@@ -1,0 +1,38 @@
+<template>
+  <div id="app" class="flex flex-col min-h-screen">
+    <Header />
+    
+    <main class="flex-grow">
+      <router-view v-slot="{ Component }">
+        <Transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </Transition>
+      </router-view>
+    </main>
+    
+    <Footer />
+  </div>
+</template>
+
+<script setup>
+import { onMounted } from 'vue'
+import Header from '@/components/layout/Header.vue'
+import Footer from '@/components/layout/Footer.vue'
+
+onMounted(() => {
+  // Add any global initialization logic here
+  console.log('Sauti Frontend Loaded')
+})
+</script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
