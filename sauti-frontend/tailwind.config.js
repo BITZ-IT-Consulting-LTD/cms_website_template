@@ -42,6 +42,7 @@ export default {
           600: '#0d9488',
         },
         danger: {
+          400: '#f87171',
           500: '#ef4444', // Red for critical
           600: '#dc2626',
         },

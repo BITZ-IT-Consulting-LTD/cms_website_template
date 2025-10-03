@@ -12,7 +12,7 @@
       <div class="flex items-center justify-between">
         <!-- Logo -->
         <router-link to="/" class="flex items-center space-x-3">
-          <img src="/logo.png" alt="Sauti Logo" class="h-12 w-auto" @error="handleLogoError" />
+          <!-- <img src="/logo.png" alt="Sauti Logo" class="h-12 w-auto" @error="handleLogoError" /> -->
           <div>
             <h1 class="text-xl md:text-2xl font-bold text-primary-600">Sauti</h1>
             <p class="text-xs text-gray-600 hidden sm:block">Child Helpline</p>
