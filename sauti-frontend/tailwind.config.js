@@ -4,30 +4,30 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Sauti Brand Colors
+        // Updated Brand: black/white and accent orange #CC5500
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6', // Main blue
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          400: '#a1a1aa',
+          500: '#262626', // Neutral dark (text)
+          600: '#171717',
+          700: '#0f0f10',
+          800: '#09090b',
+          900: '#000000',
         },
         secondary: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316', // Orange - for emergencies/alerts
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
+          50: '#fff4ec',
+          100: '#ffe9d9',
+          200: '#ffd3b3',
+          300: '#ffbd8c',
+          400: '#ff9552',
+          500: '#CC5500', // Accent Orange
+          600: '#a64400',
+          700: '#7f3400',
+          800: '#592500',
+          900: '#3b1900',
         },
         success: {
           500: '#10b981', // Green
@@ -48,7 +48,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['-apple-system','BlinkMacSystemFont','Inter','system-ui','sans-serif'],
       },
     },
   },

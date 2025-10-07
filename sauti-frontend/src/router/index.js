@@ -16,6 +16,8 @@ const Operations = () => import('@/views/Operations.vue')
 const ReportsInsights = () => import('@/views/ReportsInsights.vue')
 const Articles = () => import('@/views/Videos.vue')
 const Videos = () => import('@/views/Videos.vue')
+const Privacy = () => import('@/views/Privacy.vue')
+const Terms = () => import('@/views/Terms.vue')
 
 const routes = [
   {
@@ -25,6 +27,24 @@ const routes = [
     meta: {
       title: 'Sauti Child Helpline - Get Help Now',
       description: 'Support for children, GBV survivors, and migrant workers in Uganda',
+    },
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: Privacy,
+    meta: {
+      title: 'Privacy Policy',
+      description: 'How Sauti protects your data and confidentiality',
+    },
+  },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: Terms,
+    meta: {
+      title: 'Terms of Service',
+      description: 'Rules for using Sauti services and this website',
     },
   },
   {

@@ -1,50 +1,44 @@
 <template>
   <div>
-    <!-- Hero Section (clean landing like reference) -->
+    <!-- Hero Section (three-column composition with central Uganda map) -->
     <section class="bg-white">
       <div class="container-custom min-h-[calc(100vh-80px)] flex items-center">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center w-full">
-          <!-- Left copy -->
-          <div>
-            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight text-gray-900 mb-6">
-              Your Lifeline & Support
-            </h1>
-            <p class="text-lg text-gray-600 mb-8 max-w-xl">A safe and confidential space for every child in Uganda. We are here to listen and help.</p>
-            <div class="flex items-center gap-4">
-              <router-link to="/report" class="pill bg-secondary-500 text-white hover:bg-secondary-600">Report a Case</router-link>
-              <router-link to="/faqs" class="pill pill-outline">Learn More</router-link>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center w-full">
+          <!-- Left headline -->
+          <div class="lg:col-span-3 order-2 lg:order-1">
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">Justice begins,</h1>
+            <div class="mt-8">
+              <router-link to="/about" class="inline-flex items-center rounded-full bg-gray-200 px-6 py-3 text-gray-900 font-semibold hover:bg-gray-300 transition-colors">Read More</router-link>
             </div>
           </div>
 
-          <!-- Right visual: Bento grid 3 photos -->
-          <div class="grid grid-cols-2 lg:grid-rows-2 gap-4 lg:h-[460px]">
-            <div class="col-span-2 lg:col-span-1 lg:row-span-2 bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop"
-                alt="Community"
-                class="w-full h-[220px] md:h-[300px] lg:h-full object-cover"
-                @error="setPlaceholder"
-                data-ph="https://picsum.photos/1200/800?blur=2"
-              />
+          <!-- Center: Uganda map -->
+          <div class="lg:col-span-6 order-1 lg:order-2">
+            <div class="bg-transparent rounded-none shadow-none border-0 h-[620px] md:h-[820px] lg:h-[900px] flex items-center justify-center overflow-visible">
+              <template v-if="usePng">
+                <img
+                  :src="pngUrl"
+                  alt="Uganda map"
+                  class="w-full h-full object-contain scale-125 md:scale-[1.9] lg:scale-[2.2] xl:scale-[2.6]"
+                  @error="usePng = false"
+                />
+              </template>
+              <template v-else>
+                <iframe
+                  title="Map of Uganda"
+                  class="w-full h-full"
+                  style="border:0"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=29.5%2C-1.7%2C35.2%2C4.5&layer=mapnik&marker=1.3733%2C32.2903">
+                </iframe>
+              </template>
             </div>
-            <div class="bg-white rounded-[1.75rem] shadow-sm border border-gray-100 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=900&auto=format&fit=crop"
-                alt="Supporter"
-                class="w-full h-[200px] md:h-[220px] lg:h-full object-cover"
-                @error="setPlaceholder"
-                data-ph="https://picsum.photos/900/600?grayscale"
-              />
-            </div>
-            <div class="bg-white rounded-[1.75rem] shadow-sm border border-gray-100 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1520975922284-8b456906c813?q=80&w=900&auto=format&fit=crop"
-                alt="Team"
-                class="w-full h-[200px] md:h-[220px] lg:h-full object-cover"
-                @error="setPlaceholder"
-                data-ph="https://picsum.photos/900/600"
-              />
-            </div>
+          </div>
+
+          <!-- Right headline -->
+          <div class="lg:col-span-3 order-3">
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 lg:text-right">where Inequality stops.</h2>
           </div>
         </div>
       </div>
@@ -214,6 +208,8 @@ const latestVideos = ref([
 
 const partners = ref([])
 const loadingPartners = ref(false)
+const usePng = ref(true)
+const pngUrl = new URL('@/assets/uganda maping .png', import.meta.url).href
 
 onMounted(async () => {
   // Fetch partners
@@ -225,6 +221,15 @@ onMounted(async () => {
     console.error('Failed to load partners:', error)
   } finally {
     loadingPartners.value = false
+  }
+  // Probe if PNG exists; if not, fall back to OSM iframe
+  try {
+    const res = await fetch(pngUrl, { method: 'HEAD' })
+    if (!res.ok) {
+      usePng.value = false
+    }
+  } catch (e) {
+    usePng.value = false
   }
 })
 
