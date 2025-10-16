@@ -14,12 +14,13 @@
 
           <!-- Center: Uganda map -->
           <div class="lg:col-span-6 order-1 lg:order-2">
-            <div class="bg-transparent rounded-none shadow-none border-0 h-[620px] md:h-[820px] lg:h-[900px] flex items-center justify-center overflow-visible">
+            <div class="bg-transparent rounded-none shadow-none border-0 h-[520px] md:h-[680px] lg:h-[760px] flex items-center justify-start overflow-visible">
               <template v-if="usePng">
                 <img
                   :src="pngUrl"
                   alt="Uganda map"
-                  class="w-full h-full object-contain scale-125 md:scale-[1.9] lg:scale-[2.2] xl:scale-[2.6]"
+                  class="w-full h-full object-contain scale-[1.0] md:scale-[1.25] lg:scale-[1.35] xl:scale-[1.45] lg:mr-16 xl:mr-24 drop-shadow"
+                  style="object-position: left center;"
                   @error="usePng = false"
                 />
               </template>
@@ -37,7 +38,7 @@
           </div>
 
           <!-- Right headline -->
-          <div class="lg:col-span-3 order-3">
+          <div class="lg:col-span-3 order-3 relative z-10">
             <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 lg:text-right">where Inequality stops.</h2>
           </div>
         </div>
@@ -209,7 +210,7 @@ const latestVideos = ref([
 const partners = ref([])
 const loadingPartners = ref(false)
 const usePng = ref(true)
-const pngUrl = new URL('@/assets/uganda maping .png', import.meta.url).href
+const pngUrl = ref('')
 
 onMounted(async () => {
   // Fetch partners
@@ -222,14 +223,23 @@ onMounted(async () => {
   } finally {
     loadingPartners.value = false
   }
-  // Probe if PNG exists; if not, fall back to OSM iframe
-  try {
-    const res = await fetch(pngUrl, { method: 'HEAD' })
-    if (!res.ok) {
-      usePng.value = false
-    }
-  } catch (e) {
-    usePng.value = false
+  // Try multiple filename variants to match the asset you placed
+  const candidates = [
+    new URL('@/assets/uganda mapping.png', import.meta.url).href,
+    new URL('@/assets/uganda mapping .png', import.meta.url).href,
+    new URL('@/assets/uganda maping.png', import.meta.url).href,
+    new URL('@/assets/uganda maping .png', import.meta.url).href,
+  ]
+  usePng.value = false
+  for (const candidate of candidates) {
+    try {
+      const res = await fetch(candidate, { method: 'HEAD' })
+      if (res.ok) {
+        pngUrl.value = candidate
+        usePng.value = true
+        break
+      }
+    } catch (_) { /* ignore and try next */ }
   }
 })
 
