@@ -56,10 +56,12 @@
       <div class="container-custom">
         <h3 class="text-center mb-10">Operational Highlights</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="avm-card"><h4 class="font-semibold mb-1">116 Toll-Free Helpline</h4><p class="text-gray-600 text-sm">Always free to call.</p></div>
+          <div class="avm-card"><h4 class="font-semibold mb-1">116 Toll-Free Helpline</h4><p class="text-gray-600 text-sm">Accessible nationwide across all telecom networks.</p></div>
           <div class="avm-card"><h4 class="font-semibold mb-1">24/7 Availability</h4><p class="text-gray-600 text-sm">Help any time of day, all year round.</p></div>
+          <div class="avm-card"><h4 class="font-semibold mb-1">Language Support</h4><p class="text-gray-600 text-sm">English, Luganda, Swahili, and additional local languages.</p></div>
           <div class="avm-card"><h4 class="font-semibold mb-1">Strict Confidentiality</h4><p class="text-gray-600 text-sm">Handled with the utmost privacy.</p></div>
           <div class="avm-card"><h4 class="font-semibold mb-1">Trained Professionals</h4><p class="text-gray-600 text-sm">Counselors undergo rigorous training.</p></div>
+          <div class="avm-card"><h4 class="font-semibold mb-1">Multiple Channels</h4><p class="text-gray-600 text-sm">WhatsApp, U-Report, SafePal App, email, and walk-ins.</p></div>
         </div>
       </div>
     </section>
