@@ -60,6 +60,10 @@ apiClient.interceptors.response.use(
           }
           break
           
+        case 400:
+          console.error('❌ 400 Bad Request:', error.response.data)
+          break
+          
         case 403:
           console.error('❌ 403 Forbidden')
           break

@@ -346,6 +346,10 @@ const categories = computed(() => {
   const cats = postsStore.categories || []
   return cats.filter(c => c && c.id)
 })
+const tags = computed(() => {
+  const tagList = postsStore.tags || []
+  return tagList.filter(t => t && t.id)
+})
 
 // Editor methods (simplified - would use TipTap in real implementation)
 const toggleBold = () => {
@@ -466,6 +470,24 @@ const getReadingTime = () => {
   return Math.ceil(words / wordsPerMinute)
 }
 
+const getTagIds = (tagNames) => {
+  if (!tagNames || !tagNames.trim()) return []
+  
+  const tagNameList = tagNames.split(',').map(tag => tag.trim()).filter(Boolean)
+  const tagIds = []
+  
+  for (const tagName of tagNameList) {
+    const tag = tags.value.find(t => t.name.toLowerCase() === tagName.toLowerCase())
+    if (tag) {
+      tagIds.push(tag.id)
+    } else {
+      console.warn(`Tag not found: ${tagName}`)
+    }
+  }
+  
+  return tagIds
+}
+
 // Methods
 const handleImageUpload = (event) => {
   const file = event.target.files[0]
@@ -537,7 +559,7 @@ const savePost = async (status) => {
       author: form.value.author || 'Admin',
       publishedAt: form.value.publishedAt || new Date().toISOString().split('T')[0],
       categories: form.value.categories || [],
-      tags: tagsInput.value ? tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean) : [],
+      tags: getTagIds(tagsInput.value),
       featuredImage: form.value.featuredImage || null,
       status
     }
@@ -565,9 +587,11 @@ onMounted(async () => {
     // Set author
     form.value.author = authStore.userFullName || 'Admin'
 
-    // Load categories
+    // Load categories and tags
     await postsStore.fetchCategories()
+    await postsStore.fetchTags()
     console.log('Categories loaded:', postsStore.categories)
+    console.log('Tags loaded:', postsStore.tags)
 
     // Load post data if editing
     if (isEditing.value) {
