@@ -161,6 +161,35 @@ export const api = {
   resources: {
     list: (params) => apiClient.get('/resources/', { params }),
     get: (slug) => apiClient.get(`/resources/${slug}/`),
+    create: (data) => {
+      const formData = new FormData()
+      Object.keys(data).forEach(key => {
+        if (data[key] !== null && data[key] !== undefined) {
+          formData.append(key, data[key])
+        }
+      })
+      
+      return apiClient.post('/resources/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    update: (slug, data) => {
+      const formData = new FormData()
+      Object.keys(data).forEach(key => {
+        if (data[key] !== null && data[key] !== undefined) {
+          formData.append(key, data[key])
+        }
+      })
+      
+      return apiClient.put(`/resources/${slug}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    delete: (slug) => apiClient.delete(`/resources/${slug}/`),
     categories: () => apiClient.get('/resources/categories/'),
   },
   
@@ -168,13 +197,45 @@ export const api = {
   faqs: {
     list: (params) => apiClient.get('/faqs/', { params }),
     get: (id) => apiClient.get(`/faqs/${id}/`),
+    create: (data) => apiClient.post('/faqs/', data),
+    update: (id, data) => apiClient.put(`/faqs/${id}/`, data),
+    delete: (id) => apiClient.delete(`/faqs/${id}/`),
     categories: () => apiClient.get('/faqs/categories/'),
   },
   
   // Partners endpoints
   partners: {
-    list: () => apiClient.get('/partners/'),
+    list: (params) => apiClient.get('/partners/', { params }),
     get: (slug) => apiClient.get(`/partners/${slug}/`),
+    create: (data) => {
+      const formData = new FormData()
+      Object.keys(data).forEach(key => {
+        if (data[key] !== null && data[key] !== undefined) {
+          formData.append(key, data[key])
+        }
+      })
+      
+      return apiClient.post('/partners/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    update: (slug, data) => {
+      const formData = new FormData()
+      Object.keys(data).forEach(key => {
+        if (data[key] !== null && data[key] !== undefined) {
+          formData.append(key, data[key])
+        }
+      })
+      
+      return apiClient.put(`/partners/${slug}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    delete: (slug) => apiClient.delete(`/partners/${slug}/`),
   },
   
   // Reports endpoints (admin access)

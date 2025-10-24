@@ -58,7 +58,7 @@ const videos = ref([
     published: '2 weeks ago',
     duration: '12:45',
     category: 'Education',
-    thumbnail: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   },
   {
     id: 2,
@@ -69,7 +69,7 @@ const videos = ref([
     published: '1 month ago',
     duration: '8:22',
     category: 'Safety',
-    thumbnail: 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   },
   {
     id: 3,
@@ -80,7 +80,7 @@ const videos = ref([
     published: '1 month ago',
     duration: '15:03',
     category: 'Support',
-    thumbnail: 'https://images.unsplash.com/photo-1499355942262-97b58a6195b4?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   },
   {
     id: 4,
@@ -91,7 +91,7 @@ const videos = ref([
     published: '3 months ago',
     duration: '11:30',
     category: 'Education',
-    thumbnail: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   }
 ])
 

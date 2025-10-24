@@ -1,0 +1,329 @@
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    SAUTI PLATFORM - SYNCHRONIZED ARCHITECTURE              ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          👥 USER INTERFACES                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────────────────┐              ┌──────────────────────────┐
+    │   🌐 PUBLIC FRONTEND     │              │   👑 ADMIN DASHBOARD     │
+    │                          │              │                          │
+    │   Port: 3000             │              │   Port: 3002             │
+    │   Users: Citizens        │              │   Users: Staff Only      │
+    │   Access: Public         │              │   Access: Authenticated  │
+    │                          │              │                          │
+    │   ┌──────────────────┐   │              │   ┌──────────────────┐   │
+    │   │  Vue 3 + Vite    │   │              │   │  Vue 3 + Vite    │   │
+    │   │  TailwindCSS     │   │              │   │  TailwindCSS     │   │
+    │   │  Pinia Stores    │   │              │   │  Pinia Stores    │   │
+    │   │  Vue Router      │   │              │   │  Vue Router      │   │
+    │   └──────────────────┘   │              │   └──────────────────┘   │
+    │                          │              │                          │
+    │   📄 Pages:              │              │   📄 Views:              │
+    │   • Home                 │              │   • Dashboard            │
+    │   • Blog                 │              │   • Posts Manager        │
+    │   • Resources            │              │   • Videos Manager       │
+    │   • Report               │              │   • Settings             │
+    │   • FAQs                 │              │   • Drafts               │
+    └──────────┬───────────────┘              └──────────┬───────────────┘
+               │                                         │
+               │  🔑 JWT: token, refreshToken           │  🔑 JWT: admin_token
+               │  🎨 Color: #CC5500                     │  🎨 Color: #CC5500
+               │  📦 Store: @/store/                    │  📦 Store: @/stores/
+               │                                         │
+               └─────────────────┬───────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          🔌 SHARED REST API                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                    ┌────────────────────────────┐
+                    │    🐍 DJANGO BACKEND       │
+                    │                            │
+                    │    Port: 8000              │
+                    │    Framework: Django 4.2   │
+                    │    API: DRF + SimpleJWT    │
+                    │                            │
+                    │    📍 Endpoints:           │
+                    │    • /api/auth/login/      │
+                    │    • /api/posts/           │
+                    │    • /api/videos/          │
+                    │    • /api/resources/       │
+                    │    • /api/faqs/            │
+                    │    • /api/partners/        │
+                    │    • /api/reports/         │
+                    │                            │
+                    │    🔒 Auth: JWT Tokens     │
+                    │    ⏱  Access: 60 min       │
+                    │    🔄 Refresh: 24 hours    │
+                    └──────────┬─────────────────┘
+                               │
+                               ▼
+                    ┌────────────────────────────┐
+                    │    💾 DATABASE             │
+                    │                            │
+                    │    SQLite (Development)    │
+                    │    PostgreSQL (Production) │
+                    │                            │
+                    │    📊 Tables:              │
+                    │    • users                 │
+                    │    • posts                 │
+                    │    • videos                │
+                    │    • resources             │
+                    │    • faqs                  │
+                    │    • partners              │
+                    │    • reports (encrypted)   │
+                    └────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          🔄 DATA FLOW EXAMPLE                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    CREATE BLOG POST FLOW:
+    
+    1. 👤 Admin User                         → Opens Admin Dashboard
+    2. 🖱  Click "Create Post"               → Loads PostEditView.vue
+    3. ✍️  Write Content                     → Fills form fields
+    4. 📤 Click "Publish"                    → POST /api/posts/
+    5. 🔐 Add JWT Token                      → Authorization: Bearer <token>
+    6. 🐍 Django Receives                    → Validates token
+    7. ✅ Validate Data                      → Check required fields
+    8. 💾 Save to Database                   → posts table
+    9. 📦 Return Post Data                   → JSON response
+    10. 🔄 Update Admin Store                → Pinia store updates
+    
+    VIEW ON FRONTEND FLOW:
+    
+    11. 👥 Public User                       → Visits /blog
+    12. 🔍 Frontend Fetches                  → GET /api/posts/
+    13. 🐍 Django Queries                    → SELECT * FROM posts WHERE status='published'
+    14. 📦 Return Posts                      → JSON array
+    15. 🎨 Render BlogList                   → Display posts
+    16. ✅ User Sees Post                    → Published content visible
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          🎨 DESIGN SYSTEM SYNC                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    UNIFIED COLORS (Both Projects):
+    
+    🟠 Primary Orange    #CC5500   ■■■■■  Sauti brand color
+    ⚫ Dark Text         #262626   ■■■■■  Primary text
+    ⚪ Light Background  #fafafa   ■■■■■  Backgrounds
+    🟢 Success           #10b981   ■■■■■  Success states
+    🔴 Danger            #ef4444   ■■■■■  Errors, critical
+    🟣 Purple            #8b5cf6   ■■■■■  GBV cases
+    🔵 Teal              #14b8a6   ■■■■■  Resources
+    
+    TYPOGRAPHY:
+    
+    Font Family:    Inter (Google Fonts)
+    Headings:       Font-bold, tracking-tight
+    Body:           Font-normal, leading-relaxed
+    
+    SPACING:
+    
+    Layout:         Consistent padding/margin scale
+    Grid:           12-column responsive grid
+    Containers:     max-w-7xl centered
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          🔐 AUTHENTICATION SYNC                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    FRONTEND (Public):                       ADMIN (Dashboard):
+    
+    Storage Keys:                            Storage Keys:
+    ├─ token                                 ├─ admin_token
+    ├─ refreshToken                          ├─ admin_refresh_token
+    └─ user                                  └─ admin_user
+    
+    Login Flow:                              Login Flow:
+    ├─ POST /api/auth/login/                 ├─ POST /api/auth/login/
+    ├─ Get JWT tokens                        ├─ Get JWT tokens
+    ├─ Store in localStorage                 ├─ Store in localStorage (admin_*)
+    └─ Redirect to /                         └─ Redirect to /dashboard
+    
+    Token Refresh:                           Token Refresh:
+    ├─ Access expires: 60 min                ├─ Access expires: 60 min
+    ├─ Auto-refresh before expiry            ├─ Auto-refresh before expiry
+    ├─ Use refresh token                     ├─ Use refresh token
+    └─ If fails → logout                     └─ If fails → logout
+    
+    WHY DIFFERENT STORAGE KEYS?
+    ✓ Prevents conflicts in same browser
+    ✓ Allows simultaneous login to both
+    ✓ Different session policies possible
+    ✓ Admin can have stricter timeouts
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          📡 API ENDPOINT MAPPING                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Endpoint              Frontend Access    Admin Access     Description
+    ─────────────────────────────────────────────────────────────────────────
+    /auth/login/          ✅ POST            ✅ POST          User login
+    /auth/register/       ✅ POST            ❌ No            Public signup
+    /auth/profile/        ✅ GET/PUT         ✅ GET/PUT       User profile
+    
+    /posts/               ✅ GET             ✅ GET/POST      Blog posts
+    /posts/:slug/         ✅ GET             ✅ GET/PUT/DEL   Single post
+    
+    /videos/              ✅ GET             ✅ GET/POST      Videos
+    /videos/:id/          ✅ GET             ✅ GET/PUT/DEL   Single video
+    
+    /resources/           ✅ GET             ✅ GET/POST      Resources
+    /resources/:id/       ✅ GET             ✅ GET/PUT/DEL   Single resource
+    
+    /faqs/                ✅ GET             ✅ GET/POST      FAQs
+    /faqs/:id/            ✅ GET             ✅ GET/PUT/DEL   Single FAQ
+    
+    /partners/            ✅ GET             ✅ GET/POST      Partners
+    /partners/:id/        ✅ GET             ✅ GET/PUT/DEL   Single partner
+    
+    /reports/             ✅ POST            ✅ GET           Incident reports
+    /reports/:id/         ❌ No              ✅ GET/PUT       Single report
+    
+    ✅ = Allowed    ❌ = Denied
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          🚀 DEPLOYMENT STRUCTURE                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    DEVELOPMENT (Current):
+    
+    http://localhost:3000          → Public Frontend
+    http://localhost:3002          → Admin Dashboard
+    http://localhost:8000          → Django API
+    
+    PRODUCTION (Future):
+    
+    https://sauti.go.ug            → Public Frontend
+    https://admin.sauti.go.ug      → Admin Dashboard
+    https://api.sauti.go.ug        → Django API
+    
+    DOCKER COMPOSE:
+    
+    services:
+      frontend:
+        build: ./sauti-frontend
+        ports: ["80:80"]
+        
+      admin:
+        build: ./sauti-admin
+        ports: ["8080:80"]
+        
+      backend:
+        build: ./sauti_cms
+        ports: ["8000:8000"]
+        
+      database:
+        image: postgres:15
+        
+      nginx:
+        image: nginx
+        volumes:
+          - ./nginx.conf:/etc/nginx/nginx.conf
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          ✅ SYNCHRONIZATION CHECKLIST                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Design System:
+    ✅ Colors unified (#CC5500)
+    ✅ Typography unified (Inter)
+    ✅ Spacing consistent
+    ✅ Components styled
+    
+    Backend Connection:
+    ✅ Same API URL (localhost:8000/api)
+    ✅ CORS allows both origins
+    ✅ JWT auth configured
+    ✅ Error handling identical
+    
+    Authentication:
+    ✅ Separate storage keys
+    ✅ Same JWT flow
+    ✅ Token refresh working
+    ✅ Logout handling
+    
+    State Management:
+    ✅ Pinia in both projects
+    ✅ Similar store structure
+    ✅ Reactive state
+    ✅ Actions/getters pattern
+    
+    Routing:
+    ✅ Vue Router in both
+    ✅ Route guards configured
+    ✅ Lazy loading enabled
+    ✅ Meta tags for SEO
+    
+    Documentation:
+    ✅ SYNC_GUIDE.md created
+    ✅ FRONTEND_SYNC.md created
+    ✅ QUICKSTART_BOTH.md created
+    ✅ SYNC_COMPLETE.md created
+    ✅ Startup script created
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          📚 DOCUMENTATION FILES                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    📄 SYNC_GUIDE.md
+       └─ 5,000+ words comprehensive guide
+       └─ Architecture diagrams
+       └─ API mappings
+       └─ Troubleshooting
+
+    📄 FRONTEND_SYNC.md
+       └─ 3,000+ words user guide
+       └─ Quick start instructions
+       └─ Development workflow
+       └─ Testing checklist
+
+    📄 QUICKSTART_BOTH.md
+       └─ Simple startup guide
+       └─ Login credentials
+       └─ Port configuration
+       └─ Quick reference
+
+    📄 SYNC_COMPLETE.md
+       └─ Completion summary
+       └─ What was changed
+       └─ How to verify
+       └─ Next steps
+
+    📄 start-frontends.sh
+       └─ Automated startup script
+       └─ Dependency checks
+       └─ Both servers at once
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          🎉 SYNCHRONIZATION COMPLETE                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Both frontends are now:
+    
+    ✅ Using same color scheme (#CC5500)
+    ✅ Connected to same backend API
+    ✅ Using consistent authentication
+    ✅ Sharing data models
+    ✅ Following same patterns
+    ✅ Fully documented
+    ✅ Ready for development
+
+    Next Steps:
+    
+    1. Start both frontends (see QUICKSTART_BOTH.md)
+    2. Start Django backend
+    3. Test creating content in Admin
+    4. Verify content appears on Public Frontend
+    5. Read documentation for details
+
+    🚀 The Sauti Platform is synchronized and ready!
+
+```

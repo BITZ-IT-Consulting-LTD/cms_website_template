@@ -1,15 +1,32 @@
 <template>
-  <div class="p-6">
-    <!-- Header Actions -->
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">
-        {{ isEditing ? 'Edit Blog Post' : 'Create Blog Post' }}
+  <div class="min-h-screen bg-gray-50">
+    <!-- Enhanced Header -->
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div class="px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <button
+              @click="$router.go(-1)"
+              class="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">
+                {{ isEditing ? 'Edit Blog Post' : 'Create New Blog Post' }}
       </h1>
+              <p class="text-sm text-gray-500 mt-1">
+                {{ isEditing ? 'Update your blog post content and settings' : 'Write and publish a new blog post' }}
+              </p>
+            </div>
+          </div>
       
       <div class="flex items-center space-x-3">
         <button
           @click="previewPost"
-          class="btn-secondary flex items-center"
+              class="btn-outline flex items-center"
           :disabled="!form.title"
         >
           <EyeIcon class="h-4 w-4 mr-2" />
@@ -18,236 +35,217 @@
         
         <button
           @click="saveDraft"
-          class="btn-secondary"
+              class="btn-secondary flex items-center"
           :disabled="loading"
         >
+              <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+              </svg>
           Save Draft
         </button>
         
         <button
           @click="updatePost"
-          class="btn-success"
+              class="btn-primary flex items-center"
           :disabled="loading || !form.title"
         >
-          {{ isEditing ? 'Update' : 'Publish' }}
+              <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
+              {{ isEditing ? 'Update Post' : 'Publish Post' }}
         </button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="p-6">
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Main Content Area (Left Column) -->
       <div class="lg:col-span-2 space-y-6">
-        <!-- Post Title -->
-        <div class="card p-6">
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+          <!-- Enhanced Post Title -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="space-y-2">
+              <label for="title" class="block text-sm font-semibold text-gray-900">
             Post Title *
           </label>
+              <p class="text-xs text-gray-500">Write a compelling title that captures your audience's attention</p>
           <input
             id="title"
             v-model="form.title"
             type="text"
             required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400"
             placeholder="Enter your post title..."
+                style="font-family: 'Roboto', sans-serif;"
           />
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>{{ form.title.length }}/100 characters</span>
+                <span class="text-green-600" v-if="form.title.length > 10">Good length</span>
+              </div>
+            </div>
         </div>
 
-        <!-- Rich Text Editor -->
-        <div class="card p-6">
-          <label class="block text-sm font-medium text-gray-700 mb-4">
+          <!-- Enhanced Rich Text Editor -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="block text-sm font-semibold text-gray-900">
             Main Content *
           </label>
+                  <p class="text-xs text-gray-500 mt-1">Write your blog post content with rich formatting</p>
+                </div>
+                <div class="flex items-center space-x-2 text-xs text-gray-500">
+                  <span>{{ getWordCount() }} words</span>
+                  <span>•</span>
+                  <span>{{ getReadingTime() }} min read</span>
+                </div>
+              </div>
+            </div>
           
-          <!-- Editor Toolbar -->
-          <div class="border border-gray-300 rounded-t-md bg-gray-50 px-4 py-2 flex items-center space-x-2 overflow-x-auto">
-            <button
-              type="button"
-              @click="toggleBold"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              :class="{ 'bg-gray-200': isActive('bold') }"
-              title="Bold"
-            >
-              <strong class="text-sm">B</strong>
-            </button>
-            
-            <button
-              type="button"
-              @click="toggleItalic"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              :class="{ 'bg-gray-200': isActive('italic') }"
-              title="Italic"
-            >
-              <em class="text-sm">I</em>
-            </button>
-            
-            <button
-              type="button"
-              @click="toggleUnderline"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              :class="{ 'bg-gray-200': isActive('underline') }"
-              title="Underline"
-            >
-              <u class="text-sm">U</u>
-            </button>
-            
-            <div class="w-px h-6 bg-gray-300"></div>
-            
-            <button
-              type="button"
-              @click="toggleHeading(1)"
-              class="px-2 py-1.5 rounded hover:bg-gray-200 focus:outline-none text-sm font-medium"
-              :class="{ 'bg-gray-200': isActive('heading', { level: 1 }) }"
-              title="Heading 1"
-            >
-              H1
-            </button>
-            
-            <button
-              type="button"
-              @click="toggleHeading(2)"
-              class="px-2 py-1.5 rounded hover:bg-gray-200 focus:outline-none text-sm font-medium"
-              :class="{ 'bg-gray-200': isActive('heading', { level: 2 }) }"
-              title="Heading 2"
-            >
-              H2
-            </button>
-            
-            <div class="w-px h-6 bg-gray-300"></div>
-            
-            <button
-              type="button"
-              @click="toggleBulletList"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              :class="{ 'bg-gray-200': isActive('bulletList') }"
-              title="Bullet List"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M3 4a1 1 0 000 2h12a1 1 0 100-2H3zM3 8a1 1 0 000 2h12a1 1 0 100-2H3zM3 12a1 1 0 100 2h12a1 1 0 100-2H3z" />
-              </svg>
-            </button>
-            
-            <button
-              type="button"
-              @click="toggleOrderedList"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              :class="{ 'bg-gray-200': isActive('orderedList') }"
-              title="Numbered List"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M3 3a1 1 0 000 2h12a1 1 0 100-2H3zM3 7a1 1 0 000 2h12a1 1 0 100-2H3zM3 11a1 1 0 100 2h12a1 1 0 100-2H3z" />
-              </svg>
-            </button>
-            
-            <div class="w-px h-6 bg-gray-300"></div>
-            
-            <button
-              type="button"
-              @click="insertLink"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              title="Insert Link"
-            >
-              <LinkIcon class="w-4 h-4" />
-            </button>
-            
-            <button
-              type="button"
-              @click="insertImage"
-              class="p-1.5 rounded hover:bg-gray-200 focus:outline-none"
-              title="Insert Image"
-            >
-              <PhotoIcon class="w-4 h-4" />
-            </button>
-          </div>
           
-          <!-- Editor Content Area -->
-          <div
-            ref="editor"
-            class="min-h-96 p-4 border-l border-r border-b border-gray-300 rounded-b-md focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500 prose max-w-none"
-            contenteditable
-            @input="handleContentChange"
-            v-html="form.content"
-          ></div>
+            <!-- Enhanced Main Content Input with Paragraph Support -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-900">
+                  Main Content *
+                </label>
+                <p class="text-xs text-gray-500">Write your blog post content with paragraph formatting</p>
+                <textarea
+                  ref="editor"
+                  v-model="form.content"
+                  required
+                  rows="8"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400 resize-y"
+                  placeholder="Start typing your content here...
+
+You can create paragraphs by pressing Enter twice.
+
+Each paragraph will be properly formatted when displayed."
+                  style="font-family: 'Roboto', sans-serif; line-height: 1.6; min-height: 200px;"
+                  @input="handleContentChange"
+                  @focus="handleEditorFocus"
+                  @blur="handleEditorBlur"
+                  @keydown="handleKeydown"
+                ></textarea>
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                  <span>{{ getWordCount() }} words • {{ getReadingTime() }} min read</span>
+                  <span class="text-green-600" v-if="form.content.length > 50">Good length</span>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
 
-      <!-- Metadata Sidebar (Right Column) -->
+        <!-- Enhanced Metadata Sidebar (Right Column) -->
       <div class="space-y-6">
-        <!-- Metadata -->
-        <div class="card p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Metadata</h3>
+          <!-- Enhanced Metadata Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center space-x-2 mb-6">
+              <svg class="w-5 h-5 text-[#8B4000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <h3 class="text-lg font-semibold text-gray-900" style="font-family: 'Roboto', sans-serif;">Post Settings</h3>
+            </div>
           
-          <!-- Author -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+            <!-- Enhanced Author Field -->
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-gray-900 mb-2">Author</label>
+              <div class="relative">
             <input
               v-model="form.author"
               type="text"
               readonly
-              class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
-            />
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600 font-medium"
+                  style="font-family: 'Roboto', sans-serif;"
+                />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+              </div>
           </div>
           
-          <!-- Publication Date -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Publication Date</label>
+            <!-- Enhanced Publication Date -->
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-gray-900 mb-2">Publication Date</label>
             <input
               v-model="form.publishedAt"
               type="date"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
+                style="font-family: 'Roboto', sans-serif;"
             />
           </div>
           
-          <!-- Categories -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
-            <div class="space-y-2 max-h-32 overflow-y-auto">
-              <label v-for="category in categories" :key="category.id" class="flex items-center">
+            <!-- Enhanced Categories -->
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-gray-900 mb-3">Categories</label>
+              <div class="space-y-3 max-h-40 overflow-y-auto border border-gray-200 rounded-xl p-3 bg-gray-50">
+                <label v-for="category in categories" :key="category.id" class="flex items-center p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
                 <input
                   v-model="form.categories"
                   :value="category.id"
                   type="checkbox"
-                  class="rounded border-gray-300 text-primary-500 focus:ring-primary-500"
+                    class="rounded border-gray-300 text-[#8B4000] focus:ring-[#8B4000] focus:ring-2"
                 />
-                <span class="ml-2 text-sm text-gray-700">{{ category.name }}</span>
+                  <span class="ml-3 text-sm font-medium text-gray-700">{{ category.name }}</span>
               </label>
             </div>
           </div>
           
-          <!-- Tags -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+            <!-- Enhanced Tags -->
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-gray-900 mb-2">Tags</label>
+              <div class="relative">
             <input
               v-model="tagsInput"
               type="text"
               placeholder="helpline, children, safety, uganda"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-            <p class="mt-1 text-xs text-gray-500">Separate tags with commas</p>
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400"
+                  style="font-family: 'Roboto', sans-serif;"
+                />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="mt-2 text-xs text-gray-500">Separate tags with commas for better organization</p>
           </div>
         </div>
 
-        <!-- Featured Image -->
-        <div class="card p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Featured Image</h3>
+          <!-- Enhanced Featured Image Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center space-x-2 mb-6">
+              <svg class="w-5 h-5 text-[#8B4000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <h3 class="text-lg font-semibold text-gray-900" style="font-family: 'Roboto', sans-serif;">Featured Image</h3>
+            </div>
           
-          <div v-if="form.featuredImage || imagePreview" class="relative mb-4">
+            <div v-if="form.featuredImage || imagePreview" class="relative mb-6">
             <img
               :src="imagePreview || form.featuredImage"
               alt="Featured image"
-              class="w-full h-48 object-cover rounded-lg"
+                class="w-full h-48 object-cover rounded-xl shadow-sm"
             />
             <button
               @click="removeImage"
-              class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                class="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 shadow-lg"
               title="Remove image"
             >
               <XMarkIcon class="h-4 w-4" />
             </button>
           </div>
           
-          <div v-else class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-            <PhotoIcon class="h-12 w-12 text-gray-400 mx-auto mb-2" />
-            <p class="text-sm text-gray-500">No image selected</p>
+            <div v-else class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
+              <PhotoIcon class="h-12 w-12 text-gray-400 mx-auto mb-3" />
+              <p class="text-sm text-gray-500 font-medium">No image selected</p>
+              <p class="text-xs text-gray-400 mt-1">Click below to upload an image</p>
           </div>
           
           <input
@@ -260,28 +258,41 @@
           
           <button
             @click="$refs.imageInput.click()"
-            class="w-full mt-4 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              class="w-full mt-4 px-4 py-3 border-2 border-dashed border-[#8B4000] rounded-xl text-sm font-semibold text-[#8B4000] hover:bg-[#8B4000] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
           >
-            Change Image
+              {{ form.featuredImage || imagePreview ? 'Change Image' : 'Upload Image' }}
           </button>
         </div>
 
-        <!-- Action Buttons -->
+          <!-- Enhanced Action Buttons -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="space-y-3">
           <button
             @click="updatePost"
             :disabled="loading || !form.title"
-            class="w-full btn-primary"
-          >
-            {{ loading ? 'Saving...' : 'Save Changes' }}
+                class="w-full btn-primary flex items-center justify-center"
+                style="font-family: 'Roboto', sans-serif;"
+              >
+                <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+                {{ loading ? 'Saving...' : (isEditing ? 'Update Post' : 'Publish Post') }}
           </button>
           
           <button
             @click="$router.go(-1)"
-            class="w-full px-4 py-2 text-gray-700 hover:text-gray-900 focus:outline-none"
+                class="w-full px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                style="font-family: 'Roboto', sans-serif;"
           >
             Cancel
           </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -310,6 +321,7 @@ const toast = useToast()
 // Refs
 const editor = ref(null)
 const imageInput = ref(null)
+const autoSaveTimeout = ref(null)
 
 // Reactive data
 const loading = ref(false)
@@ -374,7 +386,81 @@ const isActive = (command, options = {}) => {
 }
 
 const handleContentChange = (event) => {
-  form.value.content = event.target.innerHTML
+  // For textarea, the content is already in form.value.content via v-model
+  // Auto-save draft every 30 seconds
+  if (autoSaveTimeout.value) {
+    clearTimeout(autoSaveTimeout.value)
+  }
+  autoSaveTimeout.value = setTimeout(() => {
+    if (form.value.title && form.value.content) {
+      saveDraft()
+    }
+  }, 30000)
+}
+
+const handlePaste = (event) => {
+  // For textarea, let the default paste behavior work
+  // The v-model will handle the content update
+}
+
+const handleKeydown = (event) => {
+  // Handle keyboard shortcuts for textarea
+  if (event.ctrlKey || event.metaKey) {
+    switch (event.key) {
+      case 's':
+        event.preventDefault()
+        saveDraft()
+        break
+    }
+  }
+  
+  // Handle Enter key for paragraph formatting
+  if (event.key === 'Enter') {
+    // Allow normal Enter behavior for line breaks
+    // Double Enter will create paragraph separation
+  }
+}
+
+const handleEditorClick = (event) => {
+  // Ensure cursor is positioned correctly when clicking
+  const range = document.createRange()
+  const sel = window.getSelection()
+  
+  // If clicking on empty space, position cursor there
+  if (event.target === editor.value) {
+    range.setStart(event.target, 0)
+    range.collapse(true)
+    sel.removeAllRanges()
+    sel.addRange(range)
+  }
+}
+
+const handleEditorFocus = (event) => {
+  // For textarea, no special handling needed
+  // Textarea naturally handles LTR text direction and paragraphs
+}
+
+const handleEditorBlur = (event) => {
+  // For textarea, no special handling needed
+  // Textarea naturally handles LTR text direction and paragraphs
+}
+
+const handleKeyup = (event) => {
+  // For textarea, no special handling needed
+  // Textarea naturally handles LTR text direction and paragraphs
+}
+
+// Helper methods for content analysis
+const getWordCount = () => {
+  if (!form.value.content) return 0
+  const text = form.value.content.replace(/<[^>]*>/g, '').trim()
+  return text.split(/\s+/).filter(word => word.length > 0).length
+}
+
+const getReadingTime = () => {
+  const words = getWordCount()
+  const wordsPerMinute = 200
+  return Math.ceil(words / wordsPerMinute)
 }
 
 // Methods
@@ -420,13 +506,19 @@ const savePost = async (status) => {
     return
   }
 
+  if (!form.value.content.trim()) {
+    toast.error('Please enter some content')
+    return
+  }
+
   loading.value = true
 
   try {
     const postData = {
       ...form.value,
       status,
-      tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean)
+      tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean),
+      excerpt: form.value.excerpt || form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...'
     }
 
     if (isEditing.value) {
@@ -439,7 +531,8 @@ const savePost = async (status) => {
     }
   } catch (err) {
     console.error('Save error:', err)
-    toast.error('Failed to save post')
+    const errorMessage = err.response?.data?.detail || err.message || 'Failed to save post'
+    toast.error(errorMessage)
   } finally {
     loading.value = false
   }
@@ -456,21 +549,32 @@ onMounted(async () => {
 
     // Load post data if editing
     if (isEditing.value) {
+      console.log('Loading post for editing:', route.params.slug)
       const post = await postsStore.fetchPost(route.params.slug)
+      console.log('Loaded post data:', post)
+      
       form.value = {
         ...form.value,
         ...post,
         publishedAt: post.published_at ? post.published_at.split('T')[0] : form.value.publishedAt,
-        categories: post.categories?.map(c => c.id) || [],
-        featuredImage: post.featured_image
+        categories: post.category ? [post.category.id] : [],
+        featuredImage: post.featured_image,
+        status: post.status?.toLowerCase() || 'draft'
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
+      console.log('Form data after loading:', form.value)
       
       // Update editor content
       await nextTick()
       if (editor.value) {
-        editor.value.innerHTML = post.content || ''
+        // For textarea, the content is already set via v-model
+        // Just focus the editor
+        editor.value.focus()
+        
+        // Move cursor to the end of the content
+        const length = editor.value.value.length
+        editor.value.setSelectionRange(length, length)
       }
     }
   } catch (err) {
@@ -486,31 +590,73 @@ onMounted(async () => {
   outline: none;
 }
 
+[contenteditable]:empty:before {
+  content: attr(placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+[contenteditable] {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
+.editor-content {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
+textarea.editor-content {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  writing-mode: horizontal-tb !important;
+  font-family: 'Roboto', sans-serif !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+}
+
 .prose h1 {
-  @apply text-2xl font-bold mt-6 mb-4;
+  @apply text-2xl font-bold mt-6 mb-4 text-gray-900;
 }
 
 .prose h2 {
-  @apply text-xl font-semibold mt-5 mb-3;
+  @apply text-xl font-semibold mt-5 mb-3 text-gray-800;
 }
 
 .prose p {
-  @apply mb-3;
+  @apply mb-3 text-gray-700 leading-relaxed;
 }
 
 .prose ul, .prose ol {
-  @apply ml-6 mb-3;
+  @apply mb-3 pl-6;
 }
 
-.prose ul {
-  @apply list-disc;
+.prose li {
+  @apply mb-1;
 }
 
-.prose ol {
-  @apply list-decimal;
+.prose strong {
+  @apply font-semibold;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose u {
+  @apply underline;
 }
 
 .prose a {
-  @apply text-primary-500 hover:text-primary-600 underline;
+  @apply text-[#8B4000] hover:text-[#A0522D] underline;
+}
+
+.prose img {
+  @apply max-w-full h-auto rounded-lg shadow-sm;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="p-6">
     <!-- Header Actions -->
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">
+      <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">
         {{ isEditing ? 'Edit Video' : 'Create Video' }}
       </h1>
       

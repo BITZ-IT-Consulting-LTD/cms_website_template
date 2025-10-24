@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Videos</h1>
+        <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">Videos</h1>
         <p class="text-gray-600 mt-1">Manage video content for the Sauti platform</p>
       </div>
       

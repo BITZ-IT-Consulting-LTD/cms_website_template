@@ -101,9 +101,9 @@
             © {{ currentYear }} Sauti Child Helpline. All rights reserved. | Ministry of Gender, Labour & Social Development
           </p>
           <div class="flex space-x-6 text-sm">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">Accessibility</a>
+            <router-link to="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</router-link>
+            <router-link to="/terms" class="text-gray-400 hover:text-white transition-colors">Terms of Service</router-link>
+            <router-link to="/accessibility" class="text-gray-400 hover:text-white transition-colors">Accessibility</router-link>
           </div>
         </div>
         <p class="text-gray-500 text-xs text-center mt-4">
