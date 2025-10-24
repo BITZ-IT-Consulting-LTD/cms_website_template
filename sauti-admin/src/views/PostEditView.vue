@@ -106,121 +106,32 @@
               </div>
             </div>
           
-            <!-- Enhanced Editor Toolbar -->
-            <div class="px-4 py-3 bg-white border-b border-gray-200 flex items-center space-x-2 overflow-x-auto">
-              <button
-                type="button"
-                @click="toggleBold"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
-                :class="{ 'bg-[#8B4000] text-white': isActive('bold'), 'text-gray-600': !isActive('bold') }"
-                title="Bold (Ctrl+B)"
-              >
-                <strong class="text-sm font-bold">B</strong>
-              </button>
-              
-              <button
-                type="button"
-                @click="toggleItalic"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
-                :class="{ 'bg-[#8B4000] text-white': isActive('italic'), 'text-gray-600': !isActive('italic') }"
-                title="Italic (Ctrl+I)"
-              >
-                <em class="text-sm font-bold">I</em>
-              </button>
-              
-              <button
-                type="button"
-                @click="toggleUnderline"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
-                :class="{ 'bg-[#8B4000] text-white': isActive('underline'), 'text-gray-600': !isActive('underline') }"
-                title="Underline"
-              >
-                <u class="text-sm font-bold">U</u>
-              </button>
-            
-              <div class="w-px h-6 bg-gray-300"></div>
-              
-              <button
-                type="button"
-                @click="toggleHeading(1)"
-                class="px-3 py-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200 text-sm font-semibold"
-                :class="{ 'bg-[#8B4000] text-white': isActive('heading', { level: 1 }), 'text-gray-600': !isActive('heading', { level: 1 }) }"
-                title="Heading 1"
-              >
-                H1
-              </button>
-              
-              <button
-                type="button"
-                @click="toggleHeading(2)"
-                class="px-3 py-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200 text-sm font-semibold"
-                :class="{ 'bg-[#8B4000] text-white': isActive('heading', { level: 2 }), 'text-gray-600': !isActive('heading', { level: 2 }) }"
-                title="Heading 2"
-              >
-                H2
-              </button>
-            
-              <div class="w-px h-6 bg-gray-300"></div>
-              
-              <button
-                type="button"
-                @click="toggleBulletList"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
-                :class="{ 'bg-[#8B4000] text-white': isActive('bulletList'), 'text-gray-600': !isActive('bulletList') }"
-                title="Bullet List"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M3 4a1 1 0 000 2h12a1 1 0 100-2H3zM3 8a1 1 0 000 2h12a1 1 0 100-2H3zM3 12a1 1 0 100 2h12a1 1 0 100-2H3z" />
-                </svg>
-              </button>
-              
-              <button
-                type="button"
-                @click="toggleOrderedList"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
-                :class="{ 'bg-[#8B4000] text-white': isActive('orderedList'), 'text-gray-600': !isActive('orderedList') }"
-                title="Numbered List"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M3 3a1 1 0 000 2h12a1 1 0 100-2H3zM3 7a1 1 0 000 2h12a1 1 0 100-2H3zM3 11a1 1 0 100 2h12a1 1 0 100-2H3z" />
-                </svg>
-              </button>
-            
-              <div class="w-px h-6 bg-gray-300"></div>
-              
-              <button
-                type="button"
-                @click="insertLink"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200 text-gray-600"
-                title="Insert Link"
-              >
-                <LinkIcon class="w-4 h-4" />
-              </button>
-              
-              <button
-                type="button"
-                @click="insertImage"
-                class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200 text-gray-600"
-                title="Insert Image"
-              >
-                <PhotoIcon class="w-4 h-4" />
-              </button>
-            </div>
           
-            <!-- Enhanced Editor Content Area -->
-            <textarea
-              ref="editor"
-              v-model="form.content"
-              class="min-h-96 p-6 focus:ring-2 focus:ring-[#8B4000] prose max-w-none editor-content w-full border border-gray-300 rounded-lg resize-none"
-              style="direction: ltr !important; text-align: left !important; unicode-bidi: normal !important; writing-mode: horizontal-tb !important; font-family: 'Roboto', sans-serif; font-size: 16px; line-height: 1.6;"
-              placeholder="Start typing your content here..."
-              @input="handleContentChange"
-              @paste="handlePaste"
-              @keydown="handleKeydown"
-              @focus="handleEditorFocus"
-              @blur="handleEditorBlur"
-              @keyup="handleKeyup"
-            ></textarea>
+            <!-- Enhanced Main Content Input -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-900">
+                  Main Content *
+                </label>
+                <p class="text-xs text-gray-500">Write your blog post content</p>
+                <input
+                  ref="editor"
+                  v-model="form.content"
+                  type="text"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400"
+                  placeholder="Start typing your content here..."
+                  style="font-family: 'Roboto', sans-serif;"
+                  @input="handleContentChange"
+                  @focus="handleEditorFocus"
+                  @blur="handleEditorBlur"
+                />
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                  <span>{{ form.content.length }}/1000 characters</span>
+                  <span class="text-green-600" v-if="form.content.length > 10">Good length</span>
+                </div>
+              </div>
+            </div>
           </div>
       </div>
 
@@ -470,16 +381,7 @@ const isActive = (command, options = {}) => {
 }
 
 const handleContentChange = (event) => {
-  // For textarea, the content is already in form.value.content via v-model
-  // Force text direction on every change
-  if (editor.value) {
-    editor.value.style.direction = 'ltr'
-    editor.value.style.textAlign = 'left'
-    editor.value.style.unicodeBidi = 'normal'
-    editor.value.style.writingMode = 'horizontal-tb'
-    editor.value.setAttribute('dir', 'ltr')
-  }
-  
+  // For input field, the content is already in form.value.content via v-model
   // Auto-save draft every 30 seconds
   if (autoSaveTimeout.value) {
     clearTimeout(autoSaveTimeout.value)
@@ -492,9 +394,8 @@ const handleContentChange = (event) => {
 }
 
 const handlePaste = (event) => {
-  // For textarea, let the default paste behavior work
+  // For input field, let the default paste behavior work
   // The v-model will handle the content update
-  // No need to prevent default or use execCommand
 }
 
 const handleKeydown = (event) => {
@@ -532,67 +433,18 @@ const handleEditorClick = (event) => {
 }
 
 const handleEditorFocus = (event) => {
-  // Force text direction to LTR when editor is focused
-  if (editor.value) {
-    editor.value.style.direction = 'ltr'
-    editor.value.style.textAlign = 'left'
-    editor.value.style.unicodeBidi = 'normal'
-    editor.value.style.writingMode = 'horizontal-tb'
-    
-    // Also set the dir attribute
-    editor.value.setAttribute('dir', 'ltr')
-    
-    // Force cursor to LTR position
-    const selection = window.getSelection()
-    if (selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0)
-      range.collapse(false) // Move to end
-      selection.removeAllRanges()
-      selection.addRange(range)
-    }
-  }
+  // For input field, no special handling needed
+  // Input fields naturally handle LTR text direction
 }
 
 const handleEditorBlur = (event) => {
-  // Ensure text direction is maintained even when editor loses focus
-  if (editor.value) {
-    editor.value.style.direction = 'ltr'
-    editor.value.style.textAlign = 'left'
-    editor.value.style.unicodeBidi = 'normal'
-    editor.value.style.writingMode = 'horizontal-tb'
-    editor.value.setAttribute('dir', 'ltr')
-  }
+  // For input field, no special handling needed
+  // Input fields naturally handle LTR text direction
 }
 
 const handleKeyup = (event) => {
-  // Force text direction on every keyup
-  if (editor.value) {
-    // Force immediate text direction correction
-    editor.value.style.direction = 'ltr'
-    editor.value.style.textAlign = 'left'
-    editor.value.style.unicodeBidi = 'normal'
-    editor.value.style.writingMode = 'horizontal-tb'
-    editor.value.setAttribute('dir', 'ltr')
-    
-    // Force all child elements to be LTR
-    const allElements = editor.value.querySelectorAll('*')
-    allElements.forEach(el => {
-      el.style.direction = 'ltr'
-      el.style.textAlign = 'left'
-      el.style.unicodeBidi = 'normal'
-      el.setAttribute('dir', 'ltr')
-    })
-    
-    // Force cursor position to be LTR
-    const selection = window.getSelection()
-    if (selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0)
-      // Ensure cursor is at the end (LTR position)
-      range.collapse(false)
-      selection.removeAllRanges()
-      selection.addRange(range)
-    }
-  }
+  // For input field, no special handling needed
+  // Input fields naturally handle LTR text direction
 }
 
 // Helper methods for content analysis
@@ -708,14 +560,7 @@ onMounted(async () => {
       // Update editor content
       await nextTick()
       if (editor.value) {
-        // Force text direction
-        editor.value.style.direction = 'ltr'
-        editor.value.style.textAlign = 'left'
-        editor.value.style.unicodeBidi = 'normal'
-        editor.value.style.writingMode = 'horizontal-tb'
-        editor.value.setAttribute('dir', 'ltr')
-        
-        // For textarea, the content is already set via v-model
+        // For input field, the content is already set via v-model
         // Just focus the editor
         editor.value.focus()
         
