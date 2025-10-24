@@ -185,7 +185,7 @@ Each paragraph will be properly formatted when displayed."
             <div class="mb-6">
               <label class="block text-sm font-semibold text-gray-900 mb-3">Categories</label>
               <div class="space-y-3 max-h-40 overflow-y-auto border border-gray-200 rounded-xl p-3 bg-gray-50">
-                <label v-for="category in categories" :key="category.id" class="flex items-center p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
+                <label v-for="category in categories.filter(c => c && c.id)" :key="category.id" class="flex items-center p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
                 <input
                   v-model="form.categories"
                   :value="category.id"
@@ -342,7 +342,10 @@ const form = ref({
 
 // Computed
 const isEditing = computed(() => !!route.params.slug)
-const categories = computed(() => postsStore.categories)
+const categories = computed(() => {
+  const cats = postsStore.categories || []
+  return cats.filter(c => c && c.id)
+})
 
 // Editor methods (simplified - would use TipTap in real implementation)
 const toggleBold = () => {
@@ -514,12 +517,12 @@ const updatePost = async () => {
 }
 
 const savePost = async (status) => {
-  if (!form.value.title.trim()) {
+  if (!form.value.title || !form.value.title.trim()) {
     toast.error('Please enter a title')
     return
   }
 
-  if (!form.value.content.trim()) {
+  if (!form.value.content || !form.value.content.trim()) {
     toast.error('Please enter some content')
     return
   }
@@ -528,10 +531,15 @@ const savePost = async (status) => {
 
   try {
     const postData = {
-      ...form.value,
-      status,
-      tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean),
-      excerpt: form.value.excerpt || form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...'
+      title: form.value.title || '',
+      content: form.value.content || '',
+      excerpt: form.value.excerpt || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : ''),
+      author: form.value.author || 'Admin',
+      publishedAt: form.value.publishedAt || new Date().toISOString().split('T')[0],
+      categories: form.value.categories || [],
+      tags: tagsInput.value ? tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean) : [],
+      featuredImage: form.value.featuredImage || null,
+      status
     }
 
     if (isEditing.value) {
@@ -555,10 +563,11 @@ const savePost = async (status) => {
 onMounted(async () => {
   try {
     // Set author
-    form.value.author = authStore.userFullName
+    form.value.author = authStore.userFullName || 'Admin'
 
     // Load categories
     await postsStore.fetchCategories()
+    console.log('Categories loaded:', postsStore.categories)
 
     // Load post data if editing
     if (isEditing.value) {
@@ -567,11 +576,14 @@ onMounted(async () => {
       console.log('Loaded post data:', post)
       
       form.value = {
-        ...form.value,
-        ...post,
-        publishedAt: post.published_at ? post.published_at.split('T')[0] : form.value.publishedAt,
+        title: post.title || '',
+        content: post.content || '',
+        excerpt: post.excerpt || '',
+        author: post.author_name || authStore.userFullName || 'Admin',
+        publishedAt: post.published_at ? post.published_at.split('T')[0] : new Date().toISOString().split('T')[0],
         categories: post.category ? [post.category.id] : [],
-        featuredImage: post.featured_image,
+        tags: post.tags?.map(t => t.id) || [],
+        featuredImage: post.featured_image || null,
         status: post.status?.toLowerCase() || 'draft'
       }
       
