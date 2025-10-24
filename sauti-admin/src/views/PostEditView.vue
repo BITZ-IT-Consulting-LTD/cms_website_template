@@ -16,44 +16,44 @@
             <div>
               <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">
                 {{ isEditing ? 'Edit Blog Post' : 'Create New Blog Post' }}
-              </h1>
+      </h1>
               <p class="text-sm text-gray-500 mt-1">
                 {{ isEditing ? 'Update your blog post content and settings' : 'Write and publish a new blog post' }}
               </p>
             </div>
           </div>
-          
-          <div class="flex items-center space-x-3">
-            <button
-              @click="previewPost"
+      
+      <div class="flex items-center space-x-3">
+        <button
+          @click="previewPost"
               class="btn-outline flex items-center"
-              :disabled="!form.title"
-            >
-              <EyeIcon class="h-4 w-4 mr-2" />
-              Preview
-            </button>
-            
-            <button
-              @click="saveDraft"
+          :disabled="!form.title"
+        >
+          <EyeIcon class="h-4 w-4 mr-2" />
+          Preview
+        </button>
+        
+        <button
+          @click="saveDraft"
               class="btn-secondary flex items-center"
-              :disabled="loading"
-            >
+          :disabled="loading"
+        >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
               </svg>
-              Save Draft
-            </button>
-            
-            <button
-              @click="updatePost"
+          Save Draft
+        </button>
+        
+        <button
+          @click="updatePost"
               class="btn-primary flex items-center"
-              :disabled="loading || !form.title"
-            >
+          :disabled="loading || !form.title"
+        >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
               </svg>
               {{ isEditing ? 'Update Post' : 'Publish Post' }}
-            </button>
+        </button>
           </div>
         </div>
       </div>
@@ -62,31 +62,31 @@
     <!-- Main Content -->
     <div class="p-6">
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Content Area (Left Column) -->
-        <div class="lg:col-span-2 space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content Area (Left Column) -->
+      <div class="lg:col-span-2 space-y-6">
           <!-- Enhanced Post Title -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="space-y-2">
               <label for="title" class="block text-sm font-semibold text-gray-900">
-                Post Title *
-              </label>
+            Post Title *
+          </label>
               <p class="text-xs text-gray-500">Write a compelling title that captures your audience's attention</p>
-              <input
-                id="title"
-                v-model="form.title"
-                type="text"
-                required
+          <input
+            id="title"
+            v-model="form.title"
+            type="text"
+            required
                 class="w-full px-4 py-3 border border-gray-300 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400"
-                placeholder="Enter your post title..."
+            placeholder="Enter your post title..."
                 style="font-family: 'Roboto', sans-serif;"
-              />
+          />
               <div class="flex items-center justify-between text-xs text-gray-500">
                 <span>{{ form.title.length }}/100 characters</span>
                 <span class="text-green-600" v-if="form.title.length > 10">Good length</span>
               </div>
             </div>
-          </div>
+        </div>
 
           <!-- Enhanced Rich Text Editor -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -94,8 +94,8 @@
               <div class="flex items-center justify-between">
                 <div>
                   <label class="block text-sm font-semibold text-gray-900">
-                    Main Content *
-                  </label>
+            Main Content *
+          </label>
                   <p class="text-xs text-gray-500 mt-1">Write your blog post content with rich formatting</p>
                 </div>
                 <div class="flex items-center space-x-2 text-xs text-gray-500">
@@ -137,11 +137,11 @@ Each paragraph will be properly formatted when displayed."
                 </div>
               </div>
             </div>
-          </div>
+        </div>
       </div>
 
         <!-- Enhanced Metadata Sidebar (Right Column) -->
-        <div class="space-y-6">
+      <div class="space-y-6">
           <!-- Enhanced Metadata Card -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center space-x-2 mb-6">
@@ -155,10 +155,10 @@ Each paragraph will be properly formatted when displayed."
             <div class="mb-6">
               <label class="block text-sm font-semibold text-gray-900 mb-2">Author</label>
               <div class="relative">
-                <input
-                  v-model="form.author"
-                  type="text"
-                  readonly
+            <input
+              v-model="form.author"
+              type="text"
+              readonly
                   class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600 font-medium"
                   style="font-family: 'Roboto', sans-serif;"
                 />
@@ -168,43 +168,43 @@ Each paragraph will be properly formatted when displayed."
                   </svg>
                 </div>
               </div>
-            </div>
-            
+          </div>
+          
             <!-- Enhanced Publication Date -->
             <div class="mb-6">
               <label class="block text-sm font-semibold text-gray-900 mb-2">Publication Date</label>
-              <input
-                v-model="form.publishedAt"
-                type="date"
+            <input
+              v-model="form.publishedAt"
+              type="date"
                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
                 style="font-family: 'Roboto', sans-serif;"
-              />
-            </div>
+            />
+          </div>
           
             <!-- Enhanced Categories -->
             <div class="mb-6">
               <label class="block text-sm font-semibold text-gray-900 mb-3">Categories</label>
               <div class="space-y-3 max-h-40 overflow-y-auto border border-gray-200 rounded-xl p-3 bg-gray-50">
                 <label v-for="category in categories" :key="category.id" class="flex items-center p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
-                  <input
-                    v-model="form.categories"
-                    :value="category.id"
-                    type="checkbox"
+                <input
+                  v-model="form.categories"
+                  :value="category.id"
+                  type="checkbox"
                     class="rounded border-gray-300 text-[#8B4000] focus:ring-[#8B4000] focus:ring-2"
-                  />
+                />
                   <span class="ml-3 text-sm font-medium text-gray-700">{{ category.name }}</span>
-                </label>
-              </div>
+              </label>
             </div>
-            
+          </div>
+          
             <!-- Enhanced Tags -->
             <div class="mb-6">
               <label class="block text-sm font-semibold text-gray-900 mb-2">Tags</label>
               <div class="relative">
-                <input
-                  v-model="tagsInput"
-                  type="text"
-                  placeholder="helpline, children, safety, uganda"
+            <input
+              v-model="tagsInput"
+              type="text"
+              placeholder="helpline, children, safety, uganda"
                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400"
                   style="font-family: 'Roboto', sans-serif;"
                 />
@@ -215,7 +215,7 @@ Each paragraph will be properly formatted when displayed."
                 </div>
               </div>
               <p class="mt-2 text-xs text-gray-500">Separate tags with commas for better organization</p>
-            </div>
+          </div>
         </div>
 
           <!-- Enhanced Featured Image Card -->
@@ -228,49 +228,49 @@ Each paragraph will be properly formatted when displayed."
             </div>
           
             <div v-if="form.featuredImage || imagePreview" class="relative mb-6">
-              <img
-                :src="imagePreview || form.featuredImage"
-                alt="Featured image"
+            <img
+              :src="imagePreview || form.featuredImage"
+              alt="Featured image"
                 class="w-full h-48 object-cover rounded-xl shadow-sm"
-              />
-              <button
-                @click="removeImage"
+            />
+            <button
+              @click="removeImage"
                 class="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 shadow-lg"
-                title="Remove image"
-              >
-                <XMarkIcon class="h-4 w-4" />
-              </button>
-            </div>
-            
+              title="Remove image"
+            >
+              <XMarkIcon class="h-4 w-4" />
+            </button>
+          </div>
+          
             <div v-else class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
               <PhotoIcon class="h-12 w-12 text-gray-400 mx-auto mb-3" />
               <p class="text-sm text-gray-500 font-medium">No image selected</p>
               <p class="text-xs text-gray-400 mt-1">Click below to upload an image</p>
-            </div>
-            
-            <input
-              ref="imageInput"
-              type="file"
-              accept="image/*"
-              @change="handleImageUpload"
-              class="hidden"
-            />
-            
-            <button
-              @click="$refs.imageInput.click()"
+          </div>
+          
+          <input
+            ref="imageInput"
+            type="file"
+            accept="image/*"
+            @change="handleImageUpload"
+            class="hidden"
+          />
+          
+          <button
+            @click="$refs.imageInput.click()"
               class="w-full mt-4 px-4 py-3 border-2 border-dashed border-[#8B4000] rounded-xl text-sm font-semibold text-[#8B4000] hover:bg-[#8B4000] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
               style="font-family: 'Roboto', sans-serif;"
-            >
+          >
               {{ form.featuredImage || imagePreview ? 'Change Image' : 'Upload Image' }}
-            </button>
+          </button>
         </div>
 
           <!-- Enhanced Action Buttons -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="space-y-3">
-              <button
-                @click="updatePost"
-                :disabled="loading || !form.title"
+        <div class="space-y-3">
+          <button
+            @click="updatePost"
+            :disabled="loading || !form.title"
                 class="w-full btn-primary flex items-center justify-center"
                 style="font-family: 'Roboto', sans-serif;"
               >
@@ -282,15 +282,15 @@ Each paragraph will be properly formatted when displayed."
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                 </svg>
                 {{ loading ? 'Saving...' : (isEditing ? 'Update Post' : 'Publish Post') }}
-              </button>
-              
-              <button
-                @click="$router.go(-1)"
+          </button>
+          
+          <button
+            @click="$router.go(-1)"
                 class="w-full px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 style="font-family: 'Roboto', sans-serif;"
-              >
-                Cancel
-              </button>
+          >
+            Cancel
+          </button>
             </div>
           </div>
         </div>
@@ -549,16 +549,21 @@ onMounted(async () => {
 
     // Load post data if editing
     if (isEditing.value) {
+      console.log('Loading post for editing:', route.params.slug)
       const post = await postsStore.fetchPost(route.params.slug)
+      console.log('Loaded post data:', post)
+      
       form.value = {
         ...form.value,
         ...post,
         publishedAt: post.published_at ? post.published_at.split('T')[0] : form.value.publishedAt,
-        categories: post.categories?.map(c => c.id) || [],
-        featuredImage: post.featured_image
+        categories: post.category ? [post.category.id] : [],
+        featuredImage: post.featured_image,
+        status: post.status?.toLowerCase() || 'draft'
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
+      console.log('Form data after loading:', form.value)
       
       // Update editor content
       await nextTick()
