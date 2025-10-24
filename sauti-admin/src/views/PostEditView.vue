@@ -210,15 +210,16 @@
             <!-- Enhanced Editor Content Area -->
             <div
               ref="editor"
-              class="min-h-96 p-6 focus-within:ring-2 focus-within:ring-[#8B4000] prose max-w-none"
+              class="min-h-96 p-6 focus-within:ring-2 focus-within:ring-[#8B4000] prose max-w-none editor-content"
               contenteditable
               dir="ltr"
-              style="direction: ltr; text-align: left; unicode-bidi: normal; font-family: 'Roboto', sans-serif;"
+              style="direction: ltr !important; text-align: left !important; unicode-bidi: normal !important; writing-mode: horizontal-tb !important; font-family: 'Roboto', sans-serif;"
               @input="handleContentChange"
               @paste="handlePaste"
               @keydown="handleKeydown"
               @click="handleEditorClick"
               @focus="handleEditorFocus"
+              @blur="handleEditorBlur"
               v-html="form.content"
               placeholder="Start typing your content here..."
             ></div>
@@ -481,6 +482,16 @@ const handleContentChange = (event) => {
     editor.value.style.textAlign = 'left'
     editor.value.style.unicodeBidi = 'normal'
     editor.value.style.writingMode = 'horizontal-tb'
+    editor.value.setAttribute('dir', 'ltr')
+    
+    // Force all child elements to be LTR
+    const allElements = editor.value.querySelectorAll('*')
+    allElements.forEach(el => {
+      el.style.direction = 'ltr'
+      el.style.textAlign = 'left'
+      el.style.unicodeBidi = 'normal'
+      el.setAttribute('dir', 'ltr')
+    })
   }
   
   // Auto-save draft every 30 seconds
@@ -542,6 +553,29 @@ const handleEditorFocus = (event) => {
     editor.value.style.textAlign = 'left'
     editor.value.style.unicodeBidi = 'normal'
     editor.value.style.writingMode = 'horizontal-tb'
+    
+    // Also set the dir attribute
+    editor.value.setAttribute('dir', 'ltr')
+    
+    // Force cursor to LTR position
+    const selection = window.getSelection()
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0)
+      range.collapse(false) // Move to end
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+  }
+}
+
+const handleEditorBlur = (event) => {
+  // Ensure text direction is maintained even when editor loses focus
+  if (editor.value) {
+    editor.value.style.direction = 'ltr'
+    editor.value.style.textAlign = 'left'
+    editor.value.style.unicodeBidi = 'normal'
+    editor.value.style.writingMode = 'horizontal-tb'
+    editor.value.setAttribute('dir', 'ltr')
   }
 }
 
@@ -663,9 +697,20 @@ onMounted(async () => {
         editor.value.style.textAlign = 'left'
         editor.value.style.unicodeBidi = 'normal'
         editor.value.style.writingMode = 'horizontal-tb'
+        editor.value.setAttribute('dir', 'ltr')
         
         if (post.content) {
           editor.value.innerHTML = post.content
+          
+          // Force all child elements to be LTR
+          const allElements = editor.value.querySelectorAll('*')
+          allElements.forEach(el => {
+            el.style.direction = 'ltr'
+            el.style.textAlign = 'left'
+            el.style.unicodeBidi = 'normal'
+            el.setAttribute('dir', 'ltr')
+          })
+          
           // Focus the editor and place cursor at the end for editing existing content
           editor.value.focus()
           // Move cursor to the end of the content
@@ -707,6 +752,20 @@ onMounted(async () => {
 }
 
 [contenteditable] {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
+.editor-content {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
+.editor-content * {
   direction: ltr !important;
   text-align: left !important;
   unicode-bidi: normal !important;
