@@ -5,10 +5,15 @@ import { api } from '@/utils/api'
 export const useDashboardStore = defineStore('dashboard', () => {
   // State
   const stats = ref({
-    totalPosts: 0,
-    totalVideos: 0,
-    totalViews: 0,
-    totalEngagement: 0
+    content: {
+      posts: { total: 0, published: 0, draft: 0, recent: 0 },
+      videos: { total: 0, published: 0, recent: 0 },
+      resources: { total: 0, recent: 0 },
+      faqs: { total: 0 },
+      partners: { total: 0 }
+    },
+    reports: { total: 0, pending: 0 },
+    activity: { recent_posts: 0, recent_videos: 0, recent_resources: 0 }
   })
   
   const contentList = ref([])
@@ -31,10 +36,15 @@ export const useDashboardStore = defineStore('dashboard', () => {
       
       // Fallback to mock data for development
       stats.value = {
-        totalPosts: 12,
-        totalVideos: 8,
-        totalViews: 15420,
-        totalEngagement: 2340
+        content: {
+          posts: { total: 12, published: 8, draft: 4, recent: 3 },
+          videos: { total: 8, published: 6, recent: 2 },
+          resources: { total: 15, recent: 1 },
+          faqs: { total: 25 },
+          partners: { total: 8 }
+        },
+        reports: { total: 45, pending: 12 },
+        activity: { recent_posts: 3, recent_videos: 2, recent_resources: 1 }
       }
       
       return stats.value

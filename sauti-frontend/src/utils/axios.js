@@ -116,6 +116,13 @@ export const api = {
     tags: () => apiClient.get('/posts/tags/'),
   },
   
+  // Videos endpoints
+  videos: {
+    list: (params) => apiClient.get('/videos/', { params }),
+    get: (slug) => apiClient.get(`/videos/${slug}/`),
+    categories: () => apiClient.get('/videos/categories/'),
+  },
+  
   // Resources endpoints
   resources: {
     list: (params) => apiClient.get('/resources/', { params }),

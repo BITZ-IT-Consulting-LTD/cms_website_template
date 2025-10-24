@@ -72,12 +72,12 @@ export const useVideosStore = defineStore('videos', () => {
     }
   }
   
-  async function fetchVideo(id) {
+  async function fetchVideo(slug) {
     loading.value = true
     error.value = null
     
     try {
-      const response = await api.videos.get(id)
+      const response = await api.videos.get(slug)
       currentVideo.value = response.data
       return currentVideo.value
     } catch (err) {
@@ -107,14 +107,14 @@ export const useVideosStore = defineStore('videos', () => {
     }
   }
   
-  async function updateVideo(id, videoData) {
+  async function updateVideo(slug, videoData) {
     loading.value = true
     error.value = null
     
     try {
-      const response = await api.videos.update(id, videoData)
+      const response = await api.videos.update(slug, videoData)
       const updatedVideo = response.data
-      const index = videos.value.findIndex(v => v.id === id)
+      const index = videos.value.findIndex(v => v.slug === slug)
       if (index !== -1) {
         videos.value[index] = updatedVideo
       }
@@ -129,14 +129,14 @@ export const useVideosStore = defineStore('videos', () => {
     }
   }
   
-  async function deleteVideo(id) {
+  async function deleteVideo(slug) {
     loading.value = true
     error.value = null
     
     try {
-      await api.videos.delete(id)
-      videos.value = videos.value.filter(v => v.id !== id)
-      if (currentVideo.value?.id === id) {
+      await api.videos.delete(slug)
+      videos.value = videos.value.filter(v => v.slug !== slug)
+      if (currentVideo.value?.slug === slug) {
         currentVideo.value = null
       }
     } catch (err) {
@@ -150,16 +150,18 @@ export const useVideosStore = defineStore('videos', () => {
   
   async function fetchCategories() {
     try {
-      // Mock categories for now
+      const response = await api.get('/videos/categories/')
+      categories.value = response.data
+      return categories.value
+    } catch (err) {
+      console.error('Failed to fetch video categories:', err)
+      // Fallback to mock categories
       categories.value = [
         { id: 1, name: 'Safety', slug: 'safety' },
         { id: 2, name: 'Services', slug: 'services' },
         { id: 3, name: 'Community', slug: 'community' },
         { id: 4, name: 'Education', slug: 'education' }
       ]
-      return categories.value
-    } catch (err) {
-      console.error('Failed to fetch video categories:', err)
       return categories.value
     }
   }
