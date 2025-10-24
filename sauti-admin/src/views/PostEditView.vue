@@ -208,21 +208,19 @@
             </div>
           
             <!-- Enhanced Editor Content Area -->
-            <div
+            <textarea
               ref="editor"
-              class="min-h-96 p-6 focus-within:ring-2 focus-within:ring-[#8B4000] prose max-w-none editor-content"
-              contenteditable
-              dir="ltr"
-              style="direction: ltr !important; text-align: left !important; unicode-bidi: normal !important; writing-mode: horizontal-tb !important; font-family: 'Roboto', sans-serif;"
+              v-model="form.content"
+              class="min-h-96 p-6 focus:ring-2 focus:ring-[#8B4000] prose max-w-none editor-content w-full border border-gray-300 rounded-lg resize-none"
+              style="direction: ltr !important; text-align: left !important; unicode-bidi: normal !important; writing-mode: horizontal-tb !important; font-family: 'Roboto', sans-serif; font-size: 16px; line-height: 1.6;"
+              placeholder="Start typing your content here..."
               @input="handleContentChange"
               @paste="handlePaste"
               @keydown="handleKeydown"
-              @click="handleEditorClick"
               @focus="handleEditorFocus"
               @blur="handleEditorBlur"
-              v-html="form.content"
-              placeholder="Start typing your content here..."
-            ></div>
+              @keyup="handleKeyup"
+            ></textarea>
           </div>
       </div>
 
@@ -472,10 +470,7 @@ const isActive = (command, options = {}) => {
 }
 
 const handleContentChange = (event) => {
-  // Ensure the content maintains proper direction
-  const content = event.target.innerHTML
-  form.value.content = content
-  
+  // For textarea, the content is already in form.value.content via v-model
   // Force text direction on every change
   if (editor.value) {
     editor.value.style.direction = 'ltr'
@@ -483,15 +478,6 @@ const handleContentChange = (event) => {
     editor.value.style.unicodeBidi = 'normal'
     editor.value.style.writingMode = 'horizontal-tb'
     editor.value.setAttribute('dir', 'ltr')
-    
-    // Force all child elements to be LTR
-    const allElements = editor.value.querySelectorAll('*')
-    allElements.forEach(el => {
-      el.style.direction = 'ltr'
-      el.style.textAlign = 'left'
-      el.style.unicodeBidi = 'normal'
-      el.setAttribute('dir', 'ltr')
-    })
   }
   
   // Auto-save draft every 30 seconds
@@ -506,10 +492,9 @@ const handleContentChange = (event) => {
 }
 
 const handlePaste = (event) => {
-  // Clean up pasted content
-  event.preventDefault()
-  const text = (event.clipboardData || window.clipboardData).getData('text/plain')
-  document.execCommand('insertText', false, text)
+  // For textarea, let the default paste behavior work
+  // The v-model will handle the content update
+  // No need to prevent default or use execCommand
 }
 
 const handleKeydown = (event) => {
@@ -576,6 +561,37 @@ const handleEditorBlur = (event) => {
     editor.value.style.unicodeBidi = 'normal'
     editor.value.style.writingMode = 'horizontal-tb'
     editor.value.setAttribute('dir', 'ltr')
+  }
+}
+
+const handleKeyup = (event) => {
+  // Force text direction on every keyup
+  if (editor.value) {
+    // Force immediate text direction correction
+    editor.value.style.direction = 'ltr'
+    editor.value.style.textAlign = 'left'
+    editor.value.style.unicodeBidi = 'normal'
+    editor.value.style.writingMode = 'horizontal-tb'
+    editor.value.setAttribute('dir', 'ltr')
+    
+    // Force all child elements to be LTR
+    const allElements = editor.value.querySelectorAll('*')
+    allElements.forEach(el => {
+      el.style.direction = 'ltr'
+      el.style.textAlign = 'left'
+      el.style.unicodeBidi = 'normal'
+      el.setAttribute('dir', 'ltr')
+    })
+    
+    // Force cursor position to be LTR
+    const selection = window.getSelection()
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0)
+      // Ensure cursor is at the end (LTR position)
+      range.collapse(false)
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
   }
 }
 
@@ -689,47 +705,23 @@ onMounted(async () => {
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
       
-      // Update editor content with proper HTML
+      // Update editor content
       await nextTick()
       if (editor.value) {
-        // Force text direction before loading content
+        // Force text direction
         editor.value.style.direction = 'ltr'
         editor.value.style.textAlign = 'left'
         editor.value.style.unicodeBidi = 'normal'
         editor.value.style.writingMode = 'horizontal-tb'
         editor.value.setAttribute('dir', 'ltr')
         
-        if (post.content) {
-          editor.value.innerHTML = post.content
-          
-          // Force all child elements to be LTR
-          const allElements = editor.value.querySelectorAll('*')
-          allElements.forEach(el => {
-            el.style.direction = 'ltr'
-            el.style.textAlign = 'left'
-            el.style.unicodeBidi = 'normal'
-            el.setAttribute('dir', 'ltr')
-          })
-          
-          // Focus the editor and place cursor at the end for editing existing content
-          editor.value.focus()
-          // Move cursor to the end of the content
-          const range = document.createRange()
-          const sel = window.getSelection()
-          range.selectNodeContents(editor.value)
-          range.collapse(false) // false = collapse to end
-          sel.removeAllRanges()
-          sel.addRange(range)
-        } else {
-          // For new posts, focus at the beginning
-          editor.value.focus()
-          const range = document.createRange()
-          const sel = window.getSelection()
-          range.setStart(editor.value, 0)
-          range.collapse(true)
-          sel.removeAllRanges()
-          sel.addRange(range)
-        }
+        // For textarea, the content is already set via v-model
+        // Just focus the editor
+        editor.value.focus()
+        
+        // Move cursor to the end of the content
+        const length = editor.value.value.length
+        editor.value.setSelectionRange(length, length)
       }
     }
   } catch (err) {
@@ -765,11 +757,12 @@ onMounted(async () => {
   writing-mode: horizontal-tb !important;
 }
 
-.editor-content * {
+textarea.editor-content {
   direction: ltr !important;
   text-align: left !important;
   unicode-bidi: normal !important;
   writing-mode: horizontal-tb !important;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 .prose h1 {
