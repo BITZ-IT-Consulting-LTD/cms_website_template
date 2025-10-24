@@ -1,14 +1,16 @@
 <template>
-  <article class="card hover:scale-105 transform transition-all duration-300">
+  <article class="group">
     <router-link :to="`/blog/${post.slug}`">
       <!-- Featured Image -->
-      <div class="relative h-48 bg-gray-200 overflow-hidden">
+      <div class="relative h-52 bg-gray-200 overflow-hidden rounded-2xl">
         <img
           v-if="post.featured_image"
           :src="post.featured_image"
           :alt="post.title"
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform"
           loading="lazy"
+          @error="setPlaceholder"
+          data-ph="https://picsum.photos/800/480?blur=2"
         />
         <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-400 to-primary-600">
           <svg class="w-16 h-16 text-white opacity-50" fill="currentColor" viewBox="0 0 20 20">
@@ -32,14 +34,14 @@
       </div>
 
       <!-- Content -->
-      <div class="card-body">
+      <div class="pt-4">
         <!-- Meta Info -->
-        <div class="flex items-center text-sm text-gray-500 mb-3 flex-wrap gap-2">
+        <div class="flex items-center text-xs text-gray-500 mb-2 flex-wrap gap-2">
           <time :datetime="post.published_at">
             {{ formatDate(post.published_at) }}
           </time>
           <span>·</span>
-          <span v-if="post.author">{{ post.author.username }}</span>
+          <span v-if="post.author">Article</span>
           <span v-if="post.views_count" class="flex items-center">
             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
@@ -50,33 +52,16 @@
         </div>
 
         <!-- Title -->
-        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2 hover:text-primary-600 transition-colors">
+        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
           {{ post.title }}
         </h3>
 
         <!-- Excerpt -->
-        <p v-if="post.excerpt" class="text-gray-600 line-clamp-3 mb-4">
+        <p v-if="post.excerpt" class="text-gray-600 line-clamp-3">
           {{ post.excerpt }}
         </p>
 
-        <!-- Tags -->
-        <div v-if="post.tags && post.tags.length" class="flex flex-wrap gap-2 mb-4">
-          <span
-            v-for="tag in post.tags.slice(0, 3)"
-            :key="tag.id"
-            class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
-          >
-            #{{ tag.name }}
-          </span>
-        </div>
-
-        <!-- Read More -->
-        <div class="flex items-center text-primary-600 font-medium text-sm">
-          Read more
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-          </svg>
-        </div>
+        <div class="h-6"></div>
       </div>
     </router-link>
   </article>
@@ -100,6 +85,14 @@ function formatDate(dateString) {
     month: 'long',
     day: 'numeric',
   })
+}
+
+function setPlaceholder(event) {
+  const img = event.target
+  const ph = img.getAttribute('data-ph') || 'https://picsum.photos/800/480'
+  if (img.src !== ph) {
+    img.src = ph
+  }
 }
 </script>
 

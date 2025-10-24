@@ -31,11 +31,15 @@
             <li><router-link to="/about" class="text-gray-400 hover:text-white transition-colors">About Us</router-link></li>
             <li><router-link to="/blog" class="text-gray-400 hover:text-white transition-colors">News & Blog</router-link></li>
             <li><router-link to="/resources" class="text-gray-400 hover:text-white transition-colors">Resources</router-link></li>
+            <li><router-link to="/partners" class="text-gray-400 hover:text-white transition-colors">Partners</router-link></li>
+            <li><router-link to="/report" class="text-gray-400 hover:text-white transition-colors">Report a Case</router-link></li>
             <li><router-link to="/faqs" class="text-gray-400 hover:text-white transition-colors">FAQs</router-link></li>
+            <li><router-link to="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</router-link></li>
+            <li><router-link to="/terms" class="text-gray-400 hover:text-white transition-colors">Terms of Service</router-link></li>
           </ul>
         </div>
 
-        <!-- Services -->
+        <!-- Services / Channels -->
         <div>
           <h3 class="text-lg font-semibold mb-4">Get Help</h3>
           <ul class="space-y-2">
@@ -43,7 +47,10 @@
             <li><router-link to="/contact" class="text-gray-400 hover:text-white transition-colors">Contact Us</router-link></li>
             <li><a href="tel:116" class="text-gray-400 hover:text-white transition-colors">Call 116</a></li>
             <li><a href="https://wa.me/256123456789" target="_blank" class="text-gray-400 hover:text-white transition-colors">WhatsApp</a></li>
-            <li><a href="https://ureport.in" target="_blank" class="text-gray-400 hover:text-white transition-colors">U-Report</a></li>
+            <li><a href="https://ureport.in" target="_blank" class="text-gray-400 hover:text-white transition-colors">U-Report (SMS)</a></li>
+            <li><a href="https://www.unicef.org/uganda/safepal-app" target="_blank" class="text-gray-400 hover:text-white transition-colors">SafePal App</a></li>
+            <li><a href="mailto:info@sauti.mglsd.go.ug" class="text-gray-400 hover:text-white transition-colors">info@sauti.mglsd.go.ug</a></li>
+            <li><a href="mailto:sautichildhelpline@gmail.com" class="text-gray-400 hover:text-white transition-colors">sautichildhelpline@gmail.com</a></li>
           </ul>
         </div>
 
@@ -71,6 +78,17 @@
               <span>Ministry of Gender, Labour & Social Development, Kampala, Uganda</span>
             </li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust badges -->
+    <div class="border-t border-gray-800">
+      <div class="container-custom py-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-gray-400 text-sm">
+          <div class="flex items-center justify-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-primary-500"></span> Supported by MGLSD</div>
+          <div class="flex items-center justify-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-primary-500"></span> Endorsed by UNICEF</div>
+          <div class="flex items-center justify-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-primary-500"></span> ITU 116 Standard</div>
         </div>
       </div>
     </div>

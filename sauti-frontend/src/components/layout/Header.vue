@@ -1,58 +1,35 @@
 <template>
-  <header class="bg-white shadow-md sticky top-0 z-50">
-    <!-- Emergency Banner -->
-    <div class="emergency-banner no-print">
-      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-      </svg>
-      <span>Emergency? Call <a href="tel:116" class="underline font-bold">116</a> now!</span>
-    </div>
-
-    <nav class="container-custom py-4">
-      <div class="flex items-center justify-between">
+  <header class="bg-white/90 backdrop-blur sticky top-0 z-50 border-b border-gray-100">
+    <nav class="container-custom py-3">
+      <div class="flex items-center justify-between min-h-[64px]">
         <!-- Logo -->
-        <router-link to="/" class="flex items-center space-x-3">
-          <!-- <img src="/logo.png" alt="Sauti Logo" class="h-12 w-auto" @error="handleLogoError" /> -->
+        <router-link to="/" class="flex items-center space-x-2">
+          <template v-if="!useFallback">
+            <img :src="logoUrl" alt="Sauti" class="h-8 w-8 object-contain" @error="useFallback = true" />
+          </template>
+          <template v-else>
+            <div class="h-8 w-8 rounded-full bg-secondary-500 flex items-center justify-center text-white font-bold">S</div>
+          </template>
           <div>
-            <h1 class="text-xl md:text-2xl font-bold text-primary-600">Sauti</h1>
-            <p class="text-xs text-gray-600 hidden sm:block">Child Helpline</p>
+            <h1 class="text-lg md:text-xl font-bold text-gray-900">Sauti.</h1>
           </div>
         </router-link>
 
-        <!-- Desktop Navigation -->
-        <div class="hidden lg:flex items-center space-x-6">
-          <router-link
-            v-for="link in navigationLinks"
-            :key="link.to"
-            :to="link.to"
-            class="text-gray-700 hover:text-primary-600 font-medium transition-colors"
-            active-class="text-primary-600"
-          >
-            {{ link.label }}
-          </router-link>
-          
-          <!-- Language Switcher -->
-          <LanguageSwitcher />
-          
-          <!-- Get Help Button -->
-          <GetHelpButton />
-          
-          <!-- Auth Links -->
-          <div v-if="isAuthenticated">
-            <button
-              @click="handleLogout"
-              class="text-gray-700 hover:text-primary-600 font-medium"
-            >
-              Logout
-            </button>
-          </div>
-          <router-link
-            v-else
-            to="/login"
-            class="text-gray-700 hover:text-primary-600 font-medium"
-          >
-            Staff Login
-          </router-link>
+        <!-- Desktop Navigation (aligned with provided design) -->
+        <div class="hidden lg:flex flex-1 items-center justify-center gap-8 xl:gap-10 whitespace-nowrap">
+          <router-link to="/" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">Home</router-link>
+          <router-link to="/about" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">About</router-link>
+          <router-link to="/operations" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">Services</router-link>
+          <router-link to="/blog" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">Blogs</router-link>
+          <router-link to="/videos" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">Videos</router-link>
+          <router-link to="/resources" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">Resources</router-link>
+          <router-link to="/contact" class="text-gray-700 hover:text-gray-900 px-2 py-1 rounded-full hover:bg-gray-100">Contact</router-link>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="hidden lg:flex items-center gap-3 whitespace-nowrap shrink-0">
+          <a href="#" class="inline-flex items-center rounded-full bg-orange-500 px-4 py-2 text-white font-semibold hover:bg-orange-600 transition-colors">Donate</a>
+          <a href="tel:116" class="inline-flex items-center rounded-full border border-gray-300 px-4 py-2 text-gray-800 font-semibold hover:bg-gray-100 transition-colors">Call Helpline</a>
         </div>
 
         <!-- Mobile Menu Button -->
@@ -73,38 +50,19 @@
       <!-- Mobile Menu -->
       <Transition name="slide">
         <div v-if="mobileMenuOpen" class="lg:hidden mt-4 pb-4 space-y-3">
-          <router-link
-            v-for="link in navigationLinks"
-            :key="link.to"
-            :to="link.to"
-            class="block py-2 text-gray-700 hover:text-primary-600 font-medium"
-            active-class="text-primary-600"
-            @click="mobileMenuOpen = false"
-          >
-            {{ link.label }}
-          </router-link>
-          
-          <div class="pt-3 border-t border-gray-200">
-            <LanguageSwitcher class="mb-3" />
-            <GetHelpButton class="w-full" />
+          <!-- Primary pages in required order -->
+          <router-link to="/" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">Home</router-link>
+          <router-link to="/about" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">About</router-link>
+          <router-link to="/operations" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">Services</router-link>
+          <router-link to="/blog" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">Blogs</router-link>
+          <router-link to="/videos" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">Videos</router-link>
+          <router-link to="/resources" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">Resources</router-link>
+          <router-link to="/contact" class="block py-2 text-gray-700 hover:text-gray-900" @click="mobileMenuOpen = false">Contact</router-link>
+
+          <div class="pt-3 border-t border-gray-200 grid grid-cols-2 gap-3">
+            <a href="#" class="inline-flex items-center justify-center rounded-full bg-orange-500 px-4 py-2 text-white font-semibold hover:bg-orange-600 transition-colors">Donate</a>
+            <a href="tel:116" class="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-gray-800 font-semibold hover:bg-gray-100 transition-colors">Call Helpline</a>
           </div>
-          
-          <div v-if="isAuthenticated" class="pt-3 border-t border-gray-200">
-            <button
-              @click="handleLogout"
-              class="block py-2 text-gray-700 hover:text-primary-600 font-medium"
-            >
-              Logout
-            </button>
-          </div>
-          <router-link
-            v-else
-            to="/login"
-            class="block py-2 text-gray-700 hover:text-primary-600 font-medium"
-            @click="mobileMenuOpen = false"
-          >
-            Staff Login
-          </router-link>
         </div>
       </Transition>
     </nav>
@@ -112,40 +70,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/store/auth'
-import LanguageSwitcher from '@/components/common/LanguageSwitcher.vue'
-import GetHelpButton from '@/components/common/GetHelpButton.vue'
-
-const router = useRouter()
-const authStore = useAuthStore()
+import { ref } from 'vue'
 
 const mobileMenuOpen = ref(false)
-
-const navigationLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' },
-  { to: '/blog', label: 'News' },
-  { to: '/resources', label: 'Resources' },
-  { to: '/faqs', label: 'FAQs' },
-  { to: '/partners', label: 'Partners' },
-  { to: '/report', label: 'Report Case' },
-  { to: '/contact', label: 'Contact' },
-]
-
-const isAuthenticated = computed(() => authStore.isAuthenticated)
-
-function handleLogout() {
-  authStore.logout()
-  router.push('/')
-  mobileMenuOpen.value = false
-}
-
-function handleLogoError(event) {
-  // Fallback if logo image fails to load
-  event.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="50">🛡️</text></svg>'
-}
+const useFallback = ref(false)
+const logoUrl = new URL('@/assets/ug.svg', import.meta.url).href
 </script>
 
 <style scoped>

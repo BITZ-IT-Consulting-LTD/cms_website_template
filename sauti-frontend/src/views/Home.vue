@@ -1,117 +1,166 @@
 <template>
   <div>
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white section-padding">
-      <div class="container-custom">
-        <div class="text-center max-w-4xl mx-auto">
-          <h1 class="text-4xl md:text-6xl font-bold mb-6 fade-in">
-            We're Here to Help You
-          </h1>
-          <p class="text-xl md:text-2xl mb-8 text-primary-100">
-            Support for children, GBV survivors, and migrant workers across Uganda
-          </p>
-          
-          <!-- Hotline -->
-          <div class="bg-white bg-opacity-10 backdrop-blur rounded-2xl p-8 mb-8">
-            <p class="text-lg mb-4">Emergency Hotline</p>
-            <a href="tel:116" class="text-6xl md:text-7xl font-bold hover:text-secondary-300 transition-colors">
-              116
-            </a>
-            <p class="text-primary-200 mt-4">Toll-free · Available 24/7</p>
+    <!-- Hero (Airbnb-inspired: big headline, soft background, quick actions) -->
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50"></div>
+      <div class="container-custom relative py-14 md:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7">
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">Every child deserves a safe voice.</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-2xl">Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.</p>
+            <!-- Quick Action Bar -->
+            <div class="mt-6 bg-white border border-gray-100 rounded-full shadow-sm p-2 flex flex-wrap items-center gap-2 md:gap-3">
+              <a href="tel:116" class="pill pill-primary" aria-label="Call 116 now">Call 116</a>
+              <router-link to="/report" class="pill pill-light" aria-label="Report a case">Report a Case</router-link>
+              <a href="https://wa.me/256123456789" target="_blank" rel="noopener" class="pill pill-outline" aria-label="Contact via WhatsApp">WhatsApp</a>
+              <a href="https://ureport.in" target="_blank" rel="noopener" class="pill pill-outline" aria-label="U-Report 8500">U-Report 8500</a>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3 text-sm text-gray-600">
+              <span class="badge-blue">24/7</span>
+              <span class="badge-orange">All Telecoms</span>
+              <span class="badge-teal">EN • LG • SW</span>
+              <span class="badge-purple">Confidential</span>
+            </div>
           </div>
-          
-          <GetHelpButton class="inline-block" />
+          <div class="lg:col-span-5">
+            <div class="card p-0 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Protecting children" class="w-full h-72 md:h-96 object-cover" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Quick Access Services -->
+    
+
+    <!-- Quick tiles (Airbnb-style categories) -->
     <section class="section-padding bg-gray-50">
       <div class="container-custom">
-        <h2 class="text-center mb-12">How Can We Help You?</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <router-link
-            v-for="service in services"
-            :key="service.title"
-            :to="service.link"
-            class="service-card"
-          >
-            <div :class="service.iconBg" class="p-4 rounded-lg mb-4">
-              <svg class="w-8 h-8" :class="service.iconColor" fill="currentColor" viewBox="0 0 20 20">
-                <path :d="service.icon" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ service.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ service.description }}</p>
-            <span :class="`text-${service.color}-600 font-medium`">
-              Learn more →
-            </span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <router-link to="/report" class="avm-card hover:shadow-md transition-shadow">
+            <h3 class="avm-title">Report a case</h3>
+            <p class="avm-text">Confidential, fast, and supportive.</p>
+          </router-link>
+          <router-link to="/resources" class="avm-card hover:shadow-md transition-shadow">
+            <h3 class="avm-title">Resources</h3>
+            <p class="avm-text">Guides, policies and toolkits.</p>
+          </router-link>
+          <router-link to="/faqs" class="avm-card hover:shadow-md transition-shadow">
+            <h3 class="avm-title">FAQs</h3>
+            <p class="avm-text">Answers to common questions.</p>
+          </router-link>
+          <router-link to="/partners" class="avm-card hover:shadow-md transition-shadow">
+            <h3 class="avm-title">Partners</h3>
+            <p class="avm-text">MGLSD, UNICEF, UCRNN, ITU.</p>
           </router-link>
         </div>
       </div>
     </section>
 
-    <!-- Latest News -->
+    <!-- Journey Timeline -->
+    <section class="section-padding">
+      <div class="container-custom">
+        <h2 class="text-center mb-3">Our Journey</h2>
+        <p class="text-center text-gray-600 mb-12">Key milestones in our history of child advocacy, including international recommendations and national designation of 116.</p>
+        <div class="relative max-w-4xl mx-auto">
+          <div class="timeline-line"></div>
+          <div class="timeline-item left">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <h4 class="text-sm text-primary-600 font-bold">2005</h4>
+              <h3 class="text-lg font-bold mb-1">Launch of Child Helpline Initiative</h3>
+              <p class="text-gray-600">Inception of the national child protection helpline in partnership with NGOs and international agencies.</p>
+            </div>
+          </div>
+          <div class="timeline-item left">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <h4 class="text-sm text-primary-600 font-bold">2010</h4>
+              <h3 class="text-lg font-bold mb-1">Launch of Sauti Helpline</h3>
+              <p class="text-gray-600">Established as a national child helpline, providing a critical first point of contact.</p>
+            </div>
+          </div>
+          <div class="timeline-item right">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <h4 class="text-sm text-primary-600 font-bold">2015</h4>
+              <h3 class="text-lg font-bold mb-1">Expansion of Services</h3>
+              <p class="text-gray-600">Introduced counseling and legal support to offer more comprehensive assistance.</p>
+            </div>
+          </div>
+          <div class="timeline-item right">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <h4 class="text-sm text-primary-600 font-bold">2016</h4>
+              <h3 class="text-lg font-bold mb-1">Legal & Regulatory Backing</h3>
+              <p class="text-gray-600">116 designated by UCC; strengthened by national child protection policies and frameworks.</p>
+            </div>
+          </div>
+          <div class="timeline-item left">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <h4 class="text-sm text-primary-600 font-bold">2020</h4>
+              <h3 class="text-lg font-bold mb-1">Reaching 1 Million Children</h3>
+              <p class="text-gray-600">A landmark achievement, having provided assistance to over a million children across Uganda.</p>
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-gray-500 text-sm mt-6">Aligned with ITU recommendation for 116 child helplines; operated under MGLSD in collaboration with NGOs and UN partners.</p>
+      </div>
+    </section>
+
+    <!-- Featured Content (videos) -->
     <section class="section-padding">
       <div class="container-custom">
         <div class="flex justify-between items-center mb-8">
-          <h2>Latest News & Updates</h2>
-          <router-link to="/blog" class="text-primary-600 hover:text-primary-700 font-medium">
-            View all →
-          </router-link>
+          <h2>Featured Content</h2>
+          <router-link to="/videos" class="text-primary-600 hover:text-primary-700 font-medium">View all →</router-link>
         </div>
-        
-        <Loader v-if="loadingPosts" message="Loading news..." />
-        
-        <div v-else-if="latestPosts.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <BlogCard v-for="post in latestPosts" :key="post.id" :post="post" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article v-for="video in latestVideos" :key="video.id" class="group">
+            <div class="relative bg-gray-200 rounded-xl overflow-hidden aspect-video">
+              <img :src="video.thumbnail" :alt="video.title" class="w-full h-full object-cover" loading="lazy" @error="useThumbPlaceholder($event)" />
+              <span class="absolute bottom-2 right-2 text-xs font-bold bg-black/80 text-white px-1.5 py-0.5 rounded">{{ video.duration }}</span>
+            </div>
+            <div class="mt-3 flex gap-3">
+              <img :src="video.channelAvatar" :alt="video.channel" class="h-9 w-9 rounded-full object-cover" loading="lazy" @error="useAvatarPlaceholder($event)" />
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-gray-900 leading-5 line-clamp-2 group-hover:text-primary-600">{{ video.title }}</h3>
+                <p class="text-xs text-gray-600 mt-1">{{ video.channel }}</p>
+                <p class="text-xs text-gray-500">{{ video.views }} • {{ video.published }}</p>
+              </div>
+            </div>
+          </article>
         </div>
-        
-        <p v-else class="text-center text-gray-500 py-8">No news available at the moment.</p>
       </div>
     </section>
 
-    <!-- Partners -->
+    <!-- Trust strip -->
+    <section class="py-8 bg-white border-y border-gray-100">
+      <div class="container-custom">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-gray-600">
+          <div class="card p-4">MGLSD</div>
+          <div class="card p-4">UNICEF</div>
+          <div class="card p-4">UCRNN</div>
+          <div class="card p-4">ITU 116</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA aligned with new style -->
     <section class="section-padding bg-gray-50">
       <div class="container-custom text-center">
-        <h2 class="mb-8">Our Partners</h2>
-        <p class="text-gray-600 mb-12 max-w-2xl mx-auto">
-          Working together with organizations committed to protecting children and vulnerable communities
-        </p>
-        
-        <Loader v-if="loadingPartners" />
-        
-        <div v-else-if="partners.length" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-          <div v-for="partner in partners" :key="partner.id" class="grayscale hover:grayscale-0 transition-all">
-            <img
-              :src="partner.logo"
-              :alt="partner.name"
-              class="h-16 w-auto mx-auto object-contain"
-              loading="lazy"
-            />
-          </div>
+        <h2 class="mb-4">Need Help Right Now?</h2>
+        <p class="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="tel:116" class="pill pill-light">Call 116</a>
+          <router-link to="/report" class="pill pill-primary">Report a Case</router-link>
+          <router-link to="/contact" class="pill pill-outline">Contact Us</router-link>
         </div>
-      </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="section-padding bg-primary-600 text-white">
-      <div class="container-custom text-center">
-        <h2 class="mb-6">Need Help Right Now?</h2>
-        <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">
-          Don't wait. Reach out to us through any of our channels. All services are free and confidential.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="tel:116" class="btn bg-white text-primary-600 hover:bg-gray-100">
-            Call 116
-          </a>
-          <router-link to="/report" class="btn bg-secondary-500 text-white hover:bg-secondary-600">
-            Report a Case
-          </router-link>
-          <router-link to="/contact" class="btn-outline border-white text-white hover:bg-white hover:text-primary-600">
-            Contact Us
-          </router-link>
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-gray-600">
+          <div class="avm-card"><strong>Channels:</strong> 116 • WhatsApp • U-Report SMS • SafePal App • Email</div>
+          <div class="avm-card"><strong>Languages:</strong> English • Luganda • Swahili • Local languages</div>
+          <div class="avm-card"><strong>Availability:</strong> 24/7 • Nationwide • All telecoms</div>
         </div>
       </div>
     </section>
@@ -120,71 +169,54 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useBlogStore } from '@/store/blog'
 import { usePartnersStore } from '@/store/partners'
-import BlogCard from '@/components/blog/BlogCard.vue'
 import GetHelpButton from '@/components/common/GetHelpButton.vue'
 import Loader from '@/components/common/Loader.vue'
 
-const blogStore = useBlogStore()
 const partnersStore = usePartnersStore()
 
-const latestPosts = ref([])
-const partners = ref([])
-const loadingPosts = ref(false)
-const loadingPartners = ref(false)
+const latestVideos = ref([
+  {
+    id: 1,
+    title: 'Understanding Child Rights',
+    channel: 'Sauti Uganda',
+    channelAvatar: 'https://i.pravatar.cc/48?img=12',
+    views: '12K views',
+    published: '2 weeks ago',
+    duration: '12:45',
+    category: 'Education',
+    thumbnail: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop'
+  },
+  {
+    id: 2,
+    title: 'Safety Tips for Children',
+    channel: 'Sauti Uganda',
+    channelAvatar: 'https://i.pravatar.cc/48?img=32',
+    views: '15K views',
+    published: '1 month ago',
+    duration: '8:22',
+    category: 'Safety',
+    thumbnail: 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=1200&auto=format&fit=crop'
+  },
+  {
+    id: 3,
+    title: 'How to Report Abuse',
+    channel: 'Sauti Uganda',
+    channelAvatar: 'https://i.pravatar.cc/48?img=15',
+    views: '8K views',
+    published: '1 month ago',
+    duration: '15:03',
+    category: 'Support',
+    thumbnail: 'https://images.unsplash.com/photo-1499355942262-97b58a6195b4?q=80&w=1200&auto=format&fit=crop'
+  }
+])
 
-const services = [
-  {
-    title: 'Child Protection',
-    description: 'Help for children facing abuse, neglect, or exploitation',
-    link: '/faqs?category=child-protection',
-    icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-    color: 'blue',
-  },
-  {
-    title: 'GBV Support',
-    description: 'Confidential support for survivors of gender-based violence',
-    link: '/faqs?category=gbv',
-    icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
-    iconBg: 'bg-purple-100',
-    iconColor: 'text-purple-600',
-    color: 'purple',
-  },
-  {
-    title: 'Migrant Workers',
-    description: 'Protection and support for migrant workers',
-    link: '/faqs?category=migrants',
-    icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    iconBg: 'bg-teal-100',
-    iconColor: 'text-teal-600',
-    color: 'teal',
-  },
-  {
-    title: 'PSEA',
-    description: 'Report sexual exploitation by aid workers',
-    link: '/faqs?category=psea',
-    icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
-    iconBg: 'bg-orange-100',
-    iconColor: 'text-orange-600',
-    color: 'orange',
-  },
-]
+const partners = ref([])
+const loadingPartners = ref(false)
+const usePng = ref(true)
+const pngUrl = ref('')
 
 onMounted(async () => {
-  // Fetch latest posts
-  loadingPosts.value = true
-  try {
-    await blogStore.fetchPosts({ page_size: 3 })
-    latestPosts.value = blogStore.posts.slice(0, 3)
-  } catch (error) {
-    console.error('Failed to load posts:', error)
-  } finally {
-    loadingPosts.value = false
-  }
-
   // Fetch partners
   loadingPartners.value = true
   try {
@@ -195,5 +227,59 @@ onMounted(async () => {
   } finally {
     loadingPartners.value = false
   }
+  // Try multiple filename variants to match the asset you placed
+  const candidates = [
+    new URL('@/assets/uganda mapping.png', import.meta.url).href,
+    new URL('@/assets/uganda mapping .png', import.meta.url).href,
+    new URL('@/assets/uganda maping.png', import.meta.url).href,
+    new URL('@/assets/uganda maping .png', import.meta.url).href,
+  ]
+  usePng.value = false
+  for (const candidate of candidates) {
+    try {
+      const res = await fetch(candidate, { method: 'HEAD' })
+      if (res.ok) {
+        pngUrl.value = candidate
+        usePng.value = true
+        break
+      }
+    } catch (_) { /* ignore and try next */ }
+  }
 })
+
+function setPlaceholder(event) {
+  const img = event.target
+  const ph = img.getAttribute('data-ph') || 'https://picsum.photos/800/600'
+  if (img.src !== ph) {
+    img.src = ph
+  }
+}
+
+function useThumbPlaceholder(e) {
+  e.target.src = 'https://picsum.photos/640/360?blur=2'
+}
+
+function useAvatarPlaceholder(e) {
+  e.target.src = 'https://i.pravatar.cc/48'
+}
 </script>
+
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.aspect-video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+}
+.aspect-video > img,
+.aspect-video > video,
+.aspect-video > div {
+  position: absolute;
+  inset: 0;
+}
+</style>

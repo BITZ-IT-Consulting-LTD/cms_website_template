@@ -12,6 +12,12 @@ const Partners = () => import('@/views/Partners.vue')
 const Report = () => import('@/views/Report.vue')
 const Contact = () => import('@/views/Contact.vue')
 const Login = () => import('@/views/Login.vue')
+const Operations = () => import('@/views/Operations.vue')
+const ReportsInsights = () => import('@/views/ReportsInsights.vue')
+const Articles = () => import('@/views/Videos.vue')
+const Videos = () => import('@/views/Videos.vue')
+const Privacy = () => import('@/views/Privacy.vue')
+const Terms = () => import('@/views/Terms.vue')
 
 const routes = [
   {
@@ -21,6 +27,51 @@ const routes = [
     meta: {
       title: 'Sauti Child Helpline - Get Help Now',
       description: 'Support for children, GBV survivors, and migrant workers in Uganda',
+    },
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: Privacy,
+    meta: {
+      title: 'Privacy Policy',
+      description: 'How Sauti protects your data and confidentiality',
+    },
+  },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: Terms,
+    meta: {
+      title: 'Terms of Service',
+      description: 'Rules for using Sauti services and this website',
+    },
+  },
+  {
+    path: '/operations',
+    name: 'operations',
+    component: Operations,
+    meta: {
+      title: 'Our Operations & Case Flow',
+      description: 'How we handle every call with care and urgency',
+    },
+  },
+  {
+    path: '/reports',
+    name: 'reports',
+    component: ReportsInsights,
+    meta: {
+      title: 'Reports & Insights',
+      description: 'Explore data and insights from Sauti Uganda',
+    },
+  },
+  {
+    path: '/videos',
+    name: 'videos',
+    component: Videos,
+    meta: {
+      title: 'Videos',
+      description: 'Educational and awareness videos',
     },
   },
   {
@@ -37,8 +88,17 @@ const routes = [
     name: 'blog',
     component: Blog,
     meta: {
-      title: 'News & Blog',
-      description: 'Latest news and articles from Sauti',
+      title: 'Blogs & Articles',
+      description: 'Latest stories, updates, and insights from Sauti',
+    },
+  },
+  {
+    path: '/articles',
+    name: 'articles',
+    component: Articles,
+    meta: {
+      title: 'Articles',
+      description: 'Featured articles and stories',
     },
   },
   {
