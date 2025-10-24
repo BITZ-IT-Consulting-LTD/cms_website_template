@@ -155,7 +155,7 @@ export const api = {
   // Videos endpoints (assuming similar structure to posts)
   videos: {
     list: (params) => apiClient.get('/videos/', { params }),
-    get: (id) => apiClient.get(`/videos/${id}/`),
+    get: (slug) => apiClient.get(`/videos/${slug}/`),
     create: (data) => {
       const formData = new FormData()
       Object.keys(data).forEach(key => {
@@ -170,7 +170,7 @@ export const api = {
         },
       })
     },
-    update: (id, data) => {
+    update: (slug, data) => {
       const formData = new FormData()
       Object.keys(data).forEach(key => {
         if (data[key] !== null && data[key] !== undefined) {
@@ -178,13 +178,13 @@ export const api = {
         }
       })
       
-      return apiClient.put(`/videos/${id}/`, formData, {
+      return apiClient.put(`/videos/${slug}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
     },
-    delete: (id) => apiClient.delete(`/videos/${id}/`),
+    delete: (slug) => apiClient.delete(`/videos/${slug}/`),
   },
   
   // Resources endpoints
