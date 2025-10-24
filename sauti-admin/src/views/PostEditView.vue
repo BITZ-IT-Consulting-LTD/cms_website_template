@@ -107,28 +107,33 @@
             </div>
           
           
-            <!-- Enhanced Main Content Input -->
+            <!-- Enhanced Main Content Input with Paragraph Support -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <div class="space-y-2">
                 <label class="block text-sm font-semibold text-gray-900">
                   Main Content *
                 </label>
-                <p class="text-xs text-gray-500">Write your blog post content</p>
-                <input
+                <p class="text-xs text-gray-500">Write your blog post content with paragraph formatting</p>
+                <textarea
                   ref="editor"
                   v-model="form.content"
-                  type="text"
                   required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400"
-                  placeholder="Start typing your content here..."
-                  style="font-family: 'Roboto', sans-serif;"
+                  rows="8"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200 placeholder-gray-400 resize-y"
+                  placeholder="Start typing your content here...
+
+You can create paragraphs by pressing Enter twice.
+
+Each paragraph will be properly formatted when displayed."
+                  style="font-family: 'Roboto', sans-serif; line-height: 1.6; min-height: 200px;"
                   @input="handleContentChange"
                   @focus="handleEditorFocus"
                   @blur="handleEditorBlur"
-                />
+                  @keydown="handleKeydown"
+                ></textarea>
                 <div class="flex items-center justify-between text-xs text-gray-500">
-                  <span>{{ form.content.length }}/1000 characters</span>
-                  <span class="text-green-600" v-if="form.content.length > 10">Good length</span>
+                  <span>{{ getWordCount() }} words • {{ getReadingTime() }} min read</span>
+                  <span class="text-green-600" v-if="form.content.length > 50">Good length</span>
                 </div>
               </div>
             </div>
@@ -381,7 +386,7 @@ const isActive = (command, options = {}) => {
 }
 
 const handleContentChange = (event) => {
-  // For input field, the content is already in form.value.content via v-model
+  // For textarea, the content is already in form.value.content via v-model
   // Auto-save draft every 30 seconds
   if (autoSaveTimeout.value) {
     clearTimeout(autoSaveTimeout.value)
@@ -394,27 +399,25 @@ const handleContentChange = (event) => {
 }
 
 const handlePaste = (event) => {
-  // For input field, let the default paste behavior work
+  // For textarea, let the default paste behavior work
   // The v-model will handle the content update
 }
 
 const handleKeydown = (event) => {
-  // Handle keyboard shortcuts
+  // Handle keyboard shortcuts for textarea
   if (event.ctrlKey || event.metaKey) {
     switch (event.key) {
-      case 'b':
-        event.preventDefault()
-        toggleBold()
-        break
-      case 'i':
-        event.preventDefault()
-        toggleItalic()
-        break
       case 's':
         event.preventDefault()
         saveDraft()
         break
     }
+  }
+  
+  // Handle Enter key for paragraph formatting
+  if (event.key === 'Enter') {
+    // Allow normal Enter behavior for line breaks
+    // Double Enter will create paragraph separation
   }
 }
 
@@ -433,18 +436,18 @@ const handleEditorClick = (event) => {
 }
 
 const handleEditorFocus = (event) => {
-  // For input field, no special handling needed
-  // Input fields naturally handle LTR text direction
+  // For textarea, no special handling needed
+  // Textarea naturally handles LTR text direction and paragraphs
 }
 
 const handleEditorBlur = (event) => {
-  // For input field, no special handling needed
-  // Input fields naturally handle LTR text direction
+  // For textarea, no special handling needed
+  // Textarea naturally handles LTR text direction and paragraphs
 }
 
 const handleKeyup = (event) => {
-  // For input field, no special handling needed
-  // Input fields naturally handle LTR text direction
+  // For textarea, no special handling needed
+  // Textarea naturally handles LTR text direction and paragraphs
 }
 
 // Helper methods for content analysis
@@ -560,7 +563,7 @@ onMounted(async () => {
       // Update editor content
       await nextTick()
       if (editor.value) {
-        // For input field, the content is already set via v-model
+        // For textarea, the content is already set via v-model
         // Just focus the editor
         editor.value.focus()
         
@@ -608,6 +611,8 @@ textarea.editor-content {
   unicode-bidi: normal !important;
   writing-mode: horizontal-tb !important;
   font-family: 'Roboto', sans-serif !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
 }
 
 .prose h1 {
