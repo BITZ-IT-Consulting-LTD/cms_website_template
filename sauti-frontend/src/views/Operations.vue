@@ -10,7 +10,7 @@
     <section class="section-padding">
       <div class="container-custom">
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop" alt="Operations" class="w-full h-96 object-cover" />
+          <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1600&auto=format&fit=crop" alt="Sauti Child Helpline operations and support services" class="w-full h-96 object-cover" />
         </div>
       </div>
     </section>

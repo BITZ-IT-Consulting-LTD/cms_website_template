@@ -4,13 +4,13 @@ A modern Vue 3 admin dashboard for the Sauti Child Helpline CMS system.
 
 ## Features
 
-- 🎨 **Modern Design** - Clean, professional interface matching provided designs
-- 🔐 **JWT Authentication** - Secure login with role-based access control
-- 📊 **Dashboard Analytics** - Real-time stats and performance metrics
-- ✍️ **Rich Text Editor** - Full-featured blog post editor
-- 🎥 **Video Management** - Upload and manage video content
-- 📱 **Responsive Design** - Works on desktop, tablet, and mobile
-- 🚀 **Fast Performance** - Built with Vue 3 and Vite
+- **Modern Design** - Clean, professional interface matching provided designs
+- **JWT Authentication** - Secure login with role-based access control
+- **Dashboard Analytics** - Real-time stats and performance metrics
+- **Rich Text Editor** - Full-featured blog post editor
+- **Video Management** - Upload and manage video content
+- **Responsive Design** - Works on desktop, tablet, and mobile
+- **Fast Performance** - Built with Vue 3 and Vite
 
 ## Tech Stack
 

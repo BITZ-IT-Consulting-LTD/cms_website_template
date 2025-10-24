@@ -39,7 +39,11 @@
 
       <!-- Grid -->
       <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article v-for="resource in resources" :key="resource.id" class="group bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+        <article v-for="resource in resources" :key="resource.id" class="group bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow relative" :class="{ 'ring-2 ring-[#8B4000] ring-opacity-20': resource.is_featured }">
+          <!-- Featured Badge -->
+          <div v-if="resource.is_featured" class="absolute -top-2 -right-2 bg-[#8B4000] text-white text-xs font-semibold px-2 py-1 rounded-full">
+            Featured
+          </div>
           <div class="flex items-start gap-4">
             <div class="h-12 w-12 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center">
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -51,13 +55,16 @@
               <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ resource.description }}</p>
               <div class="mt-2 text-xs text-gray-500 flex flex-wrap gap-3">
                 <span v-if="resource.category_name" class="inline-flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>{{ resource.category_name }}</span>
-                <span v-if="resource.language" class="uppercase">{{ resource.language }}</span>
+                <span v-if="resource.language" class="uppercase">{{ getLanguageName(resource.language) }}</span>
                 <span v-if="resource.file_type">{{ resource.file_type }}</span>
+                <span v-else class="text-gray-400">Document</span>
                 <span v-if="resource.published_at">{{ formatDate(resource.published_at) }}</span>
               </div>
               <div class="mt-4 flex items-center gap-3">
-                <a :href="resource.file" target="_blank" rel="noopener" class="pill pill-primary">Download</a>
+                <a v-if="resource.file" :href="resource.file" target="_blank" rel="noopener" class="pill pill-primary">Download</a>
+                <span v-else class="pill pill-light">Coming Soon</span>
                 <a v-if="resource.thumbnail" :href="resource.thumbnail" target="_blank" rel="noopener" class="pill pill-light">Preview</a>
+                <span class="text-xs text-gray-500">{{ resource.download_count }} downloads</span>
               </div>
             </div>
           </div>
@@ -119,7 +126,11 @@ async function fetchList(pageUrl = null) {
     const data = await resourcesStore.fetchResources(params)
     resources.value = resourcesStore.resources
     pagination.value = resourcesStore.pagination
+    console.log('Fetched resources:', resources.value)
+    console.log('Resources count:', resources.value.length)
     return data
+  } catch (error) {
+    console.error('Error fetching resources:', error)
   } finally {
     loading.value = false
   }
@@ -142,5 +153,14 @@ function prevPage() {
 
 function formatDate(iso) {
   try { return new Date(iso).toLocaleDateString() } catch { return iso }
+}
+
+function getLanguageName(code) {
+  const languages = {
+    'en': 'English',
+    'lg': 'Luganda', 
+    'sw': 'Swahili'
+  }
+  return languages[code] || code.toUpperCase()
 }
 </script>

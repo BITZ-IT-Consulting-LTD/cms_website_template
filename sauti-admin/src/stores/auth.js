@@ -6,7 +6,15 @@ export const useAuthStore = defineStore('auth', () => {
   // State
   const token = ref(localStorage.getItem('admin_token') || null)
   const refreshToken = ref(localStorage.getItem('admin_refresh_token') || null)
-  const user = ref(JSON.parse(localStorage.getItem('admin_user') || 'null'))
+  const user = ref((() => {
+    try {
+      const userData = localStorage.getItem('admin_user')
+      return userData ? JSON.parse(userData) : null
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error)
+      return null
+    }
+  })())
   const loading = ref(false)
   const error = ref(null)
   
@@ -25,56 +33,21 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     
     try {
-      // For now, check against hardcoded admin credentials while backend is being set up
-      if (credentials.username === 'admin' && credentials.password === 'admin123') {
-        // Mock successful login response
-        const mockUser = {
-          username: 'admin',
-          email: 'admin@sauti.org',
-          first_name: 'Admin',
-          last_name: 'User',
-          role: 'ADMIN'
-        }
-        
-        const mockTokens = {
-          access: 'mock-access-token',
-          refresh: 'mock-refresh-token'
-        }
-        
-        // Store tokens
-        token.value = mockTokens.access
-        refreshToken.value = mockTokens.refresh
-        user.value = mockUser
-        
-        // Persist to localStorage
-        localStorage.setItem('admin_token', mockTokens.access)
-        localStorage.setItem('admin_refresh_token', mockTokens.refresh)
-        localStorage.setItem('admin_user', JSON.stringify(mockUser))
-        
-        return {
-          access: mockTokens.access,
-          refresh: mockTokens.refresh,
-          user: mockUser
-        }
-      } else {
-        throw new Error('Invalid credentials')
-      }
+      // Real API authentication
+      const response = await api.auth.login(credentials)
+      const { access, refresh, user: userData } = response.data
       
-      // TODO: Uncomment this when Django backend is running
-      // const response = await api.auth.login(credentials)
-      // const { access, refresh, user: userData } = response.data
-      // 
-      // // Store tokens
-      // token.value = access
-      // refreshToken.value = refresh
-      // user.value = userData
-      // 
-      // // Persist to localStorage
-      // localStorage.setItem('admin_token', access)
-      // localStorage.setItem('admin_refresh_token', refresh)
-      // localStorage.setItem('admin_user', JSON.stringify(userData))
-      // 
-      // return response.data
+      // Store tokens
+      token.value = access
+      refreshToken.value = refresh
+      user.value = userData
+      
+      // Persist to localStorage
+      localStorage.setItem('admin_token', access)
+      localStorage.setItem('admin_refresh_token', refresh)
+      localStorage.setItem('admin_user', JSON.stringify(userData))
+      
+      return response.data
     } catch (err) {
       error.value = err.response?.data?.detail || err.message || 'Login failed'
       throw err

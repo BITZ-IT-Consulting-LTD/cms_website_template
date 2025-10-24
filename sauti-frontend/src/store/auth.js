@@ -6,7 +6,15 @@ export const useAuthStore = defineStore('auth', () => {
   // State
   const token = ref(localStorage.getItem('token') || null)
   const refreshToken = ref(localStorage.getItem('refreshToken') || null)
-  const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
+  const user = ref((() => {
+    try {
+      const userData = localStorage.getItem('user')
+      return userData ? JSON.parse(userData) : null
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error)
+      return null
+    }
+  })())
   const loading = ref(false)
   const error = ref(null)
   

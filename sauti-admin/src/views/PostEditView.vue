@@ -162,10 +162,17 @@
           <!-- Editor Content Area -->
           <div
             ref="editor"
-            class="min-h-96 p-4 border-l border-r border-b border-gray-300 rounded-b-md focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-primary-500 prose max-w-none"
+            class="min-h-96 p-4 border-l border-r border-b border-gray-300 rounded-b-md focus-within:ring-2 focus-within:ring-[#8B4000] focus-within:border-[#8B4000] prose max-w-none"
             contenteditable
+            dir="ltr"
+            style="direction: ltr; text-align: left; unicode-bidi: normal;"
             @input="handleContentChange"
+            @paste="handlePaste"
+            @keydown="handleKeydown"
+            @click="handleEditorClick"
+            @focus="handleEditorFocus"
             v-html="form.content"
+            placeholder="Start typing your content here..."
           ></div>
         </div>
       </div>
@@ -310,6 +317,7 @@ const toast = useToast()
 // Refs
 const editor = ref(null)
 const imageInput = ref(null)
+const autoSaveTimeout = ref(null)
 
 // Reactive data
 const loading = ref(false)
@@ -374,7 +382,78 @@ const isActive = (command, options = {}) => {
 }
 
 const handleContentChange = (event) => {
-  form.value.content = event.target.innerHTML
+  // Ensure the content maintains proper direction
+  const content = event.target.innerHTML
+  form.value.content = content
+  
+  // Force text direction on every change
+  if (editor.value) {
+    editor.value.style.direction = 'ltr'
+    editor.value.style.textAlign = 'left'
+    editor.value.style.unicodeBidi = 'normal'
+    editor.value.style.writingMode = 'horizontal-tb'
+  }
+  
+  // Auto-save draft every 30 seconds
+  if (autoSaveTimeout.value) {
+    clearTimeout(autoSaveTimeout.value)
+  }
+  autoSaveTimeout.value = setTimeout(() => {
+    if (form.value.title && form.value.content) {
+      saveDraft()
+    }
+  }, 30000)
+}
+
+const handlePaste = (event) => {
+  // Clean up pasted content
+  event.preventDefault()
+  const text = (event.clipboardData || window.clipboardData).getData('text/plain')
+  document.execCommand('insertText', false, text)
+}
+
+const handleKeydown = (event) => {
+  // Handle keyboard shortcuts
+  if (event.ctrlKey || event.metaKey) {
+    switch (event.key) {
+      case 'b':
+        event.preventDefault()
+        toggleBold()
+        break
+      case 'i':
+        event.preventDefault()
+        toggleItalic()
+        break
+      case 's':
+        event.preventDefault()
+        saveDraft()
+        break
+    }
+  }
+}
+
+const handleEditorClick = (event) => {
+  // Ensure cursor is positioned correctly when clicking
+  const range = document.createRange()
+  const sel = window.getSelection()
+  
+  // If clicking on empty space, position cursor there
+  if (event.target === editor.value) {
+    range.setStart(event.target, 0)
+    range.collapse(true)
+    sel.removeAllRanges()
+    sel.addRange(range)
+  }
+}
+
+const handleEditorFocus = (event) => {
+  // Force text direction to LTR when editor is focused
+  if (editor.value) {
+    editor.value.style.direction = 'ltr'
+    editor.value.style.textAlign = 'left'
+    editor.value.style.unicodeBidi = 'normal'
+    editor.value.style.writingMode = 'horizontal-tb'
+  }
 }
 
 // Methods
@@ -420,13 +499,19 @@ const savePost = async (status) => {
     return
   }
 
+  if (!form.value.content.trim()) {
+    toast.error('Please enter some content')
+    return
+  }
+
   loading.value = true
 
   try {
     const postData = {
       ...form.value,
       status,
-      tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean)
+      tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean),
+      excerpt: form.value.excerpt || form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...'
     }
 
     if (isEditing.value) {
@@ -439,7 +524,8 @@ const savePost = async (status) => {
     }
   } catch (err) {
     console.error('Save error:', err)
-    toast.error('Failed to save post')
+    const errorMessage = err.response?.data?.detail || err.message || 'Failed to save post'
+    toast.error(errorMessage)
   } finally {
     loading.value = false
   }
@@ -467,10 +553,36 @@ onMounted(async () => {
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
       
-      // Update editor content
+      // Update editor content with proper HTML
       await nextTick()
       if (editor.value) {
-        editor.value.innerHTML = post.content || ''
+        // Force text direction before loading content
+        editor.value.style.direction = 'ltr'
+        editor.value.style.textAlign = 'left'
+        editor.value.style.unicodeBidi = 'normal'
+        editor.value.style.writingMode = 'horizontal-tb'
+        
+        if (post.content) {
+          editor.value.innerHTML = post.content
+          // Focus the editor and place cursor at the end for editing existing content
+          editor.value.focus()
+          // Move cursor to the end of the content
+          const range = document.createRange()
+          const sel = window.getSelection()
+          range.selectNodeContents(editor.value)
+          range.collapse(false) // false = collapse to end
+          sel.removeAllRanges()
+          sel.addRange(range)
+        } else {
+          // For new posts, focus at the beginning
+          editor.value.focus()
+          const range = document.createRange()
+          const sel = window.getSelection()
+          range.setStart(editor.value, 0)
+          range.collapse(true)
+          sel.removeAllRanges()
+          sel.addRange(range)
+        }
       }
     }
   } catch (err) {
@@ -486,31 +598,56 @@ onMounted(async () => {
   outline: none;
 }
 
+[contenteditable]:empty:before {
+  content: attr(placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+[contenteditable] {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
 .prose h1 {
-  @apply text-2xl font-bold mt-6 mb-4;
+  @apply text-2xl font-bold mt-6 mb-4 text-gray-900;
 }
 
 .prose h2 {
-  @apply text-xl font-semibold mt-5 mb-3;
+  @apply text-xl font-semibold mt-5 mb-3 text-gray-800;
 }
 
 .prose p {
-  @apply mb-3;
+  @apply mb-3 text-gray-700 leading-relaxed;
 }
 
 .prose ul, .prose ol {
-  @apply ml-6 mb-3;
+  @apply mb-3 pl-6;
 }
 
-.prose ul {
-  @apply list-disc;
+.prose li {
+  @apply mb-1;
 }
 
-.prose ol {
-  @apply list-decimal;
+.prose strong {
+  @apply font-semibold;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose u {
+  @apply underline;
 }
 
 .prose a {
-  @apply text-primary-500 hover:text-primary-600 underline;
+  @apply text-[#8B4000] hover:text-[#A0522D] underline;
+}
+
+.prose img {
+  @apply max-w-full h-auto rounded-lg shadow-sm;
 }
 </style>

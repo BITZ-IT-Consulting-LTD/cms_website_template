@@ -1,10 +1,10 @@
-# 🎉 Sauti Child Helpline CMS - Complete Full Stack Application
+# Sauti Child Helpline CMS - Complete Full Stack Application
 
 **A comprehensive, production-ready platform for child protection, GBV survivors, and migrant workers in Uganda**
 
 ---
 
-## 🌟 Overview
+## Overview
 
 This is a complete full-stack application consisting of:
 
@@ -15,7 +15,7 @@ This is a complete full-stack application consisting of:
 
 ---
 
-## 📦 What's Included
+## What's Included
 
 ### Backend (`sauti_cms/`)
 - ✅ Django 5.0.6 + DRF 3.15.1
@@ -46,7 +46,7 @@ This is a complete full-stack application consisting of:
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Backend:** Python 3.12+, PostgreSQL 16+
@@ -85,7 +85,7 @@ docker run -p 80:80 sauti-frontend
 
 ---
 
-## 🔌 Access Points
+## Access Points
 
 Once running:
 
@@ -98,7 +98,7 @@ Once running:
 
 ---
 
-## 🎯 Core Features
+## Core Features
 
 ### 1. Anonymous Case Reporting ⭐
 
@@ -195,7 +195,7 @@ User fills form → Submit (no login) → Encrypted storage → Reference number
 
 ---
 
-## 📊 Technology Stack
+## Technology Stack
 
 ### Backend
 ```
@@ -222,7 +222,7 @@ Axios 1.6.8
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 sauti_cms_project/
@@ -270,7 +270,7 @@ sauti_cms_project/
 
 ---
 
-## 🔐 Security Features
+## Security Features
 
 ### Backend
 1. **JWT Authentication** - Secure token-based auth
@@ -292,7 +292,7 @@ sauti_cms_project/
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 ### Main Documentation Files
 
@@ -315,7 +315,7 @@ Interactive API docs available at:
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Backend Tests
 ```bash
@@ -335,7 +335,7 @@ See `INTEGRATION_GUIDE.md` for complete testing procedures.
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Development
 ```bash
@@ -371,7 +371,7 @@ See `sauti_cms/DEPLOYMENT.md` for:
 
 ---
 
-## 🌍 Multilingual Setup
+## Multilingual Setup
 
 ### Backend Configuration
 ```python
@@ -401,7 +401,7 @@ await blogStore.fetchPosts({ language: 'lg' })
 
 ---
 
-## 🎨 Design System
+## Design System
 
 ### Color Palette
 ```javascript
@@ -428,7 +428,7 @@ font-heading: 'Poppins', sans-serif;
 
 ---
 
-## 📊 System Architecture
+## System Architecture
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -471,7 +471,7 @@ font-heading: 'Poppins', sans-serif;
 
 ---
 
-## ✅ Feature Checklist
+## Feature Checklist
 
 ### Core Features
 - [x] Anonymous case reporting
@@ -512,7 +512,7 @@ font-heading: 'Poppins', sans-serif;
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 See individual README files for specific issues:
 
@@ -539,7 +539,7 @@ See individual README files for specific issues:
 
 ---
 
-## 📞 Support
+## Support
 
 ### Documentation
 - Backend: `sauti_cms/README.md`
@@ -553,19 +553,19 @@ See individual README files for specific issues:
 
 ---
 
-## 📄 License
+## License
 
 Proprietary - Ministry of Gender, Labour and Social Development (MGLSD), Uganda
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 This is a government project. External contributions require approval from MGLSD.
 
 ---
 
-## 🎓 Training Resources
+## Training Resources
 
 ### For Developers
 - Django Docs: https://docs.djangoproject.com/
@@ -580,7 +580,7 @@ This is a government project. External contributions require approval from MGLSD
 
 ---
 
-## 🎉 Congratulations!
+## Congratulations!
 
 You now have a **complete, production-ready full-stack application** for the Sauti Child Helpline!
 
@@ -604,7 +604,7 @@ You now have a **complete, production-ready full-stack application** for the Sau
 
 ---
 
-## 🚀 Ready to Launch!
+## Ready to Launch!
 
 Your Sauti CMS is ready to protect and empower vulnerable communities in Uganda.
 
@@ -612,7 +612,7 @@ Your Sauti CMS is ready to protect and empower vulnerable communities in Uganda.
 
 ---
 
-**Built with ❤️ for Sauti Child Helpline**  
+**Built with love for Sauti Child Helpline**  
 **Ministry of Gender, Labour and Social Development (MGLSD), Uganda**  
 **Developed by: Sales Push Limited / Bitz ITC**
 

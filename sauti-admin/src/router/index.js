@@ -11,6 +11,11 @@ const VideosView = () => import('@/views/VideosView.vue')
 const VideoEditView = () => import('@/views/VideoEditView.vue')
 const SettingsView = () => import('@/views/SettingsView.vue')
 const DraftsView = () => import('@/views/DraftsView.vue')
+const ReportsView = () => import('@/views/ReportsView.vue')
+const ResourcesView = () => import('@/views/ResourcesView.vue')
+const FaqsView = () => import('@/views/FaqsView.vue')
+const PartnersView = () => import('@/views/PartnersView.vue')
+const SuccessStoriesView = () => import('@/views/SuccessStoriesView.vue')
 
 const routes = [
   {
@@ -103,6 +108,62 @@ const routes = [
         component: SettingsView,
         meta: {
           title: 'Settings - Sauti Admin'
+        }
+      },
+      {
+        path: 'reports',
+        name: 'reports',
+        component: ReportsView,
+        meta: {
+          title: 'Active Reports - Sauti Admin'
+        }
+      },
+      {
+        path: 'reports/urgent',
+        name: 'reports-urgent',
+        component: ReportsView,
+        meta: {
+          title: 'Urgent Cases - Sauti Admin'
+        }
+      },
+      {
+        path: 'reports/archive',
+        name: 'reports-archive',
+        component: ReportsView,
+        meta: {
+          title: 'Closed Cases - Sauti Admin'
+        }
+      },
+      {
+        path: 'resources',
+        name: 'resources',
+        component: ResourcesView,
+        meta: {
+          title: 'Resources - Sauti Admin'
+        }
+      },
+      {
+        path: 'faqs',
+        name: 'faqs',
+        component: FaqsView,
+        meta: {
+          title: 'FAQs - Sauti Admin'
+        }
+      },
+      {
+        path: 'partners',
+        name: 'partners',
+        component: PartnersView,
+        meta: {
+          title: 'Partners - Sauti Admin'
+        }
+      },
+      {
+        path: 'success-stories',
+        name: 'success-stories',
+        component: SuccessStoriesView,
+        meta: {
+          title: 'Success Stories - Sauti Admin'
         }
       }
     ]
