@@ -51,21 +51,7 @@ export const usePostsStore = defineStore('posts', () => {
     error.value = null
     
     try {
-      // Handle image upload if present
-      const formData = new FormData()
-      Object.keys(postData).forEach(key => {
-        if (key === 'tags' && Array.isArray(postData[key])) {
-          postData[key].forEach(tag => formData.append('tags', tag))
-        } else if (postData[key] !== null && postData[key] !== undefined) {
-          formData.append(key, postData[key])
-        }
-      })
-      
-      const response = await api.post('/posts/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.posts.create(postData)
       
       const newPost = response.data
       posts.value.unshift(newPost)
@@ -84,21 +70,7 @@ export const usePostsStore = defineStore('posts', () => {
     error.value = null
     
     try {
-      // Handle image upload if present
-      const formData = new FormData()
-      Object.keys(postData).forEach(key => {
-        if (key === 'tags' && Array.isArray(postData[key])) {
-          postData[key].forEach(tag => formData.append('tags', tag))
-        } else if (postData[key] !== null && postData[key] !== undefined) {
-          formData.append(key, postData[key])
-        }
-      })
-      
-      const response = await api.put(`/posts/${slug}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.posts.update(slug, postData)
       
       const updatedPost = response.data
       const index = posts.value.findIndex(p => p.slug === slug)

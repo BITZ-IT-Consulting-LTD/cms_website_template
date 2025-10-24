@@ -49,19 +49,7 @@ export const usePartnersStore = defineStore('partners', () => {
     error.value = null
     
     try {
-      const formData = new FormData()
-      Object.keys(partnerData).forEach(key => {
-        if (partnerData[key] !== null && partnerData[key] !== undefined) {
-          formData.append(key, partnerData[key])
-        }
-      })
-      
-      const response = await api.post('/partners/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      
+      const response = await api.partners.create(partnerData)
       const newPartner = response.data
       partners.value.unshift(newPartner)
       return newPartner
@@ -79,19 +67,7 @@ export const usePartnersStore = defineStore('partners', () => {
     error.value = null
     
     try {
-      const formData = new FormData()
-      Object.keys(partnerData).forEach(key => {
-        if (partnerData[key] !== null && partnerData[key] !== undefined) {
-          formData.append(key, partnerData[key])
-        }
-      })
-      
-      const response = await api.put(`/partners/${slug}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      
+      const response = await api.partners.update(slug, partnerData)
       const updatedPartner = response.data
       
       // Update in list
@@ -99,12 +75,7 @@ export const usePartnersStore = defineStore('partners', () => {
       if (index !== -1) {
         partners.value[index] = updatedPartner
       }
-      
-      // Update current if it's the same
-      if (currentPartner.value?.slug === slug) {
-        currentPartner.value = updatedPartner
-      }
-      
+      currentPartner.value = updatedPartner
       return updatedPartner
     } catch (err) {
       error.value = err.message || 'Failed to update partner'
@@ -120,50 +91,14 @@ export const usePartnersStore = defineStore('partners', () => {
     error.value = null
     
     try {
-      await api.delete(`/partners/${slug}/`)
-      
-      // Remove from list
+      await api.partners.delete(slug)
       partners.value = partners.value.filter(p => p.slug !== slug)
-      
-      // Clear current if it's the same
       if (currentPartner.value?.slug === slug) {
         currentPartner.value = null
       }
-      
-      return true
     } catch (err) {
       error.value = err.message || 'Failed to delete partner'
       console.error('Failed to delete partner:', err)
-      throw err
-    } finally {
-      loading.value = false
-    }
-  }
-  
-  async function toggleActive(slug) {
-    loading.value = true
-    error.value = null
-    
-    try {
-      const partner = partners.value.find(p => p.slug === slug)
-      if (!partner) throw new Error('Partner not found')
-      
-      const response = await api.patch(`/partners/${slug}/`, {
-        is_active: !partner.is_active
-      })
-      
-      const updatedPartner = response.data
-      
-      // Update in list
-      const index = partners.value.findIndex(p => p.slug === slug)
-      if (index !== -1) {
-        partners.value[index] = updatedPartner
-      }
-      
-      return updatedPartner
-    } catch (err) {
-      error.value = err.message || 'Failed to toggle partner status'
-      console.error('Failed to toggle partner status:', err)
       throw err
     } finally {
       loading.value = false
@@ -183,6 +118,5 @@ export const usePartnersStore = defineStore('partners', () => {
     createPartner,
     updatePartner,
     deletePartner,
-    toggleActive,
   }
 })

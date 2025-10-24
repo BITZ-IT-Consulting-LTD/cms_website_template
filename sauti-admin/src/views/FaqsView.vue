@@ -8,7 +8,7 @@
       </div>
       <button
         @click="showCreateModal = true"
-        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200 flex items-center font-medium shadow-sm"
+        class="btn-primary flex items-center"
       >
         <PlusIcon class="h-5 w-5 mr-2" />
         Add New FAQ
@@ -17,7 +17,7 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="stats-card">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Total FAQs</p>
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="stats-card">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Published</p>
@@ -41,11 +41,11 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="stats-card">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Total Views</p>
-            <p class="text-3xl font-bold text-purple-600 mt-2">{{ stats.views }}</p>
+            <p class="text-3xl font-bold text-purple-600 mt-2">{{ formatNumber(stats.views) }}</p>
           </div>
           <div class="p-3 bg-purple-100 rounded-lg">
             <EyeIcon class="h-8 w-8 text-purple-600" />
@@ -53,49 +53,43 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="stats-card">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Helpful Votes</p>
-            <p class="text-3xl font-bold text-teal-600 mt-2">{{ stats.helpful }}</p>
+            <p class="text-3xl font-bold text-orange-600 mt-2">{{ formatNumber(stats.helpful) }}</p>
           </div>
-          <div class="p-3 bg-teal-100 rounded-lg">
-            <HandThumbUpIcon class="h-8 w-8 text-teal-600" />
+          <div class="p-3 bg-orange-100 rounded-lg">
+            <HandThumbUpIcon class="h-8 w-8 text-orange-600" />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Filters and Search -->
-    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-      <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1 relative">
+    <!-- Search and Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Search -->
+        <div class="relative">
           <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search FAQs..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+            class="form-input pl-10"
           />
         </div>
         
-        <select
-          v-model="filterCategory"
-          class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-        >
+        <!-- Category Filter -->
+        <select v-model="categoryFilter" class="form-select">
           <option value="">All Categories</option>
-          <option value="general">General Information</option>
-          <option value="helpline">Using the Helpline</option>
-          <option value="child_safety">Child Safety</option>
-          <option value="reporting">Reporting Abuse</option>
-          <option value="support">Support Services</option>
-          <option value="legal">Legal Information</option>
+          <option v-for="category in categories" :key="category.id" :value="category.name">
+            {{ category.name }}
+          </option>
         </select>
-
-        <select
-          v-model="filterStatus"
-          class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-        >
+        
+        <!-- Status Filter -->
+        <select v-model="statusFilter" class="form-select">
           <option value="">All Status</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
@@ -103,110 +97,185 @@
       </div>
     </div>
 
-    <!-- FAQs by Category -->
-    <div class="space-y-6">
-      <div
-        v-for="(categoryFaqs, category) in groupedFaqs"
-        :key="category"
-        class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
-      >
-        <!-- Category Header -->
-        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900">{{ category }}</h2>
-            <span class="text-sm text-gray-500">{{ categoryFaqs.length }} questions</span>
-          </div>
-        </div>
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      <p class="mt-2 text-sm text-gray-500">Loading FAQs...</p>
+    </div>
 
-        <!-- FAQ Items -->
-        <div class="divide-y divide-gray-200">
-          <div
-            v-for="(faq, index) in categoryFaqs"
-            :key="faq.id"
-            class="p-6 hover:bg-gray-50 transition-colors duration-200"
-          >
-            <div class="flex items-start justify-between gap-4">
-              <div class="flex-1">
-                <!-- Question -->
-                <div class="flex items-start gap-3 mb-3">
-                  <div class="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-sm font-semibold">
-                    Q
-                  </div>
-                  <h3 class="font-semibold text-gray-900 text-lg">{{ faq.question }}</h3>
-                </div>
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-12">
+      <div class="text-red-600 mb-4">
+        <QuestionMarkCircleIcon class="h-12 w-12 mx-auto mb-2" />
+        <h3 class="text-lg font-medium">Failed to load FAQs</h3>
+        <p class="text-sm text-gray-500">{{ error }}</p>
+      </div>
+      <button @click="fetchFaqs" class="btn-primary">
+        Try Again
+      </button>
+    </div>
 
-                <!-- Answer -->
-                <div class="flex items-start gap-3 mb-4 ml-9">
-                  <p class="text-gray-700">{{ faq.answer }}</p>
-                </div>
-
-                <!-- Meta Info -->
-                <div class="flex items-center gap-4 text-sm text-gray-500 ml-9">
-                  <div class="flex items-center">
-                    <EyeIcon class="h-4 w-4 mr-1" />
-                    {{ faq.views }} views
-                  </div>
-                  <div class="flex items-center">
-                    <HandThumbUpIcon class="h-4 w-4 mr-1" />
-                    {{ faq.helpful }} helpful
-                  </div>
-                  <div>Updated {{ formatDate(faq.updated_at) }}</div>
-                  <span
-                    v-if="faq.status === 'draft'"
-                    class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full"
-                  >
-                    Draft
-                  </span>
-                </div>
-              </div>
-
-              <!-- Actions -->
-              <div class="flex-shrink-0 flex gap-2">
-                <button
-                  @click="editFaq(faq)"
-                  class="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
-                  title="Edit"
-                >
-                  <PencilIcon class="h-5 w-5" />
-                </button>
-                <button
-                  @click="duplicateFaq(faq)"
-                  class="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200"
-                  title="Duplicate"
-                >
-                  <DocumentDuplicateIcon class="h-5 w-5" />
-                </button>
-                <button
-                  @click="deleteFaq(faq)"
-                  class="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
-                  title="Delete"
-                >
-                  <TrashIcon class="h-5 w-5" />
-                </button>
-              </div>
+    <!-- FAQs List -->
+    <div v-else class="space-y-4">
+      <div v-for="faq in filteredFaqs" :key="faq.id" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center space-x-3 mb-2">
+              <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">{{ faq.question }}</h3>
+              <span
+                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                :class="{
+                  'bg-green-100 text-green-800': faq.status === 'published',
+                  'bg-yellow-100 text-yellow-800': faq.status === 'draft'
+                }"
+              >
+                {{ faq.status }}
+              </span>
+            </div>
+            
+            <p class="text-gray-600 mb-4 line-clamp-3">{{ faq.answer }}</p>
+            
+            <div class="flex items-center space-x-6 text-sm text-gray-500">
+              <span class="flex items-center">
+                <EyeIcon class="h-4 w-4 mr-1" />
+                {{ formatNumber(faq.views_count || 0) }} views
+              </span>
+              <span class="flex items-center">
+                <HandThumbUpIcon class="h-4 w-4 mr-1" />
+                {{ formatNumber(faq.helpful_count || 0) }} helpful
+              </span>
+              <span>{{ faq.category?.name || 'Uncategorized' }}</span>
+              <span>{{ formatDate(faq.updated_at || faq.created_at) }}</span>
             </div>
           </div>
+          
+          <div class="flex items-center space-x-2 ml-4">
+            <button
+              @click="previewFaq(faq)"
+              class="text-blue-600 hover:text-blue-900 p-2"
+              title="Preview"
+            >
+              <EyeIcon class="h-4 w-4" />
+            </button>
+            <button
+              @click="editFaq(faq)"
+              class="text-primary-600 hover:text-primary-900 p-2"
+              title="Edit"
+            >
+              <PencilIcon class="h-4 w-4" />
+            </button>
+            <button
+              @click="duplicateFaq(faq)"
+              class="text-green-600 hover:text-green-900 p-2"
+              title="Duplicate"
+            >
+              <DocumentDuplicateIcon class="h-4 w-4" />
+            </button>
+            <button
+              @click="deleteFaq(faq)"
+              class="text-red-600 hover:text-red-900 p-2"
+              title="Delete"
+            >
+              <TrashIcon class="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Empty State -->
+      <div v-if="filteredFaqs.length === 0" class="text-center py-12">
+        <QuestionMarkCircleIcon class="mx-auto h-12 w-12 text-gray-400" />
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No FAQs found</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          {{ searchQuery ? 'Try adjusting your search criteria.' : 'Get started by creating your first FAQ.' }}
+        </p>
+        <div class="mt-6" v-if="!searchQuery">
+          <button @click="showCreateModal = true" class="btn-primary">
+            <PlusIcon class="h-4 w-4 mr-2" />
+            Add New FAQ
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Empty State -->
-    <div v-if="filteredFaqs.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-      <QuestionMarkCircleIcon class="mx-auto h-12 w-12 text-gray-400" />
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No FAQs found</h3>
-      <p class="mt-1 text-sm text-gray-500">Get started by adding a new FAQ</p>
-      <button
-        @click="showCreateModal = true"
-        class="mt-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200"
-      >
-        Add New FAQ
-      </button>
+    <!-- Create/Edit FAQ Modal -->
+    <div v-if="showCreateModal || showEditModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">
+            {{ showEditModal ? 'Edit FAQ' : 'Create New FAQ' }}
+          </h3>
+          
+          <form @submit.prevent="submitFaq" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Question</label>
+              <input
+                v-model="form.question"
+                type="text"
+                required
+                class="form-input"
+                placeholder="Enter the question..."
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Answer</label>
+              <textarea
+                v-model="form.answer"
+                required
+                rows="4"
+                class="form-input"
+                placeholder="Enter the answer..."
+              ></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select v-model="form.category" class="form-select">
+                  <option value="">Select Category</option>
+                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                    {{ category.name }}
+                  </option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <select v-model="form.status" class="form-select">
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                @click="closeModal"
+                class="btn-outline"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                :disabled="loading"
+                class="btn-primary"
+              >
+                {{ loading ? 'Saving...' : (showEditModal ? 'Update FAQ' : 'Create FAQ') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
+import { useFaqsStore } from '@/stores/faqs'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -219,141 +288,183 @@ import {
   TrashIcon
 } from '@heroicons/vue/24/outline'
 
-// Mock data
-const faqs = ref([
-  {
-    id: 1,
-    question: 'What is the Sauti Child Helpline?',
-    answer: 'Sauti Child Helpline (116) is a free, toll-free helpline service available 24/7 for children, parents, and caregivers in Uganda. We provide support, counseling, and referrals for issues related to child protection, safety, and well-being.',
-    category: 'General Information',
-    status: 'published',
-    views: 2847,
-    helpful: 234,
-    updated_at: '2024-10-15T10:00:00Z'
-  },
-  {
-    id: 2,
-    question: 'How do I call the helpline?',
-    answer: 'Simply dial 116 from any phone in Uganda. The call is completely free and will not appear on your phone bill. Our trained counselors are available 24 hours a day, 7 days a week.',
-    category: 'Using the Helpline',
-    status: 'published',
-    views: 1923,
-    helpful: 189,
-    updated_at: '2024-10-12T14:30:00Z'
-  },
-  {
-    id: 3,
-    question: 'Is the helpline really confidential?',
-    answer: 'Yes, absolutely. All calls to the Sauti helpline are completely confidential. We do not record your personal information unless you choose to provide it for follow-up services. Your privacy and safety are our top priorities.',
-    category: 'Using the Helpline',
-    status: 'published',
-    views: 1654,
-    helpful: 156,
-    updated_at: '2024-10-10T09:15:00Z'
-  },
-  {
-    id: 4,
-    question: 'What types of issues can I report?',
-    answer: 'You can report any concern related to child safety including physical abuse, sexual abuse, emotional abuse, neglect, trafficking, child labor, online safety issues, bullying, and more. No issue is too small - if you\'re worried about a child\'s safety, please call.',
-    category: 'Reporting Abuse',
-    status: 'published',
-    views: 1432,
-    helpful: 128,
-    updated_at: '2024-10-08T11:20:00Z'
-  },
-  {
-    id: 5,
-    question: 'What happens after I make a report?',
-    answer: 'After you report, our team will assess the situation and take appropriate action. This may include providing immediate counseling, contacting emergency services, or referring the case to relevant authorities. We will keep you updated on the progress if you provide contact information.',
-    category: 'Reporting Abuse',
-    status: 'published',
-    views: 1289,
-    helpful: 112,
-    updated_at: '2024-10-05T16:45:00Z'
-  },
-  {
-    id: 6,
-    question: 'How can I keep my child safe online?',
-    answer: 'Monitor your child\'s internet use, teach them not to share personal information online, use parental controls, keep devices in common areas, and maintain open communication about their online activities. If you suspect online abuse or exploitation, report it immediately.',
-    category: 'Child Safety',
-    status: 'published',
-    views: 1156,
-    helpful: 98,
-    updated_at: '2024-10-03T13:30:00Z'
-  },
-  {
-    id: 7,
-    question: 'What support services do you provide?',
-    answer: 'We provide crisis counseling, emotional support, safety planning, referrals to medical care, legal assistance, police intervention when needed, shelter referrals, and follow-up services. Our goal is to ensure every child gets the help they need.',
-    category: 'Support Services',
-    status: 'published',
-    views: 987,
-    helpful: 84,
-    updated_at: '2024-10-01T10:00:00Z'
-  },
-  {
-    id: 8,
-    question: 'Can I remain anonymous when reporting?',
-    answer: 'Yes, you can make an anonymous report. However, providing your contact information helps us follow up with you and provide better support. All information you share is kept strictly confidential.',
-    category: 'Reporting Abuse',
-    status: 'published',
-    views: 876,
-    helpful: 72,
-    updated_at: '2024-09-28T14:15:00Z'
-  }
-])
+const toast = useToast()
+const faqsStore = useFaqsStore()
 
-const stats = ref({
-  total: 45,
-  published: 38,
-  views: 18724,
-  helpful: 1543
+// Reactive data
+const searchQuery = ref('')
+const categoryFilter = ref('')
+const statusFilter = ref('')
+const showCreateModal = ref(false)
+const showEditModal = ref(false)
+const editForm = ref({})
+
+// Use store data
+const faqs = computed(() => faqsStore.faqs)
+const loading = computed(() => faqsStore.loading)
+const error = computed(() => faqsStore.error)
+const categories = computed(() => faqsStore.categories)
+
+// Form data
+const form = ref({
+  question: '',
+  answer: '',
+  category: '',
+  status: 'draft'
 })
 
-const searchQuery = ref('')
-const filterCategory = ref('')
-const filterStatus = ref('')
-const showCreateModal = ref(false)
+// Computed properties
+const stats = computed(() => {
+  const total = faqs.value.length
+  const published = faqs.value.filter(f => f.status === 'published').length
+  const views = faqs.value.reduce((sum, f) => sum + (f.views_count || 0), 0)
+  const helpful = faqs.value.reduce((sum, f) => sum + (f.helpful_count || 0), 0)
+  
+  return {
+    total,
+    published,
+    views,
+    helpful
+  }
+})
 
 const filteredFaqs = computed(() => {
-  return faqs.value.filter(faq => {
-    const matchesSearch = !searchQuery.value ||
-      faq.question.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchQuery.value.toLowerCase())
-    
-    const matchesCategory = !filterCategory.value || faq.category === filterCategory.value
-    const matchesStatus = !filterStatus.value || faq.status === filterStatus.value
+  let filtered = faqs.value
 
-    return matchesSearch && matchesCategory && matchesStatus
-  })
+  // Filter by search query
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(faq =>
+      faq.question.toLowerCase().includes(query) ||
+      faq.answer.toLowerCase().includes(query)
+    )
+  }
+
+  // Filter by category
+  if (categoryFilter.value) {
+    filtered = filtered.filter(faq => faq.category?.name === categoryFilter.value)
+  }
+
+  // Filter by status
+  if (statusFilter.value) {
+    filtered = filtered.filter(faq => faq.status === statusFilter.value)
+  }
+
+  return filtered
 })
 
-const groupedFaqs = computed(() => {
-  const groups = {}
-  filteredFaqs.value.forEach(faq => {
-    if (!groups[faq.category]) {
-      groups[faq.category] = []
-    }
-    groups[faq.category].push(faq)
-  })
-  return groups
-})
+// Methods
+const formatNumber = (num) => {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + 'M'
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'K'
+  }
+  return num.toString()
+}
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString()
+  if (!date) return 'Recently'
+  try {
+    return new Date(date).toLocaleDateString()
+  } catch (error) {
+    return 'Recently'
+  }
+}
+
+const previewFaq = (faq) => {
+  if (faq.status === 'draft') {
+    toast.warning('Cannot preview draft content')
+    return
+  }
+  
+  // For now, just show a message
+  toast.info('Preview functionality coming soon')
 }
 
 const editFaq = (faq) => {
-  console.log('Edit FAQ:', faq)
+  editForm.value = { ...faq }
+  form.value = {
+    question: faq.question,
+    answer: faq.answer,
+    category: faq.category?.id || '',
+    status: faq.status
+  }
+  showEditModal.value = true
 }
 
-const duplicateFaq = (faq) => {
-  console.log('Duplicate FAQ:', faq)
-}
-
-const deleteFaq = (faq) => {
-  if (confirm(`Delete this FAQ?`)) {
-    console.log('Delete FAQ:', faq)
+const duplicateFaq = async (faq) => {
+  try {
+    const duplicateData = {
+      question: `${faq.question} (Copy)`,
+      answer: faq.answer,
+      category: faq.category?.id,
+      status: 'draft'
+    }
+    
+    await faqsStore.createFaq(duplicateData)
+    toast.success(`"${faq.question}" duplicated successfully`)
+  } catch (err) {
+    console.error('Duplicate error:', err)
+    toast.error('Failed to duplicate FAQ')
   }
 }
+
+const deleteFaq = async (faq) => {
+  if (!confirm(`Are you sure you want to delete "${faq.question}"?`)) {
+    return
+  }
+  
+  try {
+    await faqsStore.deleteFaq(faq.id)
+    toast.success('FAQ deleted successfully')
+  } catch (err) {
+    console.error('Delete error:', err)
+    toast.error('Failed to delete FAQ')
+  }
+}
+
+const submitFaq = async () => {
+  try {
+    if (showEditModal.value) {
+      await faqsStore.updateFaq(editForm.value.id, form.value)
+      toast.success('FAQ updated successfully')
+    } else {
+      await faqsStore.createFaq(form.value)
+      toast.success('FAQ created successfully')
+    }
+    
+    closeModal()
+  } catch (err) {
+    console.error('Submit error:', err)
+    toast.error(showEditModal.value ? 'Failed to update FAQ' : 'Failed to create FAQ')
+  }
+}
+
+const closeModal = () => {
+  showCreateModal.value = false
+  showEditModal.value = false
+  form.value = {
+    question: '',
+    answer: '',
+    category: '',
+    status: 'draft'
+  }
+  editForm.value = {}
+}
+
+const fetchFaqs = async () => {
+  try {
+    await faqsStore.fetchFaqs()
+    await faqsStore.fetchCategories()
+  } catch (err) {
+    console.error('Failed to fetch FAQs:', err)
+    toast.error('Failed to load FAQs')
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  fetchFaqs()
+})
 </script>
