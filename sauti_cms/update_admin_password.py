@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 """
-Quick script to create admin user
+Update admin user password to admin123
 """
 import os
 import sys
 import django
-
-# Add the project directory to Python path
-sys.path.append('/Users/newtonbrian/Documents/Bitz/cms_website_template/sauti_cms')
 
 # Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cms.settings')
@@ -15,10 +12,19 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 
-def create_admin():
+def update_admin_password():
     User = get_user_model()
     
-    if not User.objects.filter(username='admin').exists():
+    try:
+        admin_user = User.objects.get(username='admin')
+        admin_user.set_password('admin123')
+        admin_user.save()
+        print('✅ Admin password updated successfully!')
+        print('Username: admin')
+        print('Password: admin123')
+    except User.DoesNotExist:
+        print('❌ Admin user not found!')
+        print('Creating new admin user...')
         User.objects.create_superuser(
             username='admin',
             email='admin@sauti.org',
@@ -27,11 +33,6 @@ def create_admin():
         print('✅ Admin user created successfully!')
         print('Username: admin')
         print('Password: admin123')
-        print('Email: admin@sauti.org')
-    else:
-        print('ℹ️ Admin user already exists!')
-        print('Username: admin')
-        print('Password: admin123')
 
 if __name__ == '__main__':
-    create_admin()
+    update_admin_password()
