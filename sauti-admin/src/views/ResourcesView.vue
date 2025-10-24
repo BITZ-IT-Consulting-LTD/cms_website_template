@@ -510,14 +510,28 @@ const resetCreateForm = () => {
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB')
+      return
+    }
+    
     createForm.value.file = file
+    toast.success('File selected successfully')
   }
 }
 
 const handleEditFileUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB')
+      return
+    }
+    
     editForm.value.file = file
+    toast.success('File selected successfully')
   }
 }
 

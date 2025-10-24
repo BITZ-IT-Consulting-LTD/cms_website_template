@@ -257,7 +257,7 @@ Each paragraph will be properly formatted when displayed."
           />
           
           <button
-            @click="$refs.imageInput.click()"
+            @click="imageInput.click()"
               class="w-full mt-4 px-4 py-3 border-2 border-dashed border-[#8B4000] rounded-xl text-sm font-semibold text-[#8B4000] hover:bg-[#8B4000] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
               style="font-family: 'Roboto', sans-serif;"
           >
@@ -467,10 +467,23 @@ const getReadingTime = () => {
 const handleImageUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file')
+      return
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB')
+      return
+    }
+    
     const reader = new FileReader()
     reader.onload = (e) => {
       imagePreview.value = e.target.result
       form.value.featuredImage = file
+      toast.success('Image uploaded successfully')
     }
     reader.readAsDataURL(file)
   }

@@ -115,8 +115,38 @@ export const api = {
   posts: {
     list: (params) => apiClient.get('/posts/', { params }),
     get: (slug) => apiClient.get(`/posts/${slug}/`),
-    create: (data) => apiClient.post('/posts/', data),
-    update: (slug, data) => apiClient.put(`/posts/${slug}/`, data),
+    create: (data) => {
+      const formData = new FormData()
+      Object.keys(data).forEach(key => {
+        if (key === 'tags' && Array.isArray(data[key])) {
+          data[key].forEach(tag => formData.append('tags', tag))
+        } else if (data[key] !== null && data[key] !== undefined) {
+          formData.append(key, data[key])
+        }
+      })
+      
+      return apiClient.post('/posts/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
+    update: (slug, data) => {
+      const formData = new FormData()
+      Object.keys(data).forEach(key => {
+        if (key === 'tags' && Array.isArray(data[key])) {
+          data[key].forEach(tag => formData.append('tags', tag))
+        } else if (data[key] !== null && data[key] !== undefined) {
+          formData.append(key, data[key])
+        }
+      })
+      
+      return apiClient.put(`/posts/${slug}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    },
     delete: (slug) => apiClient.delete(`/posts/${slug}/`),
     categories: () => apiClient.get('/posts/categories/'),
     tags: () => apiClient.get('/posts/tags/'),

@@ -78,7 +78,7 @@
               />
               
               <button
-                @click="$refs.videoInput.click()"
+                @click="videoInput.click()"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 Change Video File
@@ -110,7 +110,7 @@
               />
               
               <button
-                @click="$refs.thumbnailInput.click()"
+                @click="thumbnailInput.click()"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 Change Thumbnail
@@ -270,7 +270,20 @@ const isEditing = computed(() => !!route.params.id)
 const handleVideoUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file type
+    if (!file.type.startsWith('video/')) {
+      toast.error('Please select a video file')
+      return
+    }
+    
+    // Validate file size (max 100MB)
+    if (file.size > 100 * 1024 * 1024) {
+      toast.error('Video size must be less than 100MB')
+      return
+    }
+    
     videoForm.value.filename = file.name
+    videoForm.value.videoFile = file
     toast.success('Video file selected')
   }
 }
@@ -278,6 +291,18 @@ const handleVideoUpload = (event) => {
 const handleThumbnailUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file')
+      return
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB')
+      return
+    }
+    
     const reader = new FileReader()
     reader.onload = (e) => {
       thumbnailPreview.value = e.target.result
