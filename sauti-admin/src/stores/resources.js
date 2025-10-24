@@ -65,18 +65,7 @@ export const useResourcesStore = defineStore('resources', () => {
     error.value = null
     
     try {
-      const formData = new FormData()
-      Object.keys(resourceData).forEach(key => {
-        if (resourceData[key] !== null && resourceData[key] !== undefined) {
-          formData.append(key, resourceData[key])
-        }
-      })
-      
-      const response = await api.post('/resources/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.resources.create(resourceData)
       
       const newResource = response.data
       resources.value.unshift(newResource)
@@ -95,18 +84,7 @@ export const useResourcesStore = defineStore('resources', () => {
     error.value = null
     
     try {
-      const formData = new FormData()
-      Object.keys(resourceData).forEach(key => {
-        if (resourceData[key] !== null && resourceData[key] !== undefined) {
-          formData.append(key, resourceData[key])
-        }
-      })
-      
-      const response = await api.put(`/resources/${slug}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.resources.update(slug, resourceData)
       
       const updatedResource = response.data
       
@@ -136,7 +114,7 @@ export const useResourcesStore = defineStore('resources', () => {
     error.value = null
     
     try {
-      await api.delete(`/resources/${slug}/`)
+      await api.resources.delete(slug)
       
       // Remove from list
       resources.value = resources.value.filter(r => r.slug !== slug)

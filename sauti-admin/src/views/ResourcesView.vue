@@ -123,10 +123,10 @@
         <div class="h-48 bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center relative">
           <div class="text-center text-white">
             <component :is="getFileIcon(resource.file_type || 'PDF')" class="h-16 w-16 mx-auto mb-2 opacity-90" />
-            <p class="text-sm font-medium uppercase">{{ resource.file_type || 'Document' }}</p>
+            <p class="text-sm font-medium uppercase">{{ getFileTypeDisplay(resource.file_type) }}</p>
           </div>
           <span
-            v-if="resource.status === 'draft'"
+            v-if="resource.status === 'draft' || resource.status === 'DRAFT'"
             class="absolute top-3 right-3 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full"
           >
             Draft
@@ -392,7 +392,8 @@ const filteredResources = computed(() => {
     
     const matchesCategory = !filterCategory.value || 
       (resource.category && resource.category.name === filterCategory.value)
-    const matchesStatus = !filterStatus.value || resource.status === filterStatus.value
+    const matchesStatus = !filterStatus.value || 
+      resource.status?.toLowerCase() === filterStatus.value.toLowerCase()
     const matchesLanguage = !filterLanguage.value || resource.language === filterLanguage.value
 
     return matchesSearch && matchesCategory && matchesStatus && matchesLanguage
@@ -402,10 +403,24 @@ const filteredResources = computed(() => {
 const getFileIcon = (type) => {
   const icons = {
     'PDF': DocumentTextIcon,
+    'DOC': DocumentTextIcon,
+    'DOCX': DocumentTextIcon,
     'IMAGE': PhotoIcon,
-    'VIDEO': FilmIcon
+    'JPG': PhotoIcon,
+    'JPEG': PhotoIcon,
+    'PNG': PhotoIcon,
+    'GIF': PhotoIcon,
+    'VIDEO': FilmIcon,
+    'MP4': FilmIcon,
+    'AVI': FilmIcon,
+    'MOV': FilmIcon
   }
   return icons[type] || DocumentTextIcon
+}
+
+const getFileTypeDisplay = (type) => {
+  if (!type) return 'Document'
+  return type.toUpperCase()
 }
 
 const getLanguageName = (code) => {
@@ -418,7 +433,13 @@ const getLanguageName = (code) => {
 }
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString()
+  if (!date) return 'Recently'
+  try {
+    return new Date(date).toLocaleDateString()
+  } catch (error) {
+    console.error('Date formatting error:', error, date)
+    return 'Recently'
+  }
 }
 
 const viewResource = (resource) => {
@@ -504,6 +525,8 @@ const fetchResources = async () => {
   try {
     await resourcesStore.fetchResources()
     await resourcesStore.fetchCategories()
+    console.log('Resources loaded:', resources.value)
+    console.log('Categories loaded:', categories.value)
     updateStats()
   } catch (error) {
     console.error('Failed to fetch resources:', error)
@@ -513,7 +536,7 @@ const fetchResources = async () => {
 
 const updateStats = () => {
   const total = resources.value.length
-  const published = resources.value.filter(r => r.status === 'published').length
+  const published = resources.value.filter(r => r.status === 'PUBLISHED' || r.status === 'published').length
   const downloads = resources.value.reduce((sum, r) => sum + (r.download_count || 0), 0)
   
   stats.value = {
