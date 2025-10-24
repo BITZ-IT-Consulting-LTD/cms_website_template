@@ -23,49 +23,8 @@ export const useVideosStore = defineStore('videos', () => {
       error.value = err.message || 'Failed to fetch videos'
       console.error('Failed to fetch videos:', err)
       
-      // Fallback to mock data for development
-      videos.value = [
-        {
-          id: 1,
-          title: 'Child Safety Tips',
-          description: 'Important safety guidelines for children and parents',
-          video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          thumbnail_url: 'https://via.placeholder.com/400x225/3B82F6/FFFFFF?text=Child+Safety+Tips',
-          duration: '5:30',
-          category: 'Safety',
-          status: 'published',
-          views_count: 1200,
-          created_at: '2024-01-15T10:00:00Z',
-          updated_at: '2024-01-15T10:00:00Z'
-        },
-        {
-          id: 2,
-          title: 'Helpline Introduction',
-          description: 'Learn about our helpline services and how to access them',
-          video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          thumbnail_url: 'https://via.placeholder.com/400x225/10B981/FFFFFF?text=Helpline+Introduction',
-          duration: '3:45',
-          category: 'Services',
-          status: 'published',
-          views_count: 800,
-          created_at: '2024-01-10T10:00:00Z',
-          updated_at: '2024-01-10T10:00:00Z'
-        },
-        {
-          id: 3,
-          title: 'Community Outreach',
-          description: 'Our community engagement initiatives and programs',
-          video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          thumbnail_url: 'https://via.placeholder.com/400x225/8B5CF6/FFFFFF?text=Community+Outreach',
-          duration: '7:20',
-          category: 'Community',
-          status: 'draft',
-          views_count: 0,
-          created_at: '2024-01-05T10:00:00Z',
-          updated_at: '2024-01-05T10:00:00Z'
-        }
-      ]
-      
+      // Return empty array instead of mock data
+      videos.value = []
       return videos.value
     } finally {
       loading.value = false
@@ -155,13 +114,8 @@ export const useVideosStore = defineStore('videos', () => {
       return categories.value
     } catch (err) {
       console.error('Failed to fetch video categories:', err)
-      // Fallback to mock categories
-      categories.value = [
-        { id: 1, name: 'Safety', slug: 'safety' },
-        { id: 2, name: 'Services', slug: 'services' },
-        { id: 3, name: 'Community', slug: 'community' },
-        { id: 4, name: 'Education', slug: 'education' }
-      ]
+      // Return empty array instead of mock data
+      categories.value = []
       return categories.value
     }
   }

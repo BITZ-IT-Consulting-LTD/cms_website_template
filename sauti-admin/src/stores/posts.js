@@ -114,12 +114,8 @@ export const usePostsStore = defineStore('posts', () => {
       return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
-      // Mock categories for development
-      categories.value = [
-        { id: 1, name: 'Child Protection', slug: 'child-protection' },
-        { id: 2, name: 'Community Outreach', slug: 'community-outreach' },
-        { id: 3, name: 'Sauti News', slug: 'sauti-news' }
-      ]
+      // Return empty array instead of mock data
+      categories.value = []
       return categories.value
     }
   }
@@ -131,13 +127,8 @@ export const usePostsStore = defineStore('posts', () => {
       return tags.value
     } catch (err) {
       console.error('Failed to fetch tags:', err)
-      // Mock tags for development
-      tags.value = [
-        { id: 1, name: 'helpline', slug: 'helpline' },
-        { id: 2, name: 'children', slug: 'children' },
-        { id: 3, name: 'safety', slug: 'safety' },
-        { id: 4, name: 'uganda', slug: 'uganda' }
-      ]
+      // Return empty array instead of mock data
+      tags.value = []
       return tags.value
     }
   }

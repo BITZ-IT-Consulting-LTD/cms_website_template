@@ -242,7 +242,14 @@ import {
   DocumentTextIcon,
   VideoCameraIcon,
   CogIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  PlusCircleIcon,
+  PencilSquareIcon,
+  FolderOpenIcon,
+  QuestionMarkCircleIcon,
+  UserGroupIcon,
+  ChatBubbleLeftRightIcon,
+  UsersIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -251,6 +258,9 @@ const authStore = useAuthStore()
 const toast = useToast()
 
 const sidebarOpen = ref(false)
+
+// Mock draft count - this should be fetched from the backend
+const draftCount = ref(0)
 
 const userInitials = computed(() => {
   if (!authStore.user) return 'U'

@@ -319,7 +319,6 @@ import {
   ChartBarIcon,
   DocumentTextIcon,
   VideoCameraIcon,
-  HeartIcon,
   MagnifyingGlassIcon,
   DocumentDuplicateIcon,
   FolderOpenIcon,

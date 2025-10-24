@@ -113,13 +113,8 @@ export const useFaqsStore = defineStore('faqs', () => {
       return categories.value
     } catch (err) {
       console.error('Failed to fetch FAQ categories:', err)
-      // Mock categories for development
-      categories.value = [
-        { id: 1, name: 'General Information', slug: 'general-information' },
-        { id: 2, name: 'Using the Helpline', slug: 'using-the-helpline' },
-        { id: 3, name: 'Child Protection', slug: 'child-protection' },
-        { id: 4, name: 'Safety Guidelines', slug: 'safety-guidelines' }
-      ]
+      // Return empty array instead of mock data
+      categories.value = []
       return categories.value
     }
   }
