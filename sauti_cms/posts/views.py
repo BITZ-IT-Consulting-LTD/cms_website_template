@@ -79,7 +79,7 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     DELETE /api/posts/<slug>/ - Delete post (Admins only)
     """
     lookup_field = 'slug'
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsEditorOrReadOnly]
     
     def get_queryset(self):
         queryset = Post.objects.select_related('author', 'category').prefetch_related('tags')

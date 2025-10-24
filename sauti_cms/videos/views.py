@@ -7,6 +7,15 @@ from .serializers import (
 )
 
 
+class IsEditorOrReadOnly(permissions.BasePermission):
+    """Custom permission: Only editors/admins can create/edit, others read-only"""
+    
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user.is_authenticated and request.user.is_editor
+
+
 class VideoCategoryListView(generics.ListAPIView):
     """List all video categories"""
     queryset = VideoCategory.objects.all()
@@ -17,7 +26,7 @@ class VideoCategoryListView(generics.ListAPIView):
 class VideoListCreateView(generics.ListCreateAPIView):
     """List and create videos"""
     queryset = Video.objects.select_related('category', 'author').all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsEditorOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'description']
     ordering_fields = ['created_at', 'published_at', 'views_count', 'title']
@@ -59,7 +68,7 @@ class VideoDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve, update, or delete a video"""
     queryset = Video.objects.select_related('category', 'author').all()
     serializer_class = VideoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsEditorOrReadOnly]
     lookup_field = 'slug'
     
     def get_queryset(self):
