@@ -2,7 +2,7 @@
 
 A comprehensive Django REST Framework backend for the Sauti Child Helpline website, empowering children, GBV survivors, and migrant workers in Uganda.
 
-## 🌟 Features
+## Features
 
 - **User Management**: Role-based access control (Admin, Editor, Author, Viewer)
 - **Blog/News System**: Full CMS with draft/publish workflow
@@ -15,7 +15,7 @@ A comprehensive Django REST Framework backend for the Sauti Child Helpline websi
 - **API Documentation**: Auto-generated OpenAPI/Swagger docs
 - **Production Ready**: Docker support, PostgreSQL, Gunicorn
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -83,7 +83,7 @@ A comprehensive Django REST Framework backend for the Sauti Child Helpline websi
 
 4. **Access**: http://localhost:8000
 
-## 📚 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/login/` - JWT login

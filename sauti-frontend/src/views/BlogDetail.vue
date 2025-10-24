@@ -60,14 +60,14 @@ const related = ref([
     slug: 'supporting-children-through-trauma',
     title: 'Supporting Children Through Trauma',
     excerpt: 'Learn how to help children cope with traumatic experiences.',
-    featured_image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop'
+    featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   },
   {
     id: 102,
     slug: 'building-resilience-in-young-minds',
     title: 'Building Resilience in Young Minds',
     excerpt: 'Strategies for fostering resilience and emotional strength in children.',
-    featured_image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop'
+    featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   },
 ])
 
@@ -131,7 +131,7 @@ function mockPosts() {
         <p>You can support the program by sharing this message, volunteering as a mentor, or contributing resources. Every action brings us closer to a safer environment for children.</p>
       `,
       excerpt: 'Learn about our new youth empowerment program.',
-      featured_image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop',
+      featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
       published_at: '2024-07-15',
       author: { username: 'Dr. Aisha Nakato' },
       category: { name: 'Child Protection', slug: 'child-protection' },
@@ -148,7 +148,7 @@ function mockPosts() {
         <p>Today, the child is thriving in school and actively participates in peer support clubs advocating for children’s rights.</p>
       `,
       excerpt: "A child's journey to safety and success.",
-      featured_image: 'https://images.unsplash.com/flagged/photo-1556746834-1cb5b3a8d7e4?q=80&w=1200&auto=format&fit=crop',
+      featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
       published_at: '2024-07-05',
       author: { username: 'John' },
       category: { name: 'Migrant Workers', slug: 'migrants' },

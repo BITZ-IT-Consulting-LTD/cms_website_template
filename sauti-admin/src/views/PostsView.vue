@@ -1,69 +1,83 @@
 <template>
   <div class="p-6">
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
+    <!-- Enhanced Header -->
+    <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Content Management</h1>
-        <p class="text-gray-600 mt-1">Manage blog posts and articles for the Sauti platform</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2" style="font-family: 'Roboto', sans-serif;">Blog Posts Management</h1>
+        <p class="text-lg text-gray-600">Create, edit, and manage blog posts and articles for the Sauti platform</p>
       </div>
       
-      <router-link
-        to="/posts/create"
-        class="btn-primary flex items-center"
-      >
-        <PlusIcon class="h-4 w-4 mr-2" />
-        Create New Post
-      </router-link>
+      <div class="flex gap-3">
+        <router-link
+          to="/drafts"
+          class="btn-outline flex items-center gap-2"
+        >
+          <PencilSquareIcon class="h-5 w-5" />
+          View Drafts
+        </router-link>
+        
+        <router-link
+          to="/posts/create"
+          class="btn-primary flex items-center gap-2"
+        >
+          <PlusIcon class="h-5 w-5" />
+          Create New Post
+        </router-link>
+      </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div class="card p-4">
-        <div class="flex items-center">
-          <div class="p-2 bg-blue-100 rounded-lg">
+    <!-- Enhanced Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="stats-card group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 bg-blue-100 rounded-2xl group-hover:bg-blue-200 transition-colors duration-300">
             <DocumentTextIcon class="h-6 w-6 text-blue-600" />
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium text-gray-500">Total Posts</p>
-            <p class="text-xl font-semibold text-gray-900">{{ stats.total }}</p>
+          <div class="text-right">
+            <div class="stats-number">{{ stats.total }}</div>
+            <div class="stats-label">Total Posts</div>
           </div>
         </div>
+        <div class="text-sm text-gray-600">All blog posts</div>
       </div>
       
-      <div class="card p-4">
-        <div class="flex items-center">
-          <div class="p-2 bg-green-100 rounded-lg">
+      <div class="stats-card group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 bg-green-100 rounded-2xl group-hover:bg-green-200 transition-colors duration-300">
             <CheckCircleIcon class="h-6 w-6 text-green-600" />
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium text-gray-500">Published</p>
-            <p class="text-xl font-semibold text-gray-900">{{ stats.published }}</p>
+          <div class="text-right">
+            <div class="stats-number">{{ stats.published }}</div>
+            <div class="stats-label">Published</div>
           </div>
         </div>
+        <div class="text-sm text-gray-600">Live content</div>
       </div>
       
-      <div class="card p-4">
-        <div class="flex items-center">
-          <div class="p-2 bg-yellow-100 rounded-lg">
+      <div class="stats-card group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 bg-yellow-100 rounded-2xl group-hover:bg-yellow-200 transition-colors duration-300">
             <ClockIcon class="h-6 w-6 text-yellow-600" />
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium text-gray-500">Draft</p>
-            <p class="text-xl font-semibold text-gray-900">{{ stats.draft }}</p>
+          <div class="text-right">
+            <div class="stats-number">{{ stats.draft }}</div>
+            <div class="stats-label">Drafts</div>
           </div>
         </div>
+        <div class="text-sm text-gray-600">Work in progress</div>
       </div>
       
-      <div class="card p-4">
-        <div class="flex items-center">
-          <div class="p-2 bg-primary-100 rounded-lg">
-            <EyeIcon class="h-6 w-6 text-primary-600" />
+      <div class="stats-card group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 bg-purple-100 rounded-2xl group-hover:bg-purple-200 transition-colors duration-300">
+            <EyeIcon class="h-6 w-6 text-purple-600" />
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium text-gray-500">Total Views</p>
-            <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats.views) }}</p>
+          <div class="text-right">
+            <div class="stats-number">{{ formatNumber(stats.views) }}</div>
+            <div class="stats-label">Total Views</div>
           </div>
         </div>
+        <div class="text-sm text-gray-600">Content engagement</div>
       </div>
     </div>
 

@@ -2,7 +2,7 @@
 
 A modern, responsive, and accessible Vue 3 frontend application for the Sauti Child Helpline website. Built to empower children, GBV survivors, and migrant workers in Uganda with easy access to support services.
 
-## 🌟 Features
+## Features
 
 - **Modern Stack**: Vue 3 Composition API + Vite for fast development
 - **State Management**: Pinia for reactive state management
@@ -14,7 +14,7 @@ A modern, responsive, and accessible Vue 3 frontend application for the Sauti Ch
 - **Mobile-First**: Optimized for mobile devices
 - **Anonymous Reporting**: Secure, multi-step report submission form
 
-## 📦 Tech Stack
+## Tech Stack
 
 - Vue 3.4.21 (Composition API)
 - Vite 5.2.0
@@ -24,7 +24,7 @@ A modern, responsive, and accessible Vue 3 frontend application for the Sauti Ch
 - TailwindCSS 3.4.3
 - HeroIcons for icons
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -52,7 +52,7 @@ npm run dev
 
 The app will be available at `http://localhost:3000`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 sauti-frontend/
@@ -113,7 +113,7 @@ sauti-frontend/
 └── README.md                     # This file
 ```
 
-## 🔑 Key Components
+## Key Components
 
 ### 1. ReportForm (Most Important!)
 Location: `src/components/reports/ReportForm.vue`
@@ -152,7 +152,7 @@ Centralized API client with:
 - Error handling for all status codes
 - Convenient API methods for all endpoints
 
-## 🎨 Styling
+## Styling
 
 ### TailwindCSS Configuration
 Custom color palette matching Sauti brand:

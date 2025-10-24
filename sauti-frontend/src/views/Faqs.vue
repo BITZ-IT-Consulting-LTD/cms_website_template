@@ -1,29 +1,53 @@
 <template>
-  <div class="bg-green-50/60 py-16">
+  <div class="bg-gradient-to-br from-[#FFF8DC] via-white to-[#F5F5DC] py-16">
     <div class="container-custom">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <!-- Left visuals -->
         <div class="lg:col-span-5 order-2 lg:order-1 space-y-5">
-          <div class="rounded-3xl bg-gray-200 h-72"></div>
-          <div class="rounded-3xl bg-gray-200 h-40"></div>
-          <div class="rounded-3xl bg-gray-200 h-80 ring-4 ring-blue-400"></div>
+          <!-- Hero image -->
+          <div class="rounded-3xl bg-gradient-to-br from-[#8B4000] to-[#A0522D] h-72 flex items-center justify-center">
+            <div class="text-center text-white">
+              <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <h3 class="text-xl font-bold">24/7 Support</h3>
+              <p class="text-sm opacity-90">Always here to help</p>
+            </div>
+          </div>
+          
+          <!-- Info cards -->
+          <div class="rounded-3xl bg-white shadow-lg p-6 border border-gray-100">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="h-12 w-12 rounded-full bg-[#8B4000] text-white flex items-center justify-center">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-900">Quick Response</h4>
+                <p class="text-gray-600 text-sm">Get help immediately</p>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm">Our trained counselors are available 24/7 to provide immediate support and guidance.</p>
+          </div>
 
-          <!-- Ready to Serve card -->
-          <div class="mt-4 flex items-center gap-4 rounded-2xl border border-green-300 bg-white p-4 shadow-sm">
-            <div class="h-12 w-12 rounded-full bg-green-500 text-white flex items-center justify-center">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zm2.5 14.5l-3-3V7"/></svg>
-            </div>
-            <div>
-              <p class="font-semibold text-gray-900">Ready to Serve</p>
-              <p class="text-gray-500 text-sm">Our team is here to help.</p>
-            </div>
+          <!-- Contact card -->
+          <div class="rounded-3xl bg-gradient-to-r from-[#8B4000] to-[#A0522D] p-6 text-white">
+            <h4 class="font-bold text-lg mb-2">Need Immediate Help?</h4>
+            <p class="text-sm opacity-90 mb-4">Call our toll-free helpline</p>
+            <a href="tel:116" class="btn-emergency inline-flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+              </svg>
+              Call 116
+            </a>
           </div>
         </div>
 
         <!-- Right content -->
         <div class="lg:col-span-7 order-1 lg:order-2">
-          <p class="text-sm uppercase tracking-widest text-green-700 font-semibold">Ask Question</p>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-green-900 mt-2">Ask Us Your Migration Questions</h1>
+          <p class="text-sm uppercase tracking-widest text-[#8B4000] font-semibold">Frequently Asked</p>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-[#8B4000] to-[#A0522D] bg-clip-text text-transparent mt-2">Questions & Answers</h1>
 
           <!-- Search -->
           <div class="mt-8 mb-4">
@@ -35,28 +59,60 @@
 
           <Loader v-if="loading" />
 
-          <!-- Accordion list styled like design -->
+          <!-- FAQ Categories and Accordion -->
           <div v-else>
+            <!-- Category Filter -->
+            <div v-if="categories.length" class="mb-6">
+              <div class="flex flex-wrap gap-2">
+                <button 
+                  @click="selectedCategory = ''"
+                  :class="selectedCategory === '' ? 'bg-[#8B4000] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                  class="px-4 py-2 rounded-full text-sm font-medium transition-colors"
+                >
+                  All Categories
+                </button>
+                <button 
+                  v-for="category in categories" 
+                  :key="category.id"
+                  @click="selectedCategory = category.id"
+                  :class="selectedCategory === category.id ? 'bg-[#8B4000] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                  class="px-4 py-2 rounded-full text-sm font-medium transition-colors"
+                >
+                  {{ category.name }}
+                </button>
+              </div>
+            </div>
+
+            <!-- FAQ List -->
             <div v-if="filteredFaqs.length" class="space-y-4">
               <div
                 v-for="(faq, index) in filteredFaqs"
                 :key="faq.id || index"
-                class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+                class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow"
               >
-                <button @click="toggleFaq(index)" class="w-full text-left px-6 py-5 flex justify-between items-center">
-                  <span class="font-semibold text-gray-900">{{ faq.question }}</span>
-                  <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-green-700">
+                <button @click="toggleFaq(index)" class="w-full text-left px-6 py-5 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                  <div class="flex-1">
+                    <span class="font-semibold text-gray-900 block">{{ faq.question }}</span>
+                    <span v-if="faq.category_name" class="text-xs text-[#8B4000] font-medium mt-1">{{ faq.category_name }}</span>
+                  </div>
+                  <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#8B4000] bg-opacity-10 text-[#8B4000] ml-4 flex-shrink-0">
                     <svg class="w-5 h-5 transition-transform" :class="{ 'rotate-180': openFaq === index }" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                   </span>
                 </button>
                 <Transition name="fade">
-                  <div v-if="openFaq === index" class="px-6 pb-6 text-gray-600">
-                    {{ faq.answer }}
+                  <div v-if="openFaq === index" class="px-6 pb-6 text-gray-600 border-t border-gray-100">
+                    <div class="pt-4">{{ faq.answer }}</div>
                   </div>
                 </Transition>
               </div>
             </div>
-            <p v-else class="text-gray-600">No FAQs available yet.</p>
+            <div v-else class="text-center py-12">
+              <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <p class="text-gray-600 text-lg">No FAQs found</p>
+              <p class="text-gray-500 text-sm mt-2">Try adjusting your search or category filter</p>
+            </div>
           </div>
 
           <!-- Footer links -->
@@ -81,63 +137,53 @@ import Loader from '@/components/common/Loader.vue'
 
 const faqsStore = useFaqsStore()
 const faqs = ref([])
+const categories = ref([])
 const loading = ref(true)
 const openFaq = ref(null)
 const query = ref('')
-
-// Default FAQs to include in addition to API-provided FAQs
-const defaultFaqs = [
-  {
-    id: 'local-1',
-    question: 'How much does it cost to call the helpline?\u200b',
-    answer:
-      'Our services are completely free of charge. The call to our helpline is toll-free from all major networks in Uganda. No airtime is required to reach us on 116.',
-  },
-  {
-    id: 'local-2',
-    question: 'What services do you offer?',
-    answer:
-      'We offer counseling, guidance, referrals to partner services, and follow-up support for children and families in need of protection and welfare.',
-  },
-  {
-    id: 'local-3',
-    question: 'How can I report abuse?',
-    answer:
-      'Dial 116 or submit an anonymous report on this website via the Report page. Share as much detail as you can so we can help quickly and safely.',
-  },
-  {
-    id: 'local-4',
-    question: 'Is my information kept confidential?',
-    answer:
-      'Yes. We protect your privacy and only share information with authorized partners when necessary to keep a child safe.',
-  },
-  {
-    id: 'local-5',
-    question: 'What age group do you serve?',
-    answer:
-      'We primarily serve children and young people, but we also support parents, guardians, and community members seeking help for a child.',
-  },
-]
+const selectedCategory = ref('')
 
 onMounted(async () => {
   try {
     await faqsStore.fetchFaqs()
-    // Merge API FAQs with default FAQs, avoiding duplicates by question text
-    const apiFaqs = Array.isArray(faqsStore.faqs) ? faqsStore.faqs : []
-    const existingQuestions = new Set(apiFaqs.map(f => String(f.question).trim().toLowerCase()))
-    const extras = defaultFaqs.filter(d => !existingQuestions.has(String(d.question).trim().toLowerCase()))
-    faqs.value = [...apiFaqs, ...extras]
+    faqs.value = faqsStore.faqs || []
+    
+    // Extract unique categories from FAQs
+    const categoryMap = new Map()
+    faqs.value.forEach(faq => {
+      if (faq.category_name && !categoryMap.has(faq.category)) {
+        categoryMap.set(faq.category, {
+          id: faq.category,
+          name: faq.category_name
+        })
+      }
+    })
+    categories.value = Array.from(categoryMap.values())
+  } catch (error) {
+    console.error('Error fetching FAQs:', error)
   } finally {
     loading.value = false
   }
 })
 
 const filteredFaqs = computed(() => {
+  let filtered = faqs.value
+  
+  // Filter by category
+  if (selectedCategory.value) {
+    filtered = filtered.filter(f => f.category == selectedCategory.value)
+  }
+  
+  // Filter by search query
   const q = query.value.trim().toLowerCase()
-  if (!q) return faqs.value
-  return faqs.value.filter(f =>
-    String(f.question).toLowerCase().includes(q) || String(f.answer).toLowerCase().includes(q)
-  )
+  if (q) {
+    filtered = filtered.filter(f =>
+      String(f.question).toLowerCase().includes(q) || 
+      String(f.answer).toLowerCase().includes(q)
+    )
+  }
+  
+  return filtered
 })
 
 function toggleFaq(index) {

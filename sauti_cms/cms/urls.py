@@ -18,10 +18,12 @@ urlpatterns = [
     # API endpoints
     path('api/auth/', include('users.urls')),
     path('api/posts/', include('posts.urls')),
+    path('api/videos/', include('videos.urls')),
     path('api/resources/', include('resources.urls')),
     path('api/faqs/', include('faqs.urls')),
     path('api/partners/', include('partners.urls')),
     path('api/reports/', include('reports.urls')),
+    path('api/dashboard/', include('dashboard.urls')),
     
     # API Documentation (Swagger/OpenAPI)
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

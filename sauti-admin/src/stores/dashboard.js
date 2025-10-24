@@ -5,14 +5,19 @@ import { api } from '@/utils/api'
 export const useDashboardStore = defineStore('dashboard', () => {
   // State
   const stats = ref({
-    totalPosts: 0,
-    totalVideos: 0,
-    totalViews: 0,
-    totalEngagement: 0
+    content: {
+      posts: { total: 0, published: 0, draft: 0, recent: 0 },
+      videos: { total: 0, published: 0, recent: 0 },
+      resources: { total: 0, recent: 0 },
+      faqs: { total: 0 },
+      partners: { total: 0 }
+    },
+    reports: { total: 0, pending: 0 },
+    activity: { recent_posts: 0, recent_videos: 0, recent_resources: 0 }
   })
+  
   const contentList = ref([])
   const topContent = ref([])
-  const analytics = ref({})
   const loading = ref(false)
   const error = ref(null)
   
@@ -22,73 +27,134 @@ export const useDashboardStore = defineStore('dashboard', () => {
     error.value = null
     
     try {
-      // Since dashboard endpoints might not exist yet, we'll simulate with existing data
-      const [postsResponse] = await Promise.all([
-        api.posts.list({ page_size: 1 })
-      ])
-      
-      // For now, we'll use mock data that matches the design
-      stats.value = {
-        totalPosts: 128,
-        totalVideos: 42,
-        totalViews: '24.5k',
-        totalEngagement: '3.2k'
-      }
-      
+      const response = await api.dashboard.stats()
+      stats.value = response.data
       return stats.value
     } catch (err) {
       error.value = err.message || 'Failed to fetch stats'
-      // Use mock data on error
-      stats.value = {
-        totalPosts: 128,
-        totalVideos: 42,
-        totalViews: '24.5k',
-        totalEngagement: '3.2k'
-      }
       console.error('Failed to fetch stats:', err)
+      
+      // Fallback to mock data for development
+      stats.value = {
+        content: {
+          posts: { total: 12, published: 8, draft: 4, recent: 3 },
+          videos: { total: 8, published: 6, recent: 2 },
+          resources: { total: 15, recent: 1 },
+          faqs: { total: 25 },
+          partners: { total: 8 }
+        },
+        reports: { total: 45, pending: 12 },
+        activity: { recent_posts: 3, recent_videos: 2, recent_resources: 1 }
+      }
+      
+      return stats.value
     } finally {
       loading.value = false
     }
   }
   
-  async function fetchContentList(params = {}) {
+  async function fetchContentList() {
     loading.value = true
     error.value = null
     
     try {
-      const response = await api.posts.list(params)
-      contentList.value = response.data.results || response.data
-      return contentList.value
-    } catch (err) {
-      error.value = err.message || 'Failed to fetch content'
-      // Mock data for development
-      contentList.value = [
+      // Fetch posts from backend
+      const postsResponse = await api.posts.list()
+      const posts = postsResponse.data.results || postsResponse.data
+      
+      // Transform posts to content list format
+      const transformedPosts = posts.map(post => ({
+        id: post.id,
+        title: post.title,
+        excerpt: post.excerpt,
+        type: 'blog',
+        status: post.status === 'published' ? 'published' : 'draft',
+        date: new Date(post.created_at).toLocaleDateString(),
+        slug: post.slug,
+        views: post.views_count || 0
+      }))
+      
+      // TODO: Fetch videos from backend when video API is ready
+      const mockVideos = [
         {
           id: 1,
-          title: 'The Importance of Child Helplines',
-          type: 'blog',
+          title: 'Child Safety Tips',
+          excerpt: 'Important safety guidelines for children',
+          type: 'video',
           status: 'published',
-          date: 'Oct 26, 2023',
-          slug: 'importance-child-helplines'
+          date: '2024-01-15',
+          views: 1200
         },
         {
           id: 2,
-          title: "Sauti's Mission: A Video Overview",
+          title: 'Helpline Introduction',
+          excerpt: 'Learn about our helpline services',
           type: 'video',
           status: 'published',
-          date: 'Oct 24, 2023',
-          slug: 'sautis-mission-video'
+          date: '2024-01-10',
+          views: 800
+        }
+      ]
+      
+      contentList.value = [...transformedPosts, ...mockVideos]
+      return contentList.value
+    } catch (err) {
+      error.value = err.message || 'Failed to fetch content'
+      console.error('Failed to fetch content:', err)
+      
+      // Fallback to mock data for development
+      contentList.value = [
+        {
+          id: 1,
+          title: 'Understanding Child Protection in Uganda',
+          excerpt: 'A comprehensive guide to child protection laws and services',
+          type: 'blog',
+          status: 'published',
+          date: '2024-01-20',
+          slug: 'understanding-child-protection-uganda',
+          views: 450
+        },
+        {
+          id: 2,
+          title: 'How to Report Child Abuse',
+          excerpt: 'Step-by-step guide for reporting child abuse cases',
+          type: 'blog',
+          status: 'published',
+          date: '2024-01-18',
+          slug: 'how-to-report-child-abuse',
+          views: 320
         },
         {
           id: 3,
-          title: 'Draft: Understanding Child Rights',
+          title: 'Community Outreach Programs',
+          excerpt: 'Learn about our community engagement initiatives',
           type: 'blog',
           status: 'draft',
-          date: 'Oct 22, 2023',
-          slug: 'understanding-child-rights'
+          date: '2024-01-15',
+          slug: 'community-outreach-programs',
+          views: 0
+        },
+        {
+          id: 4,
+          title: 'Child Safety Tips',
+          excerpt: 'Important safety guidelines for children',
+          type: 'video',
+          status: 'published',
+          date: '2024-01-15',
+          views: 1200
+        },
+        {
+          id: 5,
+          title: 'Helpline Introduction',
+          excerpt: 'Learn about our helpline services',
+          type: 'video',
+          status: 'published',
+          date: '2024-01-10',
+          views: 800
         }
       ]
-      console.error('Failed to fetch content list:', err)
+      
+      return contentList.value
     } finally {
       loading.value = false
     }
@@ -96,47 +162,21 @@ export const useDashboardStore = defineStore('dashboard', () => {
   
   async function fetchTopContent() {
     try {
-      // Mock data that matches the design
-      topContent.value = [
-        {
-          title: 'The Importance of Child Helpli...',
-          type: 'Blog Post',
-          views: '10.2k Views'
-        },
-        {
-          title: "Sauti's Mission: A Video Over...",
-          type: 'Video',
-          views: '8.1k Views'
-        },
-        {
-          title: 'How to Report an Issue',
-          type: 'Blog Post',
-          views: '6.4k Views'
-        }
-      ]
+      const response = await api.dashboard.topContent()
+      topContent.value = response.data
       return topContent.value
     } catch (err) {
       console.error('Failed to fetch top content:', err)
-    }
-  }
-  
-  async function fetchAnalytics(params = {}) {
-    try {
-      // Mock analytics data
-      analytics.value = {
-        contentPerformance: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Views',
-            data: [1200, 1900, 3000, 5000, 4200, 6000],
-            borderColor: '#E65100',
-            backgroundColor: 'rgba(230, 81, 0, 0.1)'
-          }]
-        }
-      }
-      return analytics.value
-    } catch (err) {
-      console.error('Failed to fetch analytics:', err)
+      
+      // Fallback to mock data
+      topContent.value = [
+        { title: 'Understanding Child Protection in Uganda', type: 'Blog', views: 450 },
+        { title: 'Child Safety Tips', type: 'Video', views: 1200 },
+        { title: 'How to Report Child Abuse', type: 'Blog', views: 320 },
+        { title: 'Helpline Introduction', type: 'Video', views: 800 }
+      ]
+      
+      return topContent.value
     }
   }
   
@@ -145,7 +185,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     stats,
     contentList,
     topContent,
-    analytics,
     loading,
     error,
     
@@ -153,6 +192,5 @@ export const useDashboardStore = defineStore('dashboard', () => {
     fetchStats,
     fetchContentList,
     fetchTopContent,
-    fetchAnalytics,
   }
 })

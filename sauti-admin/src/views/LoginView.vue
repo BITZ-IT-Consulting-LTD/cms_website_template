@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background-color: white !important;">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-primary-500">
+        <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-br from-[#8B4000] to-[#A0522D] shadow-lg">
           <span class="text-white font-bold text-xl">S</span>
         </div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900" style="font-family: 'Roboto', sans-serif !important;">
           Admin Dashboard
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
@@ -14,31 +14,33 @@
       </div>
       
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
-        <div class="rounded-md shadow-sm -space-y-px">
+        <div class="space-y-4">
           <div>
-            <label for="username" class="sr-only">Username</label>
+            <label for="username" class="form-label">Username</label>
             <input
               id="username"
               v-model="form.username"
               name="username"
               type="text"
               required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-              placeholder="Username"
+              class="form-input"
+              placeholder="Enter your username"
               :disabled="loading"
+              :value="form.username"
             />
           </div>
           <div>
-            <label for="password" class="sr-only">Password</label>
+            <label for="password" class="form-label">Password</label>
             <input
               id="password"
               v-model="form.password"
               name="password"
               type="password"
               required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-              placeholder="Password"
+              class="form-input"
+              placeholder="Enter your password"
               :disabled="loading"
+              :value="form.password"
             />
           </div>
         </div>
@@ -61,7 +63,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="btn-primary w-full"
           >
             <span v-if="loading" class="absolute left-0 inset-y-0 flex items-center pl-3">
               <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -78,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
@@ -92,6 +94,12 @@ const toast = useToast()
 const form = ref({
   username: '',
   password: ''
+})
+
+// Force clear form on mount
+onMounted(() => {
+  form.value.username = ''
+  form.value.password = ''
 })
 
 const loading = computed(() => authStore.loading)

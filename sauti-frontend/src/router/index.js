@@ -18,6 +18,7 @@ const Articles = () => import('@/views/Videos.vue')
 const Videos = () => import('@/views/Videos.vue')
 const Privacy = () => import('@/views/Privacy.vue')
 const Terms = () => import('@/views/Terms.vue')
+const Accessibility = () => import('@/views/Accessibility.vue')
 
 const routes = [
   {
@@ -45,6 +46,15 @@ const routes = [
     meta: {
       title: 'Terms of Service',
       description: 'Rules for using Sauti services and this website',
+    },
+  },
+  {
+    path: '/accessibility',
+    name: 'accessibility',
+    component: Accessibility,
+    meta: {
+      title: 'Accessibility Statement',
+      description: 'Our commitment to making our services accessible to everyone',
     },
   },
   {
