@@ -247,6 +247,7 @@
   
   .form-textarea {
     @apply form-input resize-none;
+    border-radius: 10px;
   }
   
   .form-select {
