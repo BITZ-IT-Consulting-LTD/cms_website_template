@@ -61,6 +61,11 @@ class PostListCreateView(generics.ListCreateAPIView):
         if is_featured:
             queryset = queryset.filter(is_featured=True)
         
+        # Filter by status
+        status = self.request.query_params.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+        
         return queryset
     
     def get_serializer_class(self):
