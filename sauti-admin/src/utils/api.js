@@ -133,6 +133,14 @@ export const api = {
     update: (id, data) => apiClient.put(`/reports/${id}/`, data),
     addFollowUp: (id, data) => apiClient.post(`/reports/${id}/followup/`, data),
   },
+  
+  users: {
+    list: (params) => apiClient.get('/users/', { params }),
+    get: (id) => apiClient.get(`/users/${id}/`),
+    create: (data) => apiClient.post('/users/', data),
+    update: (id, data) => apiClient.put(`/users/${id}/`, data),
+    delete: (id) => apiClient.delete(`/users/${id}/`),
+  },
 }
 
 export default apiClient
