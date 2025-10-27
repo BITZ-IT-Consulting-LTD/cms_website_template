@@ -536,13 +536,18 @@ const removeImage = () => {
   }
 }
 
-const previewPost = () => {
+const savedSlug = ref(null)
+
+const previewPost = async () => {
   if (!form.value.title) {
     toast.warning('Please enter a title first')
     return
   }
-  if (isEditing.value && route.params.slug) {
-    const previewUrl = `http://localhost:3003/blog/${route.params.slug}`
+  
+  // Use current slug if editing, or saved slug from create
+  const slug = route.params.slug || savedSlug.value
+  if (slug) {
+    const previewUrl = `http://localhost:3003/blog/${slug}`
     window.open(previewUrl, '_blank')
     toast.info('Opening preview in new window...')
   } else {
@@ -588,9 +593,12 @@ const savePost = async () => {
       await postsStore.updatePost(route.params.slug, postData)
       toast.success('Post updated successfully')
     } else {
-      await postsStore.createPost(postData)
+      const createdPost = await postsStore.createPost(postData)
+      // Store slug for preview
+      savedSlug.value = createdPost.slug
       toast.success('Post created successfully')
-      router.push('/posts')
+      // Stay on page after creation for preview ability
+      // router.push('/posts')
     }
   } catch (err) {
     console.error('Save error:', err)
