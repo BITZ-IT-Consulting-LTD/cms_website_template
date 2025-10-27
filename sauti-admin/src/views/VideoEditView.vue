@@ -118,7 +118,7 @@
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
             <select
-              v-model="videoForm.category"
+              v-model="videoForm.category_id"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option :value="null">Select category</option>
@@ -162,8 +162,8 @@
               v-model="videoForm.status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
+              <option value="DRAFT">Draft</option>
+              <option value="PUBLISHED">Published</option>
             </select>
           </div>
         </div>
@@ -221,8 +221,8 @@ const videoForm = ref({
   title: '',
   description: '',
   youtube_url: '',
-  category: null,
-  status: 'draft',
+  category_id: null,
+  status: 'DRAFT',
   language: 'en',
   is_featured: false,
   thumbnail: null
@@ -264,10 +264,10 @@ const previewVideo = () => {
 }
 
 const publishVideo = () => {
-  saveChanges('published')
+  saveChanges('PUBLISHED')
 }
 
-const saveChanges = async (status = 'draft') => {
+const saveChanges = async (status = 'DRAFT') => {
   if (!videoForm.value.title.trim()) {
     toast.error('Please enter a video title')
     return
@@ -278,7 +278,7 @@ const saveChanges = async (status = 'draft') => {
   try {
     const videoData = {
       ...videoForm.value,
-      status
+      status: status || videoForm.value.status
     }
 
     if (isEditing.value) {
@@ -307,8 +307,8 @@ onMounted(async () => {
         title: video.title || '',
         description: video.description || '',
         youtube_url: video.youtube_url || '',
-        category: video.category?.id || null,
-        status: video.status?.toLowerCase() || 'draft',
+        category_id: video.category?.id || null,
+        status: video.status?.toUpperCase() || 'DRAFT',
         language: video.language || 'en',
         is_featured: video.is_featured || false,
         thumbnail: video.thumbnail || null
