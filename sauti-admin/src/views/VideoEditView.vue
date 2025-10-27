@@ -61,28 +61,16 @@
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Video & Thumbnail</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Video File -->
+            <!-- YouTube URL -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Current Video File</label>
-              <div class="flex items-center space-x-3 mb-3">
-                <VideoCameraIcon class="h-5 w-5 text-gray-400" />
-                <span class="text-sm text-gray-900">{{ videoForm.filename || 'No file selected' }}</span>
-              </div>
-              
+              <label class="block text-sm font-medium text-gray-700 mb-2">YouTube URL</label>
               <input
-                ref="videoInput"
-                type="file"
-                accept="video/*"
-                @change="handleVideoUpload"
-                class="hidden"
+                v-model="videoForm.youtube_url"
+                type="url"
+                placeholder="https://youtube.com/watch?v=..."
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
-              
-              <button
-                @click="videoInput.click()"
-                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              >
-                Change Video File
-              </button>
+              <p class="mt-1 text-xs text-gray-500">Enter YouTube video URL</p>
             </div>
 
             <!-- Thumbnail -->
@@ -126,71 +114,56 @@
         <div class="card p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Metadata</h3>
           
-          <!-- Categories -->
+          <!-- Category -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
-            <div class="space-y-2 max-h-32 overflow-y-auto">
-              <label v-for="category in videoCategories" :key="category" class="flex items-center">
-                <input
-                  v-model="videoForm.categories"
-                  :value="category"
-                  type="checkbox"
-                  class="rounded border-gray-300 text-primary-500 focus:ring-primary-500"
-                />
-                <span class="ml-2 text-sm text-gray-700">{{ category }}</span>
-              </label>
-            </div>
-            <p class="mt-1 text-xs text-gray-500">Select one or more categories</p>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select
+              v-model="videoForm.category"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option :value="null">Select category</option>
+              <option v-for="cat in videoCategories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+            </select>
           </div>
           
-          <!-- Tags -->
+          <!-- Language -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-            <input
-              v-model="videoForm.tags"
-              type="text"
-              placeholder="helpline, uganda, child safety"
+            <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
+            <select
+              v-model="videoForm.language"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-            <p class="mt-1 text-xs text-gray-500">Separate tags with commas</p>
+            >
+              <option value="en">English</option>
+              <option value="lg">Luganda</option>
+              <option value="sw">Swahili</option>
+            </select>
           </div>
           
-          <!-- Video Duration -->
+          <!-- Featured -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Video Duration</label>
-            <input
-              v-model="videoForm.duration"
-              type="text"
-              placeholder="00:05:32"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </div>
-          
-          <!-- Source URL -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Source URL (optional)</label>
-            <input
-              v-model="videoForm.sourceUrl"
-              type="url"
-              placeholder="e.g., https://youtube.com/watch..."
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
+            <label class="flex items-center">
+              <input
+                v-model="videoForm.is_featured"
+                type="checkbox"
+                class="rounded border-gray-300 text-primary-500 focus:ring-primary-500"
+              />
+              <span class="ml-2 text-sm text-gray-700">Feature on homepage</span>
+            </label>
           </div>
         </div>
 
         <!-- Settings -->
         <div class="card p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Publishing</h3>
           
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Privacy</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
             <select
-              v-model="videoForm.privacy"
+              v-model="videoForm.status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-              <option value="unlisted">Unlisted</option>
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
             </select>
           </div>
         </div>
@@ -244,50 +217,22 @@ const thumbnailInput = ref(null)
 const loading = ref(false)
 const thumbnailPreview = ref(null)
 
-// Form data
 const videoForm = ref({
-  title: "Sauti's Mission: A Video Overview",
-  description: "This video provides a comprehensive overview of Sauti's mission to provide a safe and accessible helpline for children in Uganda. It covers our history, services, and the impact we've made.",
-  filename: 'sauti_mission_final.mp4',
-  thumbnail: null,
-  categories: ['About Sauti', 'Child Rights'],
-  tags: 'helpline, uganda, child safety',
-  duration: '00:05:32',
-  sourceUrl: '',
-  privacy: 'public'
+  title: '',
+  description: '',
+  youtube_url: '',
+  category: null,
+  status: 'draft',
+  language: 'en',
+  is_featured: false,
+  thumbnail: null
 })
 
-// Mock data
-const videoCategories = [
-  'About Sauti',
-  'Child Rights',
-  'Testimonials',
-  'Success Stories'
-]
+const videoCategories = computed(() => videosStore.categories || [])
 
 const isEditing = computed(() => !!route.params.slug)
 
 // Methods
-const handleVideoUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    // Validate file type
-    if (!file.type.startsWith('video/')) {
-      toast.error('Please select a video file')
-      return
-    }
-    
-    // Validate file size (max 100MB)
-    if (file.size > 100 * 1024 * 1024) {
-      toast.error('Video size must be less than 100MB')
-      return
-    }
-    
-    videoForm.value.filename = file.name
-    videoForm.value.videoFile = file
-    toast.success('Video file selected')
-  }
-}
 
 const handleThumbnailUpload = (event) => {
   const file = event.target.files[0]
