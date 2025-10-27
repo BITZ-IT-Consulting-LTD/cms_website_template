@@ -216,6 +216,19 @@ Each paragraph will be properly formatted when displayed."
               </div>
               <p class="mt-2 text-xs text-gray-500">Separate tags with commas for better organization</p>
           </div>
+          
+          <!-- Enhanced Status -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-900 mb-2">Status</label>
+            <select
+              v-model="form.status"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
+            >
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </div>
         </div>
 
           <!-- Enhanced Featured Image Card -->
@@ -347,7 +360,8 @@ const categories = computed(() => {
   return cats.filter(c => c && c.id)
 })
 const tags = computed(() => {
-  const tagList = postsStore.tags || []
+  const tagList = postsStore.tags
+  if (!Array.isArray(tagList)) return []
   return tagList.filter(t => t && t.id)
 })
 
@@ -531,14 +545,15 @@ const previewPost = () => {
 }
 
 const saveDraft = async () => {
-  await savePost('draft')
+  form.value.status = 'draft'
+  await savePost()
 }
 
 const updatePost = async () => {
-  await savePost('published')
+  await savePost()
 }
 
-const savePost = async (status) => {
+const savePost = async () => {
   if (!form.value.title || !form.value.title.trim()) {
     toast.error('Please enter a title')
     return
@@ -561,7 +576,7 @@ const savePost = async (status) => {
       categories: form.value.categories || [],
       tags: getTagIds(tagsInput.value),
       featuredImage: form.value.featuredImage || null,
-      status
+      status: form.value.status || 'draft'
     }
 
     if (isEditing.value) {
@@ -602,7 +617,7 @@ onMounted(async () => {
         categories: post.category ? [post.category.id] : [],
         tags: post.tags?.map(t => t.id) || [],
         featuredImage: post.featured_image || null,
-        status: post.status?.toLowerCase() || 'draft'
+        status: post.status ? (post.status.toLowerCase() === 'published' ? 'published' : 'draft') : 'draft'
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
