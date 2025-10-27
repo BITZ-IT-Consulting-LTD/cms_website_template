@@ -115,7 +115,7 @@
                 </label>
                 <p class="text-xs text-gray-500">Write your blog post content with paragraph formatting</p>
                 <textarea
-                  ref="editor"
+            ref="editor"
                   v-model="form.content"
                   required
                   rows="8"
@@ -126,7 +126,7 @@ You can create paragraphs by pressing Enter twice.
 
 Each paragraph will be properly formatted when displayed."
                   style="font-family: 'Roboto', sans-serif; line-height: 1.6; min-height: 200px;"
-                  @input="handleContentChange"
+            @input="handleContentChange"
                   @focus="handleEditorFocus"
                   @blur="handleEditorBlur"
                   @keydown="handleKeydown"
@@ -587,17 +587,11 @@ onMounted(async () => {
     // Set author
     form.value.author = authStore.userFullName || 'Admin'
 
-    // Load categories and tags
     await postsStore.fetchCategories()
     await postsStore.fetchTags()
-    console.log('Categories loaded:', postsStore.categories)
-    console.log('Tags loaded:', postsStore.tags)
 
-    // Load post data if editing
     if (isEditing.value) {
-      console.log('Loading post for editing:', route.params.slug)
       const post = await postsStore.fetchPost(route.params.slug)
-      console.log('Loaded post data:', post)
       
       form.value = {
         title: post.title || '',
@@ -612,7 +606,6 @@ onMounted(async () => {
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
-      console.log('Form data after loading:', form.value)
       
       // Update editor content
       await nextTick()
