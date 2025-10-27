@@ -225,8 +225,8 @@ Each paragraph will be properly formatted when displayed."
               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
               style="font-family: 'Roboto', sans-serif;"
             >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
+              <option value="DRAFT">Draft</option>
+              <option value="PUBLISHED">Published</option>
             </select>
           </div>
         </div>
@@ -350,7 +350,7 @@ const form = ref({
   categories: [],
   tags: [],
   featuredImage: null,
-  status: 'draft'
+  status: 'DRAFT'
 })
 
 // Computed
@@ -545,7 +545,7 @@ const previewPost = () => {
 }
 
 const saveDraft = async () => {
-  form.value.status = 'draft'
+  form.value.status = 'DRAFT'
   await savePost()
 }
 
@@ -571,12 +571,11 @@ const savePost = async () => {
       title: form.value.title || '',
       content: form.value.content || '',
       excerpt: form.value.excerpt || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : ''),
-      author: form.value.author || 'Admin',
-      publishedAt: form.value.publishedAt || new Date().toISOString().split('T')[0],
-      categories: form.value.categories || [],
+      category: form.value.categories && form.value.categories.length > 0 ? form.value.categories[0] : null,
       tags: getTagIds(tagsInput.value),
-      featuredImage: form.value.featuredImage || null,
-      status: form.value.status || 'draft'
+      featured_image: form.value.featuredImage || null,
+      status: form.value.status || 'DRAFT',
+      language: 'en'
     }
 
     if (isEditing.value) {
@@ -617,7 +616,7 @@ onMounted(async () => {
         categories: post.category ? [post.category.id] : [],
         tags: post.tags?.map(t => t.id) || [],
         featuredImage: post.featured_image || null,
-        status: post.status ? (post.status.toLowerCase() === 'published' ? 'published' : 'draft') : 'draft'
+        status: post.status || 'DRAFT'
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
