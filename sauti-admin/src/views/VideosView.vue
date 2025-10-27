@@ -91,7 +91,7 @@
         <!-- Category Filter -->
         <select v-model="categoryFilter" class="form-select">
           <option value="">All Categories</option>
-          <option v-for="category in categories" :key="category.id" :value="category.name">
+          <option v-for="category in categories.filter(c => c && c.id)" :key="category.id" :value="category.name">
             {{ category.name }}
           </option>
         </select>
@@ -344,8 +344,9 @@ const deleteVideo = async (video) => {
 
 const fetchVideos = async () => {
   try {
-    await videosStore.fetchVideos()
+    // Fetch categories first, then videos
     await videosStore.fetchCategories()
+    await videosStore.fetchVideos()
   } catch (err) {
     console.error('Failed to fetch videos:', err)
     toast.error('Failed to load videos')

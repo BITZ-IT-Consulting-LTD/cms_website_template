@@ -225,9 +225,10 @@ Each paragraph will be properly formatted when displayed."
               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
               style="font-family: 'Roboto', sans-serif;"
             >
-              <option value="DRAFT">Draft</option>
-              <option value="PUBLISHED">Published</option>
+              <option value="DRAFT">⏳ Draft</option>
+              <option value="PUBLISHED">✅ Published</option>
             </select>
+            <p class="mt-2 text-xs text-gray-500">Published posts are visible on the frontend</p>
           </div>
         </div>
 

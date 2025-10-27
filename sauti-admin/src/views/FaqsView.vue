@@ -91,8 +91,8 @@
         <!-- Status Filter -->
         <select v-model="statusFilter" class="form-select">
           <option value="">All Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
+          <option value="PUBLISHED">✅ Published</option>
+          <option value="DRAFT">⏳ Draft</option>
         </select>
       </div>
     </div>

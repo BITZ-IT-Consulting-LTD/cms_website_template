@@ -162,9 +162,10 @@
               v-model="videoForm.status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="DRAFT">Draft</option>
-              <option value="PUBLISHED">Published</option>
+              <option value="DRAFT">⏳ Draft</option>
+              <option value="PUBLISHED">✅ Published</option>
             </select>
+            <p class="mt-2 text-xs text-gray-500">Published videos are visible on the frontend</p>
           </div>
         </div>
 
@@ -228,7 +229,10 @@ const videoForm = ref({
   thumbnail: null
 })
 
-const videoCategories = computed(() => videosStore.categories || [])
+const videoCategories = computed(() => {
+  const cats = videosStore.categories || []
+  return cats.filter(c => c && c.id && c.name)
+})
 
 const isEditing = computed(() => !!route.params.slug)
 
