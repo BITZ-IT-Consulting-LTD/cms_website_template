@@ -225,6 +225,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { useVideosStore } from '@/stores/videos'
 import {
   EyeIcon,
   ArrowUpIcon,
@@ -235,6 +236,7 @@ import {
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
+const videosStore = useVideosStore()
 
 // Refs
 const videoInput = ref(null)
@@ -263,8 +265,7 @@ const videoCategories = [
   'Success Stories'
 ]
 
-// Computed
-const isEditing = computed(() => !!route.params.id)
+const isEditing = computed(() => !!route.params.slug)
 
 // Methods
 const handleVideoUpload = (event) => {
@@ -330,27 +331,48 @@ const saveChanges = async (status = 'draft') => {
   loading.value = true
 
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    toast.success(`Video ${status === 'published' ? 'published' : 'saved'} successfully`)
-    
-    if (!isEditing.value) {
+    const videoData = {
+      ...videoForm.value,
+      status
+    }
+
+    if (isEditing.value) {
+      await videosStore.updateVideo(route.params.slug, videoData)
+      toast.success('Video updated successfully')
+    } else {
+      await videosStore.createVideo(videoData)
+      toast.success('Video created successfully')
       router.push('/videos')
     }
   } catch (err) {
     console.error('Save error:', err)
-    toast.error('Failed to save video')
+    toast.error(err.response?.data?.detail || err.message || 'Failed to save video')
   } finally {
     loading.value = false
   }
 }
 
-// Lifecycle
-onMounted(() => {
+onMounted(async () => {
+  await videosStore.fetchCategories()
+  
   if (isEditing.value) {
-    // Load video data if editing
-    console.log('Loading video data for ID:', route.params.id)
+    try {
+      const video = await videosStore.fetchVideo(route.params.slug)
+      videoForm.value = {
+        title: video.title || '',
+        description: video.description || '',
+        youtube_url: video.youtube_url || '',
+        category: video.category?.id || null,
+        status: video.status?.toLowerCase() || 'draft',
+        language: video.language || 'en',
+        is_featured: video.is_featured || false,
+        thumbnail: video.thumbnail || null
+      }
+    } catch (err) {
+      console.error('Failed to load video:', err)
+      toast.error('Failed to load video data')
+      router.push('/videos')
+    }
   }
 })
 </script>
