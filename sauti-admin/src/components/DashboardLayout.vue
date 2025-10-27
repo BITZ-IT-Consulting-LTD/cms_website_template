@@ -231,9 +231,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { usePostsStore } from '@/stores/posts'
 import { useToast } from 'vue-toastification'
 import {
   Bars3Icon,
@@ -255,12 +256,27 @@ import {
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const postsStore = usePostsStore()
 const toast = useToast()
 
 const sidebarOpen = ref(false)
 
-// Mock draft count - this should be fetched from the backend
+// Real draft count from backend
 const draftCount = ref(0)
+
+const fetchDraftCount = async () => {
+  try {
+    const drafts = await postsStore.fetchPosts({ status: 'DRAFT' })
+    draftCount.value = Array.isArray(drafts) ? drafts.length : 0
+  } catch (err) {
+    console.error('Failed to fetch draft count:', err)
+    draftCount.value = 0
+  }
+}
+
+onMounted(() => {
+  fetchDraftCount()
+})
 
 const userInitials = computed(() => {
   if (!authStore.user) return 'U'
