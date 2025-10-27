@@ -541,7 +541,13 @@ const previewPost = () => {
     toast.warning('Please enter a title first')
     return
   }
-  toast.info('Preview functionality coming soon')
+  if (isEditing.value && route.params.slug) {
+    const previewUrl = `http://localhost:3003/blog/${route.params.slug}`
+    window.open(previewUrl, '_blank')
+    toast.info('Opening preview in new window...')
+  } else {
+    toast.warning('Please save the post first to preview it')
+  }
 }
 
 const saveDraft = async () => {

@@ -68,7 +68,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
         title: post.title,
         excerpt: post.excerpt,
         type: 'blog',
-        status: post.status === 'published' ? 'published' : 'draft',
+        status: post.status?.toUpperCase() === 'PUBLISHED' ? 'published' : 'draft',
         date: new Date(post.created_at).toLocaleDateString(),
         slug: post.slug,
         views: post.views_count || 0
@@ -84,7 +84,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
         title: video.title,
         excerpt: video.description,
         type: 'video',
-        status: video.status === 'published' ? 'published' : 'draft',
+        status: video.status?.toUpperCase() === 'PUBLISHED' ? 'published' : 'draft',
         date: new Date(video.created_at).toLocaleDateString(),
         slug: video.slug,
         views: video.views_count || 0
