@@ -26,6 +26,8 @@ class Partner(models.Model):
     
     logo = models.ImageField(
         upload_to='partners/logos/',
+        blank=True,
+        null=True,
         help_text='Partner logo'
     )
     

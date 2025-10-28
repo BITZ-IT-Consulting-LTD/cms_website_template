@@ -135,11 +135,11 @@ export const api = {
   },
   
   users: {
-    list: (params) => apiClient.get('/users/', { params }),
-    get: (id) => apiClient.get(`/users/${id}/`),
-    create: (data) => apiClient.post('/users/', data),
-    update: (id, data) => apiClient.put(`/users/${id}/`, data),
-    delete: (id) => apiClient.delete(`/users/${id}/`),
+    list: (params) => apiClient.get('/auth/users/', { params }),
+    get: (id) => apiClient.get(`/auth/users/${id}/`),
+    create: (data) => apiClient.post('/auth/register/', data),
+    update: (id, data) => apiClient.put(`/auth/users/${id}/`, data),
+    delete: (id) => apiClient.delete(`/auth/users/${id}/`),
   },
 }
 
