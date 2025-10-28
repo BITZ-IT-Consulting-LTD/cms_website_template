@@ -17,67 +17,28 @@ export const useVideosStore = defineStore('videos', () => {
     
     try {
       const response = await api.videos.list(params)
-      videos.value = response.data.results || response.data
+      const data = response.data
+      // Ensure videos is always an array
+      videos.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return videos.value
     } catch (err) {
       error.value = err.message || 'Failed to fetch videos'
       console.error('Failed to fetch videos:', err)
       
-      // Fallback to mock data for development
-      videos.value = [
-        {
-          id: 1,
-          title: 'Child Safety Tips',
-          description: 'Important safety guidelines for children and parents',
-          video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          thumbnail_url: 'https://via.placeholder.com/400x225/3B82F6/FFFFFF?text=Child+Safety+Tips',
-          duration: '5:30',
-          category: 'Safety',
-          status: 'published',
-          views_count: 1200,
-          created_at: '2024-01-15T10:00:00Z',
-          updated_at: '2024-01-15T10:00:00Z'
-        },
-        {
-          id: 2,
-          title: 'Helpline Introduction',
-          description: 'Learn about our helpline services and how to access them',
-          video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          thumbnail_url: 'https://via.placeholder.com/400x225/10B981/FFFFFF?text=Helpline+Introduction',
-          duration: '3:45',
-          category: 'Services',
-          status: 'published',
-          views_count: 800,
-          created_at: '2024-01-10T10:00:00Z',
-          updated_at: '2024-01-10T10:00:00Z'
-        },
-        {
-          id: 3,
-          title: 'Community Outreach',
-          description: 'Our community engagement initiatives and programs',
-          video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          thumbnail_url: 'https://via.placeholder.com/400x225/8B5CF6/FFFFFF?text=Community+Outreach',
-          duration: '7:20',
-          category: 'Community',
-          status: 'draft',
-          views_count: 0,
-          created_at: '2024-01-05T10:00:00Z',
-          updated_at: '2024-01-05T10:00:00Z'
-        }
-      ]
-      
+      // Ensure videos is always an array even on error
+      videos.value = []
       return videos.value
     } finally {
       loading.value = false
     }
   }
   
-  async function fetchVideo(id) {
+  async function fetchVideo(slug) {
     loading.value = true
     error.value = null
     
     try {
-      const response = await api.videos.get(id)
+      const response = await api.videos.get(slug)
       currentVideo.value = response.data
       return currentVideo.value
     } catch (err) {
@@ -107,14 +68,14 @@ export const useVideosStore = defineStore('videos', () => {
     }
   }
   
-  async function updateVideo(id, videoData) {
+  async function updateVideo(slug, videoData) {
     loading.value = true
     error.value = null
     
     try {
-      const response = await api.videos.update(id, videoData)
+      const response = await api.videos.update(slug, videoData)
       const updatedVideo = response.data
-      const index = videos.value.findIndex(v => v.id === id)
+      const index = videos.value.findIndex(v => v.slug === slug)
       if (index !== -1) {
         videos.value[index] = updatedVideo
       }
@@ -129,14 +90,14 @@ export const useVideosStore = defineStore('videos', () => {
     }
   }
   
-  async function deleteVideo(id) {
+  async function deleteVideo(slug) {
     loading.value = true
     error.value = null
     
     try {
-      await api.videos.delete(id)
-      videos.value = videos.value.filter(v => v.id !== id)
-      if (currentVideo.value?.id === id) {
+      await api.videos.delete(slug)
+      videos.value = videos.value.filter(v => v.slug !== slug)
+      if (currentVideo.value?.slug === slug) {
         currentVideo.value = null
       }
     } catch (err) {
@@ -150,16 +111,15 @@ export const useVideosStore = defineStore('videos', () => {
   
   async function fetchCategories() {
     try {
-      // Mock categories for now
-      categories.value = [
-        { id: 1, name: 'Safety', slug: 'safety' },
-        { id: 2, name: 'Services', slug: 'services' },
-        { id: 3, name: 'Community', slug: 'community' },
-        { id: 4, name: 'Education', slug: 'education' }
-      ]
+      const response = await api.get('/videos/categories/')
+      // Ensure categories is always an array
+      const data = response.data
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return categories.value
     } catch (err) {
       console.error('Failed to fetch video categories:', err)
+      // Always ensure categories is an array
+      categories.value = []
       return categories.value
     }
   }

@@ -36,10 +36,12 @@ INSTALLED_APPS = [
     # Local apps
     'users',
     'posts',
+    'videos',
     'resources',
     'faqs',
     'partners',
     'reports',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

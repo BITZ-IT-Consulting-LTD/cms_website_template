@@ -51,7 +51,7 @@
             <div class="stats-label">Published</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Live content</div>
+        <div class="text-sm text-gray-600">Live on website</div>
       </div>
       
       <div class="stats-card group">
@@ -73,35 +73,30 @@
             <EyeIcon class="h-6 w-6 text-purple-600" />
           </div>
           <div class="text-right">
-            <div class="stats-number">{{ formatNumber(stats.views) }}</div>
+            <div class="stats-number">{{ formatNumber(stats.totalViews) }}</div>
             <div class="stats-label">Total Views</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Content engagement</div>
+        <div class="text-sm text-gray-600">All time views</div>
       </div>
     </div>
 
-    <!-- Filters and Search -->
-    <div class="card p-4 mb-6">
-      <div class="flex flex-col sm:flex-row gap-4">
+    <!-- Search and Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Search -->
-        <div class="flex-1">
-          <div class="relative">
-            <MagnifyingGlassIcon class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search posts..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </div>
+        <div class="relative">
+          <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search posts..."
+            class="form-input pl-10"
+          />
         </div>
         
         <!-- Status Filter -->
-        <select
-          v-model="statusFilter"
-          class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
+        <select v-model="statusFilter" class="form-select">
           <option value="">All Status</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
@@ -109,21 +104,15 @@
         </select>
         
         <!-- Category Filter -->
-        <select
-          v-model="categoryFilter"
-          class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
+        <select v-model="categoryFilter" class="form-select">
           <option value="">All Categories</option>
-          <option v-for="category in categories" :key="category" :value="category">
-            {{ category }}
+          <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.name">
+            {{ category.name }}
           </option>
         </select>
         
         <!-- Author Filter -->
-        <select
-          v-model="authorFilter"
-          class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
+        <select v-model="authorFilter" class="form-select">
           <option value="">All Authors</option>
           <option v-for="author in authors" :key="author" :value="author">
             {{ author }}
@@ -132,68 +121,66 @@
       </div>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      <p class="mt-2 text-sm text-gray-500">Loading posts...</p>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-12">
+      <div class="text-red-600 mb-4">
+        <DocumentTextIcon class="h-12 w-12 mx-auto mb-2" />
+        <h3 class="text-lg font-medium">Failed to load posts</h3>
+        <p class="text-sm text-gray-500">{{ error }}</p>
+      </div>
+      <button @click="fetchPosts" class="btn-primary">
+        Try Again
+      </button>
+    </div>
+
     <!-- Posts Table -->
-    <div class="card overflow-hidden">
+    <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+          <thead class="table-header">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Title
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Author
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Views
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Published
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              <th class="table-cell">Post</th>
+              <th class="table-cell">Author</th>
+              <th class="table-cell">Category</th>
+              <th class="table-cell">Status</th>
+              <th class="table-cell">Views</th>
+              <th class="table-cell">Date</th>
+              <th class="table-cell">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="post in filteredPosts" :key="post.id" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap">
+            <tr v-for="post in filteredPosts" :key="post.id" class="table-row hover:bg-gray-50">
+              <td class="px-6 py-4">
                 <div class="flex items-center">
-                  <div class="h-12 w-12 bg-gray-200 rounded-lg overflow-hidden mr-4 flex-shrink-0">
-                    <img
-                      v-if="post.featuredImage"
-                      :src="post.featuredImage"
-                      :alt="post.title"
-                      class="h-full w-full object-cover"
-                    />
-                    <div v-else class="h-full w-full flex items-center justify-center">
+                  <div class="flex-shrink-0 h-12 w-12">
+                    <div v-if="post.featured_image" class="h-12 w-12 rounded-lg overflow-hidden">
+                      <img :src="post.featured_image" :alt="post.title" class="h-full w-full object-cover">
+                    </div>
+                    <div v-else class="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center">
                       <DocumentTextIcon class="h-6 w-6 text-gray-400" />
                     </div>
                   </div>
-                  <div class="min-w-0">
-                    <div class="text-sm font-medium text-gray-900 truncate">{{ post.title }}</div>
-                    <div class="text-sm text-gray-500 truncate max-w-xs">{{ post.excerpt }}</div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900 line-clamp-2">
+                      {{ post.title }}
+                    </div>
+                    <div class="text-sm text-gray-500 line-clamp-1">
+                      {{ post.excerpt || post.content?.substring(0, 100) + '...' }}
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="h-8 w-8 bg-gray-300 rounded-full flex items-center justify-center mr-2">
-                    <span class="text-xs font-medium text-gray-600">
-                      {{ post.author.split(' ').map(n => n[0]).join('').toUpperCase() }}
-                    </span>
-                  </div>
-                  <span class="text-sm text-gray-900">{{ post.author }}</span>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ post.category }}
+                {{ post.author_name || 'Unknown' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ post.category?.name || 'Uncategorized' }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span
@@ -208,34 +195,38 @@
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ formatNumber(post.views) }}
+                {{ formatNumber(post.views_count || 0) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ formatDate(post.publishedAt || post.createdAt) }}
+                {{ formatDate(post.published_at || post.created_at) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex items-center justify-end space-x-2">
                   <button
                     @click="previewPost(post)"
                     class="text-blue-600 hover:text-blue-900"
+                    title="Preview"
                   >
                     <EyeIcon class="h-4 w-4" />
                   </button>
                   <router-link
                     :to="`/posts/${post.slug || post.id}/edit`"
                     class="text-primary-600 hover:text-primary-900"
+                    title="Edit"
                   >
                     <PencilIcon class="h-4 w-4" />
                   </router-link>
                   <button
                     @click="duplicatePost(post)"
                     class="text-green-600 hover:text-green-900"
+                    title="Duplicate"
                   >
                     <DocumentDuplicateIcon class="h-4 w-4" />
                   </button>
                   <button
                     @click="deletePost(post)"
                     class="text-red-600 hover:text-red-900"
+                    title="Delete"
                   >
                     <TrashIcon class="h-4 w-4" />
                   </button>
@@ -265,8 +256,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { usePostsStore } from '@/stores/posts'
 import {
   PlusIcon,
   DocumentTextIcon,
@@ -276,10 +269,14 @@ import {
   MagnifyingGlassIcon,
   PencilIcon,
   TrashIcon,
-  DocumentDuplicateIcon
+  DocumentDuplicateIcon,
+  PencilSquareIcon
 } from '@heroicons/vue/24/outline'
 
 const toast = useToast()
+const router = useRouter()
+const route = useRoute()
+const postsStore = usePostsStore()
 
 // Reactive data
 const searchQuery = ref('')
@@ -287,194 +284,143 @@ const statusFilter = ref('')
 const categoryFilter = ref('')
 const authorFilter = ref('')
 
-// Mock data
-const posts = ref([
-  {
-    id: 1,
-    title: 'Understanding Child Rights in Uganda',
-    slug: 'understanding-child-rights-uganda',
-    excerpt: 'A comprehensive guide to child rights and protection laws in Uganda, explaining how Sauti supports these fundamental principles.',
-    featuredImage: null,
-    author: 'Sarah Nakamura',
-    category: 'Child Rights',
-    status: 'published',
-    views: 2847,
-    createdAt: '2024-01-15T10:30:00Z',
-    publishedAt: '2024-01-15T14:00:00Z'
-  },
-  {
-    id: 2,
-    title: 'The Impact of Community Support on Child Welfare',
-    slug: 'impact-community-support-child-welfare',
-    excerpt: 'How community involvement and support systems contribute to better outcomes for children in need of protection.',
-    featuredImage: null,
-    author: 'David Mugisha',
-    category: 'Community Impact',
-    status: 'published',
-    views: 1923,
-    createdAt: '2024-01-12T09:15:00Z',
-    publishedAt: '2024-01-12T12:00:00Z'
-  },
-  {
-    id: 3,
-    title: 'Success Stories: How Sauti Changed Lives',
-    slug: 'success-stories-sauti-changed-lives',
-    excerpt: 'Real stories from children and families who found help and hope through the Sauti helpline services.',
-    featuredImage: null,
-    author: 'Grace Achieng',
-    category: 'Success Stories',
-    status: 'draft',
-    views: 0,
-    createdAt: '2024-01-10T16:45:00Z',
-    publishedAt: null
-  },
-  {
-    id: 4,
-    title: 'Mental Health Resources for Young People',
-    slug: 'mental-health-resources-young-people',
-    excerpt: 'Essential mental health resources and support services available to young people through various channels.',
-    featuredImage: null,
-    author: 'Dr. James Okello',
-    category: 'Mental Health',
-    status: 'published',
-    views: 3156,
-    createdAt: '2024-01-08T11:20:00Z',
-    publishedAt: '2024-01-08T15:30:00Z'
-  },
-  {
-    id: 5,
-    title: 'Digital Safety for Children and Teens',
-    slug: 'digital-safety-children-teens',
-    excerpt: 'Guidelines and tips for staying safe online, including how to report cyberbullying and inappropriate content.',
-    featuredImage: null,
-    author: 'Mary Kintu',
-    category: 'Digital Safety',
-    status: 'published',
-    views: 1678,
-    createdAt: '2024-01-05T08:00:00Z',
-    publishedAt: '2024-01-05T10:00:00Z'
-  },
-  {
-    id: 6,
-    title: 'Building Resilience in Children',
-    slug: 'building-resilience-children',
-    excerpt: 'Strategies and approaches for helping children develop emotional resilience and coping skills.',
-    featuredImage: null,
-    author: 'Peter Ssemakula',
-    category: 'Child Development',
-    status: 'archived',
-    views: 892,
-    createdAt: '2023-12-28T14:15:00Z',
-    publishedAt: '2023-12-30T09:00:00Z'
-  }
-])
-
-const categories = ref([
-  'Child Rights',
-  'Community Impact',
-  'Success Stories',
-  'Mental Health',
-  'Digital Safety',
-  'Child Development',
-  'Education',
-  'Healthcare'
-])
-
-const authors = ref([
-  'Sarah Nakamura',
-  'David Mugisha',
-  'Grace Achieng',
-  'Dr. James Okello',
-  'Mary Kintu',
-  'Peter Ssemakula'
-])
+// Use store data
+const posts = computed(() => postsStore.posts)
+const loading = computed(() => postsStore.loading)
+const error = computed(() => postsStore.error)
+const categories = computed(() => postsStore.categories)
+const authors = ref([])
 
 // Computed properties
 const stats = computed(() => {
   const total = posts.value.length
   const published = posts.value.filter(p => p.status === 'published').length
   const draft = posts.value.filter(p => p.status === 'draft').length
-  const views = posts.value.reduce((sum, p) => sum + p.views, 0)
+  const totalViews = posts.value.reduce((sum, p) => sum + (p.views_count || 0), 0)
   
-  return { total, published, draft, views }
+  return {
+    total,
+    published,
+    draft,
+    totalViews
+  }
 })
 
 const filteredPosts = computed(() => {
   let filtered = posts.value
 
-  // Search filter
+  // Filter by search query
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter(post =>
       post.title.toLowerCase().includes(query) ||
-      post.excerpt.toLowerCase().includes(query) ||
-      post.author.toLowerCase().includes(query)
+      (post.excerpt && post.excerpt.toLowerCase().includes(query)) ||
+      (post.content && post.content.toLowerCase().includes(query))
     )
   }
 
-  // Status filter
+  // Filter by status
   if (statusFilter.value) {
     filtered = filtered.filter(post => post.status === statusFilter.value)
   }
 
-  // Category filter
+  // Filter by category
   if (categoryFilter.value) {
-    filtered = filtered.filter(post => post.category === categoryFilter.value)
+    filtered = filtered.filter(post => post.category?.name === categoryFilter.value)
   }
 
-  // Author filter
+  // Filter by author
   if (authorFilter.value) {
-    filtered = filtered.filter(post => post.author === authorFilter.value)
+    filtered = filtered.filter(post => post.author_name === authorFilter.value)
   }
 
-  return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  return filtered
 })
 
 // Methods
 const formatNumber = (num) => {
-  return new Intl.NumberFormat().format(num)
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + 'M'
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'K'
+  }
+  return num.toString()
 }
 
-const formatDate = (dateString) => {
-  if (!dateString) return 'Not published'
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
+const formatDate = (date) => {
+  if (!date) return 'Recently'
+  try {
+    return new Date(date).toLocaleDateString()
+  } catch (error) {
+    return 'Recently'
+  }
 }
 
 const previewPost = (post) => {
-  toast.info(`Preview for "${post.title}" - Feature coming soon`)
-}
-
-const duplicatePost = (post) => {
-  const newPost = {
-    ...post,
-    id: Math.max(...posts.value.map(p => p.id)) + 1,
-    title: `${post.title} (Copy)`,
-    status: 'draft',
-    views: 0,
-    createdAt: new Date().toISOString(),
-    publishedAt: null
+  if (post.status === 'draft') {
+    toast.warning('Cannot preview draft content')
+    return
   }
   
-  posts.value.unshift(newPost)
-  toast.success('Post duplicated successfully')
+  // Open in new tab
+  const url = `/blog/${post.slug}`
+  window.open(url, '_blank')
 }
 
-const deletePost = (post) => {
-  if (confirm(`Are you sure you want to delete "${post.title}"?`)) {
-    const index = posts.value.findIndex(p => p.id === post.id)
-    if (index > -1) {
-      posts.value.splice(index, 1)
-      toast.success('Post deleted successfully')
+const duplicatePost = async (post) => {
+  try {
+    const duplicateData = {
+      ...post,
+      title: `${post.title} (Copy)`,
+      slug: `${post.slug}-copy-${Date.now()}`,
+      status: 'draft'
     }
+    
+    await postsStore.createPost(duplicateData)
+    toast.success(`"${post.title}" duplicated successfully`)
+  } catch (err) {
+    console.error('Duplicate error:', err)
+    toast.error('Failed to duplicate post')
   }
 }
+
+const deletePost = async (post) => {
+  if (!confirm(`Are you sure you want to delete "${post.title}"?`)) {
+    return
+  }
+  
+  try {
+    await postsStore.deletePost(post.slug || post.id)
+    toast.success('Post deleted successfully')
+  } catch (err) {
+    console.error('Delete error:', err)
+    toast.error('Failed to delete post')
+  }
+}
+
+const fetchPosts = async () => {
+  try {
+    await postsStore.fetchPosts()
+    await postsStore.fetchCategories()
+    
+    // Extract unique authors
+    const uniqueAuthors = [...new Set(posts.value.map(p => p.author_name).filter(Boolean))]
+    authors.value = uniqueAuthors
+  } catch (err) {
+    console.error('Failed to fetch posts:', err)
+    toast.error('Failed to load posts')
+  }
+}
+
+// Watch for route changes to refresh data
+watch(() => route.path, (newPath) => {
+  if (newPath === '/posts') {
+    fetchPosts()
+  }
+})
 
 // Lifecycle
 onMounted(() => {
-  console.log('Posts page loaded')
+  fetchPosts()
 })
 </script>

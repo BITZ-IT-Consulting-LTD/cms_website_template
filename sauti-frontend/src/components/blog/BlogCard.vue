@@ -1,16 +1,16 @@
 <template>
   <article class="group">
-    <router-link :to="`/blog/${post.slug}`">
-      <!-- Featured Image -->
-      <div class="relative h-52 bg-gray-200 overflow-hidden rounded-2xl">
+    <router-link :to="`/blog/${post.slug}`" class="block">
+      <!-- Featured Image (YouTube-style) -->
+      <div class="relative bg-gray-200 rounded-xl overflow-hidden aspect-video cursor-pointer">
         <img
           v-if="post.featured_image"
           :src="post.featured_image"
           :alt="post.title"
-          class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           @error="setPlaceholder"
-          data-ph="https://picsum.photos/800/480?blur=2"
+          data-ph="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop"
         />
         <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-400 to-primary-600">
           <svg class="w-16 h-16 text-white opacity-50" fill="currentColor" viewBox="0 0 20 20">
@@ -18,50 +18,48 @@
           </svg>
         </div>
         
+        <!-- Hover overlay -->
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+        
         <!-- Category Badge -->
-        <div v-if="post.category" class="absolute top-3 left-3">
-          <span class="badge-blue">
+        <div v-if="post.category" class="absolute top-2 left-2">
+          <span class="text-xs font-bold bg-black/80 text-white px-2 py-0.5 rounded">
             {{ post.category.name }}
           </span>
         </div>
         
         <!-- Featured Badge -->
-        <div v-if="post.is_featured" class="absolute top-3 right-3">
-          <span class="bg-secondary-500 text-white px-2 py-1 rounded text-xs font-semibold">
+        <div v-if="post.is_featured" class="absolute top-2 right-2">
+          <span class="bg-secondary-500 text-white px-2 py-0.5 rounded text-xs font-semibold">
             Featured
           </span>
         </div>
       </div>
 
-      <!-- Content -->
-      <div class="pt-4">
-        <!-- Meta Info -->
-        <div class="flex items-center text-xs text-gray-500 mb-2 flex-wrap gap-2">
-          <time :datetime="post.published_at">
-            {{ formatDate(post.published_at) }}
-          </time>
-          <span>·</span>
-          <span v-if="post.author">Article</span>
-          <span v-if="post.views_count" class="flex items-center">
-            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-            </svg>
-            {{ post.views_count }}
-          </span>
+      <!-- Content (YouTube-style) -->
+      <div class="mt-3 flex gap-3">
+        <!-- Author Avatar -->
+        <div class="h-9 w-9 rounded-full bg-[#8B4000] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+          {{ getAuthorInitial() }}
         </div>
-
-        <!-- Title -->
-        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
-          {{ post.title }}
-        </h3>
-
-        <!-- Excerpt -->
-        <p v-if="post.excerpt" class="text-gray-600 line-clamp-3">
-          {{ post.excerpt }}
-        </p>
-
-        <div class="h-6"></div>
+        
+        <!-- Post Info -->
+        <div class="min-w-0">
+          <!-- Title -->
+          <h3 class="text-sm font-semibold text-gray-900 leading-5 line-clamp-2 group-hover:text-[#8B4000] transition-colors">
+            {{ post.title }}
+          </h3>
+          
+          <!-- Author Name -->
+          <p class="text-xs text-gray-600 mt-1">
+            {{ post.author?.username || post.author_name || 'Sauti Uganda' }}
+          </p>
+          
+          <!-- Views & Date -->
+          <p class="text-xs text-gray-500">
+            {{ formatViews(post.views_count) }} • {{ formatTimeAgo(post.published_at) }}
+          </p>
+        </div>
       </div>
     </router-link>
   </article>
@@ -70,26 +68,45 @@
 <script setup>
 import { defineProps } from 'vue'
 
-defineProps({
+const props = defineProps({
   post: {
     type: Object,
     required: true,
   },
 })
 
-function formatDate(dateString) {
-  if (!dateString) return ''
+function getAuthorInitial() {
+  const author = props.post.author?.username || props.post.author_name || 'Sauti'
+  return author.charAt(0).toUpperCase()
+}
+
+function formatViews(views) {
+  if (!views) return '0 views'
+  if (views >= 1000000) {
+    return `${(views / 1000000).toFixed(1)}M views`
+  } else if (views >= 1000) {
+    return `${(views / 1000).toFixed(1)}K views`
+  }
+  return `${views} views`
+}
+
+function formatTimeAgo(dateString) {
+  if (!dateString) return 'Recently'
   const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const now = new Date()
+  const diffTime = Math.abs(now - date)
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 1) return '1 day ago'
+  if (diffDays < 7) return `${diffDays} days ago`
+  if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`
+  if (diffDays < 365) return `${Math.ceil(diffDays / 30)} months ago`
+  return `${Math.ceil(diffDays / 365)} years ago`
 }
 
 function setPlaceholder(event) {
   const img = event.target
-  const ph = img.getAttribute('data-ph') || 'https://picsum.photos/800/480'
+  const ph = img.getAttribute('data-ph') || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
   if (img.src !== ph) {
     img.src = ph
   }
@@ -104,10 +121,15 @@ function setPlaceholder(event) {
   overflow: hidden;
 }
 
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.aspect-video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+}
+
+.aspect-video > img,
+.aspect-video > div {
+  position: absolute;
+  inset: 0;
 }
 </style>

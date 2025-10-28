@@ -61,6 +61,11 @@ class PostListCreateView(generics.ListCreateAPIView):
         if is_featured:
             queryset = queryset.filter(is_featured=True)
         
+        # Filter by status
+        status = self.request.query_params.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+        
         return queryset
     
     def get_serializer_class(self):
@@ -79,7 +84,7 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     DELETE /api/posts/<slug>/ - Delete post (Admins only)
     """
     lookup_field = 'slug'
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsEditorOrReadOnly]
     
     def get_queryset(self):
         queryset = Post.objects.select_related('author', 'category').prefetch_related('tags')

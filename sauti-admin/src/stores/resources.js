@@ -22,14 +22,17 @@ export const useResourcesStore = defineStore('resources', () => {
     
     try {
       const response = await api.resources.list(params)
-      resources.value = response.data.results || response.data
+      const data = response.data
+      
+      // Ensure resources is always an array
+      resources.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       
       // Handle pagination
-      if (response.data.count !== undefined) {
+      if (data.count !== undefined) {
         pagination.value = {
-          count: response.data.count,
-          next: response.data.next,
-          previous: response.data.previous,
+          count: data.count,
+          next: data.next,
+          previous: data.previous,
         }
       }
       
@@ -37,6 +40,8 @@ export const useResourcesStore = defineStore('resources', () => {
     } catch (err) {
       error.value = err.message || 'Failed to fetch resources'
       console.error('Failed to fetch resources:', err)
+      // Ensure resources is always an array even on error
+      resources.value = []
       throw err
     } finally {
       loading.value = false
@@ -65,18 +70,7 @@ export const useResourcesStore = defineStore('resources', () => {
     error.value = null
     
     try {
-      const formData = new FormData()
-      Object.keys(resourceData).forEach(key => {
-        if (resourceData[key] !== null && resourceData[key] !== undefined) {
-          formData.append(key, resourceData[key])
-        }
-      })
-      
-      const response = await api.post('/resources/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.resources.create(resourceData)
       
       const newResource = response.data
       resources.value.unshift(newResource)
@@ -95,18 +89,7 @@ export const useResourcesStore = defineStore('resources', () => {
     error.value = null
     
     try {
-      const formData = new FormData()
-      Object.keys(resourceData).forEach(key => {
-        if (resourceData[key] !== null && resourceData[key] !== undefined) {
-          formData.append(key, resourceData[key])
-        }
-      })
-      
-      const response = await api.put(`/resources/${slug}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.resources.update(slug, resourceData)
       
       const updatedResource = response.data
       
@@ -136,7 +119,7 @@ export const useResourcesStore = defineStore('resources', () => {
     error.value = null
     
     try {
-      await api.delete(`/resources/${slug}/`)
+      await api.resources.delete(slug)
       
       // Remove from list
       resources.value = resources.value.filter(r => r.slug !== slug)
@@ -159,10 +142,14 @@ export const useResourcesStore = defineStore('resources', () => {
   async function fetchCategories() {
     try {
       const response = await api.resources.categories()
-      categories.value = response.data
+      // Ensure categories is always an array
+      const data = response.data
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
+      // Always ensure categories is an array
+      categories.value = []
       return []
     }
   }

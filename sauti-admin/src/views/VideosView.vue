@@ -48,7 +48,7 @@
             <ClockIcon class="h-6 w-6 text-yellow-600" />
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-500">Draft</p>
+            <p class="text-sm font-medium text-gray-500">Drafts</p>
             <p class="text-xl font-semibold text-gray-900">{{ stats.draft }}</p>
           </div>
         </div>
@@ -56,148 +56,149 @@
       
       <div class="card p-4">
         <div class="flex items-center">
-          <div class="p-2 bg-primary-100 rounded-lg">
-            <EyeIcon class="h-6 w-6 text-primary-600" />
+          <div class="p-2 bg-purple-100 rounded-lg">
+            <EyeIcon class="h-6 w-6 text-purple-600" />
           </div>
           <div class="ml-3">
             <p class="text-sm font-medium text-gray-500">Total Views</p>
-            <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats.views) }}</p>
+            <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats.totalViews) }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Filters and Search -->
-    <div class="card p-4 mb-6">
-      <div class="flex flex-col sm:flex-row gap-4">
+    <!-- Search and Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Search -->
-        <div class="flex-1">
-          <div class="relative">
-            <MagnifyingGlassIcon class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search videos..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </div>
+        <div class="relative">
+          <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search videos..."
+            class="form-input pl-10"
+          />
         </div>
         
         <!-- Status Filter -->
-        <select
-          v-model="statusFilter"
-          class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
+        <select v-model="statusFilter" class="form-select">
           <option value="">All Status</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
-          <option value="private">Private</option>
         </select>
         
         <!-- Category Filter -->
-        <select
-          v-model="categoryFilter"
-          class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
+        <select v-model="categoryFilter" class="form-select">
           <option value="">All Categories</option>
-          <option v-for="category in categories" :key="category" :value="category">
-            {{ category }}
+          <option v-for="category in (Array.isArray(categories) ? categories : []).filter(c => c && c.id)" :key="category.id" :value="category.name">
+            {{ category.name }}
           </option>
         </select>
       </div>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      <p class="mt-2 text-sm text-gray-500">Loading videos...</p>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-12">
+      <div class="text-red-600 mb-4">
+        <VideoCameraIcon class="h-12 w-12 mx-auto mb-2" />
+        <h3 class="text-lg font-medium">Failed to load videos</h3>
+        <p class="text-sm text-gray-500">{{ error }}</p>
+      </div>
+      <button @click="fetchVideos" class="btn-primary">
+        Try Again
+      </button>
+    </div>
+
     <!-- Videos Table -->
-    <div class="card overflow-hidden">
+    <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+          <thead class="table-header">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Video
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Duration
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Views
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Created
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              <th class="table-cell">Video</th>
+              <th class="table-cell">Category</th>
+              <th class="table-cell">Status</th>
+              <th class="table-cell">Views</th>
+              <th class="table-cell">Duration</th>
+              <th class="table-cell">Date</th>
+              <th class="table-cell">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="video in filteredVideos" :key="video.id" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap">
+            <tr v-for="video in filteredVideos" :key="video.id" class="table-row hover:bg-gray-50">
+              <td class="px-6 py-4">
                 <div class="flex items-center">
-                  <div class="h-16 w-24 bg-gray-200 rounded-lg overflow-hidden mr-4">
-                    <img
-                      v-if="video.thumbnail"
-                      :src="video.thumbnail"
-                      :alt="video.title"
-                      class="h-full w-full object-cover"
-                    />
-                    <div v-else class="h-full w-full flex items-center justify-center">
+                  <div class="flex-shrink-0 h-12 w-12">
+                    <div v-if="video.thumbnail" class="h-12 w-12 rounded-lg overflow-hidden">
+                      <img :src="video.thumbnail" :alt="video.title" class="h-full w-full object-cover">
+                    </div>
+                    <div v-else-if="video.youtube_thumbnail_url" class="h-12 w-12 rounded-lg overflow-hidden">
+                      <img :src="video.youtube_thumbnail_url" :alt="video.title" class="h-full w-full object-cover">
+                    </div>
+                    <div v-else class="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center">
                       <VideoCameraIcon class="h-6 w-6 text-gray-400" />
                     </div>
                   </div>
-                  <div>
-                    <div class="text-sm font-medium text-gray-900">{{ video.title }}</div>
-                    <div class="text-sm text-gray-500 max-w-xs truncate">{{ video.description }}</div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900 line-clamp-2">
+                      {{ video.title }}
+                    </div>
+                    <div class="text-sm text-gray-500 line-clamp-1">
+                      {{ video.description || 'No description' }}
+                    </div>
                   </div>
                 </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ video.category?.name || 'Uncategorized' }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span
                   class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                   :class="{
                     'bg-green-100 text-green-800': video.status === 'published',
-                    'bg-yellow-100 text-yellow-800': video.status === 'draft',
-                    'bg-red-100 text-red-800': video.status === 'private'
+                    'bg-yellow-100 text-yellow-800': video.status === 'draft'
                   }"
                 >
                   {{ video.status }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ video.category }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ video.duration }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ formatNumber(video.views) }}
+                {{ formatNumber(video.views_count || 0) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ formatDate(video.createdAt) }}
+                {{ video.duration || 'N/A' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ formatDate(video.published_at || video.created_at) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex items-center justify-end space-x-2">
                   <button
                     @click="previewVideo(video)"
                     class="text-blue-600 hover:text-blue-900"
+                    title="Preview"
                   >
                     <EyeIcon class="h-4 w-4" />
                   </button>
                   <router-link
-                    :to="`/videos/${video.id}/edit`"
+                    :to="`/videos/${video.slug || video.id}/edit`"
                     class="text-primary-600 hover:text-primary-900"
+                    title="Edit"
                   >
                     <PencilIcon class="h-4 w-4" />
                   </router-link>
                   <button
                     @click="deleteVideo(video)"
                     class="text-red-600 hover:text-red-900"
+                    title="Delete"
                   >
                     <TrashIcon class="h-4 w-4" />
                   </button>
@@ -227,8 +228,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { useVideosStore } from '@/stores/videos'
 import {
   PlusIcon,
   VideoCameraIcon,
@@ -241,110 +244,56 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const toast = useToast()
+const router = useRouter()
+const route = useRoute()
+const videosStore = useVideosStore()
 
 // Reactive data
 const searchQuery = ref('')
 const statusFilter = ref('')
 const categoryFilter = ref('')
 
-// Mock data
-const videos = ref([
-  {
-    id: 1,
-    title: "Sauti's Mission: A Video Overview",
-    description: "This video provides a comprehensive overview of Sauti's mission to provide a safe and accessible helpline for children in Uganda.",
-    thumbnail: null,
-    status: 'published',
-    category: 'About Sauti',
-    duration: '00:05:32',
-    views: 1247,
-    createdAt: '2024-01-15T10:30:00Z'
-  },
-  {
-    id: 2,
-    title: 'Child Rights Awareness Campaign',
-    description: 'Educational content about child rights and protection services available through Sauti.',
-    thumbnail: null,
-    status: 'published',
-    category: 'Child Rights',
-    duration: '00:03:45',
-    views: 892,
-    createdAt: '2024-01-10T14:20:00Z'
-  },
-  {
-    id: 3,
-    title: 'Success Story: Maria\'s Journey',
-    description: 'A testimonial video showcasing how Sauti helped a young girl find safety and support.',
-    thumbnail: null,
-    status: 'draft',
-    category: 'Success Stories',
-    duration: '00:07:12',
-    views: 0,
-    createdAt: '2024-01-08T09:15:00Z'
-  },
-  {
-    id: 4,
-    title: 'How to Use the Sauti Helpline',
-    description: 'Step-by-step guide on how children can access and use the Sauti helpline services.',
-    thumbnail: null,
-    status: 'published',
-    category: 'Tutorials',
-    duration: '00:04:28',
-    views: 1564,
-    createdAt: '2024-01-05T16:45:00Z'
-  },
-  {
-    id: 5,
-    title: 'Community Impact Report 2023',
-    description: 'Annual report video highlighting the impact Sauti has made in communities across Uganda.',
-    thumbnail: null,
-    status: 'private',
-    category: 'Reports',
-    duration: '00:12:30',
-    views: 156,
-    createdAt: '2024-01-01T08:00:00Z'
-  }
-])
-
-const categories = ref([
-  'About Sauti',
-  'Child Rights',
-  'Success Stories',
-  'Tutorials',
-  'Reports',
-  'Testimonials'
-])
+// Use store data
+const videos = computed(() => videosStore.videos)
+const loading = computed(() => videosStore.loading)
+const error = computed(() => videosStore.error)
+const categories = computed(() => videosStore.categories)
 
 // Computed properties
 const stats = computed(() => {
   const total = videos.value.length
   const published = videos.value.filter(v => v.status === 'published').length
   const draft = videos.value.filter(v => v.status === 'draft').length
-  const views = videos.value.reduce((sum, v) => sum + v.views, 0)
+  const totalViews = videos.value.reduce((sum, v) => sum + (v.views_count || 0), 0)
   
-  return { total, published, draft, views }
+  return {
+    total,
+    published,
+    draft,
+    totalViews
+  }
 })
 
 const filteredVideos = computed(() => {
   let filtered = videos.value
 
-  // Search filter
+  // Filter by search query
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter(video =>
       video.title.toLowerCase().includes(query) ||
-      video.description.toLowerCase().includes(query)
+      (video.description && video.description.toLowerCase().includes(query))
     )
   }
 
-  // Status filter
+  // Filter by status
   if (statusFilter.value) {
     filtered = filtered.filter(video => video.status === statusFilter.value)
   }
 
-  // Category filter
+  // Filter by category
   if (categoryFilter.value) {
-    filtered = filtered.filter(video => video.category === categoryFilter.value)
+    filtered = filtered.filter(video => video.category?.name === categoryFilter.value)
   }
 
   return filtered
@@ -352,34 +301,70 @@ const filteredVideos = computed(() => {
 
 // Methods
 const formatNumber = (num) => {
-  return new Intl.NumberFormat().format(num)
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + 'M'
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'K'
+  }
+  return num.toString()
 }
 
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
-}
-
-const previewVideo = (video) => {
-  toast.info(`Preview for "${video.title}" - Feature coming soon`)
-}
-
-const deleteVideo = (video) => {
-  if (confirm(`Are you sure you want to delete "${video.title}"?`)) {
-    const index = videos.value.findIndex(v => v.id === video.id)
-    if (index > -1) {
-      videos.value.splice(index, 1)
-      toast.success('Video deleted successfully')
-    }
+const formatDate = (date) => {
+  if (!date) return 'Recently'
+  try {
+    return new Date(date).toLocaleDateString()
+  } catch (error) {
+    return 'Recently'
   }
 }
 
+const previewVideo = (video) => {
+  if (video.status === 'draft') {
+    toast.warning('Cannot preview draft content')
+    return
+  }
+  
+  if (video.youtube_url) {
+    window.open(video.youtube_url, '_blank')
+  } else {
+    toast.info('No video URL available')
+  }
+}
+
+const deleteVideo = async (video) => {
+  if (!confirm(`Are you sure you want to delete "${video.title}"?`)) {
+    return
+  }
+  
+  try {
+    await videosStore.deleteVideo(video.slug || video.id)
+    toast.success('Video deleted successfully')
+  } catch (err) {
+    console.error('Delete error:', err)
+    toast.error('Failed to delete video')
+  }
+}
+
+const fetchVideos = async () => {
+  try {
+    // Fetch categories first, then videos
+    await videosStore.fetchCategories()
+    await videosStore.fetchVideos()
+  } catch (err) {
+    console.error('Failed to fetch videos:', err)
+    toast.error('Failed to load videos')
+  }
+}
+
+// Watch for route changes to refresh data
+watch(() => route.path, (newPath) => {
+  if (newPath === '/videos') {
+    fetchVideos()
+  }
+})
+
 // Lifecycle
 onMounted(() => {
-  // Load videos data
-  console.log('Videos page loaded')
+  fetchVideos()
 })
 </script>

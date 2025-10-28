@@ -69,7 +69,7 @@
             <div class="relative">
               <div class="card p-0 overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1600&auto=format&fit=crop" 
+                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop" 
                   alt="Children in Uganda receiving support and care" 
                   class="w-full h-80 md:h-96 lg:h-[500px] object-cover" 
                   loading="eager"
@@ -534,7 +534,7 @@ onMounted(async () => {
       published: formatDate(post.created_at),
       duration: '5:30', // Default duration, could be added to post model
       category: post.category?.name || 'Education',
-      thumbnail: post.featured_image || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
+      thumbnail: post.featured_image || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop'
     }))
   } catch (error) {
     console.error('Failed to load videos:', error)
@@ -550,7 +550,7 @@ onMounted(async () => {
     published: '2 weeks ago',
     duration: '12:45',
     category: 'Education',
-    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop'
   },
   {
     id: 2,
@@ -561,7 +561,7 @@ onMounted(async () => {
     published: '1 month ago',
     duration: '8:22',
     category: 'Safety',
-    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop'
   },
   {
     id: 3,
@@ -572,7 +572,7 @@ onMounted(async () => {
     published: '1 month ago',
     duration: '15:03',
     category: 'Support',
-    thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop'
+    thumbnail: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?q=80&w=1200&auto=format&fit=crop'
   }
     ]
   } finally {
@@ -621,7 +621,7 @@ function setPlaceholder(event) {
 }
 
 function useThumbPlaceholder(e) {
-  e.target.src = 'https://picsum.photos/640/360?blur=2'
+  e.target.src = 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=640&auto=format&fit=crop'
 }
 
 function useAvatarPlaceholder(e) {

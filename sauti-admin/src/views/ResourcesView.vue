@@ -122,11 +122,11 @@
         <!-- Resource Preview -->
         <div class="h-48 bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center relative">
           <div class="text-center text-white">
-            <component :is="getFileIcon(resource.type)" class="h-16 w-16 mx-auto mb-2 opacity-90" />
-            <p class="text-sm font-medium uppercase">{{ resource.type }}</p>
+            <component :is="getFileIcon(resource.file_type || 'PDF')" class="h-16 w-16 mx-auto mb-2 opacity-90" />
+            <p class="text-sm font-medium uppercase">{{ getFileTypeDisplay(resource.file_type) }}</p>
           </div>
           <span
-            v-if="resource.status === 'draft'"
+            v-if="resource.status === 'draft' || resource.status === 'DRAFT'"
             class="absolute top-3 right-3 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full"
           >
             Draft
@@ -146,22 +146,18 @@
           <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
             <div class="flex items-center">
               <FolderIcon class="h-4 w-4 mr-1" />
-              {{ resource.category }}
+              {{ resource.category?.name || 'Uncategorized' }}
             </div>
             <div class="flex items-center">
               <ArrowDownTrayIcon class="h-4 w-4 mr-1" />
-              {{ resource.downloads }}
+              {{ resource.download_count || 0 }}
             </div>
           </div>
 
-          <!-- Language Tags -->
+          <!-- Language Tag -->
           <div class="flex flex-wrap gap-1 mb-4">
-            <span
-              v-for="lang in resource.languages"
-              :key="lang"
-              class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
-            >
-              {{ lang }}
+            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+              {{ getLanguageName(resource.language) }}
             </span>
           </div>
 
@@ -234,37 +230,31 @@
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">Category</label>
-                <select v-model="createForm.category" class="form-select">
-                  <option value="Guides & Manuals">Guides & Manuals</option>
-                  <option value="Posters & Infographics">Posters & Infographics</option>
-                  <option value="Training Materials">Training Materials</option>
-                  <option value="Research Reports">Research Reports</option>
+                <select v-model="createForm.category" class="form-select" required>
+                  <option value="">Select Category</option>
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
+                    {{ category.name }}
+                  </option>
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">File Type</label>
-                <select v-model="createForm.type" class="form-select">
-                  <option value="PDF">PDF</option>
-                  <option value="IMAGE">Image</option>
-                  <option value="VIDEO">Video</option>
+                <label class="block text-sm font-medium text-gray-700">Language</label>
+                <select v-model="createForm.language" class="form-select">
+                  <option value="en">English</option>
+                  <option value="lg">Luganda</option>
+                  <option value="sw">Swahili</option>
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">Languages</label>
-                <div class="flex flex-wrap gap-2 mt-2">
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="createForm.languages" value="English" class="mr-2">
-                    English
-                  </label>
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="createForm.languages" value="Luganda" class="mr-2">
-                    Luganda
-                  </label>
-                  <label class="flex items-center">
-                    <input type="checkbox" v-model="createForm.languages" value="Swahili" class="mr-2">
-                    Swahili
-                  </label>
-                </div>
+                <label class="block text-sm font-medium text-gray-700">File Upload</label>
+                <input 
+                  type="file" 
+                  @change="handleFileUpload"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov"
+                  class="form-input"
+                  required
+                >
+                <p class="text-xs text-gray-500 mt-1">Supported formats: PDF, DOC, DOCX, JPG, PNG, MP4, AVI, MOV</p>
               </div>
             </div>
             <div class="mt-6 flex justify-end space-x-3">
@@ -280,10 +270,74 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit Resource Modal -->
+  <div v-if="showEditModal" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" @click="showEditModal = false">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <h3 class="text-lg font-medium text-gray-900 mb-4" style="font-family: 'Roboto', sans-serif;">Edit Resource</h3>
+          <form @submit.prevent="updateResource">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Resource Title</label>
+                <input v-model="editForm.title" type="text" required class="form-input" placeholder="Enter resource title">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea v-model="editForm.description" rows="3" class="form-input" placeholder="Enter resource description"></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Category</label>
+                <select v-model="editForm.category" class="form-select" required>
+                  <option value="">Select Category</option>
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
+                    {{ category.name }}
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Language</label>
+                <select v-model="editForm.language" class="form-select">
+                  <option value="en">English</option>
+                  <option value="lg">Luganda</option>
+                  <option value="sw">Swahili</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Update File (Optional)</label>
+                <input 
+                  type="file" 
+                  @change="handleEditFileUpload"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov"
+                  class="form-input"
+                >
+                <p class="text-xs text-gray-500 mt-1">Leave empty to keep current file</p>
+              </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+              <button type="button" @click="showEditModal = false" class="btn-outline">
+                Cancel
+              </button>
+              <button type="submit" class="btn-primary">
+                Update Resource
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useResourcesStore } from '@/stores/resources'
+import { useToast } from 'vue-toastification'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -300,75 +354,19 @@ import {
   FilmIcon
 } from '@heroicons/vue/24/outline'
 
-// Mock data
-const resources = ref([
-  {
-    id: 1,
-    title: 'Child Protection Guidelines 2024',
-    description: 'Comprehensive guidelines for identifying and responding to child abuse cases',
-    category: 'Guides & Manuals',
-    type: 'PDF',
-    status: 'published',
-    languages: ['English', 'Luganda'],
-    downloads: 1247,
-    file_size: '2.5 MB',
-    updated_at: '2024-10-15T10:00:00Z'
-  },
-  {
-    id: 2,
-    title: 'Signs of Child Abuse Poster',
-    description: 'Infographic showing warning signs of different types of child abuse',
-    category: 'Posters & Infographics',
-    type: 'PDF',
-    status: 'published',
-    languages: ['English', 'Swahili'],
-    downloads: 892,
-    file_size: '1.2 MB',
-    updated_at: '2024-10-10T14:30:00Z'
-  },
-  {
-    id: 3,
-    title: 'Sauti Helpline Training Manual',
-    description: 'Training material for new helpline counselors and case workers',
-    category: 'Training Materials',
-    type: 'PDF',
-    status: 'published',
-    languages: ['English'],
-    downloads: 543,
-    file_size: '5.8 MB',
-    updated_at: '2024-10-05T09:15:00Z'
-  },
-  {
-    id: 4,
-    title: 'Annual Impact Report 2023',
-    description: 'Comprehensive report on Sauti\'s activities and impact in 2023',
-    category: 'Research Reports',
-    type: 'PDF',
-    status: 'published',
-    languages: ['English'],
-    downloads: 326,
-    file_size: '8.3 MB',
-    updated_at: '2024-09-20T11:00:00Z'
-  },
-  {
-    id: 5,
-    title: 'Child Safety Video Series',
-    description: 'Educational video series teaching children about personal safety',
-    category: 'Training Materials',
-    type: 'VIDEO',
-    status: 'draft',
-    languages: ['English', 'Luganda'],
-    downloads: 0,
-    file_size: '125 MB',
-    updated_at: '2024-10-20T16:45:00Z'
-  }
-])
+const resourcesStore = useResourcesStore()
+const toast = useToast()
+
+// Reactive data
+const resources = computed(() => resourcesStore.resources)
+const categories = computed(() => resourcesStore.categories)
+const loading = computed(() => resourcesStore.loading)
 
 const stats = ref({
-  total: 45,
-  published: 38,
-  downloads: 12456,
-  thisMonth: 1834
+  total: 0,
+  published: 0,
+  downloads: 0,
+  thisMonth: 0
 })
 
 const searchQuery = ref('')
@@ -376,12 +374,14 @@ const filterCategory = ref('')
 const filterStatus = ref('')
 const filterLanguage = ref('')
 const showCreateModal = ref(false)
+const showEditModal = ref(false)
+const editForm = ref({})
 const createForm = ref({
   title: '',
   description: '',
-  category: 'Guides & Manuals',
-  type: 'PDF',
-  languages: []
+  category: '',
+  language: 'en',
+  file: null
 })
 
 const filteredResources = computed(() => {
@@ -390,9 +390,11 @@ const filteredResources = computed(() => {
       resource.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       resource.description.toLowerCase().includes(searchQuery.value.toLowerCase())
     
-    const matchesCategory = !filterCategory.value || resource.category === filterCategory.value
-    const matchesStatus = !filterStatus.value || resource.status === filterStatus.value
-    const matchesLanguage = !filterLanguage.value || resource.languages.includes(filterLanguage.value)
+    const matchesCategory = !filterCategory.value || 
+      (resource.category && resource.category.name === filterCategory.value)
+    const matchesStatus = !filterStatus.value || 
+      resource.status?.toLowerCase() === filterStatus.value.toLowerCase()
+    const matchesLanguage = !filterLanguage.value || resource.language === filterLanguage.value
 
     return matchesSearch && matchesCategory && matchesStatus && matchesLanguage
   })
@@ -401,14 +403,43 @@ const filteredResources = computed(() => {
 const getFileIcon = (type) => {
   const icons = {
     'PDF': DocumentTextIcon,
+    'DOC': DocumentTextIcon,
+    'DOCX': DocumentTextIcon,
     'IMAGE': PhotoIcon,
-    'VIDEO': FilmIcon
+    'JPG': PhotoIcon,
+    'JPEG': PhotoIcon,
+    'PNG': PhotoIcon,
+    'GIF': PhotoIcon,
+    'VIDEO': FilmIcon,
+    'MP4': FilmIcon,
+    'AVI': FilmIcon,
+    'MOV': FilmIcon
   }
   return icons[type] || DocumentTextIcon
 }
 
+const getFileTypeDisplay = (type) => {
+  if (!type) return 'Document'
+  return type.toUpperCase()
+}
+
+const getLanguageName = (code) => {
+  const languages = {
+    'en': 'English',
+    'lg': 'Luganda',
+    'sw': 'Swahili'
+  }
+  return languages[code] || 'English'
+}
+
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString()
+  if (!date) return 'Recently'
+  try {
+    return new Date(date).toLocaleDateString()
+  } catch (error) {
+    console.error('Date formatting error:', error, date)
+    return 'Recently'
+  }
 }
 
 const viewResource = (resource) => {
@@ -416,50 +447,121 @@ const viewResource = (resource) => {
 }
 
 const editResource = (resource) => {
-  console.log('Edit resource:', resource)
+  editForm.value = {
+    id: resource.id,
+    slug: resource.slug,
+    title: resource.title,
+    description: resource.description,
+    category: resource.category?.id || '',
+    language: resource.language,
+    file: null
+  }
+  showEditModal.value = true
 }
 
-const deleteResource = (resource) => {
+const deleteResource = async (resource) => {
   if (confirm(`Delete "${resource.title}"?`)) {
-    const index = resources.value.findIndex(r => r.id === resource.id)
-    if (index > -1) {
-      resources.value.splice(index, 1)
-      // Update stats
-      stats.value.total--
-      if (resource.status === 'published') stats.value.published--
-      stats.value.downloads -= resource.downloads
+    try {
+      await resourcesStore.deleteResource(resource.slug)
+      toast.success('Resource deleted successfully')
+      await fetchResources()
+    } catch (error) {
+      console.error('Delete error:', error)
+      toast.error('Failed to delete resource')
     }
   }
 }
 
-const createResource = () => {
-  const newResource = {
-    id: Date.now(), // Simple ID generation
-    title: createForm.value.title,
-    description: createForm.value.description,
-    category: createForm.value.category,
-    type: createForm.value.type,
-    status: 'published',
-    languages: createForm.value.languages,
-    downloads: 0,
-    file_size: '1.0 MB',
-    updated_at: new Date().toISOString()
+const createResource = async () => {
+  try {
+    await resourcesStore.createResource(createForm.value)
+    toast.success('Resource created successfully')
+    showCreateModal.value = false
+    resetCreateForm()
+    await fetchResources()
+  } catch (error) {
+    console.error('Create error:', error)
+    toast.error('Failed to create resource')
   }
-  
-  resources.value.push(newResource)
-  
-  // Update stats
-  stats.value.total++
-  stats.value.published++
-  
-  // Reset form and close modal
+}
+
+const updateResource = async () => {
+  try {
+    await resourcesStore.updateResource(editForm.value.slug, editForm.value)
+    toast.success('Resource updated successfully')
+    showEditModal.value = false
+    await fetchResources()
+  } catch (error) {
+    console.error('Update error:', error)
+    toast.error('Failed to update resource')
+  }
+}
+
+const resetCreateForm = () => {
   createForm.value = {
     title: '',
     description: '',
-    category: 'Guides & Manuals',
-    type: 'PDF',
-    languages: []
+    category: '',
+    language: 'en',
+    file: null
   }
-  showCreateModal.value = false
 }
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    // Validate file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB')
+      return
+    }
+    
+    createForm.value.file = file
+    toast.success('File selected successfully')
+  }
+}
+
+const handleEditFileUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    // Validate file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB')
+      return
+    }
+    
+    editForm.value.file = file
+    toast.success('File selected successfully')
+  }
+}
+
+const fetchResources = async () => {
+  try {
+    await resourcesStore.fetchResources()
+    await resourcesStore.fetchCategories()
+    console.log('Resources loaded:', resources.value)
+    console.log('Categories loaded:', categories.value)
+    updateStats()
+  } catch (error) {
+    console.error('Failed to fetch resources:', error)
+    toast.error('Failed to load resources')
+  }
+}
+
+const updateStats = () => {
+  const total = resources.value.length
+  const published = resources.value.filter(r => r.status === 'PUBLISHED' || r.status === 'published').length
+  const downloads = resources.value.reduce((sum, r) => sum + (r.download_count || 0), 0)
+  
+  stats.value = {
+    total,
+    published,
+    downloads,
+    thisMonth: Math.floor(downloads * 0.3) // Mock calculation
+  }
+}
+
+onMounted(() => {
+  fetchResources()
+})
 </script>
