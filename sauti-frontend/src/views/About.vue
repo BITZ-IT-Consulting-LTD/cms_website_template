@@ -115,42 +115,42 @@
     </section>
 
     <!-- History Timeline -->
-    <section class="section-padding">
+    <section class="section-padding bg-gray-50">
       <div class="container-custom">
-        <h2 class="text-center mb-3">Our History</h2>
-        <p class="text-center text-gray-600 mb-10">From early NGO partnerships to national designation and global alignment with ITU 116.</p>
-        <div class="relative max-w-4xl mx-auto">
+        <h2 class="text-center mb-4">Our History</h2>
+        <p class="text-center text-gray-600 mb-16 text-lg">From early NGO partnerships to national designation and global alignment with ITU 116.</p>
+        <div class="relative max-w-5xl mx-auto py-8">
           <div class="timeline-line"></div>
           <div class="timeline-item left">
             <div class="timeline-dot"></div>
             <div class="timeline-card">
-              <h4 class="text-sm text-primary-600 font-bold">2005</h4>
-              <h3 class="text-lg font-bold mb-1">Origins</h3>
-              <p class="text-gray-600">Child helpline initiative launched with NGOs and UN partners.</p>
+              <h4 class="text-sm font-bold mb-2" style="color: #8B4000;">2005</h4>
+              <h3 class="text-2xl font-bold mb-3 text-gray-900">Origins</h3>
+              <p class="text-gray-600 leading-relaxed">Child helpline initiative launched with NGOs and UN partners.</p>
             </div>
           </div>
           <div class="timeline-item right">
             <div class="timeline-dot"></div>
             <div class="timeline-card">
-              <h4 class="text-sm text-primary-600 font-bold">2010</h4>
-              <h3 class="text-lg font-bold mb-1">Sauti Established</h3>
-              <p class="text-gray-600">National rollout of the Sauti helpline service.</p>
+              <h4 class="text-sm font-bold mb-2" style="color: #8B4000;">2010</h4>
+              <h3 class="text-2xl font-bold mb-3 text-gray-900">Sauti Established</h3>
+              <p class="text-gray-600 leading-relaxed">National rollout of the Sauti helpline service.</p>
             </div>
           </div>
           <div class="timeline-item left">
             <div class="timeline-dot"></div>
             <div class="timeline-card">
-              <h4 class="text-sm text-primary-600 font-bold">2016</h4>
-              <h3 class="text-lg font-bold mb-1">Legal & Regulatory</h3>
-              <p class="text-gray-600">UCC assigns 116; alignment with ITU recommendations and national child protection frameworks.</p>
+              <h4 class="text-sm font-bold mb-2" style="color: #8B4000;">2016</h4>
+              <h3 class="text-2xl font-bold mb-3 text-gray-900">Legal & Regulatory</h3>
+              <p class="text-gray-600 leading-relaxed">UCC assigns 116; alignment with ITU recommendations and national child protection frameworks.</p>
             </div>
           </div>
           <div class="timeline-item right">
             <div class="timeline-dot"></div>
             <div class="timeline-card">
-              <h4 class="text-sm text-primary-600 font-bold">Today</h4>
-              <h3 class="text-lg font-bold mb-1">Government-led</h3>
-              <p class="text-gray-600">Operated by MGLSD with UNICEF, UCRNN and partners for nationwide impact.</p>
+              <h4 class="text-sm font-bold mb-2" style="color: #8B4000;">Today</h4>
+              <h3 class="text-2xl font-bold mb-3 text-gray-900">Government-led</h3>
+              <p class="text-gray-600 leading-relaxed">Operated by MGLSD with UNICEF, UCRNN and partners for nationwide impact.</p>
             </div>
           </div>
         </div>
@@ -158,7 +158,7 @@
     </section>
 
     <!-- Partners / Legitimacy -->
-    <section class="section-padding bg-gray-50">
+    <section class="section-padding">
       <div class="container-custom">
         <h2 class="text-center mb-8">Partners & Affiliations</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
