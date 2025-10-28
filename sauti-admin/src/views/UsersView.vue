@@ -100,8 +100,18 @@
         <p class="mt-2 text-gray-600">Loading users...</p>
       </div>
       <div v-else-if="filteredUsers.length === 0" class="p-8 text-center">
-        <UsersIcon class="h-12 w-12 text-gray-400 mx-auto" />
-        <p class="mt-4 text-gray-600">No users found</p>
+        <UsersIcon class="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No users found</h3>
+        <p class="text-gray-600 mb-4">
+          {{ searchQuery || filterRole || filterStatus ? 'Try adjusting your search criteria.' : 'Get started by adding your first team member.' }}
+        </p>
+        <p v-if="!searchQuery && !filterRole && !filterStatus" class="text-sm text-gray-500 mb-4">
+          You can create users via Django admin panel: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py createsuperuser</code>
+        </p>
+        <button v-if="!searchQuery && !filterRole && !filterStatus" @click="showCreateModal = true" class="btn-primary">
+          <PlusIcon class="h-4 w-4 inline mr-2" />
+          Add New User
+        </button>
       </div>
       <div v-else>
         <table class="min-w-full divide-y divide-gray-200">
@@ -238,16 +248,18 @@ const userForm = ref({
 })
 
 const stats = computed(() => {
-  const total = users.value.length
-  const admins = users.value.filter(u => u.role === 'ADMIN').length
-  const editors = users.value.filter(u => u.role === 'EDITOR').length
-  const active = users.value.filter(u => u.is_active).length
+  const usersList = Array.isArray(users.value) ? users.value : []
+  const total = usersList.length
+  const admins = usersList.filter(u => u.role === 'ADMIN').length
+  const editors = usersList.filter(u => u.role === 'EDITOR').length
+  const active = usersList.filter(u => u.is_active).length
   
   return { total, admins, editors, active }
 })
 
 const filteredUsers = computed(() => {
-  let filtered = users.value
+  // Ensure users is always an array
+  let filtered = Array.isArray(users.value) ? users.value : []
   
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
@@ -275,11 +287,16 @@ const fetchUsers = async () => {
   loading.value = true
   try {
     const response = await api.users.list()
-    users.value = response.data
+    const data = response.data
+    // Ensure users is always an array
+    users.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+    
+    console.log('Loaded users:', users.value.length)
   } catch (err) {
     console.error('Failed to fetch users:', err)
-    toast.error('Failed to load users')
-    // Return empty array if API call fails
+    const errorMsg = err.response?.data?.detail || err.message || 'Failed to load users'
+    toast.error(errorMsg)
+    // Always ensure users is an array even on error
     users.value = []
   } finally {
     loading.value = false
