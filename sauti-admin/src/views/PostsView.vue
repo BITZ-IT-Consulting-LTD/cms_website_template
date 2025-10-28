@@ -256,7 +256,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { usePostsStore } from '@/stores/posts'
 import {
@@ -273,6 +274,8 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const toast = useToast()
+const router = useRouter()
+const route = useRoute()
 const postsStore = usePostsStore()
 
 // Reactive data
@@ -408,6 +411,13 @@ const fetchPosts = async () => {
     toast.error('Failed to load posts')
   }
 }
+
+// Watch for route changes to refresh data
+watch(() => route.path, (newPath) => {
+  if (newPath === '/posts') {
+    fetchPosts()
+  }
+})
 
 // Lifecycle
 onMounted(() => {

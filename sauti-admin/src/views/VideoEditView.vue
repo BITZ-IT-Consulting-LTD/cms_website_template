@@ -291,6 +291,8 @@ const saveChanges = async (status = 'DRAFT') => {
     } else {
       await videosStore.createVideo(videoData)
       toast.success('Video created successfully')
+      // Wait a bit before navigating to ensure store is updated
+      await new Promise(resolve => setTimeout(resolve, 100))
       router.push('/videos')
     }
   } catch (err) {
