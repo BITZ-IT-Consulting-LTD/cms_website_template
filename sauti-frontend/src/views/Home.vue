@@ -310,8 +310,8 @@
               </span>
               
               <!-- Featured/Recent Badge -->
-              <span v-if="video.featured || latestVideos.indexOf(video) === 0" class="absolute top-3 right-3 text-xs font-bold bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
-                {{ video.featured ? 'Featured' : 'New' }}
+              <span v-if="video.featured" class="absolute top-3 right-3 text-xs font-bold bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
+                Featured
               </span>
             </div>
             
@@ -543,7 +543,8 @@ onMounted(async () => {
     })
     
     // Transform posts to video format for display
-    latestVideos.value = blogStore.posts.map(post => ({
+    // Mark all top 3 recent posts as featured
+    latestVideos.value = blogStore.posts.map((post, index) => ({
       id: post.id,
       title: post.title,
       channel: post.author?.username || post.author_name || 'Sauti Uganda',
@@ -552,7 +553,9 @@ onMounted(async () => {
       published: formatDate(post.published_at || post.created_at),
       duration: '5:30', // Default duration, could be added to post model
       category: post.category?.name || 'Education',
-      thumbnail: post.featured_image || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop'
+      thumbnail: post.featured_image || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop',
+      featured: true, // All top 3 recent posts are featured
+      isLatest: index === 0 // First one is the latest
     }))
   } catch (error) {
     console.error('Failed to load recent publications:', error)
