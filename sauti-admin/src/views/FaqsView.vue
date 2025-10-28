@@ -83,7 +83,7 @@
         <!-- Category Filter -->
         <select v-model="categoryFilter" class="form-select">
           <option value="">All Categories</option>
-          <option v-for="category in categories" :key="category.id" :value="category.name">
+          <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.name">
             {{ category.name }}
           </option>
         </select>
@@ -234,7 +234,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <select v-model="form.category" class="form-select">
                   <option value="">Select Category</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
@@ -315,10 +315,11 @@ const form = ref({
 
 // Computed properties
 const stats = computed(() => {
-  const total = faqs.value.length
-  const published = faqs.value.filter(f => f.status === 'published').length
-  const views = faqs.value.reduce((sum, f) => sum + (f.views_count || 0), 0)
-  const helpful = faqs.value.reduce((sum, f) => sum + (f.helpful_count || 0), 0)
+  const faqsList = Array.isArray(faqs.value) ? faqs.value : []
+  const total = faqsList.length
+  const published = faqsList.filter(f => f.status === 'published').length
+  const views = faqsList.reduce((sum, f) => sum + (f.views_count || 0), 0)
+  const helpful = faqsList.reduce((sum, f) => sum + (f.helpful_count || 0), 0)
   
   return {
     total,
@@ -329,7 +330,7 @@ const stats = computed(() => {
 })
 
 const filteredFaqs = computed(() => {
-  let filtered = faqs.value
+  let filtered = Array.isArray(faqs.value) ? faqs.value : []
 
   // Filter by search query
   if (searchQuery.value) {

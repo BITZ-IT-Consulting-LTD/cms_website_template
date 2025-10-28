@@ -26,12 +26,12 @@
       <!-- Loading -->
       <Loader v-if="loading" message="Loading articles..." />
 
-      <!-- Posts Grid -->
+      <!-- Posts Grid (YouTube-style like Videos) -->
       <div v-else-if="posts.length" class="space-y-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <BlogCard v-for="post in posts" :key="post.id" :post="post" />
         </div>
-        <!-- Pagination (mock to match design) -->
+        <!-- Pagination -->
         <div class="flex items-center justify-center gap-4 select-none">
           <button class="px-2 text-gray-600 hover:text-gray-900" @click="setPage('<')">‹</button>
           <button
@@ -65,14 +65,17 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import BlogCard from '@/components/blog/BlogCard.vue'
 import Loader from '@/components/common/Loader.vue'
+import { useBlogStore } from '@/store/blog'
 
-// Toggle to false to use real API via store later
-const useMock = true
+const blogStore = useBlogStore()
+
+// Now using real API data from backend
+const useMock = false
 
 const posts = ref([])
 const categories = ref([])
 const loading = ref(false)
-const totalPages = ref(8)
+const totalPages = ref(1)
 
 const filters = reactive({
   category: '',
@@ -83,10 +86,11 @@ const filters = reactive({
 
 let debounceTimer = null
 
-onMounted(() => {
-  fetchCategories()
-  // Prime with mock content immediately
-  posts.value = mockPosts()
+onMounted(async () => {
+  await Promise.all([
+    fetchCategories(),
+    fetchFilteredPosts()
+  ])
 })
 
 async function fetchCategories() {
@@ -98,10 +102,19 @@ async function fetchCategories() {
     ]
     return
   }
+  
+  try {
+    const data = await blogStore.fetchCategories()
+    categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+  } catch (error) {
+    console.error('Failed to fetch categories:', error)
+    categories.value = []
+  }
 }
 
 async function fetchFilteredPosts() {
   loading.value = true
+  
   try {
     if (useMock) {
       const all = mockPosts()
@@ -112,6 +125,47 @@ async function fetchFilteredPosts() {
       totalPages.value = 8
       return
     }
+    
+    // Fetch real posts from backend
+    const params = {
+      status: 'PUBLISHED', // Only show published posts
+      page: filters.page
+    }
+    
+    // Add category filter if selected
+    if (filters.category) {
+      params.category = filters.category
+    }
+    
+    // Add search filter if entered
+    if (filters.search) {
+      params.search = filters.search
+    }
+    
+    const response = await blogStore.fetchPosts(params)
+    
+    // Handle paginated response
+    const data = response.results || response
+    posts.value = Array.isArray(data) ? data : []
+    
+    // Calculate total pages
+    if (response.count) {
+      totalPages.value = Math.ceil(response.count / 12) // Assuming 12 posts per page
+    } else {
+      totalPages.value = 1
+    }
+    
+    // If no posts found and not using filters, show fallback message
+    if (posts.value.length === 0 && !filters.search && !filters.category) {
+      console.log('No posts found in database - you can create posts in the admin panel')
+    }
+    
+  } catch (error) {
+    console.error('Failed to fetch posts:', error)
+    console.warn('Backend not available, using mock data as fallback')
+    
+    // Fallback to mock data if backend is not available
+    posts.value = mockPosts()
   } finally {
     loading.value = false
   }
@@ -125,15 +179,20 @@ function debouncedSearch() {
   }, 400)
 }
 
-const pageNumbers = computed(() => {
-  const pages = [1, 2, 3, '…', totalPages.value, '>']
-  return pages
-})
-
+// Update type filter to trigger fetch
 function setType(t) {
   filters.type = t
-  fetchFilteredPosts()
+  if (!useMock) {
+    fetchFilteredPosts()
+  }
 }
+
+const pageNumbers = computed(() => {
+  if (totalPages.value <= 5) {
+    return Array.from({ length: totalPages.value }, (_, i) => i + 1)
+  }
+  return [1, 2, 3, '…', totalPages.value]
+})
 
 function setPage(p) {
   if (p === '…') return
@@ -154,6 +213,8 @@ function mockPosts() {
       featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
       published_at: '2024-07-15',
       author: { username: 'Dr. Aisha Nakato' },
+      author_name: 'Dr. Aisha Nakato',
+      views_count: 1250,
       category: { name: 'Child Protection', slug: 'child-protection' },
       is_video: false,
     },
@@ -162,9 +223,11 @@ function mockPosts() {
       slug: 'a-day-at-the-helpline',
       title: 'A Day at the Helpline',
       excerpt: 'Go behind the scenes with our helpline operators.',
-      featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
+      featured_image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1200&auto=format&fit=crop',
       published_at: '2024-07-12',
       author: { username: 'Sauti Team' },
+      author_name: 'Sauti Team',
+      views_count: 890,
       category: { name: 'GBV', slug: 'gbv' },
       is_video: true,
     },
@@ -173,9 +236,11 @@ function mockPosts() {
       slug: 'child-protection-in-digital-age',
       title: 'Child Protection in the Digital Age',
       excerpt: 'Navigating the online world safely.',
-      featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
+      featured_image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop',
       published_at: '2024-07-10',
-      author: { username: 'Jane' },
+      author: { username: 'Jane Mukasa' },
+      author_name: 'Jane Mukasa',
+      views_count: 2340,
       category: { name: 'Child Protection', slug: 'child-protection' },
       is_video: false,
     },
@@ -184,10 +249,64 @@ function mockPosts() {
       slug: 'success-story-victory',
       title: 'Success Story: From Vulnerability to Victory',
       excerpt: "A child's journey to safety and success.",
-      featured_image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
+      featured_image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop',
       published_at: '2024-07-05',
-      author: { username: 'John' },
+      author: { username: 'John Okello' },
+      author_name: 'John Okello',
+      views_count: 1580,
       category: { name: 'Migrant Workers', slug: 'migrants' },
+      is_video: false,
+    },
+    {
+      id: 5,
+      slug: 'understanding-child-rights',
+      title: 'Understanding Child Rights in Uganda',
+      excerpt: 'A comprehensive guide to child rights and protection laws.',
+      featured_image: 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?q=80&w=1200&auto=format&fit=crop',
+      published_at: '2024-06-28',
+      author: { username: 'Sarah Nambi' },
+      author_name: 'Sarah Nambi',
+      views_count: 3200,
+      category: { name: 'Child Protection', slug: 'child-protection' },
+      is_video: false,
+    },
+    {
+      id: 6,
+      slug: 'preventing-gbv-communities',
+      title: 'Preventing GBV in Communities',
+      excerpt: 'Community-based approaches to preventing gender-based violence.',
+      featured_image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=1200&auto=format&fit=crop',
+      published_at: '2024-06-20',
+      author: { username: 'Dr. Aisha Nakato' },
+      author_name: 'Dr. Aisha Nakato',
+      views_count: 1890,
+      category: { name: 'GBV', slug: 'gbv' },
+      is_video: false,
+    },
+    {
+      id: 7,
+      slug: 'safe-migration-guide',
+      title: 'Safe Migration: What You Need to Know',
+      excerpt: 'Essential information for safe and legal migration.',
+      featured_image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop',
+      published_at: '2024-06-15',
+      author: { username: 'Moses Wanjala' },
+      author_name: 'Moses Wanjala',
+      views_count: 2150,
+      category: { name: 'Migrant Workers', slug: 'migrants' },
+      is_video: false,
+    },
+    {
+      id: 8,
+      slug: 'hotline-impact-report',
+      title: 'Annual Hotline Impact Report 2024',
+      excerpt: 'See how your calls have made a difference this year.',
+      featured_image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop',
+      published_at: '2024-06-10',
+      author: { username: 'Sauti Uganda' },
+      author_name: 'Sauti Uganda',
+      views_count: 4500,
+      category: { name: 'Child Protection', slug: 'child-protection' },
       is_video: false,
     },
   ]

@@ -16,11 +16,15 @@ export const usePartnersStore = defineStore('partners', () => {
     
     try {
       const response = await api.partners.list(params)
-      partners.value = response.data.results || response.data
+      const data = response.data
+      // Ensure partners is always an array
+      partners.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return partners.value
     } catch (err) {
       error.value = err.message || 'Failed to fetch partners'
       console.error('Failed to fetch partners:', err)
+      // Ensure partners is always an array even on error
+      partners.value = []
       throw err
     } finally {
       loading.value = false

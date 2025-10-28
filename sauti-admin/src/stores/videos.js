@@ -17,13 +17,15 @@ export const useVideosStore = defineStore('videos', () => {
     
     try {
       const response = await api.videos.list(params)
-      videos.value = response.data.results || response.data
+      const data = response.data
+      // Ensure videos is always an array
+      videos.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return videos.value
     } catch (err) {
       error.value = err.message || 'Failed to fetch videos'
       console.error('Failed to fetch videos:', err)
       
-      // Return empty array instead of mock data
+      // Ensure videos is always an array even on error
       videos.value = []
       return videos.value
     } finally {
@@ -110,11 +112,13 @@ export const useVideosStore = defineStore('videos', () => {
   async function fetchCategories() {
     try {
       const response = await api.get('/videos/categories/')
-      categories.value = response.data
+      // Ensure categories is always an array
+      const data = response.data
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return categories.value
     } catch (err) {
       console.error('Failed to fetch video categories:', err)
-      // Return empty array instead of mock data
+      // Always ensure categories is an array
       categories.value = []
       return categories.value
     }

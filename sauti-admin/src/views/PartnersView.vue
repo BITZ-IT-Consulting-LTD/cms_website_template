@@ -363,10 +363,11 @@ const error = computed(() => partnersStore.error)
 
 // Computed properties
 const stats = computed(() => {
-  const total = partners.value.length
-  const active = partners.value.filter(p => p.status === 'active').length
-  const ngo = partners.value.filter(p => p.type === 'NGO').length
-  const government = partners.value.filter(p => p.type === 'Government Agency').length
+  const partnersList = Array.isArray(partners.value) ? partners.value : []
+  const total = partnersList.length
+  const active = partnersList.filter(p => p.status === 'active').length
+  const ngo = partnersList.filter(p => p.type === 'NGO').length
+  const government = partnersList.filter(p => p.type === 'Government Agency').length
   
   return {
     total,
@@ -377,7 +378,8 @@ const stats = computed(() => {
 })
 
 const filteredPartners = computed(() => {
-  return partners.value.filter(partner => {
+  const partnersList = Array.isArray(partners.value) ? partners.value : []
+  return partnersList.filter(partner => {
     const matchesSearch = !searchQuery.value ||
       partner.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       partner.description.toLowerCase().includes(searchQuery.value.toLowerCase())

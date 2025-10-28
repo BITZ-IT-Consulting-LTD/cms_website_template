@@ -60,7 +60,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
     try {
       // Fetch posts from backend
       const postsResponse = await api.posts.list()
-      const posts = postsResponse.data.results || postsResponse.data
+      const postsData = postsResponse.data
+      const posts = Array.isArray(postsData) ? postsData : (postsData.results && Array.isArray(postsData.results) ? postsData.results : [])
       
       // Transform posts to content list format
       const transformedPosts = posts.map(post => ({
@@ -76,7 +77,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
       
       // Fetch videos from backend
       const videosResponse = await api.videos.list()
-      const videos = videosResponse.data.results || videosResponse.data
+      const videosData = videosResponse.data
+      const videos = Array.isArray(videosData) ? videosData : (videosData.results && Array.isArray(videosData.results) ? videosData.results : [])
       
       // Transform videos to content list format
       const transformedVideos = videos.map(video => ({
@@ -96,7 +98,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       error.value = err.message || 'Failed to fetch content'
       console.error('Failed to fetch content:', err)
       
-      // Return empty array instead of mock data
+      // Ensure contentList is always an array even on error
       contentList.value = []
       return contentList.value
     } finally {
@@ -107,12 +109,14 @@ export const useDashboardStore = defineStore('dashboard', () => {
   async function fetchTopContent() {
     try {
       const response = await api.dashboard.topContent()
-      topContent.value = response.data
+      const data = response.data
+      // Ensure topContent is always an array
+      topContent.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return topContent.value
     } catch (err) {
       console.error('Failed to fetch top content:', err)
       
-      // Return empty array instead of mock data
+      // Ensure topContent is always an array even on error
       topContent.value = []
       return topContent.value
     }

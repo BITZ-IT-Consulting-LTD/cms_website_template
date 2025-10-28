@@ -16,10 +16,15 @@ export const useFaqsStore = defineStore('faqs', () => {
     
     try {
       const response = await api.faqs.list(params)
-      faqs.value = response.data.results || response.data
-      return response.data
+      const data = response.data
+      // Ensure faqs is always an array
+      faqs.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      return data
     } catch (err) {
       error.value = err.response?.data || 'Failed to fetch FAQs'
+      console.error('Failed to fetch FAQs:', err)
+      // Ensure faqs is always an array even on error
+      faqs.value = []
       throw err
     } finally {
       loading.value = false
@@ -29,10 +34,14 @@ export const useFaqsStore = defineStore('faqs', () => {
   async function fetchCategories() {
     try {
       const response = await api.faqs.categories()
-      categories.value = response.data
-      return response.data
+      const data = response.data
+      // Ensure categories is always an array
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
+      // Always ensure categories is an array
+      categories.value = []
       return []
     }
   }

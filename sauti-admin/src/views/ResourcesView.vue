@@ -232,7 +232,7 @@
                 <label class="block text-sm font-medium text-gray-700">Category</label>
                 <select v-model="createForm.category" class="form-select" required>
                   <option value="">Select Category</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
@@ -295,7 +295,7 @@
                 <label class="block text-sm font-medium text-gray-700">Category</label>
                 <select v-model="editForm.category" class="form-select" required>
                   <option value="">Select Category</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
