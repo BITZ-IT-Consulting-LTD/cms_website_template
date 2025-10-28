@@ -91,7 +91,7 @@
         <!-- Category Filter -->
         <select v-model="categoryFilter" class="form-select">
           <option value="">All Categories</option>
-          <option v-for="category in categories.filter(c => c && c.id)" :key="category.id" :value="category.name">
+          <option v-for="category in (Array.isArray(categories) ? categories : []).filter(c => c && c.id)" :key="category.id" :value="category.name">
             {{ category.name }}
           </option>
         </select>

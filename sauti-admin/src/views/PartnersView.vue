@@ -189,16 +189,19 @@
       </div>
       
       <!-- Empty State -->
-      <div v-if="filteredPartners.length === 0" class="col-span-full text-center py-12">
-        <UserGroupIcon class="mx-auto h-12 w-12 text-gray-400" />
-        <h3 class="mt-2 text-sm font-medium text-gray-900">No partners found</h3>
-        <p class="mt-1 text-sm text-gray-500">
-          {{ searchQuery ? 'Try adjusting your search criteria.' : 'Get started by adding a new partner.' }}
+      <div v-if="filteredPartners.length === 0" class="col-span-full text-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
+        <UserGroupIcon class="mx-auto h-16 w-16 text-gray-400 mb-4" />
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No partners found</h3>
+        <p class="text-gray-600 mb-4 max-w-md mx-auto">
+          {{ searchQuery || filterType || filterStatus ? 'Try adjusting your search criteria.' : 'Start building your network by adding partner organizations.' }}
         </p>
-        <div class="mt-6" v-if="!searchQuery">
-          <button @click="showCreateModal = true" class="btn-primary">
-            <PlusIcon class="h-4 w-4 mr-2" />
-            Add New Partner
+        <p v-if="!searchQuery && !filterType && !filterStatus" class="text-sm text-gray-500 mb-6">
+          Add NGOs, government agencies, and other organizations you collaborate with.
+        </p>
+        <div v-if="!searchQuery && !filterType && !filterStatus">
+          <button @click="showCreateModal = true" class="btn-primary inline-flex items-center">
+            <PlusIcon class="h-5 w-5 mr-2" />
+            Add Your First Partner
           </button>
         </div>
       </div>
@@ -363,10 +366,11 @@ const error = computed(() => partnersStore.error)
 
 // Computed properties
 const stats = computed(() => {
-  const total = partners.value.length
-  const active = partners.value.filter(p => p.status === 'active').length
-  const ngo = partners.value.filter(p => p.type === 'NGO').length
-  const government = partners.value.filter(p => p.type === 'Government Agency').length
+  const partnersList = Array.isArray(partners.value) ? partners.value : []
+  const total = partnersList.length
+  const active = partnersList.filter(p => p.status === 'active').length
+  const ngo = partnersList.filter(p => p.type === 'NGO').length
+  const government = partnersList.filter(p => p.type === 'Government Agency').length
   
   return {
     total,
@@ -377,7 +381,8 @@ const stats = computed(() => {
 })
 
 const filteredPartners = computed(() => {
-  return partners.value.filter(partner => {
+  const partnersList = Array.isArray(partners.value) ? partners.value : []
+  return partnersList.filter(partner => {
     const matchesSearch = !searchQuery.value ||
       partner.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       partner.description.toLowerCase().includes(searchQuery.value.toLowerCase())
