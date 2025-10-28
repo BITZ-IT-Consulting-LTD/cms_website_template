@@ -5,9 +5,11 @@ Quick script to create admin user
 import os
 import sys
 import django
+from pathlib import Path
 
-# Add the project directory to Python path
-sys.path.append('/Users/newtonbrian/Documents/Bitz/cms_website_template/sauti_cms')
+# Add the project directory to Python path (use current directory)
+BASE_DIR = Path(__file__).resolve().parent
+sys.path.append(str(BASE_DIR))
 
 # Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cms.settings')
