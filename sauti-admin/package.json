@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Sauti Child Helpline - Vue 3 Admin Dashboard",
   "scripts": {
-    "dev": "vite --port 3001",
+    "dev": "vite --port 3002",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
