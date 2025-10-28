@@ -41,7 +41,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 class UserListView(generics.ListAPIView):
     """
-    List all users (Admin only)
+    List all users (Admin/Editor)
     GET /api/auth/users/
     """
     queryset = User.objects.all()
@@ -49,7 +49,38 @@ class UserListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
+        # Only admins and editors can view all users
+        if not self.request.user.is_editor:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only administrators and editors can view all users.")
+        
+        # Filter by role if specified
+        role = self.request.query_params.get('role')
+        if role:
+            return User.objects.filter(role=role.upper())
+        
+        return User.objects.all().order_by('-created_at')
+
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Get/Update/Delete user details (Admin only for delete)
+    GET/PUT/DELETE /api/auth/users/<id>/
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def perform_update(self, serializer):
+        # Only admins can update user roles
+        if 'role' in serializer.validated_data and not self.request.user.is_admin:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only administrators can change user roles.")
+        serializer.save()
+    
+    def perform_destroy(self, instance):
+        # Only admins can delete users
         if not self.request.user.is_admin:
             from rest_framework.exceptions import PermissionDenied
-            raise PermissionDenied("Only administrators can view all users.")
-        return super().get_queryset()
+            raise PermissionDenied("Only administrators can delete users.")
+        instance.delete()

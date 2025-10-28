@@ -115,7 +115,7 @@
                 </label>
                 <p class="text-xs text-gray-500">Write your blog post content with paragraph formatting</p>
                 <textarea
-                  ref="editor"
+            ref="editor"
                   v-model="form.content"
                   required
                   rows="8"
@@ -126,7 +126,7 @@ You can create paragraphs by pressing Enter twice.
 
 Each paragraph will be properly formatted when displayed."
                   style="font-family: 'Roboto', sans-serif; line-height: 1.6; min-height: 200px;"
-                  @input="handleContentChange"
+            @input="handleContentChange"
                   @focus="handleEditorFocus"
                   @blur="handleEditorBlur"
                   @keydown="handleKeydown"
@@ -185,7 +185,7 @@ Each paragraph will be properly formatted when displayed."
             <div class="mb-6">
               <label class="block text-sm font-semibold text-gray-900 mb-3">Categories</label>
               <div class="space-y-3 max-h-40 overflow-y-auto border border-gray-200 rounded-xl p-3 bg-gray-50">
-                <label v-for="category in categories" :key="category.id" class="flex items-center p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
+                <label v-for="category in categories.filter(c => c && c.id)" :key="category.id" class="flex items-center p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
                 <input
                   v-model="form.categories"
                   :value="category.id"
@@ -215,6 +215,20 @@ Each paragraph will be properly formatted when displayed."
                 </div>
               </div>
               <p class="mt-2 text-xs text-gray-500">Separate tags with commas for better organization</p>
+          </div>
+          
+          <!-- Enhanced Status -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-900 mb-2">Status</label>
+            <select
+              v-model="form.status"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
+            >
+              <option value="DRAFT">⏳ Draft</option>
+              <option value="PUBLISHED">✅ Published</option>
+            </select>
+            <p class="mt-2 text-xs text-gray-500">Published posts are visible on the frontend</p>
           </div>
         </div>
 
@@ -257,7 +271,7 @@ Each paragraph will be properly formatted when displayed."
           />
           
           <button
-            @click="$refs.imageInput.click()"
+            @click="imageInput.click()"
               class="w-full mt-4 px-4 py-3 border-2 border-dashed border-[#8B4000] rounded-xl text-sm font-semibold text-[#8B4000] hover:bg-[#8B4000] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
               style="font-family: 'Roboto', sans-serif;"
           >
@@ -337,12 +351,20 @@ const form = ref({
   categories: [],
   tags: [],
   featuredImage: null,
-  status: 'draft'
+  status: 'DRAFT'
 })
 
 // Computed
 const isEditing = computed(() => !!route.params.slug)
-const categories = computed(() => postsStore.categories)
+const categories = computed(() => {
+  const cats = postsStore.categories || []
+  return cats.filter(c => c && c.id)
+})
+const tags = computed(() => {
+  const tagList = postsStore.tags
+  if (!Array.isArray(tagList)) return []
+  return tagList.filter(t => t && t.id)
+})
 
 // Editor methods (simplified - would use TipTap in real implementation)
 const toggleBold = () => {
@@ -463,14 +485,45 @@ const getReadingTime = () => {
   return Math.ceil(words / wordsPerMinute)
 }
 
+const getTagIds = (tagNames) => {
+  if (!tagNames || !tagNames.trim()) return []
+  
+  const tagNameList = tagNames.split(',').map(tag => tag.trim()).filter(Boolean)
+  const tagIds = []
+  
+  for (const tagName of tagNameList) {
+    const tag = tags.value.find(t => t.name.toLowerCase() === tagName.toLowerCase())
+    if (tag) {
+      tagIds.push(tag.id)
+    } else {
+      console.warn(`Tag not found: ${tagName}`)
+    }
+  }
+  
+  return tagIds
+}
+
 // Methods
 const handleImageUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file')
+      return
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB')
+      return
+    }
+    
     const reader = new FileReader()
     reader.onload = (e) => {
       imagePreview.value = e.target.result
       form.value.featuredImage = file
+      toast.success('Image uploaded successfully')
     }
     reader.readAsDataURL(file)
   }
@@ -484,29 +537,41 @@ const removeImage = () => {
   }
 }
 
-const previewPost = () => {
+const savedSlug = ref(null)
+
+const previewPost = async () => {
   if (!form.value.title) {
     toast.warning('Please enter a title first')
     return
   }
-  toast.info('Preview functionality coming soon')
+  
+  // Use current slug if editing, or saved slug from create
+  const slug = route.params.slug || savedSlug.value
+  if (slug) {
+    const previewUrl = `http://localhost:3003/blog/${slug}`
+    window.open(previewUrl, '_blank')
+    toast.info('Opening preview in new window...')
+  } else {
+    toast.warning('Please save the post first to preview it')
+  }
 }
 
 const saveDraft = async () => {
-  await savePost('draft')
+  form.value.status = 'DRAFT'
+  await savePost()
 }
 
 const updatePost = async () => {
-  await savePost('published')
+  await savePost()
 }
 
-const savePost = async (status) => {
-  if (!form.value.title.trim()) {
+const savePost = async () => {
+  if (!form.value.title || !form.value.title.trim()) {
     toast.error('Please enter a title')
     return
   }
 
-  if (!form.value.content.trim()) {
+  if (!form.value.content || !form.value.content.trim()) {
     toast.error('Please enter some content')
     return
   }
@@ -515,19 +580,26 @@ const savePost = async (status) => {
 
   try {
     const postData = {
-      ...form.value,
-      status,
-      tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean),
-      excerpt: form.value.excerpt || form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...'
+      title: form.value.title || '',
+      content: form.value.content || '',
+      excerpt: form.value.excerpt || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : ''),
+      category: form.value.categories && form.value.categories.length > 0 ? form.value.categories[0] : null,
+      tags: getTagIds(tagsInput.value),
+      featured_image: form.value.featuredImage || null,
+      status: form.value.status || 'DRAFT',
+      language: 'en'
     }
 
     if (isEditing.value) {
       await postsStore.updatePost(route.params.slug, postData)
       toast.success('Post updated successfully')
     } else {
-      await postsStore.createPost(postData)
+      const createdPost = await postsStore.createPost(postData)
+      // Store slug for preview
+      savedSlug.value = createdPost.slug
       toast.success('Post created successfully')
-      router.push('/posts')
+      // Stay on page after creation for preview ability
+      // router.push('/posts')
     }
   } catch (err) {
     console.error('Save error:', err)
@@ -542,28 +614,27 @@ const savePost = async (status) => {
 onMounted(async () => {
   try {
     // Set author
-    form.value.author = authStore.userFullName
+    form.value.author = authStore.userFullName || 'Admin'
 
-    // Load categories
     await postsStore.fetchCategories()
+    await postsStore.fetchTags()
 
-    // Load post data if editing
     if (isEditing.value) {
-      console.log('Loading post for editing:', route.params.slug)
       const post = await postsStore.fetchPost(route.params.slug)
-      console.log('Loaded post data:', post)
       
       form.value = {
-        ...form.value,
-        ...post,
-        publishedAt: post.published_at ? post.published_at.split('T')[0] : form.value.publishedAt,
+        title: post.title || '',
+        content: post.content || '',
+        excerpt: post.excerpt || '',
+        author: post.author_name || authStore.userFullName || 'Admin',
+        publishedAt: post.published_at ? post.published_at.split('T')[0] : new Date().toISOString().split('T')[0],
         categories: post.category ? [post.category.id] : [],
-        featuredImage: post.featured_image,
-        status: post.status?.toLowerCase() || 'draft'
+        tags: post.tags?.map(t => t.id) || [],
+        featuredImage: post.featured_image || null,
+        status: post.status || 'DRAFT'
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
-      console.log('Form data after loading:', form.value)
       
       // Update editor content
       await nextTick()

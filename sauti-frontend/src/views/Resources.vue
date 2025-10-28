@@ -105,7 +105,11 @@ onMounted(async () => {
       resourcesStore.fetchCategories(),
       fetchList(),
     ])
-    categories.value = cats
+    // Ensure categories is always an array
+    categories.value = Array.isArray(cats) ? cats : []
+  } catch (error) {
+    console.error('Error initializing resources:', error)
+    categories.value = []
   } finally {
     loading.value = false
   }
@@ -119,18 +123,22 @@ watch([search, category, language], () => {
 async function fetchList(pageUrl = null) {
   loading.value = true
   try {
-    const params = {}
+    const params = {
+      status: 'PUBLISHED' // Only show published resources
+    }
     if (search.value) params.search = search.value
     if (category.value) params.category = category.value
     if (language.value) params.language = language.value
     const data = await resourcesStore.fetchResources(params)
-    resources.value = resourcesStore.resources
-    pagination.value = resourcesStore.pagination
+    // Ensure resources is always an array
+    resources.value = Array.isArray(resourcesStore.resources) ? resourcesStore.resources : []
+    pagination.value = resourcesStore.pagination || { count: 0, next: null, previous: null }
     console.log('Fetched resources:', resources.value)
     console.log('Resources count:', resources.value.length)
     return data
   } catch (error) {
     console.error('Error fetching resources:', error)
+    resources.value = []
   } finally {
     loading.value = false
   }

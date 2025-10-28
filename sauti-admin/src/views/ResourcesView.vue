@@ -232,7 +232,7 @@
                 <label class="block text-sm font-medium text-gray-700">Category</label>
                 <select v-model="createForm.category" class="form-select" required>
                   <option value="">Select Category</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
@@ -295,7 +295,7 @@
                 <label class="block text-sm font-medium text-gray-700">Category</label>
                 <select v-model="editForm.category" class="form-select" required>
                   <option value="">Select Category</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                  <option v-for="category in (Array.isArray(categories) ? categories : [])" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
@@ -510,14 +510,28 @@ const resetCreateForm = () => {
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB')
+      return
+    }
+    
     createForm.value.file = file
+    toast.success('File selected successfully')
   }
 }
 
 const handleEditFileUpload = (event) => {
   const file = event.target.files[0]
   if (file) {
+    // Validate file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('File size must be less than 50MB')
+      return
+    }
+    
     editForm.value.file = file
+    toast.success('File selected successfully')
   }
 }
 

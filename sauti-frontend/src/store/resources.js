@@ -22,19 +22,25 @@ export const useResourcesStore = defineStore('resources', () => {
     
     try {
       const response = await api.resources.list(params)
-      resources.value = response.data.results || response.data
+      const data = response.data
       
-      if (response.data.count !== undefined) {
+      // Ensure resources is always an array
+      resources.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      
+      if (data.count !== undefined) {
         pagination.value = {
-          count: response.data.count,
-          next: response.data.next,
-          previous: response.data.previous,
+          count: data.count,
+          next: data.next,
+          previous: data.previous,
         }
       }
       
-      return response.data
+      return data
     } catch (err) {
       error.value = err.response?.data || 'Failed to fetch resources'
+      console.error('Failed to fetch resources:', err)
+      // Ensure resources is always an array even on error
+      resources.value = []
       throw err
     } finally {
       loading.value = false
@@ -60,10 +66,14 @@ export const useResourcesStore = defineStore('resources', () => {
   async function fetchCategories() {
     try {
       const response = await api.resources.categories()
-      categories.value = response.data
-      return response.data
+      const data = response.data
+      // Ensure categories is always an array
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
+      // Always ensure categories is an array
+      categories.value = []
       return []
     }
   }

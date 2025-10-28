@@ -18,11 +18,15 @@ export const usePostsStore = defineStore('posts', () => {
     
     try {
       const response = await api.posts.list(params)
-      posts.value = response.data.results || response.data
+      const data = response.data
+      // Ensure posts is always an array
+      posts.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return posts.value
     } catch (err) {
       error.value = err.message || 'Failed to fetch posts'
       console.error('Failed to fetch posts:', err)
+      // Ensure posts is always an array even on error
+      posts.value = []
       throw err
     } finally {
       loading.value = false
@@ -51,21 +55,7 @@ export const usePostsStore = defineStore('posts', () => {
     error.value = null
     
     try {
-      // Handle image upload if present
-      const formData = new FormData()
-      Object.keys(postData).forEach(key => {
-        if (key === 'tags' && Array.isArray(postData[key])) {
-          postData[key].forEach(tag => formData.append('tags', tag))
-        } else if (postData[key] !== null && postData[key] !== undefined) {
-          formData.append(key, postData[key])
-        }
-      })
-      
-      const response = await api.post('/posts/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.posts.create(postData)
       
       const newPost = response.data
       posts.value.unshift(newPost)
@@ -84,21 +74,7 @@ export const usePostsStore = defineStore('posts', () => {
     error.value = null
     
     try {
-      // Handle image upload if present
-      const formData = new FormData()
-      Object.keys(postData).forEach(key => {
-        if (key === 'tags' && Array.isArray(postData[key])) {
-          postData[key].forEach(tag => formData.append('tags', tag))
-        } else if (postData[key] !== null && postData[key] !== undefined) {
-          formData.append(key, postData[key])
-        }
-      })
-      
-      const response = await api.put(`/posts/${slug}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.posts.update(slug, postData)
       
       const updatedPost = response.data
       const index = posts.value.findIndex(p => p.slug === slug)
@@ -138,16 +114,14 @@ export const usePostsStore = defineStore('posts', () => {
   async function fetchCategories() {
     try {
       const response = await api.posts.categories()
-      categories.value = response.data
+      // Ensure categories is always an array
+      const data = response.data
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
-      // Mock categories for development
-      categories.value = [
-        { id: 1, name: 'Child Protection', slug: 'child-protection' },
-        { id: 2, name: 'Community Outreach', slug: 'community-outreach' },
-        { id: 3, name: 'Sauti News', slug: 'sauti-news' }
-      ]
+      // Always ensure categories is an array
+      categories.value = []
       return categories.value
     }
   }
@@ -155,17 +129,14 @@ export const usePostsStore = defineStore('posts', () => {
   async function fetchTags() {
     try {
       const response = await api.posts.tags()
-      tags.value = response.data
+      // Ensure tags is always an array
+      const data = response.data
+      tags.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return tags.value
     } catch (err) {
       console.error('Failed to fetch tags:', err)
-      // Mock tags for development
-      tags.value = [
-        { id: 1, name: 'helpline', slug: 'helpline' },
-        { id: 2, name: 'children', slug: 'children' },
-        { id: 3, name: 'safety', slug: 'safety' },
-        { id: 4, name: 'uganda', slug: 'uganda' }
-      ]
+      // Always ensure tags is an array
+      tags.value = []
       return tags.value
     }
   }

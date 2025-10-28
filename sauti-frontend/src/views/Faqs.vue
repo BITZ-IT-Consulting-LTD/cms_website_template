@@ -145,29 +145,52 @@ const selectedCategory = ref('')
 
 onMounted(async () => {
   try {
-    await faqsStore.fetchFaqs()
-    faqs.value = faqsStore.faqs || []
+    await faqsStore.fetchFaqs({ status: 'PUBLISHED' })
+    faqs.value = Array.isArray(faqsStore.faqs) ? faqsStore.faqs : []
     
-    // Extract unique categories from FAQs
-    const categoryMap = new Map()
-    faqs.value.forEach(faq => {
-      if (faq.category_name && !categoryMap.has(faq.category)) {
-        categoryMap.set(faq.category, {
-          id: faq.category,
-          name: faq.category_name
+    // Try to fetch categories from API first
+    try {
+      const fetchedCategories = await faqsStore.fetchCategories()
+      if (Array.isArray(fetchedCategories) && fetchedCategories.length > 0) {
+        categories.value = fetchedCategories
+      } else {
+        // Fallback: Extract unique categories from FAQs
+        const categoryMap = new Map()
+        faqs.value.forEach(faq => {
+          if (faq.category_name && !categoryMap.has(faq.category)) {
+            categoryMap.set(faq.category, {
+              id: faq.category,
+              name: faq.category_name
+            })
+          }
         })
+        categories.value = Array.from(categoryMap.values())
       }
-    })
-    categories.value = Array.from(categoryMap.values())
+    } catch (catError) {
+      console.log('Categories API not available, extracting from FAQs')
+      // Extract unique categories from FAQs
+      const categoryMap = new Map()
+      faqs.value.forEach(faq => {
+        if (faq.category_name && !categoryMap.has(faq.category)) {
+          categoryMap.set(faq.category, {
+            id: faq.category,
+            name: faq.category_name
+          })
+        }
+      })
+      categories.value = Array.from(categoryMap.values())
+    }
   } catch (error) {
     console.error('Error fetching FAQs:', error)
+    faqs.value = []
   } finally {
     loading.value = false
   }
 })
 
 const filteredFaqs = computed(() => {
-  let filtered = faqs.value
+  // Ensure faqs is an array
+  let filtered = Array.isArray(faqs.value) ? faqs.value : []
   
   // Filter by category
   if (selectedCategory.value) {

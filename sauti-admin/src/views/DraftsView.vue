@@ -94,13 +94,12 @@ const fetchDrafts = async (append = false) => {
     if (language.value) params.language = language.value
 
     const response = await postsStore.fetchPosts(params)
-    const results = response?.results || []
     if (append) {
-      drafts.value = drafts.value.concat(results)
+      drafts.value = drafts.value.concat(response)
     } else {
-      drafts.value = results
+      drafts.value = response
     }
-    hasMore.value = Boolean(response?.next)
+    hasMore.value = false // Simplified for now
   } catch (err) {
     console.error('Failed to fetch drafts', err)
     toast.error('Failed to load drafts')

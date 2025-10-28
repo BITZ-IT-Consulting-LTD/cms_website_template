@@ -9,11 +9,6 @@ export const useFaqsStore = defineStore('faqs', () => {
   const categories = ref([])
   const loading = ref(false)
   const error = ref(null)
-  const pagination = ref({
-    count: 0,
-    next: null,
-    previous: null,
-  })
   
   // Actions
   async function fetchFaqs(params = {}) {
@@ -22,21 +17,15 @@ export const useFaqsStore = defineStore('faqs', () => {
     
     try {
       const response = await api.faqs.list(params)
-      faqs.value = response.data.results || response.data
-      
-      // Handle pagination
-      if (response.data.count !== undefined) {
-        pagination.value = {
-          count: response.data.count,
-          next: response.data.next,
-          previous: response.data.previous,
-        }
-      }
-      
+      const data = response.data
+      // Ensure faqs is always an array
+      faqs.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return faqs.value
     } catch (err) {
       error.value = err.message || 'Failed to fetch FAQs'
       console.error('Failed to fetch FAQs:', err)
+      // Ensure faqs is always an array even on error
+      faqs.value = []
       throw err
     } finally {
       loading.value = false
@@ -65,8 +54,7 @@ export const useFaqsStore = defineStore('faqs', () => {
     error.value = null
     
     try {
-      const response = await api.post('/faqs/', faqData)
-      
+      const response = await api.faqs.create(faqData)
       const newFaq = response.data
       faqs.value.unshift(newFaq)
       return newFaq
@@ -84,8 +72,7 @@ export const useFaqsStore = defineStore('faqs', () => {
     error.value = null
     
     try {
-      const response = await api.put(`/faqs/${id}/`, faqData)
-      
+      const response = await api.faqs.update(id, faqData)
       const updatedFaq = response.data
       
       // Update in list
@@ -93,12 +80,7 @@ export const useFaqsStore = defineStore('faqs', () => {
       if (index !== -1) {
         faqs.value[index] = updatedFaq
       }
-      
-      // Update current if it's the same
-      if (currentFaq.value?.id === id) {
-        currentFaq.value = updatedFaq
-      }
-      
+      currentFaq.value = updatedFaq
       return updatedFaq
     } catch (err) {
       error.value = err.message || 'Failed to update FAQ'
@@ -114,17 +96,11 @@ export const useFaqsStore = defineStore('faqs', () => {
     error.value = null
     
     try {
-      await api.delete(`/faqs/${id}/`)
-      
-      // Remove from list
+      await api.faqs.delete(id)
       faqs.value = faqs.value.filter(f => f.id !== id)
-      
-      // Clear current if it's the same
       if (currentFaq.value?.id === id) {
         currentFaq.value = null
       }
-      
-      return true
     } catch (err) {
       error.value = err.message || 'Failed to delete FAQ'
       console.error('Failed to delete FAQ:', err)
@@ -137,41 +113,15 @@ export const useFaqsStore = defineStore('faqs', () => {
   async function fetchCategories() {
     try {
       const response = await api.faqs.categories()
-      categories.value = response.data
+      // Ensure categories is always an array
+      const data = response.data
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       return categories.value
     } catch (err) {
-      console.error('Failed to fetch categories:', err)
-      return []
-    }
-  }
-  
-  async function togglePublished(id) {
-    loading.value = true
-    error.value = null
-    
-    try {
-      const faq = faqs.value.find(f => f.id === id)
-      if (!faq) throw new Error('FAQ not found')
-      
-      const response = await api.patch(`/faqs/${id}/`, {
-        is_published: !faq.is_published
-      })
-      
-      const updatedFaq = response.data
-      
-      // Update in list
-      const index = faqs.value.findIndex(f => f.id === id)
-      if (index !== -1) {
-        faqs.value[index] = updatedFaq
-      }
-      
-      return updatedFaq
-    } catch (err) {
-      error.value = err.message || 'Failed to toggle FAQ status'
-      console.error('Failed to toggle FAQ status:', err)
-      throw err
-    } finally {
-      loading.value = false
+      console.error('Failed to fetch FAQ categories:', err)
+      // Always ensure categories is an array
+      categories.value = []
+      return categories.value
     }
   }
   
@@ -182,7 +132,6 @@ export const useFaqsStore = defineStore('faqs', () => {
     categories,
     loading,
     error,
-    pagination,
     
     // Actions
     fetchFaqs,
@@ -191,6 +140,5 @@ export const useFaqsStore = defineStore('faqs', () => {
     updateFaq,
     deleteFaq,
     fetchCategories,
-    togglePublished,
   }
 })

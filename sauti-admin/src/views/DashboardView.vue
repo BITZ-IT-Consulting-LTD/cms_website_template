@@ -319,7 +319,6 @@ import {
   ChartBarIcon,
   DocumentTextIcon,
   VideoCameraIcon,
-  HeartIcon,
   MagnifyingGlassIcon,
   DocumentDuplicateIcon,
   FolderOpenIcon,
@@ -338,8 +337,15 @@ const filters = ref({
   status: ''
 })
 
-// Computed properties
-const stats = computed(() => dashboardStore.stats)
+const stats = computed(() => ({
+  totalPosts: dashboardStore.stats.content?.posts?.total || 0,
+  totalVideos: dashboardStore.stats.content?.videos?.total || 0,
+  totalResources: dashboardStore.stats.content?.resources?.total || 0,
+  totalFaqs: dashboardStore.stats.content?.faqs?.total || 0,
+  totalPartners: dashboardStore.stats.content?.partners?.total || 0,
+  totalReports: dashboardStore.stats.reports?.total || 0,
+  pendingReports: dashboardStore.stats.reports?.pending || 0
+}))
 const contentList = computed(() => dashboardStore.contentList)
 const topContent = computed(() => dashboardStore.topContent)
 const loading = computed(() => dashboardStore.loading)
@@ -378,13 +384,15 @@ const editItem = (item) => {
 }
 
 const viewItem = (item) => {
-  if (item.status === 'draft') {
-    toast.warning('Cannot preview draft content')
-    return
+  if (item.type === 'blog') {
+    // Open preview in new window for both drafts and published content
+    const previewUrl = `http://localhost:3003/blog/${item.slug}`
+    window.open(previewUrl, '_blank')
+    toast.info('Opening preview in new window...')
+  } else if (item.type === 'video') {
+    // For videos, open the YouTube link
+    toast.info('Video preview via YouTube coming soon')
   }
-  
-  // For now, just show a message
-  toast.info('Preview functionality coming soon')
 }
 
 const duplicateItem = async (item) => {

@@ -23,20 +23,26 @@ export const useBlogStore = defineStore('blog', () => {
     
     try {
       const response = await api.posts.list(params)
-      posts.value = response.data.results || response.data
+      const data = response.data
+      
+      // Ensure posts is always an array
+      posts.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
       
       // Handle pagination
-      if (response.data.count !== undefined) {
+      if (data.count !== undefined) {
         pagination.value = {
-          count: response.data.count,
-          next: response.data.next,
-          previous: response.data.previous,
+          count: data.count,
+          next: data.next,
+          previous: data.previous,
         }
       }
       
-      return response.data
+      return data
     } catch (err) {
       error.value = err.response?.data || 'Failed to fetch posts'
+      console.error('Failed to fetch posts:', err)
+      // Ensure posts is always an array even on error
+      posts.value = []
       throw err
     } finally {
       loading.value = false
@@ -62,10 +68,14 @@ export const useBlogStore = defineStore('blog', () => {
   async function fetchCategories() {
     try {
       const response = await api.posts.categories()
-      categories.value = response.data
-      return response.data
+      const data = response.data
+      // Ensure categories is always an array
+      categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
+      // Always ensure categories is an array
+      categories.value = []
       return []
     }
   }
@@ -73,10 +83,14 @@ export const useBlogStore = defineStore('blog', () => {
   async function fetchTags() {
     try {
       const response = await api.posts.tags()
-      tags.value = response.data
-      return response.data
+      const data = response.data
+      // Ensure tags is always an array
+      tags.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      return tags.value
     } catch (err) {
       console.error('Failed to fetch tags:', err)
+      // Always ensure tags is an array
+      tags.value = []
       return []
     }
   }
