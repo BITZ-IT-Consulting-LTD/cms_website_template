@@ -538,43 +538,7 @@ onMounted(async () => {
     }))
   } catch (error) {
     console.error('Failed to load videos:', error)
-    
-    // Fallback to mock data if backend fails
-    latestVideos.value = [
-  {
-    id: 1,
-    title: 'Understanding Child Rights',
-    channel: 'Sauti Uganda',
-    channelAvatar: 'https://i.pravatar.cc/48?img=12',
-    views: '12K views',
-    published: '2 weeks ago',
-    duration: '12:45',
-    category: 'Education',
-    thumbnail: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop'
-  },
-  {
-    id: 2,
-    title: 'Safety Tips for Children',
-    channel: 'Sauti Uganda',
-    channelAvatar: 'https://i.pravatar.cc/48?img=32',
-    views: '15K views',
-    published: '1 month ago',
-    duration: '8:22',
-    category: 'Safety',
-    thumbnail: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop'
-  },
-  {
-    id: 3,
-    title: 'How to Report Abuse',
-    channel: 'Sauti Uganda',
-    channelAvatar: 'https://i.pravatar.cc/48?img=15',
-    views: '8K views',
-    published: '1 month ago',
-    duration: '15:03',
-    category: 'Support',
-    thumbnail: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?q=80&w=1200&auto=format&fit=crop'
-  }
-    ]
+    latestVideos.value = []
   } finally {
     loadingVideos.value = false
   }

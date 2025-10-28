@@ -97,21 +97,7 @@ async function fetchVideos() {
     }))
   } catch (error) {
     console.error('Failed to fetch videos:', error)
-    // Fallback to mock data
-    videos.value = [
-      {
-        id: 1,
-        title: 'Understanding Child Rights',
-        description: 'Learn about child rights in Uganda',
-        thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
-        youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        views_count: 1200,
-        author_name: 'Sauti Uganda',
-        category: { name: 'Education' },
-        published_at: '2024-01-15T10:00:00Z',
-        duration: '12:45'
-      }
-    ]
+    videos.value = []
   } finally {
     loading.value = false
   }
@@ -124,7 +110,7 @@ function setChip(chip) {
 function applySearch() {}
 
 function useThumbPlaceholder(e) {
-  e.target.src = 'https://picsum.photos/640/360?blur=2'
+  e.target.src = 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=640&auto=format&fit=crop'
 }
 
 function useAvatarPlaceholder(e) {
