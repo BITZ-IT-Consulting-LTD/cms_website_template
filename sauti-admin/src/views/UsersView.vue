@@ -166,36 +166,102 @@
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
           <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ editingUser ? 'Edit User' : 'Add New User' }}</h2>
           <form @submit.prevent="editingUser ? updateUser() : createUser()">
+            <!-- Display general errors -->
+            <div v-if="validationErrors.non_field_errors || validationErrors.detail" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p class="text-sm text-red-600">
+                {{ Array.isArray(validationErrors.non_field_errors) ? validationErrors.non_field_errors[0] : (validationErrors.detail || validationErrors.non_field_errors) }}
+              </p>
+            </div>
+
             <div class="space-y-4">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                <input v-model="userForm.username" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]" />
+                <input
+                  v-model="userForm.username"
+                  type="text"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.username ? 'border-red-500' : 'border-gray-300']"
+                />
+                <p v-if="validationErrors.username" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.username) ? validationErrors.username[0] : validationErrors.username }}
+                </p>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                <input v-model="userForm.first_name" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]" />
+                <input
+                  v-model="userForm.first_name"
+                  type="text"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.first_name ? 'border-red-500' : 'border-gray-300']"
+                />
+                <p v-if="validationErrors.first_name" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.first_name) ? validationErrors.first_name[0] : validationErrors.first_name }}
+                </p>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                <input v-model="userForm.last_name" type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]" />
+                <input
+                  v-model="userForm.last_name"
+                  type="text"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.last_name ? 'border-red-500' : 'border-gray-300']"
+                />
+                <p v-if="validationErrors.last_name" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.last_name) ? validationErrors.last_name[0] : validationErrors.last_name }}
+                </p>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                <input v-model="userForm.email" type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]" />
+                <input
+                  v-model="userForm.email"
+                  type="email"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.email ? 'border-red-500' : 'border-gray-300']"
+                />
+                <p v-if="validationErrors.email" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.email) ? validationErrors.email[0] : validationErrors.email }}
+                </p>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                <select v-model="userForm.role" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]">
+                <select
+                  v-model="userForm.role"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.role ? 'border-red-500' : 'border-gray-300']"
+                >
                   <option value="">Select role</option>
                   <option value="ADMIN">Admin</option>
                   <option value="EDITOR">Editor</option>
                   <option value="AUTHOR">Author</option>
                   <option value="VIEWER">Viewer</option>
                 </select>
+                <p v-if="validationErrors.role" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.role) ? validationErrors.role[0] : validationErrors.role }}
+                </p>
               </div>
               <div v-if="!editingUser">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                <input v-model="userForm.password" type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]" />
+                <input
+                  v-model="userForm.password"
+                  type="password"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.password ? 'border-red-500' : 'border-gray-300']"
+                />
+                <p v-if="validationErrors.password" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.password) ? validationErrors.password[0] : validationErrors.password }}
+                </p>
+              </div>
+              <div v-if="!editingUser">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                <input
+                  v-model="userForm.password2"
+                  type="password"
+                  required
+                  :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4000]', validationErrors.password2 ? 'border-red-500' : 'border-gray-300']"
+                />
+                <p v-if="validationErrors.password2" class="mt-1 text-sm text-red-600">
+                  {{ Array.isArray(validationErrors.password2) ? validationErrors.password2[0] : validationErrors.password2 }}
+                </p>
               </div>
               <div class="flex items-center">
                 <input v-model="userForm.is_active" type="checkbox" id="is_active" class="rounded border-gray-300 text-[#8B4000] focus:ring-[#8B4000]" />
@@ -244,8 +310,11 @@ const userForm = ref({
   email: '',
   role: '',
   password: '',
+  password2: '',
   is_active: true
 })
+
+const validationErrors = ref({})
 
 const stats = computed(() => {
   const usersList = Array.isArray(users.value) ? users.value : []
@@ -305,6 +374,7 @@ const fetchUsers = async () => {
 
 const editUser = (user) => {
   editingUser.value = user
+  validationErrors.value = {}
   userForm.value = {
     username: user.username,
     first_name: user.first_name,
@@ -312,6 +382,7 @@ const editUser = (user) => {
     email: user.email,
     role: user.role,
     password: '',
+    password2: '',
     is_active: user.is_active
   }
   showCreateModal.value = true
@@ -331,6 +402,9 @@ const deleteUser = async (user) => {
 }
 
 const createUser = async () => {
+  // Clear previous validation errors
+  validationErrors.value = {}
+
   try {
     await api.users.create(userForm.value)
     toast.success('User created successfully')
@@ -338,11 +412,39 @@ const createUser = async () => {
     await fetchUsers()
   } catch (err) {
     console.error('Failed to create user:', err)
-    toast.error(err.response?.data?.detail || 'Failed to create user')
+
+    // Handle validation errors from Django
+    if (err.response?.data) {
+      const errors = err.response.data
+
+      // Store all validation errors
+      validationErrors.value = errors
+
+      // Show a toast with the first error message
+      if (errors.password2) {
+        const errorMsg = Array.isArray(errors.password2) ? errors.password2[0] : errors.password2
+        toast.error(errorMsg)
+      } else if (errors.password) {
+        const errorMsg = Array.isArray(errors.password) ? errors.password[0] : errors.password
+        toast.error(errorMsg)
+      } else if (errors.detail) {
+        toast.error(errors.detail)
+      } else if (errors.username) {
+        const errorMsg = Array.isArray(errors.username) ? errors.username[0] : errors.username
+        toast.error(errorMsg)
+      } else {
+        toast.error('Failed to create user. Please check the form.')
+      }
+    } else {
+      toast.error(err.message || 'Failed to create user')
+    }
   }
 }
 
 const updateUser = async () => {
+  // Clear previous validation errors
+  validationErrors.value = {}
+
   try {
     await api.users.update(editingUser.value.id, userForm.value)
     toast.success('User updated successfully')
@@ -350,13 +452,28 @@ const updateUser = async () => {
     await fetchUsers()
   } catch (err) {
     console.error('Failed to update user:', err)
-    toast.error(err.response?.data?.detail || 'Failed to update user')
+
+    // Handle validation errors from Django
+    if (err.response?.data) {
+      const errors = err.response.data
+      validationErrors.value = errors
+
+      // Show appropriate error message
+      if (errors.detail) {
+        toast.error(errors.detail)
+      } else {
+        toast.error('Failed to update user. Please check the form.')
+      }
+    } else {
+      toast.error(err.message || 'Failed to update user')
+    }
   }
 }
 
 const closeModal = () => {
   showCreateModal.value = false
   editingUser.value = null
+  validationErrors.value = {}
   userForm.value = {
     username: '',
     first_name: '',
@@ -364,6 +481,7 @@ const closeModal = () => {
     email: '',
     role: '',
     password: '',
+    password2: '',
     is_active: true
   }
 }

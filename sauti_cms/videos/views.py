@@ -16,11 +16,14 @@ class IsEditorOrReadOnly(permissions.BasePermission):
         return request.user.is_authenticated and request.user.is_editor
 
 
-class VideoCategoryListView(generics.ListAPIView):
-    """List all video categories"""
+class VideoCategoryListView(generics.ListCreateAPIView):
+    """
+    GET /api/videos/categories/ - List all video categories
+    POST /api/videos/categories/ - Create new category (Editors/Admins only)
+    """
     queryset = VideoCategory.objects.all()
     serializer_class = VideoCategorySerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsEditorOrReadOnly]
 
 
 class VideoListCreateView(generics.ListCreateAPIView):

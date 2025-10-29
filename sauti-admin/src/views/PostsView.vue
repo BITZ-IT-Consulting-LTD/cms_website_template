@@ -98,9 +98,9 @@
         <!-- Status Filter -->
         <select v-model="statusFilter" class="form-select">
           <option value="">All Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-          <option value="archived">Archived</option>
+          <option value="PUBLISHED">Published</option>
+          <option value="DRAFT">Draft</option>
+          <option value="ARCHIVED">Archived</option>
         </select>
         
         <!-- Category Filter -->
@@ -186,9 +186,9 @@
                 <span
                   class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                   :class="{
-                    'bg-green-100 text-green-800': post.status === 'published',
-                    'bg-yellow-100 text-yellow-800': post.status === 'draft',
-                    'bg-gray-100 text-gray-800': post.status === 'archived'
+                    'bg-green-100 text-green-800': post.status === 'PUBLISHED',
+                    'bg-yellow-100 text-yellow-800': post.status === 'DRAFT',
+                    'bg-gray-100 text-gray-800': post.status === 'ARCHIVED'
                   }"
                 >
                   {{ post.status }}
@@ -294,10 +294,10 @@ const authors = ref([])
 // Computed properties
 const stats = computed(() => {
   const total = posts.value.length
-  const published = posts.value.filter(p => p.status === 'published').length
-  const draft = posts.value.filter(p => p.status === 'draft').length
+  const published = posts.value.filter(p => p.status === 'PUBLISHED').length
+  const draft = posts.value.filter(p => p.status === 'DRAFT').length
   const totalViews = posts.value.reduce((sum, p) => sum + (p.views_count || 0), 0)
-  
+
   return {
     total,
     published,
@@ -357,11 +357,11 @@ const formatDate = (date) => {
 }
 
 const previewPost = (post) => {
-  if (post.status === 'draft') {
+  if (post.status === 'DRAFT') {
     toast.warning('Cannot preview draft content')
     return
   }
-  
+
   // Open in new tab
   const url = `/blog/${post.slug}`
   window.open(url, '_blank')
@@ -373,9 +373,9 @@ const duplicatePost = async (post) => {
       ...post,
       title: `${post.title} (Copy)`,
       slug: `${post.slug}-copy-${Date.now()}`,
-      status: 'draft'
+      status: 'DRAFT'
     }
-    
+
     await postsStore.createPost(duplicateData)
     toast.success(`"${post.title}" duplicated successfully`)
   } catch (err) {
