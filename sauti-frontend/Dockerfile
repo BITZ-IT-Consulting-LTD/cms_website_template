@@ -14,7 +14,7 @@ RUN npm ci --only=production
 COPY . .
 
 # Build argument for API URL
-ARG VITE_API_URL=http://localhost:8000
+ARG VITE_API_URL=/api
 ARG VITE_APP_NAME="Sauti Child Helpline"
 ARG VITE_HOTLINE=116
 ARG VITE_WHATSAPP="+256123456789"

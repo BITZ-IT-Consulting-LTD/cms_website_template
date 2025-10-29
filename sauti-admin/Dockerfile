@@ -14,7 +14,7 @@ RUN npm ci --only=production
 COPY . .
 
 # Build argument for API URL
-ARG VITE_API_URL=http://localhost:8000/api
+ARG VITE_API_URL=/api
 ARG VITE_APP_TITLE="Sauti Admin Dashboard"
 ARG VITE_APP_VERSION="1.0.0"
 
