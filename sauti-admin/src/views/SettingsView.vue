@@ -545,7 +545,6 @@
         </div>
       </div>
     </div>
-    </div>
 
     <!-- Save Button -->
     <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
