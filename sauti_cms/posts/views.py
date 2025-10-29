@@ -120,6 +120,17 @@ class CategoryListView(generics.ListCreateAPIView):
     permission_classes = [IsEditorOrReadOnly]
 
 
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET /api/posts/categories/<id>/ - Get category
+    PUT/PATCH /api/posts/categories/<id>/ - Update category (Editors/Admins only)
+    DELETE /api/posts/categories/<id>/ - Delete category (Editors/Admins only)
+    """
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+
 class TagListView(generics.ListCreateAPIView):
     """
     GET /api/posts/tags/ - List tags

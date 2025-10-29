@@ -307,6 +307,151 @@
       </div>
     </div>
 
+    <!-- Categories Tab -->
+    <div v-show="activeTab === 'categories'" class="space-y-6">
+      <!-- Blog Categories Section -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Blog Categories</h3>
+            <p class="text-sm text-gray-500 mt-1">Manage categories for blog posts</p>
+          </div>
+          <button @click="openCategoryModal('blog')" class="btn-primary">
+            <PlusIcon class="h-4 w-4 mr-2" />
+            Add Category
+          </button>
+        </div>
+        
+        <!-- Search -->
+        <div class="mb-4">
+          <input
+            v-model="categorySearch.blog"
+            type="text"
+            placeholder="Search blog categories..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+        
+        <!-- Categories List -->
+        <div v-if="loadingCategories" class="text-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+        </div>
+        <div v-else-if="filteredBlogCategories.length" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="category in filteredBlogCategories" :key="category.id" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-500">{{ category.slug }}</div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="text-sm text-gray-500 max-w-md truncate">{{ category.description || '-' }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ formatDate(category.created_at) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end space-x-2">
+                    <button @click="openEditCategoryModal('blog', category)" class="text-primary-600 hover:text-primary-900">
+                      <PencilIcon class="h-4 w-4" />
+                    </button>
+                    <button @click="deleteCategory('blog', category)" class="text-red-600 hover:text-red-900">
+                      <TrashIcon class="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="text-center py-8 text-gray-500">
+          No blog categories found. Create one to get started.
+        </div>
+      </div>
+      
+      <!-- Video Categories Section -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Video Categories</h3>
+            <p class="text-sm text-gray-500 mt-1">Manage categories for videos</p>
+          </div>
+          <button @click="openCategoryModal('video')" class="btn-primary">
+            <PlusIcon class="h-4 w-4 mr-2" />
+            Add Category
+          </button>
+        </div>
+        
+        <!-- Search -->
+        <div class="mb-4">
+          <input
+            v-model="categorySearch.video"
+            type="text"
+            placeholder="Search video categories..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+        
+        <!-- Categories List -->
+        <div v-if="loadingCategories" class="text-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+        </div>
+        <div v-else-if="filteredVideoCategories.length" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="category in filteredVideoCategories" :key="category.id" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-500">{{ category.slug }}</div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="text-sm text-gray-500 max-w-md truncate">{{ category.description || '-' }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ formatDate(category.created_at) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end space-x-2">
+                    <button @click="openEditCategoryModal('video', category)" class="text-primary-600 hover:text-primary-900">
+                      <PencilIcon class="h-4 w-4" />
+                    </button>
+                    <button @click="deleteCategory('video', category)" class="text-red-600 hover:text-red-900">
+                      <TrashIcon class="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="text-center py-8 text-gray-500">
+          No video categories found. Create one to get started.
+        </div>
+      </div>
+    </div>
+
     <!-- API Settings Tab -->
     <div v-show="activeTab === 'api'" class="space-y-6">
       <div class="card p-6">
@@ -351,6 +496,57 @@
       </div>
     </div>
 
+    <!-- Category Modal -->
+    <div v-if="showCategoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            {{ editingCategory ? 'Edit' : 'Create' }} {{ categoryModalType === 'blog' ? 'Blog' : 'Video' }} Category
+          </h3>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+              <input
+                v-model="categoryForm.name"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Category name"
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <textarea
+                v-model="categoryForm.description"
+                rows="3"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Category description (optional)"
+              ></textarea>
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-end space-x-3 mt-6">
+            <button
+              @click="closeCategoryModal"
+              class="px-4 py-2 text-gray-700 hover:text-gray-900 focus:outline-none"
+            >
+              Cancel
+            </button>
+            <button
+              @click="saveCategory"
+              :disabled="!categoryForm.name"
+              class="btn-primary"
+            >
+              {{ editingCategory ? 'Update' : 'Create' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
     <!-- Save Button -->
     <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
       <button
@@ -371,7 +567,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useToast } from 'vue-toastification'
 import {
   CogIcon,
@@ -380,8 +576,10 @@ import {
   CloudIcon,
   PlusIcon,
   PencilIcon,
-  TrashIcon
+  TrashIcon,
+  TagIcon
 } from '@heroicons/vue/24/outline'
+import { api } from '@/utils/api'
 
 const toast = useToast()
 
@@ -390,9 +588,23 @@ const activeTab = ref('general')
 const saving = ref(false)
 const showAddUserModal = ref(false)
 
+// Category management
+const blogCategories = ref([])
+const videoCategories = ref([])
+const loadingCategories = ref(false)
+const showCategoryModal = ref(false)
+const categoryModalType = ref('blog') // 'blog' or 'video'
+const editingCategory = ref(null)
+const categoryForm = reactive({
+  name: '',
+  description: ''
+})
+const categorySearch = ref({ blog: '', video: '' })
+
 // Settings tabs
 const settingsTabs = [
   { id: 'general', name: 'General', icon: CogIcon },
+  { id: 'categories', name: 'Categories', icon: TagIcon },
   { id: 'users', name: 'Users', icon: UsersIcon },
   { id: 'security', name: 'Security', icon: ShieldCheckIcon },
   { id: 'api', name: 'API', icon: CloudIcon }
@@ -515,8 +727,153 @@ const deleteUser = (user) => {
   }
 }
 
+// Computed properties for filtered categories
+const filteredBlogCategories = computed(() => {
+  if (!categorySearch.value.blog) return blogCategories.value
+  const search = categorySearch.value.blog.toLowerCase()
+  return blogCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(search) ||
+    cat.slug.toLowerCase().includes(search) ||
+    (cat.description && cat.description.toLowerCase().includes(search))
+  )
+})
+
+const filteredVideoCategories = computed(() => {
+  if (!categorySearch.value.video) return videoCategories.value
+  const search = categorySearch.value.video.toLowerCase()
+  return videoCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(search) ||
+    cat.slug.toLowerCase().includes(search) ||
+    (cat.description && cat.description.toLowerCase().includes(search))
+  )
+})
+
+// Category management methods
+const fetchCategories = async () => {
+  loadingCategories.value = true
+  try {
+    const [blogRes, videoRes] = await Promise.all([
+      api.posts.categories.list().catch(() => ({ data: [] })),
+      api.videos.categories.list().catch(() => ({ data: [] }))
+    ])
+    
+    blogCategories.value = Array.isArray(blogRes.data) ? blogRes.data : (blogRes.data.results || [])
+    videoCategories.value = Array.isArray(videoRes.data) ? videoRes.data : (videoRes.data.results || [])
+  } catch (error) {
+    console.error('Failed to fetch categories:', error)
+    toast.error('Failed to load categories')
+  } finally {
+    loadingCategories.value = false
+  }
+}
+
+const openCategoryModal = (type) => {
+  categoryModalType.value = type
+  editingCategory.value = null
+  categoryForm.name = ''
+  categoryForm.description = ''
+  showCategoryModal.value = true
+}
+
+const openEditCategoryModal = (type, category) => {
+  categoryModalType.value = type
+  editingCategory.value = category
+  categoryForm.name = category.name
+  categoryForm.description = category.description || ''
+  showCategoryModal.value = true
+}
+
+const closeCategoryModal = () => {
+  showCategoryModal.value = false
+  editingCategory.value = null
+  categoryForm.name = ''
+  categoryForm.description = ''
+}
+
+const saveCategory = async () => {
+  if (!categoryForm.name.trim()) {
+    toast.error('Category name is required')
+    return
+  }
+
+  try {
+    const apiEndpoint = categoryModalType.value === 'blog' 
+      ? api.posts.categories 
+      : api.videos.categories
+    
+    const data = {
+      name: categoryForm.name.trim(),
+      description: categoryForm.description.trim() || ''
+    }
+
+    if (editingCategory.value) {
+      // Update category
+      try {
+        await apiEndpoint.update(editingCategory.value.id, data)
+        toast.success(`${categoryModalType.value === 'blog' ? 'Blog' : 'Video'} category updated successfully`)
+      } catch (error) {
+        if (error.message === 'Delete endpoint not available') {
+          toast.info('Update endpoint not available. Please use the Django admin panel.')
+          return
+        }
+        throw error
+      }
+    } else {
+      // Create category
+      await apiEndpoint.create(data)
+      toast.success(`${categoryModalType.value === 'blog' ? 'Blog' : 'Video'} category created successfully`)
+    }
+
+    closeCategoryModal()
+    await fetchCategories()
+  } catch (error) {
+    console.error('Failed to save category:', error)
+    const message = error.response?.data?.name?.[0] || error.response?.data?.detail || 'Failed to save category'
+    toast.error(message)
+  }
+}
+
+const deleteCategory = async (type, category) => {
+  if (!confirm(`Are you sure you want to delete "${category.name}"? This action cannot be undone.`)) {
+    return
+  }
+
+  try {
+    const apiEndpoint = type === 'blog' 
+      ? api.posts.categories 
+      : api.videos.categories
+    
+    try {
+      await apiEndpoint.delete(category.id)
+      toast.success(`${type === 'blog' ? 'Blog' : 'Video'} category deleted successfully`)
+      await fetchCategories()
+    } catch (error) {
+      if (error.message === 'Delete endpoint not available' || error.response?.status === 404) {
+        toast.info('Delete endpoint not available. Please use the Django admin panel.')
+      } else {
+        throw error
+      }
+    }
+  } catch (error) {
+    console.error('Failed to delete category:', error)
+    const message = error.response?.data?.detail || 'Failed to delete category'
+    toast.error(message)
+  }
+}
+
+// Watch for tab changes to fetch categories when needed
+watch(activeTab, (newTab) => {
+  if (newTab === 'categories' && blogCategories.value.length === 0 && videoCategories.value.length === 0) {
+    fetchCategories()
+  }
+})
+
 // Lifecycle
 onMounted(() => {
   console.log('Settings page loaded')
+  // Fetch categories if categories tab is active
+  if (activeTab.value === 'categories') {
+    fetchCategories()
+  }
 })
 </script>

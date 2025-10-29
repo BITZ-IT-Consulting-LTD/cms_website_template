@@ -77,7 +77,18 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/posts/${slug}/`),
-    categories: () => apiClient.get('/posts/categories/'),
+    categories: {
+      list: () => apiClient.get('/posts/categories/'),
+      create: (data) => apiClient.post('/posts/categories/', data),
+      update: (id, data) => apiClient.put(`/posts/categories/${id}/`, data).catch(() => {
+        // Fallback to PATCH if PUT not supported
+        return apiClient.patch(`/posts/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/posts/categories/${id}/`).catch(() => {
+        // Handle gracefully if endpoint doesn't exist
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
     tags: () => apiClient.get('/posts/tags/'),
   },
   
@@ -91,6 +102,18 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/videos/${slug}/`),
+    categories: {
+      list: () => apiClient.get('/videos/categories/'),
+      create: (data) => apiClient.post('/videos/categories/', data),
+      update: (id, data) => apiClient.put(`/videos/categories/${id}/`, data).catch(() => {
+        // Fallback to PATCH if PUT not supported
+        return apiClient.patch(`/videos/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/videos/categories/${id}/`).catch(() => {
+        // Handle gracefully if endpoint doesn't exist
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
   },
   
   resources: {

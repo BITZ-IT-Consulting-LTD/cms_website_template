@@ -26,6 +26,17 @@ class VideoCategoryListView(generics.ListCreateAPIView):
     permission_classes = [IsEditorOrReadOnly]
 
 
+class VideoCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET /api/videos/categories/<id>/ - Get video category
+    PUT/PATCH /api/videos/categories/<id>/ - Update video category (Editors/Admins only)
+    DELETE /api/videos/categories/<id>/ - Delete video category (Editors/Admins only)
+    """
+    queryset = VideoCategory.objects.all()
+    serializer_class = VideoCategorySerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+
 class VideoListCreateView(generics.ListCreateAPIView):
     """List and create videos"""
     queryset = Video.objects.select_related('category', 'author').all()
