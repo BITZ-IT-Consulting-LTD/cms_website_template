@@ -252,19 +252,32 @@
     <section class="section-padding bg-gradient-to-b from-white to-gray-50">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Featured Content</h2>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Recent Publications</h2>
           <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            Educational videos and resources to help children, families, and communities stay safe and informed.
+            Latest articles, videos and resources to help children, families, and communities stay safe and informed.
           </p>
-          <router-link to="/videos" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200">
-            View all videos
+          <router-link to="/blog" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200">
+            View all posts
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </router-link>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Loading State -->
+        <Loader v-if="loadingVideos" message="Loading recent publications..." />
+        
+        <!-- Empty State -->
+        <div v-else-if="!loadingVideos && latestVideos.length === 0" class="text-center py-16">
+          <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">No publications yet</h3>
+          <p class="text-gray-600">Check back soon for new content from Sauti Uganda.</p>
+        </div>
+        
+        <!-- Publications Grid -->
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <article v-for="video in latestVideos" :key="video.id" class="group cursor-pointer">
             <div class="relative bg-gray-200 rounded-2xl overflow-hidden aspect-video shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
               <img 
@@ -296,8 +309,8 @@
                 {{ video.category }}
               </span>
               
-              <!-- Featured Badge -->
-              <span v-if="video.id === 1" class="absolute top-3 right-3 text-xs font-bold bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
+              <!-- Featured/Recent Badge -->
+              <span v-if="video.featured" class="absolute top-3 right-3 text-xs font-bold bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
                 Featured
               </span>
             </div>
@@ -519,62 +532,34 @@ onMounted(async () => {
     loadingPartners.value = false
   }
   
-  // Load featured posts (videos) from backend
+  // Load recent publications from backend
   loadingVideos.value = true
   try {
-    await blogStore.fetchPosts({ featured: true, limit: 3 })
+    // Fetch most recent published posts (limit to 3)
+    await blogStore.fetchPosts({ 
+      status: 'PUBLISHED',
+      ordering: '-published_at,-created_at', // Most recent first
+      limit: 3 
+    })
     
     // Transform posts to video format for display
-    latestVideos.value = blogStore.posts.map(post => ({
+    // Mark all top 3 recent posts as featured
+    latestVideos.value = blogStore.posts.map((post, index) => ({
       id: post.id,
       title: post.title,
-      channel: 'Sauti Uganda',
+      channel: post.author?.username || post.author_name || 'Sauti Uganda',
       channelAvatar: 'https://i.pravatar.cc/48?img=12',
       views: `${post.views_count || 0} views`,
-      published: formatDate(post.created_at),
+      published: formatDate(post.published_at || post.created_at),
       duration: '5:30', // Default duration, could be added to post model
       category: post.category?.name || 'Education',
-      thumbnail: post.featured_image || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop'
+      thumbnail: post.featured_image || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop',
+      featured: true, // All top 3 recent posts are featured
+      isLatest: index === 0 // First one is the latest
     }))
   } catch (error) {
-    console.error('Failed to load videos:', error)
-    
-    // Fallback to mock data if backend fails
-    latestVideos.value = [
-  {
-    id: 1,
-    title: 'Understanding Child Rights',
-    channel: 'Sauti Uganda',
-    channelAvatar: 'https://i.pravatar.cc/48?img=12',
-    views: '12K views',
-    published: '2 weeks ago',
-    duration: '12:45',
-    category: 'Education',
-    thumbnail: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop'
-  },
-  {
-    id: 2,
-    title: 'Safety Tips for Children',
-    channel: 'Sauti Uganda',
-    channelAvatar: 'https://i.pravatar.cc/48?img=32',
-    views: '15K views',
-    published: '1 month ago',
-    duration: '8:22',
-    category: 'Safety',
-    thumbnail: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop'
-  },
-  {
-    id: 3,
-    title: 'How to Report Abuse',
-    channel: 'Sauti Uganda',
-    channelAvatar: 'https://i.pravatar.cc/48?img=15',
-    views: '8K views',
-    published: '1 month ago',
-    duration: '15:03',
-    category: 'Support',
-    thumbnail: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?q=80&w=1200&auto=format&fit=crop'
-  }
-    ]
+    console.error('Failed to load recent publications:', error)
+    latestVideos.value = []
   } finally {
     loadingVideos.value = false
   }
