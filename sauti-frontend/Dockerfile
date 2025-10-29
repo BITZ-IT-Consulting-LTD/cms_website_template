@@ -9,15 +9,15 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies needed for build)
+# Install dependencies
 RUN npm ci
+
+# Set build arguments BEFORE copying source code
+ARG VITE_API_URL=/api
+ENV VITE_API_URL=${VITE_API_URL}
 
 # Copy application code
 COPY . .
-
-# Build argument for API URL
-ARG VITE_API_URL
-ENV VITE_API_URL=${VITE_API_URL}
 
 # Build the application
 RUN npm run build
