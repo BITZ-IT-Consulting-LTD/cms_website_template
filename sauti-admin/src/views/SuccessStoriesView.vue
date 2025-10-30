@@ -8,7 +8,7 @@
       </div>
       <button
         @click="showCreateModal = true"
-        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200 flex items-center font-medium shadow-sm"
+        class="btn-primary flex items-center"
       >
         <PlusIcon class="h-5 w-5 mr-2" />
         Add New Story
@@ -56,8 +56,8 @@
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-600">Lives Impacted</p>
-            <p class="text-3xl font-bold text-orange-600 mt-2">{{ stats.impacted.toLocaleString() }}</p>
+            <p class="text-sm font-medium text-gray-600">Featured</p>
+            <p class="text-3xl font-bold text-orange-600 mt-2">{{ stats.featured }}</p>
           </div>
           <div class="p-3 bg-orange-100 rounded-lg">
             <HeartIcon class="h-8 w-8 text-orange-600" />
@@ -84,11 +84,9 @@
           class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">All Categories</option>
-          <option value="rescue">Rescue & Recovery</option>
-          <option value="education">Education</option>
-          <option value="rehabilitation">Rehabilitation</option>
-          <option value="family">Family Reunification</option>
-          <option value="empowerment">Youth Empowerment</option>
+          <option v-for="cat in (Array.isArray(categories) ? categories : [])" :key="cat.id" :value="cat.slug">
+            {{ cat.name }}
+          </option>
         </select>
 
         <select
@@ -96,15 +94,20 @@
           class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">All Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-          <option value="pending">Pending Review</option>
+          <option value="PUBLISHED">Published</option>
+          <option value="DRAFT">Draft</option>
         </select>
       </div>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      <p class="mt-2 text-sm text-gray-500">Loading success stories...</p>
+    </div>
+
     <!-- Stories Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div
         v-for="story in filteredStories"
         :key="story.id"
@@ -113,8 +116,8 @@
         <!-- Story Image -->
         <div class="relative h-56 bg-gradient-to-br from-orange-400 to-pink-500">
           <img
-            v-if="story.image"
-            :src="story.image"
+            v-if="story.featured_image"
+            :src="story.featured_image"
             :alt="story.title"
             class="w-full h-full object-cover"
           />
@@ -132,7 +135,7 @@
 
           <!-- Category Badge -->
           <span class="absolute top-4 left-4 px-3 py-1 text-xs font-semibold rounded-full bg-white text-gray-700 shadow-sm">
-            {{ story.category }}
+            {{ story.category_name || 'Uncategorized' }}
           </span>
         </div>
 
@@ -145,38 +148,28 @@
           </div>
 
           <p class="text-gray-600 mb-4 line-clamp-3">
-            {{ story.excerpt }}
+            {{ story.excerpt || 'No excerpt available.' }}
           </p>
 
           <!-- Impact Stats -->
-          <div class="grid grid-cols-3 gap-4 mb-4 py-4 border-y border-gray-100">
+          <div class="grid grid-cols-2 gap-4 mb-4 py-4 border-y border-gray-100">
             <div class="text-center">
-              <p class="text-2xl font-bold text-primary-600">{{ story.beneficiaries }}</p>
-              <p class="text-xs text-gray-500">Beneficiaries</p>
-            </div>
-            <div class="text-center">
-              <p class="text-2xl font-bold text-green-600">{{ story.views }}</p>
+              <p class="text-2xl font-bold text-primary-600">{{ story.views_count || 0 }}</p>
               <p class="text-xs text-gray-500">Views</p>
             </div>
             <div class="text-center">
-              <p class="text-2xl font-bold text-purple-600">{{ story.shares }}</p>
-              <p class="text-xs text-gray-500">Shares</p>
+              <p class="text-2xl font-bold text-green-600">{{ story.is_featured ? 'Yes' : 'No' }}</p>
+              <p class="text-xs text-gray-500">Featured</p>
             </div>
           </div>
 
           <!-- Meta Info -->
           <div class="flex items-center text-sm text-gray-500 mb-4">
             <CalendarIcon class="h-4 w-4 mr-1" />
-            <span>{{ formatDate(story.date) }}</span>
+            <span>{{ formatDate(story.published_at || story.created_at) }}</span>
             <span class="mx-2">•</span>
             <UserIcon class="h-4 w-4 mr-1" />
-            <span>{{ story.author }}</span>
-          </div>
-
-          <!-- Location -->
-          <div v-if="story.location" class="flex items-center text-sm text-gray-600 mb-4">
-            <MapPinIcon class="h-4 w-4 mr-1 text-gray-400" />
-            <span>{{ story.location }}</span>
+            <span>{{ story.author_name || story.author?.username || 'Unknown' }}</span>
           </div>
 
           <!-- Actions -->
@@ -196,7 +189,7 @@
               Edit
             </button>
             <button
-              v-if="story.status === 'published'"
+              v-if="story.status === 'PUBLISHED'"
               @click="shareStory(story)"
               class="px-3 py-2 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition-colors duration-200"
             >
@@ -214,22 +207,116 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="filteredStories.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+    <div v-if="!loading && filteredStories.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
       <SparklesIcon class="mx-auto h-12 w-12 text-gray-400" />
       <h3 class="mt-2 text-sm font-medium text-gray-900">No stories found</h3>
       <p class="mt-1 text-sm text-gray-500">Start sharing inspiring success stories</p>
       <button
         @click="showCreateModal = true"
-        class="mt-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200"
+        class="mt-4 btn-primary"
       >
         Add New Story
       </button>
+    </div>
+
+    <!-- Create/Edit Success Story Modal -->
+    <div v-if="showCreateModal || showEditModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">
+            {{ showEditModal ? 'Edit Success Story' : 'Create New Success Story' }}
+          </h3>
+          
+          <form @submit.prevent="submitStory" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <input
+                v-model="form.title"
+                type="text"
+                required
+                class="form-input"
+                placeholder="Enter the story title..."
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt</label>
+              <textarea
+                v-model="form.excerpt"
+                rows="2"
+                class="form-input"
+                placeholder="Brief summary of the story..."
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+              <textarea
+                v-model="form.content"
+                required
+                rows="6"
+                class="form-input"
+                placeholder="Full story content..."
+              ></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select v-model="form.category" class="form-select" required>
+                  <option value="">Select Category</option>
+                  <option v-for="cat in (Array.isArray(categories) ? categories : [])" :key="cat.id" :value="cat.id">
+                    {{ cat.name }}
+                  </option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <select v-model="form.status" class="form-select">
+                  <option value="DRAFT">Draft</option>
+                  <option value="PUBLISHED">Published</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="featured"
+                v-model="form.is_featured"
+                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <label for="featured" class="text-sm font-medium text-gray-700">Featured Story</label>
+            </div>
+            
+            <div class="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                @click="closeModal"
+                class="btn-outline"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                :disabled="loading"
+                class="btn-primary"
+              >
+                {{ loading ? 'Saving...' : (showEditModal ? 'Update Story' : 'Create Story') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
+import { usePostsStore } from '@/stores/posts'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -242,141 +329,201 @@ import {
   TrashIcon,
   ShareIcon,
   CalendarIcon,
-  UserIcon,
-  MapPinIcon
+  UserIcon
 } from '@heroicons/vue/24/outline'
 
-// Mock data
-const stories = ref([
-  {
-    id: 1,
-    title: 'Amina\'s Journey: From Street Child to University Graduate',
-    excerpt: 'At just 12 years old, Amina was living on the streets of Kampala. Today, she holds a degree in Social Work and helps other children escape similar situations. Her story is a testament to resilience and the power of intervention.',
-    category: 'Education',
-    status: 'published',
-    image: null,
-    date: '2024-01-15',
-    author: 'Sarah Nakato',
-    location: 'Kampala, Uganda',
-    beneficiaries: 1,
-    views: 2847,
-    shares: 156
-  },
-  {
-    id: 2,
-    title: 'Safe Haven: How a Village United to Protect Its Children',
-    excerpt: 'When reports of child abuse increased in Mbale District, the community came together to create a child protection committee. Within 18 months, reported cases dropped by 60% and 45 children found safe homes.',
-    category: 'Rescue & Recovery',
-    status: 'published',
-    image: null,
-    date: '2024-01-10',
-    author: 'John Okello',
-    location: 'Mbale District, Uganda',
-    beneficiaries: 45,
-    views: 3921,
-    shares: 284
-  },
-  {
-    id: 3,
-    title: 'Breaking Cycles: Joseph\'s Story of Healing and Hope',
-    excerpt: 'After experiencing severe trauma, 15-year-old Joseph entered our rehabilitation program. Through counseling, education, and vocational training, he now runs a successful carpentry business and mentors other youth.',
-    category: 'Rehabilitation',
-    status: 'published',
-    image: null,
-    date: '2023-12-20',
-    author: 'Grace Apio',
-    location: 'Gulu, Uganda',
-    beneficiaries: 1,
-    views: 1834,
-    shares: 92
-  },
-  {
-    id: 4,
-    title: 'Family Reunion: Reuniting 8 Siblings After 5 Years',
-    excerpt: 'When their parents passed away, 8 siblings were separated across different households. Through dedicated case work and family tracing, all siblings were successfully reunited with their grandmother who received support to care for them.',
-    category: 'Family Reunification',
-    status: 'published',
-    image: null,
-    date: '2023-12-15',
-    author: 'Patrick Musoke',
-    location: 'Jinja, Uganda',
-    beneficiaries: 8,
-    views: 4562,
-    shares: 387
-  },
-  {
-    id: 5,
-    title: 'Young Leaders: Teen Mothers Return to School',
-    excerpt: 'Our adolescent mothers program has enabled 34 young mothers to return to school while receiving childcare support and life skills training. Meet Maria, who is now preparing for her nursing exams.',
-    category: 'Youth Empowerment',
-    status: 'draft',
-    image: null,
-    date: '2024-01-18',
-    author: 'Betty Namuli',
-    location: 'Kampala, Uganda',
-    beneficiaries: 34,
-    views: 0,
-    shares: 0
-  }
-])
+const toast = useToast()
+const postsStore = usePostsStore()
 
-const stats = ref({
-  total: 47,
-  published: 42,
-  views: 28456,
-  impacted: 1247
-})
-
+// Reactive data
 const searchQuery = ref('')
 const filterCategory = ref('')
 const filterStatus = ref('')
 const showCreateModal = ref(false)
+const showEditModal = ref(false)
+const editForm = ref({})
+
+// Use store data
+const stories = computed(() => postsStore.posts)
+const loading = computed(() => postsStore.loading)
+const categories = computed(() => postsStore.categories)
+
+// Form data
+const form = ref({
+  title: '',
+  excerpt: '',
+  content: '',
+  category: '',
+  status: 'DRAFT',
+  is_featured: false
+})
+
+// Computed properties
+const stats = computed(() => {
+  const storiesList = Array.isArray(stories.value) ? stories.value : []
+  const total = storiesList.length
+  const published = storiesList.filter(s => s.status === 'PUBLISHED').length
+  const views = storiesList.reduce((sum, s) => sum + (s.views_count || 0), 0)
+  const featured = storiesList.filter(s => s.is_featured).length
+  
+  return {
+    total,
+    published,
+    views,
+    featured
+  }
+})
 
 const filteredStories = computed(() => {
-  return stories.value.filter(story => {
-    const matchesSearch = !searchQuery.value ||
-      story.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      story.excerpt.toLowerCase().includes(searchQuery.value.toLowerCase())
-    
-    const matchesCategory = !filterCategory.value || story.category === filterCategory.value
-    const matchesStatus = !filterStatus.value || story.status === filterStatus.value
+  let filtered = Array.isArray(stories.value) ? stories.value : []
 
-    return matchesSearch && matchesCategory && matchesStatus
-  })
+  // Filter by search query
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(story =>
+      story.title.toLowerCase().includes(query) ||
+      (story.excerpt && story.excerpt.toLowerCase().includes(query))
+    )
+  }
+
+  // Filter by category
+  if (filterCategory.value) {
+    filtered = filtered.filter(story => story.category?.slug === filterCategory.value)
+  }
+
+  // Filter by status
+  if (filterStatus.value) {
+    filtered = filtered.filter(story => story.status === filterStatus.value)
+  }
+
+  return filtered
 })
 
 const statusBadgeClass = (status) => {
+  const statusStr = status?.toUpperCase() || ''
   const classes = {
-    published: 'bg-green-100 text-green-800',
-    draft: 'bg-yellow-100 text-yellow-800',
-    pending: 'bg-blue-100 text-blue-800'
+    PUBLISHED: 'bg-green-100 text-green-800',
+    DRAFT: 'bg-yellow-100 text-yellow-800'
   }
-  return classes[status] || 'bg-gray-100 text-gray-800'
+  return classes[statusStr] || 'bg-gray-100 text-gray-800'
 }
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
+  if (!date) return 'Recently'
+  try {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
+  } catch (error) {
+    return 'Recently'
+  }
 }
 
 const viewStory = (story) => {
-  console.log('View story:', story)
+  window.open(`http://localhost:5173/blog/${story.slug}`, '_blank')
 }
 
 const editStory = (story) => {
-  console.log('Edit story:', story)
+  editForm.value = { ...story }
+  form.value = {
+    title: story.title,
+    excerpt: story.excerpt || '',
+    content: story.content || '',
+    category: story.category?.id || '',
+    status: story.status,
+    is_featured: story.is_featured || false
+  }
+  showEditModal.value = true
 }
 
 const shareStory = (story) => {
-  console.log('Share story:', story)
-}
-
-const deleteStory = (story) => {
-  if (confirm(`Delete "${story.title}"?`)) {
-    console.log('Delete story:', story)
+  const url = `http://localhost:5173/blog/${story.slug}`
+  if (navigator.share) {
+    navigator.share({
+      title: story.title,
+      text: story.excerpt,
+      url: url
+    }).catch(() => {
+      copyToClipboard(url)
+    })
+  } else {
+    copyToClipboard(url)
   }
 }
+
+const copyToClipboard = (text) => {
+  navigator.clipboard.writeText(text).then(() => {
+    toast.success('Link copied to clipboard!')
+  }).catch(() => {
+    toast.error('Failed to copy link')
+  })
+}
+
+const deleteStory = async (story) => {
+  if (!confirm(`Delete "${story.title}"?`)) {
+    return
+  }
+  
+  try {
+    await postsStore.deletePost(story.slug)
+    toast.success('Success story deleted successfully')
+  } catch (err) {
+    console.error('Delete error:', err)
+    toast.error('Failed to delete success story')
+  }
+}
+
+const submitStory = async () => {
+  try {
+    if (showEditModal.value) {
+      await postsStore.updatePost(editForm.value.slug, form.value)
+      toast.success('Success story updated successfully')
+    } else {
+      await postsStore.createPost(form.value)
+      toast.success('Success story created successfully')
+    }
+    
+    closeModal()
+  } catch (err) {
+    console.error('Submit error:', err)
+    toast.error(showEditModal.value ? 'Failed to update success story' : 'Failed to create success story')
+  }
+}
+
+const closeModal = () => {
+  showCreateModal.value = false
+  showEditModal.value = false
+  form.value = {
+    title: '',
+    excerpt: '',
+    content: '',
+    category: '',
+    status: 'DRAFT',
+    is_featured: false
+  }
+  editForm.value = {}
+}
+
+const fetchStories = async () => {
+  try {
+    // Fetch posts filtered by "Success Stories" category
+    const successCategory = categories.value.find(cat => cat.slug === 'success-stories')
+    if (successCategory) {
+      await postsStore.fetchPosts({ category: 'success-stories' })
+    } else {
+      await postsStore.fetchPosts()
+    }
+    await postsStore.fetchCategories()
+  } catch (err) {
+    console.error('Failed to fetch success stories:', err)
+    toast.error('Failed to load success stories')
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  fetchStories()
+})
 </script>
