@@ -450,6 +450,144 @@
           No video categories found. Create one to get started.
         </div>
       </div>
+      
+      <!-- Resource Categories Section -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Resource Categories</h3>
+            <p class="text-sm text-gray-500 mt-1">Manage categories for downloadable resources</p>
+          </div>
+          <button @click="openCategoryModal('resource')" class="btn-primary">
+            <PlusIcon class="h-4 w-4 mr-2" />
+            Add Category
+          </button>
+        </div>
+        
+        <!-- Search -->
+        <div class="mb-4">
+          <input
+            v-model="categorySearch.resource"
+            type="text"
+            placeholder="Search resource categories..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+        
+        <!-- Categories List -->
+        <div v-if="loadingCategories" class="text-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+        </div>
+        <div v-else-if="filteredResourceCategories.length" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="category in filteredResourceCategories" :key="category.id" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-500">{{ category.slug }}</div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="text-sm text-gray-500 max-w-md truncate">{{ category.description || '-' }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end space-x-2">
+                    <button @click="openEditCategoryModal('resource', category)" class="text-primary-600 hover:text-primary-900">
+                      <PencilIcon class="h-4 w-4" />
+                    </button>
+                    <button @click="deleteCategory('resource', category)" class="text-red-600 hover:text-red-900">
+                      <TrashIcon class="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="text-center py-8 text-gray-500">
+          No resource categories found. Create one to get started.
+        </div>
+      </div>
+      
+      <!-- FAQ Categories Section -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">FAQ Categories</h3>
+            <p class="text-sm text-gray-500 mt-1">Manage categories for frequently asked questions</p>
+          </div>
+          <button @click="openCategoryModal('faq')" class="btn-primary">
+            <PlusIcon class="h-4 w-4 mr-2" />
+            Add Category
+          </button>
+        </div>
+        
+        <!-- Search -->
+        <div class="mb-4">
+          <input
+            v-model="categorySearch.faq"
+            type="text"
+            placeholder="Search FAQ categories..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+        
+        <!-- Categories List -->
+        <div v-if="loadingCategories" class="text-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+        </div>
+        <div v-else-if="filteredFaqCategories.length" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="category in filteredFaqCategories" :key="category.id" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-500">{{ category.slug }}</div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="text-sm text-gray-500 max-w-md truncate">{{ category.description || '-' }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-500">{{ category.order || 0 }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end space-x-2">
+                    <button @click="openEditCategoryModal('faq', category)" class="text-primary-600 hover:text-primary-900">
+                      <PencilIcon class="h-4 w-4" />
+                    </button>
+                    <button @click="deleteCategory('faq', category)" class="text-red-600 hover:text-red-900">
+                      <TrashIcon class="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="text-center py-8 text-gray-500">
+          No FAQ categories found. Create one to get started.
+        </div>
+      </div>
     </div>
 
     <!-- API Settings Tab -->
@@ -501,7 +639,7 @@
       <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
         <div class="p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">
-            {{ editingCategory ? 'Edit' : 'Create' }} {{ categoryModalType === 'blog' ? 'Blog' : 'Video' }} Category
+            {{ editingCategory ? 'Edit' : 'Create' }} {{ getCategoryTypeName() }} Category
           </h3>
           
           <div class="space-y-4">
@@ -590,15 +728,17 @@ const showAddUserModal = ref(false)
 // Category management
 const blogCategories = ref([])
 const videoCategories = ref([])
+const resourceCategories = ref([])
+const faqCategories = ref([])
 const loadingCategories = ref(false)
 const showCategoryModal = ref(false)
-const categoryModalType = ref('blog') // 'blog' or 'video'
+const categoryModalType = ref('blog') // 'blog', 'video', 'resource', or 'faq'
 const editingCategory = ref(null)
 const categoryForm = reactive({
   name: '',
   description: ''
 })
-const categorySearch = ref({ blog: '', video: '' })
+const categorySearch = ref({ blog: '', video: '', resource: '', faq: '' })
 
 // Settings tabs
 const settingsTabs = [
@@ -747,17 +887,41 @@ const filteredVideoCategories = computed(() => {
   )
 })
 
+const filteredResourceCategories = computed(() => {
+  if (!categorySearch.value.resource) return resourceCategories.value
+  const search = categorySearch.value.resource.toLowerCase()
+  return resourceCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(search) ||
+    cat.slug.toLowerCase().includes(search) ||
+    (cat.description && cat.description.toLowerCase().includes(search))
+  )
+})
+
+const filteredFaqCategories = computed(() => {
+  if (!categorySearch.value.faq) return faqCategories.value
+  const search = categorySearch.value.faq.toLowerCase()
+  return faqCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(search) ||
+    cat.slug.toLowerCase().includes(search) ||
+    (cat.description && cat.description.toLowerCase().includes(search))
+  )
+})
+
 // Category management methods
 const fetchCategories = async () => {
   loadingCategories.value = true
   try {
-    const [blogRes, videoRes] = await Promise.all([
+    const [blogRes, videoRes, resourceRes, faqRes] = await Promise.all([
       api.posts.categories.list().catch(() => ({ data: [] })),
-      api.videos.categories.list().catch(() => ({ data: [] }))
+      api.videos.categories.list().catch(() => ({ data: [] })),
+      api.resources.categories.list().catch(() => ({ data: [] })),
+      api.faqs.categories.list().catch(() => ({ data: [] }))
     ])
     
     blogCategories.value = Array.isArray(blogRes.data) ? blogRes.data : (blogRes.data.results || [])
     videoCategories.value = Array.isArray(videoRes.data) ? videoRes.data : (videoRes.data.results || [])
+    resourceCategories.value = Array.isArray(resourceRes.data) ? resourceRes.data : (resourceRes.data.results || [])
+    faqCategories.value = Array.isArray(faqRes.data) ? faqRes.data : (faqRes.data.results || [])
   } catch (error) {
     console.error('Failed to fetch categories:', error)
     toast.error('Failed to load categories')
@@ -789,6 +953,26 @@ const closeCategoryModal = () => {
   categoryForm.description = ''
 }
 
+const getCategoryTypeName = () => {
+  const typeMap = {
+    'blog': 'Blog',
+    'video': 'Video',
+    'resource': 'Resource',
+    'faq': 'FAQ'
+  }
+  return typeMap[categoryModalType.value] || 'Category'
+}
+
+const getApiEndpoint = () => {
+  const endpointMap = {
+    'blog': api.posts.categories,
+    'video': api.videos.categories,
+    'resource': api.resources.categories,
+    'faq': api.faqs.categories
+  }
+  return endpointMap[categoryModalType.value]
+}
+
 const saveCategory = async () => {
   if (!categoryForm.name.trim()) {
     toast.error('Category name is required')
@@ -796,9 +980,7 @@ const saveCategory = async () => {
   }
 
   try {
-    const apiEndpoint = categoryModalType.value === 'blog' 
-      ? api.posts.categories 
-      : api.videos.categories
+    const apiEndpoint = getApiEndpoint()
     
     const data = {
       name: categoryForm.name.trim(),
@@ -809,7 +991,7 @@ const saveCategory = async () => {
       // Update category
       try {
         await apiEndpoint.update(editingCategory.value.id, data)
-        toast.success(`${categoryModalType.value === 'blog' ? 'Blog' : 'Video'} category updated successfully`)
+        toast.success(`${getCategoryTypeName()} category updated successfully`)
       } catch (error) {
         if (error.message === 'Delete endpoint not available') {
           toast.info('Update endpoint not available. Please use the Django admin panel.')
@@ -820,7 +1002,7 @@ const saveCategory = async () => {
     } else {
       // Create category
       await apiEndpoint.create(data)
-      toast.success(`${categoryModalType.value === 'blog' ? 'Blog' : 'Video'} category created successfully`)
+      toast.success(`${getCategoryTypeName()} category created successfully`)
     }
 
     closeCategoryModal()
@@ -838,13 +1020,18 @@ const deleteCategory = async (type, category) => {
   }
 
   try {
-    const apiEndpoint = type === 'blog' 
-      ? api.posts.categories 
-      : api.videos.categories
+    const endpointMap = {
+      'blog': api.posts.categories,
+      'video': api.videos.categories,
+      'resource': api.resources.categories,
+      'faq': api.faqs.categories
+    }
+    const apiEndpoint = endpointMap[type]
+    const typeName = type.charAt(0).toUpperCase() + type.slice(1)
     
     try {
       await apiEndpoint.delete(category.id)
-      toast.success(`${type === 'blog' ? 'Blog' : 'Video'} category deleted successfully`)
+      toast.success(`${typeName} category deleted successfully`)
       await fetchCategories()
     } catch (error) {
       if (error.message === 'Delete endpoint not available' || error.response?.status === 404) {
@@ -862,7 +1049,7 @@ const deleteCategory = async (type, category) => {
 
 // Watch for tab changes to fetch categories when needed
 watch(activeTab, (newTab) => {
-  if (newTab === 'categories' && blogCategories.value.length === 0 && videoCategories.value.length === 0) {
+  if (newTab === 'categories' && blogCategories.value.length === 0 && videoCategories.value.length === 0 && resourceCategories.value.length === 0 && faqCategories.value.length === 0) {
     fetchCategories()
   }
 })

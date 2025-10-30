@@ -126,7 +126,16 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/resources/${slug}/`),
-    categories: () => apiClient.get('/resources/categories/'),
+    categories: {
+      list: () => apiClient.get('/resources/categories/'),
+      create: (data) => apiClient.post('/resources/categories/', data),
+      update: (id, data) => apiClient.put(`/resources/categories/${id}/`, data).catch(() => {
+        return apiClient.patch(`/resources/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/resources/categories/${id}/`).catch(() => {
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
   },
   
   faqs: {
@@ -135,7 +144,16 @@ export const api = {
     create: (data) => apiClient.post('/faqs/', data),
     update: (id, data) => apiClient.put(`/faqs/${id}/`, data),
     delete: (id) => apiClient.delete(`/faqs/${id}/`),
-    categories: () => apiClient.get('/faqs/categories/'),
+    categories: {
+      list: () => apiClient.get('/faqs/categories/'),
+      create: (data) => apiClient.post('/faqs/categories/', data),
+      update: (id, data) => apiClient.put(`/faqs/categories/${id}/`, data).catch(() => {
+        return apiClient.patch(`/faqs/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/faqs/categories/${id}/`).catch(() => {
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
   },
   
   partners: {
