@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex justify-between items-start">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Active Reports</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ pageTitle }}</h1>
         <p class="text-gray-600 mt-1">Manage and respond to child protection reports</p>
       </div>
       <router-link
@@ -112,6 +112,18 @@
           <option value="in_progress">In Progress</option>
           <option value="pending">Pending</option>
         </select>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <label class="text-sm text-gray-600">Per page</label>
+          <select
+            v-model.number="perPage"
+            class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+          >
+            <option :value="10">10</option>
+            <option :value="20">20</option>
+            <option :value="50">50</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -147,8 +159,8 @@
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="report in filteredReports" :key="report.id" class="hover:bg-gray-50 cursor-pointer" @click="viewReport(report.id)">
+          <tbody v-if="!loading" class="bg-white divide-y divide-gray-200">
+            <tr v-for="report in pagedReports" :key="report.id" class="hover:bg-gray-50 cursor-pointer" @click="viewReport(report.id)">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900">#{{ report.id }}</div>
               </td>
@@ -196,11 +208,39 @@
               </td>
             </tr>
           </tbody>
+          <tbody v-else class="bg-white divide-y divide-gray-200">
+            <tr v-for="n in 5" :key="n">
+              <td class="px-6 py-4">
+                <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-5 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-5 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="h-5 w-12 ml-auto bg-gray-200 rounded animate-pulse"></div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
 
       <!-- Empty State -->
-      <div v-if="filteredReports.length === 0" class="text-center py-12">
+      <div v-if="!loading && filteredReports.length === 0" class="text-center py-12">
         <ShieldExclamationIcon class="mx-auto h-12 w-12 text-gray-400" />
         <h3 class="mt-2 text-sm font-medium text-gray-900">No reports found</h3>
         <p class="mt-1 text-sm text-gray-500">Try adjusting your search or filters</p>
@@ -229,9 +269,9 @@
         <div>
           <p class="text-sm text-gray-700">
             Showing
-            <span class="font-medium">{{ (currentPage - 1) * perPage + 1 }}</span>
+            <span class="font-medium">{{ startIndex + 1 }}</span>
             to
-            <span class="font-medium">{{ Math.min(currentPage * perPage, filteredReports.length) }}</span>
+            <span class="font-medium">{{ endIndex }}</span>
             of
             <span class="font-medium">{{ filteredReports.length }}</span>
             results
@@ -262,7 +302,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -275,6 +315,13 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
+const route = useRoute()
+
+const pageTitle = computed(() => {
+  if (route.name === 'reports-urgent') return 'Urgent Cases'
+  if (route.name === 'reports-archive') return 'Closed Cases'
+  return 'Active Reports'
+})
 
 // Mock data - Replace with actual API calls
 const reports = ref([
@@ -329,6 +376,7 @@ const filterType = ref('')
 const filterStatus = ref('')
 const currentPage = ref(1)
 const perPage = ref(10)
+const loading = ref(false)
 
 const filteredReports = computed(() => {
   return reports.value.filter(report => {
@@ -344,7 +392,11 @@ const filteredReports = computed(() => {
   })
 })
 
-const totalPages = computed(() => Math.ceil(filteredReports.value.length / perPage.value))
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredReports.value.length / perPage.value)))
+
+const startIndex = computed(() => (currentPage.value - 1) * perPage.value)
+const endIndex = computed(() => Math.min(currentPage.value * perPage.value, filteredReports.value.length))
+const pagedReports = computed(() => filteredReports.value.slice(startIndex.value, endIndex.value))
 
 const priorityClass = (priority) => {
   const classes = {
@@ -402,7 +454,9 @@ const nextPage = () => {
 }
 
 onMounted(() => {
-  // Fetch reports from API
+  // Placeholder for fetch; show skeleton very briefly to communicate loading state
+  loading.value = true
+  setTimeout(() => { loading.value = false }, 300)
 })
 </script>
 

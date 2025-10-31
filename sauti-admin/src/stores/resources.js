@@ -141,7 +141,7 @@ export const useResourcesStore = defineStore('resources', () => {
   
   async function fetchCategories() {
     try {
-      const response = await api.resources.categories()
+      const response = await api.resources.categories.list()
       // Ensure categories is always an array
       const data = response.data
       categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])

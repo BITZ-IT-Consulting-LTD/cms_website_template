@@ -61,6 +61,15 @@
               </router-link>
               
               <router-link
+                to="/reports"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/reports') }"
+              >
+                <ShieldExclamationIcon class="h-5 w-5 mr-3 text-red-500 group-hover:text-red-600 transition-colors duration-300" />
+                <span class="flex-1">Reports</span>
+              </router-link>
+              
+              <router-link
                 to="/posts"
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/posts') }"
@@ -250,7 +259,8 @@ import {
   QuestionMarkCircleIcon,
   UserGroupIcon,
   ChatBubbleLeftRightIcon,
-  UsersIcon
+  UsersIcon,
+  ShieldExclamationIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -294,7 +304,8 @@ const pageTitle = computed(() => {
     '/posts': 'Content',
     '/drafts': 'Drafts',
     '/videos': 'Videos',
-    '/settings': 'Settings'
+    '/settings': 'Settings',
+    '/reports': 'Reports'
   }
   
   // Check for exact matches first
@@ -303,6 +314,7 @@ const pageTitle = computed(() => {
   }
   
   // Check for partial matches
+  if (route.path.startsWith('/reports')) return 'Reports'
   if (route.path.startsWith('/posts')) return 'Content'
   if (route.path.startsWith('/videos')) return 'Videos'
   
