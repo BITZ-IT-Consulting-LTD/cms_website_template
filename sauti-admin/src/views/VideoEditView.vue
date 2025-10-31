@@ -175,6 +175,7 @@
           
           <div class="space-y-3">
             <button
+              v-if="isEditing"
               @click="saveChanges"
               :disabled="loading"
               class="w-full btn-primary"
