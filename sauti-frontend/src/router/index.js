@@ -11,6 +11,7 @@ const Faqs = () => import('@/views/Faqs.vue')
 const Partners = () => import('@/views/Partners.vue')
 const Report = () => import('@/views/Report.vue')
 const Contact = () => import('@/views/Contact.vue')
+const Donate = () => import('@/views/Donate.vue')
 const Login = () => import('@/views/Login.vue')
 const Operations = () => import('@/views/Operations.vue')
 const ReportsInsights = () => import('@/views/ReportsInsights.vue')
@@ -162,6 +163,15 @@ const routes = [
     meta: {
       title: 'Contact Us',
       description: 'Get in touch with Sauti',
+    },
+  },
+  {
+    path: '/donate',
+    name: 'donate',
+    component: Donate,
+    meta: {
+      title: 'Donate',
+      description: 'Support Sauti Child Helpline and make a difference',
     },
   },
   {

@@ -16,7 +16,19 @@ const createFormData = (data) => {
     if (key === 'tags' && Array.isArray(data[key])) {
       data[key].forEach(tag => formData.append('tags', tag))
     } else if (data[key] !== null && data[key] !== undefined) {
-      formData.append(key, data[key])
+      // For file fields (featured_image, thumbnail, file, etc.), only append if it's a File object
+      // If it's a string (existing URL), skip it so the backend keeps the existing file
+      const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo']
+      if (fileFields.includes(key)) {
+        // Only append if it's a File object (new upload), not a string (existing URL)
+        if (data[key] instanceof File) {
+          formData.append(key, data[key])
+        }
+        // If it's a string, omit it - backend will keep existing file
+      } else {
+        // For non-file fields, append normally
+        formData.append(key, data[key])
+      }
     }
   })
   return formData

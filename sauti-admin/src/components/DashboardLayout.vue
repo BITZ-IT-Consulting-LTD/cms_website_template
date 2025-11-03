@@ -4,26 +4,26 @@
     <div class="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200" :class="{ '-translate-x-full': !sidebarOpen }">
       <div class="flex flex-col h-full">
         <!-- Enhanced Logo -->
-        <div class="flex items-center justify-between h-20 px-6 border-b border-gray-200 bg-gradient-to-r from-[#8B4000] to-[#A0522D]">
+        <div class="flex items-center justify-between h-20 px-6 bg-transparent">
           <div class="flex items-center space-x-3">
-            <div class="h-10 w-10 rounded-2xl bg-white flex items-center justify-center">
-              <span class="text-[#8B4000] font-bold text-lg">S</span>
+            <div class="h-10 w-10 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+              <img :src="sautiLogo" alt="Sauti Logo" class="h-full w-full object-contain" />
             </div>
             <div>
-              <h1 class="text-xl font-bold text-white" style="font-family: 'Roboto', sans-serif;">Sauti Admin</h1>
-              <p class="text-xs text-white/80">Child Helpline CMS</p>
+              <h1 class="text-xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">Sauti Admin</h1>
+              <p class="text-xs text-gray-600">Child Helpline CMS</p>
             </div>
           </div>
           <button
             @click="sidebarOpen = false"
-            class="lg:hidden p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+            class="lg:hidden p-2 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300"
           >
             <XMarkIcon class="h-6 w-6" />
           </button>
         </div>
 
         <!-- Enhanced Quick Actions -->
-        <div class="px-4 py-6 border-b border-gray-200 space-y-3">
+        <div class="px-4 py-6 space-y-3">
           <router-link
             to="/posts/create"
             class="w-full px-4 py-3 bg-gradient-to-r from-[#8B4000] to-[#A0522D] text-white hover:from-[#A0522D] hover:to-[#8B4000] rounded-full transition-all duration-300 flex items-center justify-center font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
@@ -178,7 +178,7 @@
         </nav>
 
         <!-- Enhanced User Info & Logout -->
-        <div class="border-t border-gray-200 p-6 bg-white">
+        <div class="p-6 bg-white">
           <div class="flex items-center mb-4">
             <div class="flex-shrink-0">
               <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#8B4000] to-[#A0522D] flex items-center justify-center shadow-lg">
@@ -245,6 +245,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { usePostsStore } from '@/stores/posts'
 import { useToast } from 'vue-toastification'
+import sautiLogo from '@/assets/sauti-logo.jpeg'
 import {
   Bars3Icon,
   XMarkIcon,

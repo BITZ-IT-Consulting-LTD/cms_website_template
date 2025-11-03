@@ -82,7 +82,7 @@
     </div>
 
     <!-- Search and Filters -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Search -->
         <div class="relative">
@@ -140,9 +140,9 @@
     </div>
 
     <!-- Posts Table -->
-    <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div v-else class="bg-white rounded-lg shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full">
           <thead class="table-header">
             <tr>
               <th class="table-cell">Post</th>
@@ -154,7 +154,7 @@
               <th class="table-cell">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="bg-white">
             <tr v-for="post in filteredPosts" :key="post.id" class="table-row hover:bg-gray-50">
               <td class="px-6 py-4">
                 <div class="flex items-center">

@@ -32,6 +32,7 @@
             <li><router-link to="/blog" class="text-gray-400 hover:text-white transition-colors">News & Blog</router-link></li>
             <li><router-link to="/resources" class="text-gray-400 hover:text-white transition-colors">Resources</router-link></li>
             <li><router-link to="/partners" class="text-gray-400 hover:text-white transition-colors">Partners</router-link></li>
+            <li><router-link to="/donate" class="text-gray-400 hover:text-white transition-colors">Donate</router-link></li>
             <li><router-link to="/report" class="text-gray-400 hover:text-white transition-colors">Report a Case</router-link></li>
             <li><router-link to="/faqs" class="text-gray-400 hover:text-white transition-colors">FAQs</router-link></li>
             <li><router-link to="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</router-link></li>
@@ -83,7 +84,7 @@
     </div>
 
     <!-- Trust badges -->
-    <div class="border-t border-gray-800">
+    <div>
       <div class="container-custom py-6">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-gray-400 text-sm">
           <div class="flex items-center justify-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-primary-500"></span> Supported by MGLSD</div>
@@ -94,7 +95,7 @@
     </div>
 
     <!-- Bottom Bar -->
-    <div class="border-t border-gray-800">
+    <div>
       <div class="container-custom py-6">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p class="text-gray-400 text-sm text-center md:text-left">

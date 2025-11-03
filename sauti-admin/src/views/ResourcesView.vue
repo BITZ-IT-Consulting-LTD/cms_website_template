@@ -67,7 +67,7 @@
     </div>
 
     <!-- Filters and Search -->
-    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div class="bg-white p-4 rounded-lg shadow-sm">
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 relative">
           <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -336,6 +336,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useResourcesStore } from '@/stores/resources'
 import { useToast } from 'vue-toastification'
 import {
@@ -354,6 +355,7 @@ import {
   FilmIcon
 } from '@heroicons/vue/24/outline'
 
+const route = useRoute()
 const resourcesStore = useResourcesStore()
 const toast = useToast()
 
@@ -563,5 +565,8 @@ const updateStats = () => {
 
 onMounted(() => {
   fetchResources()
+  if (route.query.create === 'true') {
+    showCreateModal.value = true
+  }
 })
 </script>

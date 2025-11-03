@@ -585,10 +585,19 @@ const savePost = async () => {
       excerpt: form.value.excerpt || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : ''),
       category: form.value.categories && form.value.categories.length > 0 ? form.value.categories[0] : null,
       tags: getTagIds(tagsInput.value),
-      featured_image: form.value.featuredImage || null,
       status: form.value.status || 'DRAFT',
       language: 'en'
     }
+
+    // Only include featured_image if it's a File object (new upload)
+    // If it's a string (existing URL), omit it - backend will keep existing image
+    if (form.value.featuredImage instanceof File) {
+      postData.featured_image = form.value.featuredImage
+    } else if (!isEditing.value && form.value.featuredImage) {
+      // For new posts, include if it exists (even if string, though shouldn't happen)
+      postData.featured_image = form.value.featuredImage
+    }
+    // For editing: if featuredImage is a string (existing URL), don't include it
 
     if (isEditing.value) {
       await postsStore.updatePost(route.params.slug, postData)
