@@ -579,25 +579,56 @@ const savePost = async () => {
   loading.value = true
 
   try {
+    // Build post data object, only including defined values
     const postData = {
-      title: form.value.title || '',
-      content: form.value.content || '',
-      excerpt: form.value.excerpt || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : ''),
-      category: form.value.categories && form.value.categories.length > 0 ? form.value.categories[0] : null,
-      tags: getTagIds(tagsInput.value),
+      title: form.value.title.trim(),
+      content: form.value.content.trim(),
       status: form.value.status || 'DRAFT',
       language: 'en'
+    }
+    
+    // Add excerpt only if it exists or generate from content
+    const excerpt = form.value.excerpt?.trim() || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160).trim() : '')
+    if (excerpt) {
+      postData.excerpt = excerpt
+    }
+    
+    // Add category only if selected (ensure it's a number)
+    if (form.value.categories && Array.isArray(form.value.categories) && form.value.categories.length > 0) {
+      const categoryId = form.value.categories[0]
+      if (categoryId) {
+        // Ensure category is a number (ID)
+        const parsedCategoryId = typeof categoryId === 'number' ? categoryId : parseInt(categoryId, 10)
+        // Skip if parsing failed
+        if (!isNaN(parsedCategoryId) && parsedCategoryId > 0) {
+          postData.category = parsedCategoryId
+        }
+      }
+    }
+    
+    // Add tags only if there are any (ensure they're numbers)
+    const tagIds = getTagIds(tagsInput.value)
+    if (tagIds && tagIds.length > 0) {
+      // Ensure all tag IDs are numbers
+      const validTagIds = tagIds.map(id => typeof id === 'number' ? id : parseInt(id, 10)).filter(id => !isNaN(id) && id > 0)
+      // Only include if we have valid tag IDs
+      if (validTagIds.length > 0) {
+        postData.tags = validTagIds
+      }
     }
 
     // Only include featured_image if it's a File object (new upload)
     // If it's a string (existing URL), omit it - backend will keep existing image
     if (form.value.featuredImage instanceof File) {
       postData.featured_image = form.value.featuredImage
-    } else if (!isEditing.value && form.value.featuredImage) {
-      // For new posts, include if it exists (even if string, though shouldn't happen)
-      postData.featured_image = form.value.featuredImage
     }
     // For editing: if featuredImage is a string (existing URL), don't include it
+    
+    // Debug: Log the data being sent
+    console.log('Post data being sent:', {
+      ...postData,
+      featured_image: postData.featured_image instanceof File ? `File: ${postData.featured_image.name}` : 'No file'
+    })
 
     if (isEditing.value) {
       await postsStore.updatePost(route.params.slug, postData)
@@ -612,7 +643,40 @@ const savePost = async () => {
     }
   } catch (err) {
     console.error('Save error:', err)
-    const errorMessage = err.response?.data?.detail || err.message || 'Failed to save post'
+    console.error('Error response:', err.response?.data)
+    console.error('Post data sent:', postData)
+    
+    // Extract detailed error message
+    let errorMessage = 'Failed to save post'
+    
+    if (err.response?.data) {
+      const data = err.response.data
+      
+      // Handle Django REST Framework validation errors
+      if (data.detail) {
+        errorMessage = data.detail
+      } else if (typeof data === 'object') {
+        // Collect all field errors
+        const fieldErrors = []
+        Object.keys(data).forEach(field => {
+          if (Array.isArray(data[field])) {
+            fieldErrors.push(`${field}: ${data[field].join(', ')}`)
+          } else if (typeof data[field] === 'string') {
+            fieldErrors.push(`${field}: ${data[field]}`)
+          } else {
+            fieldErrors.push(`${field}: ${JSON.stringify(data[field])}`)
+          }
+        })
+        if (fieldErrors.length > 0) {
+          errorMessage = fieldErrors.join('; ')
+        }
+      } else if (typeof data === 'string') {
+        errorMessage = data
+      }
+    } else if (err.message) {
+      errorMessage = err.message
+    }
+    
     toast.error(errorMessage)
   } finally {
     loading.value = false

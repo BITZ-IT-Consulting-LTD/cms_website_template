@@ -95,12 +95,10 @@
           class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">All Types</option>
-          <option value="physical_abuse">Physical Abuse</option>
-          <option value="sexual_abuse">Sexual Abuse</option>
-          <option value="neglect">Neglect</option>
-          <option value="emotional_abuse">Emotional Abuse</option>
-          <option value="trafficking">Trafficking</option>
-          <option value="other">Other</option>
+          <option value="CHILD_PROTECTION">Child Protection</option>
+          <option value="GBV">Gender-Based Violence</option>
+          <option value="MIGRANT">Migrant Worker</option>
+          <option value="PSEA">PSEA</option>
         </select>
 
         <select
@@ -108,9 +106,10 @@
           class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">All Statuses</option>
-          <option value="new">New</option>
-          <option value="in_progress">In Progress</option>
-          <option value="pending">Pending</option>
+          <option value="PENDING">Pending Review</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="RESOLVED">Resolved</option>
+          <option value="CLOSED">Closed</option>
         </select>
 
         <div class="flex items-center gap-2 ml-auto">
@@ -162,10 +161,11 @@
           <tbody v-if="!loading" class="bg-white">
             <tr v-for="report in pagedReports" :key="report.id" class="hover:bg-gray-50 cursor-pointer" @click="viewReport(report.id)">
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900">#{{ report.id }}</div>
+                <div class="text-sm font-medium text-gray-900">{{ report.reference_number || `#${report.id}` }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span class="text-sm text-gray-900">{{ formatType(report.type) }}</span>
+                <div class="text-sm text-gray-900">{{ formatType(report.type) }}</div>
+                <div v-if="report.incident_type" class="text-xs text-gray-500">{{ formatType(report.incident_type) }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span
@@ -326,48 +326,188 @@ const pageTitle = computed(() => {
 // Mock data - Replace with actual API calls
 const reports = ref([
   {
-    id: '2024-001',
-    type: 'physical_abuse',
+    id: 'SAUTI-CH-20250124103015',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'child_neglect',
     priority: 'critical',
-    status: 'in_progress',
+    status: 'IN_PROGRESS',
     location: 'Kampala, Central',
-    created_at: '2024-10-24T10:30:00Z',
-    assigned_to: 'Jane Mukasa'
+    created_at: '2025-01-24T10:30:00Z',
+    assigned_to: 'Jane Mukasa',
+    reference_number: 'SAUTI-CH-20250124103015'
   },
   {
-    id: '2024-002',
-    type: 'neglect',
+    id: 'SAUTI-CH-20250124091522',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'physical_violence',
     priority: 'high',
-    status: 'new',
+    status: 'PENDING',
     location: 'Gulu, Northern',
-    created_at: '2024-10-24T09:15:00Z',
-    assigned_to: null
+    created_at: '2025-01-24T09:15:00Z',
+    assigned_to: null,
+    reference_number: 'SAUTI-CH-20250124091522'
   },
   {
-    id: '2024-003',
-    type: 'sexual_abuse',
+    id: 'SAUTI-GB-20250123164530',
+    type: 'GBV',
+    incident_type: 'sexual_violence',
     priority: 'critical',
-    status: 'in_progress',
+    status: 'IN_PROGRESS',
     location: 'Mbarara, Western',
-    created_at: '2024-10-23T16:45:00Z',
-    assigned_to: 'Peter Okello'
+    created_at: '2025-01-23T16:45:00Z',
+    assigned_to: 'Peter Okello',
+    reference_number: 'SAUTI-GB-20250123164530'
   },
   {
-    id: '2024-004',
-    type: 'emotional_abuse',
+    id: 'SAUTI-CH-20250123142045',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'emotional_abuse',
     priority: 'medium',
-    status: 'pending',
+    status: 'PENDING',
     location: 'Jinja, Eastern',
-    created_at: '2024-10-23T14:20:00Z',
-    assigned_to: 'Sarah Nambi'
+    created_at: '2025-01-23T14:20:00Z',
+    assigned_to: 'Sarah Nambi',
+    reference_number: 'SAUTI-CH-20250123142045'
+  },
+  {
+    id: 'SAUTI-CH-20250122110030',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'child_neglect',
+    priority: 'high',
+    status: 'IN_PROGRESS',
+    location: 'Kampala, Central',
+    created_at: '2025-01-22T11:00:00Z',
+    assigned_to: 'Jane Mukasa',
+    reference_number: 'SAUTI-CH-20250122110030'
+  },
+  {
+    id: 'SAUTI-MI-20250122104515',
+    type: 'MIGRANT',
+    incident_type: 'trafficking',
+    priority: 'critical',
+    status: 'IN_PROGRESS',
+    location: 'Kampala, Central',
+    created_at: '2025-01-22T10:45:00Z',
+    assigned_to: 'Peter Okello',
+    reference_number: 'SAUTI-MI-20250122104515'
+  },
+  {
+    id: 'SAUTI-GB-20250121153020',
+    type: 'GBV',
+    incident_type: 'physical_violence',
+    priority: 'high',
+    status: 'RESOLVED',
+    location: 'Kampala, Central',
+    created_at: '2025-01-21T15:30:00Z',
+    assigned_to: 'Sarah Nambi',
+    reference_number: 'SAUTI-GB-20250121153020'
+  },
+  {
+    id: 'SAUTI-CH-20250121090010',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'child_neglect',
+    priority: 'medium',
+    status: 'PENDING',
+    location: 'Mbale, Eastern',
+    created_at: '2025-01-21T09:00:00Z',
+    assigned_to: null,
+    reference_number: 'SAUTI-CH-20250121090010'
+  },
+  {
+    id: 'SAUTI-GB-20250120140025',
+    type: 'GBV',
+    incident_type: 'economic_violence',
+    priority: 'medium',
+    status: 'IN_PROGRESS',
+    location: 'Kampala, Central',
+    created_at: '2025-01-20T14:00:00Z',
+    assigned_to: 'Jane Mukasa',
+    reference_number: 'SAUTI-GB-20250120140025'
+  },
+  {
+    id: 'SAUTI-CH-20250119120050',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'sexual_violence',
+    priority: 'critical',
+    status: 'IN_PROGRESS',
+    location: 'Gulu, Northern',
+    created_at: '2025-01-19T12:00:00Z',
+    assigned_to: 'Peter Okello',
+    reference_number: 'SAUTI-CH-20250119120050'
+  },
+  {
+    id: 'SAUTI-CH-20250118103040',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'child_exploitation',
+    priority: 'high',
+    status: 'PENDING',
+    location: 'Kampala, Central',
+    created_at: '2025-01-18T10:30:00Z',
+    assigned_to: null,
+    reference_number: 'SAUTI-CH-20250118103040'
+  },
+  {
+    id: 'SAUTI-GB-20250117150015',
+    type: 'GBV',
+    incident_type: 'harmful_traditional_practices',
+    priority: 'medium',
+    status: 'RESOLVED',
+    location: 'Mbarara, Western',
+    created_at: '2025-01-17T15:00:00Z',
+    assigned_to: 'Sarah Nambi',
+    reference_number: 'SAUTI-GB-20250117150015'
+  },
+  {
+    id: 'SAUTI-CH-20250116110030',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'child_neglect',
+    priority: 'high',
+    status: 'IN_PROGRESS',
+    location: 'Kampala, Central',
+    created_at: '2025-01-16T11:00:00Z',
+    assigned_to: 'Jane Mukasa',
+    reference_number: 'SAUTI-CH-20250116110030'
+  },
+  {
+    id: 'SAUTI-MI-20250115143020',
+    type: 'MIGRANT',
+    incident_type: 'trafficking',
+    priority: 'critical',
+    status: 'IN_PROGRESS',
+    location: 'Jinja, Eastern',
+    created_at: '2025-01-15T14:30:00Z',
+    assigned_to: 'Peter Okello',
+    reference_number: 'SAUTI-MI-20250115143020'
+  },
+  {
+    id: 'SAUTI-GB-20250114090045',
+    type: 'GBV',
+    incident_type: 'physical_violence',
+    priority: 'high',
+    status: 'PENDING',
+    location: 'Kampala, Central',
+    created_at: '2025-01-14T09:00:00Z',
+    assigned_to: null,
+    reference_number: 'SAUTI-GB-20250114090045'
+  },
+  {
+    id: 'SAUTI-CH-20250113120010',
+    type: 'CHILD_PROTECTION',
+    incident_type: 'child_neglect',
+    priority: 'medium',
+    status: 'RESOLVED',
+    location: 'Kampala, Central',
+    created_at: '2025-01-13T12:00:00Z',
+    assigned_to: 'Sarah Nambi',
+    reference_number: 'SAUTI-CH-20250113120010'
   }
 ])
 
 const stats = ref({
-  total: 47,
-  critical: 8,
-  inProgress: 23,
-  resolvedToday: 5
+  total: 2761, // Total active cases (Child Neglect is highest category)
+  critical: 312, // Critical priority cases
+  inProgress: 1845, // Cases in progress
+  resolvedToday: 23 // Cases resolved today
 })
 
 const searchQuery = ref('')
@@ -380,9 +520,14 @@ const loading = ref(false)
 
 const filteredReports = computed(() => {
   return reports.value.filter(report => {
+    const searchLower = searchQuery.value.toLowerCase()
     const matchesSearch = !searchQuery.value ||
-      report.id.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      report.location.toLowerCase().includes(searchQuery.value.toLowerCase())
+      report.reference_number?.toLowerCase().includes(searchLower) ||
+      report.id.toLowerCase().includes(searchLower) ||
+      report.location.toLowerCase().includes(searchLower) ||
+      report.assigned_to?.toLowerCase().includes(searchLower) ||
+      formatType(report.type).toLowerCase().includes(searchLower) ||
+      (report.incident_type && formatType(report.incident_type).toLowerCase().includes(searchLower))
     
     const matchesPriority = !filterPriority.value || report.priority === filterPriority.value
     const matchesType = !filterType.value || report.type === filterType.value
@@ -410,6 +555,11 @@ const priorityClass = (priority) => {
 
 const statusClass = (status) => {
   const classes = {
+    PENDING: 'bg-yellow-100 text-yellow-800',
+    IN_PROGRESS: 'bg-purple-100 text-purple-800',
+    RESOLVED: 'bg-green-100 text-green-800',
+    CLOSED: 'bg-gray-100 text-gray-800',
+    // Legacy support
     new: 'bg-blue-100 text-blue-800',
     in_progress: 'bg-purple-100 text-purple-800',
     pending: 'bg-yellow-100 text-yellow-800',
@@ -419,11 +569,37 @@ const statusClass = (status) => {
 }
 
 const formatType = (type) => {
-  return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  if (!type) return 'Unknown'
+  const typeMap = {
+    'CHILD_PROTECTION': 'Child Protection',
+    'GBV': 'Gender-Based Violence',
+    'MIGRANT': 'Migrant Worker',
+    'PSEA': 'PSEA',
+    'child_neglect': 'Child Neglect',
+    'physical_violence': 'Physical Violence',
+    'sexual_violence': 'Sexual Violence',
+    'economic_violence': 'Economic Violence',
+    'emotional_abuse': 'Emotional Abuse',
+    'child_exploitation': 'Child Exploitation',
+    'trafficking': 'Trafficking',
+    'harmful_traditional_practices': 'Harmful Traditional Practices'
+  }
+  return typeMap[type] || type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
 const formatStatus = (status) => {
-  return status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const statusMap = {
+    'PENDING': 'Pending Review',
+    'IN_PROGRESS': 'In Progress',
+    'RESOLVED': 'Resolved',
+    'CLOSED': 'Closed',
+    // Legacy support
+    'pending': 'Pending',
+    'in_progress': 'In Progress',
+    'resolved': 'Resolved',
+    'new': 'New'
+  }
+  return statusMap[status] || status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
 const formatDate = (date) => {

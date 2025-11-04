@@ -280,11 +280,58 @@ const saveChanges = async (status = 'DRAFT') => {
 
   loading.value = true
 
+  let videoData = {}
+  
   try {
-    const videoData = {
-      ...videoForm.value,
-      status: status || videoForm.value.status
+    // Build video data object, only including defined values
+    videoData = {
+      title: videoForm.value.title.trim(),
+      description: videoForm.value.description?.trim() || '',
+      status: status || videoForm.value.status || 'DRAFT',
+      language: videoForm.value.language || 'en',
+      is_featured: videoForm.value.is_featured || false
     }
+    
+    // Add category_id only if selected (ensure it's a number)
+    if (videoForm.value.category_id) {
+      const categoryId = typeof videoForm.value.category_id === 'number' 
+        ? videoForm.value.category_id 
+        : parseInt(videoForm.value.category_id, 10)
+      if (!isNaN(categoryId) && categoryId > 0) {
+        videoData.category_id = categoryId
+      }
+    }
+    
+    // Handle YouTube URL - only include if it's not empty
+    if (videoForm.value.youtube_url && videoForm.value.youtube_url.trim()) {
+      videoData.youtube_url = videoForm.value.youtube_url.trim()
+      videoData.video_type = 'YOUTUBE'
+    } else {
+      // If no YouTube URL, default to YOUTUBE type (backend default)
+      // This allows for videos that will be added later
+      videoData.video_type = 'YOUTUBE'
+    }
+    
+    // Handle video file upload (if implemented)
+    // Note: If both video_file and youtube_url are provided, video_file takes precedence
+    if (videoForm.value.video_file instanceof File) {
+      videoData.video_file = videoForm.value.video_file
+      videoData.video_type = 'UPLOAD'
+    }
+
+    // Only include thumbnail if it's a File object (new upload)
+    // If it's a string (existing URL), omit it - backend will keep existing thumbnail
+    if (videoForm.value.thumbnail instanceof File) {
+      videoData.thumbnail = videoForm.value.thumbnail
+    }
+    // For editing: if thumbnail is a string (existing URL), don't include it
+    
+    // Debug: Log the data being sent
+    console.log('Video data being sent:', {
+      ...videoData,
+      thumbnail: videoData.thumbnail instanceof File ? `File: ${videoData.thumbnail.name}` : 'No file',
+      video_file: videoData.video_file instanceof File ? `File: ${videoData.video_file.name}` : 'No file'
+    })
 
     if (isEditing.value) {
       await videosStore.updateVideo(route.params.slug, videoData)
@@ -298,7 +345,41 @@ const saveChanges = async (status = 'DRAFT') => {
     }
   } catch (err) {
     console.error('Save error:', err)
-    toast.error(err.response?.data?.detail || err.message || 'Failed to save video')
+    console.error('Error response:', err.response?.data)
+    console.error('Video data sent:', videoData)
+    
+    // Extract detailed error message
+    let errorMessage = 'Failed to save video'
+    
+    if (err.response?.data) {
+      const data = err.response.data
+      
+      // Handle Django REST Framework validation errors
+      if (data.detail) {
+        errorMessage = data.detail
+      } else if (typeof data === 'object') {
+        // Collect all field errors
+        const fieldErrors = []
+        Object.keys(data).forEach(field => {
+          if (Array.isArray(data[field])) {
+            fieldErrors.push(`${field}: ${data[field].join(', ')}`)
+          } else if (typeof data[field] === 'string') {
+            fieldErrors.push(`${field}: ${data[field]}`)
+          } else {
+            fieldErrors.push(`${field}: ${JSON.stringify(data[field])}`)
+          }
+        })
+        if (fieldErrors.length > 0) {
+          errorMessage = fieldErrors.join('; ')
+        }
+      } else if (typeof data === 'string') {
+        errorMessage = data
+      }
+    } else if (err.message) {
+      errorMessage = err.message
+    }
+    
+    toast.error(errorMessage)
   } finally {
     loading.value = false
   }
