@@ -14,32 +14,29 @@
     <!-- Form Card -->
     <div class="bg-white rounded-2xl shadow-lg p-8">
       <!-- Step 1: Category Selection -->
-      <div v-show="currentStep === 0" class="space-y-6">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Select Report Category</h2>
+      <div v-show="currentStep === 0" class="space-y-4">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Select Report Category</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
           <label
             v-for="category in categories"
             :key="category.value"
-            class="relative cursor-pointer"
+            class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-primary-300 transition-all"
+            :class="form.category === category.value ? 'bg-primary-50 border-primary-500' : ''"
           >
             <input
               type="radio"
               v-model="form.category"
               :value="category.value"
-              class="sr-only peer"
+              class="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500 focus:ring-2"
               required
             />
-            <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-primary-300 peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all">
-              <div class="flex items-start space-x-4">
-                <div :class="category.iconClass" class="p-3 rounded-lg">
-                  <div class="w-6 h-6 rounded-full" :class="category.dotColor"></div>
-                </div>
-                <div class="flex-1">
-                  <h3 class="font-semibold text-gray-900 mb-1">{{ category.label }}</h3>
-                  <p class="text-sm text-gray-600">{{ category.description }}</p>
-                </div>
+            <div class="ml-3 flex-1">
+              <div class="flex items-center">
+                <div class="w-2.5 h-2.5 rounded-full mr-2.5" :class="category.dotColor"></div>
+                <h3 class="text-sm font-medium text-gray-900">{{ category.label }}</h3>
               </div>
+              <p class="text-xs text-gray-600 mt-0.5 ml-5">{{ category.description }}</p>
             </div>
           </label>
         </div>

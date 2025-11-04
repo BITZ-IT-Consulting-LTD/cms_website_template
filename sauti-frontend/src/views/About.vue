@@ -23,7 +23,7 @@
           </div>
           <div class="lg:col-span-5">
             <div class="card p-0 overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?q=80&w=1600&auto=format&fit=crop" alt="Children receiving support and care in Uganda" class="w-full h-72 md:h-96 object-cover" />
+              <img :src="sautiAboutpage" alt="African children in Uganda - happy children receiving support and care through Sauti Child Helpline services" class="w-full h-72 md:h-96 object-cover" />
             </div>
           </div>
         </div>
@@ -187,4 +187,5 @@
 </template>
 
 <script setup>
+import sautiAboutpage from '@/assets/sauti-aboutpage.webp'
 </script>

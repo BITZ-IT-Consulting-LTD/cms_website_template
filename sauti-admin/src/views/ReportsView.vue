@@ -67,7 +67,7 @@
     </div>
 
     <!-- Filters and Search -->
-    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div class="bg-white p-4 rounded-lg shadow-sm">
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 relative">
           <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -128,9 +128,9 @@
     </div>
 
     <!-- Reports Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full">
           <thead class="bg-gray-50">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -159,7 +159,7 @@
               </th>
             </tr>
           </thead>
-          <tbody v-if="!loading" class="bg-white divide-y divide-gray-200">
+          <tbody v-if="!loading" class="bg-white">
             <tr v-for="report in pagedReports" :key="report.id" class="hover:bg-gray-50 cursor-pointer" @click="viewReport(report.id)">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900">#{{ report.id }}</div>
@@ -208,7 +208,7 @@
               </td>
             </tr>
           </tbody>
-          <tbody v-else class="bg-white divide-y divide-gray-200">
+          <tbody v-else class="bg-white">
             <tr v-for="n in 5" :key="n">
               <td class="px-6 py-4">
                 <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>

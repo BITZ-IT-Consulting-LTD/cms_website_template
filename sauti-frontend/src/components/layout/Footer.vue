@@ -34,6 +34,7 @@
             <li><router-link to="/partners" class="text-gray-400 hover:text-white transition-colors">Partners</router-link></li>
             <li><router-link to="/donate" class="text-gray-400 hover:text-white transition-colors">Donate</router-link></li>
             <li><router-link to="/report" class="text-gray-400 hover:text-white transition-colors">Report a Case</router-link></li>
+            <li><router-link to="/reports" class="text-gray-400 hover:text-white transition-colors">Reports</router-link></li>
             <li><router-link to="/faqs" class="text-gray-400 hover:text-white transition-colors">FAQs</router-link></li>
             <li><router-link to="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</router-link></li>
             <li><router-link to="/terms" class="text-gray-400 hover:text-white transition-colors">Terms of Service</router-link></li>
@@ -107,9 +108,6 @@
             <router-link to="/accessibility" class="text-gray-400 hover:text-white transition-colors">Accessibility</router-link>
           </div>
         </div>
-        <p class="text-gray-500 text-xs text-center mt-4">
-          Built with ❤️ by Sales Push Limited / Bitz ITC
-        </p>
       </div>
     </div>
   </footer>

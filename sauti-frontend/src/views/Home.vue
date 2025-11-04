@@ -69,8 +69,8 @@
             <div class="relative">
               <div class="card p-0 overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop" 
-                  alt="Children in Uganda receiving support and care" 
+                  :src="sautiHomepage" 
+                  alt="African children in Uganda - smiling children receiving support and protection through Sauti Child Helpline" 
                   class="w-full h-80 md:h-96 lg:h-[500px] object-cover" 
                   loading="eager"
                 />
@@ -507,6 +507,7 @@ import { usePartnersStore } from '@/store/partners'
 import { useBlogStore } from '@/store/blog'
 import GetHelpButton from '@/components/common/GetHelpButton.vue'
 import Loader from '@/components/common/Loader.vue'
+import sautiHomepage from '@/assets/sauti-homepage.avif'
 
 const partnersStore = usePartnersStore()
 const blogStore = useBlogStore()
