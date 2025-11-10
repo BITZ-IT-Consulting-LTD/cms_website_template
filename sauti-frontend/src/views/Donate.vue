@@ -141,7 +141,7 @@
               </div>
               <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-5 rounded-xl border-l-4 border-[#A0522D]">
                 <div class="text-sm text-gray-600 mb-1">Account Name</div>
-                <div class="text-base font-semibold text-gray-900">Sauti Child Helpline</div>
+                <div class="text-base font-semibold text-gray-900">Sauti 116 helpline</div>
               </div>
               <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-5 rounded-xl border-l-4 border-[#8B4000]">
                 <div class="text-sm text-gray-600 mb-1">Account Number</div>
@@ -265,7 +265,7 @@
             <div class="ml-4">
               <h3 class="text-lg font-bold text-gray-900 mb-2">Transparency & Accountability</h3>
               <p class="text-gray-700 leading-relaxed mb-4">
-                All donations directly support the operations of Sauti Child Helpline. We are committed to transparency and accountability. Receipts will be provided for all contributions, and we regularly report on how funds are used to maximize impact.
+                All donations directly support the operations of Sauti 116 helpline. We are committed to transparency and accountability. Receipts will be provided for all contributions, and we regularly report on how funds are used to maximize impact.
               </p>
               <div class="flex flex-col sm:flex-row gap-3">
                 <router-link 

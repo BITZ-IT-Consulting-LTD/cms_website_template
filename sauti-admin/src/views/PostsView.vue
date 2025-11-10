@@ -252,6 +252,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Blog Preview Modal -->
+    <BlogPreviewModal
+      v-if="selectedPost"
+      :isOpen="isPreviewOpen"
+      :slug="selectedPost.slug"
+      :postId="selectedPost.id"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -260,6 +269,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { usePostsStore } from '@/stores/posts'
+import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   PlusIcon,
   DocumentTextIcon,
@@ -356,15 +366,17 @@ const formatDate = (date) => {
   }
 }
 
-const previewPost = (post) => {
-  if (post.status === 'DRAFT') {
-    toast.warning('Cannot preview draft content')
-    return
-  }
+const isPreviewOpen = ref(false)
+const selectedPost = ref(null)
 
-  // Open in new tab
-  const url = `/blog/${post.slug}`
-  window.open(url, '_blank')
+const previewPost = (post) => {
+  selectedPost.value = post
+  isPreviewOpen.value = true
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
+  selectedPost.value = null
 }
 
 const duplicatePost = async (post) => {

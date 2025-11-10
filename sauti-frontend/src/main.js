@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import { useContentStore } from './store/content'
 import './assets/styles/main.css'
 
 const app = createApp(App)
@@ -9,5 +10,9 @@ const pinia = createPinia()
 
 app.use(pinia)
 app.use(router)
+
+// Initialize content store
+const contentStore = useContentStore()
+contentStore.init()
 
 app.mount('#app')

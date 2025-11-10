@@ -752,7 +752,7 @@ const settingsTabs = [
 // Settings data
 const settings = reactive({
   general: {
-    siteName: 'Sauti Child Helpline',
+    siteName: 'Sauti 116 helpline',
     siteUrl: 'https://sauti.org',
     siteDescription: 'A safe and accessible helpline for children in Uganda.',
     adminEmail: 'admin@sauti.org',

@@ -1,6 +1,6 @@
 # Docker Deployment Guide - Sauti CMS
 
-This guide provides complete instructions for deploying the Sauti Child Helpline CMS using Docker and Docker Compose.
+This guide provides complete instructions for deploying the Sauti 116 helpline CMS using Docker and Docker Compose.
 
 ---
 
@@ -128,7 +128,7 @@ CORS_ALLOWED_ORIGINS=http://localhost,https://your-domain.com
 
 ```bash
 VITE_API_URL=http://localhost:8000
-VITE_APP_NAME=Sauti Child Helpline
+VITE_APP_NAME=Sauti 116 helpline
 VITE_HOTLINE=116
 VITE_WHATSAPP=+256123456789
 VITE_EMAIL=info@sauti.mglsd.go.ug

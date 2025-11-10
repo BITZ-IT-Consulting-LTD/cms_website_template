@@ -3,8 +3,8 @@
     <!-- Enhanced Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Roboto', sans-serif;">Content Management Dashboard</h1>
-        <p class="text-lg text-gray-600">Manage your website content, blog posts, videos, and resources</p>
+        <h1 class="text-4xl font-bold mb-2" style="font-family: 'Roboto', sans-serif; color: #222222;">Content Management Dashboard</h1>
+        <p class="text-lg" style="color: #555555;">Manage your website content, blog posts, videos, and resources</p>
       </div>
       <div class="flex gap-3">
         <button
@@ -28,62 +28,62 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-blue-100 rounded-2xl group-hover:bg-blue-200 transition-colors duration-300">
-            <DocumentTextIcon class="h-6 w-6 text-blue-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(0, 158, 219, 0.15);">
+            <DocumentTextIcon class="h-6 w-6" style="color: #009EDB;" />
           </div>
           <div class="text-right">
             <div class="stats-number">{{ stats.totalPosts }}</div>
             <div class="stats-label">Blog Posts</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Published articles</div>
+        <div class="text-sm" style="color: #555555;">Published articles</div>
       </div>
       
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-purple-100 rounded-2xl group-hover:bg-purple-200 transition-colors duration-300">
-            <VideoCameraIcon class="h-6 w-6 text-purple-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(124, 58, 237, 0.15);">
+            <VideoCameraIcon class="h-6 w-6" style="color: #7C3AED;" />
           </div>
           <div class="text-right">
             <div class="stats-number">{{ stats.totalVideos }}</div>
             <div class="stats-label">Videos</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Educational content</div>
+        <div class="text-sm" style="color: #555555;">Educational content</div>
       </div>
       
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-indigo-100 rounded-2xl group-hover:bg-indigo-200 transition-colors duration-300">
-            <FolderOpenIcon class="h-6 w-6 text-indigo-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(13, 148, 136, 0.15);">
+            <FolderOpenIcon class="h-6 w-6" style="color: #0D9488;" />
           </div>
           <div class="text-right">
             <div class="stats-number">{{ stats.totalResources || 0 }}</div>
             <div class="stats-label">Resources</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Downloadable content</div>
+        <div class="text-sm" style="color: #555555;">Downloadable content</div>
       </div>
       
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-teal-100 rounded-2xl group-hover:bg-teal-200 transition-colors duration-300">
-            <QuestionMarkCircleIcon class="h-6 w-6 text-teal-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(153, 204, 0, 0.2);">
+            <QuestionMarkCircleIcon class="h-6 w-6" style="color: #7A9900;" />
           </div>
           <div class="text-right">
             <div class="stats-number">{{ stats.totalFaqs || 0 }}</div>
             <div class="stats-label">FAQs</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Help content</div>
+        <div class="text-sm" style="color: #555555;">Help content</div>
       </div>
     </div>
 
     <!-- Enhanced Content Management -->
     <div class="card">
       <div class="card-header">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2" style="font-family: 'Roboto', sans-serif;">Content Management</h2>
-        <p class="text-gray-600">Manage your blog posts, videos, resources, and other content</p>
+        <h2 class="text-2xl font-bold mb-2" style="font-family: 'Roboto', sans-serif; color: #222222;">Content Management</h2>
+        <p style="color: #555555;">Manage your blog posts, videos, resources, and other content</p>
       </div>
         
       <div class="card-body">
@@ -260,6 +260,14 @@
       </div>
     </div>
 
+    <!-- Blog Preview Modal -->
+    <BlogPreviewModal
+      v-if="selectedItem && selectedItem.type === 'blog'"
+      :isOpen="isPreviewOpen"
+      :slug="selectedItem.slug"
+      :postId="selectedItem.id"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -268,6 +276,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useToast } from 'vue-toastification'
+import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   PlusIcon,
   PencilIcon,
@@ -338,16 +347,22 @@ const editItem = (item) => {
   }
 }
 
+const isPreviewOpen = ref(false)
+const selectedItem = ref(null)
+
 const viewItem = (item) => {
   if (item.type === 'blog') {
-    // Open preview in new window for both drafts and published content
-    const previewUrl = `http://localhost:3003/blog/${item.slug}`
-    window.open(previewUrl, '_blank')
-    toast.info('Opening preview in new window...')
+    selectedItem.value = item
+    isPreviewOpen.value = true
   } else if (item.type === 'video') {
     // For videos, open the YouTube link
     toast.info('Video preview via YouTube coming soon')
   }
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
+  selectedItem.value = null
 }
 
 const duplicateItem = async (item) => {

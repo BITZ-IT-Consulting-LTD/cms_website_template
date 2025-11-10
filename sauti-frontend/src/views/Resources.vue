@@ -46,7 +46,12 @@
           </div>
           <div class="flex items-start gap-4">
             <div class="h-12 w-12 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <svg v-if="isAudio(resource)" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M9 19V6l12-2v13"/>
+                <circle cx="6" cy="18" r="3"/>
+                <circle cx="18" cy="18" r="3"/>
+              </svg>
+              <svg v-else class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
               </svg>
             </div>
@@ -61,6 +66,9 @@
                 <span v-if="resource.published_at">{{ formatDate(resource.published_at) }}</span>
               </div>
               <div class="mt-4 flex items-center gap-3">
+                <template v-if="isAudio(resource) && resource.file">
+                  <audio :src="resource.file" controls class="w-full"></audio>
+                </template>
                 <a v-if="resource.file" :href="resource.file" target="_blank" rel="noopener" class="pill pill-primary">Download</a>
                 <span v-else class="pill pill-light">Coming Soon</span>
                 <a v-if="resource.thumbnail" :href="resource.thumbnail" target="_blank" rel="noopener" class="pill pill-light">Preview</a>
@@ -170,5 +178,12 @@ function getLanguageName(code) {
     'sw': 'Swahili'
   }
   return languages[code] || code.toUpperCase()
+}
+
+function isAudio(resource) {
+  const type = (resource.file_type || '').toLowerCase()
+  const url = (resource.file || '').toLowerCase()
+  const exts = ['mp3', 'm4a', 'wav', 'ogg']
+  return exts.some(ext => type.includes(ext) || url.endsWith(`.${ext}`))
 }
 </script>

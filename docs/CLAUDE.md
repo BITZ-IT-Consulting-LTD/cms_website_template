@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a full-stack CMS platform for Sauti Child Helpline, built to handle child protection cases, GBV reports, and migrant worker issues in Uganda. The system consists of:
+This is a full-stack CMS platform for Sauti 116 helpline, built to handle child protection cases, GBV reports, and migrant worker issues in Uganda. The system consists of:
 
 - **Backend**: Django 4.2 + Django REST Framework + PostgreSQL
 - **Public Frontend**: Vue 3 + Vite (port 3000) - Public-facing website

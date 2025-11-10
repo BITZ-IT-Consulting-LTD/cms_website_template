@@ -74,7 +74,7 @@
               <p class="text-gray-600">If you are in danger or need urgent assistance, call now.</p>
               <div class="mt-4 flex flex-wrap gap-2">
                 <a href="tel:116" class="pill pill-primary" aria-label="Call the 116 helpline">Call 116</a>
-                <a href="https://wa.me/256123456789" target="_blank" rel="noopener" class="pill pill-outline" aria-label="Chat on WhatsApp">WhatsApp</a>
+                <a href="https://wa.me/256743889999" target="_blank" rel="noopener" class="pill pill-outline" aria-label="Chat on WhatsApp">WhatsApp</a>
               </div>
             </div>
 

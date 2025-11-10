@@ -179,8 +179,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 # DRF Spectacular (OpenAPI/Swagger) Configuration
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Sauti Child Helpline CMS API',
-    'DESCRIPTION': 'API for Sauti Child Helpline Website - Empowering children, GBV survivors, and migrant workers',
+    'TITLE': 'Sauti 116 helpline CMS API',
+    'DESCRIPTION': 'API for Sauti 116 helpline Website - Empowering children, GBV survivors, and migrant workers',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,

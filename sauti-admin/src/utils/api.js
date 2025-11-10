@@ -70,15 +70,27 @@ const createFormData = (data) => {
       return
     }
     
-    // For all other fields, append the value
-    // FormData automatically converts values to strings, but we'll be explicit for clarity
+    // Handle boolean values - Django expects 'true'/'false' or '1'/'0'
     if (typeof value === 'boolean') {
       formData.append(key, value ? 'true' : 'false')
-    } else if (typeof value === 'number') {
-      formData.append(key, value.toString())
-    } else {
-      formData.append(key, value)
+      return
     }
+    
+    // Handle number values
+    if (typeof value === 'number') {
+      formData.append(key, value.toString())
+      return
+    }
+    
+    // Handle empty strings for optional text fields
+    if (value === '' && ['description', 'youtube_url'].includes(key)) {
+      // Allow empty strings for these optional fields
+      formData.append(key, '')
+      return
+    }
+    
+    // For all other fields, append the value as-is (FormData handles strings)
+    formData.append(key, value)
   })
   return formData
 }

@@ -17,49 +17,49 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="bg-white p-6 rounded-lg shadow-sm border-transparent">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Total Resources</p>
             <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats.total }}</p>
           </div>
-          <div class="p-3 bg-teal-100 rounded-lg">
+          <div class="p-3 bg-transparent rounded-lg">
             <FolderOpenIcon class="h-8 w-8 text-teal-600" />
           </div>
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="bg-white p-6 rounded-lg shadow-sm border-transparent">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Published</p>
             <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.published }}</p>
           </div>
-          <div class="p-3 bg-green-100 rounded-lg">
+          <div class="p-3 bg-transparent rounded-lg">
             <CheckCircleIcon class="h-8 w-8 text-green-600" />
           </div>
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="bg-white p-6 rounded-lg shadow-sm border-transparent">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Total Downloads</p>
             <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.downloads }}</p>
           </div>
-          <div class="p-3 bg-blue-100 rounded-lg">
+          <div class="p-3 bg-transparent rounded-lg">
             <ArrowDownTrayIcon class="h-8 w-8 text-blue-600" />
           </div>
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="bg-white p-6 rounded-lg shadow-sm border-transparent">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">This Month</p>
             <p class="text-3xl font-bold text-purple-600 mt-2">{{ stats.thisMonth }}</p>
           </div>
-          <div class="p-3 bg-purple-100 rounded-lg">
+          <div class="p-3 bg-transparent rounded-lg">
             <CalendarIcon class="h-8 w-8 text-purple-600" />
           </div>
         </div>
@@ -117,11 +117,11 @@
       <div
         v-for="resource in filteredResources"
         :key="resource.id"
-        class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
+        class="bg-white rounded-lg shadow-sm border-transparent overflow-hidden hover:shadow-md transition-shadow duration-200"
       >
         <!-- Resource Preview -->
-        <div class="h-48 bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center relative">
-          <div class="text-center text-white">
+        <div class="h-48 bg-white flex items-center justify-center relative border-b border-transparent">
+          <div class="text-center text-gray-700">
             <component :is="getFileIcon(resource.file_type || 'PDF')" class="h-16 w-16 mx-auto mb-2 opacity-90" />
             <p class="text-sm font-medium uppercase">{{ getFileTypeDisplay(resource.file_type) }}</p>
           </div>
@@ -162,7 +162,7 @@
           </div>
 
           <!-- File Info -->
-          <div class="flex items-center justify-between text-xs text-gray-500 mb-4 pt-4 border-t border-gray-100">
+          <div class="flex items-center justify-between text-xs text-gray-500 mb-4 pt-4 border-t border-transparent">
             <span>{{ resource.file_size }}</span>
             <span>{{ formatDate(resource.updated_at) }}</span>
           </div>
@@ -171,21 +171,30 @@
           <div class="flex gap-2">
             <button
               @click="viewResource(resource)"
-              class="flex-1 btn-outline text-sm"
+              class="flex-1 btn-outline text-sm flex items-center justify-center"
             >
               <EyeIcon class="h-4 w-4 mr-1" />
               View
             </button>
             <button
+              @click="downloadResource(resource)"
+              class="flex-1 btn-outline text-sm flex items-center justify-center"
+              title="Download file"
+            >
+              <ArrowDownTrayIcon class="h-4 w-4 mr-1" />
+              Download
+            </button>
+            <button
               @click="editResource(resource)"
-              class="flex-1 btn-primary text-sm"
+              class="flex-1 btn-primary text-sm flex items-center justify-center"
             >
               <PencilIcon class="h-4 w-4 mr-1" />
               Edit
             </button>
             <button
               @click="deleteResource(resource)"
-              class="btn-danger text-sm"
+              class="btn-danger text-sm flex items-center justify-center px-3"
+              title="Delete resource"
             >
               <TrashIcon class="h-4 w-4" />
             </button>
@@ -195,7 +204,7 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="filteredResources.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+    <div v-if="filteredResources.length === 0" class="bg-white rounded-lg shadow-sm border-transparent p-12 text-center">
       <FolderOpenIcon class="mx-auto h-12 w-12 text-gray-400" />
       <h3 class="mt-2 text-sm font-medium text-gray-900">No resources found</h3>
       <p class="mt-1 text-sm text-gray-500">Get started by adding a new resource</p>
@@ -250,11 +259,11 @@
                 <input 
                   type="file" 
                   @change="handleFileUpload"
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mp3,.m4a,.wav,.ogg"
                   class="form-input"
                   required
                 >
-                <p class="text-xs text-gray-500 mt-1">Supported formats: PDF, DOC, DOCX, JPG, PNG, MP4, AVI, MOV</p>
+                <p class="text-xs text-gray-500 mt-1">Supported: PDF, DOC/DOCX, Images (JPG/PNG), Video (MP4/AVI/MOV), Audio (MP3/M4A/WAV/OGG)</p>
               </div>
             </div>
             <div class="mt-6 flex justify-end space-x-3">
@@ -313,7 +322,7 @@
                 <input 
                   type="file" 
                   @change="handleEditFileUpload"
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mp3,.m4a,.wav,.ogg"
                   class="form-input"
                 >
                 <p class="text-xs text-gray-500 mt-1">Leave empty to keep current file</p>
@@ -331,6 +340,18 @@
         </div>
       </div>
     </div>
+
+    <!-- Resource Preview Modal -->
+    <ResourcePreviewModal
+      v-if="selectedResource"
+      :isOpen="isPreviewOpen"
+      :slug="selectedResource.slug || ''"
+      :resourceId="selectedResource.id || null"
+      :fileType="selectedResource.file_type || ''"
+      :fileUrl="selectedResource.file || ''"
+      :resourceTitle="selectedResource.title || 'Resource'"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -339,6 +360,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useResourcesStore } from '@/stores/resources'
 import { useToast } from 'vue-toastification'
+import ResourcePreviewModal from '@/components/previews/ResourcePreviewModal.vue'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -352,7 +374,8 @@ import {
   FolderIcon,
   DocumentTextIcon,
   PhotoIcon,
-  FilmIcon
+  FilmIcon,
+  MusicalNoteIcon
 } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
@@ -415,7 +438,12 @@ const getFileIcon = (type) => {
     'VIDEO': FilmIcon,
     'MP4': FilmIcon,
     'AVI': FilmIcon,
-    'MOV': FilmIcon
+    'MOV': FilmIcon,
+    'AUDIO': MusicalNoteIcon,
+    'MP3': MusicalNoteIcon,
+    'M4A': MusicalNoteIcon,
+    'WAV': MusicalNoteIcon,
+    'OGG': MusicalNoteIcon
   }
   return icons[type] || DocumentTextIcon
 }
@@ -444,8 +472,57 @@ const formatDate = (date) => {
   }
 }
 
+const isPreviewOpen = ref(false)
+const selectedResource = ref(null)
+
 const viewResource = (resource) => {
-  console.log('View resource:', resource)
+  console.log('View resource clicked:', resource)
+  if (!resource) {
+    console.error('Resource is null or undefined')
+    toast.error('Resource not found')
+    return
+  }
+  
+  if (!resource.file) {
+    console.warn('Resource has no file:', resource)
+    toast.warning('This resource has no file to preview')
+    return
+  }
+  
+  selectedResource.value = resource
+  isPreviewOpen.value = true
+  console.log('Preview modal should open:', { 
+    isOpen: isPreviewOpen.value, 
+    resource: selectedResource.value,
+    fileUrl: resource.file 
+  })
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
+  selectedResource.value = null
+}
+
+const downloadResource = (resource) => {
+  if (!resource.file) {
+    toast.error('No file available for download')
+    return
+  }
+  
+  // Construct full file URL
+  const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+  const backendUrl = apiBaseUrl.replace('/api', '') || 'http://localhost:8000'
+  
+  // Handle both relative paths (/media/...) and full URLs
+  let fileUrl = resource.file
+  if (fileUrl && !fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+    // Remove leading slash if present and construct full URL
+    fileUrl = `${backendUrl}${fileUrl.startsWith('/') ? '' : '/'}${fileUrl}`
+  }
+  
+  // Open in new tab to trigger download
+  window.open(fileUrl, '_blank')
+  toast.success('Downloading file...')
 }
 
 const editResource = (resource) => {

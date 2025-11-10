@@ -2,7 +2,7 @@
   "name": "sauti-frontend",
   "version": "1.0.0",
   "type": "module",
-  "description": "Sauti Child Helpline - Vue 3 Frontend",
+  "description": "Sauti 116 helpline - Vue 3 Frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -1,20 +1,20 @@
 <template>
-  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+  <header class="bg-white backdrop-blur-md sticky top-0 z-50 shadow-sm">
     <nav class="container-custom py-4">
       <div class="flex items-center justify-between min-h-[72px]">
         <!-- Enhanced Logo -->
-        <router-link to="/" class="flex items-center space-x-3 group">
+        <router-link to="/" class="flex items-center space-x-3 group no-underline">
           <template v-if="!useFallback">
             <img :src="logoUrl" alt="Sauti" class="h-10 w-10 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
           </template>
           <template v-else>
-            <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#8B4000] to-[#A0522D] flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300">S</div>
+            <div class="h-10 w-10 rounded-2xl flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300" style="background-color: #009EDB;">S</div>
           </template>
           <div>
-            <h1 class="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-[#8B4000] transition-colors duration-300" style="font-family: 'Poppins', sans-serif;">
+            <h1 class="text-xl md:text-2xl font-bold group-hover:text-[#009EDB] transition-colors duration-300" style="font-family: 'Poppins', sans-serif; color: #222222;">
               Sauti
             </h1>
-            <p class="text-xs text-gray-500 -mt-1">Child Helpline</p>
+            <p class="text-xs -mt-1" style="color: #555555;">116 helpline</p>
           </div>
         </router-link>
 

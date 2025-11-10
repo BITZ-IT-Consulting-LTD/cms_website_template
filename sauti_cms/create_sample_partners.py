@@ -49,7 +49,7 @@ def create_sample_partners():
             'order': 3,
         },
         {
-            'name': 'Uganda Child Helpline',
+            'name': 'Uganda 116 helpline',
             'description': 'National toll-free helpline for children in need of protection and support.',
             'partner_type': 'NGO',
             'website_url': 'https://childhelpline.or.ug',

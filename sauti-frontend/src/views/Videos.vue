@@ -37,7 +37,7 @@
                 </div>
               </div>
             </div>
-            <span class="absolute bottom-2 right-2 text-xs font-bold bg-black/80 text-white px-1.5 py-0.5 rounded">{{ video.duration }}</span>
+            <span v-if="video.duration" class="absolute bottom-2 right-2 text-xs font-bold bg-black/80 text-white px-1.5 py-0.5 rounded">{{ video.duration }}</span>
           </div>
           <div class="mt-3 flex gap-3">
             <div class="h-9 w-9 rounded-full bg-[#8B4000] flex items-center justify-center text-white font-bold text-sm">
@@ -52,6 +52,13 @@
         </article>
       </div>
     </div>
+
+    <!-- Video Player Modal -->
+    <VideoPlayerModal
+      :isOpen="isModalOpen"
+      :video="selectedVideo"
+      @close="closeModal"
+    />
   </div>
   
 </template>
@@ -59,12 +66,15 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useVideosStore } from '@/stores/videos'
+import VideoPlayerModal from '@/components/videos/VideoPlayerModal.vue'
 
 const videosStore = useVideosStore()
 const query = ref('')
 const chips = ['All', 'Education', 'Safety', 'Support', 'Recency', 'Popular']
 const activeChip = ref('All')
 const loading = ref(false)
+const isModalOpen = ref(false)
+const selectedVideo = ref(null)
 
 const videos = ref([])
 
@@ -89,6 +99,8 @@ async function fetchVideos() {
       description: video.description,
       thumbnail: video.thumbnail || video.youtube_thumbnail_url || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
       youtube_url: video.youtube_url,
+      video_file: video.video_file,
+      video_type: video.video_type || 'YOUTUBE',
       views_count: video.views_count,
       author_name: video.author_name || 'Sauti Uganda',
       category: video.category,
@@ -118,9 +130,13 @@ function useAvatarPlaceholder(e) {
 }
 
 function openVideo(video) {
-  if (video.youtube_url) {
-    window.open(video.youtube_url, '_blank')
-  }
+  selectedVideo.value = video
+  isModalOpen.value = true
+}
+
+function closeModal() {
+  isModalOpen.value = false
+  selectedVideo.value = null
 }
 
 function formatViews(views) {

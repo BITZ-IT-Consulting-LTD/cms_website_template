@@ -16,9 +16,9 @@
                 </svg>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-900 mb-1">Hotline</h3>
-                <a href="tel:116" class="text-2xl font-bold text-secondary-500 hover:text-secondary-600">116</a>
-                <p class="text-sm text-gray-600">Toll-free · 24/7</p>
+                <h3 class="font-semibold mb-1" style="color: #222222;">Hotline</h3>
+                <a href="tel:116" class="text-2xl font-bold hover:opacity-80 transition-colors" style="color: #EC0000;">116</a>
+                <p class="text-sm" style="color: #555555;">Toll-free · 24/7</p>
               </div>
             </div>
 
@@ -29,8 +29,8 @@
                 </svg>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-900 mb-1">WhatsApp</h3>
-                <a href="https://wa.me/256123456789" target="_blank" class="text-secondary-500 hover:text-secondary-600">+256 123 456 789</a>
+                <h3 class="font-semibold mb-1" style="color: #222222;">WhatsApp</h3>
+                <a href="https://wa.me/256743889999" target="_blank" class="hover:opacity-80 transition-colors" style="color: #009EDB;">+256 743 889 999</a>
               </div>
             </div>
 
@@ -42,8 +42,8 @@
                 </svg>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-900 mb-1">Email</h3>
-                <a href="mailto:info@sauti.mglsd.go.ug" class="text-secondary-500 hover:text-secondary-600">info@sauti.mglsd.go.ug</a>
+                <h3 class="font-semibold mb-1" style="color: #222222;">Email</h3>
+                <a href="mailto:info@sauti.mglsd.go.ug" class="hover:opacity-80 transition-colors" style="color: #009EDB;">info@sauti.mglsd.go.ug</a>
               </div>
             </div>
 
@@ -54,8 +54,8 @@
                 </svg>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-900 mb-1">Office</h3>
-                <p class="text-gray-700">Ministry of Gender, Labour & Social Development<br/>Kampala, Uganda</p>
+                <h3 class="font-semibold mb-1" style="color: #222222;">Office</h3>
+                <p style="color: #222222;">Ministry of Gender, Labour & Social Development<br/>Kampala, Uganda</p>
               </div>
             </div>
           </div>
@@ -81,7 +81,7 @@
               <label class="form-label">Message</label>
               <textarea v-model="form.message" rows="5" class="form-textarea" required></textarea>
             </div>
-            <button type="submit" class="btn-primary w-full bg-secondary-500 hover:bg-secondary-600 focus:ring-secondary-400">Send Message</button>
+            <button type="submit" class="btn-primary w-full">Send Message</button>
           </form>
         </div>
       </div>

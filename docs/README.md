@@ -1,6 +1,6 @@
 # Sauti CMS Documentation
 
-Complete documentation for the Sauti Child Helpline CMS platform.
+Complete documentation for the Sauti 116 helpline CMS platform.
 
 ---
 

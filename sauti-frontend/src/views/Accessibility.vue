@@ -16,7 +16,7 @@
           <section class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Commitment</h2>
             <p class="text-gray-700 mb-4">
-              Sauti Child Helpline is committed to ensuring digital accessibility for all users, including those 
+              Sauti 116 helpline is committed to ensuring digital accessibility for all users, including those 
               with disabilities. We strive to provide an accessible and inclusive experience for everyone who 
               needs our services.
             </p>

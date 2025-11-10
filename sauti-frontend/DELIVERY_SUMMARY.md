@@ -2,7 +2,7 @@
 
 ## 📦 What You're Getting
 
-A **complete, production-ready Vue 3 frontend application** for the Sauti Child Helpline website!
+A **complete, production-ready Vue 3 frontend application** for the Sauti 116 helpline website!
 
 ---
 
@@ -626,7 +626,7 @@ sudo sysctl -p
 
 ## 🎉 Congratulations!
 
-You now have a **complete, production-ready Vue 3 frontend** for the Sauti Child Helpline!
+You now have a **complete, production-ready Vue 3 frontend** for the Sauti 116 helpline!
 
 ### What Makes This Special?
 
@@ -690,7 +690,7 @@ You've received:
 - ✅ Production deployment guides
 - ✅ Comprehensive documentation
 
-**Built with ❤️ for Sauti Child Helpline**
+**Built with ❤️ for Sauti 116 helpline**
 **Ministry of Gender, Labour and Social Development (MGLSD), Uganda**
 **Developed by: Sales Push Limited / Bitz ITC**
 

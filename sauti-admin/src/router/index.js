@@ -17,6 +17,7 @@ const FaqsView = () => import('@/views/FaqsView.vue')
 const PartnersView = () => import('@/views/PartnersView.vue')
 const UsersView = () => import('@/views/UsersView.vue')
 const SuccessStoriesView = () => import('@/views/SuccessStoriesView.vue')
+const UploadsView = () => import('@/views/UploadsView.vue')
 
 const routes = [
   {
@@ -173,6 +174,14 @@ const routes = [
         component: SuccessStoriesView,
         meta: {
           title: 'Success Stories - Sauti Admin'
+        }
+      },
+      {
+        path: 'uploads',
+        name: 'uploads',
+        component: UploadsView,
+        meta: {
+          title: 'Frontend Content - Sauti Admin'
         }
       }
     ]

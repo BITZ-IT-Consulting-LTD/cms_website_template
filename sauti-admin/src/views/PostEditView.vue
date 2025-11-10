@@ -310,6 +310,13 @@ Each paragraph will be properly formatted when displayed."
         </div>
       </div>
     </div>
+
+    <!-- Blog Preview Modal -->
+    <BlogPreviewModal
+      :isOpen="isPreviewOpen"
+      :slug="route.params.slug || savedSlug"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -319,6 +326,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { usePostsStore } from '@/stores/posts'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
+import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   EyeIcon,
   LinkIcon,
@@ -539,6 +547,8 @@ const removeImage = () => {
 
 const savedSlug = ref(null)
 
+const isPreviewOpen = ref(false)
+
 const previewPost = async () => {
   if (!form.value.title) {
     toast.warning('Please enter a title first')
@@ -548,12 +558,14 @@ const previewPost = async () => {
   // Use current slug if editing, or saved slug from create
   const slug = route.params.slug || savedSlug.value
   if (slug) {
-    const previewUrl = `http://localhost:3003/blog/${slug}`
-    window.open(previewUrl, '_blank')
-    toast.info('Opening preview in new window...')
+    isPreviewOpen.value = true
   } else {
     toast.warning('Please save the post first to preview it')
   }
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
 }
 
 const saveDraft = async () => {

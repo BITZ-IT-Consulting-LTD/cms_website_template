@@ -147,6 +147,13 @@ export const api = {
     get: (slug) => apiClient.get(`/partners/${slug}/`),
   },
   
+  // Content/Uploads endpoints
+  content: {
+    list: () => apiClient.get('/content/'),
+    get: (key) => apiClient.get(`/content/${key}/`),
+    update: (key, data) => apiClient.put(`/content/${key}/`, data),
+  },
+  
   // Reports endpoints (anonymous submission)
   reports: {
     submit: (data) => {

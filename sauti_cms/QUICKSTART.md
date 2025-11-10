@@ -2,7 +2,7 @@
 
 ## What You Have
 
-A **complete, production-ready Django CMS backend** for the Sauti Child Helpline website with:
+A **complete, production-ready Django CMS backend** for the Sauti 116 helpline website with:
 
 ✅ User Management (Role-based access: Admin, Editor, Author, Viewer)  
 ✅ Blog/News System (Draft/Publish workflow)  
@@ -375,4 +375,4 @@ Your Sauti CMS backend is **production-ready**. Start building your Vue 3 fronte
 
 ---
 
-**Built with ❤️ for Sauti Child Helpline**
+**Built with ❤️ for Sauti 116 helpline**

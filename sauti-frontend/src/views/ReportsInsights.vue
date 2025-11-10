@@ -4,7 +4,7 @@
       <!-- Heading -->
       <div class="text-center mb-10">
         <h1 class="text-4xl md:text-5xl font-extrabold mb-3">Reports & Insights</h1>
-        <p class="text-gray-600 max-w-3xl mx-auto">Explore the data collected by Sauti Uganda Child Helpline to understand the trends and patterns in child abuse and neglect across the country.</p>
+        <p class="text-gray-600 max-w-3xl mx-auto">Explore the data collected by Sauti Uganda 116 helpline to understand the trends and patterns in child abuse and neglect across the country.</p>
       </div>
 
       <!-- Filters -->
@@ -186,7 +186,7 @@
         <router-link to="/terms" class="hover:text-gray-700">Terms of Service</router-link>
         <span class="mx-2">•</span>
         <router-link to="/contact" class="hover:text-gray-700">Contact Us</router-link>
-        <p class="mt-2">© 2024 Sauti Uganda Child Helpline. All rights reserved.</p>
+        <p class="mt-2">© 2024 Sauti Uganda 116 helpline. All rights reserved.</p>
       </div>
     </div>
   </div>

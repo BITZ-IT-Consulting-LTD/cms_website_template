@@ -60,9 +60,34 @@
         <div class="card p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Video & Thumbnail</h3>
           
+          <!-- Video Source Selection -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">Video Source</label>
+            <div class="flex gap-4">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  v-model="videoForm.video_type"
+                  type="radio"
+                  value="YOUTUBE"
+                  class="mr-2 text-[#8B4000] focus:ring-[#8B4000]"
+                />
+                <span class="text-sm text-gray-700">YouTube URL</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input
+                  v-model="videoForm.video_type"
+                  type="radio"
+                  value="UPLOAD"
+                  class="mr-2 text-[#8B4000] focus:ring-[#8B4000]"
+                />
+                <span class="text-sm text-gray-700">Upload Video File</span>
+              </label>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- YouTube URL -->
-            <div>
+            <!-- YouTube URL (shown when YOUTUBE is selected) -->
+            <div v-if="videoForm.video_type === 'YOUTUBE'">
               <label class="block text-sm font-medium text-gray-700 mb-2">YouTube URL</label>
               <input
                 v-model="videoForm.youtube_url"
@@ -71,6 +96,45 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
               <p class="mt-1 text-xs text-gray-500">Enter YouTube video URL</p>
+            </div>
+
+            <!-- Video File Upload (shown when UPLOAD is selected) -->
+            <div v-if="videoForm.video_type === 'UPLOAD'">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Video File</label>
+              
+              <div v-if="videoPreview || videoForm.video_file" class="mb-3">
+                <video
+                  v-if="videoPreview"
+                  :src="videoPreview"
+                  controls
+                  class="w-full h-48 object-contain rounded-lg bg-black"
+                ></video>
+                <div v-else class="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <p class="text-sm text-gray-600">Video file selected</p>
+                </div>
+              </div>
+              
+              <div v-else class="w-full h-48 bg-gray-100 rounded-lg flex flex-col items-center justify-center mb-3 border-2 border-dashed border-gray-300">
+                <VideoCameraIcon class="h-12 w-12 text-gray-400 mb-2" />
+                <p class="text-sm text-gray-500">No video selected</p>
+                <p class="text-xs text-gray-400 mt-1">MP4, AVI, MOV, etc.</p>
+              </div>
+              
+              <input
+                ref="videoInput"
+                type="file"
+                accept="video/*"
+                @change="handleVideoUpload"
+                class="hidden"
+              />
+              
+              <button
+                @click="videoInput.click()"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              >
+                {{ videoForm.video_file ? 'Change Video' : 'Upload Video' }}
+              </button>
+              <p class="mt-1 text-xs text-gray-500">Max file size: 500MB</p>
             </div>
 
             <!-- Thumbnail -->
@@ -218,11 +282,14 @@ const videoInput = ref(null)
 const thumbnailInput = ref(null)
 const loading = ref(false)
 const thumbnailPreview = ref(null)
+const videoPreview = ref(null)
 
 const videoForm = ref({
   title: '',
   description: '',
   youtube_url: '',
+  video_file: null,
+  video_type: 'YOUTUBE',
   category_id: null,
   status: 'DRAFT',
   language: 'en',
@@ -264,6 +331,36 @@ const handleThumbnailUpload = (event) => {
   }
 }
 
+const handleVideoUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    // Validate file type
+    if (!file.type.startsWith('video/')) {
+      toast.error('Please select a video file')
+      return
+    }
+    
+    // Validate file size (max 500MB)
+    if (file.size > 500 * 1024 * 1024) {
+      toast.error('Video size must be less than 500MB')
+      return
+    }
+    
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      videoPreview.value = e.target.result
+      videoForm.value.video_file = file
+      videoForm.value.video_type = 'UPLOAD'
+      // Clear YouTube URL if video file is uploaded
+      if (videoForm.value.video_file) {
+        videoForm.value.youtube_url = ''
+      }
+    }
+    reader.readAsDataURL(file)
+    toast.success('Video file ready')
+  }
+}
+
 const previewVideo = () => {
   toast.info('Video preview functionality coming soon')
 }
@@ -302,21 +399,29 @@ const saveChanges = async (status = 'DRAFT') => {
       }
     }
     
-    // Handle YouTube URL - only include if it's not empty
-    if (videoForm.value.youtube_url && videoForm.value.youtube_url.trim()) {
-      videoData.youtube_url = videoForm.value.youtube_url.trim()
-      videoData.video_type = 'YOUTUBE'
+    // Handle video source based on video_type
+    if (videoForm.value.video_type === 'UPLOAD') {
+      // For uploaded videos, include video_file and clear youtube_url
+      if (videoForm.value.video_file instanceof File) {
+        videoData.video_file = videoForm.value.video_file
+        videoData.video_type = 'UPLOAD'
+        // Don't include youtube_url when uploading a file
+        delete videoData.youtube_url
+      } else {
+        // If video_type is UPLOAD but no file, use existing file URL if editing
+        videoData.video_type = 'UPLOAD'
+      }
     } else {
-      // If no YouTube URL, default to YOUTUBE type (backend default)
-      // This allows for videos that will be added later
-      videoData.video_type = 'YOUTUBE'
-    }
-    
-    // Handle video file upload (if implemented)
-    // Note: If both video_file and youtube_url are provided, video_file takes precedence
-    if (videoForm.value.video_file instanceof File) {
-      videoData.video_file = videoForm.value.video_file
-      videoData.video_type = 'UPLOAD'
+      // For YouTube videos, include youtube_url and clear video_file
+      if (videoForm.value.youtube_url && videoForm.value.youtube_url.trim()) {
+        videoData.youtube_url = videoForm.value.youtube_url.trim()
+        videoData.video_type = 'YOUTUBE'
+      } else {
+        // Default to YOUTUBE if no URL provided yet
+        videoData.video_type = 'YOUTUBE'
+      }
+      // Don't include video_file when using YouTube
+      delete videoData.video_file
     }
 
     // Only include thumbnail if it's a File object (new upload)
@@ -326,12 +431,13 @@ const saveChanges = async (status = 'DRAFT') => {
     }
     // For editing: if thumbnail is a string (existing URL), don't include it
     
-    // Debug: Log the data being sent
-    console.log('Video data being sent:', {
+    // Debug: Log the data being sent (without file objects for cleaner console)
+    const debugData = {
       ...videoData,
-      thumbnail: videoData.thumbnail instanceof File ? `File: ${videoData.thumbnail.name}` : 'No file',
-      video_file: videoData.video_file instanceof File ? `File: ${videoData.video_file.name}` : 'No file'
-    })
+      thumbnail: videoData.thumbnail instanceof File ? `File: ${videoData.thumbnail.name} (${(videoData.thumbnail.size / 1024 / 1024).toFixed(2)}MB)` : (videoData.thumbnail || 'No file'),
+      video_file: videoData.video_file instanceof File ? `File: ${videoData.video_file.name} (${(videoData.video_file.size / 1024 / 1024).toFixed(2)}MB)` : (videoData.video_file || 'No file')
+    }
+    console.log('Video data being sent:', debugData)
 
     if (isEditing.value) {
       await videosStore.updateVideo(route.params.slug, videoData)
@@ -345,13 +451,15 @@ const saveChanges = async (status = 'DRAFT') => {
     }
   } catch (err) {
     console.error('Save error:', err)
-    console.error('Error response:', err.response?.data)
-    console.error('Video data sent:', videoData)
     
     // Extract detailed error message
     let errorMessage = 'Failed to save video'
     
-    if (err.response?.data) {
+    // Handle network errors
+    if (err.code === 'ERR_NETWORK' || err.message?.includes('Network Error') || err.message?.includes('Connection refused')) {
+      errorMessage = 'Cannot connect to server. Please ensure the backend server is running on http://localhost:8000'
+      console.error('Network error - backend server may not be running')
+    } else if (err.response?.data) {
       const data = err.response.data
       
       // Handle Django REST Framework validation errors
@@ -395,6 +503,8 @@ onMounted(async () => {
         title: video.title || '',
         description: video.description || '',
         youtube_url: video.youtube_url || '',
+        video_file: null, // Don't load existing file, just URL reference
+        video_type: video.video_type || 'YOUTUBE',
         category_id: video.category?.id || null,
         status: video.status?.toUpperCase() || 'DRAFT',
         language: video.language || 'en',

@@ -1,6 +1,6 @@
-# Sauti Child Helpline CMS
+# Sauti 116 helpline CMS
 
-Full-stack Content Management System for Sauti Child Helpline - Ministry of Gender, Labour and Social Development (MGLSD), Uganda.
+Full-stack Content Management System for Sauti 116 helpline - Ministry of Gender, Labour and Social Development (MGLSD), Uganda.
 
 ## 🚀 Quick Start
 
@@ -105,5 +105,5 @@ See [`docs/DOCKER_MEDIA_FILES_FIX.md`](./docs/DOCKER_MEDIA_FILES_FIX.md)
 
 ---
 
-**Built with ❤️ for Sauti Child Helpline**  
+**Built with ❤️ for Sauti 116 helpline**  
 **Ministry of Gender, Labour and Social Development (MGLSD), Uganda**

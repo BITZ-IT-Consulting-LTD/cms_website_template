@@ -40,4 +40,4 @@ if settings.DEBUG:
 # Customize admin site
 admin.site.site_header = "Sauti CMS Administration"
 admin.site.site_title = "Sauti CMS"
-admin.site.index_title = "Welcome to Sauti Child Helpline CMS"
+admin.site.index_title = "Welcome to Sauti 116 helpline CMS"

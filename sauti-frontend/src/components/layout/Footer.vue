@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-900 text-white no-print">
+  <footer class="text-white no-print" style="background-color: #006633;">
     <!-- Main Footer Content -->
     <div class="container-custom py-12">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -10,14 +10,37 @@
             Supporting children, GBV survivors, and migrant workers across Uganda with confidential helpline services.
           </p>
           <div class="flex space-x-4">
-            <a href="https://facebook.com" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors" aria-label="Facebook">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/Sauti116Helpline" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors" aria-label="Facebook - Sauti 116 Helpline">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692V11.09h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.503 0-1.794.715-1.794 1.763v2.316h3.587l-.467 3.616h-3.12V24h6.116C23.407 24 24 23.407 24 22.676V1.325C24 .593 23.407 0 22.675 0z"/>
               </svg>
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            <!-- X / Twitter -->
+            <a href="https://x.com/sauti116" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors" aria-label="X (Twitter) - @sauti116">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.244 2H21l-6.52 7.455L22.5 22h-6.9l-4.5-6.22L5.7 22H3l7.03-8.036L1.5 2h7.02l4.08 5.64L18.244 2zm-2.41 18h1.6L8.28 4h-1.6l9.155 16z"/>
+              </svg>
+            </a>
+            <!-- WhatsApp -->
+            <a href="https://wa.me/256743889999" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors" aria-label="WhatsApp">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.52 3.48A11.86 11.86 0 0012.07 0C5.43 0 .08 5.35.08 11.96c0 2.11.55 4.09 1.6 5.86L0 24l6.35-1.66a11.93 11.93 0 005.72 1.46h.01c6.63 0 12-5.36 12-11.98 0-3.2-1.25-6.2-3.56-8.34zM12.08 22a9.93 9.93 0 01-5.06-1.38l-.36-.21-3.77.99.99-3.65-.24-.37a9.9 9.9 0 01-1.66-5.41C2 6.46 6.55 1.98 12.07 1.98a10.06 10.06 0 017.14 2.95 9.95 9.95 0 012.94 7.12c0 5.53-4.51 10-10.07 10z"/>
+              </svg>
+            </a>
+            <!-- Email -->
+            <a href="mailto:sautichl@mglsd.go.ug" class="text-gray-400 hover:text-white transition-colors" aria-label="Email">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v.01L12 13l8-6.99V6H4zm16 12V9l-8 7-8-7v9h16z"/>
+              </svg>
+            </a>
+            <!-- Website -->
+            <a href="https://sauti.mglsd.go.ug" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors" aria-label="Website">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke-width="1.8"/>
+                <path d="M3 12h18" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M12 3a15 15 0 010 18" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M12 3a15 15 0 000 18" stroke-width="1.8" stroke-linecap="round"/>
               </svg>
             </a>
           </div>
@@ -45,14 +68,65 @@
         <div>
           <h3 class="text-lg font-semibold mb-4">Get Help</h3>
           <ul class="space-y-2">
-            <li><router-link to="/report" class="text-gray-400 hover:text-white transition-colors">Report a Case</router-link></li>
-            <li><router-link to="/contact" class="text-gray-400 hover:text-white transition-colors">Contact Us</router-link></li>
-            <li><a href="tel:116" class="text-gray-400 hover:text-white transition-colors">Call 116</a></li>
-            <li><a href="https://wa.me/256123456789" target="_blank" class="text-gray-400 hover:text-white transition-colors">WhatsApp</a></li>
-            <li><a href="https://ureport.in" target="_blank" class="text-gray-400 hover:text-white transition-colors">U-Report (SMS)</a></li>
-            <li><a href="https://www.unicef.org/uganda/safepal-app" target="_blank" class="text-gray-400 hover:text-white transition-colors">SafePal App</a></li>
-            <li><a href="mailto:info@sauti.mglsd.go.ug" class="text-gray-400 hover:text-white transition-colors">info@sauti.mglsd.go.ug</a></li>
-            <li><a href="mailto:sautichildhelpline@gmail.com" class="text-gray-400 hover:text-white transition-colors">sautichildhelpline@gmail.com</a></li>
+            <li>
+              <router-link to="/report" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h18v4H3zM3 10h18v11H3z"/></svg>
+                <span>Report a Case</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/contact" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span>Contact Us</span>
+              </router-link>
+            </li>
+            <li>
+              <a href="tel:116" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z"/></svg>
+                <span>Call 116</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://wa.me/256743889999" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.86 11.86 0 0012.07 0C5.43 0 .08 5.35.08 11.96c0 2.11.55 4.09 1.6 5.86L0 24l6.35-1.66a11.93 11.93 0 005.72 1.46h.01c6.63 0 12-5.36 12-11.98 0-3.2-1.25-6.2-3.56-8.34z"/></svg>
+                <span>WhatsApp (0743889999)</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://ureport.in" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 2H4a2 2 0 00-2 2v14l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>
+                <span>U‑Report (SMS “Hello” to 116)</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://sauti.mglsd.go.ug" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" stroke-width="1.8"/>
+                  <path d="M3 12h18" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M12 3a15 15 0 010 18" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M12 3a15 15 0 000 18" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                <span>Online Reporting (sauti.mglsd.go.ug)</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.unicef.org/uganda/safepal-app" target="_blank" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l10 6-10 6L2 8l10-6zm0 7l10 6-10 6-10-6 10-6z"/></svg>
+                <span>SafePal App</span>
+              </a>
+            </li>
+            <li>
+              <a href="mailto:info@sauti.mglsd.go.ug" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v.01L12 13l8-6.99V6H4zm16 12V9l-8 7-8-7v9h16z"/></svg>
+                <span>info@sauti.mglsd.go.ug</span>
+              </a>
+            </li>
+            <li>
+              <a href="mailto:sautichl@mglsd.go.ug" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v.01L12 13l8-6.99V6H4zm16 12V9l-8 7-8-7v9h16z"/></svg>
+                <span>sautichl@mglsd.go.ug</span>
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -100,7 +174,7 @@
       <div class="container-custom py-6">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p class="text-gray-400 text-sm text-center md:text-left">
-            © {{ currentYear }} Sauti Child Helpline. All rights reserved. | Ministry of Gender, Labour & Social Development
+            © {{ currentYear }} Sauti 116 helpline. All rights reserved. | Ministry of Gender, Labour & Social Development
           </p>
           <div class="flex space-x-6 text-sm">
             <router-link to="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</router-link>

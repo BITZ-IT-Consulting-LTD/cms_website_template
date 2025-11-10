@@ -69,7 +69,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_API_URL=/api
-        - VITE_APP_NAME=${VITE_APP_NAME:-Sauti Child Helpline}
+        - VITE_APP_NAME=${VITE_APP_NAME:-Sauti 116 helpline}
         - VITE_HOTLINE=${VITE_HOTLINE:-116}
         - VITE_WHATSAPP=${VITE_WHATSAPP:-+256123456789}
         - VITE_EMAIL=${VITE_EMAIL:-info@sauti.mglsd.go.ug}

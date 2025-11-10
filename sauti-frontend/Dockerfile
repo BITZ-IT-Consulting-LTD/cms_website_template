@@ -15,9 +15,9 @@ COPY . .
 
 # Build argument for API URL
 ARG VITE_API_URL=/api
-ARG VITE_APP_NAME="Sauti Child Helpline"
+ARG VITE_APP_NAME="Sauti 116 helpline"
 ARG VITE_HOTLINE=116
-ARG VITE_WHATSAPP="+256123456789"
+ARG VITE_WHATSAPP="+256743889999"
 ARG VITE_EMAIL="info@sauti.mglsd.go.ug"
 
 # Set environment variables for build

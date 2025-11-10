@@ -27,7 +27,7 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      title: 'Sauti Child Helpline - Get Help Now',
+      title: 'Sauti 116 helpline - Get Help Now',
       description: 'Support for children, GBV survivors, and migrant workers in Uganda',
     },
   },
@@ -91,7 +91,7 @@ const routes = [
     component: About,
     meta: {
       title: 'About Sauti',
-      description: 'Learn about Sauti Child Helpline and our mission',
+      description: 'Learn about Sauti 116 helpline and our mission',
     },
   },
   {
@@ -171,7 +171,7 @@ const routes = [
     component: Donate,
     meta: {
       title: 'Donate',
-      description: 'Support Sauti Child Helpline and make a difference',
+      description: 'Support Sauti 116 helpline and make a difference',
     },
   },
   {
@@ -220,7 +220,7 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   
   // Update page title
-  document.title = to.meta.title || 'Sauti Child Helpline'
+  document.title = to.meta.title || 'Sauti 116 helpline'
   
   // Update meta description
   const descriptionTag = document.querySelector('meta[name="description"]')
