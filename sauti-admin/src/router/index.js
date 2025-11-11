@@ -12,6 +12,8 @@ const VideoEditView = () => import('@/views/VideoEditView.vue')
 const SettingsView = () => import('@/views/SettingsView.vue')
 const DraftsView = () => import('@/views/DraftsView.vue')
 const ReportsView = () => import('@/views/ReportsView.vue')
+const ReportDetailView = () => import('@/views/ReportDetailView.vue')
+const ReportEditView = () => import('@/views/ReportEditView.vue')
 const ResourcesView = () => import('@/views/ResourcesView.vue')
 const FaqsView = () => import('@/views/FaqsView.vue')
 const PartnersView = () => import('@/views/PartnersView.vue')
@@ -118,6 +120,22 @@ const routes = [
         component: ReportsView,
         meta: {
           title: 'Active Reports - Sauti Admin'
+        }
+      },
+      {
+        path: 'reports/:id',
+        name: 'report-detail',
+        component: ReportDetailView,
+        meta: {
+          title: 'Report Details - Sauti Admin'
+        }
+      },
+      {
+        path: 'reports/:id/edit',
+        name: 'report-edit',
+        component: ReportEditView,
+        meta: {
+          title: 'Edit Report - Sauti Admin'
         }
       },
       {

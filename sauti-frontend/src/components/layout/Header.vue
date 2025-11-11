@@ -5,10 +5,10 @@
         <!-- Enhanced Logo -->
         <router-link to="/" class="flex items-center space-x-3 group no-underline">
           <template v-if="!useFallback">
-            <img :src="logoUrl" alt="Sauti" class="h-10 w-10 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
+            <img :src="logoUrl" alt="Sauti" class="h-16 w-16 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
           </template>
           <template v-else>
-            <div class="h-10 w-10 rounded-2xl flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300" style="background-color: #009EDB;">S</div>
+            <div class="h-16 w-16 rounded-2xl flex items-center justify-center text-white font-bold text-2xl group-hover:scale-110 transition-transform duration-300" style="background-color: #009EDB;">S</div>
           </template>
           <div>
             <h1 class="text-xl md:text-2xl font-bold group-hover:text-[#009EDB] transition-colors duration-300" style="font-family: 'Poppins', sans-serif; color: #222222;">

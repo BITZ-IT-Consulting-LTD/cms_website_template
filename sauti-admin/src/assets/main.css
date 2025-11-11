@@ -66,6 +66,18 @@
   a:hover {
     color: #007BAA;
   }
+  
+  /* Remove underline from router-links styled as buttons and navigation links */
+  a.router-link-active,
+  a.router-link-exact-active,
+  a.sidebar-link,
+  a[class*="btn"],
+  a[class*="px-"],
+  a[class*="bg-"],
+  nav a,
+  .navigation a {
+    text-decoration: none !important;
+  }
 }
 
 @layer components {

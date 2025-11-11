@@ -66,6 +66,14 @@
       </div>
     </div>
 
+    <!-- Error Message -->
+    <div v-if="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+      <div class="flex">
+        <ExclamationTriangleIcon class="h-5 w-5 text-red-400 mr-3" />
+        <p class="text-sm text-red-700">{{ error }}</p>
+      </div>
+    </div>
+
     <!-- Filters and Search -->
     <div class="bg-white p-4 rounded-lg shadow-sm">
       <div class="flex flex-col md:flex-row gap-4">
@@ -303,6 +311,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { api } from '@/utils/api'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -323,191 +332,13 @@ const pageTitle = computed(() => {
   return 'Active Reports'
 })
 
-// Mock data - Replace with actual API calls
-const reports = ref([
-  {
-    id: 'SAUTI-CH-20250124103015',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'child_neglect',
-    priority: 'critical',
-    status: 'IN_PROGRESS',
-    location: 'Kampala, Central',
-    created_at: '2025-01-24T10:30:00Z',
-    assigned_to: 'Jane Mukasa',
-    reference_number: 'SAUTI-CH-20250124103015'
-  },
-  {
-    id: 'SAUTI-CH-20250124091522',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'physical_violence',
-    priority: 'high',
-    status: 'PENDING',
-    location: 'Gulu, Northern',
-    created_at: '2025-01-24T09:15:00Z',
-    assigned_to: null,
-    reference_number: 'SAUTI-CH-20250124091522'
-  },
-  {
-    id: 'SAUTI-GB-20250123164530',
-    type: 'GBV',
-    incident_type: 'sexual_violence',
-    priority: 'critical',
-    status: 'IN_PROGRESS',
-    location: 'Mbarara, Western',
-    created_at: '2025-01-23T16:45:00Z',
-    assigned_to: 'Peter Okello',
-    reference_number: 'SAUTI-GB-20250123164530'
-  },
-  {
-    id: 'SAUTI-CH-20250123142045',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'emotional_abuse',
-    priority: 'medium',
-    status: 'PENDING',
-    location: 'Jinja, Eastern',
-    created_at: '2025-01-23T14:20:00Z',
-    assigned_to: 'Sarah Nambi',
-    reference_number: 'SAUTI-CH-20250123142045'
-  },
-  {
-    id: 'SAUTI-CH-20250122110030',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'child_neglect',
-    priority: 'high',
-    status: 'IN_PROGRESS',
-    location: 'Kampala, Central',
-    created_at: '2025-01-22T11:00:00Z',
-    assigned_to: 'Jane Mukasa',
-    reference_number: 'SAUTI-CH-20250122110030'
-  },
-  {
-    id: 'SAUTI-MI-20250122104515',
-    type: 'MIGRANT',
-    incident_type: 'trafficking',
-    priority: 'critical',
-    status: 'IN_PROGRESS',
-    location: 'Kampala, Central',
-    created_at: '2025-01-22T10:45:00Z',
-    assigned_to: 'Peter Okello',
-    reference_number: 'SAUTI-MI-20250122104515'
-  },
-  {
-    id: 'SAUTI-GB-20250121153020',
-    type: 'GBV',
-    incident_type: 'physical_violence',
-    priority: 'high',
-    status: 'RESOLVED',
-    location: 'Kampala, Central',
-    created_at: '2025-01-21T15:30:00Z',
-    assigned_to: 'Sarah Nambi',
-    reference_number: 'SAUTI-GB-20250121153020'
-  },
-  {
-    id: 'SAUTI-CH-20250121090010',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'child_neglect',
-    priority: 'medium',
-    status: 'PENDING',
-    location: 'Mbale, Eastern',
-    created_at: '2025-01-21T09:00:00Z',
-    assigned_to: null,
-    reference_number: 'SAUTI-CH-20250121090010'
-  },
-  {
-    id: 'SAUTI-GB-20250120140025',
-    type: 'GBV',
-    incident_type: 'economic_violence',
-    priority: 'medium',
-    status: 'IN_PROGRESS',
-    location: 'Kampala, Central',
-    created_at: '2025-01-20T14:00:00Z',
-    assigned_to: 'Jane Mukasa',
-    reference_number: 'SAUTI-GB-20250120140025'
-  },
-  {
-    id: 'SAUTI-CH-20250119120050',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'sexual_violence',
-    priority: 'critical',
-    status: 'IN_PROGRESS',
-    location: 'Gulu, Northern',
-    created_at: '2025-01-19T12:00:00Z',
-    assigned_to: 'Peter Okello',
-    reference_number: 'SAUTI-CH-20250119120050'
-  },
-  {
-    id: 'SAUTI-CH-20250118103040',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'child_exploitation',
-    priority: 'high',
-    status: 'PENDING',
-    location: 'Kampala, Central',
-    created_at: '2025-01-18T10:30:00Z',
-    assigned_to: null,
-    reference_number: 'SAUTI-CH-20250118103040'
-  },
-  {
-    id: 'SAUTI-GB-20250117150015',
-    type: 'GBV',
-    incident_type: 'harmful_traditional_practices',
-    priority: 'medium',
-    status: 'RESOLVED',
-    location: 'Mbarara, Western',
-    created_at: '2025-01-17T15:00:00Z',
-    assigned_to: 'Sarah Nambi',
-    reference_number: 'SAUTI-GB-20250117150015'
-  },
-  {
-    id: 'SAUTI-CH-20250116110030',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'child_neglect',
-    priority: 'high',
-    status: 'IN_PROGRESS',
-    location: 'Kampala, Central',
-    created_at: '2025-01-16T11:00:00Z',
-    assigned_to: 'Jane Mukasa',
-    reference_number: 'SAUTI-CH-20250116110030'
-  },
-  {
-    id: 'SAUTI-MI-20250115143020',
-    type: 'MIGRANT',
-    incident_type: 'trafficking',
-    priority: 'critical',
-    status: 'IN_PROGRESS',
-    location: 'Jinja, Eastern',
-    created_at: '2025-01-15T14:30:00Z',
-    assigned_to: 'Peter Okello',
-    reference_number: 'SAUTI-MI-20250115143020'
-  },
-  {
-    id: 'SAUTI-GB-20250114090045',
-    type: 'GBV',
-    incident_type: 'physical_violence',
-    priority: 'high',
-    status: 'PENDING',
-    location: 'Kampala, Central',
-    created_at: '2025-01-14T09:00:00Z',
-    assigned_to: null,
-    reference_number: 'SAUTI-GB-20250114090045'
-  },
-  {
-    id: 'SAUTI-CH-20250113120010',
-    type: 'CHILD_PROTECTION',
-    incident_type: 'child_neglect',
-    priority: 'medium',
-    status: 'RESOLVED',
-    location: 'Kampala, Central',
-    created_at: '2025-01-13T12:00:00Z',
-    assigned_to: 'Sarah Nambi',
-    reference_number: 'SAUTI-CH-20250113120010'
-  }
-])
-
+// State
+const reports = ref([])
 const stats = ref({
-  total: 2761, // Total active cases (Child Neglect is highest category)
-  critical: 312, // Critical priority cases
-  inProgress: 1845, // Cases in progress
-  resolvedToday: 23 // Cases resolved today
+  total: 0,
+  critical: 0,
+  inProgress: 0,
+  resolvedToday: 0
 })
 
 const searchQuery = ref('')
@@ -517,6 +348,51 @@ const filterStatus = ref('')
 const currentPage = ref(1)
 const perPage = ref(10)
 const loading = ref(false)
+const error = ref(null)
+
+// Fetch reports from API
+async function fetchReports() {
+  loading.value = true
+  error.value = null
+  
+  try {
+    const response = await api.reports.list()
+    reports.value = response.data.results || response.data || []
+    
+    // Calculate stats from fetched data
+    calculateStats()
+    
+    console.log('✅ Fetched reports:', reports.value.length)
+  } catch (err) {
+    console.error('❌ Error fetching reports:', err)
+    error.value = 'Failed to load reports. Please try again.'
+    
+    // Show user-friendly error
+    if (err.response?.status === 401) {
+      error.value = 'You need to be logged in to view reports.'
+    } else if (err.response?.status === 403) {
+      error.value = 'You do not have permission to view reports.'
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+// Calculate statistics from reports
+function calculateStats() {
+  const now = new Date()
+  const today = now.toISOString().split('T')[0]
+  
+  stats.value = {
+    total: reports.value.filter(r => r.status !== 'CLOSED' && r.status !== 'RESOLVED').length,
+    critical: reports.value.filter(r => r.priority === 'critical' || r.priority === 'CRITICAL').length,
+    inProgress: reports.value.filter(r => r.status === 'IN_PROGRESS').length,
+    resolvedToday: reports.value.filter(r => {
+      const resolvedDate = r.resolved_at || r.updated_at
+      return resolvedDate && resolvedDate.startsWith(today) && (r.status === 'RESOLVED' || r.status === 'CLOSED')
+    }).length
+  }
+}
 
 const filteredReports = computed(() => {
   return reports.value.filter(report => {
@@ -630,9 +506,7 @@ const nextPage = () => {
 }
 
 onMounted(() => {
-  // Placeholder for fetch; show skeleton very briefly to communicate loading state
-  loading.value = true
-  setTimeout(() => { loading.value = false }, 300)
+  fetchReports()
 })
 </script>
 
@@ -642,6 +516,6 @@ onMounted(() => {
 }
 
 .sidebar-link.active {
-  @apply bg-primary-50 text-primary-700;
+  @apply bg-primary-50 text-primary-600;
 }
 </style>

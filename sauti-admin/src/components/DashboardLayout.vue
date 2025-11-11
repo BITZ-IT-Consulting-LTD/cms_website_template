@@ -6,7 +6,7 @@
         <!-- Enhanced Logo -->
         <div class="flex items-center justify-between h-20 px-6 bg-transparent">
           <div class="flex items-center space-x-3">
-            <div class="h-10 w-10 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+            <div class="h-16 w-16 flex items-center justify-center">
               <img :src="sautiLogo" alt="Sauti Logo" class="h-full w-full object-contain" />
             </div>
             <div>
