@@ -650,8 +650,8 @@ const savePost = async () => {
       // Store slug for preview
       savedSlug.value = createdPost.slug
       toast.success('Post created successfully')
-      // Stay on page after creation for preview ability
-      // router.push('/posts')
+      // Redirect to posts list after creation
+      router.push('/posts')
     }
   } catch (err) {
     console.error('Save error:', err)

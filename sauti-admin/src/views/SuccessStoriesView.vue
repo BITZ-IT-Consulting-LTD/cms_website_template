@@ -485,6 +485,7 @@ const submitStory = async () => {
       toast.success('Success story created successfully')
     }
     
+    await fetchStories()
     closeModal()
   } catch (err) {
     console.error('Submit error:', err)
