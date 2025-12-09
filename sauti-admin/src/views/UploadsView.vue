@@ -50,7 +50,7 @@
           <!-- Photo Preview -->
           <img
             v-if="upload.type === 'photo' && upload.currentValue"
-            :src="upload.currentValue"
+            :src="getImageUrl(upload.currentValue)"
             :alt="upload.label"
             class="max-w-full max-h-full object-contain"
             @error="handleImageError"
@@ -198,17 +198,58 @@
               </div>
 
               <!-- Photo Upload -->
+              <!-- Photo Upload with Comparison -->
               <div v-if="editForm.type === 'photo'">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
-                <div v-if="editForm.currentValue" class="mb-4">
-                  <img :src="editForm.currentValue" :alt="editForm.label" class="max-w-full h-48 object-contain border border-gray-200 rounded-lg" />
+                
+                <!-- Comparison View (Only if image has changed) -->
+                <div v-if="imagePreview && imagePreview !== (selectedUpload.currentValue || selectedUpload.value)" class="grid grid-cols-2 gap-4 mb-4">
+                  <!-- Original -->
+                  <div class="relative">
+                    <p class="text-xs font-semibold text-gray-500 mb-1">Current</p>
+                    <div class="border border-gray-200 rounded-lg p-2 bg-gray-50 h-48 flex items-center justify-center">
+                      <img 
+                        :src="getImageUrl(selectedUpload.currentValue || selectedUpload.value)" 
+                        :alt="editForm.label" 
+                        class="max-w-full max-h-full object-contain opacity-75 grayscale" 
+                      />
+                    </div>
+                  </div>
+                  
+                  <!-- New -->
+                  <div class="relative">
+                    <p class="text-xs font-semibold text-green-600 mb-1">New (Preview)</p>
+                    <div class="border-2 border-green-500 rounded-lg p-2 bg-white h-48 flex items-center justify-center relative">
+                      <img 
+                        :src="getImageUrl(imagePreview)" 
+                        class="max-w-full max-h-full object-contain" 
+                      />
+                      <div class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-sm">
+                        New
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
+                <!-- Single View (No change yet) -->
+                <div v-else-if="editForm.currentValue" class="mb-4">
+                  <p class="text-xs font-semibold text-gray-500 mb-1">Current Image</p>
+                  <div class="border border-gray-200 rounded-lg p-2 bg-gray-50 h-64 flex items-center justify-center">
+                    <img 
+                      :src="getImageUrl(editForm.currentValue)" 
+                      :alt="editForm.label" 
+                      class="max-w-full max-h-full object-contain" 
+                    />
+                  </div>
+                </div>
+
                 <input
                   type="file"
                   accept="image/*"
                   @change="handleImageUpload"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
                 />
+                <p class="mt-1 text-xs text-gray-500">Select a new image to replace the current one.</p>
               </div>
 
               <!-- Heading Input -->
@@ -505,6 +546,14 @@ const filteredUploads = computed(() => {
 const getTypeName = (type) => {
   const typeObj = contentTypes.value.find(t => t.id === type)
   return typeObj ? typeObj.name : type
+}
+
+const getImageUrl = (url) => {
+  if (!url) return ''
+  if (url.startsWith('http') || url.startsWith('blob:') || url.startsWith('data:')) return url
+  // If it's a relative path, prepend the frontend URL
+  const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000'
+  return `${frontendUrl}${url}`
 }
 
 const getPageName = (pageId) => {

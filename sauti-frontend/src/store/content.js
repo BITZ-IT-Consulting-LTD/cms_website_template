@@ -30,13 +30,13 @@ export const useContentStore = defineStore('content', () => {
   async function fetchContent() {
     loading.value = true
     error.value = null
-    
+
     try {
       // Try to fetch from API first (but don't fail if it doesn't exist)
       try {
         const response = await api.get('/content/')
         const data = response.data
-        
+
         // Convert array to object keyed by content key
         const contentMap = {}
         if (Array.isArray(data)) {
@@ -104,13 +104,13 @@ export const useContentStore = defineStore('content', () => {
       quick_access_title: { key: 'quick_access_title', value: 'Get Help & Information', currentValue: 'Get Help & Information', page: 'home', type: 'heading' },
       quick_access_description: { key: 'quick_access_description', value: 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.', currentValue: 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.', page: 'home', type: 'text' },
       card_report_title: { key: 'card_report_title', value: 'Report a Case', currentValue: 'Report a Case', page: 'home', type: 'heading' },
-      card_report_text: { key: 'card_report_text', value: 'Confidential, fast, and supportive reporting system.', currentValue: 'Confidential, fast, and supportive reporting system.', page: 'home', type: 'text' },
+      card_report_text: { key: 'card_report_text', value: 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.', currentValue: 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.', page: 'home', type: 'text' },
       card_resources_title: { key: 'card_resources_title', value: 'Resources', currentValue: 'Resources', page: 'home', type: 'heading' },
-      card_resources_text: { key: 'card_resources_text', value: 'Guides, policies, and educational toolkits.', currentValue: 'Guides, policies, and educational toolkits.', page: 'home', type: 'text' },
+      card_resources_text: { key: 'card_resources_text', value: 'Access vital information, safety guides, and educational materials to protect children.', currentValue: 'Access vital information, safety guides, and educational materials to protect children.', page: 'home', type: 'text' },
       card_faqs_title: { key: 'card_faqs_title', value: 'FAQs', currentValue: 'FAQs', page: 'home', type: 'heading' },
-      card_faqs_text: { key: 'card_faqs_text', value: 'Answers to common questions and concerns.', currentValue: 'Answers to common questions and concerns.', page: 'home', type: 'text' },
+      card_faqs_text: { key: 'card_faqs_text', value: 'Find quick answers to common questions about our services, reporting process, and safety.', currentValue: 'Find quick answers to common questions about our services, reporting process, and safety.', page: 'home', type: 'text' },
       card_partners_title: { key: 'card_partners_title', value: 'Partners', currentValue: 'Partners', page: 'home', type: 'heading' },
-      card_partners_text: { key: 'card_partners_text', value: 'MGLSD, UNICEF, UCRNN, ITU collaboration.', currentValue: 'MGLSD, UNICEF, UCRNN, ITU collaboration.', page: 'home', type: 'text' },
+      card_partners_text: { key: 'card_partners_text', value: 'Collaborating with government and international organizations to ensure child safety.', currentValue: 'Collaborating with government and international organizations to ensure child safety.', page: 'home', type: 'text' },
       journey_title: { key: 'journey_title', value: 'Our Journey', currentValue: 'Our Journey', page: 'home', type: 'heading' },
       journey_description: { key: 'journey_description', value: 'Key milestones in our history of child advocacy, including international recommendations and national designation of 116.', currentValue: 'Key milestones in our history of child advocacy, including international recommendations and national designation of 116.', page: 'home', type: 'text' },
       publications_title: { key: 'publications_title', value: 'Recent Publications', currentValue: 'Recent Publications', page: 'home', type: 'heading' },
@@ -122,7 +122,20 @@ export const useContentStore = defineStore('content', () => {
       final_cta_text: { key: 'final_cta_text', value: 'Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.', currentValue: 'Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.', page: 'home', type: 'text' },
       final_cta_call: { key: 'final_cta_call', value: 'Call 116 Now', currentValue: 'Call 116 Now', page: 'home', type: 'button' },
       final_cta_report: { key: 'final_cta_report', value: 'Report a Case', currentValue: 'Report a Case', page: 'home', type: 'button' },
-      final_cta_contact: { key: 'final_cta_contact', value: 'Contact Us', currentValue: 'Contact Us', page: 'home', type: 'button' }
+      final_cta_contact: { key: 'final_cta_contact', value: 'Contact Us', currentValue: 'Contact Us', page: 'home', type: 'button' },
+
+      // Social Media & External Links
+      social_facebook: { key: 'social_facebook', value: 'https://www.facebook.com/Sauti116Helpline', currentValue: 'https://www.facebook.com/Sauti116Helpline', page: 'footer', type: 'text' },
+      social_twitter: { key: 'social_twitter', value: 'https://x.com/sauti116', currentValue: 'https://x.com/sauti116', page: 'footer', type: 'text' },
+      social_whatsapp: { key: 'social_whatsapp', value: 'https://wa.me/256743889999', currentValue: 'https://wa.me/256743889999', page: 'footer', type: 'text' },
+      social_ureport: { key: 'social_ureport', value: 'https://ureport.in', currentValue: 'https://ureport.in', page: 'footer', type: 'text' },
+      social_safepal: { key: 'social_safepal', value: 'https://www.unicef.org/uganda/safepal-app', currentValue: 'https://www.unicef.org/uganda/safepal-app', page: 'footer', type: 'text' },
+
+      // Contact Info
+      contact_email_info: { key: 'contact_email_info', value: 'info@sauti.mglsd.go.ug', currentValue: 'info@sauti.mglsd.go.ug', page: 'contact', type: 'text' },
+      contact_email_sautichl: { key: 'contact_email_sautichl', value: 'sautichl@mglsd.go.ug', currentValue: 'sautichl@mglsd.go.ug', page: 'contact', type: 'text' },
+      contact_website: { key: 'contact_website', value: 'https://sauti.mglsd.go.ug', currentValue: 'https://sauti.mglsd.go.ug', page: 'contact', type: 'text' },
+      contact_phone_main: { key: 'contact_phone_main', value: '116', currentValue: '116', page: 'contact', type: 'text' }
     }
   }
 
@@ -145,7 +158,7 @@ export const useContentStore = defineStore('content', () => {
     fetchContent().then(() => {
       console.log('Content store initialized with', Object.keys(content.value).length, 'items')
     })
-    
+
     // Also listen for same-window storage events (for admin updates)
     window.addEventListener('storage', (e) => {
       if (e.key === 'sauti_content') {
@@ -158,7 +171,7 @@ export const useContentStore = defineStore('content', () => {
         }
       }
     })
-    
+
     // Listen for custom content-updated event from admin
     window.addEventListener('sauti-content-updated', (e) => {
       if (e.detail && e.detail.content) {
@@ -173,12 +186,12 @@ export const useContentStore = defineStore('content', () => {
         fetchContent()
       }
     })
-    
+
     // Also listen for the generic content-updated event
     window.addEventListener('content-updated', () => {
       fetchContent()
     })
-    
+
     // Watch for localStorage changes (works across tabs)
     window.addEventListener('storage', (e) => {
       if (e.key === 'sauti_content' && e.newValue) {
@@ -191,38 +204,48 @@ export const useContentStore = defineStore('content', () => {
         }
       }
     })
-    
-    // Poll localStorage periodically to catch admin updates in same window
-    // This is needed because storage events don't fire in the same window
-    let pollInterval = setInterval(() => {
-      try {
-        const stored = localStorage.getItem('sauti_content')
-        if (stored) {
-          const parsed = JSON.parse(stored)
-          // Only update if content has changed (deep comparison)
-          const currentStr = JSON.stringify(content.value)
-          const newStr = JSON.stringify(parsed)
-          if (currentStr !== newStr) {
-            // Create a new object to trigger reactivity
-            content.value = { ...parsed }
-            console.log('✅ Content updated from localStorage poll:', Object.keys(parsed).length, 'items')
-            // Log a sample to verify it's working
-            if (parsed['hero_title']) {
-              console.log('📝 Sample: hero_title =', parsed['hero_title'].currentValue || parsed['hero_title'].value)
+
+    // Poll API periodically to catch admin updates (cross-port)
+    // This is needed because localStorage is not shared across ports
+    let apiPollInterval = setInterval(() => {
+      // Only poll if we're not already loading
+      if (!loading.value) {
+        // We use a silent fetch (no loading state) to avoid UI flickering
+        api.get('/content/')
+          .then(response => {
+            const data = response.data
+            const contentMap = {}
+
+            if (Array.isArray(data)) {
+              data.forEach(item => {
+                contentMap[item.key] = item
+              })
+            } else if (data.results && Array.isArray(data.results)) {
+              data.results.forEach(item => {
+                contentMap[item.key] = item
+              })
             }
-          }
-        } else {
-          // If localStorage is empty, try to load defaults
-          if (Object.keys(content.value).length === 0) {
-            content.value = getDefaultContent()
-            localStorage.setItem('sauti_content', JSON.stringify(content.value))
-          }
-        }
-      } catch (err) {
-        console.error('Polling error:', err)
+
+            // Only update if content has changed (deep comparison)
+            const currentStr = JSON.stringify(content.value)
+            const newStr = JSON.stringify(contentMap)
+
+            if (currentStr !== newStr) {
+              content.value = contentMap
+              // Update localStorage as well to keep it in sync
+              localStorage.setItem('sauti_content', newStr)
+              console.log('✅ Content updated from API poll:', Object.keys(contentMap).length, 'items')
+            }
+          })
+          .catch(err => {
+            // Silent fail for polling
+            if (import.meta.env.DEV) {
+              console.debug('API poll failed:', err.message)
+            }
+          })
       }
-    }, 300) // Check every 300ms for faster updates
-    
+    }, 3000) // Check every 3 seconds
+
     // Cleanup interval on unmount (if needed)
     // Note: This won't clean up automatically, but that's okay for a store
   }
@@ -232,11 +255,11 @@ export const useContentStore = defineStore('content', () => {
     content,
     loading,
     error,
-    
+
     // Computed
     getContent,
     getContentByPage,
-    
+
     // Actions
     fetchContent,
     init

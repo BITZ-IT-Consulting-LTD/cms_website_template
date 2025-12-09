@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/partners/', include('partners.urls')),
     path('api/reports/', include('reports.urls')),
     path('api/dashboard/', include('dashboard.urls')),
+    path('api/content/', include('content.urls')),
+    path('api/social/', include('social_media.urls')),
     
     # API Documentation (Swagger/OpenAPI)
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

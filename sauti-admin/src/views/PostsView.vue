@@ -21,7 +21,7 @@
           class="btn-primary flex items-center gap-2"
         >
           <PlusIcon class="h-5 w-5" />
-          Create New Post
+          Create Blog Post
         </router-link>
       </div>
     </div>
@@ -242,12 +242,12 @@
         <DocumentTextIcon class="mx-auto h-12 w-12 text-gray-400" />
         <h3 class="mt-2 text-sm font-medium text-gray-900">No posts found</h3>
         <p class="mt-1 text-sm text-gray-500">
-          {{ searchQuery ? 'Try adjusting your search criteria.' : 'Get started by creating your first post.' }}
+          {{ searchQuery ? 'Try adjusting your search criteria.' : 'Get started by creating your first blog post.' }}
         </p>
         <div class="mt-6" v-if="!searchQuery">
           <router-link to="/posts/create" class="btn-primary">
             <PlusIcon class="h-4 w-4 mr-2" />
-            Create New Post
+            Create Blog Post
           </router-link>
         </div>
       </div>

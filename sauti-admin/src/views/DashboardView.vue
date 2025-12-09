@@ -28,28 +28,41 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(0, 158, 219, 0.15);">
-            <DocumentTextIcon class="h-6 w-6" style="color: #009EDB;" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(220, 38, 38, 0.15);">
+            <ClipboardDocumentListIcon class="h-6 w-6" style="color: #DC2626;" />
           </div>
           <div class="text-right">
-            <div class="stats-number">{{ stats.totalPosts }}</div>
-            <div class="stats-label">Blog Posts</div>
+            <div class="stats-number">{{ stats.totalReports }}</div>
+            <div class="stats-label">Total Reports</div>
           </div>
         </div>
-        <div class="text-sm" style="color: #555555;">Published articles</div>
+        <div class="text-sm" style="color: #555555;">All submitted cases</div>
       </div>
       
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(124, 58, 237, 0.15);">
-            <VideoCameraIcon class="h-6 w-6" style="color: #7C3AED;" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(245, 158, 11, 0.15);">
+            <ClockIcon class="h-6 w-6" style="color: #F59E0B;" />
           </div>
           <div class="text-right">
-            <div class="stats-number">{{ stats.totalVideos }}</div>
-            <div class="stats-label">Videos</div>
+            <div class="stats-number">{{ stats.pendingReports }}</div>
+            <div class="stats-label">Pending Review</div>
           </div>
         </div>
-        <div class="text-sm" style="color: #555555;">Educational content</div>
+        <div class="text-sm" style="color: #555555;">Requires attention</div>
+      </div>
+      
+      <div class="stats-card group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(16, 185, 129, 0.15);">
+            <CheckCircleIcon class="h-6 w-6" style="color: #10B981;" />
+          </div>
+          <div class="text-right">
+            <div class="stats-number">{{ stats.resolvedReports }}</div>
+            <div class="stats-label">Resolved</div>
+          </div>
+        </div>
+        <div class="text-sm" style="color: #555555;">Successfully closed</div>
       </div>
       
       <div class="stats-card group">
@@ -63,19 +76,6 @@
           </div>
         </div>
         <div class="text-sm" style="color: #555555;">Downloadable content</div>
-      </div>
-      
-      <div class="stats-card group">
-        <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(153, 204, 0, 0.2);">
-            <QuestionMarkCircleIcon class="h-6 w-6" style="color: #7A9900;" />
-          </div>
-          <div class="text-right">
-            <div class="stats-number">{{ stats.totalFaqs || 0 }}</div>
-            <div class="stats-label">FAQs</div>
-          </div>
-        </div>
-        <div class="text-sm" style="color: #555555;">Help content</div>
       </div>
     </div>
 
@@ -132,7 +132,7 @@
                 class="form-select w-48"
               >
                 <option value="">All Content</option>
-                <option value="blog">Blog Posts</option>
+                <option value="blog">Blogs</option>
                 <option value="video">Videos</option>
                 <option value="resource">Resources</option>
                 <option value="faq">FAQs</option>
@@ -288,7 +288,10 @@ import {
   MagnifyingGlassIcon,
   DocumentDuplicateIcon,
   FolderOpenIcon,
-  QuestionMarkCircleIcon
+  QuestionMarkCircleIcon,
+  ClipboardDocumentListIcon,
+  ClockIcon,
+  CheckCircleIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -303,13 +306,9 @@ const filters = ref({
 })
 
 const stats = computed(() => ({
-  totalPosts: dashboardStore.stats.content?.posts?.total || 0,
-  totalVideos: dashboardStore.stats.content?.videos?.total || 0,
-  totalResources: dashboardStore.stats.content?.resources?.total || 0,
-  totalFaqs: dashboardStore.stats.content?.faqs?.total || 0,
-  totalPartners: dashboardStore.stats.content?.partners?.total || 0,
   totalReports: dashboardStore.stats.reports?.total || 0,
-  pendingReports: dashboardStore.stats.reports?.pending || 0
+  pendingReports: dashboardStore.stats.reports?.pending || 0,
+  resolvedReports: (dashboardStore.stats.reports?.total || 0) - (dashboardStore.stats.reports?.pending || 0)
 }))
 const contentList = computed(() => dashboardStore.contentList)
 const loading = computed(() => dashboardStore.loading)

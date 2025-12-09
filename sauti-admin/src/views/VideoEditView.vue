@@ -219,7 +219,7 @@
         <!-- Settings -->
         <div class="card p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Publishing</h3>
-          
+
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
             <select
@@ -230,6 +230,31 @@
               <option value="PUBLISHED">✅ Published</option>
             </select>
             <p class="mt-2 text-xs text-gray-500">Published videos are visible on the frontend</p>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              <svg class="w-4 h-4 inline mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Schedule Publishing
+            </label>
+            <input
+              v-model="videoForm.scheduled_publish_at"
+              type="datetime-local"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            />
+            <p class="mt-2 text-xs text-gray-500">
+              Set a date and time to automatically publish this video. It will stay as draft until then.
+            </p>
+            <button
+              v-if="videoForm.scheduled_publish_at"
+              @click="videoForm.scheduled_publish_at = null"
+              type="button"
+              class="mt-2 text-xs text-red-600 hover:text-red-800"
+            >
+              Clear schedule
+            </button>
           </div>
         </div>
 
@@ -294,7 +319,8 @@ const videoForm = ref({
   status: 'DRAFT',
   language: 'en',
   is_featured: false,
-  thumbnail: null
+  thumbnail: null,
+  scheduled_publish_at: null
 })
 
 const videoCategories = computed(() => {
@@ -424,6 +450,18 @@ const saveChanges = async (status = 'DRAFT') => {
       delete videoData.video_file
     }
 
+    // Add scheduled publish date if set
+    if (videoForm.value.scheduled_publish_at) {
+      // Convert local datetime to ISO format for backend
+      videoData.scheduled_publish_at = new Date(videoForm.value.scheduled_publish_at).toISOString()
+      // If scheduling, ensure status is DRAFT
+      if (videoData.scheduled_publish_at) {
+        videoData.status = 'DRAFT'
+      }
+    } else {
+      videoData.scheduled_publish_at = null
+    }
+
     // Only include thumbnail if it's a File object (new upload)
     // If it's a string (existing URL), omit it - backend will keep existing thumbnail
     if (videoForm.value.thumbnail instanceof File) {
@@ -509,7 +547,8 @@ onMounted(async () => {
         status: video.status?.toUpperCase() || 'DRAFT',
         language: video.language || 'en',
         is_featured: video.is_featured || false,
-        thumbnail: video.thumbnail || null
+        thumbnail: video.thumbnail || null,
+        scheduled_publish_at: video.scheduled_publish_at ? new Date(video.scheduled_publish_at).toISOString().slice(0, 16) : null
       }
     } catch (err) {
       console.error('Failed to load video:', err)

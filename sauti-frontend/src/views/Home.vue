@@ -36,18 +36,44 @@
               
               <!-- Secondary Actions -->
               <div class="flex flex-wrap gap-3">
+                <!-- Buddy Button with Tooltip -->
+                <div class="relative group">
+                  <button class="pill pill-outline hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200 cursor-default" aria-label="Chat with Buddy">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    Buddy
+                  </button>
+                  <!-- Hover Tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-blue-100 text-left">
+                    <h4 class="font-bold text-blue-600 mb-1">Chat with Buddy</h4>
+                    <p class="text-xs text-gray-600">Our friendly AI assistant is here to help you find information and resources instantly. Just click the chat icon in the bottom right!</p>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-blue-100"></div>
+                  </div>
+                </div>
+
                 <a href="https://wa.me/256743889999" target="_blank" rel="noopener" class="pill pill-outline hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-all duration-200" aria-label="Contact via WhatsApp">
                   <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.525 3.488"/>
                   </svg>
                   WhatsApp
                 </a>
-                <a href="https://ureport.in" target="_blank" rel="noopener" class="pill pill-outline hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200" aria-label="U-Report 8500">
-                  <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                  U-Report 8500
-                </a>
+
+                <!-- U-Report Button with Tooltip -->
+                <div class="relative group">
+                  <button class="pill pill-outline hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200 cursor-default" aria-label="U-Report 8500">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    U-Report 8500
+                  </button>
+                  <!-- Hover Tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-blue-100 text-left">
+                    <h4 class="font-bold text-blue-600 mb-1">U-Report Uganda</h4>
+                    <p class="text-xs text-gray-600">A free SMS-based tool for community participation. Text "JOIN" to 8500 to speak out on issues that matter to you.</p>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-blue-100"></div>
+                  </div>
+                </div>
               </div>
               
               <!-- Trust Indicators -->
@@ -63,34 +89,13 @@
           <!-- Enhanced Hero Image -->
           <div class="lg:col-span-5">
             <div class="relative">
-              <div class="card p-0 overflow-hidden shadow-2xl">
-                <img 
-                  :src="sautiHomepage" 
-                  alt="African children in Uganda - smiling children receiving support and protection through Sauti 116 helpline" 
-                  class="w-full h-80 md:h-96 lg:h-[500px] object-cover" 
-                  loading="eager"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                <!-- Overlay content -->
-                <div class="absolute bottom-6 left-6 right-6 text-white">
-                  <h3 class="text-xl font-bold mb-2">Safe Spaces for Every Child</h3>
-                  <p class="text-sm opacity-90">24/7 support across Uganda</p>
-                </div>
-              </div>
-              <!-- Floating Stats Card -->
-              <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                <div class="text-center">
-                  <div class="text-3xl font-bold" style="color: #009EDB;">1M+</div>
-                  <div class="text-sm font-medium" style="color: #555555;">Children Helped</div>
-                </div>
-              </div>
+              <!-- Social Media Carousel -->
+              <SocialMediaCarousel />
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    
 
     <!-- Enhanced Quick Access Section -->
     <section class="section-padding bg-gradient-to-b from-gray-50 to-white">
@@ -155,102 +160,7 @@
     </section>
 
     <!-- Enhanced Journey Timeline -->
-    <section class="section-padding bg-white">
-      <div class="container-custom">
-        <div class="text-center mb-20">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ journeyTitle }}</h2>
-          <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            {{ journeyDesc }}
-          </p>
-        </div>
-        
-        <div class="relative max-w-5xl mx-auto">
-          <!-- Enhanced Timeline Line -->
-          <div class="timeline-line bg-gradient-to-b from-blue-300 via-blue-400 to-orange-300"></div>
-          
-          <!-- Timeline Items with Enhanced Spacing -->
-          <div class="space-y-20">
-          <div class="timeline-item left">
-              <div class="timeline-dot bg-blue-500 border-blue-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-full">2013</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Lobbying & Designation Effort</h3>
-                <p class="text-gray-600 leading-relaxed">MGLSD, with UCRNN and UNICEF, lobbied for 116 to be designated as the national child helpline number.</p>
-              </div>
-            </div>
-            
-            <div class="timeline-item right">
-              <div class="timeline-dot bg-green-500 border-green-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full">Aug 2013</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Official Toll‑Free Number</h3>
-                <p class="text-gray-600 leading-relaxed">UCC officially designated 116 as an emergency and toll‑free number.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item left">
-              <div class="timeline-dot bg-purple-500 border-purple-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-purple-600 font-bold bg-purple-50 px-3 py-1 rounded-full">Nov 2013</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">First Call Received</h3>
-                <p class="text-gray-600 leading-relaxed">UCHL received the first call on code 116 on 4th November 2013.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item right">
-              <div class="timeline-dot bg-orange-500 border-orange-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-orange-600 font-bold bg-orange-50 px-3 py-1 rounded-full">Dec 2014</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Government Takes Over</h3>
-                <p class="text-gray-600 leading-relaxed">MGLSD took over the management of UCHL from UCRNN.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item left">
-              <div class="timeline-dot bg-red-500 border-red-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-red-600 font-bold bg-red-50 px-3 py-1 rounded-full">2016</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Legal & Regulatory Framework</h3>
-                <p class="text-gray-600 leading-relaxed">UCHL instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item right">
-              <div class="timeline-dot bg-teal-500 border-teal-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-teal-600 font-bold bg-teal-50 px-3 py-1 rounded-full">2021</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">GBV Response Integrated</h3>
-                <p class="text-gray-600 leading-relaxed">Gender‑based violence response integrated into Sauti’s work nationwide.</p>
-          </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="text-center mt-16">
-          <p class="text-gray-500 text-lg leading-relaxed max-w-4xl mx-auto">
-            Aligned with ITU recommendation for 116 child helplines; operated under MGLSD in collaboration with NGOs and UN partners.
-          </p>
-        </div>
-      </div>
-    </section>
+    <JourneyTimeline />
 
     <!-- Enhanced Featured Content Section -->
     <section class="section-padding bg-gradient-to-b from-white to-gray-50">
@@ -276,8 +186,8 @@
           <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">No publications yet</h3>
-          <p class="text-gray-600">Check back soon for new content from Sauti Uganda.</p>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">No success stories yet</h3>
+          <p class="text-gray-600">Check back soon for new stories from Sauti Uganda.</p>
         </div>
         
         <!-- Publications Grid -->
@@ -512,6 +422,9 @@ import { useContentStore } from '@/store/content'
 import GetHelpButton from '@/components/common/GetHelpButton.vue'
 import Loader from '@/components/common/Loader.vue'
 import sautiHomepage from '@/assets/sauti-homepage.avif'
+import emitter from '@/utils/eventBus.js'
+import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
+import JourneyTimeline from '@/components/home/JourneyTimeline.vue'
 
 const partnersStore = usePartnersStore()
 const blogStore = useBlogStore()
@@ -525,18 +438,18 @@ const heroCtaReport = computed(() => contentStore.getContent('hero_cta_report', 
 const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Get Help & Information'))
 const quickAccessDesc = computed(() => contentStore.getContent('quick_access_description', 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.'))
 const cardReportTitle = computed(() => contentStore.getContent('card_report_title', 'Report a Case'))
-const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Confidential, fast, and supportive reporting system.'))
+const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.'))
 const cardResourcesTitle = computed(() => contentStore.getContent('card_resources_title', 'Resources'))
-const cardResourcesText = computed(() => contentStore.getContent('card_resources_text', 'Guides, policies, and educational toolkits.'))
+const cardResourcesText = computed(() => contentStore.getContent('card_resources_text', 'Access vital information, safety guides, and educational materials to protect children.'))
 const cardFaqsTitle = computed(() => contentStore.getContent('card_faqs_title', 'FAQs'))
-const cardFaqsText = computed(() => contentStore.getContent('card_faqs_text', 'Answers to common questions and concerns.'))
+const cardFaqsText = computed(() => contentStore.getContent('card_faqs_text', 'Find quick answers to common questions about our services, reporting process, and safety.'))
 const cardPartnersTitle = computed(() => contentStore.getContent('card_partners_title', 'Partners'))
-const cardPartnersText = computed(() => contentStore.getContent('card_partners_text', 'MGLSD, UNICEF, UCRNN, ITU collaboration.'))
+const cardPartnersText = computed(() => contentStore.getContent('card_partners_text', 'Collaborating with government and international organizations to ensure child safety.'))
 const journeyTitle = computed(() => contentStore.getContent('journey_title', 'Our Journey'))
 const journeyDesc = computed(() => contentStore.getContent('journey_description', 'Key milestones in our history of child advocacy, including international recommendations and national designation of 116.'))
-const publicationsTitle = computed(() => contentStore.getContent('publications_title', 'Recent Publications'))
-const publicationsDesc = computed(() => contentStore.getContent('publications_description', 'Latest articles, videos and resources to help children, families, and communities stay safe and informed.'))
-const publicationsLink = computed(() => contentStore.getContent('publications_link', 'View all posts'))
+const publicationsTitle = computed(() => contentStore.getContent('publications_title', 'Success Stories'))
+const publicationsDesc = computed(() => contentStore.getContent('publications_description', 'Latest success stories, videos and resources to help children, families, and communities stay safe and informed.'))
+const publicationsLink = computed(() => contentStore.getContent('publications_link', 'View all stories'))
 const trustPartnersTitle = computed(() => contentStore.getContent('trust_partners_title', 'Trusted by Leading Organizations'))
 const trustPartnersDesc = computed(() => contentStore.getContent('trust_partners_description', 'Working in partnership with government and international agencies'))
 const finalCtaTitle = computed(() => contentStore.getContent('final_cta_title', 'Need Help Right Now?'))
@@ -648,6 +561,10 @@ function useThumbPlaceholder(e) {
 
 function useAvatarPlaceholder(e) {
   e.target.src = 'https://i.pravatar.cc/48'
+}
+
+const openChat = () => {
+  emitter.emit('open-chat')
 }
 </script>
 

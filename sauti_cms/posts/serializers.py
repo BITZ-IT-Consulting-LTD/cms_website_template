@@ -25,14 +25,14 @@ class PostListSerializer(serializers.ModelSerializer):
     author_name = serializers.CharField(source='author.get_full_name', read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Post
         fields = [
             'id', 'title', 'slug', 'excerpt', 'author_name',
             'category_name', 'tags', 'featured_image', 'status',
             'language', 'views_count', 'is_featured', 'published_at',
-            'created_at'
+            'scheduled_publish_at', 'created_at'
         ]
 
 
@@ -41,14 +41,14 @@ class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Post
         fields = [
             'id', 'title', 'slug', 'content', 'excerpt', 'author',
             'category', 'tags', 'featured_image', 'status', 'language',
-            'views_count', 'is_featured', 'published_at', 'created_at',
-            'updated_at'
+            'views_count', 'is_featured', 'published_at', 'scheduled_publish_at',
+            'created_at', 'updated_at'
         ]
 
 
@@ -59,12 +59,13 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         required=False
     )
-    
+
     class Meta:
         model = Post
         fields = [
             'title', 'slug', 'content', 'excerpt', 'category',
-            'tags', 'featured_image', 'status', 'language', 'is_featured'
+            'tags', 'featured_image', 'status', 'language', 'is_featured',
+            'scheduled_publish_at'
         ]
         extra_kwargs = {'slug': {'required': False}}
     

@@ -102,7 +102,7 @@ const previewUrl = computed(() => {
   
   // Use slug if available, otherwise use ID
   const identifier = props.slug || props.postId
-  return `${frontendUrl}/blog/${identifier}?preview=true`
+  return `${frontendUrl}/blogs/${identifier}?preview=true`
 })
 
 const close = () => {

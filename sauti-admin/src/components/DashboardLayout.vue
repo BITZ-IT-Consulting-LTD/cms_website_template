@@ -90,7 +90,7 @@
                     $route.path.startsWith('/posts') ? 'text-white' : 'text-[#FF9900] group-hover:text-[#E68A00]'
                   ]"
                 />
-                <span class="flex-1">Blog Posts</span>
+                <span class="flex-1">Blogs</span>
                 <span
                   v-if="draftCount > 0"
                   class="text-xs font-bold px-2 py-1 rounded-full"
@@ -187,17 +187,17 @@
               </router-link>
               
               <router-link
-                to="/success-stories"
+                to="/blogs"
                 class="sidebar-link group"
-                :class="{ active: $route.path.startsWith('/success-stories') }"
+                :class="{ active: $route.path.startsWith('/blogs') }"
               >
-                <ChatBubbleLeftRightIcon
+                <BookOpenIcon
                   :class="[
                     'h-5 w-5 mr-3 transition-colors duration-300',
-                    $route.path.startsWith('/success-stories') ? 'text-white' : 'text-[#FF9900] group-hover:text-[#E68A00]'
+                    $route.path.startsWith('/blogs') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
                   ]"
                 />
-                <span class="flex-1">Success Stories</span>
+                <span class="flex-1">Blogs</span>
               </router-link>
               
               <router-link
@@ -212,6 +212,20 @@
                   ]"
                 />
                 <span class="flex-1">Uploads</span>
+              </router-link>
+
+              <router-link
+                to="/social-media"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/social-media') }"
+              >
+                <ShareIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/social-media') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Social Media</span>
               </router-link>
             </div>
           </div>
@@ -350,7 +364,9 @@ import {
   ChatBubbleLeftRightIcon,
   UsersIcon,
   ShieldExclamationIcon,
-  PhotoIcon
+  PhotoIcon,
+  ShareIcon,
+  BookOpenIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -392,23 +408,25 @@ const userInitials = computed(() => {
 const pageTitle = computed(() => {
   const routeNames = {
     '/dashboard': 'Dashboard',
-    '/posts': 'Content',
+    '/posts': 'Blogs',
     '/drafts': 'Drafts',
     '/videos': 'Videos',
     '/settings': 'Settings',
-    '/reports': 'Reports'
+    '/reports': 'Reports',
+    '/social-media': 'Social Media'
   }
-  
+
   // Check for exact matches first
   if (routeNames[route.path]) {
     return routeNames[route.path]
   }
-  
+
   // Check for partial matches
   if (route.path.startsWith('/reports')) return 'Reports'
-  if (route.path.startsWith('/posts')) return 'Content'
+  if (route.path.startsWith('/posts')) return 'Blogs'
   if (route.path.startsWith('/videos')) return 'Videos'
-  
+  if (route.path.startsWith('/social-media')) return 'Social Media'
+
   return 'Dashboard'
 })
 

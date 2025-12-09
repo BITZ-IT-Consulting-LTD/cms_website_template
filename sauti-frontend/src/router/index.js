@@ -95,11 +95,11 @@ const routes = [
     },
   },
   {
-    path: '/blog',
+    path: '/blogs',
     name: 'blog',
     component: Blog,
     meta: {
-      title: 'Blogs & Articles',
+      title: 'Blogs',
       description: 'Latest stories, updates, and insights from Sauti',
     },
   },
@@ -113,11 +113,11 @@ const routes = [
     },
   },
   {
-    path: '/blog/:slug',
+    path: '/blogs/:slug',
     name: 'blog-detail',
     component: BlogDetail,
     meta: {
-      title: 'Blog Post',
+      title: 'Success Story',
     },
   },
   {
@@ -201,7 +201,7 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     }
-    
+
     // Scroll to anchor if present
     if (to.hash) {
       return {
@@ -209,7 +209,7 @@ const router = createRouter({
         behavior: 'smooth',
       }
     }
-    
+
     // Scroll to top for new pages
     return { top: 0, behavior: 'smooth' }
   },
@@ -218,16 +218,16 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // Update page title
   document.title = to.meta.title || 'Sauti 116 helpline'
-  
+
   // Update meta description
   const descriptionTag = document.querySelector('meta[name="description"]')
   if (descriptionTag && to.meta.description) {
     descriptionTag.setAttribute('content', to.meta.description)
   }
-  
+
   // Check authentication requirements
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } })

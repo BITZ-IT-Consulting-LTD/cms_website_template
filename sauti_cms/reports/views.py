@@ -163,3 +163,32 @@ class ReportFollowUpCreateView(generics.CreateAPIView):
         if not self.request.user.is_editor:
             raise PermissionDenied("Only Editors and Admins can add follow-ups.")
         serializer.save(created_by=self.request.user)
+
+
+class PublicReportStatsView(generics.GenericAPIView):
+    """
+    GET /api/reports/stats/public/ - Public statistics for charts
+    """
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request):
+        from django.db.models import Count
+        from django.db.models.functions import TruncMonth
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        # Cases by Category
+        by_category = Report.objects.values('category').annotate(count=Count('id'))
+        
+        # Reports over time (last 6 months)
+        six_months_ago = timezone.now() - timedelta(days=180)
+        over_time = Report.objects.filter(created_at__gte=six_months_ago)\
+            .annotate(month=TruncMonth('created_at'))\
+            .values('month')\
+            .annotate(count=Count('id'))\
+            .order_by('month')
+            
+        return Response({
+            'by_category': by_category,
+            'over_time': over_time
+        })

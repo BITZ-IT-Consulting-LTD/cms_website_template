@@ -230,6 +230,33 @@ Each paragraph will be properly formatted when displayed."
             </select>
             <p class="mt-2 text-xs text-gray-500">Published posts are visible on the frontend</p>
           </div>
+
+          <!-- Scheduled Publishing -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-900 mb-2">
+              <svg class="w-4 h-4 inline mr-1 text-[#8B4000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Schedule Publishing
+            </label>
+            <input
+              v-model="form.scheduledPublishAt"
+              type="datetime-local"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
+            />
+            <p class="mt-2 text-xs text-gray-500">
+              Set a date and time to automatically publish this post. It will stay as draft until then.
+            </p>
+            <button
+              v-if="form.scheduledPublishAt"
+              @click="form.scheduledPublishAt = null"
+              type="button"
+              class="mt-2 text-xs text-red-600 hover:text-red-800"
+            >
+              Clear schedule
+            </button>
+          </div>
         </div>
 
           <!-- Enhanced Featured Image Card -->
@@ -359,7 +386,8 @@ const form = ref({
   categories: [],
   tags: [],
   featuredImage: null,
-  status: 'DRAFT'
+  status: 'DRAFT',
+  scheduledPublishAt: null
 })
 
 // Computed
@@ -629,6 +657,18 @@ const savePost = async () => {
       }
     }
 
+    // Add scheduled publish date if set
+    if (form.value.scheduledPublishAt) {
+      // Convert local datetime to ISO format for backend
+      postData.scheduled_publish_at = new Date(form.value.scheduledPublishAt).toISOString()
+      // If scheduling, ensure status is DRAFT
+      if (postData.scheduled_publish_at) {
+        postData.status = 'DRAFT'
+      }
+    } else {
+      postData.scheduled_publish_at = null
+    }
+
     // Only include featured_image if it's a File object (new upload)
     // If it's a string (existing URL), omit it - backend will keep existing image
     if (form.value.featuredImage instanceof File) {
@@ -716,7 +756,8 @@ onMounted(async () => {
         categories: post.category ? [post.category.id] : [],
         tags: post.tags?.map(t => t.id) || [],
         featuredImage: post.featured_image || null,
-        status: post.status || 'DRAFT'
+        status: post.status || 'DRAFT',
+        scheduledPublishAt: post.scheduled_publish_at ? new Date(post.scheduled_publish_at).toISOString().slice(0, 16) : null
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''

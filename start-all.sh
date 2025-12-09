@@ -22,16 +22,24 @@ fi
 # Start Django Backend
 start_django() {
     echo "${BLUE}🐍 Starting Django Backend (Port 8000)...${NC}"
+    export DB_ENGINE=sqlite
     cd sauti_cms
+    
+    # Activate virtual environment
+    if [ -d "venv" ]; then
+        source venv/bin/activate
+    elif [ -d ".venv" ]; then
+        source .venv/bin/activate
+    fi
     
     # Check if database exists
     if [ ! -f "db.sqlite3" ]; then
         echo "${ORANGE}📦 Database not found. Running migrations...${NC}"
-        python manage.py migrate
+        python3 manage.py migrate
     fi
     
     # Start server
-    python manage.py runserver &
+    python3 manage.py runserver &
     DJANGO_PID=$!
     cd ..
     

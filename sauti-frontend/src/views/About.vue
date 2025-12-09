@@ -23,7 +23,7 @@
           </div>
           <div class="lg:col-span-5">
             <div class="card p-0 overflow-hidden">
-              <img :src="sautiAboutpage" alt="African children in Uganda - happy children receiving support and care through Sauti 116 helpline services" class="w-full h-72 md:h-96 object-cover" />
+              <img :src="aboutImage" alt="About Sauti" class="w-full h-72 md:h-96 object-cover" />
             </div>
           </div>
         </div>
@@ -34,10 +34,61 @@
     <section class="section-padding">
       <div class="container-custom">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          <div class="avm-card text-center"><h3 class="text-3xl font-extrabold">116</h3><p style="color: #555555;">Toll-free</p></div>
-          <div class="avm-card text-center"><h3 class="text-3xl font-extrabold">24/7</h3><p style="color: #555555;">Availability</p></div>
-          <div class="avm-card text-center"><h3 class="text-3xl font-extrabold">3+</h3><p style="color: #555555;">Languages</p></div>
-          <div class="avm-card text-center"><h3 class="text-3xl font-extrabold">Nationwide</h3><p style="color: #555555;">All telecoms</p></div>
+          <!-- Stat Card 1 -->
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl opacity-90 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative p-8 text-center text-white">
+              <div class="mb-3">
+                <svg class="w-12 h-12 mx-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+              </div>
+              <h3 class="text-4xl font-extrabold mb-2">116</h3>
+              <p class="text-white/90 text-sm font-medium">Toll-free Hotline</p>
+            </div>
+          </div>
+
+          <!-- Stat Card 2 -->
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl opacity-90 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative p-8 text-center text-white">
+              <div class="mb-3">
+                <svg class="w-12 h-12 mx-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-4xl font-extrabold mb-2">24/7</h3>
+              <p class="text-white/90 text-sm font-medium">Always Available</p>
+            </div>
+          </div>
+
+          <!-- Stat Card 3 -->
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl opacity-90 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative p-8 text-center text-white">
+              <div class="mb-3">
+                <svg class="w-12 h-12 mx-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                </svg>
+              </div>
+              <h3 class="text-4xl font-extrabold mb-2">26+</h3>
+              <p class="text-white/90 text-sm font-medium">Local Languages</p>
+            </div>
+          </div>
+
+          <!-- Stat Card 4 -->
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl opacity-90 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative p-8 text-center text-white">
+              <div class="mb-3">
+                <svg class="w-12 h-12 mx-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-4xl font-extrabold mb-2">100%</h3>
+              <p class="text-white/90 text-sm font-medium">National Coverage</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -53,60 +104,167 @@
               professional support services available 24/7.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-              <div class="service-card p-5">
-                <h4 class="mb-1">Telephone counseling</h4>
-                <p class="text-sm" style="color: #555555;">Immediate, confidential support via 116.</p>
+              <!-- Service 1 -->
+              <div class="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Telephone Counseling</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">Immediate, confidential support via 116.</p>
+                  </div>
+                </div>
               </div>
-              <div class="service-card p-5">
-                <h4 class="mb-1">Walk-in support</h4>
-                <p class="text-sm" style="color: #555555;">On-site help and rapid referrals.</p>
+
+              <!-- Service 2 -->
+              <div class="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-teal-200">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-teal-50 flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+                    <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Walk-in Support</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">On-site help and rapid referrals.</p>
+                  </div>
+                </div>
               </div>
-              <div class="service-card p-5">
-                <h4 class="mb-1">Media & U-Report</h4>
-                <p class="text-sm" style="color: #555555;">Engagement via broadcast and U-Report 8500.</p>
+
+              <!-- Service 3 -->
+              <div class="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-orange-200">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Media & U-Report</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">Engagement via broadcast and U-Report 8500.</p>
+                  </div>
+                </div>
               </div>
-              <div class="service-card p-5">
-                <h4 class="mb-1">Guidance & referral</h4>
-                <p class="text-sm" style="color: #555555;">Connections to specialized services.</p>
+
+              <!-- Service 4 -->
+              <div class="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-purple-200">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Guidance & Referral</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">Connections to specialized services.</p>
+                  </div>
+                </div>
               </div>
-              <div class="service-card p-5 sm:col-span-2">
-                <h4 class="mb-1">Community sensitization</h4>
-                <p class="text-sm" style="color: #555555;">Awareness and advocacy in communities.</p>
+
+              <!-- Service 5 -->
+              <div class="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-200 sm:col-span-2">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Community Sensitization</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">Awareness and advocacy in communities nationwide.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div>
             <h2 class="mb-3">Core Values</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="avm-card">
-                <div class="avm-icon bg-blue-50 text-blue-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 1.657-1.343 3-3 3S6 12.657 6 11s1.343-3 3-3 3 1.343 3 3z"/></svg></div>
-                <h3 class="avm-title">Confidentiality</h3>
-                <p class="avm-text">We are committed to handling all reported cases with the utmost confidence, ensuring your privacy and safety throughout the process.</p>
+              <!-- Value 1: Confidentiality -->
+              <div class="group relative bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-blue-100/50 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative">
+                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white mb-4 shadow-lg">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Confidentiality</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">We are committed to handling all reported cases with the utmost confidence, ensuring your privacy and safety throughout the process.</p>
+                </div>
               </div>
-              <div class="avm-card">
-                <div class="avm-icon bg-teal-50 text-teal-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg></div>
-                <h3 class="avm-title">Responsiveness</h3>
-                <p class="avm-text">Our promise is to be responsive, ensuring that we acknowledge and act upon every case reported to our service.</p>
+
+              <!-- Value 2: Responsiveness -->
+              <div class="group relative bg-gradient-to-br from-white to-teal-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-teal-100/50 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-teal-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative">
+                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 text-white mb-4 shadow-lg">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Responsiveness</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">Our promise is to be responsive, ensuring that we acknowledge and act upon every case reported to our service.</p>
+                </div>
               </div>
-              <div class="avm-card">
-                <div class="avm-icon bg-orange-50 text-orange-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12"/></svg></div>
-                <h3 class="avm-title">Compassion</h3>
-                <p class="avm-text">We approach our work with deep compassion, recognizing that issues of abuse are deeply personal and require us to handle every case uniquely.</p>
+
+              <!-- Value 3: Compassion -->
+              <div class="group relative bg-gradient-to-br from-white to-orange-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-orange-100/50 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative">
+                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white mb-4 shadow-lg">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Compassion</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">We approach our work with deep compassion, recognizing that issues of abuse are deeply personal and require us to handle every case uniquely.</p>
+                </div>
               </div>
-              <div class="avm-card">
-                <div class="avm-icon bg-purple-50 text-purple-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg></div>
-                <h3 class="avm-title">Integrity</h3>
-                <p class="avm-text">We operate with integrity in all we do, upholding moral uprightness in our work and interactions.</p>
+
+              <!-- Value 4: Integrity -->
+              <div class="group relative bg-gradient-to-br from-white to-purple-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-purple-100/50 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative">
+                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white mb-4 shadow-lg">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Integrity</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">We operate with integrity in all we do, upholding moral uprightness in our work and interactions.</p>
+                </div>
               </div>
-              <div class="avm-card">
-                <div class="avm-icon bg-blue-50 text-blue-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7H7v6h6V7z"/></svg></div>
-                <h3 class="avm-title">Empowerment</h3>
-                <p class="avm-text">We are committed to empowerment by sharing essential knowledge on child rights—enabling children and communities to make informed decisions.</p>
+
+              <!-- Value 5: Empowerment -->
+              <div class="group relative bg-gradient-to-br from-white to-indigo-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-indigo-100/50 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative">
+                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white mb-4 shadow-lg">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Empowerment</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">We are committed to empowerment by sharing essential knowledge on child rights—enabling children and communities to make informed decisions.</p>
+                </div>
               </div>
-              <div class="avm-card">
-                <div class="avm-icon bg-teal-50 text-teal-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V4H2v16h5"/></svg></div>
-                <h3 class="avm-title">Collaboration</h3>
-                <p class="avm-text">Our service is built on collaboration. We work with diverse service sectors, valuing every input to realize and protect the rights of each child in Uganda.</p>
+
+              <!-- Value 6: Collaboration -->
+              <div class="group relative bg-gradient-to-br from-white to-green-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-green-100/50 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-green-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative">
+                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white mb-4 shadow-lg">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Collaboration</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">Our service is built on collaboration. We work with diverse service sectors, valuing every input to realize and protect the rights of each child in Uganda.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -115,34 +273,77 @@
     </section>
 
     <!-- Internal Value Cards -->
-    <section class="section-padding">
+    <section class="section-padding bg-gradient-to-b from-white to-gray-50">
       <div class="container-custom">
-        <h2 class="mb-3">Internal Value Cards (How We Work Together)</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="avm-card">
-            <div class="avm-icon bg-blue-50 text-blue-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 1.657-1.343 3-3 3S6 12.657 6 11s1.343-3 3-3 3 1.343 3 3z"/></svg></div>
-            <h3 class="avm-title">Confidentiality</h3>
-            <p class="avm-text">We maintain strict internal confidentiality. Case information is only shared with organizations or people directly involved in its resolution.</p>
+        <div class="text-center mb-12">
+          <h2 class="mb-3">How We Work Together</h2>
+          <p class="text-lg max-w-2xl mx-auto" style="color: #555555;">Our internal values guide every interaction and decision within our team.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Internal Value 1 -->
+          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-200">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold mb-3 text-gray-900">Confidentiality</h3>
+              <p class="text-sm leading-relaxed" style="color: #555555;">We maintain strict internal confidentiality. Case information is only shared with organizations or people directly involved in its resolution.</p>
+            </div>
           </div>
-          <div class="avm-card">
-            <div class="avm-icon bg-indigo-50 text-indigo-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-4.553a1.5 1.5 0 00-2.121-2.121L12.879 7.58M9 14l-4.553 4.553a1.5 1.5 0 102.121 2.121L11.121 16.42"/></svg></div>
-            <h3 class="avm-title">Innovativeness</h3>
-            <p class="avm-text">We embrace new methods and technologies to reach and support as many people as possible, especially children.</p>
+
+          <!-- Internal Value 2 -->
+          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-indigo-200">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold mb-3 text-gray-900">Innovativeness</h3>
+              <p class="text-sm leading-relaxed" style="color: #555555;">We embrace new methods and technologies to reach and support as many people as possible, especially children.</p>
+            </div>
           </div>
-          <div class="avm-card">
-            <div class="avm-icon bg-yellow-50 text-yellow-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6M9 9V7a3 3 0 016 0v2"/></svg></div>
-            <h3 class="avm-title">Accountability</h3>
-            <p class="avm-text">We practice full accountability for all cases reported to Sauti, taking responsibility from intake to resolution.</p>
+
+          <!-- Internal Value 3 -->
+          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-yellow-200">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold mb-3 text-gray-900">Accountability</h3>
+              <p class="text-sm leading-relaxed" style="color: #555555;">We practice full accountability for all cases reported to Sauti, taking responsibility from intake to resolution.</p>
+            </div>
           </div>
-          <div class="avm-card">
-            <div class="avm-icon bg-teal-50 text-teal-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V4H2v16h5"/></svg></div>
-            <h3 class="avm-title">Collaboration</h3>
-            <p class="avm-text">We value every partner's input and work closely across sectors to protect the rights of each child in Uganda.</p>
+
+          <!-- Internal Value 4 -->
+          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-teal-200">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold mb-3 text-gray-900">Collaboration</h3>
+              <p class="text-sm leading-relaxed" style="color: #555555;">We value every partner's input and work closely across sectors to protect the rights of each child in Uganda.</p>
+            </div>
           </div>
-          <div class="avm-card">
-            <div class="avm-icon bg-green-50 text-green-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></div>
-            <h3 class="avm-title">Transparency</h3>
-            <p class="avm-text">We commit to transparency across partnerships—ensuring all Sauti partners are transparent and accountable to each other.</p>
+
+          <!-- Internal Value 5 -->
+          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-green-200 sm:col-span-2 lg:col-span-1">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold mb-3 text-gray-900">Transparency</h3>
+              <p class="text-sm leading-relaxed" style="color: #555555;">We commit to transparency across partnerships—ensuring all Sauti partners are transparent and accountable to each other.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -312,5 +513,16 @@
 </template>
 
 <script setup>
+import { computed, onMounted } from 'vue'
+import { useContentStore } from '@/store/content'
 import sautiAboutpage from '@/assets/sauti-aboutpage.webp'
+
+const contentStore = useContentStore()
+
+// Get dynamic content
+const aboutImage = computed(() => contentStore.getContent('about_image', sautiAboutpage))
+
+onMounted(async () => {
+  await contentStore.fetchContent()
+})
 </script>

@@ -255,6 +255,27 @@ export const api = {
     update: (id, data) => apiClient.put(`/auth/users/${id}/`, data),
     delete: (id) => apiClient.delete(`/auth/users/${id}/`),
   },
+
+  socialMedia: {
+    list: (params) => apiClient.get('/social/posts/', { params }),
+    get: (id) => apiClient.get(`/social/posts/${id}/`),
+    create: (data) => apiClient.post('/social/posts/', createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (id, data) => apiClient.put(`/social/posts/${id}/`, createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (id) => apiClient.delete(`/social/posts/${id}/`),
+    fetchMetadata: (url) => apiClient.post('/social/posts/fetch-metadata/', { url }),
+    channels: {
+      get: () => apiClient.get('/social/channels/'),
+      update: (data) => apiClient.put('/social/channels/', data),
+    },
+    contact: {
+      get: () => apiClient.get('/social/contact/'),
+      update: (data) => apiClient.put('/social/contact/', data),
+    },
+  },
 }
 
 export default apiClient

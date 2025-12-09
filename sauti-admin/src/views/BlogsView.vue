@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex justify-between items-start">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">Success Stories</h1>
+        <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">Blogs</h1>
         <p class="text-gray-600 mt-1">Share inspiring stories of impact and transformation</p>
       </div>
       <button
@@ -103,7 +103,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
       <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-      <p class="mt-2 text-sm text-gray-500">Loading success stories...</p>
+      <p class="mt-2 text-sm text-gray-500">Loading blogs...</p>
     </div>
 
     <!-- Stories Grid -->
@@ -209,22 +209,22 @@
     <!-- Empty State -->
     <div v-if="!loading && filteredStories.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
       <SparklesIcon class="mx-auto h-12 w-12 text-gray-400" />
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No stories found</h3>
-      <p class="mt-1 text-sm text-gray-500">Start sharing inspiring success stories</p>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No blogs found</h3>
+      <p class="mt-1 text-sm text-gray-500">Start sharing inspiring stories</p>
       <button
         @click="showCreateModal = true"
         class="mt-4 btn-primary"
       >
-        Add New Story
+        Add New Blog
       </button>
     </div>
 
-    <!-- Create/Edit Success Story Modal -->
+    <!-- Create/Edit Blog Modal -->
     <div v-if="showCreateModal || showEditModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
           <h3 class="text-lg font-medium text-gray-900 mb-4">
-            {{ showEditModal ? 'Edit Success Story' : 'Create New Success Story' }}
+            {{ showEditModal ? 'Edit Blog' : 'Create New Blog' }}
           </h3>
           
           <form @submit.prevent="submitStory" class="space-y-4">
@@ -303,7 +303,7 @@
                 :disabled="loading"
                 class="btn-primary"
               >
-                {{ loading ? 'Saving...' : (showEditModal ? 'Update Story' : 'Create Story') }}
+                {{ loading ? 'Saving...' : (showEditModal ? 'Update Blog' : 'Create Blog') }}
               </button>
             </div>
           </form>
@@ -468,10 +468,10 @@ const deleteStory = async (story) => {
   
   try {
     await postsStore.deletePost(story.slug)
-    toast.success('Success story deleted successfully')
+    toast.success('Blog deleted successfully')
   } catch (err) {
     console.error('Delete error:', err)
-    toast.error('Failed to delete success story')
+    toast.error('Failed to delete blog')
   }
 }
 
@@ -479,17 +479,17 @@ const submitStory = async () => {
   try {
     if (showEditModal.value) {
       await postsStore.updatePost(editForm.value.slug, form.value)
-      toast.success('Success story updated successfully')
+      toast.success('Blog updated successfully')
     } else {
       await postsStore.createPost(form.value)
-      toast.success('Success story created successfully')
+      toast.success('Blog created successfully')
     }
     
     await fetchStories()
     closeModal()
   } catch (err) {
     console.error('Submit error:', err)
-    toast.error(showEditModal.value ? 'Failed to update success story' : 'Failed to create success story')
+    toast.error(showEditModal.value ? 'Failed to update blog' : 'Failed to create blog')
   }
 }
 
@@ -509,17 +509,17 @@ const closeModal = () => {
 
 const fetchStories = async () => {
   try {
-    // Fetch posts filtered by "Success Stories" category
-    const successCategory = categories.value.find(cat => cat.slug === 'success-stories')
+    // Fetch posts filtered by "Blogs" category
+    const successCategory = categories.value.find(cat => cat.slug === 'blogs')
     if (successCategory) {
-      await postsStore.fetchPosts({ category: 'success-stories' })
+      await postsStore.fetchPosts({ category: 'blogs' })
     } else {
       await postsStore.fetchPosts()
     }
     await postsStore.fetchCategories()
   } catch (err) {
-    console.error('Failed to fetch success stories:', err)
-    toast.error('Failed to load success stories')
+    console.error('Failed to fetch blogs:', err)
+    toast.error('Failed to load blogs')
   }
 }
 

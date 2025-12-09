@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'partners',
     'reports',
     'dashboard',
+    'content',
+    'social_media',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +78,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cms.wsgi.application'
 
 # Database
-DB_ENGINE = config('DB_ENGINE', default='postgresql')
+DB_ENGINE = config('DB_ENGINE', default='sqlite')
 
 if DB_ENGINE == 'sqlite':
     DATABASES = {
