@@ -12,12 +12,12 @@ COPY package*.json ./
 # Install dependencies (including devDependencies needed for build)
 RUN npm ci
 
-# Copy application code
-COPY . .
-
-# Build argument for API URL
-ARG VITE_API_URL
+# Set build arguments BEFORE copying source code
+ARG VITE_API_URL=/api
 ENV VITE_API_URL=${VITE_API_URL}
+
+# Copy application code (this will respect .dockerignore)
+COPY . .
 
 # Build the application
 RUN npm run build
