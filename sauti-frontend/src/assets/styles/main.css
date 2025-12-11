@@ -109,6 +109,18 @@
     border-color: #007BAA;
     background-color: #FFFFFF;
   }
+
+  .pill-report {
+    @apply pill border-2;
+    border-color: #DC2626; /* Red border */
+    color: #DC2626; /* Red text */
+    background-color: transparent;
+  }
+  .pill-report:hover {
+    background-color: #FEF2F2; /* Light red background */
+    border-color: #EF4444; /* Brighter red border */
+    color: #B91C1C; /* Darker red text for contrast */
+  }
   
   .pill-light {
     @apply pill border-2;

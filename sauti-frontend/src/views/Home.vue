@@ -36,19 +36,24 @@
               
               <!-- Secondary Actions -->
               <div class="flex flex-wrap gap-3">
-                <!-- Buddy Button with Tooltip -->
+                <!-- Report a Case Button with Tooltip -->
                 <div class="relative group">
-                  <button class="pill pill-outline hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200 cursor-default" aria-label="Chat with Buddy">
+                  <router-link to="/report" class="pill pill-report transition-all duration-200" aria-label="Report a Case">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                      <!-- Child head silhouette -->
+                      <circle cx="8" cy="6" r="3" stroke-width="1.5"/>
+                      <!-- Body/neck -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13c0-1.5 1.5-3 3-3s3 1.5 3 3"/>
+                      <!-- Sound waves from mouth -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 6c1 0 1.5.5 2 1M13 6c1.5 0 2 1 2.5 1.5M15 7c1.5.5 2 1.5 2.5 2.5"/>
                     </svg>
-                    Buddy
-                  </button>
+                    Report
+                  </router-link>
                   <!-- Hover Tooltip -->
-                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-blue-100 text-left">
-                    <h4 class="font-bold text-blue-600 mb-1">Chat with Buddy</h4>
-                    <p class="text-xs text-gray-600">Our friendly AI assistant is here to help you find information and resources instantly. Just click the chat icon in the bottom right!</p>
-                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-blue-100"></div>
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-red-100 text-left">
+                    <h4 class="font-bold text-red-600 mb-1">Report a Case</h4>
+                    <p class="text-xs text-gray-600">Need help? Report a case of child protection, GBV, or migrant issues. Your report is confidential and secure.</p>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-red-100"></div>
                   </div>
                 </div>
 
