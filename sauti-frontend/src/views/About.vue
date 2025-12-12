@@ -182,88 +182,33 @@
           </div>
           <div>
             <h2 class="mb-3">Core Values</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <!-- Value 1: Confidentiality -->
-              <div class="group relative bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-blue-100/50 overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="relative">
-                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white mb-4 shadow-lg">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-xl font-bold mb-3 text-gray-900">Confidentiality</h3>
-                  <p class="text-sm leading-relaxed" style="color: #555555;">We are committed to handling all reported cases with the utmost confidence, ensuring your privacy and safety throughout the process.</p>
-                </div>
-              </div>
 
-              <!-- Value 2: Responsiveness -->
-              <div class="group relative bg-gradient-to-br from-white to-teal-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-teal-100/50 overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-teal-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="relative">
-                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 text-white mb-4 shadow-lg">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-xl font-bold mb-3 text-gray-900">Responsiveness</h3>
-                  <p class="text-sm leading-relaxed" style="color: #555555;">Our promise is to be responsive, ensuring that we acknowledge and act upon every case reported to our service.</p>
-                </div>
-              </div>
+            <!-- Loading State -->
+            <div v-if="loadingCoreValues" class="text-center py-8">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
 
-              <!-- Value 3: Compassion -->
-              <div class="group relative bg-gradient-to-br from-white to-orange-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-orange-100/50 overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+            <!-- Core Values Grid -->
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div
+                v-for="value in coreValues"
+                :key="value.id"
+                class="group relative bg-gradient-to-br from-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border overflow-hidden"
+                :class="`to-${value.color_from.split('-')[0]}-50/30 border-${value.border_color}/50`"
+              >
+                <div
+                  class="absolute top-0 right-0 w-32 h-32 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"
+                  :class="`bg-${value.border_color}/20`"
+                ></div>
                 <div class="relative">
-                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white mb-4 shadow-lg">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
+                  <div
+                    class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br text-white mb-4 shadow-lg"
+                    :class="`from-${value.color_from} to-${value.color_to}`"
+                  >
+                    <component :is="getIconComponent(value.icon)" class="w-7 h-7" />
                   </div>
-                  <h3 class="text-xl font-bold mb-3 text-gray-900">Compassion</h3>
-                  <p class="text-sm leading-relaxed" style="color: #555555;">We approach our work with deep compassion, recognizing that issues of abuse are deeply personal and require us to handle every case uniquely.</p>
-                </div>
-              </div>
-
-              <!-- Value 4: Integrity -->
-              <div class="group relative bg-gradient-to-br from-white to-purple-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-purple-100/50 overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="relative">
-                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white mb-4 shadow-lg">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-xl font-bold mb-3 text-gray-900">Integrity</h3>
-                  <p class="text-sm leading-relaxed" style="color: #555555;">We operate with integrity in all we do, upholding moral uprightness in our work and interactions.</p>
-                </div>
-              </div>
-
-              <!-- Value 5: Empowerment -->
-              <div class="group relative bg-gradient-to-br from-white to-indigo-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-indigo-100/50 overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="relative">
-                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white mb-4 shadow-lg">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-xl font-bold mb-3 text-gray-900">Empowerment</h3>
-                  <p class="text-sm leading-relaxed" style="color: #555555;">We are committed to empowerment by sharing essential knowledge on child rights—enabling children and communities to make informed decisions.</p>
-                </div>
-              </div>
-
-              <!-- Value 6: Collaboration -->
-              <div class="group relative bg-gradient-to-br from-white to-green-50/30 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-green-100/50 overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-green-100/20 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="relative">
-                  <div class="inline-flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white mb-4 shadow-lg">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-xl font-bold mb-3 text-gray-900">Collaboration</h3>
-                  <p class="text-sm leading-relaxed" style="color: #555555;">Our service is built on collaboration. We work with diverse service sectors, valuing every input to realize and protect the rights of each child in Uganda.</p>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">{{ value.title }}</h3>
+                  <p class="text-sm leading-relaxed" style="color: #555555;">{{ value.description }}</p>
                 </div>
               </div>
             </div>
@@ -272,82 +217,7 @@
       </div>
     </section>
 
-    <!-- Internal Value Cards -->
-    <section class="section-padding bg-gradient-to-b from-white to-gray-50">
-      <div class="container-custom">
-        <div class="text-center mb-12">
-          <h2 class="mb-3">How We Work Together</h2>
-          <p class="text-lg max-w-2xl mx-auto" style="color: #555555;">Our internal values guide every interaction and decision within our team.</p>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Internal Value 1 -->
-          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-200">
-            <div class="flex flex-col items-center text-center">
-              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-              </div>
-              <h3 class="text-lg font-bold mb-3 text-gray-900">Confidentiality</h3>
-              <p class="text-sm leading-relaxed" style="color: #555555;">We maintain strict internal confidentiality. Case information is only shared with organizations or people directly involved in its resolution.</p>
-            </div>
-          </div>
-
-          <!-- Internal Value 2 -->
-          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-indigo-200">
-            <div class="flex flex-col items-center text-center">
-              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                </svg>
-              </div>
-              <h3 class="text-lg font-bold mb-3 text-gray-900">Innovativeness</h3>
-              <p class="text-sm leading-relaxed" style="color: #555555;">We embrace new methods and technologies to reach and support as many people as possible, especially children.</p>
-            </div>
-          </div>
-
-          <!-- Internal Value 3 -->
-          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-yellow-200">
-            <div class="flex flex-col items-center text-center">
-              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <h3 class="text-lg font-bold mb-3 text-gray-900">Accountability</h3>
-              <p class="text-sm leading-relaxed" style="color: #555555;">We practice full accountability for all cases reported to Sauti, taking responsibility from intake to resolution.</p>
-            </div>
-          </div>
-
-          <!-- Internal Value 4 -->
-          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-teal-200">
-            <div class="flex flex-col items-center text-center">
-              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                </svg>
-              </div>
-              <h3 class="text-lg font-bold mb-3 text-gray-900">Collaboration</h3>
-              <p class="text-sm leading-relaxed" style="color: #555555;">We value every partner's input and work closely across sectors to protect the rights of each child in Uganda.</p>
-            </div>
-          </div>
-
-          <!-- Internal Value 5 -->
-          <div class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-green-200 sm:col-span-2 lg:col-span-1">
-            <div class="flex flex-col items-center text-center">
-              <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </div>
-              <h3 class="text-lg font-bold mb-3 text-gray-900">Transparency</h3>
-              <p class="text-sm leading-relaxed" style="color: #555555;">We commit to transparency across partnerships—ensuring all Sauti partners are transparent and accountable to each other.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Section removed: "How We Work Together" as per user request -->
 
     <!-- Background / Our Journey -->
     <section class="section-padding bg-gray-50">
@@ -513,8 +383,9 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, h } from 'vue'
 import { useContentStore } from '@/store/content'
+import { api } from '@/utils/axios'
 import sautiAboutpage from '@/assets/sauti-aboutpage.webp'
 
 const contentStore = useContentStore()
@@ -522,7 +393,49 @@ const contentStore = useContentStore()
 // Get dynamic content
 const aboutImage = computed(() => contentStore.getContent('about_image', sautiAboutpage))
 
+// Core Values
+const coreValues = ref([])
+const loadingCoreValues = ref(false)
+
+// Icon components map
+const getIconComponent = (iconName) => {
+  const icons = {
+    'lock': () => h('svg', { class: 'w-7 h-7', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' })
+    ]),
+    'lightning': () => h('svg', { class: 'w-7 h-7', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M13 10V3L4 14h7v7l9-11h-7z' })
+    ]),
+    'heart': () => h('svg', { class: 'w-7 h-7', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' })
+    ]),
+    'shield': () => h('svg', { class: 'w-7 h-7', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' })
+    ]),
+    'users': () => h('svg', { class: 'w-7 h-7', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' })
+    ])
+  }
+
+  return icons[iconName] || icons['shield']
+}
+
+// Fetch core values
+const fetchCoreValues = async () => {
+  loadingCoreValues.value = true
+  try {
+    const response = await api.get('/content/core-values/')
+    coreValues.value = response.data
+  } catch (error) {
+    console.error('Failed to fetch core values:', error)
+    coreValues.value = []
+  } finally {
+    loadingCoreValues.value = false
+  }
+}
+
 onMounted(async () => {
   await contentStore.fetchContent()
+  await fetchCoreValues()
 })
 </script>

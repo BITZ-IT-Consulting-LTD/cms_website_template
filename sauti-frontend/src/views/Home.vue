@@ -164,8 +164,7 @@
       </div>
     </section>
 
-    <!-- Enhanced Journey Timeline -->
-    <JourneyTimeline />
+    <!-- Journey Timeline removed as per user request -->
 
     <!-- Enhanced Featured Content Section -->
     <section class="section-padding bg-gradient-to-b from-white to-gray-50">
@@ -304,30 +303,50 @@
       </div>
     </section>
 
-    <!-- Enhanced Trust Partners Section -->
+    <!-- Partners Section with Logos Carousel -->
     <section class="py-16 bg-white border-y border-gray-100">
       <div class="container-custom">
         <div class="text-center mb-12">
           <h3 class="text-2xl font-bold text-gray-900 mb-4">{{ trustPartnersTitle }}</h3>
           <p class="text-gray-600">{{ trustPartnersDesc }}</p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-300">MGLSD</div>
-            <p class="text-sm text-gray-600">Ministry of Gender, Labour & Social Development</p>
+
+        <!-- Loading State -->
+        <div v-if="loadingPartners" class="text-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        </div>
+
+        <!-- Partners Logos Horizontal Scroll -->
+        <div v-else-if="partners.length > 0" class="relative">
+          <div class="overflow-hidden">
+            <div class="partners-scroll flex gap-8 py-4">
+              <div
+                v-for="partner in partners"
+                :key="partner.id"
+                class="partner-logo-container flex-shrink-0 bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <img
+                  v-if="partner.logo"
+                  :src="partner.logo"
+                  :alt="partner.name"
+                  class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                  @error="handlePartnerLogoError"
+                />
+                <div v-else class="h-20 w-32 flex items-center justify-center bg-gray-100 rounded">
+                  <span class="text-sm font-semibold text-gray-600">{{ partner.name }}</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-blue-500 mb-2 group-hover:scale-110 transition-transform duration-300">UNICEF</div>
-            <p class="text-sm text-gray-600">United Nations Children's Fund</p>
-          </div>
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform duration-300">UCRNN</div>
-            <p class="text-sm text-gray-600">Uganda Child Rights NGO Network</p>
-          </div>
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-purple-600 mb-2 group-hover:scale-110 transition-transform duration-300">ITU 116</div>
-            <p class="text-sm text-gray-600">International Telecommunication Union</p>
-          </div>
+
+          <!-- Gradient Overlays for scroll indication -->
+          <div class="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+          <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else class="text-center py-8 text-gray-500">
+          <p>No partners to display</p>
         </div>
       </div>
     </section>
@@ -429,7 +448,6 @@ import Loader from '@/components/common/Loader.vue'
 import sautiHomepage from '@/assets/sauti-homepage.avif'
 import emitter from '@/utils/eventBus.js'
 import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
-import JourneyTimeline from '@/components/home/JourneyTimeline.vue'
 
 const partnersStore = usePartnersStore()
 const blogStore = useBlogStore()
@@ -571,6 +589,14 @@ function useAvatarPlaceholder(e) {
 const openChat = () => {
   emitter.emit('open-chat')
 }
+
+function handlePartnerLogoError(e) {
+  e.target.style.display = 'none'
+  const parent = e.target.parentElement
+  if (parent) {
+    parent.innerHTML = `<div class="h-20 w-32 flex items-center justify-center bg-gray-100 rounded"><span class="text-sm font-semibold text-gray-600">${e.target.alt}</span></div>`
+  }
+}
 </script>
 
 <style scoped>
@@ -591,5 +617,36 @@ const openChat = () => {
 .aspect-video > div {
   position: absolute;
   inset: 0;
+}
+
+/* Partners Scroll Animation */
+.partners-scroll {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  animation: scroll 30s linear infinite;
+}
+
+.partners-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.partners-scroll:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-250px * 4)); /* Adjust based on logo count */
+  }
+}
+
+.partner-logo-container {
+  min-width: 180px;
+  max-width: 220px;
 }
 </style>

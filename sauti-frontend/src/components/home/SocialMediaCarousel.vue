@@ -25,23 +25,26 @@
       </div>
     </div>
 
-    <!-- Video Grid - Flexible Layout -->
+    <!-- Video Grid - Bento Grid Layout -->
     <div v-else class="relative w-full px-4 md:px-8">
       <div class="max-w-7xl mx-auto">
-        <!-- Dynamic grid based on number of posts -->
+        <!-- Bento Grid Layout - Dynamic based on number of posts -->
         <div
-          class="grid gap-6"
+          class="bento-grid gap-4"
           :class="{
-            'grid-cols-1 md:grid-cols-2 lg:grid-cols-4': allPosts.length === 4,
-            'grid-cols-1 md:grid-cols-3': allPosts.length === 3,
-            'grid-cols-1 md:grid-cols-2': allPosts.length === 2,
-            'grid-cols-1 max-w-2xl mx-auto': allPosts.length === 1
+            'bento-1': allPosts.length === 1,
+            'bento-2': allPosts.length === 2,
+            'bento-3': allPosts.length === 3,
+            'bento-4': allPosts.length === 4,
+            'bento-5': allPosts.length === 5,
+            'bento-6-plus': allPosts.length >= 6
           }"
         >
           <div
-            v-for="post in allPosts"
+            v-for="(post, index) in allPosts"
             :key="post.id"
-            class="relative bg-white rounded-2xl shadow-xl overflow-hidden group"
+            class="relative bg-white rounded-2xl shadow-xl overflow-hidden group bento-item"
+            :class="getBentoItemClass(index, allPosts.length)"
           >
             <!-- TikTok Embed -->
             <div v-if="post.platform === 'TikTok'" class="relative w-full" style="padding-bottom: 177.78%;">
@@ -261,6 +264,40 @@ const getYouTubeVideoId = (url) => {
   return null
 }
 
+// Get bento grid item classes based on position and total count
+const getBentoItemClass = (index, total) => {
+  if (total === 1) return 'col-span-full row-span-2'
+
+  if (total === 2) return 'col-span-1 row-span-2'
+
+  if (total === 3) {
+    // First item takes 2 rows, others are normal
+    return index === 0 ? 'col-span-1 md:col-span-2 row-span-2' : 'col-span-1 row-span-1'
+  }
+
+  if (total === 4) {
+    // 2x2 grid
+    return 'col-span-1 row-span-1'
+  }
+
+  if (total === 5) {
+    // First item is large (2x2), others normal
+    return index === 0 ? 'col-span-1 md:col-span-2 row-span-2' : 'col-span-1 row-span-1'
+  }
+
+  // 6 or more: Mix of large and small tiles
+  if (total >= 6) {
+    // Make some items larger for visual interest
+    const largeIndices = [0, 3, 7] // First, 4th, and 8th items are large
+    if (largeIndices.includes(index)) {
+      return 'col-span-1 md:col-span-2 row-span-2'
+    }
+    return 'col-span-1 row-span-1'
+  }
+
+  return 'col-span-1 row-span-1'
+}
+
 // Load social media embed scripts
 const loadEmbedScripts = () => {
   // Twitter
@@ -319,5 +356,112 @@ onMounted(async () => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Bento Grid Base Styles */
+.bento-grid {
+  display: grid;
+  grid-auto-rows: minmax(250px, auto);
+  width: 100%;
+}
+
+/* Single Item - Centered large */
+.bento-1 {
+  grid-template-columns: 1fr;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Two Items - Side by side */
+.bento-2 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .bento-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Three Items - One large, two small */
+.bento-3 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .bento-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Four Items - 2x2 Grid */
+.bento-4 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .bento-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Five Items - One large hero, four smaller */
+.bento-5 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .bento-5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-5 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Six or More - Full bento grid with varied sizes */
+.bento-6-plus {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .bento-6-plus {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-6-plus {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Bento Item Transitions */
+.bento-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 250px;
+}
+
+.bento-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure embeds fill their containers */
+.bento-item iframe,
+.bento-item .fb-post,
+.bento-item .twitter-tweet,
+.bento-item .instagram-media {
+  height: 100%;
+  min-height: 100%;
 }
 </style>
