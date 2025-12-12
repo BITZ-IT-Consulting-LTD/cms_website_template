@@ -104,24 +104,42 @@
 
     <!-- Input Area -->
     <div v-if="!submitted" class="chat-input bg-white rounded-2xl shadow-lg p-4">
-      <form @submit.prevent="handleSubmit" class="flex gap-3">
-        <input
-          v-model="userInput"
-          :placeholder="currentPlaceholder"
-          :disabled="isTyping || waitingForOption"
-          class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-          ref="inputField"
-        />
-        <button
-          type="submit"
-          :disabled="!userInput.trim() || isTyping || waitingForOption"
-          class="px-6 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
-        >
-          <span>Send</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-          </svg>
-        </button>
+      <form @submit.prevent="handleSubmit">
+        <div class="flex gap-3">
+          <textarea
+            v-if="currentStep < conversationFlow.length && conversationFlow[currentStep]?.multiline"
+            v-model="userInput"
+            :placeholder="currentPlaceholder"
+            :disabled="isTyping || waitingForOption"
+            class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
+            ref="inputField"
+            rows="4"
+          ></textarea>
+          <input
+            v-else
+            v-model="userInput"
+            :placeholder="currentPlaceholder"
+            :disabled="isTyping || waitingForOption"
+            class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            ref="inputField"
+          />
+          <button
+            type="submit"
+            :disabled="!userInput.trim() || isTyping || waitingForOption"
+            class="px-6 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2 self-start"
+          >
+            <span>Send</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+          </button>
+        </div>
+        <!-- Character Counter for Narrative -->
+        <div v-if="currentStep < conversationFlow.length && conversationFlow[currentStep]?.showCounter" class="mt-2 text-right">
+          <span class="text-sm" :class="userInput.length > 0 ? 'text-blue-600' : 'text-gray-400'">
+            {{ userInput.length }} characters
+          </span>
+        </div>
       </form>
       <p v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</p>
     </div>
@@ -147,17 +165,16 @@ const form = ref({
   category: '',
   contact_name: '',
   contact_phone: '',
-  incident_type: '',
-  description: '',
-  district: '',
-  village: '',
-  location_confirmed: false,
   victim_name: '',
-  victim_gender: '',
-  victim_age: ''
+  victim_sex: '',
+  victim_age: '',
+  location: '',
+  description: '',
+  incident_type: ''
 })
 
 const conversationFlow = [
+  // Step 1: Names - Who is reporting and victim name
   {
     step: 'reporting_for',
     type: 'options',
@@ -169,9 +186,19 @@ const conversationFlow = [
     ]
   },
   {
+    step: 'victim_name',
+    type: 'input',
+    question: 'What is the name of the victim? <span class="text-sm text-red-500">[Required]</span>',
+    field: 'victim_name',
+    placeholder: 'Enter victim\'s name',
+    required: true
+  },
+  // Step 2: Category
+  {
     step: 'category',
     type: 'options',
     question: 'What type of case would you like to report?',
+    field: 'category',
     options: [
       { value: 'CHILD_PROTECTION', label: 'Child Protection', icon: '👶', description: 'Abuse, neglect, or exploitation of a child' },
       { value: 'GBV', label: 'Gender-Based Violence', icon: '🚨', description: 'Violence based on gender' },
@@ -179,6 +206,21 @@ const conversationFlow = [
       { value: 'PSEA', label: 'Sexual Exploitation & Abuse', icon: '⚠️', description: 'Sexual exploitation or abuse' }
     ]
   },
+  {
+    step: 'incident_type',
+    type: 'options',
+    question: 'What type of incident occurred?',
+    field: 'incident_type',
+    options: [
+      { value: 'physical', label: 'Physical Abuse', icon: '🤕' },
+      { value: 'sexual', label: 'Sexual Abuse', icon: '⚠️' },
+      { value: 'emotional', label: 'Emotional Abuse', icon: '💔' },
+      { value: 'neglect', label: 'Neglect', icon: '🏚️' },
+      { value: 'exploitation', label: 'Exploitation', icon: '⛓️' },
+      { value: 'other', label: 'Other', icon: '📝' }
+    ]
+  },
+  // Step 3: Contacts
   {
     step: 'ask_name',
     type: 'input',
@@ -195,62 +237,15 @@ const conversationFlow = [
     placeholder: 'Enter phone number',
     required: true
   },
+  // Step 4: Sex
   {
-    step: 'incident_type',
+    step: 'victim_sex',
     type: 'options',
-    question: 'What type of incident occurred?',
-    options: [
-      { value: 'physical', label: 'Physical Abuse', icon: '🤕' },
-      { value: 'sexual', label: 'Sexual Abuse', icon: '⚠️' },
-      { value: 'emotional', label: 'Emotional Abuse', icon: '💔' },
-      { value: 'neglect', label: 'Neglect', icon: '🏚️' },
-      { value: 'exploitation', label: 'Exploitation', icon: '⛓️' },
-      { value: 'other', label: 'Other', icon: '📝' }
-    ]
-  },
-  {
-    step: 'district',
-    type: 'input',
-    question: 'Where did this incident occur? Please provide the District or City. <span class="text-sm text-red-500">[Required]</span>',
-    field: 'district',
-    placeholder: 'Enter district or city name (e.g., Kampala, Gulu)',
-    required: true
-  },
-  {
-    step: 'village',
-    type: 'input',
-    question: 'Please provide the Village, Town, or specific area. <span class="text-sm text-red-500">[Required]</span>',
-    field: 'village',
-    placeholder: 'Enter village or area name',
-    required: true
-  },
-  {
-    step: 'location_confirm',
-    type: 'options',
-    question: () => `Is it <strong>${form.value.village}</strong> in <strong>${form.value.district}</strong>?`,
-    field: 'location_confirmed',
-    options: [
-      { value: 'YES', label: 'Yes, that\'s correct', icon: '✓' },
-      { value: 'NO', label: 'No, let me re-enter', icon: '✗' }
-    ]
-  },
-  {
-    step: 'victim_name',
-    type: 'input',
-    question: 'What is the name of the victim? <span class="text-sm text-red-500">[Required]</span>',
-    field: 'victim_name',
-    placeholder: 'Enter victim\'s name',
-    required: true
-  },
-  {
-    step: 'victim_gender',
-    type: 'options',
-    question: 'What is the gender of the victim?',
-    field: 'victim_gender',
+    question: 'What is the sex of the victim?',
+    field: 'victim_sex',
     options: [
       { value: 'MALE', label: 'Male', icon: '♂️' },
-      { value: 'FEMALE', label: 'Female', icon: '♀️' },
-      { value: 'OTHER', label: 'Other/Prefer not to say', icon: '⚧' }
+      { value: 'FEMALE', label: 'Female', icon: '♀️' }
     ]
   },
   {
@@ -261,13 +256,24 @@ const conversationFlow = [
     placeholder: 'Enter age (e.g., 12 years old)',
     required: true
   },
+  // Step 5: Location
+  {
+    step: 'location',
+    type: 'input',
+    question: 'Where are you? Please provide your location (District, Village/Town, or area). <span class="text-sm text-red-500">[Required]</span>',
+    field: 'location',
+    placeholder: 'e.g., Kampala, Nakawa Division or Gulu, Bardege Village',
+    required: true
+  },
+  // Step 6: Narrative (moved after phone call)
   {
     step: 'description',
     type: 'input',
     question: 'Please describe what happened in as much detail as you feel comfortable sharing. <span class="text-sm text-gray-500">Who was involved? When did it happen?</span>',
     field: 'description',
     placeholder: 'Describe the incident...',
-    multiline: true
+    multiline: true,
+    showCounter: true
   }
 ]
 
@@ -328,38 +334,6 @@ const selectOption = async (field, value, label) => {
       }, 800)
     }
     return
-  }
-
-  // Handle location confirmation
-  if (field === 'location_confirmed') {
-    waitingForOption.value = false
-    addUserMessage(label)
-
-    if (value === 'NO') {
-      // Go back to district step
-      await typeMessage(() => {
-        addBotMessage('No problem, let\'s get the correct location.')
-        setTimeout(() => {
-          // Reset location fields and go back to district step
-          form.value.district = ''
-          form.value.village = ''
-          currentStep = conversationFlow.findIndex(s => s.step === 'district')
-          const step = conversationFlow[currentStep]
-          addBotMessage(step.question)
-          nextTick(() => inputField.value?.focus())
-        }, 500)
-      }, 800)
-      return
-    } else {
-      // Location confirmed, proceed
-      form.value[field] = true
-      waitingForOption.value = false
-
-      await typeMessage(() => {
-        proceedToNextStep()
-      }, 800)
-      return
-    }
   }
 
   // Handle regular option selection
@@ -459,17 +433,20 @@ const showReview = () => {
   const reportingFor = conversationFlow.find(s => s.step === 'reporting_for')?.options.find(o => o.value === form.value.reporting_for)?.label
   const category = conversationFlow.find(s => s.step === 'category')?.options.find(o => o.value === form.value.category)?.label
   const incidentType = conversationFlow.find(s => s.step === 'incident_type')?.options.find(o => o.value === form.value.incident_type)?.label
+  const victimSex = conversationFlow.find(s => s.step === 'victim_sex')?.options.find(o => o.value === form.value.victim_sex)?.label
 
   addBotMessage(`
     <div class="space-y-2">
       <p class="font-semibold">Let me confirm the details:</p>
       <p><strong>Reporting:</strong> ${reportingFor}</p>
+      <p><strong>Victim Name:</strong> ${form.value.victim_name}</p>
       <p><strong>Category:</strong> ${category}</p>
-      ${form.value.contact_name ? `<p><strong>Name:</strong> ${form.value.contact_name}</p>` : '<p><em>Reporting anonymously</em></p>'}
-      ${form.value.contact_phone ? `<p><strong>Phone:</strong> ${form.value.contact_phone}</p>` : ''}
       <p><strong>Incident Type:</strong> ${incidentType}</p>
-      <p><strong>Location:</strong> ${form.value.village}, ${form.value.district}</p>
+      ${form.value.contact_name ? `<p><strong>Your Name:</strong> ${form.value.contact_name}</p>` : '<p><em>Reporting anonymously</em></p>'}
+      ${form.value.contact_phone ? `<p><strong>Phone:</strong> ${form.value.contact_phone}</p>` : ''}
+      <p><strong>Victim Sex:</strong> ${victimSex}</p>
       ${form.value.victim_age ? `<p><strong>Victim Age:</strong> ${form.value.victim_age}</p>` : ''}
+      <p><strong>Location:</strong> ${form.value.location}</p>
       <p><strong>Description:</strong> ${form.value.description}</p>
     </div>
   `)
@@ -491,16 +468,15 @@ const submitReport = async () => {
     isTyping.value = true
     error.value = ''
 
-    const location = `${form.value.village}, ${form.value.district}`
     const reportingForLabel = form.value.reporting_for === 'SELF' ? 'Reporting for self' : 'Reporting on behalf of someone else'
-    const genderLabel = form.value.victim_gender === 'MALE' ? 'Male' : form.value.victim_gender === 'FEMALE' ? 'Female' : 'Other/Prefer not to say'
+    const sexLabel = form.value.victim_sex === 'MALE' ? 'Male' : 'Female'
 
     const reportData = {
       category: form.value.category,
       contact_name: form.value.contact_name || 'Anonymous',
       contact_phone: form.value.contact_phone,
       incident_type: form.value.incident_type,
-      description: `${reportingForLabel}\n\nVictim Name: ${form.value.victim_name}\nVictim Gender: ${genderLabel}\nVictim Age: ${form.value.victim_age}\nLocation: ${location}\n\n${form.value.description}`,
+      description: `${reportingForLabel}\n\nVictim Name: ${form.value.victim_name}\nVictim Sex: ${sexLabel}\nVictim Age: ${form.value.victim_age}\nLocation: ${form.value.location}\n\n${form.value.description}`,
       status: 'PENDING',
       source: 'ONLINE'
     }
@@ -525,14 +501,12 @@ const resetForm = () => {
     category: '',
     contact_name: '',
     contact_phone: '',
-    incident_type: '',
-    description: '',
-    district: '',
-    village: '',
-    location_confirmed: false,
     victim_name: '',
-    victim_gender: '',
-    victim_age: ''
+    victim_sex: '',
+    victim_age: '',
+    location: '',
+    description: '',
+    incident_type: ''
   }
   submitted.value = false
   referenceNumber.value = ''
