@@ -458,7 +458,7 @@ const heroTitle = computed(() => contentStore.getContent('hero_title', 'Every ch
 const heroSubtitle = computed(() => contentStore.getContent('hero_subtitle', 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.'))
 const heroCtaCall = computed(() => contentStore.getContent('hero_cta_call', 'Call 116 Now'))
 const heroCtaReport = computed(() => contentStore.getContent('hero_cta_report', 'Report a Case'))
-const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Get Help & Information'))
+const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Services'))
 const quickAccessDesc = computed(() => contentStore.getContent('quick_access_description', 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.'))
 const cardReportTitle = computed(() => contentStore.getContent('card_report_title', 'Report a Case'))
 const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.'))
