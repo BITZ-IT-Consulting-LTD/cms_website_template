@@ -1,6 +1,6 @@
 # Sauti Admin Dashboard
 
-A modern Vue 3 admin dashboard for the Sauti Child Helpline CMS system.
+A modern Vue 3 admin dashboard for the Sauti 116 helpline CMS system.
 
 ## Features
 
@@ -159,4 +159,4 @@ The dashboard communicates with the Django backend via REST API:
 
 ## License
 
-This project is part of the Sauti Child Helpline CMS system.
+This project is part of the Sauti 116 helpline CMS system.

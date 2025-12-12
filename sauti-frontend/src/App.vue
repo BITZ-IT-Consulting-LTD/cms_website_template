@@ -11,6 +11,8 @@
     </main>
     
     <Footer />
+    
+    <FloatingChatBot />
   </div>
 </template>
 
@@ -18,6 +20,11 @@
 import { onMounted } from 'vue'
 import Header from '@/components/layout/Header.vue'
 import Footer from '@/components/layout/Footer.vue'
+import FloatingChatBot from '@/components/giz/FloatingChatBot.vue'
+
+// Import Giz styles
+import '@/assets/giz-css/root.css'
+import '@/assets/giz-css/giz-scoped.css'
 
 onMounted(() => {
   // Add any global initialization logic here

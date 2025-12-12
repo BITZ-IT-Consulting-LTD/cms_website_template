@@ -2,12 +2,33 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from .serializers import (
     UserSerializer, UserCreateSerializer, UserProfileSerializer
 )
 
 User = get_user_model()
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Custom serializer to include user data in token response
+    """
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Add user data to the response
+        data['user'] = UserSerializer(self.user).data
+
+        return data
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Custom login view that returns tokens + user data
+    """
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class UserRegistrationView(generics.CreateAPIView):

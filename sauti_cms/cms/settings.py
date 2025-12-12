@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'partners',
     'reports',
     'dashboard',
+    'content',
+    'social_media',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +78,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cms.wsgi.application'
 
 # Database
-DB_ENGINE = config('DB_ENGINE', default='postgresql')
+DB_ENGINE = config('DB_ENGINE', default='sqlite')
 
 if DB_ENGINE == 'sqlite':
     DATABASES = {
@@ -136,6 +138,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# File upload settings - Allow up to 500MB for video uploads
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500MB in bytes
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500MB in bytes
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -179,8 +185,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 # DRF Spectacular (OpenAPI/Swagger) Configuration
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Sauti Child Helpline CMS API',
-    'DESCRIPTION': 'API for Sauti Child Helpline Website - Empowering children, GBV survivors, and migrant workers',
+    'TITLE': 'Sauti 116 helpline CMS API',
+    'DESCRIPTION': 'API for Sauti 116 helpline Website - Empowering children, GBV survivors, and migrant workers',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,

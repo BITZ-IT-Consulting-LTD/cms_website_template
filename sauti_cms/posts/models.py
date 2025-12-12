@@ -96,8 +96,13 @@ class Post(models.Model):
     
     views_count = models.PositiveIntegerField(default=0)
     is_featured = models.BooleanField(default=False, help_text='Feature on homepage')
-    
+
     published_at = models.DateTimeField(null=True, blank=True)
+    scheduled_publish_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='Schedule automatic publishing at this date/time'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

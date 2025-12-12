@@ -8,15 +8,11 @@
           <div class="lg:col-span-7 space-y-8">
             <!-- Enhanced Typography Hierarchy -->
             <div class="space-y-6">
-              <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 leading-tight">
-                Every child deserves a 
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8B4000] to-[#A0522D]">
-                  safe voice.
-                </span>
+              <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight" style="color: #222222;">
+                {{ heroTitle }}
               </h1>
-              <p class="text-xl md:text-2xl text-gray-600 max-w-3xl leading-relaxed">
-                Sauti 116 is free, confidential and available 24/7 across all telecoms. 
-                Report abuse, seek guidance, or get urgent help in your language.
+              <p class="text-xl md:text-2xl max-w-3xl leading-relaxed" style="color: #555555;">
+                {{ heroSubtitle }}
               </p>
             </div>
             
@@ -28,30 +24,61 @@
                   <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <span>Call 116 Now</span>
+                  <span>{{ heroCtaCall }}</span>
                 </a>
                 <router-link to="/report" class="btn-primary text-lg px-6 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2" aria-label="Report a case">
                   <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>Report a Case</span>
+                  <span>{{ heroCtaReport }}</span>
                 </router-link>
               </div>
               
               <!-- Secondary Actions -->
               <div class="flex flex-wrap gap-3">
-                <a href="https://wa.me/256123456789" target="_blank" rel="noopener" class="pill pill-outline hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-all duration-200" aria-label="Contact via WhatsApp">
+                <!-- Report a Case Button with Tooltip -->
+                <div class="relative group">
+                  <router-link to="/report" class="pill pill-report transition-all duration-200" aria-label="Report a Case">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <!-- Child head silhouette -->
+                      <circle cx="8" cy="6" r="3" stroke-width="1.5"/>
+                      <!-- Body/neck -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13c0-1.5 1.5-3 3-3s3 1.5 3 3"/>
+                      <!-- Sound waves from mouth -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 6c1 0 1.5.5 2 1M13 6c1.5 0 2 1 2.5 1.5M15 7c1.5.5 2 1.5 2.5 2.5"/>
+                    </svg>
+                    Report
+                  </router-link>
+                  <!-- Hover Tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-red-100 text-left">
+                    <h4 class="font-bold text-red-600 mb-1">Report a Case</h4>
+                    <p class="text-xs text-gray-600">Need help? Report a case of child protection, GBV, or migrant issues. Your report is confidential and secure.</p>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-red-100"></div>
+                  </div>
+                </div>
+
+                <a href="https://wa.me/256743889999" target="_blank" rel="noopener" class="pill pill-outline hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-all duration-200" aria-label="Contact via WhatsApp">
                   <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.525 3.488"/>
                   </svg>
                   WhatsApp
                 </a>
-                <a href="https://ureport.in" target="_blank" rel="noopener" class="pill pill-outline hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200" aria-label="U-Report 8500">
-                  <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                  U-Report 8500
-                </a>
+
+                <!-- U-Report Button with Tooltip -->
+                <div class="relative group">
+                  <button class="pill pill-outline hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200 cursor-default" aria-label="U-Report 8500">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    U-Report 8500
+                  </button>
+                  <!-- Hover Tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-blue-100 text-left">
+                    <h4 class="font-bold text-blue-600 mb-1">U-Report Uganda</h4>
+                    <p class="text-xs text-gray-600">A free SMS-based tool for community participation. Text "JOIN" to 8500 to speak out on issues that matter to you.</p>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-blue-100"></div>
+                  </div>
+                </div>
               </div>
               
               <!-- Trust Indicators -->
@@ -67,46 +94,21 @@
           <!-- Enhanced Hero Image -->
           <div class="lg:col-span-5">
             <div class="relative">
-              <div class="card p-0 overflow-hidden shadow-2xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600&auto=format&fit=crop" 
-                  alt="Children in Uganda receiving support and care" 
-                  class="w-full h-80 md:h-96 lg:h-[500px] object-cover" 
-                  loading="eager"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                <!-- Overlay content -->
-                <div class="absolute bottom-6 left-6 right-6 text-white">
-                  <h3 class="text-xl font-bold mb-2">Safe Spaces for Every Child</h3>
-                  <p class="text-sm opacity-90">24/7 support across Uganda</p>
-                </div>
-              </div>
-              <!-- Floating Stats Card -->
-              <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                <div class="text-center">
-                  <div class="text-3xl font-bold text-[#8B4000]">1M+</div>
-                  <div class="text-sm text-gray-600 font-medium">Children Helped</div>
-                </div>
-              </div>
-              <!-- Trust Badge -->
-              <div class="absolute -top-4 -right-4 bg-gradient-to-r from-[#8B4000] to-[#A0522D] text-white rounded-full px-4 py-2 text-sm font-semibold shadow-lg">
-                Trusted by UNICEF
-              </div>
+              <!-- Social Media Carousel -->
+              <SocialMediaCarousel />
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    
-
     <!-- Enhanced Quick Access Section -->
     <section class="section-padding bg-gradient-to-b from-gray-50 to-white">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Get Help & Information</h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Access our comprehensive support services and resources designed to protect and empower children across Uganda.
+          <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: #222222;">{{ quickAccessTitle }}</h2>
+          <p class="text-xl max-w-3xl mx-auto leading-relaxed" style="color: #555555;">
+            {{ quickAccessDesc }}
           </p>
         </div>
         
@@ -118,8 +120,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-blue-600 transition-colors duration-300">Report a Case</h3>
-              <p class="avm-text">Confidential, fast, and supportive reporting system.</p>
+              <h3 class="avm-title group-hover:text-blue-600 transition-colors duration-300">{{ cardReportTitle }}</h3>
+              <p class="avm-text">{{ cardReportText }}</p>
             </div>
           </router-link>
           
@@ -130,8 +132,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-green-600 transition-colors duration-300">Resources</h3>
-              <p class="avm-text">Guides, policies, and educational toolkits.</p>
+              <h3 class="avm-title group-hover:text-green-600 transition-colors duration-300">{{ cardResourcesTitle }}</h3>
+              <p class="avm-text">{{ cardResourcesText }}</p>
             </div>
           </router-link>
           
@@ -142,8 +144,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-purple-600 transition-colors duration-300">FAQs</h3>
-              <p class="avm-text">Answers to common questions and concerns.</p>
+              <h3 class="avm-title group-hover:text-purple-600 transition-colors duration-300">{{ cardFaqsTitle }}</h3>
+              <p class="avm-text">{{ cardFaqsText }}</p>
             </div>
           </router-link>
           
@@ -154,110 +156,26 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-orange-600 transition-colors duration-300">Partners</h3>
-              <p class="avm-text">MGLSD, UNICEF, UCRNN, ITU collaboration.</p>
+              <h3 class="avm-title group-hover:text-orange-600 transition-colors duration-300">{{ cardPartnersTitle }}</h3>
+              <p class="avm-text">{{ cardPartnersText }}</p>
             </div>
           </router-link>
         </div>
       </div>
     </section>
 
-    <!-- Enhanced Journey Timeline -->
-    <section class="section-padding bg-white">
-      <div class="container-custom">
-        <div class="text-center mb-20">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Our Journey</h2>
-          <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Key milestones in our history of child advocacy, including international recommendations and national designation of 116.
-          </p>
-        </div>
-        
-        <div class="relative max-w-5xl mx-auto">
-          <!-- Enhanced Timeline Line -->
-          <div class="timeline-line bg-gradient-to-b from-blue-300 via-blue-400 to-orange-300"></div>
-          
-          <!-- Timeline Items with Enhanced Spacing -->
-          <div class="space-y-20">
-          <div class="timeline-item left">
-              <div class="timeline-dot bg-blue-500 border-blue-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-full">2005</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Launch of Child Helpline Initiative</h3>
-                <p class="text-gray-600 leading-relaxed">Inception of the national child protection helpline in partnership with NGOs and international agencies.</p>
-              </div>
-            </div>
-            
-            <div class="timeline-item right">
-              <div class="timeline-dot bg-green-500 border-green-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-green-600 font-bold bg-green-50 px-3 py-1 rounded-full">2010</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Launch of Sauti Helpline</h3>
-                <p class="text-gray-600 leading-relaxed">Established as a national child helpline, providing a critical first point of contact.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item left">
-              <div class="timeline-dot bg-purple-500 border-purple-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-purple-600 font-bold bg-purple-50 px-3 py-1 rounded-full">2015</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Expansion of Services</h3>
-                <p class="text-gray-600 leading-relaxed">Introduced counseling and legal support to offer more comprehensive assistance.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item right">
-              <div class="timeline-dot bg-orange-500 border-orange-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-orange-600 font-bold bg-orange-50 px-3 py-1 rounded-full">2016</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Legal & Regulatory Backing</h3>
-                <p class="text-gray-600 leading-relaxed">116 designated by UCC; strengthened by national child protection policies and frameworks.</p>
-          </div>
-            </div>
-            
-            <div class="timeline-item left">
-              <div class="timeline-dot bg-red-500 border-red-200"></div>
-              <div class="timeline-card hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                  <h4 class="text-lg text-red-600 font-bold bg-red-50 px-3 py-1 rounded-full">2020</h4>
-                  <div class="h-px bg-gray-200 flex-1"></div>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 text-gray-900">Reaching 1 Million Children</h3>
-                <p class="text-gray-600 leading-relaxed">A landmark achievement, having provided assistance to over a million children across Uganda.</p>
-          </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="text-center mt-16">
-          <p class="text-gray-500 text-lg leading-relaxed max-w-4xl mx-auto">
-            Aligned with ITU recommendation for 116 child helplines; operated under MGLSD in collaboration with NGOs and UN partners.
-          </p>
-        </div>
-      </div>
-    </section>
+    <!-- Journey Timeline removed as per user request -->
 
     <!-- Enhanced Featured Content Section -->
     <section class="section-padding bg-gradient-to-b from-white to-gray-50">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Recent Publications</h2>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ publicationsTitle }}</h2>
           <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            Latest articles, videos and resources to help children, families, and communities stay safe and informed.
+            {{ publicationsDesc }}
           </p>
           <router-link to="/blog" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200">
-            View all posts
+            {{ publicationsLink }}
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -272,8 +190,8 @@
           <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">No publications yet</h3>
-          <p class="text-gray-600">Check back soon for new content from Sauti Uganda.</p>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">No success stories yet</h3>
+          <p class="text-gray-600">Check back soon for new stories from Sauti Uganda.</p>
         </div>
         
         <!-- Publications Grid -->
@@ -385,30 +303,50 @@
       </div>
     </section>
 
-    <!-- Enhanced Trust Partners Section -->
+    <!-- Partners Section with Logos Carousel -->
     <section class="py-16 bg-white border-y border-gray-100">
       <div class="container-custom">
         <div class="text-center mb-12">
-          <h3 class="text-2xl font-bold text-gray-900 mb-4">Trusted by Leading Organizations</h3>
-          <p class="text-gray-600">Working in partnership with government and international agencies</p>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">{{ trustPartnersTitle }}</h3>
+          <p class="text-gray-600">{{ trustPartnersDesc }}</p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-300">MGLSD</div>
-            <p class="text-sm text-gray-600">Ministry of Gender, Labour & Social Development</p>
+
+        <!-- Loading State -->
+        <div v-if="loadingPartners" class="text-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        </div>
+
+        <!-- Partners Logos Horizontal Scroll -->
+        <div v-else-if="partners.length > 0" class="relative">
+          <div class="overflow-hidden">
+            <div class="partners-scroll flex gap-8 py-4">
+              <div
+                v-for="partner in partners"
+                :key="partner.id"
+                class="partner-logo-container flex-shrink-0 bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <img
+                  v-if="partner.logo"
+                  :src="partner.logo"
+                  :alt="partner.name"
+                  class="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                  @error="handlePartnerLogoError"
+                />
+                <div v-else class="h-20 w-32 flex items-center justify-center bg-gray-100 rounded">
+                  <span class="text-sm font-semibold text-gray-600">{{ partner.name }}</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-blue-500 mb-2 group-hover:scale-110 transition-transform duration-300">UNICEF</div>
-            <p class="text-sm text-gray-600">United Nations Children's Fund</p>
-          </div>
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform duration-300">UCRNN</div>
-            <p class="text-sm text-gray-600">Uganda Child Rights NGO Network</p>
-          </div>
-          <div class="card p-6 text-center hover:shadow-lg transition-all duration-300 group">
-            <div class="text-2xl font-bold text-purple-600 mb-2 group-hover:scale-110 transition-transform duration-300">ITU 116</div>
-            <p class="text-sm text-gray-600">International Telecommunication Union</p>
-          </div>
+
+          <!-- Gradient Overlays for scroll indication -->
+          <div class="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+          <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else class="text-center py-8 text-gray-500">
+          <p>No partners to display</p>
         </div>
       </div>
     </section>
@@ -417,10 +355,9 @@
     <section class="section-padding bg-gradient-to-br from-blue-50 via-white to-orange-50">
       <div class="container-custom text-center">
         <div class="max-w-4xl mx-auto">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Need Help Right Now?</h2>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ finalCtaTitle }}</h2>
           <p class="text-xl text-gray-600 mb-12 leading-relaxed">
-            Accessible 24/7 across all telecom networks. Support in multiple local languages. 
-            All services are free and confidential.
+            {{ finalCtaText }}
           </p>
           
           <!-- Primary CTA Buttons -->
@@ -430,7 +367,7 @@
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                Call 116 Now
+                {{ finalCtaCall }}
               </span>
             </a>
             <router-link to="/report" class="btn-primary text-xl px-10 py-5 rounded-2xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
@@ -438,7 +375,7 @@
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Report a Case
+                {{ finalCtaReport }}
               </span>
             </router-link>
             <router-link to="/contact" class="btn-outline text-xl px-10 py-5 rounded-2xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
@@ -446,7 +383,7 @@
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                Contact Us
+                {{ finalCtaContact }}
               </span>
             </router-link>
           </div>
@@ -502,14 +439,47 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { usePartnersStore } from '@/store/partners'
 import { useBlogStore } from '@/store/blog'
+import { useContentStore } from '@/store/content'
 import GetHelpButton from '@/components/common/GetHelpButton.vue'
 import Loader from '@/components/common/Loader.vue'
+import sautiHomepage from '@/assets/sauti-homepage.avif'
+import emitter from '@/utils/eventBus.js'
+import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
 
 const partnersStore = usePartnersStore()
 const blogStore = useBlogStore()
+const contentStore = useContentStore()
+
+// Get dynamic content - computed properties that reactively access content store
+const heroTitle = computed(() => contentStore.getContent('hero_title', 'Every child deserves a safe voice.'))
+const heroSubtitle = computed(() => contentStore.getContent('hero_subtitle', 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.'))
+const heroCtaCall = computed(() => contentStore.getContent('hero_cta_call', 'Call 116 Now'))
+const heroCtaReport = computed(() => contentStore.getContent('hero_cta_report', 'Report a Case'))
+const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Services'))
+const quickAccessDesc = computed(() => contentStore.getContent('quick_access_description', 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.'))
+const cardReportTitle = computed(() => contentStore.getContent('card_report_title', 'Report a Case'))
+const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.'))
+const cardResourcesTitle = computed(() => contentStore.getContent('card_resources_title', 'Resources'))
+const cardResourcesText = computed(() => contentStore.getContent('card_resources_text', 'Access vital information, safety guides, and educational materials to protect children.'))
+const cardFaqsTitle = computed(() => contentStore.getContent('card_faqs_title', 'FAQs'))
+const cardFaqsText = computed(() => contentStore.getContent('card_faqs_text', 'Find quick answers to common questions about our services, reporting process, and safety.'))
+const cardPartnersTitle = computed(() => contentStore.getContent('card_partners_title', 'Partners'))
+const cardPartnersText = computed(() => contentStore.getContent('card_partners_text', 'Collaborating with government and international organizations to ensure child safety.'))
+const journeyTitle = computed(() => contentStore.getContent('journey_title', 'Our Journey'))
+const journeyDesc = computed(() => contentStore.getContent('journey_description', 'Key milestones in our history of child advocacy, including international recommendations and national designation of 116.'))
+const publicationsTitle = computed(() => contentStore.getContent('publications_title', 'Success Stories'))
+const publicationsDesc = computed(() => contentStore.getContent('publications_description', 'Latest success stories, videos and resources to help children, families, and communities stay safe and informed.'))
+const publicationsLink = computed(() => contentStore.getContent('publications_link', 'View all stories'))
+const trustPartnersTitle = computed(() => contentStore.getContent('trust_partners_title', 'Trusted by Leading Organizations'))
+const trustPartnersDesc = computed(() => contentStore.getContent('trust_partners_description', 'Working in partnership with government and international agencies'))
+const finalCtaTitle = computed(() => contentStore.getContent('final_cta_title', 'Need Help Right Now?'))
+const finalCtaText = computed(() => contentStore.getContent('final_cta_text', 'Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.'))
+const finalCtaCall = computed(() => contentStore.getContent('final_cta_call', 'Call 116 Now'))
+const finalCtaReport = computed(() => contentStore.getContent('final_cta_report', 'Report a Case'))
+const finalCtaContact = computed(() => contentStore.getContent('final_cta_contact', 'Contact Us'))
 
 // Video data from backend
 const latestVideos = ref([])
@@ -521,6 +491,9 @@ const usePng = ref(true)
 const pngUrl = ref('')
 
 onMounted(async () => {
+  // Fetch content from store
+  await contentStore.fetchContent()
+  
   // Fetch partners
   loadingPartners.value = true
   try {
@@ -612,6 +585,18 @@ function useThumbPlaceholder(e) {
 function useAvatarPlaceholder(e) {
   e.target.src = 'https://i.pravatar.cc/48'
 }
+
+const openChat = () => {
+  emitter.emit('open-chat')
+}
+
+function handlePartnerLogoError(e) {
+  e.target.style.display = 'none'
+  const parent = e.target.parentElement
+  if (parent) {
+    parent.innerHTML = `<div class="h-20 w-32 flex items-center justify-center bg-gray-100 rounded"><span class="text-sm font-semibold text-gray-600">${e.target.alt}</span></div>`
+  }
+}
 </script>
 
 <style scoped>
@@ -632,5 +617,36 @@ function useAvatarPlaceholder(e) {
 .aspect-video > div {
   position: absolute;
   inset: 0;
+}
+
+/* Partners Scroll Animation */
+.partners-scroll {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  animation: scroll 30s linear infinite;
+}
+
+.partners-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.partners-scroll:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-250px * 4)); /* Adjust based on logo count */
+  }
+}
+
+.partner-logo-container {
+  min-width: 180px;
+  max-width: 220px;
 }
 </style>

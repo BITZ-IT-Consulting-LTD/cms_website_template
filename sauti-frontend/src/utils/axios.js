@@ -147,6 +147,13 @@ export const api = {
     get: (slug) => apiClient.get(`/partners/${slug}/`),
   },
   
+  // Content/Uploads endpoints
+  content: {
+    list: () => apiClient.get('/content/'),
+    get: (key) => apiClient.get(`/content/${key}/`),
+    update: (key, data) => apiClient.put(`/content/${key}/`, data),
+  },
+  
   // Reports endpoints (anonymous submission)
   reports: {
     submit: (data) => {
@@ -157,7 +164,7 @@ export const api = {
           formData.append(key, data[key])
         }
       })
-      
+
       return apiClient.post('/reports/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -168,6 +175,12 @@ export const api = {
     get: (id) => apiClient.get(`/reports/${id}/`),
     update: (id, data) => apiClient.put(`/reports/${id}/`, data),
     addFollowUp: (id, data) => apiClient.post(`/reports/${id}/followup/`, data),
+  },
+
+  // Social Media endpoints
+  socialMedia: {
+    list: (params) => apiClient.get('/social/posts/', { params }),
+    get: (id) => apiClient.get(`/social/posts/${id}/`),
   },
 }
 

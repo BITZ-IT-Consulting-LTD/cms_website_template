@@ -2,9 +2,9 @@
   "name": "sauti-admin",
   "version": "1.0.0",
   "type": "module",
-  "description": "Sauti Child Helpline - Vue 3 Admin Dashboard",
+  "description": "Sauti 116 helpline - Vue 3 Admin Dashboard",
   "scripts": {
-    "dev": "vite --port 3001",
+    "dev": "vite --port 3002",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",

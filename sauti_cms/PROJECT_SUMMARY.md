@@ -2,13 +2,13 @@
 
 ## 📋 Overview
 
-**Project Name:** Sauti Child Helpline CMS Backend  
+**Project Name:** Sauti 116 helpline CMS Backend  
 **Tech Stack:** Django 5.0.6 + Django REST Framework  
 **Database:** PostgreSQL  
 **Authentication:** JWT (djangorestframework-simplejwt)  
 **Status:** ✅ Production Ready
 
-This is a complete, modular, and secure CMS backend for the Sauti Child Helpline website, designed to empower children, GBV survivors, and migrant workers in Uganda with safe reporting channels and comprehensive information access.
+This is a complete, modular, and secure CMS backend for the Sauti 116 helpline website, designed to empower children, GBV survivors, and migrant workers in Uganda with safe reporting channels and comprehensive information access.
 
 ---
 

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex justify-between items-start">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Active Reports</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ pageTitle }}</h1>
         <p class="text-gray-600 mt-1">Manage and respond to child protection reports</p>
       </div>
       <router-link
@@ -66,8 +66,16 @@
       </div>
     </div>
 
+    <!-- Error Message -->
+    <div v-if="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+      <div class="flex">
+        <ExclamationTriangleIcon class="h-5 w-5 text-red-400 mr-3" />
+        <p class="text-sm text-red-700">{{ error }}</p>
+      </div>
+    </div>
+
     <!-- Filters and Search -->
-    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div class="bg-white p-4 rounded-lg shadow-sm">
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 relative">
           <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -95,12 +103,10 @@
           class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">All Types</option>
-          <option value="physical_abuse">Physical Abuse</option>
-          <option value="sexual_abuse">Sexual Abuse</option>
-          <option value="neglect">Neglect</option>
-          <option value="emotional_abuse">Emotional Abuse</option>
-          <option value="trafficking">Trafficking</option>
-          <option value="other">Other</option>
+          <option value="CHILD_PROTECTION">Child Protection</option>
+          <option value="GBV">Gender-Based Violence</option>
+          <option value="MIGRANT">Migrant Worker</option>
+          <option value="PSEA">PSEA</option>
         </select>
 
         <select
@@ -108,17 +114,30 @@
           class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">All Statuses</option>
-          <option value="new">New</option>
-          <option value="in_progress">In Progress</option>
-          <option value="pending">Pending</option>
+          <option value="PENDING">Pending Review</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="RESOLVED">Resolved</option>
+          <option value="CLOSED">Closed</option>
         </select>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <label class="text-sm text-gray-600">Per page</label>
+          <select
+            v-model.number="perPage"
+            class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+          >
+            <option :value="10">10</option>
+            <option :value="20">20</option>
+            <option :value="50">50</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <!-- Reports Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full">
           <thead class="bg-gray-50">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -147,13 +166,14 @@
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="report in filteredReports" :key="report.id" class="hover:bg-gray-50 cursor-pointer" @click="viewReport(report.id)">
+          <tbody v-if="!loading" class="bg-white">
+            <tr v-for="report in pagedReports" :key="report.id" class="hover:bg-gray-50 cursor-pointer" @click="viewReport(report.id)">
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900">#{{ report.id }}</div>
+                <div class="text-sm font-medium text-gray-900">{{ report.reference_number || `#${report.id}` }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span class="text-sm text-gray-900">{{ formatType(report.type) }}</span>
+                <div class="text-sm text-gray-900">{{ formatType(report.type) }}</div>
+                <div v-if="report.incident_type" class="text-xs text-gray-500">{{ formatType(report.incident_type) }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span
@@ -196,11 +216,39 @@
               </td>
             </tr>
           </tbody>
+          <tbody v-else class="bg-white">
+            <tr v-for="n in 5" :key="n">
+              <td class="px-6 py-4">
+                <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-5 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-5 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="h-5 w-12 ml-auto bg-gray-200 rounded animate-pulse"></div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
 
       <!-- Empty State -->
-      <div v-if="filteredReports.length === 0" class="text-center py-12">
+      <div v-if="!loading && filteredReports.length === 0" class="text-center py-12">
         <ShieldExclamationIcon class="mx-auto h-12 w-12 text-gray-400" />
         <h3 class="mt-2 text-sm font-medium text-gray-900">No reports found</h3>
         <p class="mt-1 text-sm text-gray-500">Try adjusting your search or filters</p>
@@ -229,9 +277,9 @@
         <div>
           <p class="text-sm text-gray-700">
             Showing
-            <span class="font-medium">{{ (currentPage - 1) * perPage + 1 }}</span>
+            <span class="font-medium">{{ startIndex + 1 }}</span>
             to
-            <span class="font-medium">{{ Math.min(currentPage * perPage, filteredReports.length) }}</span>
+            <span class="font-medium">{{ endIndex }}</span>
             of
             <span class="font-medium">{{ filteredReports.length }}</span>
             results
@@ -262,7 +310,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { api } from '@/utils/api'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -275,52 +324,21 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
+const route = useRoute()
 
-// Mock data - Replace with actual API calls
-const reports = ref([
-  {
-    id: '2024-001',
-    type: 'physical_abuse',
-    priority: 'critical',
-    status: 'in_progress',
-    location: 'Kampala, Central',
-    created_at: '2024-10-24T10:30:00Z',
-    assigned_to: 'Jane Mukasa'
-  },
-  {
-    id: '2024-002',
-    type: 'neglect',
-    priority: 'high',
-    status: 'new',
-    location: 'Gulu, Northern',
-    created_at: '2024-10-24T09:15:00Z',
-    assigned_to: null
-  },
-  {
-    id: '2024-003',
-    type: 'sexual_abuse',
-    priority: 'critical',
-    status: 'in_progress',
-    location: 'Mbarara, Western',
-    created_at: '2024-10-23T16:45:00Z',
-    assigned_to: 'Peter Okello'
-  },
-  {
-    id: '2024-004',
-    type: 'emotional_abuse',
-    priority: 'medium',
-    status: 'pending',
-    location: 'Jinja, Eastern',
-    created_at: '2024-10-23T14:20:00Z',
-    assigned_to: 'Sarah Nambi'
-  }
-])
+const pageTitle = computed(() => {
+  if (route.name === 'reports-urgent') return 'Urgent Cases'
+  if (route.name === 'reports-archive') return 'Closed Cases'
+  return 'Active Reports'
+})
 
+// State
+const reports = ref([])
 const stats = ref({
-  total: 47,
-  critical: 8,
-  inProgress: 23,
-  resolvedToday: 5
+  total: 0,
+  critical: 0,
+  inProgress: 0,
+  resolvedToday: 0
 })
 
 const searchQuery = ref('')
@@ -329,12 +347,63 @@ const filterType = ref('')
 const filterStatus = ref('')
 const currentPage = ref(1)
 const perPage = ref(10)
+const loading = ref(false)
+const error = ref(null)
+
+// Fetch reports from API
+async function fetchReports() {
+  loading.value = true
+  error.value = null
+  
+  try {
+    const response = await api.reports.list()
+    reports.value = response.data.results || response.data || []
+    
+    // Calculate stats from fetched data
+    calculateStats()
+    
+    console.log('✅ Fetched reports:', reports.value.length)
+  } catch (err) {
+    console.error('❌ Error fetching reports:', err)
+    error.value = 'Failed to load reports. Please try again.'
+    
+    // Show user-friendly error
+    if (err.response?.status === 401) {
+      error.value = 'You need to be logged in to view reports.'
+    } else if (err.response?.status === 403) {
+      error.value = 'You do not have permission to view reports.'
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+// Calculate statistics from reports
+function calculateStats() {
+  const now = new Date()
+  const today = now.toISOString().split('T')[0]
+  
+  stats.value = {
+    total: reports.value.filter(r => r.status !== 'CLOSED' && r.status !== 'RESOLVED').length,
+    critical: reports.value.filter(r => r.priority === 'critical' || r.priority === 'CRITICAL').length,
+    inProgress: reports.value.filter(r => r.status === 'IN_PROGRESS').length,
+    resolvedToday: reports.value.filter(r => {
+      const resolvedDate = r.resolved_at || r.updated_at
+      return resolvedDate && resolvedDate.startsWith(today) && (r.status === 'RESOLVED' || r.status === 'CLOSED')
+    }).length
+  }
+}
 
 const filteredReports = computed(() => {
   return reports.value.filter(report => {
+    const searchLower = searchQuery.value.toLowerCase()
     const matchesSearch = !searchQuery.value ||
-      report.id.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      report.location.toLowerCase().includes(searchQuery.value.toLowerCase())
+      report.reference_number?.toLowerCase().includes(searchLower) ||
+      report.id.toLowerCase().includes(searchLower) ||
+      report.location.toLowerCase().includes(searchLower) ||
+      report.assigned_to?.toLowerCase().includes(searchLower) ||
+      formatType(report.type).toLowerCase().includes(searchLower) ||
+      (report.incident_type && formatType(report.incident_type).toLowerCase().includes(searchLower))
     
     const matchesPriority = !filterPriority.value || report.priority === filterPriority.value
     const matchesType = !filterType.value || report.type === filterType.value
@@ -344,7 +413,11 @@ const filteredReports = computed(() => {
   })
 })
 
-const totalPages = computed(() => Math.ceil(filteredReports.value.length / perPage.value))
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredReports.value.length / perPage.value)))
+
+const startIndex = computed(() => (currentPage.value - 1) * perPage.value)
+const endIndex = computed(() => Math.min(currentPage.value * perPage.value, filteredReports.value.length))
+const pagedReports = computed(() => filteredReports.value.slice(startIndex.value, endIndex.value))
 
 const priorityClass = (priority) => {
   const classes = {
@@ -358,6 +431,11 @@ const priorityClass = (priority) => {
 
 const statusClass = (status) => {
   const classes = {
+    PENDING: 'bg-yellow-100 text-yellow-800',
+    IN_PROGRESS: 'bg-purple-100 text-purple-800',
+    RESOLVED: 'bg-green-100 text-green-800',
+    CLOSED: 'bg-gray-100 text-gray-800',
+    // Legacy support
     new: 'bg-blue-100 text-blue-800',
     in_progress: 'bg-purple-100 text-purple-800',
     pending: 'bg-yellow-100 text-yellow-800',
@@ -367,11 +445,37 @@ const statusClass = (status) => {
 }
 
 const formatType = (type) => {
-  return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  if (!type) return 'Unknown'
+  const typeMap = {
+    'CHILD_PROTECTION': 'Child Protection',
+    'GBV': 'Gender-Based Violence',
+    'MIGRANT': 'Migrant Worker',
+    'PSEA': 'PSEA',
+    'child_neglect': 'Child Neglect',
+    'physical_violence': 'Physical Violence',
+    'sexual_violence': 'Sexual Violence',
+    'economic_violence': 'Economic Violence',
+    'emotional_abuse': 'Emotional Abuse',
+    'child_exploitation': 'Child Exploitation',
+    'trafficking': 'Trafficking',
+    'harmful_traditional_practices': 'Harmful Traditional Practices'
+  }
+  return typeMap[type] || type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
 const formatStatus = (status) => {
-  return status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const statusMap = {
+    'PENDING': 'Pending Review',
+    'IN_PROGRESS': 'In Progress',
+    'RESOLVED': 'Resolved',
+    'CLOSED': 'Closed',
+    // Legacy support
+    'pending': 'Pending',
+    'in_progress': 'In Progress',
+    'resolved': 'Resolved',
+    'new': 'New'
+  }
+  return statusMap[status] || status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
 const formatDate = (date) => {
@@ -402,7 +506,7 @@ const nextPage = () => {
 }
 
 onMounted(() => {
-  // Fetch reports from API
+  fetchReports()
 })
 </script>
 
@@ -412,6 +516,6 @@ onMounted(() => {
 }
 
 .sidebar-link.active {
-  @apply bg-primary-50 text-primary-700;
+  @apply bg-primary-50 text-primary-600;
 }
 </style>

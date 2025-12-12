@@ -4,47 +4,54 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Updated Brand: black/white and accent orange #CC5500
+        // Neutral Palette (Text & Backgrounds)
+        neutral: {
+          white: '#FFFFFF',
+          dark: '#006633', // Sauti Dark Green for dark backgrounds
+          textPrimary: '#222222', // Primary text (very dark gray)
+          textSecondary: '#555555', // Secondary text (subheadings, captions)
+          border: '#DDDDDD', // Borders, disabled states
+        },
+        // Sauti Brand Colors
+        sauti: {
+          blue: '#009EDB', // Information, primary actions
+          orange: '#FF9900', // Secondary actions
+          red: '#EC0000', // Error, danger, urgent/emergency
+          greenLight: '#99CC00', // Success
+          greenDark: '#006633', // Dark green (footer, dark backgrounds)
+          yellow: '#FFED00', // Warning
+        },
+        // Semantic Colors (User Feedback)
+        success: {
+          500: '#99CC00', // Sauti Light Green
+          600: '#88BB00',
+        },
+        warning: {
+          500: '#FFED00', // Sauti Yellow
+          600: '#E6D600',
+        },
+        error: {
+          500: '#EC0000', // Sauti Red
+          600: '#CC0000',
+        },
+        info: {
+          500: '#009EDB', // Sauti Blue
+          600: '#007BAA',
+        },
+        // Legacy support (mapped to new colors)
         primary: {
-          50: '#fafafa',
-          100: '#f4f4f5',
-          200: '#e4e4e7',
-          300: '#d4d4d8',
-          400: '#a1a1aa',
-          500: '#262626', // Neutral dark (text)
-          600: '#171717',
-          700: '#0f0f10',
-          800: '#09090b',
-          900: '#000000',
+          50: '#E6F7FF',
+          100: '#B3E5FF',
+          500: '#009EDB', // Sauti Blue
+          600: '#007BAA',
         },
         secondary: {
-          50: '#fff4ec',
-          100: '#ffe9d9',
-          200: '#ffd3b3',
-          300: '#ffbd8c',
-          400: '#ff9552',
-          500: '#CC5500', // Accent Orange
-          600: '#a64400',
-          700: '#7f3400',
-          800: '#592500',
-          900: '#3b1900',
-        },
-        success: {
-          500: '#10b981', // Green
-          600: '#059669',
-        },
-        purple: {
-          500: '#8b5cf6', // For GBV
-          600: '#7c3aed',
-        },
-        teal: {
-          500: '#14b8a6', // For resources
-          600: '#0d9488',
+          500: '#FF9900', // Sauti Orange
+          600: '#E68A00',
         },
         danger: {
-          400: '#f87171',
-          500: '#ef4444', // Red for critical
-          600: '#dc2626',
+          500: '#EC0000', // Sauti Red
+          600: '#CC0000',
         },
       },
       fontFamily: {

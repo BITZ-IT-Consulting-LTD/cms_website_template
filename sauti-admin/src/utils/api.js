@@ -13,11 +13,84 @@ const apiClient = axios.create({
 const createFormData = (data) => {
   const formData = new FormData()
   Object.keys(data).forEach(key => {
-    if (key === 'tags' && Array.isArray(data[key])) {
-      data[key].forEach(tag => formData.append('tags', tag))
-    } else if (data[key] !== null && data[key] !== undefined) {
-      formData.append(key, data[key])
+    const value = data[key]
+    
+    // Skip null, undefined, or empty strings for optional fields
+    if (value === null || value === undefined) {
+      return
     }
+    
+    // Handle tags array - only append if array has items
+    if (key === 'tags') {
+      if (Array.isArray(value) && value.length > 0) {
+        value.forEach(tag => {
+          // Only append if tag is a valid ID (number or string number)
+          const tagId = typeof tag === 'number' ? tag : parseInt(tag, 10)
+          if (!isNaN(tagId) && tagId > 0) {
+            formData.append('tags', tagId)
+          }
+        })
+      }
+      // If tags is empty array or null/undefined, skip it completely
+      return
+    }
+    
+    // Handle file fields - only append if it's a File object
+    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file']
+    if (fileFields.includes(key)) {
+      if (value instanceof File) {
+        formData.append(key, value)
+      }
+      // If it's a string (existing URL), skip it - backend will keep existing file
+      return
+    }
+    
+    // Handle category and category_id - ensure it's a number and skip if invalid
+    if (key === 'category' || key === 'category_id') {
+      if (value === null || value === '' || value === undefined) {
+        return
+      }
+      // Ensure category is sent as a number (FormData will convert to string)
+      const categoryId = typeof value === 'number' ? value : parseInt(value, 10)
+      if (!isNaN(categoryId) && categoryId > 0) {
+        formData.append(key, categoryId.toString())
+      }
+      return
+    }
+    
+    // Handle empty strings for optional fields - convert to empty string or skip
+    if (value === '' && ['excerpt', 'slug'].includes(key)) {
+      // Allow empty strings for these optional fields
+      formData.append(key, '')
+      return
+    }
+    
+    // Skip empty strings for other optional fields
+    if (value === '') {
+      return
+    }
+    
+    // Handle boolean values - Django expects 'true'/'false' or '1'/'0'
+    if (typeof value === 'boolean') {
+      formData.append(key, value ? 'true' : 'false')
+      return
+    }
+    
+    // Handle number values
+    if (typeof value === 'number') {
+      formData.append(key, value.toString())
+      return
+    }
+    
+    // Handle empty strings for optional text fields
+    if (value === '' && ['description', 'youtube_url'].includes(key)) {
+      // Allow empty strings for these optional fields
+      formData.append(key, '')
+      return
+    }
+    
+    // For all other fields, append the value as-is (FormData handles strings)
+    formData.append(key, value)
   })
   return formData
 }
@@ -77,7 +150,18 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/posts/${slug}/`),
-    categories: () => apiClient.get('/posts/categories/'),
+    categories: {
+      list: () => apiClient.get('/posts/categories/'),
+      create: (data) => apiClient.post('/posts/categories/', data),
+      update: (id, data) => apiClient.put(`/posts/categories/${id}/`, data).catch(() => {
+        // Fallback to PATCH if PUT not supported
+        return apiClient.patch(`/posts/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/posts/categories/${id}/`).catch(() => {
+        // Handle gracefully if endpoint doesn't exist
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
     tags: () => apiClient.get('/posts/tags/'),
   },
   
@@ -91,6 +175,18 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/videos/${slug}/`),
+    categories: {
+      list: () => apiClient.get('/videos/categories/'),
+      create: (data) => apiClient.post('/videos/categories/', data),
+      update: (id, data) => apiClient.put(`/videos/categories/${id}/`, data).catch(() => {
+        // Fallback to PATCH if PUT not supported
+        return apiClient.patch(`/videos/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/videos/categories/${id}/`).catch(() => {
+        // Handle gracefully if endpoint doesn't exist
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
   },
   
   resources: {
@@ -103,7 +199,16 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/resources/${slug}/`),
-    categories: () => apiClient.get('/resources/categories/'),
+    categories: {
+      list: () => apiClient.get('/resources/categories/'),
+      create: (data) => apiClient.post('/resources/categories/', data),
+      update: (id, data) => apiClient.put(`/resources/categories/${id}/`, data).catch(() => {
+        return apiClient.patch(`/resources/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/resources/categories/${id}/`).catch(() => {
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
   },
   
   faqs: {
@@ -112,7 +217,16 @@ export const api = {
     create: (data) => apiClient.post('/faqs/', data),
     update: (id, data) => apiClient.put(`/faqs/${id}/`, data),
     delete: (id) => apiClient.delete(`/faqs/${id}/`),
-    categories: () => apiClient.get('/faqs/categories/'),
+    categories: {
+      list: () => apiClient.get('/faqs/categories/'),
+      create: (data) => apiClient.post('/faqs/categories/', data),
+      update: (id, data) => apiClient.put(`/faqs/categories/${id}/`, data).catch(() => {
+        return apiClient.patch(`/faqs/categories/${id}/`, data)
+      }),
+      delete: (id) => apiClient.delete(`/faqs/categories/${id}/`).catch(() => {
+        return Promise.reject(new Error('Delete endpoint not available'))
+      }),
+    },
   },
   
   partners: {
@@ -140,6 +254,27 @@ export const api = {
     create: (data) => apiClient.post('/auth/register/', data),
     update: (id, data) => apiClient.put(`/auth/users/${id}/`, data),
     delete: (id) => apiClient.delete(`/auth/users/${id}/`),
+  },
+
+  socialMedia: {
+    list: (params) => apiClient.get('/social/posts/', { params }),
+    get: (id) => apiClient.get(`/social/posts/${id}/`),
+    create: (data) => apiClient.post('/social/posts/', createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (id, data) => apiClient.put(`/social/posts/${id}/`, createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (id) => apiClient.delete(`/social/posts/${id}/`),
+    fetchMetadata: (url) => apiClient.post('/social/posts/fetch-metadata/', { url }),
+    channels: {
+      get: () => apiClient.get('/social/channels/'),
+      update: (data) => apiClient.put('/social/channels/', data),
+    },
+    contact: {
+      get: () => apiClient.get('/social/contact/'),
+      update: (data) => apiClient.put('/social/contact/', data),
+    },
   },
 }
 

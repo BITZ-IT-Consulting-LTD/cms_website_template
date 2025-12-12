@@ -13,8 +13,8 @@
       </router-link>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div class="p-4 border-b border-gray-200">
+    <div class="bg-white rounded-lg shadow-sm">
+      <div class="p-4">
         <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
           <div class="flex-1">
             <input
@@ -40,8 +40,8 @@
         <div v-if="drafts.length === 0" class="p-6 text-center text-gray-500">
           No drafts found.
         </div>
-        <ul v-else class="divide-y divide-gray-200">
-          <li v-for="post in drafts" :key="post.id" class="p-4 flex items-start justify-between">
+        <ul v-else class="space-y-2">
+          <li v-for="post in drafts" :key="post.id" class="p-4 flex items-start justify-between border-2 border-gray-200 rounded-lg transition-all duration-200 hover:border-primary-500 hover:bg-gray-50 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
             <div class="min-w-0">
               <h3 class="text-base font-semibold text-gray-900 truncate">{{ post.title }}</h3>
               <p class="text-sm text-gray-600 mt-1 line-clamp-2" v-html="post.excerpt" />
@@ -57,7 +57,7 @@
           </li>
         </ul>
 
-        <div v-if="hasMore" class="p-4 border-t border-gray-200 flex justify-center">
+        <div v-if="hasMore" class="p-4 flex justify-center">
           <button @click="loadMore" class="px-4 py-2 rounded-md border hover:bg-gray-50">Load more</button>
         </div>
       </div>

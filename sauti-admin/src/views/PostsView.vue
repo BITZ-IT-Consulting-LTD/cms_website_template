@@ -21,7 +21,7 @@
           class="btn-primary flex items-center gap-2"
         >
           <PlusIcon class="h-5 w-5" />
-          Create New Post
+          Create Blog Post
         </router-link>
       </div>
     </div>
@@ -82,7 +82,7 @@
     </div>
 
     <!-- Search and Filters -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Search -->
         <div class="relative">
@@ -98,9 +98,9 @@
         <!-- Status Filter -->
         <select v-model="statusFilter" class="form-select">
           <option value="">All Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-          <option value="archived">Archived</option>
+          <option value="PUBLISHED">Published</option>
+          <option value="DRAFT">Draft</option>
+          <option value="ARCHIVED">Archived</option>
         </select>
         
         <!-- Category Filter -->
@@ -140,9 +140,9 @@
     </div>
 
     <!-- Posts Table -->
-    <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div v-else class="bg-white rounded-lg shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full">
           <thead class="table-header">
             <tr>
               <th class="table-cell">Post</th>
@@ -154,7 +154,7 @@
               <th class="table-cell">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="bg-white">
             <tr v-for="post in filteredPosts" :key="post.id" class="table-row hover:bg-gray-50">
               <td class="px-6 py-4">
                 <div class="flex items-center">
@@ -186,9 +186,9 @@
                 <span
                   class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                   :class="{
-                    'bg-green-100 text-green-800': post.status === 'published',
-                    'bg-yellow-100 text-yellow-800': post.status === 'draft',
-                    'bg-gray-100 text-gray-800': post.status === 'archived'
+                    'bg-green-100 text-green-800': post.status === 'PUBLISHED',
+                    'bg-yellow-100 text-yellow-800': post.status === 'DRAFT',
+                    'bg-gray-100 text-gray-800': post.status === 'ARCHIVED'
                   }"
                 >
                   {{ post.status }}
@@ -242,16 +242,25 @@
         <DocumentTextIcon class="mx-auto h-12 w-12 text-gray-400" />
         <h3 class="mt-2 text-sm font-medium text-gray-900">No posts found</h3>
         <p class="mt-1 text-sm text-gray-500">
-          {{ searchQuery ? 'Try adjusting your search criteria.' : 'Get started by creating your first post.' }}
+          {{ searchQuery ? 'Try adjusting your search criteria.' : 'Get started by creating your first blog post.' }}
         </p>
         <div class="mt-6" v-if="!searchQuery">
           <router-link to="/posts/create" class="btn-primary">
             <PlusIcon class="h-4 w-4 mr-2" />
-            Create New Post
+            Create Blog Post
           </router-link>
         </div>
       </div>
     </div>
+
+    <!-- Blog Preview Modal -->
+    <BlogPreviewModal
+      v-if="selectedPost"
+      :isOpen="isPreviewOpen"
+      :slug="selectedPost.slug"
+      :postId="selectedPost.id"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -260,6 +269,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { usePostsStore } from '@/stores/posts'
+import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   PlusIcon,
   DocumentTextIcon,
@@ -294,10 +304,10 @@ const authors = ref([])
 // Computed properties
 const stats = computed(() => {
   const total = posts.value.length
-  const published = posts.value.filter(p => p.status === 'published').length
-  const draft = posts.value.filter(p => p.status === 'draft').length
+  const published = posts.value.filter(p => p.status === 'PUBLISHED').length
+  const draft = posts.value.filter(p => p.status === 'DRAFT').length
   const totalViews = posts.value.reduce((sum, p) => sum + (p.views_count || 0), 0)
-  
+
   return {
     total,
     published,
@@ -356,15 +366,17 @@ const formatDate = (date) => {
   }
 }
 
+const isPreviewOpen = ref(false)
+const selectedPost = ref(null)
+
 const previewPost = (post) => {
-  if (post.status === 'draft') {
-    toast.warning('Cannot preview draft content')
-    return
-  }
-  
-  // Open in new tab
-  const url = `/blog/${post.slug}`
-  window.open(url, '_blank')
+  selectedPost.value = post
+  isPreviewOpen.value = true
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
+  selectedPost.value = null
 }
 
 const duplicatePost = async (post) => {
@@ -373,9 +385,9 @@ const duplicatePost = async (post) => {
       ...post,
       title: `${post.title} (Copy)`,
       slug: `${post.slug}-copy-${Date.now()}`,
-      status: 'draft'
+      status: 'DRAFT'
     }
-    
+
     await postsStore.createPost(duplicateData)
     toast.success(`"${post.title}" duplicated successfully`)
   } catch (err) {

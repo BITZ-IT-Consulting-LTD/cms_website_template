@@ -4,39 +4,39 @@
     <div class="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200" :class="{ '-translate-x-full': !sidebarOpen }">
       <div class="flex flex-col h-full">
         <!-- Enhanced Logo -->
-        <div class="flex items-center justify-between h-20 px-6 border-b border-gray-200 bg-gradient-to-r from-[#8B4000] to-[#A0522D]">
+        <div class="flex items-center justify-between h-20 px-6 bg-transparent">
           <div class="flex items-center space-x-3">
-            <div class="h-10 w-10 rounded-2xl bg-white flex items-center justify-center">
-              <span class="text-[#8B4000] font-bold text-lg">S</span>
+            <div class="h-16 w-16 flex items-center justify-center">
+              <img :src="sautiLogo" alt="Sauti Logo" class="h-full w-full object-contain" />
             </div>
             <div>
-              <h1 class="text-xl font-bold text-white" style="font-family: 'Roboto', sans-serif;">Sauti Admin</h1>
-              <p class="text-xs text-white/80">Child Helpline CMS</p>
+              <h1 class="text-xl font-bold" style="font-family: 'Roboto', sans-serif; color: #222222;">Sauti Admin</h1>
+              <p class="text-xs" style="color: #555555;">116 helpline CMS</p>
             </div>
           </div>
           <button
             @click="sidebarOpen = false"
-            class="lg:hidden p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+            class="lg:hidden p-2 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300"
           >
             <XMarkIcon class="h-6 w-6" />
           </button>
         </div>
 
         <!-- Enhanced Quick Actions -->
-        <div class="px-4 py-6 border-b border-gray-200 space-y-3">
+        <div class="px-4 py-6 space-y-3">
           <router-link
             to="/posts/create"
-            class="w-full px-4 py-3 bg-gradient-to-r from-[#8B4000] to-[#A0522D] text-white hover:from-[#A0522D] hover:to-[#8B4000] rounded-full transition-all duration-300 flex items-center justify-center font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
+            class="w-full btn-primary justify-center gap-2 text-sm shadow-lg hover:shadow-xl"
           >
-            <PlusCircleIcon class="h-5 w-5 mr-2" />
+            <PlusCircleIcon class="h-5 w-5" />
             New Blog Post
           </router-link>
           
           <router-link
             to="/videos/create"
-            class="w-full px-4 py-3 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 hover:from-purple-200 hover:to-indigo-200 rounded-full transition-all duration-300 flex items-center justify-center text-sm font-semibold border border-purple-200 hover:border-purple-300"
+            class="w-full btn-secondary justify-center gap-2 text-sm border border-transparent hover:border-[#E68A00]"
           >
-            <VideoCameraIcon class="h-5 w-5 mr-2" />
+            <VideoCameraIcon class="h-5 w-5" />
             New Video
           </router-link>
         </div>
@@ -46,8 +46,8 @@
 
           <!-- Main Content Management Section -->
           <div>
-            <h3 class="px-3 text-xs font-bold text-gray-600 uppercase tracking-wider mb-4 flex items-center">
-              <div class="w-2 h-2 bg-[#8B4000] rounded-full mr-2"></div>
+            <h3 class="px-3 text-xs font-bold uppercase tracking-wider mb-4 flex items-center" style="color: #555555;">
+              <div class="w-2 h-2 rounded-full mr-2" style="background-color: #009EDB;"></div>
               Content Management
             </h3>
             <div class="space-y-2">
@@ -56,8 +56,27 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path === '/dashboard' }"
               >
-                <Squares2X2Icon class="h-5 w-5 mr-3 text-[#8B4000] group-hover:text-[#A0522D] transition-colors duration-300" />
+                <Squares2X2Icon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path === '/dashboard' ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
                 <span class="flex-1">Dashboard</span>
+              </router-link>
+              
+              <router-link
+                to="/reports"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/reports') }"
+              >
+                <ShieldExclamationIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/reports') ? 'text-white' : 'text-[#EC0000] group-hover:text-[#CC0000]'
+                  ]"
+                />
+                <span class="flex-1">Reports</span>
               </router-link>
               
               <router-link
@@ -65,9 +84,18 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/posts') }"
               >
-                <DocumentTextIcon class="h-5 w-5 mr-3 text-green-500 group-hover:text-green-600 transition-colors duration-300" />
-                <span class="flex-1">Blog Posts</span>
-                <span v-if="draftCount > 0" class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded-full">
+                <DocumentTextIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/posts') ? 'text-white' : 'text-[#FF9900] group-hover:text-[#E68A00]'
+                  ]"
+                />
+                <span class="flex-1">Blogs</span>
+                <span
+                  v-if="draftCount > 0"
+                  class="text-xs font-bold px-2 py-1 rounded-full"
+                  style="background-color: rgba(255, 237, 0, 0.25); color: #8A7A00;"
+                >
                   {{ draftCount }}
                 </span>
               </router-link>
@@ -77,9 +105,18 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path === '/drafts' }"
               >
-                <PencilSquareIcon class="h-5 w-5 mr-3 text-yellow-500 group-hover:text-yellow-600 transition-colors duration-300" />
+                <PencilSquareIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path === '/drafts' ? 'text-white' : 'text-[#FFED00] group-hover:text-[#C7B800]'
+                  ]"
+                />
                 <span class="flex-1">Drafts</span>
-                <span v-if="draftCount > 0" class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded-full">
+                <span
+                  v-if="draftCount > 0"
+                  class="text-xs font-bold px-2 py-1 rounded-full"
+                  style="background-color: rgba(255, 237, 0, 0.25); color: #8A7A00;"
+                >
                   {{ draftCount }}
                 </span>
               </router-link>
@@ -89,7 +126,12 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/videos') }"
               >
-                <VideoCameraIcon class="h-5 w-5 mr-3 text-purple-500 group-hover:text-purple-600 transition-colors duration-300" />
+                <VideoCameraIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/videos') ? 'text-white' : 'text-[#7C3AED] group-hover:text-[#5B21B6]'
+                  ]"
+                />
                 <span class="flex-1">Videos</span>
               </router-link>
               
@@ -98,7 +140,12 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/resources') }"
               >
-                <FolderOpenIcon class="h-5 w-5 mr-3 text-indigo-500 group-hover:text-indigo-600 transition-colors duration-300" />
+                <FolderOpenIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/resources') ? 'text-white' : 'text-[#0D9488] group-hover:text-[#0A746A]'
+                  ]"
+                />
                 <span class="flex-1">Resources</span>
               </router-link>
               
@@ -107,7 +154,12 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/faqs') }"
               >
-                <QuestionMarkCircleIcon class="h-5 w-5 mr-3 text-teal-500 group-hover:text-teal-600 transition-colors duration-300" />
+                <QuestionMarkCircleIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/faqs') ? 'text-white' : 'text-[#99CC00] group-hover:text-[#7A9900]'
+                  ]"
+                />
                 <span class="flex-1">FAQs</span>
               </router-link>
             </div>
@@ -115,8 +167,8 @@
 
           <!-- Content Organization Section -->
           <div>
-            <h3 class="px-3 text-xs font-bold text-gray-600 uppercase tracking-wider mb-4 flex items-center">
-              <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+            <h3 class="px-3 text-xs font-bold uppercase tracking-wider mb-4 flex items-center" style="color: #555555;">
+              <div class="w-2 h-2 rounded-full mr-2" style="background-color: #0D9488;"></div>
               Content Organization
             </h3>
             <div class="space-y-2">
@@ -125,25 +177,63 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/partners') }"
               >
-                <UserGroupIcon class="h-5 w-5 mr-3 text-green-500 group-hover:text-green-600 transition-colors duration-300" />
+                <UserGroupIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/partners') ? 'text-white' : 'text-[#0D9488] group-hover:text-[#0A746A]'
+                  ]"
+                />
                 <span class="flex-1">Partners</span>
               </router-link>
               
               <router-link
-                to="/success-stories"
+                to="/blogs"
                 class="sidebar-link group"
-                :class="{ active: $route.path.startsWith('/success-stories') }"
+                :class="{ active: $route.path.startsWith('/blogs') }"
               >
-                <ChatBubbleLeftRightIcon class="h-5 w-5 mr-3 text-emerald-500 group-hover:text-emerald-600 transition-colors duration-300" />
-                <span class="flex-1">Success Stories</span>
+                <BookOpenIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/blogs') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Blogs</span>
+              </router-link>
+              
+              <router-link
+                to="/uploads"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/uploads') }"
+              >
+                <PhotoIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/uploads') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Uploads</span>
+              </router-link>
+
+              <router-link
+                to="/social-media"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/social-media') }"
+              >
+                <ShareIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/social-media') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Social Media</span>
               </router-link>
             </div>
           </div>
 
           <!-- System & Settings Section -->
           <div>
-            <h3 class="px-3 text-xs font-bold text-gray-600 uppercase tracking-wider mb-4 flex items-center">
-              <div class="w-2 h-2 bg-gray-500 rounded-full mr-2"></div>
+            <h3 class="px-3 text-xs font-bold uppercase tracking-wider mb-4 flex items-center" style="color: #555555;">
+              <div class="w-2 h-2 rounded-full mr-2" style="background-color: #555555;"></div>
               System & Settings
             </h3>
             <div class="space-y-2">
@@ -152,7 +242,12 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/users') }"
               >
-                <UsersIcon class="h-5 w-5 mr-3 text-gray-500 group-hover:text-gray-600 transition-colors duration-300" />
+                <UsersIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/users') ? 'text-white' : 'text-[#555555] group-hover:text-[#222222]'
+                  ]"
+                />
                 <span class="flex-1">Team Members</span>
               </router-link>
               
@@ -161,7 +256,12 @@
                 class="sidebar-link group"
                 :class="{ active: $route.path === '/settings' }"
               >
-                <CogIcon class="h-5 w-5 mr-3 text-gray-500 group-hover:text-gray-600 transition-colors duration-300" />
+                <CogIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path === '/settings' ? 'text-white' : 'text-[#555555] group-hover:text-[#222222]'
+                  ]"
+                />
                 <span class="flex-1">Settings</span>
               </router-link>
             </div>
@@ -169,27 +269,37 @@
         </nav>
 
         <!-- Enhanced User Info & Logout -->
-        <div class="border-t border-gray-200 p-6 bg-white">
+        <div class="p-6 bg-white">
           <div class="flex items-center mb-4">
             <div class="flex-shrink-0">
-              <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#8B4000] to-[#A0522D] flex items-center justify-center shadow-lg">
+              <div class="h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg" style="background-color: #009EDB;">
                 <span class="text-white text-lg font-bold">
                   {{ userInitials }}
                 </span>
               </div>
             </div>
             <div class="ml-4">
-              <p class="text-sm font-bold text-gray-900" style="font-family: 'Poppins', sans-serif;">{{ authStore.userFullName }}</p>
-              <p class="text-xs text-gray-600 font-medium">{{ authStore.user?.role }}</p>
+              <p class="text-sm font-bold" style="font-family: 'Poppins', sans-serif; color: #222222;">{{ authStore.userFullName }}</p>
+              <p class="text-xs font-medium" style="color: #555555;">{{ authStore.user?.role }}</p>
             </div>
           </div>
           
           <button
             @click="handleLogout"
-            class="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 rounded-xl transition-all duration-300 font-semibold border border-gray-200 hover:border-red-200"
+            class="flex items-center w-full px-4 py-3 text-sm rounded-xl transition-all duration-300 font-semibold border"
+            :style="{
+              color: isHoveringLogout ? '#CC0000' : '#222222',
+              borderColor: isHoveringLogout ? '#CC0000' : '#DDDDDD',
+              backgroundColor: isHoveringLogout ? 'rgba(236, 0, 0, 0.08)' : '#FFFFFF'
+            }"
+            @mouseover="isHoveringLogout = true"
+            @mouseleave="isHoveringLogout = false"
           >
-            <ArrowRightOnRectangleIcon class="h-5 w-5 mr-3" />
-            Logout
+            <ArrowRightOnRectangleIcon
+              class="h-5 w-5 mr-3 transition-colors duration-300"
+              :class="isHoveringLogout ? 'text-[#CC0000]' : 'text-[#EC0000]'"
+            />
+            <span>Logout</span>
           </button>
         </div>
       </div>
@@ -198,15 +308,16 @@
     <!-- Enhanced Main content -->
     <div class="flex-1 flex flex-col overflow-hidden lg:ml-0">
       <!-- Enhanced Mobile header -->
-      <div class="lg:hidden bg-white shadow-lg border-b border-gray-200">
+      <div class="lg:hidden bg-white shadow-lg" style="border-bottom: 1px solid #E6E6E6;">
         <div class="flex items-center justify-between h-16 px-4">
           <button
             @click="sidebarOpen = true"
-            class="p-3 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-300"
+            class="p-3 rounded-xl transition-all duration-300"
+            style="color: #009EDB;"
           >
             <Bars3Icon class="h-6 w-6" />
           </button>
-          <h1 class="text-lg font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">{{ pageTitle }}</h1>
+          <h1 class="text-lg font-bold" style="font-family: 'Roboto', sans-serif; color: #222222;">{{ pageTitle }}</h1>
           <div class="w-10"></div>
         </div>
       </div>
@@ -236,6 +347,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { usePostsStore } from '@/stores/posts'
 import { useToast } from 'vue-toastification'
+import sautiLogo from '@/assets/sauti-logo.jpeg'
 import {
   Bars3Icon,
   XMarkIcon,
@@ -250,7 +362,11 @@ import {
   QuestionMarkCircleIcon,
   UserGroupIcon,
   ChatBubbleLeftRightIcon,
-  UsersIcon
+  UsersIcon,
+  ShieldExclamationIcon,
+  PhotoIcon,
+  ShareIcon,
+  BookOpenIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -260,6 +376,7 @@ const postsStore = usePostsStore()
 const toast = useToast()
 
 const sidebarOpen = ref(false)
+const isHoveringLogout = ref(false)
 
 // Real draft count from backend
 const draftCount = ref(0)
@@ -291,21 +408,25 @@ const userInitials = computed(() => {
 const pageTitle = computed(() => {
   const routeNames = {
     '/dashboard': 'Dashboard',
-    '/posts': 'Content',
+    '/posts': 'Blogs',
     '/drafts': 'Drafts',
     '/videos': 'Videos',
-    '/settings': 'Settings'
+    '/settings': 'Settings',
+    '/reports': 'Reports',
+    '/social-media': 'Social Media'
   }
-  
+
   // Check for exact matches first
   if (routeNames[route.path]) {
     return routeNames[route.path]
   }
-  
+
   // Check for partial matches
-  if (route.path.startsWith('/posts')) return 'Content'
+  if (route.path.startsWith('/reports')) return 'Reports'
+  if (route.path.startsWith('/posts')) return 'Blogs'
   if (route.path.startsWith('/videos')) return 'Videos'
-  
+  if (route.path.startsWith('/social-media')) return 'Social Media'
+
   return 'Dashboard'
 })
 

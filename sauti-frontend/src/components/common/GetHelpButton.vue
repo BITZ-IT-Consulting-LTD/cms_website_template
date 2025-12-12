@@ -58,7 +58,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- WhatsApp -->
                 <a
-                  href="https://wa.me/256123456789"
+                  href="https://wa.me/256743889999"
                   target="_blank"
                   class="card hover:shadow-lg transition-shadow p-4 flex items-center space-x-3"
                 >

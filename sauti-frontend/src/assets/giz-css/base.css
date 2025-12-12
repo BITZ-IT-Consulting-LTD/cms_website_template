@@ -1,0 +1,107 @@
+/* CSS Reset */
+
+/* Remove default margin, padding, and set box-sizing */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Remove default list styles */
+ul, ol {
+  list-style: none;
+}
+
+/* Remove default link styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Reset typography */
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #fff;
+  color: #000;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Make images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Remove default button styles */
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* Reset table styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Set a consistent focus outline for accessibility */
+a, button, input, textarea, select {
+  outline: none;
+}
+
+a:focus, button:focus, input:focus, textarea:focus, select:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Prevent text selection on buttons */
+button {
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Prevent iOS zoom on form elements */
+input, textarea, select, button {
+  font-size: 100%;
+}
+
+/* Ensure consistent form element appearance */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.custom-alert {
+  background: var(--gradient-alert-warning); /* Use a suitable alert gradient */
+  color: var(--text-dark);
+  padding: var(--md-spacing);
+  border-radius: var(--base-radius);
+  box-shadow: var(--shadow-light);
+  font-weight: bold;
+  text-align: center;
+}
+
+
+/* Dark Mode Preference */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #ffffff;
+  }
+}

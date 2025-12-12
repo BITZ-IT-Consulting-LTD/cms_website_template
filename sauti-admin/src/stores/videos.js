@@ -111,7 +111,7 @@ export const useVideosStore = defineStore('videos', () => {
   
   async function fetchCategories() {
     try {
-      const response = await api.get('/videos/categories/')
+      const response = await api.videos.categories.list()
       // Ensure categories is always an array
       const data = response.data
       categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])

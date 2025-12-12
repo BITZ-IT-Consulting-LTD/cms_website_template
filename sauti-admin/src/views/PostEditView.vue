@@ -230,6 +230,33 @@ Each paragraph will be properly formatted when displayed."
             </select>
             <p class="mt-2 text-xs text-gray-500">Published posts are visible on the frontend</p>
           </div>
+
+          <!-- Scheduled Publishing -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-900 mb-2">
+              <svg class="w-4 h-4 inline mr-1 text-[#8B4000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Schedule Publishing
+            </label>
+            <input
+              v-model="form.scheduledPublishAt"
+              type="datetime-local"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
+            />
+            <p class="mt-2 text-xs text-gray-500">
+              Set a date and time to automatically publish this post. It will stay as draft until then.
+            </p>
+            <button
+              v-if="form.scheduledPublishAt"
+              @click="form.scheduledPublishAt = null"
+              type="button"
+              class="mt-2 text-xs text-red-600 hover:text-red-800"
+            >
+              Clear schedule
+            </button>
+          </div>
         </div>
 
           <!-- Enhanced Featured Image Card -->
@@ -310,6 +337,13 @@ Each paragraph will be properly formatted when displayed."
         </div>
       </div>
     </div>
+
+    <!-- Blog Preview Modal -->
+    <BlogPreviewModal
+      :isOpen="isPreviewOpen"
+      :slug="route.params.slug || savedSlug"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -319,6 +353,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { usePostsStore } from '@/stores/posts'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
+import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   EyeIcon,
   LinkIcon,
@@ -351,7 +386,8 @@ const form = ref({
   categories: [],
   tags: [],
   featuredImage: null,
-  status: 'DRAFT'
+  status: 'DRAFT',
+  scheduledPublishAt: null
 })
 
 // Computed
@@ -539,6 +575,8 @@ const removeImage = () => {
 
 const savedSlug = ref(null)
 
+const isPreviewOpen = ref(false)
+
 const previewPost = async () => {
   if (!form.value.title) {
     toast.warning('Please enter a title first')
@@ -548,12 +586,14 @@ const previewPost = async () => {
   // Use current slug if editing, or saved slug from create
   const slug = route.params.slug || savedSlug.value
   if (slug) {
-    const previewUrl = `http://localhost:3003/blog/${slug}`
-    window.open(previewUrl, '_blank')
-    toast.info('Opening preview in new window...')
+    isPreviewOpen.value = true
   } else {
     toast.warning('Please save the post first to preview it')
   }
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
 }
 
 const saveDraft = async () => {
@@ -579,16 +619,68 @@ const savePost = async () => {
   loading.value = true
 
   try {
+    // Build post data object, only including defined values
     const postData = {
-      title: form.value.title || '',
-      content: form.value.content || '',
-      excerpt: form.value.excerpt || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : ''),
-      category: form.value.categories && form.value.categories.length > 0 ? form.value.categories[0] : null,
-      tags: getTagIds(tagsInput.value),
-      featured_image: form.value.featuredImage || null,
+      title: form.value.title.trim(),
+      content: form.value.content.trim(),
       status: form.value.status || 'DRAFT',
       language: 'en'
     }
+    
+    // Add excerpt only if it exists or generate from content
+    const excerpt = form.value.excerpt?.trim() || (form.value.content ? form.value.content.replace(/<[^>]*>/g, '').substring(0, 160).trim() : '')
+    if (excerpt) {
+      postData.excerpt = excerpt
+    }
+    
+    // Add category only if selected (ensure it's a number)
+    if (form.value.categories && Array.isArray(form.value.categories) && form.value.categories.length > 0) {
+      const categoryId = form.value.categories[0]
+      if (categoryId) {
+        // Ensure category is a number (ID)
+        const parsedCategoryId = typeof categoryId === 'number' ? categoryId : parseInt(categoryId, 10)
+        // Skip if parsing failed
+        if (!isNaN(parsedCategoryId) && parsedCategoryId > 0) {
+          postData.category = parsedCategoryId
+        }
+      }
+    }
+    
+    // Add tags only if there are any (ensure they're numbers)
+    const tagIds = getTagIds(tagsInput.value)
+    if (tagIds && tagIds.length > 0) {
+      // Ensure all tag IDs are numbers
+      const validTagIds = tagIds.map(id => typeof id === 'number' ? id : parseInt(id, 10)).filter(id => !isNaN(id) && id > 0)
+      // Only include if we have valid tag IDs
+      if (validTagIds.length > 0) {
+        postData.tags = validTagIds
+      }
+    }
+
+    // Add scheduled publish date if set
+    if (form.value.scheduledPublishAt) {
+      // Convert local datetime to ISO format for backend
+      postData.scheduled_publish_at = new Date(form.value.scheduledPublishAt).toISOString()
+      // If scheduling, ensure status is DRAFT
+      if (postData.scheduled_publish_at) {
+        postData.status = 'DRAFT'
+      }
+    } else {
+      postData.scheduled_publish_at = null
+    }
+
+    // Only include featured_image if it's a File object (new upload)
+    // If it's a string (existing URL), omit it - backend will keep existing image
+    if (form.value.featuredImage instanceof File) {
+      postData.featured_image = form.value.featuredImage
+    }
+    // For editing: if featuredImage is a string (existing URL), don't include it
+    
+    // Debug: Log the data being sent
+    console.log('Post data being sent:', {
+      ...postData,
+      featured_image: postData.featured_image instanceof File ? `File: ${postData.featured_image.name}` : 'No file'
+    })
 
     if (isEditing.value) {
       await postsStore.updatePost(route.params.slug, postData)
@@ -598,12 +690,45 @@ const savePost = async () => {
       // Store slug for preview
       savedSlug.value = createdPost.slug
       toast.success('Post created successfully')
-      // Stay on page after creation for preview ability
-      // router.push('/posts')
+      // Redirect to posts list after creation
+      router.push('/posts')
     }
   } catch (err) {
     console.error('Save error:', err)
-    const errorMessage = err.response?.data?.detail || err.message || 'Failed to save post'
+    console.error('Error response:', err.response?.data)
+    console.error('Post data sent:', postData)
+    
+    // Extract detailed error message
+    let errorMessage = 'Failed to save post'
+    
+    if (err.response?.data) {
+      const data = err.response.data
+      
+      // Handle Django REST Framework validation errors
+      if (data.detail) {
+        errorMessage = data.detail
+      } else if (typeof data === 'object') {
+        // Collect all field errors
+        const fieldErrors = []
+        Object.keys(data).forEach(field => {
+          if (Array.isArray(data[field])) {
+            fieldErrors.push(`${field}: ${data[field].join(', ')}`)
+          } else if (typeof data[field] === 'string') {
+            fieldErrors.push(`${field}: ${data[field]}`)
+          } else {
+            fieldErrors.push(`${field}: ${JSON.stringify(data[field])}`)
+          }
+        })
+        if (fieldErrors.length > 0) {
+          errorMessage = fieldErrors.join('; ')
+        }
+      } else if (typeof data === 'string') {
+        errorMessage = data
+      }
+    } else if (err.message) {
+      errorMessage = err.message
+    }
+    
     toast.error(errorMessage)
   } finally {
     loading.value = false
@@ -631,7 +756,8 @@ onMounted(async () => {
         categories: post.category ? [post.category.id] : [],
         tags: post.tags?.map(t => t.id) || [],
         featuredImage: post.featured_image || null,
-        status: post.status || 'DRAFT'
+        status: post.status || 'DRAFT',
+        scheduledPublishAt: post.scheduled_publish_at ? new Date(post.scheduled_publish_at).toISOString().slice(0, 16) : null
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''

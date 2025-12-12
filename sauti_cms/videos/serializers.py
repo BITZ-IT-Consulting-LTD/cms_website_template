@@ -23,7 +23,7 @@ class VideoSerializer(serializers.ModelSerializer):
             'youtube_url', 'video_file', 'thumbnail', 'duration',
             'file_size', 'category', 'category_id', 'author_name',
             'status', 'language', 'is_featured', 'views_count',
-            'published_at', 'created_at', 'updated_at',
+            'published_at', 'scheduled_publish_at', 'created_at', 'updated_at',
             'youtube_id', 'youtube_embed_url', 'youtube_thumbnail_url'
         ]
         read_only_fields = ['slug', 'created_at', 'updated_at', 'views_count']
@@ -69,8 +69,8 @@ class VideoListSerializer(serializers.ModelSerializer):
         model = Video
         fields = [
             'id', 'title', 'slug', 'description', 'video_type',
-            'youtube_url', 'thumbnail', 'duration', 'category',
+            'youtube_url', 'video_file', 'thumbnail', 'duration', 'category',
             'author_name', 'status', 'language', 'is_featured',
-            'views_count', 'published_at', 'created_at',
+            'views_count', 'published_at', 'scheduled_publish_at', 'created_at',
             'youtube_id', 'youtube_thumbnail_url'
         ]

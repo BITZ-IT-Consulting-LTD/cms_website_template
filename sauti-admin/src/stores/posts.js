@@ -113,7 +113,7 @@ export const usePostsStore = defineStore('posts', () => {
   
   async function fetchCategories() {
     try {
-      const response = await api.posts.categories()
+      const response = await api.posts.categories.list()
       // Ensure categories is always an array
       const data = response.data
       categories.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])

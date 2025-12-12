@@ -91,7 +91,7 @@ Key rights include:
 - Right to protection from abuse
 - Right to participate in decisions affecting them
 
-The Sauti Child Helpline is committed to ensuring these rights are respected and protected. If you know a child whose rights are being violated, call 116 immediately.
+The Sauti 116 helpline is committed to ensuring these rights are respected and protected. If you know a child whose rights are being violated, call 116 immediately.
 
 Our trained counselors are available 24/7 to provide support and guidance. Remember, every child deserves to grow up in a safe and nurturing environment.''',
             'excerpt': 'A comprehensive guide to child rights and protection laws in Uganda, explaining how Sauti supports these fundamental principles.',
@@ -113,7 +113,7 @@ Benefits of community support:
 - Local knowledge and resources
 - Cultural sensitivity in interventions
 
-The Sauti Child Helpline works closely with communities across Uganda to build awareness and provide support. We believe that protecting children is everyone's responsibility.
+The Sauti 116 helpline works closely with communities across Uganda to build awareness and provide support. We believe that protecting children is everyone's responsibility.
 
 If you're concerned about a child in your community, don't hesitate to reach out. Our helpline is confidential and available around the clock.''',
             'excerpt': 'How community involvement and support systems contribute to better outcomes for children in need of protection.',
@@ -135,7 +135,7 @@ Signs to watch for:
 - Difficulty concentrating
 - Changes in sleep or eating patterns
 
-The Sauti Child Helpline provides mental health support and can connect young people with appropriate resources. Our counselors are trained to handle sensitive situations with care and confidentiality.
+The Sauti 116 helpline provides mental health support and can connect young people with appropriate resources. Our counselors are trained to handle sensitive situations with care and confidentiality.
 
 Remember, it's okay to ask for help. Mental health challenges are common and treatable. You're not alone.''',
             'excerpt': 'Important mental health resources and support available for young people through the Sauti helpline.',
@@ -163,7 +163,7 @@ At School:
 - Teach children about appropriate touch
 - Create reporting mechanisms
 
-The Sauti Child Helpline (116) is available 24/7 for any safety concerns. Early intervention can prevent serious problems and protect children from harm.
+The Sauti 116 helpline (116) is available 24/7 for any safety concerns. Early intervention can prevent serious problems and protect children from harm.
 
 If you suspect a child is in danger, don't wait - call immediately. Every child deserves to feel safe and protected.''',
             'excerpt': 'Essential safety guidelines to protect children in home and school environments.',
