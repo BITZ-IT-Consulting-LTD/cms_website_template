@@ -1,16 +1,48 @@
-*.pyc
+# Python
 __pycache__
-.env
-.git
-.gitignore
-*.md
-venv/
+*.py[cod]
+*$py.class
+*.so
+.Python
 env/
-.venv/
+venv/
+ENV/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Django
+*.log
 db.sqlite3
-.DS_Store
+db.sqlite3-journal
+/media
+/staticfiles
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
 .vscode/
 .idea/
-*.log
-media/
-staticfiles/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Testing
+.coverage
+htmlcov/
+.tox/

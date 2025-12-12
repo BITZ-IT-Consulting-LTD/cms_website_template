@@ -1,41 +1,46 @@
-# Multi-stage build for Sauti Admin Dashboard
-# Stage 1: Build the Vue application
-FROM node:18-alpine AS build
+# Multi-stage build for Vue.js Admin Dashboard
 
+# Build stage
+FROM node:20-alpine as build-stage
+
+# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (including devDependencies needed for build)
+RUN npm ci
 
-# Copy application files
-COPY . .
-
-# Build argument for API URL
+# Set build arguments BEFORE copying source code
 ARG VITE_API_URL=/api
 ARG VITE_APP_TITLE="Sauti Admin Dashboard"
 ARG VITE_APP_VERSION="1.0.0"
 
 # Set environment variables for build
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_APP_TITLE=$VITE_APP_TITLE
-ENV VITE_APP_VERSION=$VITE_APP_VERSION
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_APP_TITLE=${VITE_APP_TITLE}
+ENV VITE_APP_VERSION=${VITE_APP_VERSION}
+
+# Copy application code (this will respect .dockerignore)
+COPY . .
 
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve with nginx
-FROM nginx:alpine
+# Production stage with Nginx
+FROM nginx:1.25-alpine as production-stage
 
-# Copy built files from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copy built assets from build stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
+# Add healthcheck
+RUN apk add --no-cache curl
+
+# Expose port
 EXPOSE 80
 
 # Start nginx
