@@ -7,6 +7,17 @@ from .serializers import (
 from posts.views import IsEditorOrReadOnly
 
 
+class ResourceCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET /api/resources/categories/<id>/ - Get category
+    PUT/PATCH /api/resources/categories/<id>/ - Update category (Editors/Admins only)
+    DELETE /api/resources/categories/<id>/ - Delete category (Editors/Admins only)
+    """
+    queryset = ResourceCategory.objects.all()
+    serializer_class = ResourceCategorySerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+
 class ResourceListCreateView(generics.ListCreateAPIView):
     """
     GET /api/resources/ - List all resources

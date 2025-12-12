@@ -1,20 +1,20 @@
 <template>
-  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 shadow-sm">
+  <header class="bg-white backdrop-blur-md sticky top-0 z-50 shadow-sm">
     <nav class="container-custom py-4">
       <div class="flex items-center justify-between min-h-[72px]">
         <!-- Enhanced Logo -->
-        <router-link to="/" class="flex items-center space-x-3 group">
+        <router-link to="/" class="flex items-center space-x-3 group no-underline">
           <template v-if="!useFallback">
-            <img :src="logoUrl" alt="Sauti" class="h-10 w-10 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
+            <img :src="logoUrl" alt="Sauti" class="h-16 w-16 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
           </template>
           <template v-else>
-            <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#8B4000] to-[#A0522D] flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300">S</div>
+            <div class="h-16 w-16 rounded-2xl flex items-center justify-center text-white font-bold text-2xl group-hover:scale-110 transition-transform duration-300" style="background-color: #009EDB;">S</div>
           </template>
           <div>
-            <h1 class="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-[#8B4000] transition-colors duration-300" style="font-family: 'Poppins', sans-serif;">
+            <h1 class="text-xl md:text-2xl font-bold group-hover:text-[#009EDB] transition-colors duration-300" style="font-family: 'Poppins', sans-serif; color: #222222;">
               Sauti
             </h1>
-            <p class="text-xs text-gray-500 -mt-1">Child Helpline</p>
+            <p class="text-xs -mt-1" style="color: #555555;">116 helpline</p>
           </div>
         </router-link>
 
@@ -23,19 +23,20 @@
           <router-link to="/" class="nav-link" :class="{ 'nav-link-active': $route.path === '/' }">Home</router-link>
           <router-link to="/about" class="nav-link" :class="{ 'nav-link-active': $route.path === '/about' }">About</router-link>
           <router-link to="/operations" class="nav-link" :class="{ 'nav-link-active': $route.path === '/operations' }">Services</router-link>
-          <router-link to="/blog" class="nav-link" :class="{ 'nav-link-active': $route.path === '/blog' }">Blogs</router-link>
+          <router-link to="/resources" class="nav-link" :class="{ 'nav-link-active': $route.path === '/resources' }">Reports & Resources</router-link>
+          <router-link to="/blogs" class="nav-link" :class="{ active: $route.path === '/blogs' }">Blogs</router-link>
           <router-link to="/videos" class="nav-link" :class="{ 'nav-link-active': $route.path === '/videos' }">Videos</router-link>
-          <router-link to="/resources" class="nav-link" :class="{ 'nav-link-active': $route.path === '/resources' }">Resources</router-link>
+          <router-link to="/faqs" class="nav-link" :class="{ 'nav-link-active': $route.path === '/faqs' }">FAQs</router-link>
           <router-link to="/contact" class="nav-link" :class="{ 'nav-link-active': $route.path === '/contact' }">Contact</router-link>
         </div>
 
         <!-- Enhanced Right Actions -->
         <div class="hidden lg:flex items-center gap-4 whitespace-nowrap shrink-0">
-          <a href="tel:116" class="btn-emergency text-sm px-6 py-3 flex items-center gap-2">
+          <a :href="`tel:${contactPhone}`" class="btn-emergency text-sm px-6 py-3 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span>Call 116</span>
+            <span>Call {{ contactPhone }}</span>
           </a>
         </div>
 
@@ -82,9 +83,9 @@
             About
           </router-link>
           
-          <router-link 
-            to="/operations" 
-            class="mobile-nav-link" 
+          <router-link
+            to="/operations"
+            class="mobile-nav-link"
             :class="{ 'mobile-nav-link-active': $route.path === '/operations' }"
             @click="mobileMenuOpen = false"
           >
@@ -93,11 +94,23 @@
             </svg>
             Services
           </router-link>
-          
-          <router-link 
-            to="/blog" 
-            class="mobile-nav-link" 
-            :class="{ 'mobile-nav-link-active': $route.path === '/blog' }"
+
+          <router-link
+            to="/resources"
+            class="mobile-nav-link"
+            :class="{ 'mobile-nav-link-active': $route.path === '/resources' }"
+            @click="mobileMenuOpen = false"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            Reports & Resources
+          </router-link>
+
+          <router-link
+            to="/blogs"
+            class="mobile-nav-link"
+            :class="{ 'mobile-nav-link-active': $route.path === '/blogs' }"
             @click="mobileMenuOpen = false"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,10 +118,10 @@
             </svg>
             Blogs
           </router-link>
-          
-          <router-link 
-            to="/videos" 
-            class="mobile-nav-link" 
+
+          <router-link
+            to="/videos"
+            class="mobile-nav-link"
             :class="{ 'mobile-nav-link-active': $route.path === '/videos' }"
             @click="mobileMenuOpen = false"
           >
@@ -119,15 +132,15 @@
           </router-link>
           
           <router-link 
-            to="/resources" 
+            to="/faqs" 
             class="mobile-nav-link" 
-            :class="{ 'mobile-nav-link-active': $route.path === '/resources' }"
+            :class="{ 'mobile-nav-link-active': $route.path === '/faqs' }"
             @click="mobileMenuOpen = false"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Resources
+            FAQs
           </router-link>
           
           <router-link 
@@ -143,12 +156,12 @@
           </router-link>
 
           <!-- Mobile CTA Buttons -->
-          <div class="pt-6 border-t border-gray-200">
-            <a href="tel:116" class="w-full btn-emergency text-center justify-center flex items-center gap-2">
+          <div class="pt-6">
+            <a :href="`tel:${contactPhone}`" class="w-full btn-emergency text-center justify-center flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <span>Call 116</span>
+              <span>Call {{ contactPhone }}</span>
             </a>
           </div>
         </div>
@@ -158,11 +171,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useContentStore } from '@/store/content'
 
+const contentStore = useContentStore()
 const mobileMenuOpen = ref(false)
 const useFallback = ref(false)
-const logoUrl = new URL('@/assets/ug.svg', import.meta.url).href
+const logoUrl = new URL('@/assets/sauti-logo.jpeg', import.meta.url).href
+
+const contactPhone = computed(() => contentStore.getContent('contact_phone_main', '116'))
+
+onMounted(() => {
+  contentStore.fetchContent()
+})
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
-# Sauti Child Helpline CMS Backend
+# Sauti 116 helpline CMS Backend
 
-A comprehensive Django REST Framework backend for the Sauti Child Helpline website, empowering children, GBV survivors, and migrant workers in Uganda.
+A comprehensive Django REST Framework backend for the Sauti 116 helpline website, empowering children, GBV survivors, and migrant workers in Uganda.
 
 ## Features
 
@@ -436,4 +436,4 @@ This is a government project. External contributions require approval from MGLSD
 
 ---
 
-**Built with ❤️ for Sauti Child Helpline by Sales Push Limited / Bitz ITC**
+**Built with ❤️ for Sauti 116 helpline by Sales Push Limited / Bitz ITC**

@@ -4,58 +4,63 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Sauti Brand Colors (synced with public frontend)
-        primary: {
-          50: '#fff4ec',
-          100: '#ffe9d9',
-          200: '#ffd0b3',
-          300: '#ffb18c',
-          400: '#ff8c52',
-          500: '#CC5500', // Sauti Orange (matching frontend)
-          600: '#a64400',
-          700: '#7f3400',
-          800: '#592500',
-          900: '#3b1900',
+        // Neutral Palette (Text & Backgrounds)
+        neutral: {
+          white: '#FFFFFF',
+          dark: '#006633', // Sauti Dark Green for dark backgrounds / footer
+          textPrimary: '#222222',
+          textSecondary: '#555555',
+          border: '#DDDDDD',
         },
-        gray: {
-          50: '#fafafa',
-          100: '#f4f4f5',
-          200: '#e4e4e7',
-          300: '#d4d4d8',
-          400: '#a1a1aa',
-          500: '#71717a',
-          600: '#52525b',
-          700: '#3f3f46',
-          800: '#27272a',
-          900: '#18181b',
+        // Sauti Brand Colors
+        sauti: {
+          blue: '#009EDB',
+          orange: '#FF9900',
+          red: '#EC0000',
+          greenLight: '#99CC00',
+          greenDark: '#006633',
+          yellow: '#FFED00',
         },
-        // Utility colors for admin dashboard
+        // Semantic Colors (User Feedback)
         success: {
-          500: '#10b981',
-          600: '#059669',
-        },
-        danger: {
-          400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',
+          500: '#99CC00',
+          600: '#88BB00',
         },
         warning: {
-          500: '#f59e0b',
-          600: '#d97706',
+          500: '#FFED00',
+          600: '#E6D600',
+        },
+        error: {
+          500: '#EC0000',
+          600: '#CC0000',
         },
         info: {
-          500: '#3b82f6',
-          600: '#2563eb',
+          500: '#009EDB',
+          600: '#007BAA',
         },
-        // Context-specific colors (matching frontend)
+        // Legacy support mappings
+        primary: {
+          50: '#E6F7FF',
+          100: '#B3E5FF',
+          500: '#009EDB',
+          600: '#007BAA',
+        },
+        secondary: {
+          500: '#FF9900',
+          600: '#E68A00',
+        },
+        danger: {
+          500: '#EC0000',
+          600: '#CC0000',
+        },
         purple: {
-          500: '#8b5cf6', // GBV cases
-          600: '#7c3aed',
+          500: '#7C3AED',
+          600: '#6B2DCC',
         },
         teal: {
-          500: '#14b8a6', // Resources
-          600: '#0d9488',
-        }
+          500: '#0D9488',
+          600: '#0A746A',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],

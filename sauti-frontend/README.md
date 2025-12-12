@@ -1,6 +1,6 @@
-# Sauti Child Helpline - Vue 3 Frontend
+# Sauti 116 helpline - Vue 3 Frontend
 
-A modern, responsive, and accessible Vue 3 frontend application for the Sauti Child Helpline website. Built to empower children, GBV survivors, and migrant workers in Uganda with easy access to support services.
+A modern, responsive, and accessible Vue 3 frontend application for the Sauti 116 helpline website. Built to empower children, GBV survivors, and migrant workers in Uganda with easy access to support services.
 
 ## Features
 
@@ -435,4 +435,4 @@ For issues or questions:
 
 ---
 
-**Built with ❤️ for Sauti Child Helpline by Sales Push Limited / Bitz ITC**
+**Built with ❤️ for Sauti 116 helpline by Sales Push Limited / Bitz ITC**

@@ -3,7 +3,7 @@
     <div class="container-custom">
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="mb-2 text-4xl md:text-5xl font-extrabold text-gray-900">Sauti Blog</h1>
+        <h1 class="mb-2 text-4xl md:text-5xl font-extrabold text-gray-900">Blogs</h1>
         <p class="text-gray-600 max-w-3xl mx-auto">Insights, stories, and news from the front lines of child protection in Uganda.</p>
       </div>
 
@@ -11,7 +11,7 @@
       <div class="mb-8">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3 max-w-3xl mx-auto">
           <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
-          <input v-model="filters.search" @input="debouncedSearch" type="search" placeholder="Search articles..." class="flex-1 focus:outline-none" />
+          <input v-model="filters.search" @input="debouncedSearch" type="search" placeholder="Search stories..." class="flex-1 focus:outline-none" />
         </div>
         <div class="flex flex-wrap justify-center gap-3 mt-4">
           <button class="pill pill-primary" @click="setType('All')">All</button>
@@ -24,7 +24,7 @@
       </div>
 
       <!-- Loading -->
-      <Loader v-if="loading" message="Loading articles..." />
+      <Loader v-if="loading" message="Loading stories..." />
 
       <!-- Posts Grid (YouTube-style like Videos) -->
       <div v-else-if="posts.length" class="space-y-10">
@@ -54,7 +54,7 @@
         <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">No stories found</h3>
         <p class="text-gray-600">Try adjusting your filters or check back later for new content.</p>
       </div>
     </div>

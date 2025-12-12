@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="p-6 space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-start">
@@ -67,7 +67,7 @@
     </div>
 
     <!-- Search and Filters -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div class="bg-white rounded-lg shadow-sm p-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Search -->
         <div class="relative">
@@ -274,6 +274,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useFaqsStore } from '@/stores/faqs'
 import {
@@ -288,6 +289,7 @@ import {
   TrashIcon
 } from '@heroicons/vue/24/outline'
 
+const route = useRoute()
 const toast = useToast()
 const faqsStore = useFaqsStore()
 
@@ -467,5 +469,8 @@ const fetchFaqs = async () => {
 // Lifecycle
 onMounted(() => {
   fetchFaqs()
+  if (route.query.create === 'true') {
+    showCreateModal.value = true
+  }
 })
 </script>

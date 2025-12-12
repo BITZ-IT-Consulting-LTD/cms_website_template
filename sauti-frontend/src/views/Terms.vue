@@ -16,7 +16,7 @@
           <section class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
             <p class="text-gray-700 mb-4">
-              By accessing and using the Sauti Child Helpline services, you accept and agree to be bound by the terms 
+              By accessing and using the Sauti 116 helpline services, you accept and agree to be bound by the terms 
               and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
             </p>
           </section>
@@ -24,7 +24,7 @@
           <section class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">2. Description of Service</h2>
             <p class="text-gray-700 mb-4">
-              Sauti Child Helpline provides:
+              Sauti 116 helpline provides:
             </p>
             <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
               <li>24/7 confidential helpline services (116)</li>
@@ -78,7 +78,7 @@
           <section class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">6. Limitation of Liability</h2>
             <p class="text-gray-700 mb-4">
-              Sauti Child Helpline and its partners are not liable for any direct, indirect, incidental, special, 
+              Sauti 116 helpline and its partners are not liable for any direct, indirect, incidental, special, 
               or consequential damages resulting from the use or inability to use our services.
             </p>
           </section>

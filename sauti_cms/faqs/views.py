@@ -6,6 +6,17 @@ from .serializers import (
 from posts.views import IsEditorOrReadOnly
 
 
+class FAQCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET /api/faqs/categories/<id>/ - Get category
+    PUT/PATCH /api/faqs/categories/<id>/ - Update category (Editors/Admins only)
+    DELETE /api/faqs/categories/<id>/ - Delete category (Editors/Admins only)
+    """
+    queryset = FAQCategory.objects.all()
+    serializer_class = FAQCategorySerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+
 class FAQListCreateView(generics.ListCreateAPIView):
     """
     GET /api/faqs/ - List all active FAQs

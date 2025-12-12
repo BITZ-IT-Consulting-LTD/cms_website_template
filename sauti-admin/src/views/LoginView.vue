@@ -2,8 +2,8 @@
   <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background-color: white !important;">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-br from-[#8B4000] to-[#A0522D] shadow-lg">
-          <span class="text-white font-bold text-xl">S</span>
+        <div class="mx-auto h-24 w-24 flex items-center justify-center">
+          <img :src="sautiLogo" alt="Sauti Logo" class="h-full w-full object-contain" />
         </div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900" style="font-family: 'Roboto', sans-serif !important;">
           Admin Dashboard
@@ -85,6 +85,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
 import { LockClosedIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/solid'
+import sautiLogo from '@/assets/sauti-logo.jpeg'
 
 const router = useRouter()
 const route = useRoute()

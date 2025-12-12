@@ -110,9 +110,14 @@ class Video(models.Model):
     
     is_featured = models.BooleanField(default=False, help_text='Feature on homepage')
     views_count = models.PositiveIntegerField(default=0)
-    
+
     # Timestamps
     published_at = models.DateTimeField(null=True, blank=True)
+    scheduled_publish_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='Schedule automatic publishing at this date/time'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

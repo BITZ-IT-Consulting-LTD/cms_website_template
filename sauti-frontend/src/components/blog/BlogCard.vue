@@ -1,6 +1,6 @@
 <template>
   <article class="group">
-    <router-link :to="`/blog/${post.slug}`" class="block">
+    <router-link :to="`/blogs/${post.slug}`" class="block">
       <!-- Featured Image (YouTube-style) -->
       <div class="relative bg-gray-200 rounded-xl overflow-hidden aspect-video cursor-pointer">
         <img

@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/partners/', include('partners.urls')),
     path('api/reports/', include('reports.urls')),
     path('api/dashboard/', include('dashboard.urls')),
+    path('api/content/', include('content.urls')),
+    path('api/social/', include('social_media.urls')),
     
     # API Documentation (Swagger/OpenAPI)
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
@@ -31,12 +33,13 @@ urlpatterns = [
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
-# Serve media files in development
+# Serve media files in development and production
+# In production, nginx will proxy /media/ requests to Django
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Customize admin site
 admin.site.site_header = "Sauti CMS Administration"
 admin.site.site_title = "Sauti CMS"
-admin.site.index_title = "Welcome to Sauti Child Helpline CMS"
+admin.site.index_title = "Welcome to Sauti 116 helpline CMS"

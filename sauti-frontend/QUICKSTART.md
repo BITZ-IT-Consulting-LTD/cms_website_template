@@ -2,7 +2,7 @@
 
 ## What You Have
 
-A **complete, production-ready Vue 3 frontend application** for the Sauti Child Helpline website!
+A **complete, production-ready Vue 3 frontend application** for the Sauti 116 helpline website!
 
 ---
 
@@ -574,5 +574,5 @@ Your Sauti CMS frontend is **production-ready** and includes:
 
 ---
 
-**Built with ❤️ for Sauti Child Helpline**
+**Built with ❤️ for Sauti 116 helpline**
 **Ministry of Gender, Labour and Social Development (MGLSD), Uganda**

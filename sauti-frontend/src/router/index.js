@@ -11,6 +11,7 @@ const Faqs = () => import('@/views/Faqs.vue')
 const Partners = () => import('@/views/Partners.vue')
 const Report = () => import('@/views/Report.vue')
 const Contact = () => import('@/views/Contact.vue')
+const Donate = () => import('@/views/Donate.vue')
 const Login = () => import('@/views/Login.vue')
 const Operations = () => import('@/views/Operations.vue')
 const ReportsInsights = () => import('@/views/ReportsInsights.vue')
@@ -26,7 +27,7 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      title: 'Sauti Child Helpline - Get Help Now',
+      title: 'Sauti 116 helpline - Get Help Now',
       description: 'Support for children, GBV survivors, and migrant workers in Uganda',
     },
   },
@@ -90,15 +91,15 @@ const routes = [
     component: About,
     meta: {
       title: 'About Sauti',
-      description: 'Learn about Sauti Child Helpline and our mission',
+      description: 'Learn about Sauti 116 helpline and our mission',
     },
   },
   {
-    path: '/blog',
+    path: '/blogs',
     name: 'blog',
     component: Blog,
     meta: {
-      title: 'Blogs & Articles',
+      title: 'Blogs',
       description: 'Latest stories, updates, and insights from Sauti',
     },
   },
@@ -112,11 +113,11 @@ const routes = [
     },
   },
   {
-    path: '/blog/:slug',
+    path: '/blogs/:slug',
     name: 'blog-detail',
     component: BlogDetail,
     meta: {
-      title: 'Blog Post',
+      title: 'Success Story',
     },
   },
   {
@@ -165,6 +166,15 @@ const routes = [
     },
   },
   {
+    path: '/donate',
+    name: 'donate',
+    component: Donate,
+    meta: {
+      title: 'Donate',
+      description: 'Support Sauti 116 helpline and make a difference',
+    },
+  },
+  {
     path: '/login',
     name: 'login',
     component: Login,
@@ -191,7 +201,7 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     }
-    
+
     // Scroll to anchor if present
     if (to.hash) {
       return {
@@ -199,7 +209,7 @@ const router = createRouter({
         behavior: 'smooth',
       }
     }
-    
+
     // Scroll to top for new pages
     return { top: 0, behavior: 'smooth' }
   },
@@ -208,16 +218,16 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // Update page title
-  document.title = to.meta.title || 'Sauti Child Helpline'
-  
+  document.title = to.meta.title || 'Sauti 116 helpline'
+
   // Update meta description
   const descriptionTag = document.querySelector('meta[name="description"]')
   if (descriptionTag && to.meta.description) {
     descriptionTag.setAttribute('content', to.meta.description)
   }
-  
+
   // Check authentication requirements
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } })

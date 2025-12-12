@@ -3,8 +3,8 @@
     <!-- Enhanced Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Roboto', sans-serif;">Content Management Dashboard</h1>
-        <p class="text-lg text-gray-600">Manage your website content, blog posts, videos, and resources</p>
+        <h1 class="text-4xl font-bold mb-2" style="font-family: 'Roboto', sans-serif; color: #222222;">Content Management Dashboard</h1>
+        <p class="text-lg" style="color: #555555;">Manage your website content, blog posts, videos, and resources</p>
       </div>
       <div class="flex gap-3">
         <button
@@ -28,70 +28,70 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-blue-100 rounded-2xl group-hover:bg-blue-200 transition-colors duration-300">
-            <DocumentTextIcon class="h-6 w-6 text-blue-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(220, 38, 38, 0.15);">
+            <ClipboardDocumentListIcon class="h-6 w-6" style="color: #DC2626;" />
           </div>
           <div class="text-right">
-            <div class="stats-number">{{ stats.totalPosts }}</div>
-            <div class="stats-label">Blog Posts</div>
+            <div class="stats-number">{{ stats.totalReports }}</div>
+            <div class="stats-label">Total Reports</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Published articles</div>
+        <div class="text-sm" style="color: #555555;">All submitted cases</div>
       </div>
       
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-purple-100 rounded-2xl group-hover:bg-purple-200 transition-colors duration-300">
-            <VideoCameraIcon class="h-6 w-6 text-purple-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(245, 158, 11, 0.15);">
+            <ClockIcon class="h-6 w-6" style="color: #F59E0B;" />
           </div>
           <div class="text-right">
-            <div class="stats-number">{{ stats.totalVideos }}</div>
-            <div class="stats-label">Videos</div>
+            <div class="stats-number">{{ stats.pendingReports }}</div>
+            <div class="stats-label">Pending Review</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Educational content</div>
+        <div class="text-sm" style="color: #555555;">Requires attention</div>
       </div>
       
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-indigo-100 rounded-2xl group-hover:bg-indigo-200 transition-colors duration-300">
-            <FolderOpenIcon class="h-6 w-6 text-indigo-600" />
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(16, 185, 129, 0.15);">
+            <CheckCircleIcon class="h-6 w-6" style="color: #10B981;" />
+          </div>
+          <div class="text-right">
+            <div class="stats-number">{{ stats.resolvedReports }}</div>
+            <div class="stats-label">Resolved</div>
+          </div>
+        </div>
+        <div class="text-sm" style="color: #555555;">Successfully closed</div>
+      </div>
+      
+      <div class="stats-card group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(13, 148, 136, 0.15);">
+            <FolderOpenIcon class="h-6 w-6" style="color: #0D9488;" />
           </div>
           <div class="text-right">
             <div class="stats-number">{{ stats.totalResources || 0 }}</div>
             <div class="stats-label">Resources</div>
           </div>
         </div>
-        <div class="text-sm text-gray-600">Downloadable content</div>
-      </div>
-      
-      <div class="stats-card group">
-        <div class="flex items-center justify-between mb-4">
-          <div class="p-3 bg-teal-100 rounded-2xl group-hover:bg-teal-200 transition-colors duration-300">
-            <QuestionMarkCircleIcon class="h-6 w-6 text-teal-600" />
-          </div>
-          <div class="text-right">
-            <div class="stats-number">{{ stats.totalFaqs || 0 }}</div>
-            <div class="stats-label">FAQs</div>
-          </div>
-        </div>
-        <div class="text-sm text-gray-600">Help content</div>
+        <div class="text-sm" style="color: #555555;">Downloadable content</div>
       </div>
     </div>
 
     <!-- Enhanced Content Management -->
     <div class="card">
       <div class="card-header">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2" style="font-family: 'Roboto', sans-serif;">Content Management</h2>
-        <p class="text-gray-600">Manage your blog posts, videos, resources, and other content</p>
+        <h2 class="text-2xl font-bold mb-2" style="font-family: 'Roboto', sans-serif; color: #222222;">Content Management</h2>
+        <p style="color: #555555;">Manage your blog posts, videos, resources, and other content</p>
       </div>
         
       <div class="card-body">
         <!-- Enhanced Quick Actions -->
-        <div class="flex flex-wrap gap-3 mb-6">
+        <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
           <router-link
             to="/posts/create"
-            class="btn-primary flex items-center gap-2"
+            class="btn-primary flex items-center gap-2 flex-1 min-w-[140px]"
           >
             <DocumentTextIcon class="h-5 w-5" />
             New Blog Post
@@ -99,23 +99,23 @@
           
           <router-link
             to="/videos/create"
-            class="btn-secondary flex items-center gap-2"
+            class="btn-secondary flex items-center gap-2 flex-1 min-w-[140px]"
           >
             <VideoCameraIcon class="h-5 w-5" />
             New Video
           </router-link>
           
           <router-link
-            to="/resources/create"
-            class="btn-outline flex items-center gap-2"
+            to="/resources?create=true"
+            class="btn-outline flex items-center gap-2 flex-1 min-w-[140px]"
           >
             <FolderOpenIcon class="h-5 w-5" />
             New Resource
           </router-link>
           
           <router-link
-            to="/faqs/create"
-            class="btn-outline flex items-center gap-2"
+            to="/faqs?create=true"
+            class="btn-outline flex items-center gap-2 flex-1 min-w-[140px]"
           >
             <QuestionMarkCircleIcon class="h-5 w-5" />
             New FAQ
@@ -132,7 +132,7 @@
                 class="form-select w-48"
               >
                 <option value="">All Content</option>
-                <option value="blog">Blog Posts</option>
+                <option value="blog">Blogs</option>
                 <option value="video">Videos</option>
                 <option value="resource">Resources</option>
                 <option value="faq">FAQs</option>
@@ -168,7 +168,7 @@
 
         <!-- Enhanced Content Table -->
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="min-w-full">
             <thead class="table-header">
               <tr>
                 <th class="table-cell text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -188,7 +188,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white">
               <tr v-for="item in filteredContent" :key="item.id" class="table-row">
                 <td class="table-cell">
                   <div class="text-sm font-semibold text-gray-900">{{ item.title }}</div>
@@ -260,48 +260,14 @@
       </div>
     </div>
 
-    <!-- Statistics & Analytics -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Content Performance Chart -->
-      <div class="lg:col-span-2 card p-6">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-gray-900">Content Performance</h3>
-          <select
-            v-model="analyticsTimeframe"
-            class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          >
-            <option value="30">Last 30 days</option>
-            <option value="90">Last 90 days</option>
-            <option value="365">Last year</option>
-          </select>
-        </div>
-        
-        <div class="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-          <div class="text-center">
-            <ChartBarIcon class="h-12 w-12 text-gray-400 mx-auto mb-2" />
-            <p class="text-sm text-gray-500">Interactive Chart Area</p>
-            <p class="text-xs text-gray-400">Chart.js integration coming soon</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Top Performing Content -->
-      <div class="card p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6">Top Performing Content</h3>
-        
-        <div class="space-y-4">
-          <div v-for="item in topContent" :key="item.title" class="flex items-start justify-between">
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 truncate">{{ item.title }}</p>
-              <p class="text-xs text-gray-500">{{ item.type }}</p>
-            </div>
-            <div class="flex-shrink-0 ml-4">
-              <p class="text-xs font-medium text-gray-900">{{ item.views }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Blog Preview Modal -->
+    <BlogPreviewModal
+      v-if="selectedItem && selectedItem.type === 'blog'"
+      :isOpen="isPreviewOpen"
+      :slug="selectedItem.slug"
+      :postId="selectedItem.id"
+      @close="closePreview"
+    />
   </div>
 </template>
 
@@ -310,19 +276,22 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useToast } from 'vue-toastification'
+import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   PlusIcon,
   PencilIcon,
   EyeIcon,
   EyeSlashIcon,
   TrashIcon,
-  ChartBarIcon,
   DocumentTextIcon,
   VideoCameraIcon,
   MagnifyingGlassIcon,
   DocumentDuplicateIcon,
   FolderOpenIcon,
-  QuestionMarkCircleIcon
+  QuestionMarkCircleIcon,
+  ClipboardDocumentListIcon,
+  ClockIcon,
+  CheckCircleIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -331,23 +300,17 @@ const toast = useToast()
 
 // Reactive data
 const searchQuery = ref('')
-const analyticsTimeframe = ref('30')
 const filters = ref({
   contentType: '',
   status: ''
 })
 
 const stats = computed(() => ({
-  totalPosts: dashboardStore.stats.content?.posts?.total || 0,
-  totalVideos: dashboardStore.stats.content?.videos?.total || 0,
-  totalResources: dashboardStore.stats.content?.resources?.total || 0,
-  totalFaqs: dashboardStore.stats.content?.faqs?.total || 0,
-  totalPartners: dashboardStore.stats.content?.partners?.total || 0,
   totalReports: dashboardStore.stats.reports?.total || 0,
-  pendingReports: dashboardStore.stats.reports?.pending || 0
+  pendingReports: dashboardStore.stats.reports?.pending || 0,
+  resolvedReports: (dashboardStore.stats.reports?.total || 0) - (dashboardStore.stats.reports?.pending || 0)
 }))
 const contentList = computed(() => dashboardStore.contentList)
-const topContent = computed(() => dashboardStore.topContent)
 const loading = computed(() => dashboardStore.loading)
 
 const filteredContent = computed(() => {
@@ -383,16 +346,22 @@ const editItem = (item) => {
   }
 }
 
+const isPreviewOpen = ref(false)
+const selectedItem = ref(null)
+
 const viewItem = (item) => {
   if (item.type === 'blog') {
-    // Open preview in new window for both drafts and published content
-    const previewUrl = `http://localhost:3003/blog/${item.slug}`
-    window.open(previewUrl, '_blank')
-    toast.info('Opening preview in new window...')
+    selectedItem.value = item
+    isPreviewOpen.value = true
   } else if (item.type === 'video') {
     // For videos, open the YouTube link
     toast.info('Video preview via YouTube coming soon')
   }
+}
+
+const closePreview = () => {
+  isPreviewOpen.value = false
+  selectedItem.value = null
 }
 
 const duplicateItem = async (item) => {
@@ -428,8 +397,7 @@ onMounted(async () => {
   try {
     await Promise.all([
       dashboardStore.fetchStats(),
-      dashboardStore.fetchContentList(),
-      dashboardStore.fetchTopContent()
+      dashboardStore.fetchContentList()
     ])
   } catch (err) {
     console.error('Failed to load dashboard data:', err)

@@ -9,12 +9,13 @@ from .serializers import (
 
 
 class IsEditorOrReadOnly(permissions.BasePermission):
-    """Custom permission: Only editors/admins can create/edit, others read-only"""
-    
+    """Custom permission: Only editors/admins/authors can create/edit, others read-only"""
+
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user.is_authenticated and request.user.is_editor
+        # Allow authenticated users with author role or higher (AUTHOR, EDITOR, ADMIN)
+        return request.user.is_authenticated and request.user.is_author
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -113,6 +114,17 @@ class CategoryListView(generics.ListCreateAPIView):
     """
     GET /api/posts/categories/ - List categories
     POST /api/posts/categories/ - Create category (Editors/Admins only)
+    """
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET /api/posts/categories/<id>/ - Get category
+    PUT/PATCH /api/posts/categories/<id>/ - Update category (Editors/Admins only)
+    DELETE /api/posts/categories/<id>/ - Delete category (Editors/Admins only)
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

@@ -14,7 +14,17 @@ RUN npm ci
 
 # Set build arguments BEFORE copying source code
 ARG VITE_API_URL=/api
+ARG VITE_APP_NAME="Sauti 116 helpline"
+ARG VITE_HOTLINE=116
+ARG VITE_WHATSAPP="+256743889999"
+ARG VITE_EMAIL="info@sauti.mglsd.go.ug"
+
+# Set environment variables for build
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_APP_NAME=${VITE_APP_NAME}
+ENV VITE_HOTLINE=${VITE_HOTLINE}
+ENV VITE_WHATSAPP=${VITE_WHATSAPP}
+ENV VITE_EMAIL=${VITE_EMAIL}
 
 # Copy application code
 COPY . .

@@ -1,6 +1,6 @@
 # Sauti CMS API Documentation
 
-Complete reference for the Sauti Child Helpline CMS REST API.
+Complete reference for the Sauti 116 helpline CMS REST API.
 
 ## Base URL
 

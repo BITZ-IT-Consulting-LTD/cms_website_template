@@ -12,11 +12,15 @@ const VideoEditView = () => import('@/views/VideoEditView.vue')
 const SettingsView = () => import('@/views/SettingsView.vue')
 const DraftsView = () => import('@/views/DraftsView.vue')
 const ReportsView = () => import('@/views/ReportsView.vue')
+const ReportDetailView = () => import('@/views/ReportDetailView.vue')
+const ReportEditView = () => import('@/views/ReportEditView.vue')
 const ResourcesView = () => import('@/views/ResourcesView.vue')
 const FaqsView = () => import('@/views/FaqsView.vue')
 const PartnersView = () => import('@/views/PartnersView.vue')
 const UsersView = () => import('@/views/UsersView.vue')
-const SuccessStoriesView = () => import('@/views/SuccessStoriesView.vue')
+const BlogsView = () => import('@/views/BlogsView.vue')
+const UploadsView = () => import('@/views/UploadsView.vue')
+const SocialMediaView = () => import('@/views/SocialMediaView.vue')
 
 const routes = [
   {
@@ -120,6 +124,22 @@ const routes = [
         }
       },
       {
+        path: 'reports/:id',
+        name: 'report-detail',
+        component: ReportDetailView,
+        meta: {
+          title: 'Report Details - Sauti Admin'
+        }
+      },
+      {
+        path: 'reports/:id/edit',
+        name: 'report-edit',
+        component: ReportEditView,
+        meta: {
+          title: 'Edit Report - Sauti Admin'
+        }
+      },
+      {
         path: 'reports/urgent',
         name: 'reports-urgent',
         component: ReportsView,
@@ -168,11 +188,27 @@ const routes = [
         }
       },
       {
-        path: 'success-stories',
-        name: 'success-stories',
-        component: SuccessStoriesView,
+        path: 'blogs',
+        name: 'blogs',
+        component: BlogsView,
         meta: {
-          title: 'Success Stories - Sauti Admin'
+          title: 'Blogs - Sauti Admin'
+        }
+      },
+      {
+        path: 'uploads',
+        name: 'uploads',
+        component: UploadsView,
+        meta: {
+          title: 'Frontend Content - Sauti Admin'
+        }
+      },
+      {
+        path: 'social-media',
+        name: 'social-media',
+        component: SocialMediaView,
+        meta: {
+          title: 'Social Media Posts - Sauti Admin'
         }
       }
     ]
@@ -197,10 +233,10 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // Update page title
   document.title = to.meta.title || 'Sauti Admin Dashboard'
-  
+
   // Check authentication requirements
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } })
