@@ -11,11 +11,17 @@ export const useContentStore = defineStore('content', () => {
   // Get content by key (reactive function)
   // Accessing content.value inside makes it reactive
   function getContent(key, defaultValue = '') {
-    // Access content.value to make it reactive
     const item = content.value[key]
-    if (!item) return defaultValue
-    // Prefer currentValue, then value, then defaultValue
-    return item.currentValue || item.value || defaultValue
+    const value = item?.currentValue || item?.value
+
+    if (value) {
+      return value
+    }
+
+    const defaultItem = getDefaultContent()[key]
+    const defaultValueFromContent = defaultItem?.currentValue || defaultItem?.value
+
+    return defaultValueFromContent || defaultValue
   }
 
   // Get content by page and key
@@ -48,7 +54,8 @@ export const useContentStore = defineStore('content', () => {
             contentMap[item.key] = item
           })
         }
-        content.value = contentMap
+        const defaultContent = getDefaultContent()
+        content.value = { ...defaultContent, ...contentMap }
         // Also save to localStorage as backup
         localStorage.setItem('sauti_content', JSON.stringify(content.value))
         console.log('Content loaded from API:', Object.keys(content.value).length, 'items')
@@ -226,12 +233,13 @@ export const useContentStore = defineStore('content', () => {
               })
             }
 
-            // Only update if content has changed (deep comparison)
+            const defaultContent = getDefaultContent()
+            const mergedContent = { ...defaultContent, ...contentMap }
             const currentStr = JSON.stringify(content.value)
-            const newStr = JSON.stringify(contentMap)
+            const newStr = JSON.stringify(mergedContent)
 
             if (currentStr !== newStr) {
-              content.value = contentMap
+              content.value = mergedContent
               // Update localStorage as well to keep it in sync
               localStorage.setItem('sauti_content', newStr)
               console.log('✅ Content updated from API poll:', Object.keys(contentMap).length, 'items')

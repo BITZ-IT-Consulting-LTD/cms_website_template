@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   # PostgreSQL Database
@@ -27,7 +27,7 @@ services:
       context: ./sauti_cms
       dockerfile: Dockerfile
     container_name: sauti_backend
-    command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
     volumes:
       - ./sauti_cms:/app
       - static_volume:/app/staticfiles
@@ -35,6 +35,7 @@ services:
     environment:
       - DEBUG=${DEBUG:-False}
       - SECRET_KEY=${SECRET_KEY}
+      - DB_ENGINE=postgres
       - DB_NAME=${DB_NAME:-sauti_cms}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
@@ -53,7 +54,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    networks:
+    networks: 
       - sauti_network
 
   # Vue.js Public Frontend with Nginx
@@ -65,10 +66,11 @@ services:
         - VITE_API_URL=/api
     container_name: sauti_frontend
     ports:
-      - "80:80"
+      - "8085:8085"
       - "443:443"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
       interval: 30s
@@ -88,7 +90,8 @@ services:
     ports:
       - "3001:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
       interval: 30s
