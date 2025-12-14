@@ -248,7 +248,9 @@ export const useContentStore = defineStore('content', () => {
     // (e.g., if the component using the store is unmounted)
     // Note: For a global store that's always active, this might not be strictly necessary,
     // but it's good practice for resource management.
-    this.$onDispose(() => {
+    // Access the store instance to use $onDispose
+    const store = useContentStore()
+    store.$onDispose(() => {
       clearInterval(apiPollInterval)
     })
   }
