@@ -2,31 +2,30 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
 
 // Lazy load views for better performance
-const Home = () => import('@/views/Home.vue')
-const About = () => import('@/views/About.vue')
-const Blog = () => import('@/views/Blog.vue')
-const BlogDetail = () => import('@/views/BlogDetail.vue')
-const Resources = () => import('@/views/Resources.vue')
-const Faqs = () => import('@/views/Faqs.vue')
-const Partners = () => import('@/views/Partners.vue')
-const Report = () => import('@/views/Report.vue')
-const Contact = () => import('@/views/Contact.vue')
-const Donate = () => import('@/views/Donate.vue')
-const Login = () => import('@/views/Login.vue')
-const Operations = () => import('@/views/Operations.vue')
-const ReportsInsights = () => import('@/views/ReportsInsights.vue')
-const Articles = () => import('@/views/Videos.vue')
-const Videos = () => import('@/views/Videos.vue')
-const Privacy = () => import('@/views/Privacy.vue')
-const Terms = () => import('@/views/Terms.vue')
-const Accessibility = () => import('@/views/Accessibility.vue')
+import HomePage from '@/views/HomePage.vue'
+import AboutPage from '@/views/AboutPage.vue'
+import BlogPage from '@/views/BlogPage.vue'
+import BlogDetailPage from '@/views/BlogDetailPage.vue'
+import ResourcesPage from '@/views/ResourcesPage.vue'
+import FaqsPage from '@/views/FaqsPage.vue'
+import PartnersPage from '@/views/PartnersPage.vue'
+import ReportPage from '@/views/ReportPage.vue'
+import ContactPage from '@/views/ContactPage.vue'
+import DonatePage from '@/views/DonatePage.vue'
+import LoginPage from '@/views/LoginPage.vue'
+import OperationsPage from '@/views/OperationsPage.vue'
+import ReportsInsightsPage from '@/views/ReportsInsightsPage.vue'
+import VideosPage from '@/views/VideosPage.vue'
+import PrivacyPage from '@/views/PrivacyPage.vue'
+import TermsPage from '@/views/TermsPage.vue'
+import AccessibilityPage from '@/views/AccessibilityPage.vue'
 
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: HomePage,
     meta: {
       title: 'Sauti 116 helpline - Get Help Now',
       description: 'Support for children, GBV survivors, and migrant workers in Uganda',
@@ -35,7 +34,7 @@ const routes = [
   {
     path: '/privacy',
     name: 'privacy',
-    component: Privacy,
+    component: PrivacyPage,
     meta: {
       title: 'Privacy Policy',
       description: 'How Sauti protects your data and confidentiality',
@@ -44,7 +43,7 @@ const routes = [
   {
     path: '/terms',
     name: 'terms',
-    component: Terms,
+    component: TermsPage,
     meta: {
       title: 'Terms of Service',
       description: 'Rules for using Sauti services and this website',
@@ -53,7 +52,7 @@ const routes = [
   {
     path: '/accessibility',
     name: 'accessibility',
-    component: Accessibility,
+    component: AccessibilityPage,
     meta: {
       title: 'Accessibility Statement',
       description: 'Our commitment to making our services accessible to everyone',
@@ -62,7 +61,7 @@ const routes = [
   {
     path: '/operations',
     name: 'operations',
-    component: Operations,
+    component: OperationsPage,
     meta: {
       title: 'Our Operations & Case Flow',
       description: 'How we handle every call with care and urgency',
@@ -71,7 +70,7 @@ const routes = [
   {
     path: '/reports',
     name: 'reports',
-    component: ReportsInsights,
+    component: ReportsInsightsPage,
     meta: {
       title: 'Reports & Insights',
       description: 'Explore data and insights from Sauti Uganda',
@@ -80,7 +79,7 @@ const routes = [
   {
     path: '/videos',
     name: 'videos',
-    component: Videos,
+    component: VideosPage,
     meta: {
       title: 'Videos',
       description: 'Educational and awareness videos',
@@ -88,18 +87,14 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'about',
-    component: About,
-    meta: {
-      title: 'About Sauti',
-      description: 'Learn about Sauti 116 helpline and our mission',
-    },
+    name: 'AboutPage',
+    component: AboutPage
   },
 
   {
     path: '/blogs',
     name: 'blog',
-    component: Blog,
+    component: BlogPage,
     meta: {
       title: 'Blogs',
       description: 'Latest stories, updates, and insights from Sauti',
@@ -108,7 +103,7 @@ const routes = [
   {
     path: '/articles',
     name: 'articles',
-    component: Articles,
+    component: VideosPage, // Assuming Articles also uses VideosPage
     meta: {
       title: 'Articles',
       description: 'Featured articles and stories',
@@ -117,7 +112,7 @@ const routes = [
   {
     path: '/blogs/:slug',
     name: 'blog-detail',
-    component: BlogDetail,
+    component: BlogDetailPage,
     meta: {
       title: 'Success Story',
     },
@@ -125,7 +120,7 @@ const routes = [
   {
     path: '/resources',
     name: 'resources',
-    component: Resources,
+    component: ResourcesPage,
     meta: {
       title: 'Resources',
       description: 'Downloadable resources and guides',
@@ -134,7 +129,7 @@ const routes = [
   {
     path: '/faqs',
     name: 'faqs',
-    component: Faqs,
+    component: FaqsPage,
     meta: {
       title: 'FAQs',
       description: 'Frequently asked questions',
@@ -143,7 +138,7 @@ const routes = [
   {
     path: '/partners',
     name: 'partners',
-    component: Partners,
+    component: PartnersPage,
     meta: {
       title: 'Our Partners',
       description: 'Organizations supporting Sauti',
@@ -152,7 +147,7 @@ const routes = [
   {
     path: '/report',
     name: 'report',
-    component: Report,
+    component: ReportPage,
     meta: {
       title: 'Report a Case',
       description: 'Submit a confidential report anonymously',
@@ -161,7 +156,7 @@ const routes = [
   {
     path: '/contact',
     name: 'contact',
-    component: Contact,
+    component: ContactPage,
     meta: {
       title: 'Contact Us',
       description: 'Get in touch with Sauti',
@@ -170,7 +165,7 @@ const routes = [
   {
     path: '/donate',
     name: 'donate',
-    component: Donate,
+    component: DonatePage,
     meta: {
       title: 'Donate',
       description: 'Support Sauti 116 helpline and make a difference',
@@ -179,7 +174,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login,
+    component: LoginPage,
     meta: {
       title: 'Staff Login',
       requiresGuest: true,
@@ -188,7 +183,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('@/views/NotFound.vue'),
+    component: () => import('@/views/NotFoundPage.vue'),
     meta: {
       title: '404 - Page Not Found',
     },

@@ -33,7 +33,7 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <Loader />
+      <AppLoader />
     </div>
 
     <!-- Error State -->
@@ -169,7 +169,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import Loader from '../common/Loader.vue'
+import AppLoader from '../common/AppLoader.vue'
 
 const props = defineProps({
   faqs: {

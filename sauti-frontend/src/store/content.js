@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { api } from '@/utils/axios'
 
 export const useContentStore = defineStore('content', () => {
@@ -40,7 +40,7 @@ export const useContentStore = defineStore('content', () => {
     try {
       // Try to fetch from API first (but don't fail if it doesn't exist)
       try {
-        const response = await api.get('/content/')
+        const response = await api.get('/content/site-content/') // Corrected endpoint
         const data = response.data
 
         // Convert array to object keyed by content key
@@ -146,18 +146,7 @@ export const useContentStore = defineStore('content', () => {
     }
   }
 
-  // Listen for storage changes (when admin updates content)
-  function setupStorageListener() {
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'sauti_content') {
-        try {
-          content.value = JSON.parse(e.newValue || '{}')
-        } catch (err) {
-          console.error('Failed to parse storage content:', err)
-        }
-      }
-    })
-  }
+
 
   // Initialize
   function init() {
@@ -214,11 +203,11 @@ export const useContentStore = defineStore('content', () => {
 
     // Poll API periodically to catch admin updates (cross-port)
     // This is needed because localStorage is not shared across ports
-    let apiPollInterval = setInterval(() => {
+    const apiPollInterval = setInterval(() => {
       // Only poll if we're not already loading
       if (!loading.value) {
         // We use a silent fetch (no loading state) to avoid UI flickering
-        api.get('/content/')
+        api.get('/content/site-content/') // Corrected endpoint
           .then(response => {
             const data = response.data
             const contentMap = {}
@@ -254,8 +243,14 @@ export const useContentStore = defineStore('content', () => {
       }
     }, 3000) // Check every 3 seconds
 
-    // Cleanup interval on unmount (if needed)
-    // Note: This won't clean up automatically, but that's okay for a store
+    // Cleanup interval on store dispose
+    // This ensures the interval is cleared when the store is no longer active
+    // (e.g., if the component using the store is unmounted)
+    // Note: For a global store that's always active, this might not be strictly necessary,
+    // but it's good practice for resource management.
+    this.$onDispose(() => {
+      clearInterval(apiPollInterval)
+    })
   }
 
   return {
