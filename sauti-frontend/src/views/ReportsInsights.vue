@@ -3,24 +3,24 @@
     <div class="container-custom">
       <!-- Heading -->
       <div class="text-center mb-10">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-3">Reports & Insights</h1>
-        <p class="text-gray-600 max-w-3xl mx-auto">Explore the data collected by Sauti Uganda 116 helpline to understand the trends and patterns in child abuse and neglect across the country.</p>
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-3">{{ reportsInsightsTitle }}</h1>
+        <p class="text-gray-600 max-w-3xl mx-auto">{{ reportsInsightsSubtitle }}</p>
       </div>
 
       <!-- Filters -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ reportsInsightsSearchLabel }}</label>
             <div class="relative">
-              <input v-model="search" class="w-full form-input pl-10" placeholder="Search reports by keyword" />
+              <input v-model="search" class="w-full form-input pl-10" :placeholder="reportsInsightsSearchPlaceholder" />
               <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/></svg>
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Region</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ reportsInsightsRegionLabel }}</label>
             <select v-model="region" class="form-input">
-              <option value="all">All Regions</option>
+              <option value="all">{{ reportsInsightsAllRegions }}</option>
               <option>Central</option>
               <option>Eastern</option>
               <option>Northern</option>
@@ -28,71 +28,71 @@
             </select>
           </div>
           <div class="flex md:justify-end">
-            <button class="pill pill-primary">Apply Filters</button>
+            <button class="pill pill-primary">{{ reportsInsightsApplyFilters }}</button>
           </div>
         </div>
         <!-- Date range placeholder strip -->
-        <div class="mt-6 h-20 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 text-sm">Date Range Picker (placeholder)</div>
+        <div class="mt-6 h-20 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 text-sm">{{ reportsInsightsDateRangePlaceholder }}</div>
       </div>
 
       <!-- Cards grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Cases Per Category (Pie Chart) -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h4 class="font-semibold mb-4">Cases Per Category</h4>
+          <h4 class="font-semibold mb-4">{{ reportsInsightsCasesPerCategory }}</h4>
           <PieChart :labels="categoryLabels" :values="categoryValues" />
           <div class="mt-4 text-sm text-gray-600">
-            <p class="font-medium mb-2">Key Insights:</p>
+            <p class="font-medium mb-2">{{ reportsInsightsKeyInsights }}</p>
             <ul class="space-y-1 text-xs">
-              <li>• Child Neglect: 48.1% (2,746 cases)</li>
-              <li>• Physical Violence: 17.0% (817 cases)</li>
-              <li>• Sexual Violence: 14.7% (595 cases)</li>
-              <li>• Economic Violence: 5.0% (423 cases)</li>
+              <li>• {{ reportsInsightsChildNeglectStat }}</li>
+              <li>• {{ reportsInsightsPhysicalViolenceStat }}</li>
+              <li>• {{ reportsInsightsSexualViolenceStat }}</li>
+              <li>• {{ reportsInsightsEconomicViolenceStat }}</li>
             </ul>
           </div>
         </div>
         
         <!-- Summary -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h4 class="font-semibold mb-4">Summary</h4>
+          <h4 class="font-semibold mb-4">{{ reportsInsightsSummaryTitle }}</h4>
           <div class="space-y-3 text-sm text-gray-600">
-            <p><strong>Child Neglect</strong> remains the highest reported category, accounting for 48.1% of all cases (2,746 cases). This reflects the critical need for child protection services and support systems.</p>
-            <p><strong>Physical Violence</strong> follows at 17.0% (817 cases), while <strong>Sexual Violence</strong> represents 14.7% (595 cases), highlighting the urgent need for comprehensive protection services.</p>
-            <p>These trends indicate the importance of continued awareness campaigns and accessible reporting mechanisms across all regions of Uganda.</p>
+            <p>{{ reportsInsightsSummaryParagraph1 }}</p>
+            <p>{{ reportsInsightsSummaryParagraph2 }}</p>
+            <p>{{ reportsInsightsSummaryParagraph3 }}</p>
           </div>
         </div>
 
         <!-- Cases Per Region Over Time -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h4 class="font-semibold mb-4">Cases Per Region</h4>
-          <p class="text-xs text-gray-500 mb-3">01/01/2025 12:00 AM - 31/12/2025 12:00 AM</p>
+          <h4 class="font-semibold mb-4">{{ reportsInsightsCasesPerRegion }}</h4>
+          <p class="text-xs text-gray-500 mb-3">{{ reportsInsightsDateRange }}</p>
           <RegionChart :labels="timelineLabels" :regionData="regionTimeSeriesData" />
           <div class="mt-4 text-xs text-gray-600">
-            <p class="font-medium mb-2">Regions:</p>
+            <p class="font-medium mb-2">{{ reportsInsightsRegionsLabel }}</p>
             <div class="grid grid-cols-3 gap-2">
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-purple-500"></div>
-                <span>Central</span>
+                <span>{{ reportsInsightsRegionCentral }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-green-500"></div>
-                <span>Eastern</span>
+                <span>{{ reportsInsightsRegionEastern }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-orange-500"></div>
-                <span>Northern</span>
+                <span>{{ reportsInsightsRegionNorthern }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-blue-500"></div>
-                <span>Western</span>
+                <span>{{ reportsInsightsRegionWestern }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-dark-blue-500"></div>
-                <span>International</span>
+                <span>{{ reportsInsightsRegionInternational }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-light-green-500"></div>
-                <span>Unknown</span>
+                <span>{{ reportsInsightsRegionUnknown }}</span>
               </div>
             </div>
           </div>
@@ -100,56 +100,56 @@
 
         <!-- Summary -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h4 class="font-semibold mb-4">Regional Trends</h4>
+          <h4 class="font-semibold mb-4">{{ reportsInsightsRegionalTrends }}</h4>
           <div class="space-y-3 text-sm text-gray-600">
-            <p><strong>Central region</strong> consistently reports the highest number of cases throughout the year, with peaks in May (470 cases) and April (330 cases).</p>
-            <p><strong>Eastern region</strong> shows steady reporting with 1,320 total cases, while <strong>Northern region</strong> has 650 cases, with notable spikes in May (290 cases) and October (170 cases).</p>
-            <p>This data helps guide resource allocation and targeted intervention programs across different regions.</p>
+            <p>{{ reportsInsightsRegionalTrendsParagraph1 }}</p>
+            <p>{{ reportsInsightsRegionalTrendsParagraph2 }}</p>
+            <p>{{ reportsInsightsRegionalTrendsParagraph3 }}</p>
           </div>
         </div>
 
         <!-- Case Categories per Age Group -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h4 class="font-semibold mb-4">Case Categories per Age Group</h4>
+          <h4 class="font-semibold mb-4">{{ reportsInsightsCaseCategoriesPerAgeGroup }}</h4>
           <AgeGroupChart :labels="ageGroupLabels" :ageData="ageGroupData" />
           <div class="mt-4 text-xs text-gray-600">
-            <p class="font-medium mb-2">Age Groups:</p>
+            <p class="font-medium mb-2">{{ reportsInsightsAgeGroupsLabel }}</p>
             <div class="grid grid-cols-2 gap-2">
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-purple-500"></div>
-                <span>0-04</span>
+                <span>{{ reportsInsightsAgeGroup04 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-green-500"></div>
-                <span>05-09</span>
+                <span>{{ reportsInsightsAgeGroup0509 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-blue-500"></div>
-                <span>10-13</span>
+                <span>{{ reportsInsightsAgeGroup1013 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-green-400"></div>
-                <span>14-17</span>
+                <span>{{ reportsInsightsAgeGroup1417 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-pink-500"></div>
-                <span>18-24</span>
+                <span>{{ reportsInsightsAgeGroup1824 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-orange-500"></div>
-                <span>25-30</span>
+                <span>{{ reportsInsightsAgeGroup2530 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-orange-400"></div>
-                <span>31-45</span>
+                <span>{{ reportsInsightsAgeGroup3145 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-dark-purple-500"></div>
-                <span>Above 60</span>
+                <span>{{ reportsInsightsAgeGroupAbove60 }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-light-green-500"></div>
-                <span>Unknown</span>
+                <span>{{ reportsInsightsAgeGroupUnknown }}</span>
               </div>
             </div>
           </div>
@@ -157,22 +157,22 @@
 
         <!-- Case Categories per Gender -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <h4 class="font-semibold mb-4">Case Categories per Gender</h4>
+          <h4 class="font-semibold mb-4">{{ reportsInsightsCaseCategoriesPerGender }}</h4>
           <GenderChart :labels="ageGroupLabels" :genderData="genderData" />
           <div class="mt-4 text-xs text-gray-600">
-            <p class="font-medium mb-2">Gender Breakdown:</p>
+            <p class="font-medium mb-2">{{ reportsInsightsGenderBreakdownLabel }}</p>
             <div class="grid grid-cols-3 gap-2">
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-purple-500"></div>
-                <span>Female</span>
+                <span>{{ reportsInsightsGenderFemale }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-green-500"></div>
-                <span>Male</span>
+                <span>{{ reportsInsightsGenderMale }}</span>
               </div>
               <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2 bg-light-green-500"></div>
-                <span>Unknown</span>
+                <span>{{ reportsInsightsGenderUnknown }}</span>
               </div>
             </div>
           </div>
@@ -181,12 +181,12 @@
 
       <!-- Footer row like mock -->
       <div class="text-center text-sm text-gray-500 mt-10">
-        <router-link to="/privacy" class="hover:text-gray-700">Privacy Policy</router-link>
+        <router-link to="/privacy" class="hover:text-gray-700">{{ reportsInsightsPrivacyPolicy }}</router-link>
         <span class="mx-2">•</span>
-        <router-link to="/terms" class="hover:text-gray-700">Terms of Service</router-link>
+        <router-link to="/terms" class="hover:text-gray-700">{{ reportsInsightsTermsOfService }}</router-link>
         <span class="mx-2">•</span>
-        <router-link to="/contact" class="hover:text-gray-700">Contact Us</router-link>
-        <p class="mt-2">© 2024 Sauti Uganda 116 helpline. All rights reserved.</p>
+        <router-link to="/contact" class="hover:text-gray-700">{{ reportsInsightsContactUs }}</router-link>
+        <p class="mt-2">{{ reportsInsightsFooterText }}</p>
       </div>
     </div>
   </div>
@@ -207,11 +207,66 @@ import {
   PointElement,
   ArcElement
 } from 'chart.js'
+import { useContentStore } from '@/store/content'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, LineElement, CategoryScale, LinearScale, PointElement, ArcElement)
 
 const search = ref('')
 const region = ref('all')
+const contentStore = useContentStore()
+
+// Computed properties for content
+const reportsInsightsTitle = computed(() => contentStore.getContent('reports_insights_title', 'Reports & Insights'))
+const reportsInsightsSubtitle = computed(() => contentStore.getContent('reports_insights_subtitle', 'Explore the data collected by Sauti Uganda 116 helpline to understand the trends and patterns in child abuse and neglect across the country.'))
+const reportsInsightsSearchLabel = computed(() => contentStore.getContent('reports_insights_search_label', 'Search'))
+const reportsInsightsSearchPlaceholder = computed(() => contentStore.getContent('reports_insights_search_placeholder', 'Search reports by keyword'))
+const reportsInsightsRegionLabel = computed(() => contentStore.getContent('reports_insights_region_label', 'Region'))
+const reportsInsightsAllRegions = computed(() => contentStore.getContent('reports_insights_all_regions', 'All Regions'))
+const reportsInsightsApplyFilters = computed(() => contentStore.getContent('reports_insights_apply_filters', 'Apply Filters'))
+const reportsInsightsDateRangePlaceholder = computed(() => contentStore.getContent('reports_insights_date_range_placeholder', 'Date Range Picker (placeholder)'))
+const reportsInsightsCasesPerCategory = computed(() => contentStore.getContent('reports_insights_cases_per_category', 'Cases Per Category'))
+const reportsInsightsKeyInsights = computed(() => contentStore.getContent('reports_insights_key_insights', 'Key Insights:'))
+const reportsInsightsChildNeglectStat = computed(() => contentStore.getContent('reports_insights_child_neglect_stat', 'Child Neglect: 48.1% (2,746 cases)'))
+const reportsInsightsPhysicalViolenceStat = computed(() => contentStore.getContent('reports_insights_physical_violence_stat', 'Physical Violence: 17.0% (817 cases)'))
+const reportsInsightsSexualViolenceStat = computed(() => contentStore.getContent('reports_insights_sexual_violence_stat', 'Sexual Violence: 14.7% (595 cases)'))
+const reportsInsightsEconomicViolenceStat = computed(() => contentStore.getContent('reports_insights_economic_violence_stat', 'Economic Violence: 5.0% (423 cases)'))
+const reportsInsightsSummaryTitle = computed(() => contentStore.getContent('reports_insights_summary_title', 'Summary'))
+const reportsInsightsSummaryParagraph1 = computed(() => contentStore.getContent('reports_insights_summary_paragraph_1', 'Child Neglect remains the highest reported category, accounting for 48.1% of all cases (2,746 cases). This reflects the critical need for child protection services and support systems.'))
+const reportsInsightsSummaryParagraph2 = computed(() => contentStore.getContent('reports_insights_summary_paragraph_2', 'Physical Violence follows at 17.0% (817 cases), while Sexual Violence represents 14.7% (595 cases), highlighting the urgent need for comprehensive protection services.'))
+const reportsInsightsSummaryParagraph3 = computed(() => contentStore.getContent('reports_insights_summary_paragraph_3', 'These trends indicate the importance of continued awareness campaigns and accessible reporting mechanisms across all regions of Uganda.'))
+const reportsInsightsCasesPerRegion = computed(() => contentStore.getContent('reports_insights_cases_per_region', 'Cases Per Region'))
+const reportsInsightsDateRange = computed(() => contentStore.getContent('reports_insights_date_range', '01/01/2025 12:00 AM - 31/12/2025 12:00 AM'))
+const reportsInsightsRegionsLabel = computed(() => contentStore.getContent('reports_insights_regions_label', 'Regions:'))
+const reportsInsightsRegionCentral = computed(() => contentStore.getContent('reports_insights_region_central', 'Central'))
+const reportsInsightsRegionEastern = computed(() => contentStore.getContent('reports_insights_region_eastern', 'Eastern'))
+const reportsInsightsRegionNorthern = computed(() => contentStore.getContent('reports_insights_region_northern', 'Northern'))
+const reportsInsightsRegionWestern = computed(() => contentStore.getContent('reports_insights_region_western', 'Western'))
+const reportsInsightsRegionInternational = computed(() => contentStore.getContent('reports_insights_region_international', 'International'))
+const reportsInsightsRegionUnknown = computed(() => contentStore.getContent('reports_insights_region_unknown', 'Unknown'))
+const reportsInsightsRegionalTrends = computed(() => contentStore.getContent('reports_insights_regional_trends', 'Regional Trends'))
+const reportsInsightsRegionalTrendsParagraph1 = computed(() => contentStore.getContent('reports_insights_regional_trends_paragraph_1', 'Central region consistently reports the highest number of cases throughout the year, with peaks in May (470 cases) and April (330 cases).'))
+const reportsInsightsRegionalTrendsParagraph2 = computed(() => contentStore.getContent('reports_insights_regional_trends_paragraph_2', 'Eastern region shows steady reporting with 1,320 total cases, while Northern region has 650 cases, with notable spikes in May (290 cases) and October (170 cases).'))
+const reportsInsightsRegionalTrendsParagraph3 = computed(() => contentStore.getContent('reports_insights_regional_trends_paragraph_3', 'This data helps guide resource allocation and targeted intervention programs across different regions.'))
+const reportsInsightsCaseCategoriesPerAgeGroup = computed(() => contentStore.getContent('reports_insights_case_categories_per_age_group', 'Case Categories per Age Group'))
+const reportsInsightsAgeGroupsLabel = computed(() => contentStore.getContent('reports_insights_age_groups_label', 'Age Groups:'))
+const reportsInsightsAgeGroup04 = computed(() => contentStore.getContent('reports_insights_age_group_04', '0-04'))
+const reportsInsightsAgeGroup0509 = computed(() => contentStore.getContent('reports_insights_age_group_0509', '05-09'))
+const reportsInsightsAgeGroup1013 = computed(() => contentStore.getContent('reports_insights_age_group_1013', '10-13'))
+const reportsInsightsAgeGroup1417 = computed(() => contentStore.getContent('reports_insights_age_group_1417', '14-17'))
+const reportsInsightsAgeGroup1824 = computed(() => contentStore.getContent('reports_insights_age_group_1824', '18-24'))
+const reportsInsightsAgeGroup2530 = computed(() => contentStore.getContent('reports_insights_age_group_2530', '25-30'))
+const reportsInsightsAgeGroup3145 = computed(() => contentStore.getContent('reports_insights_age_group_3145', '31-45'))
+const reportsInsightsAgeGroupAbove60 = computed(() => contentStore.getContent('reports_insights_age_group_above_60', 'Above 60'))
+const reportsInsightsAgeGroupUnknown = computed(() => contentStore.getContent('reports_insights_age_group_unknown', 'Unknown'))
+const reportsInsightsCaseCategoriesPerGender = computed(() => contentStore.getContent('reports_insights_case_categories_per_gender', 'Case Categories per Gender'))
+const reportsInsightsGenderBreakdownLabel = computed(() => contentStore.getContent('reports_insights_gender_breakdown_label', 'Gender Breakdown:'))
+const reportsInsightsGenderFemale = computed(() => contentStore.getContent('reports_insights_gender_female', 'Female'))
+const reportsInsightsGenderMale = computed(() => contentStore.getContent('reports_insights_gender_male', 'Male'))
+const reportsInsightsGenderUnknown = computed(() => contentStore.getContent('reports_insights_gender_unknown', 'Unknown'))
+const reportsInsightsPrivacyPolicy = computed(() => contentStore.getContent('reports_insights_privacy_policy', 'Privacy Policy'))
+const reportsInsightsTermsOfService = computed(() => contentStore.getContent('reports_insights_terms_of_service', 'Terms of Service'))
+const reportsInsightsContactUs = computed(() => contentStore.getContent('reports_insights_contact_us', 'Contact Us'))
+const reportsInsightsFooterText = computed(() => contentStore.getContent('reports_insights_footer_text', '© 2024 Sauti Uganda 116 helpline. All rights reserved.'))
 
 // Mock datasets based on real data patterns
 // Cases Per Category (Pie Chart Data)

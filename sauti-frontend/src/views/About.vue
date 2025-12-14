@@ -6,10 +6,9 @@
       <div class="container-custom relative py-16 md:py-24">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div class="lg:col-span-7">
-            <h1 class="mb-4">About Sauti 116 helpline</h1>
+            <h1 class="mb-4">{{ aboutHeroTitle }}</h1>
             <p class="text-xl max-w-2xl" style="color: #555555;">
-              Uganda's national child helpline—free, confidential and accessible 24/7 across all telecoms.
-              We protect and empower children, GBV survivors and migrant workers with rapid, compassionate support.
+              {{ aboutHeroSubtitle }}
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
               <a href="tel:116" class="pill pill-primary" aria-label="Call the 116 helpline">Call 116</a>
@@ -43,8 +42,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                 </svg>
               </div>
-              <h3 class="text-4xl font-extrabold mb-2">116</h3>
-              <p class="text-white/90 text-sm font-medium">Toll-free Hotline</p>
+              <h3 class="text-4xl font-extrabold mb-2">{{ aboutStat1Title }}</h3>
+              <p class="text-white/90 text-sm font-medium">{{ aboutStat1Text }}</p>
             </div>
           </div>
 
@@ -57,8 +56,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
-              <h3 class="text-4xl font-extrabold mb-2">24/7</h3>
-              <p class="text-white/90 text-sm font-medium">Always Available</p>
+              <h3 class="text-4xl font-extrabold mb-2">{{ aboutStat2Title }}</h3>
+              <p class="text-white/90 text-sm font-medium">{{ aboutStat2Text }}</p>
             </div>
           </div>
 
@@ -71,8 +70,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
                 </svg>
               </div>
-              <h3 class="text-4xl font-extrabold mb-2">26+</h3>
-              <p class="text-white/90 text-sm font-medium">Local Languages</p>
+              <h3 class="text-4xl font-extrabold mb-2">{{ aboutStat3Title }}</h3>
+              <p class="text-white/90 text-sm font-medium">{{ aboutStat3Text }}</p>
             </div>
           </div>
 
@@ -85,8 +84,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
-              <h3 class="text-4xl font-extrabold mb-2">100%</h3>
-              <p class="text-white/90 text-sm font-medium">National Coverage</p>
+              <h3 class="text-4xl font-extrabold mb-2">{{ aboutStat4Title }}</h3>
+              <p class="text-white/90 text-sm font-medium">{{ aboutStat4Text }}</p>
             </div>
           </div>
         </div>
@@ -98,10 +97,9 @@
       <div class="container-custom">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           <div>
-            <h2 class="mb-3">Our Mission</h2>
+            <h2 class="mb-3">{{ aboutMissionTitle }}</h2>
             <p class="leading-relaxed" style="color: #222222;">
-              To protect and empower vulnerable populations through accessible, confidential, and
-              professional support services available 24/7.
+              {{ aboutMissionText }}
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
               <!-- Service 1 -->
@@ -113,8 +111,8 @@
                     </svg>
                   </div>
                   <div>
-                    <h4 class="font-bold text-gray-900 mb-2">Telephone Counseling</h4>
-                    <p class="text-sm leading-relaxed" style="color: #555555;">Immediate, confidential support via 116.</p>
+                    <h4 class="font-bold text-gray-900 mb-2">{{ aboutService1Title }}</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">{{ aboutService1Text }}</p>
                   </div>
                 </div>
               </div>
@@ -128,8 +126,8 @@
                     </svg>
                   </div>
                   <div>
-                    <h4 class="font-bold text-gray-900 mb-2">Walk-in Support</h4>
-                    <p class="text-sm leading-relaxed" style="color: #555555;">On-site help and rapid referrals.</p>
+                    <h4 class="font-bold text-gray-900 mb-2">{{ aboutService2Title }}</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">{{ aboutService2Text }}</p>
                   </div>
                 </div>
               </div>
@@ -143,8 +141,8 @@
                     </svg>
                   </div>
                   <div>
-                    <h4 class="font-bold text-gray-900 mb-2">Media & U-Report</h4>
-                    <p class="text-sm leading-relaxed" style="color: #555555;">Engagement via broadcast and U-Report 8500.</p>
+                    <h4 class="font-bold text-gray-900 mb-2">{{ aboutService3Title }}</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">{{ aboutService3Text }}</p>
                   </div>
                 </div>
               </div>
@@ -158,8 +156,8 @@
                     </svg>
                   </div>
                   <div>
-                    <h4 class="font-bold text-gray-900 mb-2">Guidance & Referral</h4>
-                    <p class="text-sm leading-relaxed" style="color: #555555;">Connections to specialized services.</p>
+                    <h4 class="font-bold text-gray-900 mb-2">{{ aboutService4Title }}</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">{{ aboutService4Text }}</p>
                   </div>
                 </div>
               </div>
@@ -173,15 +171,15 @@
                     </svg>
                   </div>
                   <div>
-                    <h4 class="font-bold text-gray-900 mb-2">Community Sensitization</h4>
-                    <p class="text-sm leading-relaxed" style="color: #555555;">Awareness and advocacy in communities nationwide.</p>
+                    <h4 class="font-bold text-gray-900 mb-2">{{ aboutService5Title }}</h4>
+                    <p class="text-sm leading-relaxed" style="color: #555555;">{{ aboutService5Text }}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div>
-            <h2 class="mb-3">Core Values</h2>
+            <h2 class="mb-3">{{ aboutValuesTitle }}</h2>
 
             <!-- Loading State -->
             <div v-if="loadingCoreValues" class="text-center py-8">
@@ -222,17 +220,17 @@
     <!-- Background / Our Journey -->
     <section class="section-padding bg-gray-50">
       <div class="container-custom">
-        <h2 class="text-center mb-4">Background</h2>
+        <h2 class="text-center mb-4">{{ aboutBackgroundTitle }}</h2>
         <div class="max-w-5xl mx-auto">
           <ul class="space-y-4 text-lg" style="color: #222222;">
-            <li>In early 2013, MGLSD in partnership with UCRNN and UNICEF lobbied for 116 to be designated as a child helpline number.</li>
-            <li>August 2013, 116 was officially designated as an emergency and toll‑free number by UCC.</li>
-            <li>On 4th November 2013, the first call was received by UCHL on the code 116.</li>
-            <li>In December 2014, government (MGLSD) took over the management of UCHL from UCRNN.</li>
-            <li>UCHL was instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.</li>
-            <li>In 2021, GBV response was integrated into Sauti’s work.</li>
+            <li>{{ aboutBackgroundItem1 }}</li>
+            <li>{{ aboutBackgroundItem2 }}</li>
+            <li>{{ aboutBackgroundItem3 }}</li>
+            <li>{{ aboutBackgroundItem4 }}</li>
+            <li>{{ aboutBackgroundItem5 }}</li>
+            <li>{{ aboutBackgroundItem6 }}</li>
           </ul>
-          <p class="text-sm mt-6" style="color: #555555;">Note: In October 2007, ITU asked all countries around the world to allocate 116 to Child Helplines.</p>
+          <p class="text-sm mt-6" style="color: #555555;">{{ aboutBackgroundNote }}</p>
         </div>
       </div>
     </section>
@@ -240,79 +238,21 @@
     <!-- Our Journey (Milestones) -->
     <section class="section-padding">
       <div class="container-custom">
-        <h2 class="text-center mb-4">Our Journey</h2>
-        <p class="text-center mb-10" style="color: #555555;">Key milestones in our history of child advocacy and the national designation of 116.</p>
-        <div class="relative max-w-5xl mx-auto py-8">
-          <div class="timeline-line"></div>
-          <!-- 2013 (Lobbying) -->
-          <div class="timeline-item left">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card">
-              <h4 class="text-sm font-bold mb-2" style="color: #009EDB;">2013</h4>
-              <h3 class="text-2xl font-bold mb-3" style="color: #222222;">Lobbying & Designation Effort</h3>
-              <p class="leading-relaxed" style="color: #555555;">MGLSD, with UCRNN and UNICEF, lobbied for 116 to be designated as Uganda’s child helpline number.</p>
-            </div>
-          </div>
-          <!-- Aug 2013 (UCC Designation) -->
-          <div class="timeline-item right">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card">
-              <h4 class="text-sm font-bold mb-2" style="color: #009EDB;">Aug 2013</h4>
-              <h3 class="text-2xl font-bold mb-3" style="color: #222222;">Official Toll‑Free Number</h3>
-              <p class="leading-relaxed" style="color: #555555;">UCC officially designated 116 as an emergency and toll‑free number.</p>
-            </div>
-          </div>
-          <!-- Nov 2013 (First Call) -->
-          <div class="timeline-item left">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card">
-              <h4 class="text-sm font-bold mb-2" style="color: #009EDB;">Nov 2013</h4>
-              <h3 class="text-2xl font-bold mb-3" style="color: #222222;">First Call Received</h3>
-              <p class="leading-relaxed" style="color: #555555;">UCHL received the first call on code 116 on 4th November 2013.</p>
-            </div>
-          </div>
-          <!-- Dec 2014 (Govt takeover) -->
-          <div class="timeline-item right">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card">
-              <h4 class="text-sm font-bold mb-2" style="color: #009EDB;">Dec 2014</h4>
-              <h3 class="text-2xl font-bold mb-3" style="color: #222222;">Government Takes Over</h3>
-              <p class="leading-relaxed" style="color: #555555;">MGLSD took over the management of UCHL from UCRNN.</p>
-            </div>
-          </div>
-          <!-- 2016 (Legal framework) -->
-          <div class="timeline-item left">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card">
-              <h4 class="text-sm font-bold mb-2" style="color: #009EDB;">2016</h4>
-              <h3 class="text-2xl font-bold mb-3" style="color: #222222;">Legal & Regulatory Framework</h3>
-              <p class="leading-relaxed" style="color: #555555;">UCHL instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.</p>
-            </div>
-          </div>
-          <!-- 2021 (GBV Integration) -->
-          <div class="timeline-item right">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card">
-              <h4 class="text-sm font-bold mb-2" style="color: #009EDB;">2021</h4>
-              <h3 class="text-2xl font-bold mb-3" style="color: #222222;">GBV Response Integrated</h3>
-              <p class="leading-relaxed" style="color: #555555;">Gender‑based violence response integrated into Sauti’s work nationwide.</p>
-            </div>
-          </div>
-        </div>
+        <Timeline />
       </div>
     </section>
 
     <!-- Operations -->
     <section class="section-padding">
       <div class="container-custom">
-        <h2 class="mb-4">Operations</h2>
+        <h2 class="mb-4">{{ aboutOperationsTitle }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg" style="color: #222222;">
           <div>
             <ul class="space-y-3">
-              <li>Sauti is a Swahili word that means “voice”.</li>
-              <li>Operates on short code 116 (toll‑free), accessible from any telecom network.</li>
-              <li>Operational 24/7 and accessible from every part of the country.</li>
-              <li>The counselors speak a total of 26 local languages.</li>
+              <li>{{ aboutOperationsItem1 }}</li>
+              <li>{{ aboutOperationsItem2 }}</li>
+              <li>{{ aboutOperationsItem3 }}</li>
+              <li>{{ aboutOperationsItem4 }}</li>
             </ul>
           </div>
           <div class="hidden md:block"></div>
@@ -323,30 +263,30 @@
     <!-- Path to Resolution (Case Flow) -->
     <section class="section-padding bg-gray-50">
       <div class="container-custom">
-        <h2 class="text-center mb-10">Path to Resolution</h2>
+        <h2 class="text-center mb-10">{{ aboutResolutionTitle }}</h2>
         <div class="max-w-3xl mx-auto">
           <div class="space-y-6">
             <div class="card p-5 text-center">
-              <h3 class="text-xl font-bold" style="color: #222222;">Caller</h3>
-              <p class="text-sm" style="color: #555555;">Case reported</p>
+              <h3 class="text-xl font-bold" style="color: #222222;">{{ aboutResolutionCard1Title }}</h3>
+              <p class="text-sm" style="color: #555555;">{{ aboutResolutionCard1Text }}</p>
             </div>
             <div class="text-center">⬇️</div>
             <div class="card p-5 text-center">
-              <h3 class="text-xl font-bold" style="color: #222222;">Call Center</h3>
+              <h3 class="text-xl font-bold" style="color: #222222;">{{ aboutResolutionCard2Title }}</h3>
             </div>
             <div class="text-center">⬇️</div>
             <div class="card p-5 text-center">
-              <h3 class="text-xl font-bold" style="color: #222222;">Case Management Department</h3>
+              <h3 class="text-xl font-bold" style="color: #222222;">{{ aboutResolutionCard3Title }}</h3>
             </div>
             <div class="text-center">⬇️</div>
             <div class="card p-5 text-center">
-              <h3 class="text-xl font-bold" style="color: #226B5E;">Probation Offices (DACs)</h3>
-              <p class="text-sm" style="color: #555555;">Supported by partners & CSOs, police, court, etc.</p>
+              <h3 class="text-xl font-bold" style="color: #226B5E;">{{ aboutResolutionCard4Title }}</h3>
+              <p class="text-sm" style="color: #555555;">{{ aboutResolutionCard4Text }}</p>
             </div>
             <div class="text-center">⬇️</div>
             <div class="card p-5 text-center">
-              <h3 class="text-xl font-bold" style="color: #222222;">Local Leaders, CDOs, Para‑Social Workers, VHTs, etc.</h3>
-              <p class="text-sm" style="color: #555555;">Feedback shared back through the chain.</p>
+              <h3 class="text-xl font-bold" style="color: #222222;">{{ aboutResolutionCard5Title }}</h3>
+              <p class="text-sm" style="color: #555555;">{{ aboutResolutionCard5Text }}</p>
             </div>
           </div>
         </div>
@@ -356,22 +296,22 @@
     <!-- Partners / Legitimacy -->
     <section class="section-padding">
       <div class="container-custom">
-        <h2 class="text-center mb-8">Partners & Affiliations</h2>
+        <h2 class="text-center mb-8">{{ aboutPartnersTitle }}</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
-          <div class="card p-6 text-center">MGLSD</div>
-          <div class="card p-6 text-center">UNICEF</div>
-          <div class="card p-6 text-center">UCRNN</div>
-          <div class="card p-6 text-center">ITU 116</div>
+          <div class="card p-6 text-center">{{ aboutPartner1 }}</div>
+          <div class="card p-6 text-center">{{ aboutPartner2 }}</div>
+          <div class="card p-6 text-center">{{ aboutPartner3 }}</div>
+          <div class="card p-6 text-center">{{ aboutPartner4 }}</div>
         </div>
-        <p class="text-center text-sm mt-6" style="color: #555555;">Legally designated 116 child helpline; compliant with national and international standards.</p>
+        <p class="text-center text-sm mt-6" style="color: #555555;">{{ aboutPartnersText }}</p>
       </div>
     </section>
 
     <!-- CTA -->
     <section class="section-padding">
       <div class="container-custom text-center">
-        <h2 class="mb-3">Need help or ready to partner?</h2>
-        <p class="max-w-2xl mx-auto" style="color: #555555;">Reach out any time. Your call or message could change a life.</p>
+        <h2 class="mb-3">{{ aboutCtaTitle }}</h2>
+        <p class="max-w-2xl mx-auto" style="color: #555555;">{{ aboutCtaText }}</p>
         <div class="mt-6 flex flex-wrap justify-center gap-3">
           <a href="tel:116" class="pill pill-primary">Call 116</a>
           <router-link to="/report" class="pill pill-outline">Report a Case</router-link>
@@ -387,11 +327,86 @@ import { computed, onMounted, ref, h } from 'vue'
 import { useContentStore } from '@/store/content'
 import { api } from '@/utils/axios'
 import sautiAboutpage from '@/assets/sauti-aboutpage.webp'
+import Timeline from '@/components/Timeline.vue' // Import the Timeline component
 
 const contentStore = useContentStore()
 
 // Get dynamic content
 const aboutImage = computed(() => contentStore.getContent('about_image', sautiAboutpage))
+const aboutHeroTitle = computed(() => contentStore.getContent('about_hero_title', 'About Sauti 116 helpline'))
+const aboutHeroSubtitle = computed(() => contentStore.getContent('about_hero_subtitle', 'Free, confidential and accessible 24/7 across all telecoms. We protect and empower children, GBV survivors and migrant workers with rapid, compassionate support.'))
+const aboutStat1Title = computed(() => contentStore.getContent('about_stat_1_title', '116'))
+const aboutStat1Text = computed(() => contentStore.getContent('about_stat_1_text', 'Toll-free Hotline'))
+const aboutStat2Title = computed(() => contentStore.getContent('about_stat_2_title', '24/7'))
+const aboutStat2Text = computed(() => contentStore.getContent('about_stat_2_text', 'Always Available'))
+const aboutStat3Title = computed(() => contentStore.getContent('about_stat_3_title', '26+'))
+const aboutStat3Text = computed(() => contentStore.getContent('about_stat_3_text', 'Local Languages'))
+const aboutStat4Title = computed(() => contentStore.getContent('about_stat_4_title', '100%'))
+const aboutStat4Text = computed(() => contentStore.getContent('about_stat_4_text', 'National Coverage'))
+const aboutMissionTitle = computed(() => contentStore.getContent('about_mission_title', 'Our Mission'))
+const aboutMissionText = computed(() => contentStore.getContent('about_mission_text', 'To protect and empower vulnerable populations through accessible, confidential, and professional support services available 24/7.'))
+const aboutService1Title = computed(() => contentStore.getContent('about_service_1_title', 'Telephone Counseling'))
+const aboutService1Text = computed(() => contentStore.getContent('about_service_1_text', 'Immediate, confidential support via 116.'))
+const aboutService2Title = computed(() => contentStore.getContent('about_service_2_title', 'Walk-in Support'))
+const aboutService2Text = computed(() => contentStore.getContent('about_service_2_text', 'On-site help and rapid referrals.'))
+const aboutService3Title = computed(() => contentStore.getContent('about_service_3_title', 'Media & U-Report'))
+const aboutService3Text = computed(() => contentStore.getContent('about_service_3_text', 'Engagement via broadcast and U-Report 8500.'))
+const aboutService4Title = computed(() => contentStore.getContent('about_service_4_title', 'Guidance & Referral'))
+const aboutService4Text = computed(() => contentStore.getContent('about_service_4_text', 'Connections to specialized services.'))
+const aboutService5Title = computed(() => contentStore.getContent('about_service_5_title', 'Community Sensitization'))
+const aboutService5Text = computed(() => contentStore.getContent('about_service_5_text', 'Awareness and advocacy in communities nationwide.'))
+const aboutValuesTitle = computed(() => contentStore.getContent('about_values_title', 'Core Values'))
+const aboutBackgroundTitle = computed(() => contentStore.getContent('about_background_title', 'Background'))
+const aboutBackgroundItem1 = computed(() => contentStore.getContent('about_background_item_1', 'In early 2013, MGLSD in partnership with UCRNN and UNICEF lobbied for 116 to be designated as a child helpline number.'))
+const aboutBackgroundItem2 = computed(() => contentStore.getContent('about_background_item_2', 'August 2013, 116 was officially designated as an emergency and toll-free number by UCC.'))
+const aboutBackgroundItem3 = computed(() => contentStore.getContent('about_background_item_3', 'On 4th November 2013, the first call was received by UCHL on the code 116.'))
+const aboutBackgroundItem4 = computed(() => contentStore.getContent('about_background_item_4', 'In December 2014, government (MGLSD) took over the management of UCHL from UCRNN.'))
+const aboutBackgroundItem5 = computed(() => contentStore.getContent('about_background_item_5', 'UCHL was instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.'))
+const aboutBackgroundItem6 = computed(() => contentStore.getContent('about_background_item_6', 'In 2021, GBV response was integrated into Sauti’s work.'))
+const aboutBackgroundNote = computed(() => contentStore.getContent('about_background_note', 'Note: In October 2007, ITU asked all countries around the world to allocate 116 to Child Helplines.'))
+const aboutJourneyTitle = computed(() => contentStore.getContent('about_journey_title', 'Our Journey'))
+const aboutJourneySubtitle = computed(() => contentStore.getContent('about_journey_subtitle', 'Key milestones in our history of child advocacy and the national designation of 116.'))
+const aboutJourneyItem1Year = computed(() => contentStore.getContent('about_journey_item_1_year', '2013'))
+const aboutJourneyItem1Title = computed(() => contentStore.getContent('about_journey_item_1_title', 'Lobbying & Designation Effort'))
+const aboutJourneyItem1Text = computed(() => contentStore.getContent('about_journey_item_1_text', 'MGLSD, with UCRNN and UNICEF, lobbied for 116 to be designated as Uganda’s child helpline number.'))
+const aboutJourneyItem2Year = computed(() => contentStore.getContent('about_journey_item_2_year', 'Aug 2013'))
+const aboutJourneyItem2Title = computed(() => contentStore.getContent('about_journey_item_2_title', 'Official Toll-Free Number'))
+const aboutJourneyItem2Text = computed(() => contentStore.getContent('about_journey_item_2_text', 'UCC officially designated 116 as an emergency and toll-free number.'))
+const aboutJourneyItem3Year = computed(() => contentStore.getContent('about_journey_item_3_year', 'Nov 2013'))
+const aboutJourneyItem3Title = computed(() => contentStore.getContent('about_journey_item_3_title', 'First Call Received'))
+const aboutJourneyItem3Text = computed(() => contentStore.getContent('about_journey_item_3_text', 'UCHL received the first call on code 116 on 4th November 2013.'))
+const aboutJourneyItem4Year = computed(() => contentStore.getContent('about_journey_item_4_year', 'Dec 2014'))
+const aboutJourneyItem4Title = computed(() => contentStore.getContent('about_journey_item_4_title', 'Government Takes Over'))
+const aboutJourneyItem4Text = computed(() => contentStore.getContent('about_journey_item_4_text', 'MGLSD took over the management of UCHL from UCRNN.'))
+const aboutJourneyItem5Year = computed(() => contentStore.getContent('about_journey_item_5_year', '2016'))
+const aboutJourneyItem5Title = computed(() => contentStore.getContent('about_journey_item_5_title', 'Legal & Regulatory Framework'))
+const aboutJourneyItem5Text = computed(() => contentStore.getContent('about_journey_item_5_text', 'UCHL instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.'))
+const aboutJourneyItem6Year = computed(() => contentStore.getContent('about_journey_item_6_year', '2021'))
+const aboutJourneyItem6Title = computed(() => contentStore.getContent('about_journey_item_6_title', 'GBV Response Integrated'))
+const aboutJourneyItem6Text = computed(() => contentStore.getContent('about_journey_item_6_text', 'Gender-based violence response integrated into Sauti’s work nationwide.'))
+const aboutOperationsTitle = computed(() => contentStore.getContent('about_operations_title', 'Operations'))
+const aboutOperationsItem1 = computed(() => contentStore.getContent('about_operations_item_1', 'Sauti is a Swahili word that means “voice”.'))
+const aboutOperationsItem2 = computed(() => contentStore.getContent('about_operations_item_2', 'Operates on short code 116 (toll-free), accessible from any telecom network.'))
+const aboutOperationsItem3 = computed(() => contentStore.getContent('about_operations_item_3', 'Operational 24/7 and accessible from every part of the country.'))
+const aboutOperationsItem4 = computed(() => contentStore.getContent('about_operations_item_4', 'The counselors speak a total of 26 local languages.'))
+const aboutResolutionTitle = computed(() => contentStore.getContent('about_resolution_title', 'Path to Resolution'))
+const aboutResolutionCard1Title = computed(() => contentStore.getContent('about_resolution_card_1_title', 'Caller'))
+const aboutResolutionCard1Text = computed(() => contentStore.getContent('about_resolution_card_1_text', 'Case reported'))
+const aboutResolutionCard2Title = computed(() => contentStore.getContent('about_resolution_card_2_title', 'Call Center'))
+const aboutResolutionCard3Title = computed(() => contentStore.getContent('about_resolution_card_3_title', 'Case Management Department'))
+const aboutResolutionCard4Title = computed(() => contentStore.getContent('about_resolution_card_4_title', 'Probation Offices (DACs)'))
+const aboutResolutionCard4Text = computed(() => contentStore.getContent('about_resolution_card_4_text', 'Supported by partners & CSOs, police, court, etc.'))
+const aboutResolutionCard5Title = computed(() => contentStore.getContent('about_resolution_card_5_title', 'Local Leaders, CDOs, Para-Social Workers, VHTs, etc.'))
+const aboutResolutionCard5Text = computed(() => contentStore.getContent('about_resolution_card_5_text', 'Feedback shared back through the chain.'))
+const aboutPartnersTitle = computed(() => contentStore.getContent('about_partners_title', 'Partners & Affiliations'))
+const aboutPartner1 = computed(() => contentStore.getContent('about_partner_1', 'MGLSD'))
+const aboutPartner2 = computed(() => contentStore.getContent('about_partner_2', 'UNICEF'))
+const aboutPartner3 = computed(() => contentStore.getContent('about_partner_3', 'UCRNN'))
+const aboutPartner4 = computed(() => contentStore.getContent('about_partner_4', 'ITU 116'))
+const aboutPartnersText = computed(() => contentStore.getContent('about_partners_text', 'Legally designated 116 child helpline; compliant with national and international standards.'))
+const aboutCtaTitle = computed(() => contentStore.getContent('about_cta_title', 'Need help or ready to partner?'))
+const aboutCtaText = computed(() => contentStore.getContent('about_cta_text', 'Reach out any time. Your call or message could change a life.'))
+
 
 // Core Values
 const coreValues = ref([])

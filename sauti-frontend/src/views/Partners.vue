@@ -8,14 +8,14 @@
       
       <Loader v-if="loading" />
       
-      <div v-else-if="partners.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div v-for="partner in partners" :key="partner.id" class="card card-body text-center">
-          <img :src="partner.logo" :alt="partner.name" class="h-24 w-auto mx-auto mb-4 object-contain" />
-          <h3 class="font-bold text-gray-900 mb-2">{{ partner.name }}</h3>
-          <p class="text-sm text-gray-600 mb-4">{{ partner.description }}</p>
-          <a v-if="partner.website_url" :href="partner.website_url" target="_blank" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-            Visit Website →
-          </a>
+      <div v-else-if="partners.length" class="overflow-x-auto whitespace-nowrap py-4">
+        <div class="inline-flex space-x-8">
+          <div v-for="partner in partners" :key="partner.id" class="flex-shrink-0 w-48 h-24 flex items-center justify-center bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <a v-if="partner.website_url" :href="partner.website_url" target="_blank" class="block h-full w-full">
+              <img :src="partner.logo" :alt="partner.name" class="max-h-full max-w-full object-contain mx-auto" />
+            </a>
+            <img v-else :src="partner.logo" :alt="partner.name" class="max-h-full max-w-full object-contain mx-auto" />
+          </div>
         </div>
       </div>
 

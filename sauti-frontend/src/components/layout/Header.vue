@@ -22,6 +22,7 @@
         <div class="hidden lg:flex flex-1 items-center justify-center gap-2 xl:gap-4 whitespace-nowrap">
           <router-link to="/" class="nav-link" :class="{ 'nav-link-active': $route.path === '/' }">Home</router-link>
           <router-link to="/about" class="nav-link" :class="{ 'nav-link-active': $route.path === '/about' }">About</router-link>
+          
           <router-link to="/operations" class="nav-link" :class="{ 'nav-link-active': $route.path === '/operations' }">Services</router-link>
           <router-link to="/resources" class="nav-link" :class="{ 'nav-link-active': $route.path === '/resources' }">Reports & Resources</router-link>
           <router-link to="/blogs" class="nav-link" :class="{ active: $route.path === '/blogs' }">Blogs</router-link>
@@ -82,6 +83,8 @@
             </svg>
             About
           </router-link>
+          
+
           
           <router-link
             to="/operations"

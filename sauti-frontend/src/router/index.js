@@ -21,6 +21,7 @@ const Privacy = () => import('@/views/Privacy.vue')
 const Terms = () => import('@/views/Terms.vue')
 const Accessibility = () => import('@/views/Accessibility.vue')
 
+
 const routes = [
   {
     path: '/',
@@ -94,6 +95,7 @@ const routes = [
       description: 'Learn about Sauti 116 helpline and our mission',
     },
   },
+
   {
     path: '/blogs',
     name: 'blog',

@@ -104,7 +104,7 @@ export const useContentStore = defineStore('content', () => {
   // Get default content (fallback)
   function getDefaultContent() {
     return {
-      hero_title: { key: 'hero_title', value: 'Every child deserves a safe voice.', currentValue: 'Every child deserves a safe voice.', page: 'home', type: 'heading' },
+      hero_title: { key: 'hero_title', value: 'Every One Deserves to Be Heard.', currentValue: 'Every One Deserves to Be Heard.', page: 'home', type: 'heading' },
       hero_subtitle: { key: 'hero_subtitle', value: 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.', currentValue: 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.', page: 'home', type: 'text' },
       hero_cta_call: { key: 'hero_cta_call', value: 'Call 116 Now', currentValue: 'Call 116 Now', page: 'home', type: 'button' },
       hero_cta_report: { key: 'hero_cta_report', value: 'Report a Case', currentValue: 'Report a Case', page: 'home', type: 'button' },

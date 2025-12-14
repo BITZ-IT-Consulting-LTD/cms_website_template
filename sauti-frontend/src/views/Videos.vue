@@ -2,20 +2,25 @@
   <div class="section-padding">
     <div class="container-custom">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">Videos</h2>
-        <router-link to="/resources" class="text-primary-600 hover:text-primary-700">Resources →</router-link>
+        <h2 class="text-2xl font-bold">{{ videosTitle }}</h2>
+        <router-link to="/resources" class="text-primary-600 hover:text-primary-700">{{ videosResourcesLink }}</router-link>
       </div>
 
       <!-- Search and filters -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6">
         <div class="flex items-center gap-3">
           <div class="flex-1">
-            <input class="form-input" placeholder="Search videos..." v-model="query" />
+            <input class="form-input" :placeholder="videosSearchPlaceholder" v-model="query" />
           </div>
-          <button class="pill pill-primary" @click="applySearch">Search</button>
+          <button class="pill pill-primary" @click="applySearch">{{ videosSearchButton }}</button>
         </div>
         <div class="mt-3 flex flex-wrap gap-2">
-          <button v-for="chip in chips" :key="chip" class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip(chip)">{{ chip }}</button>
+          <button class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip('All')">{{ videosChipAll }}</button>
+          <button class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip('Education')">{{ videosChipEducation }}</button>
+          <button class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip('Safety')">{{ videosChipSafety }}</button>
+          <button class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip('Support')">{{ videosChipSupport }}</button>
+          <button class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip('Recency')">{{ videosChipRecency }}</button>
+          <button class="px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200" @click="setChip('Popular')">{{ videosChipPopular }}</button>
         </div>
       </div>
 
@@ -67,14 +72,28 @@
 import { ref, computed, onMounted } from 'vue'
 import { useVideosStore } from '@/stores/videos'
 import VideoPlayerModal from '@/components/videos/VideoPlayerModal.vue'
+import { useContentStore } from '@/store/content'
 
 const videosStore = useVideosStore()
+const contentStore = useContentStore()
 const query = ref('')
 const chips = ['All', 'Education', 'Safety', 'Support', 'Recency', 'Popular']
 const activeChip = ref('All')
 const loading = ref(false)
 const isModalOpen = ref(false)
 const selectedVideo = ref(null)
+
+// Computed properties for content
+const videosTitle = computed(() => contentStore.getContent('videos_title', 'Videos'))
+const videosResourcesLink = computed(() => contentStore.getContent('videos_resources_link', 'Resources →'))
+const videosSearchPlaceholder = computed(() => contentStore.getContent('videos_search_placeholder', 'Search videos...'))
+const videosSearchButton = computed(() => contentStore.getContent('videos_search_button', 'Search'))
+const videosChipAll = computed(() => contentStore.getContent('videos_chip_all', 'All'))
+const videosChipEducation = computed(() => contentStore.getContent('videos_chip_education', 'Education'))
+const videosChipSafety = computed(() => contentStore.getContent('videos_chip_safety', 'Safety'))
+const videosChipSupport = computed(() => contentStore.getContent('videos_chip_support', 'Support'))
+const videosChipRecency = computed(() => contentStore.getContent('videos_chip_recency', 'Recency'))
+const videosChipPopular = computed(() => contentStore.getContent('videos_chip_popular', 'Popular'))
 
 const videos = ref([])
 

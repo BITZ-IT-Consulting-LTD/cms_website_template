@@ -385,7 +385,6 @@ const toast = useToast()
 // Reactive data
 const resources = computed(() => resourcesStore.resources)
 const categories = computed(() => resourcesStore.categories)
-const loading = computed(() => resourcesStore.loading)
 
 const stats = ref({
   total: 0,

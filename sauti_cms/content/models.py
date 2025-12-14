@@ -81,3 +81,31 @@ class CoreValue(models.Model):
         ordering = ['order', 'title']
         verbose_name = 'Core Value'
         verbose_name_plural = 'Core Values'
+
+
+class Contact(models.Model):
+    """Contact information for the website"""
+    CONTACT_TYPES = (
+        ('phone', 'Phone Number'),
+        ('email', 'Email Address'),
+        ('location', 'Physical Location'),
+        ('social', 'Social Media Link'),
+        ('other', 'Other'),
+    )
+
+    name = models.CharField(max_length=100, help_text="Name of the contact item (e.g., 'Emergency Hotline', 'WhatsApp')")
+    value = models.CharField(max_length=255, help_text="The contact detail (e.g., '116', 'info@example.com', 'Street Address')")
+    type = models.CharField(max_length=20, choices=CONTACT_TYPES, default='phone', help_text="Type of contact information")
+    icon = models.CharField(max_length=50, blank=True, null=True, help_text="Name of the icon for the contact (e.g., 'phone', 'envelope', 'location-marker')")
+    order = models.IntegerField(default=0, help_text="Order in which the contact item appears")
+    is_visible = models.BooleanField(default=True, help_text="Whether this contact item should be visible on the site")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name}: {self.value}"
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = 'Contact Item'
+        verbose_name_plural = 'Contact Items'

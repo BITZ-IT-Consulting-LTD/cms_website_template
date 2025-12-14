@@ -511,3 +511,9 @@ html {
   border-color: #DDDDDD; /* Borders */
   border-top-color: #009EDB; /* Sauti Blue */
 }
+
+
+/* Css to hide a section */
+.hide-section {
+  display: none;
+}

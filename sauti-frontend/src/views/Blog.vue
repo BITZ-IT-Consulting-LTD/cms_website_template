@@ -3,28 +3,28 @@
     <div class="container-custom">
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="mb-2 text-4xl md:text-5xl font-extrabold text-gray-900">Blogs</h1>
-        <p class="text-gray-600 max-w-3xl mx-auto">Insights, stories, and news from the front lines of child protection in Uganda.</p>
+        <h1 class="mb-2 text-4xl md:text-5xl font-extrabold text-gray-900">{{ blogTitle }}</h1>
+        <p class="text-gray-600 max-w-3xl mx-auto">{{ blogSubtitle }}</p>
       </div>
 
       <!-- Filters -->
       <div class="mb-8">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3 max-w-3xl mx-auto">
           <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
-          <input v-model="filters.search" @input="debouncedSearch" type="search" placeholder="Search stories..." class="flex-1 focus:outline-none" />
+          <input v-model="filters.search" @input="debouncedSearch" type="search" :placeholder="blogSearchPlaceholder" class="flex-1 focus:outline-none" />
         </div>
         <div class="flex flex-wrap justify-center gap-3 mt-4">
-          <button class="pill pill-primary" @click="setType('All')">All</button>
-          <button class="px-3 py-1 rounded-full bg-gray-100" @click="setType('Articles')">Articles</button>
+          <button class="pill pill-primary" @click="setType('All')">{{ blogAllButton }}</button>
+          <button class="px-3 py-1 rounded-full bg-gray-100" @click="setType('Articles')">{{ blogArticlesButton }}</button>
           <select v-model="filters.category" @change="fetchFilteredPosts" class="form-select max-w-xs">
-            <option value="">Categories</option>
+            <option value="">{{ blogCategoriesDropdown }}</option>
             <option v-for="cat in categories" :key="cat.id" :value="cat.slug">{{ cat.name }}</option>
           </select>
         </div>
       </div>
 
       <!-- Loading -->
-      <Loader v-if="loading" message="Loading stories..." />
+      <Loader v-if="loading" :message="blogLoading" />
 
       <!-- Posts Grid (YouTube-style like Videos) -->
       <div v-else-if="posts.length" class="space-y-10">
@@ -54,8 +54,8 @@
         <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">No stories found</h3>
-        <p class="text-gray-600">Try adjusting your filters or check back later for new content.</p>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ blogNoResults }}</h3>
+        <p class="text-gray-600">{{ blogNoResultsSubtitle }}</p>
       </div>
     </div>
   </div>
@@ -66,13 +66,26 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import BlogCard from '@/components/blog/BlogCard.vue'
 import Loader from '@/components/common/Loader.vue'
 import { useBlogStore } from '@/store/blog'
+import { useContentStore } from '@/store/content'
 
 const blogStore = useBlogStore()
+const contentStore = useContentStore()
 
 const posts = ref([])
 const categories = ref([])
 const loading = ref(false)
 const totalPages = ref(1)
+
+// Computed properties for content
+const blogTitle = computed(() => contentStore.getContent('blog_title', 'Blogs'))
+const blogSubtitle = computed(() => contentStore.getContent('blog_subtitle', 'Insights, stories, and news from the front lines of child protection in Uganda.'))
+const blogSearchPlaceholder = computed(() => contentStore.getContent('blog_search_placeholder', 'Search stories...'))
+const blogAllButton = computed(() => contentStore.getContent('blog_all_button', 'All'))
+const blogArticlesButton = computed(() => contentStore.getContent('blog_articles_button', 'Articles'))
+const blogCategoriesDropdown = computed(() => contentStore.getContent('blog_categories_dropdown', 'Categories'))
+const blogLoading = computed(() => contentStore.getContent('blog_loading', 'Loading stories...'))
+const blogNoResults = computed(() => contentStore.getContent('blog_no_results', 'No stories found'))
+const blogNoResultsSubtitle = computed(() => contentStore.getContent('blog_no_results_subtitle', 'Try adjusting your filters or check back later for new content.'))
 
 const filters = reactive({
   category: '',

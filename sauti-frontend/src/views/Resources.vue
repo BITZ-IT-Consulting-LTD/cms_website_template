@@ -5,24 +5,24 @@
         <!-- Header -->
         <div class="text-center mb-12">
           <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-            Resources & Statistics
+            {{ resourcesTitle }}
           </h1>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Real-time insights from case reports and downloadable resources to support communities
+            {{ resourcesSubtitle }}
           </p>
         </div>
 
         <!-- Statistics Dashboard -->
         <div class="mb-16">
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">Case Report Statistics</h2>
-            <div class="text-sm text-gray-500">Updated in real-time</div>
+            <h2 class="text-2xl font-bold text-gray-900">{{ resourcesStatsTitle }}</h2>
+            <div class="text-sm text-gray-500">{{ resourcesStatsUpdated }}</div>
           </div>
 
           <!-- Loading State for Stats -->
           <div v-if="statsLoading" class="bg-white rounded-3xl shadow-xl p-12 text-center">
             <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p class="text-gray-600">Loading statistics...</p>
+            <p class="text-gray-600">{{ resourcesStatsLoading }}</p>
           </div>
 
           <!-- Error State for Stats -->
@@ -30,7 +30,7 @@
             <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <p class="text-red-700 font-medium">{{ statsError }}</p>
+            <p class="text-red-700 font-medium">{{ resourcesStatsError }}</p>
           </div>
 
           <!-- Stats Content -->
@@ -47,7 +47,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ stats.total_reports || 0 }}</h3>
-                  <p class="text-blue-100 text-sm font-medium">Total Reports</p>
+                  <p class="text-blue-100 text-sm font-medium">{{ resourcesTotalReports }}</p>
                 </div>
               </div>
 
@@ -61,7 +61,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('CHILD_PROTECTION') }}</h3>
-                  <p class="text-purple-100 text-sm font-medium">Child Protection</p>
+                  <p class="text-purple-100 text-sm font-medium">{{ resourcesChildProtection }}</p>
                 </div>
               </div>
 
@@ -75,7 +75,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('GBV') }}</h3>
-                  <p class="text-teal-100 text-sm font-medium">GBV Cases</p>
+                  <p class="text-teal-100 text-sm font-medium">{{ resourcesGbvCases }}</p>
                 </div>
               </div>
 
@@ -89,7 +89,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('MIGRANT') }}</h3>
-                  <p class="text-orange-100 text-sm font-medium">Migrant Worker</p>
+                  <p class="text-orange-100 text-sm font-medium">{{ resourcesMigrantWorker }}</p>
                 </div>
               </div>
             </div>
@@ -99,9 +99,9 @@
               <!-- Doughnut Chart - Cases by Category -->
               <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-xl font-bold text-gray-900">Cases by Category</h3>
+                  <h3 class="text-xl font-bold text-gray-900">{{ resourcesCasesByCategory }}</h3>
                   <div class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
-                    Interactive
+                    {{ resourcesInteractive }}
                   </div>
                 </div>
                 <div class="h-80 flex items-center justify-center">
@@ -112,9 +112,9 @@
               <!-- Bar Chart - Reports Over Time -->
               <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-xl font-bold text-gray-900">Reports Over Time</h3>
+                  <h3 class="text-xl font-bold text-gray-900">{{ resourcesReportsOverTime }}</h3>
                   <div class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full">
-                    Last 6 Months
+                    {{ resourcesLast6Months }}
                   </div>
                 </div>
                 <div class="h-80">
@@ -125,23 +125,23 @@
 
             <!-- Status Distribution -->
             <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-              <h3 class="text-xl font-bold text-gray-900 mb-6">Report Status Distribution</h3>
+              <h3 class="text-xl font-bold text-gray-900 mb-6">{{ resourcesStatusDistribution }}</h3>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div class="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl border-2 border-yellow-200">
                   <div class="text-4xl font-extrabold text-yellow-700 mb-2">{{ getStatusCount('PENDING') }}</div>
-                  <div class="text-sm font-semibold text-yellow-800">Pending</div>
+                  <div class="text-sm font-semibold text-yellow-800">{{ resourcesPending }}</div>
                 </div>
                 <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-200">
                   <div class="text-4xl font-extrabold text-blue-700 mb-2">{{ getStatusCount('IN_PROGRESS') }}</div>
-                  <div class="text-sm font-semibold text-blue-800">In Progress</div>
+                  <div class="text-sm font-semibold text-blue-800">{{ resourcesInProgress }}</div>
                 </div>
                 <div class="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-green-200">
                   <div class="text-4xl font-extrabold text-green-700 mb-2">{{ getStatusCount('RESOLVED') }}</div>
-                  <div class="text-sm font-semibold text-green-800">Resolved</div>
+                  <div class="text-sm font-semibold text-green-800">{{ resourcesResolved }}</div>
                 </div>
                 <div class="text-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200">
                   <div class="text-4xl font-extrabold text-gray-700 mb-2">{{ getStatusCount('CLOSED') }}</div>
-                  <div class="text-sm font-semibold text-gray-800">Closed</div>
+                  <div class="text-sm font-semibold text-gray-800">{{ resourcesClosed }}</div>
                 </div>
               </div>
             </div>
@@ -152,11 +152,11 @@
         <div>
           <div class="flex items-center justify-between mb-8">
             <div>
-              <h2 class="text-2xl font-bold text-gray-900 mb-2">Downloadable Resources</h2>
-              <p class="text-gray-600">Guides, policies, and toolkits available in multiple languages</p>
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ resourcesDownloadsTitle }}</h2>
+              <p class="text-gray-600">{{ resourcesDownloadsSubtitle }}</p>
             </div>
             <div class="text-sm text-gray-500">
-              <span class="font-semibold text-gray-900">{{ resources.length }}</span> resources available
+              <span class="font-semibold text-gray-900">{{ resources.length }}</span> {{ resourcesAvailable }}
             </div>
           </div>
 
@@ -170,7 +170,7 @@
                 <input
                   v-model="search"
                   type="text"
-                  placeholder="Search resources by title or description..."
+                  :placeholder="resourcesSearchPlaceholder"
                   class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -178,7 +178,7 @@
                 v-model="category"
                 class="px-4 py-3 border border-gray-200 rounded-xl min-w-[200px] focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">All Categories</option>
+                <option value="">{{ resourcesAllCategories }}</option>
                 <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
                   {{ cat.name }}
                 </option>
@@ -187,7 +187,7 @@
                 v-model="language"
                 class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">All Languages</option>
+                <option value="">{{ resourcesAllLanguages }}</option>
                 <option value="en">English</option>
                 <option value="lg">Luganda</option>
                 <option value="sw">Swahili</option>
@@ -196,7 +196,7 @@
           </div>
 
           <!-- Resources Loading -->
-          <Loader v-if="loading" message="Loading resources..." />
+          <Loader v-if="loading" :message="resourcesLoading" />
 
           <!-- Resources Grid -->
           <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -278,7 +278,7 @@
                     Download
                   </a>
                   <span v-else class="px-6 py-3 bg-gray-100 text-gray-500 text-sm font-semibold rounded-xl">
-                    Coming Soon
+                    {{ resourcesComingSoon }}
                   </span>
 
                   <!-- Download Count -->
@@ -298,8 +298,8 @@
             <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">No resources found</h3>
-            <p class="text-gray-600">Try adjusting your search or filters</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ resourcesNoResults }}</h3>
+            <p class="text-gray-600">{{ resourcesNoResultsSubtitle }}</p>
           </div>
 
           <!-- Pagination -->
@@ -309,14 +309,14 @@
               @click="prevPage"
               class="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
             >
-              Previous
+              {{ resourcesPrevious }}
             </button>
             <button
               :disabled="!pagination.next || loading"
               @click="nextPage"
               class="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
             >
-              Next
+              {{ resourcesNext }}
             </button>
           </div>
         </div>
@@ -332,10 +332,12 @@ import { api } from '@/utils/axios'
 import Loader from '@/components/common/Loader.vue'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title } from 'chart.js'
 import { Doughnut, Bar } from 'vue-chartjs'
+import { useContentStore } from '@/store/content'
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title)
 
 const resourcesStore = useResourcesStore()
+const contentStore = useContentStore()
 const resources = ref([])
 const loading = ref(true)
 const search = ref('')

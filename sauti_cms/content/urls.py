@@ -1,7 +1,9 @@
-from django.urls import path
-from .views import SiteContentViewSet
+from rest_framework.routers import DefaultRouter
+from .views import SiteContentViewSet, CoreValueViewSet, ContactViewSet
 
-urlpatterns = [
-    path('', SiteContentViewSet.as_view({'get': 'list', 'post': 'create'}), name='site-content-list'),
-    path('<str:key>/', SiteContentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='site-content-detail'),
-]
+router = DefaultRouter()
+router.register(r'site-content', SiteContentViewSet, basename='site-content')
+router.register(r'core-values', CoreValueViewSet, basename='core-value')
+router.register(r'contacts', ContactViewSet, basename='contact')
+
+urlpatterns = router.urls
