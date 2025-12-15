@@ -11,6 +11,9 @@ echo "PostgreSQL is ready!"
 echo "Running database migrations..."
 python manage.py migrate --noinput
 
+echo "Populating site content..."
+python /app/populate_all_content.py
+
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
 

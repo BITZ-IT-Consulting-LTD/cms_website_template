@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     libpq-dev \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -20,16 +21,33 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project
+
 COPY . /app/
 
+
+
 # Create directories for media and static files
+
 RUN mkdir -p /app/media /app/staticfiles
 
-# Collect static files
-RUN python manage.py collectstatic --noinput || true
+
+
+# Copy entrypoint script and make it executable
+
+COPY entrypoint.sh /app/entrypoint.sh
+
+RUN chmod +x /app/entrypoint.sh
+
+
 
 # Expose port
+
 EXPOSE 8000
 
+
+
 # Run gunicorn
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "cms.wsgi:application"]

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { api } from '@/utils/axios'
 
 export const useContentStore = defineStore('content', () => {
@@ -11,11 +11,17 @@ export const useContentStore = defineStore('content', () => {
   // Get content by key (reactive function)
   // Accessing content.value inside makes it reactive
   function getContent(key, defaultValue = '') {
-    // Access content.value to make it reactive
     const item = content.value[key]
-    if (!item) return defaultValue
-    // Prefer currentValue, then value, then defaultValue
-    return item.currentValue || item.value || defaultValue
+    const value = item?.currentValue || item?.value
+
+    if (value) {
+      return value
+    }
+
+    const defaultItem = getDefaultContent()[key]
+    const defaultValueFromContent = defaultItem?.currentValue || defaultItem?.value
+
+    return defaultValueFromContent || defaultValue
   }
 
   // Get content by page and key
@@ -34,7 +40,7 @@ export const useContentStore = defineStore('content', () => {
     try {
       // Try to fetch from API first (but don't fail if it doesn't exist)
       try {
-        const response = await api.get('/content/')
+        const response = await api.get('/content/site-content/') // Corrected endpoint
         const data = response.data
 
         // Convert array to object keyed by content key
@@ -48,7 +54,8 @@ export const useContentStore = defineStore('content', () => {
             contentMap[item.key] = item
           })
         }
-        content.value = contentMap
+        const defaultContent = getDefaultContent()
+        content.value = { ...defaultContent, ...contentMap }
         // Also save to localStorage as backup
         localStorage.setItem('sauti_content', JSON.stringify(content.value))
         console.log('Content loaded from API:', Object.keys(content.value).length, 'items')
@@ -97,7 +104,7 @@ export const useContentStore = defineStore('content', () => {
   // Get default content (fallback)
   function getDefaultContent() {
     return {
-      hero_title: { key: 'hero_title', value: 'Every child deserves a safe voice.', currentValue: 'Every child deserves a safe voice.', page: 'home', type: 'heading' },
+      hero_title: { key: 'hero_title', value: 'Every One Deserves to Be Heard.', currentValue: 'Every One Deserves to Be Heard.', page: 'home', type: 'heading' },
       hero_subtitle: { key: 'hero_subtitle', value: 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.', currentValue: 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.', page: 'home', type: 'text' },
       hero_cta_call: { key: 'hero_cta_call', value: 'Call 116 Now', currentValue: 'Call 116 Now', page: 'home', type: 'button' },
       hero_cta_report: { key: 'hero_cta_report', value: 'Report a Case', currentValue: 'Report a Case', page: 'home', type: 'button' },
@@ -139,18 +146,7 @@ export const useContentStore = defineStore('content', () => {
     }
   }
 
-  // Listen for storage changes (when admin updates content)
-  function setupStorageListener() {
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'sauti_content') {
-        try {
-          content.value = JSON.parse(e.newValue || '{}')
-        } catch (err) {
-          console.error('Failed to parse storage content:', err)
-        }
-      }
-    })
-  }
+
 
   // Initialize
   function init() {
@@ -207,11 +203,11 @@ export const useContentStore = defineStore('content', () => {
 
     // Poll API periodically to catch admin updates (cross-port)
     // This is needed because localStorage is not shared across ports
-    let apiPollInterval = setInterval(() => {
+    const apiPollInterval = setInterval(() => {
       // Only poll if we're not already loading
       if (!loading.value) {
         // We use a silent fetch (no loading state) to avoid UI flickering
-        api.get('/content/')
+        api.get('/content/site-content/') // Corrected endpoint
           .then(response => {
             const data = response.data
             const contentMap = {}
@@ -226,12 +222,13 @@ export const useContentStore = defineStore('content', () => {
               })
             }
 
-            // Only update if content has changed (deep comparison)
+            const defaultContent = getDefaultContent()
+            const mergedContent = { ...defaultContent, ...contentMap }
             const currentStr = JSON.stringify(content.value)
-            const newStr = JSON.stringify(contentMap)
+            const newStr = JSON.stringify(mergedContent)
 
             if (currentStr !== newStr) {
-              content.value = contentMap
+              content.value = mergedContent
               // Update localStorage as well to keep it in sync
               localStorage.setItem('sauti_content', newStr)
               console.log('✅ Content updated from API poll:', Object.keys(contentMap).length, 'items')
@@ -246,8 +243,16 @@ export const useContentStore = defineStore('content', () => {
       }
     }, 3000) // Check every 3 seconds
 
-    // Cleanup interval on unmount (if needed)
-    // Note: This won't clean up automatically, but that's okay for a store
+    // Cleanup interval on store dispose
+    // This ensures the interval is cleared when the store is no longer active
+    // (e.g., if the component using the store is unmounted)
+    // Note: For a global store that's always active, this might not be strictly necessary,
+    // but it's good practice for resource management.
+    // Access the store instance to use $onDispose
+    const store = useContentStore()
+    store.$onDispose(() => {
+      clearInterval(apiPollInterval)
+    })
   }
 
   return {

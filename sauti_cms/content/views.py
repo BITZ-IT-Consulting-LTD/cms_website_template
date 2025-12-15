@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
-from .models import SiteContent, CoreValue
-from .serializers import SiteContentSerializer, CoreValueSerializer
+from .models import SiteContent, CoreValue, Contact
+from .serializers import SiteContentSerializer, CoreValueSerializer, ContactSerializer
 
 class SiteContentViewSet(viewsets.ModelViewSet):
     queryset = SiteContent.objects.all()
@@ -12,7 +12,7 @@ class SiteContentViewSet(viewsets.ModelViewSet):
         """
         Allow public read access, but require authentication for write access.
         """
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAuthenticated]
@@ -28,7 +28,23 @@ class CoreValueViewSet(viewsets.ModelViewSet):
         """
         Allow public read access, but require authentication for write access.
         """
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'options']:
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.filter(is_visible=True).order_by('order')
+    serializer_class = ContactSerializer
+    pagination_class = None
+
+    def get_permissions(self):
+        """
+        Allow public read access, but require authentication for write access.
+        """
+        if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAuthenticated]

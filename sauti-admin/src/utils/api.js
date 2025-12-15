@@ -97,7 +97,8 @@ const createFormData = (data) => {
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('admin_token')
+    const authStore = useAuthStore() // Use the auth store
+    const token = authStore.token // Get token from the store
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

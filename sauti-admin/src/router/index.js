@@ -21,6 +21,11 @@ const UsersView = () => import('@/views/UsersView.vue')
 const BlogsView = () => import('@/views/BlogsView.vue')
 const UploadsView = () => import('@/views/UploadsView.vue')
 const SocialMediaView = () => import('@/views/SocialMediaView.vue')
+const ContentManagerView = () => import('@/views/ContentManager.vue')
+const TimelineAdmin = () => import('@/views/TimelineAdmin.vue')
+const ServiceAdmin = () => import('@/views/ServiceAdmin.vue')
+const ContactAdmin = () => import('@/views/ContactAdmin.vue')
+const SiteSettings = () => import('@/views/SiteSettings.vue') // New: Import SiteSettings component
 
 const routes = [
   {
@@ -209,6 +214,44 @@ const routes = [
         component: SocialMediaView,
         meta: {
           title: 'Social Media Posts - Sauti Admin'
+        }
+      },
+    {
+      path: '/content',
+      name: 'ContentManager',
+      component: ContentManagerView,
+      meta: { requiresAuth: true }
+    },
+      {
+        path: 'timeline',
+        name: 'timeline-admin',
+        component: TimelineAdmin,
+        meta: {
+          title: 'Timeline Events - Sauti Admin'
+        }
+      },
+      {
+        path: 'services',
+        name: 'services-admin',
+        component: ServiceAdmin,
+        meta: {
+          title: 'Services - Sauti Admin'
+        }
+      },
+      {
+        path: 'contacts',
+        name: 'contacts-admin',
+        component: ContactAdmin,
+        meta: {
+          title: 'Contact Info - Sauti Admin'
+        }
+      },
+      {
+        path: 'site-settings', // New route path
+        name: 'site-settings', // New route name
+        component: SiteSettings, // New component
+        meta: {
+          title: 'Site Settings - Sauti Admin'
         }
       }
     ]
