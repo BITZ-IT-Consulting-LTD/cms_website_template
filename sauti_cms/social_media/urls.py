@@ -7,6 +7,5 @@ router.register(r'posts', SocialPostViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('channels/', social_channels, name='social-channels'),
     path('contact/', contact_information, name='contact-information'),
 ]

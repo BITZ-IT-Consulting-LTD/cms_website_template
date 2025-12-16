@@ -2,10 +2,8 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from .models import SocialPost, SocialMediaChannels, ContactInformation
-from .serializers import SocialPostSerializer, SocialMediaChannelsSerializer, ContactInformationSerializer
-import requests
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse
+from .serializers import SocialPostSerializer, ContactInformationSerializer
+
 
 class SocialPostViewSet(viewsets.ModelViewSet):
     queryset = SocialPost.objects.filter(is_active=True)
@@ -128,25 +126,6 @@ class SocialPostViewSet(viewsets.ModelViewSet):
                 {'error': f'Error processing URL: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
-
-@api_view(['GET', 'PUT'])
-def social_channels(request):
-    """
-    Get or update the 4 social media channel URLs
-    """
-    channels = SocialMediaChannels.get_channels()
-
-    if request.method == 'GET':
-        serializer = SocialMediaChannelsSerializer(channels)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = SocialMediaChannelsSerializer(channels, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT'])
