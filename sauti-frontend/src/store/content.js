@@ -148,112 +148,56 @@ export const useContentStore = defineStore('content', () => {
 
 
 
-  // Initialize
-  function init() {
-    // Initial fetch
-    fetchContent().then(() => {
-      console.log('Content store initialized with', Object.keys(content.value).length, 'items')
-    })
+  // Initial fetch
+  fetchContent().then(() => {
+    console.log('Content store initialized with', Object.keys(content.value).length, 'items')
+  })
 
-    // Also listen for same-window storage events (for admin updates)
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'sauti_content') {
-        try {
-          const parsed = JSON.parse(e.newValue || '{}')
-          content.value = { ...parsed } // Create new object for reactivity
-          console.log('Content updated from storage event:', Object.keys(parsed).length, 'items')
-        } catch (err) {
-          console.error('Failed to parse storage content:', err)
-        }
+  // Also listen for same-window storage events (for admin updates)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'sauti_content') {
+      try {
+        const parsed = JSON.parse(e.newValue || '{}')
+        content.value = { ...parsed } // Create new object for reactivity
+        console.log('Content updated from storage event:', Object.keys(parsed).length, 'items')
+      } catch (err) {
+        console.error('Failed to parse storage content:', err)
       }
-    })
+    }
+  })
 
-    // Listen for custom content-updated event from admin
-    window.addEventListener('sauti-content-updated', (e) => {
-      if (e.detail && e.detail.content) {
-        // Create a new object to trigger Vue reactivity
-        content.value = { ...e.detail.content }
-        console.log('✅ Content updated from custom event:', Object.keys(content.value).length, 'items')
-        if (content.value['hero_title']) {
-          console.log('📝 hero_title from event:', content.value['hero_title'].currentValue || content.value['hero_title'].value)
-        }
-      } else {
-        // Fallback: refetch from localStorage
-        fetchContent()
+  // Listen for custom content-updated event from admin
+  window.addEventListener('sauti-content-updated', (e) => {
+    if (e.detail && e.detail.content) {
+      // Create a new object to trigger Vue reactivity
+      content.value = { ...e.detail.content }
+      console.log('✅ Content updated from custom event:', Object.keys(content.value).length, 'items')
+      if (content.value['hero_title']) {
+        console.log('📝 hero_title from event:', content.value['hero_title'].currentValue || content.value['hero_title'].value)
       }
-    })
-
-    // Also listen for the generic content-updated event
-    window.addEventListener('content-updated', () => {
+    } else {
+      // Fallback: refetch from localStorage
       fetchContent()
-    })
+    }
+  })
 
-    // Watch for localStorage changes (works across tabs)
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'sauti_content' && e.newValue) {
-        try {
-          const parsed = JSON.parse(e.newValue)
-          content.value = parsed
-          console.log('Content updated from storage event (cross-tab):', Object.keys(parsed).length, 'items')
-        } catch (err) {
-          console.error('Failed to parse storage event content:', err)
-        }
+  // Also listen for the generic content-updated event
+  window.addEventListener('content-updated', () => {
+    fetchContent()
+  })
+
+  // Watch for localStorage changes (works across tabs)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'sauti_content' && e.newValue) {
+      try {
+        const parsed = JSON.parse(e.newValue)
+        content.value = parsed
+        console.log('Content updated from storage event (cross-tab):', Object.keys(parsed).length, 'items')
+      } catch (err) {
+        console.error('Failed to parse storage event content:', err)
       }
-    })
-
-    // Poll API periodically to catch admin updates (cross-port)
-    // This is needed because localStorage is not shared across ports
-    const apiPollInterval = setInterval(() => {
-      // Only poll if we're not already loading
-      if (!loading.value) {
-        // We use a silent fetch (no loading state) to avoid UI flickering
-        api.get('/content/site-content/') // Corrected endpoint
-          .then(response => {
-            const data = response.data
-            const contentMap = {}
-
-            if (Array.isArray(data)) {
-              data.forEach(item => {
-                contentMap[item.key] = item
-              })
-            } else if (data.results && Array.isArray(data.results)) {
-              data.results.forEach(item => {
-                contentMap[item.key] = item
-              })
-            }
-
-            const defaultContent = getDefaultContent()
-            const mergedContent = { ...defaultContent, ...contentMap }
-            const currentStr = JSON.stringify(content.value)
-            const newStr = JSON.stringify(mergedContent)
-
-            if (currentStr !== newStr) {
-              content.value = mergedContent
-              // Update localStorage as well to keep it in sync
-              localStorage.setItem('sauti_content', newStr)
-              console.log('✅ Content updated from API poll:', Object.keys(contentMap).length, 'items')
-            }
-          })
-          .catch(err => {
-            // Silent fail for polling
-            if (import.meta.env.DEV) {
-              console.debug('API poll failed:', err.message)
-            }
-          })
-      }
-    }, 3000) // Check every 3 seconds
-
-    // Cleanup interval on store dispose
-    // This ensures the interval is cleared when the store is no longer active
-    // (e.g., if the component using the store is unmounted)
-    // Note: For a global store that's always active, this might not be strictly necessary,
-    // but it's good practice for resource management.
-    // Access the store instance to use $onDispose
-    const store = useContentStore()
-    store.$onDispose(() => {
-      clearInterval(apiPollInterval)
-    })
-  }
+    }
+  })
 
   return {
     // State
@@ -267,7 +211,5 @@ export const useContentStore = defineStore('content', () => {
 
     // Actions
     fetchContent,
-    init
   }
 })
-

@@ -508,15 +508,11 @@ const downloadResource = (resource) => {
     return
   }
   
-  // Construct full file URL
-  const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
-  const backendUrl = apiBaseUrl.replace('/api', '') || 'http://localhost:8000'
-  
   // Handle both relative paths (/media/...) and full URLs
   let fileUrl = resource.file
   if (fileUrl && !fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
-    // Remove leading slash if present and construct full URL
-    fileUrl = `${backendUrl}${fileUrl.startsWith('/') ? '' : '/'}${fileUrl}`
+    // Ensure it's a relative path
+    fileUrl = fileUrl.startsWith('/') ? fileUrl : `/${fileUrl}`
   }
   
   // Open in new tab to trigger download

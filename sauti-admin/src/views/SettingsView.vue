@@ -771,7 +771,7 @@ const settings = reactive({
     requireSpecialChars: true
   },
   api: {
-    baseUrl: 'http://localhost:8000/api',
+    baseUrl: '/api',
     rateLimit: 100,
     enableCors: true
   }

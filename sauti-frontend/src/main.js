@@ -11,8 +11,6 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(router)
 
-// Initialize content store
-const contentStore = useContentStore()
-contentStore.init()
+
 
 app.mount('#app')
