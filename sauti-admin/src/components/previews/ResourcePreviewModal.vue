@@ -192,7 +192,6 @@ const loading = ref(true)
 const isOpen = computed(() => props.isOpen)
 
 const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
-const backendUrl = apiBaseUrl.replace('/api', '') || 'http://localhost:8000'
 
 const isPdf = computed(() => {
   return props.fileType?.toLowerCase() === 'pdf' || props.fileUrl?.toLowerCase().endsWith('.pdf')
@@ -246,9 +245,8 @@ const previewUrl = computed(() => {
     // Construct full URL from relative path
     // File paths are typically like /media/resources/files/...
     const filePath = props.fileUrl.startsWith('/') ? props.fileUrl : `/${props.fileUrl}`
-    const fullUrl = `${backendUrl}${filePath}`
-    console.log('Constructed preview URL:', { fileUrl: props.fileUrl, backendUrl, filePath, fullUrl })
-    return fullUrl
+    console.log('Constructed preview URL:', { fileUrl: props.fileUrl, filePath })
+    return filePath
   }
   
   // Fallback: if no file URL, this shouldn't happen but handle gracefully

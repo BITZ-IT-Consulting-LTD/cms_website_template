@@ -2,8 +2,10 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
 
+console.log('Vite Environment Variables:', import.meta.env);
+
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: 'http://localhost:8000/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
