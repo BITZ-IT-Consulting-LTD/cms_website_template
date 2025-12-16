@@ -40,6 +40,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Healthcheck support
 RUN apk add --no-cache curl
 
-EXPOSE 8085 443
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
