@@ -71,12 +71,19 @@ def add_twitter_post(url, handle='@sauti116'):
     metadata = fetch_twitter_metadata(url)
 
     # Create post
+    content = "No content available"
+    thumbnail = ""
+
+    if metadata:
+        content = metadata.get('description') or content
+        thumbnail = metadata.get('image') or thumbnail
+
     post_data = {
         'platform': 'Twitter',
         'handle': handle,
-        'content': metadata.get('description', '') if metadata else '',
+        'content': content,
         'post_url': url,
-        'thumbnail_url': metadata.get('image', '') if metadata else None,
+        'thumbnail_url': thumbnail,
         'posted_at': datetime.now().isoformat(),
         'is_active': True,
         'order': 0,

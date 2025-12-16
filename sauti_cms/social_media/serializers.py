@@ -11,63 +11,30 @@ class SocialPostSerializer(serializers.ModelSerializer):
         model = SocialPost
         fields = '__all__'
 
-
-class SocialMediaChannelsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SocialMediaChannels
-        fields = ['id', 'channel_1_url', 'channel_2_url', 'channel_3_url', 'channel_4_url', 'updated_at']
-
     def create(self, validated_data):
-        # Handle thumbnail_url if provided
         thumbnail_url = validated_data.pop('thumbnail_url', None)
 
-        if thumbnail_url and not validated_data.get('image'):
+        if thumbnail_url:
             try:
-                # Download the image from the URL
                 headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
                 }
                 response = requests.get(thumbnail_url, headers=headers, timeout=10)
                 response.raise_for_status()
 
-                # Get filename from URL or generate one
-                filename = os.path.basename(thumbnail_url.split('?')[0])
-                if not filename or '.' not in filename:
-                    filename = f'social_post_{validated_data.get("platform", "image")}.jpg'
+                filename = os.path.basename(thumbnail_url.split("?")[0])
+                if not filename:
+                    filename = "default.jpg"
 
-                # Save the image to the model
                 validated_data['image'] = ContentFile(response.content, name=filename)
+
             except Exception as e:
-                # If downloading fails, continue without image
-                print(f'Failed to download thumbnail: {str(e)}')
+                print(f"Could not download image from {thumbnail_url}. Error: {e}")
 
         return super().create(validated_data)
 
-    def update(self, instance, validated_data):
-        # Handle thumbnail_url if provided
-        thumbnail_url = validated_data.pop('thumbnail_url', None)
 
-        if thumbnail_url and not validated_data.get('image'):
-            try:
-                # Download the image from the URL
-                headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-                response = requests.get(thumbnail_url, headers=headers, timeout=10)
-                response.raise_for_status()
 
-                # Get filename from URL or generate one
-                filename = os.path.basename(thumbnail_url.split('?')[0])
-                if not filename or '.' not in filename:
-                    filename = f'social_post_{validated_data.get("platform", instance.platform)}.jpg'
-
-                # Save the image to the model
-                validated_data['image'] = ContentFile(response.content, name=filename)
-            except Exception as e:
-                # If downloading fails, continue without image
-                print(f'Failed to download thumbnail: {str(e)}')
-
-        return super().update(instance, validated_data)
 
 
 class ContactInformationSerializer(serializers.ModelSerializer):
