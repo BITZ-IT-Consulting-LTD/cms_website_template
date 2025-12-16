@@ -127,6 +127,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Kampala'
 USE_I18N = True
 USE_TZ = True
+USE_X_FORWARDED_HOST = True
 
 LANGUAGES = [
     ('en', 'English'),
@@ -180,12 +181,23 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = True # Temporarily set to True for debugging
+CORS_ALLOW_ALL_ORIGINS = False # Temporarily set to True for debugging
 # CORS_ALLOWED_ORIGINS = config(
 #     'CORS_ALLOWED_ORIGINS',
 #     default='http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://localhost:3005,http://localhost:8080,http://localhost:3002',
 #     cast=lambda v: [s.strip() for s in v.split(',')]
 # )
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:3004',
+    'http://localhost:3005',
+    'http://localhost:8080',
+    'http://localhost:3002',
+]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'accept',
