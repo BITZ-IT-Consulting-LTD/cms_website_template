@@ -1,15 +1,24 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { fileURLToPath, URL } from 'node:url';
 
-export default defineConfig(({ mode }) => {
+export default ({ mode }) => {
+  // Load env file based on `mode`
+  const env = loadEnv(mode, process.cwd(), '');
+
+  const basePath = env.VITE_BASE_PATH;
+
+  // Build-time guard to ensure VITE_BASE_PATH is set
+  if (basePath === undefined) {
+    throw new Error('VITE_BASE_PATH is not defined in your .env file.');
+  }
+
+  console.log(`Vite build mode: ${mode}`);
+  console.log(`Using base path: ${basePath}`);
+
   return {
-    /**
-     * IMPORTANT:
-     * Each Vue app is served on its own port (8085 / 3001).
-     * Assets must be resolved from the app root.
-     */
-    base: '/',
+    // Use the basePath from the .env file
+    base: basePath,
 
     plugins: [vue()],
 
@@ -19,35 +28,22 @@ export default defineConfig(({ mode }) => {
       }
     },
 
-    /**
-     * Dev server configuration
-     * Used ONLY when running `npm run dev`
-     */
     server: {
       host: true,
       port: 3000,
-
-      /**
-       * Development convenience:
-       * Proxy API calls to Django to avoid CORS locally.
-       * In production, Vue calls Django directly using VITE_API_URL.
-       */
-      // proxy: {
-      //   '/api': {
-      //     target: process.env.VITE_API_URL || 'http://localhost:8000',
-      //     changeOrigin: true,
-      //     secure: false
-      //   }
-      // }
+      proxy: {
+        '/api': {
+          target: env.VITE_API_URL || 'http://localhost:8000',
+          changeOrigin: true,
+          secure: false
+        }
+      }
     },
 
-    /**
-     * Build configuration (production)
-     */
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
       sourcemap: false
     }
-  }
-})
+  };
+};
