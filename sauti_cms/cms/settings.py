@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-produc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.00.1', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,0.0.0.0,backend', cast=lambda v: [s.strip() for s in v.split(',')])
 
 # Application definition
 INSTALLED_APPS = [
@@ -182,21 +182,16 @@ SIMPLE_JWT = {
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = False # Temporarily set to True for debugging
-# CORS_ALLOWED_ORIGINS = config(
-#     'CORS_ALLOWED_ORIGINS',
-#     default='http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://localhost:3005,http://localhost:8080,http://localhost:3002',
-#     cast=lambda v: [s.strip() for s in v.split(',')]
-# )
-
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://localhost:3003',
-    'http://localhost:3004',
-    'http://localhost:3005',
-    'http://localhost:8080',
-    'http://localhost:3002',
+    "http://localhost:8085",  # Public frontend local dev/docker
+    "http://localhost:3001",  # Admin frontend local dev/docker
+    "http://localhost:8000",  # Backend itself (for direct access/testing)
+    # Add your production frontend origins here
+    "http://your-server-domain.com:8085", # Public frontend production
+    "http://your-server-domain.com:3001", # Admin frontend production
+    # If your frontend is served on a standard port (80/443) without explicit port in URL
+    "http://your-server-domain.com",
+    "https://your-server-domain.com", # If you eventually set up HTTPS
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
@@ -240,8 +235,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 ENCRYPTION_KEY = config('ENCRYPTION_KEY', default='')
 
 # Security Settings for Production
+SECURE_SSL_REDIRECT = False # Ensure this is False for development
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # SECURE_SSL_REDIRECT = False # This line is now redundant if set above
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True

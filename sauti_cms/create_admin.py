@@ -24,14 +24,14 @@ def create_admin():
         admin_user = User.objects.create_superuser(
             username='admin',
             email='admin@sauti.org',
-            password='admin123'
+            password='starten1@'
         )
         # Explicitly set ADMIN role
         admin_user.role = 'ADMIN'
         admin_user.save()
         print('✅ Admin user created successfully!')
         print('Username: admin')
-        print('Password: admin123')
+        print('Password: starten1@')
         print('Email: admin@sauti.org')
         print('Role: ADMIN')
     else:
@@ -46,7 +46,7 @@ def create_admin():
         else:
             print('ℹ️ Admin user already exists!')
         print('Username: admin')
-        print('Password: admin123')
+        print('Password: starten1@')
 
 if __name__ == '__main__':
     create_admin()

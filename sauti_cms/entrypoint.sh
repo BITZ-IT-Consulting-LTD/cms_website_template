@@ -13,6 +13,8 @@ python manage.py migrate --noinput
 
 echo "Populating site content..."
 python /app/populate_all_content.py
+python manage.py populate_sitesettings
+python manage.py populate_faqs
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
