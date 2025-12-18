@@ -1,7 +1,10 @@
-from rest_framework import viewsets, permissions
-from .models import SiteSetting
-from .serializers import SiteSettingSerializer
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import SiteSetting, GlobalSettings
+from .serializers import SiteSettingSerializer, GlobalSettingsSerializer
 
+# DEPRECATED: This viewset is deprecated and will be removed in a future version.
 class SiteSettingViewSet(viewsets.ModelViewSet):
     queryset = SiteSetting.objects.all()
     serializer_class = SiteSettingSerializer
@@ -25,3 +28,24 @@ class SiteSettingViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+
+class GlobalSettingsView(APIView):
+    """
+    API endpoint to manage global site settings.
+    Provides GET and PUT methods for the singleton GlobalSettings object.
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, *args, **kwargs):
+        settings, created = GlobalSettings.objects.get_or_create()
+        serializer = GlobalSettingsSerializer(settings)
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        settings, created = GlobalSettings.objects.get_or_create()
+        serializer = GlobalSettingsSerializer(settings, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
