@@ -186,6 +186,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://sauti.mglsd.go.ug",
     "http://localhost:8085",  # Public frontend local dev/docker
     "http://localhost:3001",  # Admin frontend local dev/docker
+    "http://localhost:3002",  # Admin frontend local dev/docker
     "http://localhost:8000",  # Backend itself (for direct access/testing)
     # Add your production frontend origins here
     "http://your-server-domain.com:8085", # Public frontend production
@@ -197,7 +198,7 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'accept',
-    'accept-encoding',
+    'accept-encoding',  
     'authorization',
     'content-type',
     'dnt',
