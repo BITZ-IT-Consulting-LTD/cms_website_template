@@ -10,10 +10,10 @@
             <div class="space-y-6">
               <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight"
                 style="color: #222222;">
-                {{ heroTitle }}
+                {{ settingsStore.settings.hero_title }}
               </h1>
               <p class="text-xl md:text-2xl max-w-3xl leading-relaxed" style="color: #555555;">
-                {{ heroSubtitle }}
+                {{ settingsStore.settings.hero_subtitle }}
               </p>
             </div>
 
@@ -28,7 +28,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <span>{{ heroCtaCall }}</span>
+                  <span>{{ settingsStore.settings.hero_cta_call }}</span>
                 </a>
                 <router-link to="/report"
                   class="btn-primary text-lg px-6 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
@@ -37,7 +37,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>{{ heroCtaReport }}</span>
+                  <span>{{ settingsStore.settings.hero_cta_report }}</span>
                 </router-link>
               </div>
 
@@ -130,9 +130,9 @@
     <section class="section-padding bg-gradient-to-b from-gray-50 to-white">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: #222222;">{{ quickAccessTitle }}</h2>
+          <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: #222222;">{{ settingsStore.settings.quick_access_title }}</h2>
           <p class="text-xl max-w-3xl mx-auto leading-relaxed" style="color: #555555;">
-            {{ quickAccessDesc }}
+            {{ settingsStore.settings.quick_access_description }}
           </p>
         </div>
 
@@ -146,8 +146,8 @@
                     d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-blue-600 transition-colors duration-300">{{ cardReportTitle }}</h3>
-              <p class="avm-text">{{ cardReportText }}</p>
+              <h3 class="avm-title group-hover:text-blue-600 transition-colors duration-300">{{ settingsStore.settings.card_report_title }}</h3>
+              <p class="avm-text">{{ settingsStore.settings.card_report_text }}</p>
             </div>
           </router-link>
 
@@ -160,9 +160,9 @@
                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-green-600 transition-colors duration-300">{{ cardResourcesTitle }}
+              <h3 class="avm-title group-hover:text-green-600 transition-colors duration-300">{{ settingsStore.settings.card_resources_title }}
               </h3>
-              <p class="avm-text">{{ cardResourcesText }}</p>
+              <p class="avm-text">{{ settingsStore.settings.card_resources_text }}</p>
             </div>
           </router-link>
 
@@ -176,8 +176,8 @@
                     d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-purple-600 transition-colors duration-300">{{ cardFaqsTitle }}</h3>
-              <p class="avm-text">{{ cardFaqsText }}</p>
+              <h3 class="avm-title group-hover:text-purple-600 transition-colors duration-300">{{ settingsStore.settings.card_faqs_title }}</h3>
+              <p class="avm-text">{{ settingsStore.settings.card_faqs_text }}</p>
             </div>
           </router-link>
 
@@ -191,9 +191,9 @@
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 class="avm-title group-hover:text-orange-600 transition-colors duration-300">{{ cardPartnersTitle }}
+              <h3 class="avm-title group-hover:text-orange-600 transition-colors duration-300">{{ settingsStore.settings.card_partners_title }}
               </h3>
-              <p class="avm-text">{{ cardPartnersText }}</p>
+              <p class="avm-text">{{ settingsStore.settings.card_partners_text }}</p>
             </div>
           </router-link>
         </div>
@@ -206,13 +206,13 @@
     <section class="section-padding bg-gradient-to-b from-white to-gray-50">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ publicationsTitle }}</h2>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ settingsStore.settings.publications_title }}</h2>
           <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            {{ publicationsDesc }}
+            {{ settingsStore.settings.publications_description }}
           </p>
           <router-link to="/blog"
             class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200">
-            {{ publicationsLink }}
+            {{ settingsStore.settings.publications_link }}
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -354,8 +354,8 @@
     <section class="py-16 bg-white border-y border-gray-100">
       <div class="container-custom">
         <div class="text-center mb-12">
-          <h3 class="text-2xl font-bold text-gray-900 mb-4">{{ trustPartnersTitle }}</h3>
-          <p class="text-gray-600">{{ trustPartnersDesc }}</p>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">{{ settingsStore.settings.trust_partners_title }}</h3>
+          <p class="text-gray-600">{{ settingsStore.settings.trust_partners_description }}</p>
         </div>
 
         <!-- Loading State -->
@@ -399,9 +399,9 @@
     <section class="section-padding bg-gradient-to-br from-blue-50 via-white to-orange-50 hide-section">
       <div class="container-custom text-center">
         <div class="max-w-4xl mx-auto">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ finalCtaTitle }}</h2>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{{ settingsStore.settings.final_cta_title }}</h2>
           <p class="text-xl text-gray-600 mb-12 leading-relaxed">
-            {{ finalCtaText }}
+            {{ settingsStore.settings.final_cta_text }}
           </p>
 
           <!-- Primary CTA Buttons -->
@@ -413,7 +413,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                {{ finalCtaCall }}
+                {{ settingsStore.settings.final_cta_call }}
               </span>
             </a>
             <router-link to="/report"
@@ -423,7 +423,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {{ finalCtaReport }}
+                {{ settingsStore.settings.final_cta_report }}
               </span>
             </router-link>
             <router-link to="/contact"
@@ -433,7 +433,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                {{ finalCtaContact }}
+                {{ settingsStore.settings.final_cta_contact }}
               </span>
             </router-link>
           </div>
@@ -492,10 +492,10 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { usePartnersStore } from '@/store/partners'
   import { useBlogStore } from '@/store/blog'
-  import { useContentStore } from '@/store/content'
+  import { useSettingsStore } from '@/store/settings'
   import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
 
   defineOptions({
@@ -504,33 +504,7 @@
 
   const partnersStore = usePartnersStore()
   const blogStore = useBlogStore()
-  const contentStore = useContentStore()
-
-  // Get dynamic content - computed properties that reactively access content store
-  const heroTitle = computed(() => contentStore.getContent('hero_title', 'Every One Deserves to Be Heard.'))
-  const heroSubtitle = computed(() => contentStore.getContent('hero_subtitle', 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.'))
-  const heroCtaCall = computed(() => contentStore.getContent('hero_cta_call', 'Call 116 Now'))
-  const heroCtaReport = computed(() => contentStore.getContent('hero_cta_report', 'Report a Case'))
-  const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Services'))
-  const quickAccessDesc = computed(() => contentStore.getContent('quick_access_description', 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.'))
-  const cardReportTitle = computed(() => contentStore.getContent('card_report_title', 'Report a Case'))
-  const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.'))
-  const cardResourcesTitle = computed(() => contentStore.getContent('card_resources_title', 'Resources'))
-  const cardResourcesText = computed(() => contentStore.getContent('card_resources_text', 'Access vital information, safety guides, and educational materials to protect children.'))
-  const cardFaqsTitle = computed(() => contentStore.getContent('card_faqs_title', 'FAQs'))
-  const cardFaqsText = computed(() => contentStore.getContent('card_faqs_text', 'Find quick answers to common questions about our services, reporting process, and safety.'))
-  const cardPartnersTitle = computed(() => contentStore.getContent('card_partners_title', 'Partners'))
-  const cardPartnersText = computed(() => contentStore.getContent('card_partners_text', 'Collaborating with government and international organizations to ensure child safety.'))
-  const publicationsTitle = computed(() => contentStore.getContent('publications_title', 'Success Stories'))
-  const publicationsDesc = computed(() => contentStore.getContent('publications_description', 'Latest success stories, videos and resources to help children, families, and communities stay safe and informed.'))
-  const publicationsLink = computed(() => contentStore.getContent('publications_link', 'View all stories'))
-  const trustPartnersTitle = computed(() => contentStore.getContent('trust_partners_title', 'Trusted by Leading Organizations'))
-  const trustPartnersDesc = computed(() => contentStore.getContent('trust_partners_description', 'Working in partnership with government and international agencies'))
-  const finalCtaTitle = computed(() => contentStore.getContent('final_cta_title', 'Need Help Right Now?'))
-  const finalCtaText = computed(() => contentStore.getContent('final_cta_text', 'Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.'))
-  const finalCtaCall = computed(() => contentStore.getContent('final_cta_call', 'Call 116 Now'))
-  const finalCtaReport = computed(() => contentStore.getContent('final_cta_report', 'Report a Case'))
-  const finalCtaContact = computed(() => contentStore.getContent('final_cta_contact', 'Contact Us'))
+  const settingsStore = useSettingsStore()
 
   // Video data from backend
   const latestVideos = ref([])
@@ -542,8 +516,8 @@
   const pngUrl = ref('')
 
   onMounted(async () => {
-    // Fetch content from store
-    await contentStore.fetchContent()
+    // Fetch settings from store
+    await settingsStore.fetchSettings()
 
     // Fetch partners
     loadingPartners.value = true
