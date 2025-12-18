@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <Loader />
+      <AppLoader />
     </div>
 
     <!-- Error State -->
@@ -89,7 +89,7 @@
 <script setup>
 import { computed } from 'vue'
 import BlogCard from './BlogCard.vue'
-import Loader from '../common/Loader.vue'
+import AppLoader from '../common/AppLoader.vue'
 
 const props = defineProps({
   posts: {

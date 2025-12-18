@@ -1,31 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
 
-// Lazy load views for better performance
-const Home = () => import('@/views/Home.vue')
-const About = () => import('@/views/About.vue')
-const Blog = () => import('@/views/Blog.vue')
-const BlogDetail = () => import('@/views/BlogDetail.vue')
-const Resources = () => import('@/views/Resources.vue')
-const Faqs = () => import('@/views/Faqs.vue')
-const Partners = () => import('@/views/Partners.vue')
-const Report = () => import('@/views/Report.vue')
-const Contact = () => import('@/views/Contact.vue')
-const Donate = () => import('@/views/Donate.vue')
-const Login = () => import('@/views/Login.vue')
-const Operations = () => import('@/views/Operations.vue')
-const ReportsInsights = () => import('@/views/ReportsInsights.vue')
-const Articles = () => import('@/views/Videos.vue')
-const Videos = () => import('@/views/Videos.vue')
-const Privacy = () => import('@/views/Privacy.vue')
-const Terms = () => import('@/views/Terms.vue')
-const Accessibility = () => import('@/views/Accessibility.vue')
-
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: () => import('@/views/HomePage.vue'),
     meta: {
       title: 'Sauti 116 helpline - Get Help Now',
       description: 'Support for children, GBV survivors, and migrant workers in Uganda',
@@ -34,7 +14,7 @@ const routes = [
   {
     path: '/privacy',
     name: 'privacy',
-    component: Privacy,
+    component: () => import('@/views/PrivacyPage.vue'),
     meta: {
       title: 'Privacy Policy',
       description: 'How Sauti protects your data and confidentiality',
@@ -43,7 +23,7 @@ const routes = [
   {
     path: '/terms',
     name: 'terms',
-    component: Terms,
+    component: () => import('@/views/TermsPage.vue'),
     meta: {
       title: 'Terms of Service',
       description: 'Rules for using Sauti services and this website',
@@ -52,7 +32,7 @@ const routes = [
   {
     path: '/accessibility',
     name: 'accessibility',
-    component: Accessibility,
+    component: () => import('@/views/AccessibilityPage.vue'),
     meta: {
       title: 'Accessibility Statement',
       description: 'Our commitment to making our services accessible to everyone',
@@ -61,7 +41,7 @@ const routes = [
   {
     path: '/operations',
     name: 'operations',
-    component: Operations,
+    component: () => import('@/views/OperationsPage.vue'),
     meta: {
       title: 'Our Operations & Case Flow',
       description: 'How we handle every call with care and urgency',
@@ -70,7 +50,7 @@ const routes = [
   {
     path: '/reports',
     name: 'reports',
-    component: ReportsInsights,
+    component: () => import('@/views/ReportsInsightsPage.vue'),
     meta: {
       title: 'Reports & Insights',
       description: 'Explore data and insights from Sauti Uganda',
@@ -79,7 +59,7 @@ const routes = [
   {
     path: '/videos',
     name: 'videos',
-    component: Videos,
+    component: () => import('@/views/VideosPage.vue'),
     meta: {
       title: 'Videos',
       description: 'Educational and awareness videos',
@@ -87,17 +67,14 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'about',
-    component: About,
-    meta: {
-      title: 'About Sauti',
-      description: 'Learn about Sauti 116 helpline and our mission',
-    },
+    name: 'AboutPage',
+    component: () => import('@/views/AboutPage.vue')
   },
+
   {
     path: '/blogs',
     name: 'blog',
-    component: Blog,
+    component: () => import('@/views/BlogPage.vue'),
     meta: {
       title: 'Blogs',
       description: 'Latest stories, updates, and insights from Sauti',
@@ -106,7 +83,7 @@ const routes = [
   {
     path: '/articles',
     name: 'articles',
-    component: Articles,
+    component: () => import('@/views/VideosPage.vue'), // Assuming Articles also uses VideosPage
     meta: {
       title: 'Articles',
       description: 'Featured articles and stories',
@@ -115,7 +92,7 @@ const routes = [
   {
     path: '/blogs/:slug',
     name: 'blog-detail',
-    component: BlogDetail,
+    component: () => import('@/views/BlogDetailPage.vue'),
     meta: {
       title: 'Success Story',
     },
@@ -123,7 +100,7 @@ const routes = [
   {
     path: '/resources',
     name: 'resources',
-    component: Resources,
+    component: () => import('@/views/ResourcesPage.vue'),
     meta: {
       title: 'Resources',
       description: 'Downloadable resources and guides',
@@ -132,7 +109,7 @@ const routes = [
   {
     path: '/faqs',
     name: 'faqs',
-    component: Faqs,
+    component: () => import('@/views/FaqsPage.vue'),
     meta: {
       title: 'FAQs',
       description: 'Frequently asked questions',
@@ -141,7 +118,7 @@ const routes = [
   {
     path: '/partners',
     name: 'partners',
-    component: Partners,
+    component: () => import('@/views/PartnersPage.vue'),
     meta: {
       title: 'Our Partners',
       description: 'Organizations supporting Sauti',
@@ -150,7 +127,7 @@ const routes = [
   {
     path: '/report',
     name: 'report',
-    component: Report,
+    component: () => import('@/views/ReportPage.vue'),
     meta: {
       title: 'Report a Case',
       description: 'Submit a confidential report anonymously',
@@ -159,7 +136,7 @@ const routes = [
   {
     path: '/contact',
     name: 'contact',
-    component: Contact,
+    component: () => import('@/views/ContactPage.vue'),
     meta: {
       title: 'Contact Us',
       description: 'Get in touch with Sauti',
@@ -168,7 +145,7 @@ const routes = [
   {
     path: '/donate',
     name: 'donate',
-    component: Donate,
+    component: () => import('@/views/DonatePage.vue'),
     meta: {
       title: 'Donate',
       description: 'Support Sauti 116 helpline and make a difference',
@@ -177,7 +154,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login,
+    component: () => import('@/views/LoginPage.vue'),
     meta: {
       title: 'Staff Login',
       requiresGuest: true,
@@ -186,7 +163,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('@/views/NotFound.vue'),
+    component: () => import('@/views/NotFoundPage.vue'),
     meta: {
       title: '404 - Page Not Found',
     },

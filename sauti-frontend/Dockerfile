@@ -7,18 +7,20 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install --production=false
 
 # Copy source code
 COPY . .
 
 # Build arguments
+ARG VITE_BASE_URL=/
 ARG VITE_API_URL=/api
 ARG VITE_APP_NAME="Sauti 116 helpline"
 ARG VITE_HOTLINE=116
 ARG VITE_WHATSAPP="+256743889999"
 ARG VITE_EMAIL="info@sauti.mglsd.go.ug"
 
+ENV VITE_BASE_URL=${VITE_BASE_URL}
 ENV VITE_API_URL=${VITE_API_URL}
 ENV VITE_APP_NAME=${VITE_APP_NAME}
 ENV VITE_HOTLINE=${VITE_HOTLINE}
@@ -40,6 +42,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Healthcheck support
 RUN apk add --no-cache curl
 
-EXPOSE 80 443
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

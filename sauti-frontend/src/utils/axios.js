@@ -4,7 +4,7 @@ import router from '@/router'
 
 // Create axios instance
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ apiClient.interceptors.response.use(
       const status = error.response.status
       
       switch (status) {
-        case 401:
+        case 401: { // Added curly braces
           // Unauthorized - clear auth and redirect to login
           console.error('❌ 401 Unauthorized')
           const authStore = useAuthStore()
@@ -59,6 +59,7 @@ apiClient.interceptors.response.use(
             router.push('/login')
           }
           break
+        } // Added curly braces
           
         case 400:
           console.error('❌ 400 Bad Request:', error.response.data)

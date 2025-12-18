@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-produc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,0.0.0.0,backend', cast=lambda v: [s.strip() for s in v.split(',')])
 
 # Application definition
 INSTALLED_APPS = [
@@ -44,11 +44,15 @@ INSTALLED_APPS = [
     'dashboard',
     'content',
     'social_media',
+    'timeline',
+    'services',
+    'sitesettings', # Added sitesettings app
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    # 'cms.middleware.RequestLogMiddleware', # Temporarily removed for debugging
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -123,6 +127,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Kampala'
 USE_I18N = True
 USE_TZ = True
+USE_X_FORWARDED_HOST = True
 
 LANGUAGES = [
     ('en', 'English'),
@@ -151,7 +156,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny', # Changed to AllowAny
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
@@ -176,12 +181,40 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = config(
-    'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://localhost:3005,http://localhost:8080',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
+CORS_ALLOW_ALL_ORIGINS = False # Temporarily set to True for debugging
+CORS_ALLOWED_ORIGINS = [
+    "https://sauti.mglsd.go.ug",
+    "http://localhost:8085",  # Public frontend local dev/docker
+    "http://localhost:3001",  # Admin frontend local dev/docker
+    "http://localhost:3002",  # Admin frontend local dev/docker
+    "http://localhost:8000",  # Backend itself (for direct access/testing)
+    # Add your production frontend origins here
+    "http://your-server-domain.com:8085", # Public frontend production
+    "http://your-server-domain.com:3001", # Admin frontend production
+    # If your frontend is served on a standard port (80/443) without explicit port in URL
+    "http://your-server-domain.com",
+    "https://your-server-domain.com", # If you eventually set up HTTPS
+]
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',  
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 # DRF Spectacular (OpenAPI/Swagger) Configuration
 SPECTACULAR_SETTINGS = {
@@ -204,8 +237,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 ENCRYPTION_KEY = config('ENCRYPTION_KEY', default='')
 
 # Security Settings for Production
+SECURE_SSL_REDIRECT = False # Ensure this is False for development
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # SECURE_SSL_REDIRECT = False # This line is now redundant if set above
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
@@ -214,3 +248,17 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}

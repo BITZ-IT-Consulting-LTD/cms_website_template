@@ -230,15 +230,16 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Type</label>
                   <select v-model="createForm.type" class="form-select">
-                    <option value="NGO">NGO</option>
-                    <option value="Government Agency">Government Agency</option>
-                    <option value="International Organization">International Organization</option>
-                    <option value="Private Sector">Private Sector</option>
+                    <option value="GOVERNMENT">Government Agency</option>
+                    <option value="UN_AGENCY">UN Agency</option>
+                    <option value="NGO">NGO/CSO</option>
+                    <option value="PRIVATE">Private Sector</option>
+                    <option value="OTHER">Other</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Website</label>
-                  <input v-model="createForm.website" type="url" class="form-input">
+                  <input v-model="createForm.website_url" type="url" class="form-input">
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Email</label>
@@ -247,6 +248,13 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Phone</label>
                   <input v-model="createForm.phone" type="tel" class="form-input">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Logo</label>
+                  <input type="file" @change="handleCreateLogoUpload" accept="image/*" class="form-input-file">
+                  <div v-if="createForm.logoPreview" class="mt-2">
+                    <img :src="createForm.logoPreview" alt="Logo Preview" class="max-w-xs h-auto">
+                  </div>
                 </div>
               </div>
               <div class="mt-6 flex justify-end space-x-3">
@@ -285,16 +293,17 @@
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Type</label>
-                  <select v-model="editForm.type" class="form-select">
-                    <option value="NGO">NGO</option>
-                    <option value="Government Agency">Government Agency</option>
-                    <option value="International Organization">International Organization</option>
-                    <option value="Private Sector">Private Sector</option>
+                  <select v-model="editForm.partner_type" class="form-select">
+                    <option value="GOVERNMENT">Government Agency</option>
+                    <option value="UN_AGENCY">UN Agency</option>
+                    <option value="NGO">NGO/CSO</option>
+                    <option value="PRIVATE">Private Sector</option>
+                    <option value="OTHER">Other</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Website</label>
-                  <input v-model="editForm.website" type="url" class="form-input">
+                  <input v-model="editForm.website_url" type="url" class="form-input">
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Email</label>
@@ -303,6 +312,13 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Phone</label>
                   <input v-model="editForm.phone" type="tel" class="form-input">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Logo</label>
+                  <input type="file" @change="handleEditLogoUpload" accept="image/*" class="form-input-file">
+                  <div v-if="editForm.logoPreview || editForm.logo" class="mt-2">
+                    <img :src="editForm.logoPreview || editForm.logo" alt="Logo Preview" class="max-w-xs h-auto">
+                  </div>
                 </div>
               </div>
               <div class="mt-6 flex justify-end space-x-3">
@@ -353,10 +369,14 @@ const editForm = ref({})
 const createForm = ref({
   name: '',
   description: '',
-  type: 'NGO',
-  website: '',
+  partner_type: 'NGO', // Corrected to partner_type
+  website_url: '', // Corrected to website_url
   email: '',
-  phone: ''
+  phone: '',
+  logoFile: null,
+  logoPreview: null, // Add logoPreview
+  is_active: true,
+  is_featured: false,
 })
 
 // Use store data
@@ -368,9 +388,9 @@ const error = computed(() => partnersStore.error)
 const stats = computed(() => {
   const partnersList = Array.isArray(partners.value) ? partners.value : []
   const total = partnersList.length
-  const active = partnersList.filter(p => p.status === 'active').length
-  const ngo = partnersList.filter(p => p.type === 'NGO').length
-  const government = partnersList.filter(p => p.type === 'Government Agency').length
+  const active = partnersList.filter(p => p.is_active).length
+  const ngo = partnersList.filter(p => p.partner_type === 'NGO').length
+  const government = partnersList.filter(p => p.partner_type === 'GOVERNMENT').length
   
   return {
     total,
@@ -387,21 +407,22 @@ const filteredPartners = computed(() => {
       partner.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       partner.description.toLowerCase().includes(searchQuery.value.toLowerCase())
     
-    const matchesType = !filterType.value || partner.type === filterType.value
-    const matchesStatus = !filterStatus.value || partner.status === filterStatus.value
+    const matchesType = !filterType.value || partner.partner_type === filterType.value
+    const matchesStatus = !filterStatus.value || 
+                          (filterStatus.value === 'active' && partner.is_active) ||
+                          (filterStatus.value === 'inactive' && !partner.is_active)
 
     return matchesSearch && matchesType && matchesStatus
   })
 })
 
 // Methods
-const statusBadgeClass = (status) => {
+const statusBadgeClass = (is_active) => {
   const classes = {
-    active: 'bg-green-100 text-green-800',
-    pending: 'bg-yellow-100 text-yellow-800',
-    inactive: 'bg-gray-100 text-gray-800'
+    true: 'bg-green-100 text-green-800',
+    false: 'bg-gray-100 text-gray-800'
   }
-  return classes[status] || 'bg-gray-100 text-gray-800'
+  return classes[is_active] || 'bg-gray-100 text-gray-800'
 }
 
 const viewPartner = (partner) => {
@@ -410,7 +431,7 @@ const viewPartner = (partner) => {
 }
 
 const editPartner = (partner) => {
-  editForm.value = { ...partner }
+  editForm.value = { ...partner, logoFile: null, logoPreview: partner.logo || null } // Reset logoFile and set logoPreview
   showEditModal.value = true
 }
 
@@ -430,7 +451,15 @@ const deletePartner = async (partner) => {
 
 const createPartner = async () => {
   try {
-    await partnersStore.createPartner(createForm.value)
+    const formData = new FormData()
+    for (const key in createForm.value) {
+      if (key === 'logoFile' && createForm.value[key]) {
+        formData.append('logo', createForm.value[key])
+      } else if (key !== 'logoFile') {
+        formData.append(key, createForm.value[key])
+      }
+    }
+    await partnersStore.createPartner(formData)
     toast.success('Partner created successfully')
     showCreateModal.value = false
     createForm.value = {
@@ -439,7 +468,8 @@ const createPartner = async () => {
       type: 'NGO',
       website: '',
       email: '',
-      phone: ''
+      phone: '',
+      logoFile: null
     }
   } catch (err) {
     console.error('Create error:', err)
@@ -449,13 +479,43 @@ const createPartner = async () => {
 
 const updatePartner = async () => {
   try {
-    await partnersStore.updatePartner(editForm.value.slug || editForm.value.id, editForm.value)
+    const formData = new FormData()
+    for (const key in editForm.value) {
+      if (key === 'logoFile' && editForm.value[key]) {
+        formData.append('logo', editForm.value[key])
+      } else if (key !== 'logoFile' && key !== 'logo') { // Exclude existing logo URL
+        formData.append(key, editForm.value[key])
+      }
+    }
+    await partnersStore.updatePartner(editForm.value.slug || editForm.value.id, formData)
     toast.success('Partner updated successfully')
     showEditModal.value = false
     editForm.value = {}
   } catch (err) {
     console.error('Update error:', err)
     toast.error('Failed to update partner')
+  }
+}
+
+const handleCreateLogoUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    createForm.value.logoFile = file
+    createForm.value.logoPreview = URL.createObjectURL(file)
+  } else {
+    createForm.value.logoFile = null
+    createForm.value.logoPreview = null
+  }
+}
+
+const handleEditLogoUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    editForm.value.logoFile = file
+    editForm.value.logoPreview = URL.createObjectURL(file)
+  } else {
+    editForm.value.logoFile = null
+    editForm.value.logoPreview = null
   }
 }
 

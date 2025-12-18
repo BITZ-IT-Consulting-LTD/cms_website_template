@@ -121,7 +121,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { api } from '@/utils/axios'
 
 const loading = ref(true)
@@ -214,41 +214,7 @@ const getPlatformColor = (platform) => {
   }
 }
 
-const handleImageError = (e) => {
-  // Use a beautiful gradient placeholder instead of trying another image
-  e.target.style.display = 'none'
-  const parent = e.target.parentElement
-  if (parent) {
-    parent.innerHTML = `
-      <div class="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-30">
-          <div class="absolute top-0 left-0 w-full h-full">
-            <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-white rounded-full blur-3xl"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-40 h-40 bg-white rounded-full blur-3xl"></div>
-          </div>
-        </div>
-        <div class="relative z-10 text-center">
-          <svg class="w-24 h-24 text-white mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-          <p class="text-white font-bold text-lg">Social Media</p>
-        </div>
-      </div>
-    `
-  }
-}
 
-const openPost = (url) => {
-  if (!url || url === '#') return
-  window.open(url, '_blank')
-}
-
-// Extract TikTok video ID from URL
-const getTikTokVideoId = (url) => {
-  if (!url) return null
-  const match = url.match(/\/video\/(\d+)/)
-  return match ? match[1] : null
-}
 
 // Extract YouTube video ID from URL
 const getYouTubeVideoId = (url) => {

@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 const getBaseURL = () => {
-    return 'https://backend.bitz-itc.com/api/';
+  return import.meta.env.VITE_API_BASE_URL;
 };
-
 // Create an Axios instance
 const apiClient = axios.create({
     baseURL: getBaseURL(),

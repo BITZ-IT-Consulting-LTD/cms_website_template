@@ -227,6 +227,59 @@
                 />
                 <span class="flex-1">Social Media</span>
               </router-link>
+
+              <router-link
+                to="/content"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/content') }"
+              >
+                <WrenchScrewdriverIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/content') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Site Content</span>
+              </router-link>
+              <router-link
+                to="/timeline"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/timeline') }"
+              >
+                <ClockIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/timeline') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Timeline Events</span>
+              </router-link>
+              <router-link
+                to="/services"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/services') }"
+              >
+                <CubeIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/services') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Services</span>
+              </router-link>
+              <router-link
+                to="/contacts"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/contacts') }"
+              >
+                <PhoneIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/contacts') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Contact Info</span>
+              </router-link>
             </div>
           </div>
 
@@ -263,6 +316,21 @@
                   ]"
                 />
                 <span class="flex-1">Settings</span>
+              </router-link>
+
+              <!-- New Site Settings Link -->
+              <router-link
+                to="/site-settings"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/site-settings') }"
+              >
+                <CogIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/site-settings') ? 'text-white' : 'text-[#555555] group-hover:text-[#222222]'
+                  ]"
+                />
+                <span class="flex-1">Site Settings</span>
               </router-link>
             </div>
           </div>
@@ -361,12 +429,15 @@ import {
   FolderOpenIcon,
   QuestionMarkCircleIcon,
   UserGroupIcon,
-  ChatBubbleLeftRightIcon,
   UsersIcon,
   ShieldExclamationIcon,
   PhotoIcon,
   ShareIcon,
-  BookOpenIcon
+  BookOpenIcon,
+  WrenchScrewdriverIcon,
+  ClockIcon,
+  CubeIcon,
+  PhoneIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -413,7 +484,8 @@ const pageTitle = computed(() => {
     '/videos': 'Videos',
     '/settings': 'Settings',
     '/reports': 'Reports',
-    '/social-media': 'Social Media'
+    '/social-media': 'Social Media',
+    '/site-settings': 'Site Settings' // Added for Site Settings
   }
 
   // Check for exact matches first
@@ -426,6 +498,7 @@ const pageTitle = computed(() => {
   if (route.path.startsWith('/posts')) return 'Blogs'
   if (route.path.startsWith('/videos')) return 'Videos'
   if (route.path.startsWith('/social-media')) return 'Social Media'
+  if (route.path.startsWith('/site-settings')) return 'Site Settings' // Added for Site Settings
 
   return 'Dashboard'
 })

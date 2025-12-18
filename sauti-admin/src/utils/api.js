@@ -2,8 +2,10 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
 
+console.log('Vite Environment Variables:', import.meta.env);
+
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -97,7 +99,8 @@ const createFormData = (data) => {
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('admin_token')
+    const authStore = useAuthStore() // Use the auth store
+    const token = authStore.token // Get token from the store
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

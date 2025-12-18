@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="flex flex-col min-h-screen">
-    <Header />
+    <AppHeader />
     
     <main class="flex-grow">
       <router-view v-slot="{ Component }">
@@ -10,7 +10,7 @@
       </router-view>
     </main>
     
-    <Footer />
+    <AppFooter />
     
     <FloatingChatBot />
   </div>
@@ -18,8 +18,8 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import Header from '@/components/layout/Header.vue'
-import Footer from '@/components/layout/Footer.vue'
+import AppHeader from '@/components/layout/AppHeader.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
 import FloatingChatBot from '@/components/giz/FloatingChatBot.vue'
 
 // Import Giz styles

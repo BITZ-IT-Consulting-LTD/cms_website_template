@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SiteContent, CoreValue
+from .models import SiteContent, CoreValue, Contact
 
 @admin.register(SiteContent)
 class SiteContentAdmin(admin.ModelAdmin):
@@ -17,3 +17,13 @@ class CoreValueAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     list_editable = ('order', 'is_active')
     ordering = ('order', 'title')
+
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'value', 'type', 'order', 'is_visible', 'updated_at')
+    list_filter = ('type', 'is_visible')
+    search_fields = ('name', 'value')
+    readonly_fields = ('created_at', 'updated_at')
+    list_editable = ('order', 'is_visible')
+    ordering = ('order', 'name')

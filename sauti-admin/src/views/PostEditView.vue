@@ -356,7 +356,6 @@ import { useToast } from 'vue-toastification'
 import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
 import {
   EyeIcon,
-  LinkIcon,
   PhotoIcon,
   XMarkIcon
 } from '@heroicons/vue/24/outline'
@@ -403,46 +402,7 @@ const tags = computed(() => {
 })
 
 // Editor methods (simplified - would use TipTap in real implementation)
-const toggleBold = () => {
-  document.execCommand('bold', false, null)
-}
-
-const toggleItalic = () => {
-  document.execCommand('italic', false, null)
-}
-
-const toggleUnderline = () => {
-  document.execCommand('underline', false, null)
-}
-
-const toggleHeading = (level) => {
-  document.execCommand('formatBlock', false, `h${level}`)
-}
-
-const toggleBulletList = () => {
-  document.execCommand('insertUnorderedList', false, null)
-}
-
-const toggleOrderedList = () => {
-  document.execCommand('insertOrderedList', false, null)
-}
-
-const insertLink = () => {
-  const url = prompt('Enter the URL:')
-  if (url) {
-    document.execCommand('createLink', false, url)
-  }
-}
-
-const insertImage = () => {
-  imageInput.value.click()
-}
-
-const isActive = (command, options = {}) => {
-  // Simplified active state check
-  return document.queryCommandState(command)
-}
-
+// eslint-disable-next-line no-unused-vars
 const handleContentChange = (event) => {
   // For textarea, the content is already in form.value.content via v-model
   // Auto-save draft every 30 seconds
@@ -454,11 +414,6 @@ const handleContentChange = (event) => {
       saveDraft()
     }
   }, 30000)
-}
-
-const handlePaste = (event) => {
-  // For textarea, let the default paste behavior work
-  // The v-model will handle the content update
 }
 
 const handleKeydown = (event) => {
@@ -477,35 +432,6 @@ const handleKeydown = (event) => {
     // Allow normal Enter behavior for line breaks
     // Double Enter will create paragraph separation
   }
-}
-
-const handleEditorClick = (event) => {
-  // Ensure cursor is positioned correctly when clicking
-  const range = document.createRange()
-  const sel = window.getSelection()
-  
-  // If clicking on empty space, position cursor there
-  if (event.target === editor.value) {
-    range.setStart(event.target, 0)
-    range.collapse(true)
-    sel.removeAllRanges()
-    sel.addRange(range)
-  }
-}
-
-const handleEditorFocus = (event) => {
-  // For textarea, no special handling needed
-  // Textarea naturally handles LTR text direction and paragraphs
-}
-
-const handleEditorBlur = (event) => {
-  // For textarea, no special handling needed
-  // Textarea naturally handles LTR text direction and paragraphs
-}
-
-const handleKeyup = (event) => {
-  // For textarea, no special handling needed
-  // Textarea naturally handles LTR text direction and paragraphs
 }
 
 // Helper methods for content analysis
@@ -606,6 +532,7 @@ const updatePost = async () => {
 }
 
 const savePost = async () => {
+  let postData = {}; // Declare postData here
   if (!form.value.title || !form.value.title.trim()) {
     toast.error('Please enter a title')
     return
@@ -620,7 +547,7 @@ const savePost = async () => {
 
   try {
     // Build post data object, only including defined values
-    const postData = {
+    postData = {
       title: form.value.title.trim(),
       content: form.value.content.trim(),
       status: form.value.status || 'DRAFT',

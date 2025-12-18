@@ -49,3 +49,122 @@
 /sauti_cms/.coverage
 /sauti_cms/htmlcov/
 /sauti_cms/.pytest_cache/
+
+
+############################
+# General
+############################
+.DS_Store
+Thumbs.db
+.env
+.env.*
+*.log
+*.tmp
+*.swp
+*.bak
+.idea/
+.vscode/
+*.code-workspace
+
+############################
+# Node / Vue
+############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+dist/
+build/
+.cache/
+.vite/
+.vite-ssg/
+.eslintcache
+
+############################
+# Vue / Vite / Webpack
+############################
+*.local
+*.map
+stats.json
+
+############################
+# Python
+############################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+
+############################
+# Virtual Environments
+############################
+venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+pip-wheel-metadata/
+
+############################
+# Python Packaging
+############################
+build/
+dist/
+develop-eggs/
+downloads/
+sdist/
+wheels/
+MANIFEST
+
+############################
+# Django / FastAPI / Flask
+############################
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+instance/
+.webassets-cache
+
+############################
+# Jupyter / Notebooks
+############################
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+############################
+# Testing / Coverage
+############################
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+############################
+# Logs
+############################
+*.log
+logs/
+
+############################
+# Docker
+############################
+*.env.docker
+docker-compose.override.yml
+
+############################
+# OS / Editors
+############################
+*.orig
+*.rej
+
+venv/
+
