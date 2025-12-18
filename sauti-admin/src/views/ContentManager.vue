@@ -104,16 +104,13 @@ const showModal = ref(false)
 const currentContent = ref(null)
 const activeMainTab = ref('home') // Default active main tab
 const activeSubTab = ref('') // Default active sub tab
-const contentTypesApiMap = ref({}) // Stores the map from /api/content/ (e.g., { 'site-content': 'url' })
+const globalSettings = ref({}) // Will hold the single GlobalSettings object
 const currentTabContent = ref([]) // Stores content for the active sub tab
 
 // Define Main Navigation Tabs
 const mainNavTabs = [
   { value: 'home', label: 'Home' },
   { value: 'about', label: 'About' },
-  { value: 'services', label: 'Services' },
-  { value: 'blog', label: 'Blog' },
-  { value: 'videos', label: 'Videos' },
   { value: 'resources', label: 'Resources' },
   { value: 'faqs', label: 'FAQs' },
   { value: 'partners', label: 'Partners' },
@@ -126,79 +123,65 @@ const mainNavTabs = [
 // Define Sub-Tab Mapping for each Main Tab
 const subTabMapping = {
   home: [
-    { value: 'hero-section', label: 'Hero Section', contentType: 'site-content', filterKeys: ['hero_title', 'hero_subtitle', 'hero_button_text'], apiUrlKey: 'site-content' },
-    { value: 'about-overview', label: 'About Overview', contentType: 'site-content', filterKeys: ['about_section_title', 'about_section_content'], apiUrlKey: 'site-content' },
-    // Add more sub-tabs for Home page
+    { value: 'hero-section', label: 'Hero Section', filterKeys: ['home_hero_title', 'home_hero_subtitle', 'home_hero_cta_call', 'home_hero_cta_report'] },
+    { value: 'quick-access', label: 'Quick Access', filterKeys: ['home_quick_access_title', 'home_quick_access_description'] },
+    { value: 'cards', label: 'Cards', filterKeys: ['home_card_report_title', 'home_card_report_text', 'home_card_resources_title', 'home_card_resources_text', 'home_card_faqs_title', 'home_card_faqs_text', 'home_card_partners_title', 'home_card_partners_text'] },
+    { value: 'journey', label: 'Journey', filterKeys: ['home_journey_title', 'home_journey_description'] },
+    { value: 'publications', label: 'Publications', filterKeys: ['home_publications_title', 'home_publications_description', 'home_publications_link'] },
+    { value: 'trust-partners', label: 'Trust Partners', filterKeys: ['home_trust_partners_title', 'home_trust_partners_description'] },
+    { value: 'final-cta', label: 'Final CTA', filterKeys: ['home_final_cta_title', 'home_final_cta_text', 'home_final_cta_call', 'home_final_cta_report', 'home_final_cta_contact'] },
   ],
   about: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['about_hero_title', 'about_hero_subtitle', 'about_image', 'about_title'], apiUrlKey: 'site-content' },
-    { value: 'mission-values', label: 'Mission & Values', contentType: 'site-content', filterKeys: ['about_mission_text', 'about_mission_title', 'about_values_title'], apiUrlKey: 'site-content' },
-    { value: 'stats', label: 'Stats', contentType: 'site-content', filterKeys: ['about_stat_1_text', 'about_stat_1_title', 'about_stat_2_text', 'about_stat_2_title', 'about_stat_3_text', 'about_stat_3_title', 'about_stat_4_text', 'about_stat_4_title'], apiUrlKey: 'site-content' },
-    { value: 'services', label: 'Services', contentType: 'site-content', filterKeys: ['about_service_1_text', 'about_service_1_title', 'about_service_2_text', 'about_service_2_title', 'about_service_3_text', 'about_service_3_title', 'about_service_4_text', 'about_service_4_title', 'about_service_5_text', 'about_service_5_title'], apiUrlKey: 'site-content' },
-    { value: 'background', label: 'Background', contentType: 'site-content', filterKeys: ['about_background_item_1', 'about_background_item_2', 'about_background_item_3', 'about_background_item_4', 'about_background_item_5', 'about_background_item_6', 'about_background_note', 'about_background_title'], apiUrlKey: 'site-content' },
-    { value: 'journey', label: 'Journey', contentType: 'site-content', filterKeys: ['about_journey_item_1_text', 'about_journey_item_1_title', 'about_journey_item_1_year', 'about_journey_item_2_text', 'about_journey_item_2_title', 'about_journey_item_2_year', 'about_journey_item_3_text', 'about_journey_item_3_title', 'about_journey_item_3_year', 'about_journey_item_4_text', 'about_journey_item_4_title', 'about_journey_item_4_year', 'about_journey_item_5_text', 'about_journey_item_5_title', 'about_journey_item_5_year', 'about_journey_item_6_text', 'about_journey_item_6_title', 'about_journey_item_6_year', 'about_journey_subtitle', 'about_journey_title'], apiUrlKey: 'site-content' },
-    { value: 'operations', label: 'Operations', contentType: 'site-content', filterKeys: ['about_operations_item_1', 'about_operations_item_2', 'about_operations_item_3', 'about_operations_item_4', 'about_operations_title'], apiUrlKey: 'site-content' },
-    { value: 'resolution', label: 'Path to Resolution', contentType: 'site-content', filterKeys: ['about_resolution_card_1_text', 'about_resolution_card_1_title', 'about_resolution_card_2_title', 'about_resolution_card_3_title', 'about_resolution_card_4_text', 'about_resolution_card_4_title', 'about_resolution_card_5_text', 'about_resolution_card_5_title', 'about_resolution_title'], apiUrlKey: 'site-content' },
-    { value: 'partners-cta', label: 'Partners & CTA', contentType: 'site-content', filterKeys: ['about_partner_1', 'about_partner_2', 'about_partner_3', 'about_partner_4', 'about_partners_text', 'about_partners_title', 'about_cta_text', 'about_cta_title'], apiUrlKey: 'site-content' },
-  ],
-  services: [
-    { value: 'page-content', label: 'Page Content', contentType: 'site-content', filterKeys: ['services_page_title', 'services_intro_text'], apiUrlKey: 'site-content' },
-    { value: 'all-services', label: 'All Services', contentType: 'services', apiUrlKey: 'services' },
-  ],
-  blog: [
-    { value: 'page-content', label: 'Page Content', contentType: 'site-content', filterKeys: ['blog_page_title', 'blog_intro_text'], apiUrlKey: 'site-content' },
-    { value: 'blog-posts', label: 'Blog Posts', contentType: 'posts', apiUrlKey: 'posts' },
-  ],
-  videos: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['videos_title'], apiUrlKey: 'site-content' },
-    { value: 'search-filters', label: 'Search & Filters', contentType: 'site-content', filterKeys: ['videos_search_placeholder', 'videos_search_button', 'videos_resources_link', 'videos_chip_all', 'videos_chip_education', 'videos_chip_safety', 'videos_chip_support', 'videos_chip_recency', 'videos_chip_popular'], apiUrlKey: 'site-content' },
-    { value: 'all-videos', label: 'All Videos', contentType: 'videos', apiUrlKey: 'videos' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['about_hero_title', 'about_hero_subtitle', 'about_image', 'about_title'] },
+    { value: 'mission-values', label: 'Mission & Values', filterKeys: ['about_mission_text', 'about_mission_title', 'about_values_title'] },
+    { value: 'stats', label: 'Stats', filterKeys: ['about_stat_1_text', 'about_stat_1_title', 'about_stat_2_text', 'about_stat_2_title', 'about_stat_3_text', 'about_stat_3_title', 'about_stat_4_text', 'about_stat_4_title'] },
+    { value: 'services', label: 'Services', filterKeys: ['about_service_1_text', 'about_service_1_title', 'about_service_2_text', 'about_service_2_title', 'about_service_3_text', 'about_service_3_title', 'about_service_4_text', 'about_service_4_title', 'about_service_5_text', 'about_service_5_title'] },
+    { value: 'background', label: 'Background', filterKeys: ['about_background_item_1', 'about_background_item_2', 'about_background_item_3', 'about_background_item_4', 'about_background_item_5', 'about_background_item_6', 'about_background_note', 'about_background_title'] },
+    { value: 'journey', label: 'Journey', filterKeys: ['about_journey_item_1_text', 'about_journey_item_1_title', 'about_journey_item_1_year', 'about_journey_item_2_text', 'about_journey_item_2_title', 'about_journey_item_2_year', 'about_journey_item_3_text', 'about_journey_item_3_title', 'about_journey_item_3_year', 'about_journey_item_4_text', 'about_journey_item_4_title', 'about_journey_item_4_year', 'about_journey_item_5_text', 'about_journey_item_5_title', 'about_journey_item_5_year', 'about_journey_item_6_text', 'about_journey_item_6_title', 'about_journey_item_6_year', 'about_journey_subtitle', 'about_journey_title'] },
+    { value: 'operations', label: 'Operations', filterKeys: ['about_operations_item_1', 'about_operations_item_2', 'about_operations_item_3', 'about_operations_item_4', 'about_operations_title'] },
+    { value: 'resolution', label: 'Path to Resolution', filterKeys: ['about_resolution_card_1_text', 'about_resolution_card_1_title', 'about_resolution_card_2_title', 'about_resolution_card_3_title', 'about_resolution_card_4_text', 'about_resolution_card_4_title', 'about_resolution_card_5_text', 'about_resolution_card_5_title', 'about_resolution_title'] },
+    { value: 'partners-cta', label: 'Partners & CTA', filterKeys: ['about_partner_1', 'about_partner_2', 'about_partner_3', 'about_partner_4', 'about_partners_text', 'about_partners_title', 'about_cta_text', 'about_cta_title'] },
   ],
   resources: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['resources_title'], apiUrlKey: 'site-content' },
-    { value: 'search-filters', label: 'Search & Filters', contentType: 'site-content', filterKeys: ['resources_search_placeholder', 'resources_search_button', 'resources_chip_all', 'resources_chip_guides', 'resources_chip_infographics', 'resources_chip_reports', 'resources_chip_tools'], apiUrlKey: 'site-content' },
-    { value: 'all-resources', label: 'All Resources', contentType: 'resources', apiUrlKey: 'resources' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['resources_title', 'resources_subtitle'] },
+    { value: 'stats', label: 'Statistics', filterKeys: ['resources_stats_title', 'resources_stats_updated', 'resources_stats_loading', 'resources_stats_error', 'resources_total_reports', 'resources_child_protection', 'resources_gbv_cases', 'resources_migrant_worker', 'resources_cases_by_category', 'resources_interactive', 'resources_reports_over_time', 'resources_last_6_months', 'resources_status_distribution', 'resources_pending', 'resources_in_progress', 'resources_resolved', 'resources_closed'] },
+    { value: 'downloads', label: 'Downloads', filterKeys: ['resources_downloads_title', 'resources_downloads_subtitle', 'resources_available', 'resources_search_placeholder', 'resources_all_categories', 'resources_all_languages', 'resources_loading', 'resources_coming_soon', 'resources_no_results', 'resources_no_results_subtitle', 'resources_previous', 'resources_next'] },
   ],
   faqs: [
-    { value: 'support', label: 'Support', contentType: 'site-content', filterKeys: ['faqs_support_title', 'faqs_support_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'quick-response', label: 'Quick Response', contentType: 'site-content', filterKeys: ['faqs_quick_response_title', 'faqs_quick_response_subtitle', 'faqs_quick_response_text'], apiUrlKey: 'site-content' },
-    { value: 'immediate-help', label: 'Immediate Help', contentType: 'site-content', filterKeys: ['faqs_immediate_help_title', 'faqs_immediate_help_subtitle', 'faqs_call_button'], apiUrlKey: 'site-content' },
-    { value: 'page-content', label: 'Page Content', contentType: 'site-content', filterKeys: ['faqs_page_title', 'faqs_page_subtitle', 'faqs_search_placeholder', 'faqs_all_categories_button', 'faqs_no_results', 'faqs_no_results_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'footer', label: 'Footer', contentType: 'site-content', filterKeys: ['faqs_privacy_policy', 'faqs_terms_of_service', 'faqs_contact_us', 'faqs_footer_text'], apiUrlKey: 'site-content' },
-    { value: 'all-faqs', label: 'All FAQs', contentType: 'faqs', apiUrlKey: 'faqs' },
+    { value: 'support', label: 'Support', filterKeys: ['faqs_support_title', 'faqs_support_subtitle'] },
+    { value: 'quick-response', label: 'Quick Response', filterKeys: ['faqs_quick_response_title', 'faqs_quick_response_subtitle', 'faqs_quick_response_text'] },
+    { value: 'immediate-help', label: 'Immediate Help', filterKeys: ['faqs_immediate_help_title', 'faqs_immediate_help_subtitle', 'faqs_call_button'] },
+    { value: 'page-content', label: 'Page Content', filterKeys: ['faqs_page_title', 'faqs_page_subtitle', 'faqs_search_placeholder', 'faqs_all_categories_button', 'faqs_no_results', 'faqs_no_results_subtitle'] },
+    { value: 'footer', label: 'Footer', filterKeys: ['faqs_privacy_policy', 'faqs_terms_of_service', 'faqs_contact_us', 'faqs_footer_text'] },
   ],
   partners: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['partners_title', 'partners_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'cta', label: 'Call to Action', contentType: 'site-content', filterKeys: ['partners_cta_title', 'partners_cta_text', 'partners_cta_button'], apiUrlKey: 'site-content' },
-    { value: 'all-partners', label: 'All Partners', contentType: 'partners', apiUrlKey: 'partners' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['partners_title', 'partners_subtitle'] },
+    { value: 'cta', label: 'Call to Action', filterKeys: ['partners_cta_title', 'partners_cta_text', 'partners_cta_button'] },
   ],
   'social-media': [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['social_media_title', 'social_media_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'links', label: 'Social Links', contentType: 'site-content', filterKeys: ['social_media_facebook_link', 'social_media_twitter_link', 'social_media_instagram_link', 'social_media_linkedin_link'], apiUrlKey: 'site-content' },
-    { value: 'social-posts', label: 'Social Posts', contentType: 'social_media', apiUrlKey: 'social-media' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['social_media_title', 'social_media_subtitle'] },
+    { value: 'links', label: 'Social Links', filterKeys: ['social_media_facebook_link', 'social_media_twitter_link', 'social_media_instagram_link', 'social_media_linkedin_link'] },
   ],
   timeline: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['timeline_title', 'timeline_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'timeline-events', label: 'Timeline Events', contentType: 'timeline', apiUrlKey: 'timeline' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['timeline_title', 'timeline_subtitle'] },
   ],
   contact: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['contact_title', 'contact_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'hotline', label: 'Hotline', contentType: 'site-content', filterKeys: ['contact_hotline_title', 'contact_hotline_number', 'contact_hotline_subtitle', 'contact_hotline_text'], apiUrlKey: 'site-content' },
-    { value: 'email', label: 'Email', contentType: 'site-content', filterKeys: ['contact_email_title', 'contact_email_address', 'contact_email_text'], apiUrlKey: 'site-content' },
-    { value: 'whatsapp', label: 'WhatsApp', contentType: 'site-content', filterKeys: ['contact_whatsapp_title', 'contact_whatsapp_number', 'contact_whatsapp_text'], apiUrlKey: 'site-content' },
-    { value: 'location', label: 'Location', contentType: 'site-content', filterKeys: ['contact_location_title', 'contact_location_text_1', 'contact_location_text_2'], apiUrlKey: 'site-content' },
-    { value: 'follow-us', label: 'Follow Us', contentType: 'site-content', filterKeys: ['contact_follow_us'], apiUrlKey: 'site-content' },
-    { value: 'contact-forms', label: 'Contact Forms', contentType: 'contacts', apiUrlKey: 'contacts' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['contact_title', 'contact_subtitle'] },
+    { value: 'hotline', label: 'Hotline', filterKeys: ['contact_hotline_title', 'contact_hotline_number', 'contact_hotline_subtitle', 'contact_hotline_text'] },
+    { value: 'email', label: 'Email', filterKeys: ['contact_email_title', 'contact_email_address', 'contact_email_text'] },
+    { value: 'whatsapp', label: 'WhatsApp', filterKeys: ['contact_whatsapp_title', 'contact_whatsapp_number', 'contact_whatsapp_text'] },
+    { value: 'location', label: 'Location', filterKeys: ['contact_location_title', 'contact_location_text_1', 'contact_location_text_2'] },
+    { value: 'follow-us', label: 'Follow Us', filterKeys: ['contact_follow_us'] },
   ],
   operations: [
-    { value: 'hero', label: 'Hero Section', contentType: 'site-content', filterKeys: ['operations_title', 'operations_subtitle', 'operations_image'], apiUrlKey: 'site-content' },
-    { value: 'path-to-resolution', label: 'Path to Resolution', contentType: 'site-content', filterKeys: ['operations_path_title', 'operations_path_subtitle'], apiUrlKey: 'site-content' },
-    { value: 'step-1', label: 'Step 1: Initial Contact', contentType: 'site-content', filterKeys: ['operations_step_1_title', 'operations_step_1_text', 'operations_step_1_tag'], apiUrlKey: 'site-content' },
-    { value: 'step-2', label: 'Step 2: Counselor Support', contentType: 'site-content', filterKeys: ['operations_step_2_title', 'operations_step_2_text', 'operations_step_2_tag'], apiUrlKey: 'site-content' },
-    { value: 'step-3', label: 'Step 3: Case Assessment', contentType: 'site-content', filterKeys: ['operations_step_3_title', 'operations_step_3_text', 'operations_step_3_tag'], apiUrlKey: 'site-content' },
-    { value: 'step-4', label: 'Step 4: Referral & Follow-up', contentType: 'site-content', filterKeys: ['operations_step_4_title', 'operations_step_4_text', 'operations_step_4_tag'], apiUrlKey: 'site-content' },
-    { value: 'metrics', label: 'Metrics', contentType: 'site-content', filterKeys: ['operations_metrics_1_title', 'operations_metrics_1_text', 'operations_metrics_2_title', 'operations_metrics_2_text', 'operations_metrics_3_title', 'operations_metrics_3_text'], apiUrlKey: 'site-content' },
-    { value: 'highlights', label: 'Highlights', contentType: 'site-content', filterKeys: ['operations_highlights_title', 'operations_highlight_1_title', 'operations_highlight_1_text', 'operations_highlight_2_title', 'operations_highlight_2_text', 'operations_highlight_3_title', 'operations_highlight_3_text', 'operations_highlight_4_title', 'operations_highlight_4_text', 'operations_highlight_5_title', 'operations_highlight_5_text', 'operations_highlight_6_title', 'operations_highlight_6_text'], apiUrlKey: 'site-content' },
+    { value: 'hero', label: 'Hero Section', filterKeys: ['operations_title', 'operations_subtitle', 'operations_image'] },
+    { value: 'path-to-resolution', label: 'Path to Resolution', filterKeys: ['operations_path_title', 'operations_path_subtitle'] },
+    { value: 'step-1', label: 'Step 1: Initial Contact', filterKeys: ['operations_step_1_title', 'operations_step_1_text', 'operations_step_1_tag'] },
+    { value: 'step-2', label: 'Step 2: Counselor Support', filterKeys: ['operations_step_2_title', 'operations_step_2_text', 'operations_step_2_tag'] },
+    { value: 'step-3', label: 'Step 3: Case Assessment', filterKeys: ['operations_step_3_title', 'operations_step_3_text', 'operations_step_3_tag'] },
+    { value: 'step-4', label: 'Step 4: Referral & Follow-up', filterKeys: ['operations_step_4_title', 'operations_step_4_text', 'operations_step_4_tag'] },
+    { value: 'metrics', label: 'Metrics', filterKeys: ['operations_metrics_1_title', 'operations_metrics_1_text', 'operations_metrics_2_title', 'operations_metrics_2_text', 'operations_metrics_3_title', 'operations_metrics_3_text'] },
+    { value: 'highlights', label: 'Highlights', filterKeys: ['operations_highlights_title', 'operations_highlight_1_title', 'operations_highlight_1_text', 'operations_highlight_2_title', 'operations_highlight_2_text', 'operations_highlight_3_title', 'operations_highlight_3_text', 'operations_highlight_4_title', 'operations_highlight_4_text', 'operations_highlight_5_title', 'operations_highlight_5_text', 'operations_highlight_6_title', 'operations_highlight_6_text'] },
   ],
 }
 
@@ -206,47 +189,46 @@ const currentSubTabs = computed(() => {
   return subTabMapping[activeMainTab.value] || []
 })
 
-const fetchContentTypesApiMap = async () => {
+const fetchGlobalSettings = async () => {
+  setLoading(true)
+  setError(null)
   try {
-    const response = await api.get('/content/')
-    contentTypesApiMap.value = response.data
+    const response = await api.get('/api/sitesettings/settings/')
+    globalSettings.value = response.data
     // Set initial active sub tab based on the first main tab's first sub tab
     if (mainNavTabs.length > 0 && subTabMapping[activeMainTab.value] && subTabMapping[activeMainTab.value].length > 0) {
       activeSubTab.value = subTabMapping[activeMainTab.value][0].value
     }
   } catch (err) {
-    console.error('Error fetching content types API map:', err)
-    // Handle error
+    console.error('Error fetching global settings:', err)
+    setError('Failed to fetch global settings.')
+  } finally {
+    setLoading(false)
   }
 }
 
 const fetchContentForActiveSubTab = async () => {
   const currentSubTabConfig = currentSubTabs.value.find(tab => tab.value === activeSubTab.value)
 
-  if (!currentSubTabConfig || !contentTypesApiMap.value[currentSubTabConfig.apiUrlKey]) {
+  if (!currentSubTabConfig || !globalSettings.value) {
     currentTabContent.value = []
     return
   }
 
-      setLoading(true)
-      setError(null)
-      try {
-    const url = contentTypesApiMap.value[currentSubTabConfig.apiUrlKey]
-    console.log('Fetching from URL:', url)
-    const response = await api.get(url)
-    console.log('API Response for', currentSubTabConfig.apiUrlKey, ':', response.data)
-    let data = Array.isArray(response.data) ? response.data : response.data.results || []
-
-    // If it's 'site-content' and filterKeys are defined, filter the data
-    if (currentSubTabConfig.contentType === 'site-content' && currentSubTabConfig.filterKeys) {
-      console.log('Filtering site-content with keys:', currentSubTabConfig.filterKeys)
-      data = data.filter(item => currentSubTabConfig.filterKeys.includes(item.key))
-      console.log('Filtered site-content data:', data)
+  setLoading(true)
+  setError(null)
+  try {
+    let data = []
+    if (currentSubTabConfig.filterKeys) {
+      data = currentSubTabConfig.filterKeys.map(key => ({
+        key: key,
+        value: globalSettings.value[key] || '',
+        id: key // Use key as id for consistency in the UI
+      }))
     }
     currentTabContent.value = data
-    console.log('currentTabContent after fetch:', currentTabContent.value)
   } catch (err) {
-    console.error(`Error fetching content for ${activeMainTab.value} - ${activeSubTab.value}:`, err)
+    console.error(`Error processing content for ${activeMainTab.value} - ${activeSubTab.value}:`, err)
     setError(`Failed to load content for ${activeMainTab.value} - ${activeSubTab.value}.`)
     currentTabContent.value = []
   } finally {
@@ -255,7 +237,7 @@ const fetchContentForActiveSubTab = async () => {
 }
 
 onMounted(async () => {
-  await fetchContentTypesApiMap()
+  await fetchGlobalSettings()
   if (activeSubTab.value) {
     await fetchContentForActiveSubTab()
   }
@@ -289,37 +271,26 @@ function closeModal() {
 }
 
 async function saveContent() {
-  const currentSubTabConfig = currentSubTabs.value.find(tab => tab.value === activeSubTab.value)
-  if (!currentSubTabConfig) {
-    console.error('Cannot save content: No active sub-tab configuration found.')
+  if (!currentContent.value || !globalSettings.value) {
+    console.error('Cannot save content: No current content or global settings available.')
     return
   }
 
-  if (currentContent.value && currentSubTabConfig.apiUrlKey && contentTypesApiMap.value[currentSubTabConfig.apiUrlKey]) {
-    const baseUrl = contentTypesApiMap.value[currentSubTabConfig.apiUrlKey]
-    const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl; // Remove trailing slash if present
+  setLoading(true)
+  setError(null)
+  try {
+    // Update the local globalSettings object
+    globalSettings.value[currentContent.value.key] = currentContent.value.value
 
-    setLoading(true)
-    setError(null)
-    try {
-      let updateUrl = '';
-      if (currentSubTabConfig.contentType === 'site-content' && currentContent.value.key) {
-        updateUrl = `${url}/${currentContent.value.key}/`;
-      } else if (currentContent.value.id) {
-        updateUrl = `${url}/${currentContent.value.id}/`;
-      } else {
-        console.error('Cannot save content: Missing identifier (id or key).')
-        return
-      }
-      await updateContent(updateUrl, currentContent.value)
-      closeModal()
-      await fetchContentForActiveSubTab() // Refresh content after save
-    } catch (err) {
-      console.error('Error saving content:', err)
-      setError('Failed to save content.')
-    } finally {
-      setLoading(false)
-    }
+    // Send the entire updated globalSettings object to the backend
+    await updateContent('/api/sitesettings/settings/', globalSettings.value)
+    closeModal()
+    await fetchContentForActiveSubTab() // Refresh content after save
+  } catch (err) {
+    console.error('Error saving content:', err)
+    setError('Failed to save content.')
+  } finally {
+    setLoading(false)
   }
 }
 </script>
