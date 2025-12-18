@@ -191,7 +191,9 @@ const loading = ref(true)
 // Watch props.isOpen to ensure reactivity
 const isOpen = computed(() => props.isOpen)
 
-const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+
+
 
 const isPdf = computed(() => {
   return props.fileType?.toLowerCase() === 'pdf' || props.fileUrl?.toLowerCase().endsWith('.pdf')
