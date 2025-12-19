@@ -17,15 +17,19 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cms.settings')
 django.setup()
 
 # Import functions from the individual scripts
-from create_admin import create_admin
-from create_infographics_category import create_category as create_infographics_category
-from create_initial_content import create_initial_content
-from create_sample_partners import create_sample_partners
-from create_sample_posts import create_sample_posts
-from create_sample_videos import create_sample_videos
+from populate_admin import populate_admin
+from populate_infographics import populate_infographics
+from populate_initial_content import populate_initial_content, populate_global_settings
+from populate_partners import populate_partners
+from populate_posts import populate_posts
+from populate_videos import populate_videos
 from populate_social_posts import populate as populate_social_posts
 from add_twitter_post import add_twitter_post
-
+from populate_timeline import populate_timeline
+from populate_contacts import populate_contacts
+from populate_about_page_content import populate_about_page_content
+from populate_faqs import populate_faqs
+from populate_services import populate_services
 
 
 def populate_all():
@@ -34,30 +38,48 @@ def populate_all():
     """
     print("--- Starting to populate all content ---")
 
-    print("\n[1/8] Creating admin user...")
-    create_admin()
+    print("\n[1/14] Creating admin user...")
+    populate_admin()
 
-    print("\n[2/8] Creating initial site content...")
-    create_initial_content()
+    print("\n[2/14] Creating initial site content...")
+    populate_initial_content()
 
-    print("\n[3/8] Creating sample blog posts, categories, and tags...")
-    create_sample_posts()
+    print("\n[3/14] Populating global settings...")
+    populate_global_settings()
 
-    print("\n[4/8] Creating sample videos and video categories...")
-    create_sample_videos()
+    print("\n[4/14] Populating About Page content (Core Values, Timeline, Protection Approach, Team)...")
+    populate_about_page_content()
 
-    print("\n[5/8] Creating sample partners...")
-    create_sample_partners()
+    print("\n[5/14] Creating sample blog posts, categories, and tags...")
+    populate_posts()
 
-    print("\n[6/8] Creating infographics category...")
-    create_infographics_category()
+    print("\n[6/14] Creating sample videos and video categories...")
+    populate_videos()
 
-    print("\n[7/8] Populating social media posts...")
+    print("\n[7/14] Creating sample partners...")
+    populate_partners()
+
+    print("\n[8/14] Creating infographics category...")
+    populate_infographics()
+
+    print("\n[9/14] Populating social media posts...")
     populate_social_posts()
 
-    print("\n[8/8] Adding a specific Twitter post...")
+    print("\n[10/14] Adding a specific Twitter post...")
     twitter_url = 'https://x.com/sauti116/status/1997995788517945838/photo/1'
     add_twitter_post(twitter_url)
+
+    print("\n[11/14] Populating timeline...")
+    populate_timeline()
+
+    print("\n[12/14] Populating contacts...")
+    populate_contacts()
+
+    print("\n[13/14] Populating FAQs...")
+    populate_faqs()
+
+    print("\n[14/14] Populating services...")
+    populate_services()
 
     print("\n--- All content population complete! ---")
 

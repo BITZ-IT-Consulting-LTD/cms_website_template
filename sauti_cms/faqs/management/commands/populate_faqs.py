@@ -97,7 +97,7 @@ class Command(BaseCommand):
         ]
 
         for i, faq_data in enumerate(faqs_data):
-            faq_obj, created = FAQ.objects.get_or_create(
+            faq_obj, created = FAQ.objects.update_or_create(
                 question=faq_data['question'],
                 defaults={
                     'answer': faq_data['answer'],
@@ -111,4 +111,4 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(self.style.SUCCESS(f"Created FAQ: {faq_data['question']}"))
             else:
-                self.stdout.write(self.style.WARNING(f"FAQ already exists: {faq_data['question']}"))
+                self.stdout.write(self.style.SUCCESS(f"Updated FAQ: {faq_data['question']}"))

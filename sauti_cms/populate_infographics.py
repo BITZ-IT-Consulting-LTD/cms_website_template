@@ -6,8 +6,8 @@ django.setup()
 
 from resources.models import ResourceCategory
 
-def create_category():
-    category, created = ResourceCategory.objects.get_or_create(
+def populate_infographics():
+    category, created = ResourceCategory.objects.update_or_create(
         name='Infographics',
         defaults={
             'description': 'Visual representations of data and information',
@@ -18,7 +18,7 @@ def create_category():
     if created:
         print(f"Created category: {category.name}")
     else:
-        print(f"Category already exists: {category.name}")
+        print(f"Updated category: {category.name}")
 
 if __name__ == '__main__':
-    create_category()
+    populate_infographics()

@@ -517,7 +517,7 @@
 
   onMounted(async () => {
     // Fetch settings from store
-    await settingsStore.fetchSettings()
+    await settingsStore.fetchGlobalSettings()
 
     // Fetch partners
     loadingPartners.value = true

@@ -16,12 +16,12 @@ const createFormData = (data) => {
   const formData = new FormData()
   Object.keys(data).forEach(key => {
     const value = data[key]
-    
+
     // Skip null, undefined, or empty strings for optional fields
     if (value === null || value === undefined) {
       return
     }
-    
+
     // Handle tags array - only append if array has items
     if (key === 'tags') {
       if (Array.isArray(value) && value.length > 0) {
@@ -36,7 +36,7 @@ const createFormData = (data) => {
       // If tags is empty array or null/undefined, skip it completely
       return
     }
-    
+
     // Handle file fields - only append if it's a File object
     const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file']
     if (fileFields.includes(key)) {
@@ -46,7 +46,7 @@ const createFormData = (data) => {
       // If it's a string (existing URL), skip it - backend will keep existing file
       return
     }
-    
+
     // Handle category and category_id - ensure it's a number and skip if invalid
     if (key === 'category' || key === 'category_id') {
       if (value === null || value === '' || value === undefined) {
@@ -59,38 +59,38 @@ const createFormData = (data) => {
       }
       return
     }
-    
+
     // Handle empty strings for optional fields - convert to empty string or skip
     if (value === '' && ['excerpt', 'slug'].includes(key)) {
       // Allow empty strings for these optional fields
       formData.append(key, '')
       return
     }
-    
+
     // Skip empty strings for other optional fields
     if (value === '') {
       return
     }
-    
+
     // Handle boolean values - Django expects 'true'/'false' or '1'/'0'
     if (typeof value === 'boolean') {
       formData.append(key, value ? 'true' : 'false')
       return
     }
-    
+
     // Handle number values
     if (typeof value === 'number') {
       formData.append(key, value.toString())
       return
     }
-    
+
     // Handle empty strings for optional text fields
     if (value === '' && ['description', 'youtube_url'].includes(key)) {
       // Allow empty strings for these optional fields
       formData.append(key, '')
       return
     }
-    
+
     // For all other fields, append the value as-is (FormData handles strings)
     formData.append(key, value)
   })
@@ -130,19 +130,19 @@ export const api = {
   put: (url, data, config) => apiClient.put(url, data, config),
   patch: (url, data, config) => apiClient.patch(url, data, config),
   delete: (url, config) => apiClient.delete(url, config),
-  
+
   auth: {
     login: (credentials) => apiClient.post('/auth/login/', credentials),
     profile: () => apiClient.get('/auth/profile/'),
     refreshToken: (refreshToken) => apiClient.post('/auth/token/refresh/', { refresh: refreshToken }),
   },
-  
+
   dashboard: {
     stats: () => apiClient.get('/dashboard/stats/'),
     analytics: (params) => apiClient.get('/dashboard/analytics/', { params }),
     topContent: () => apiClient.get('/dashboard/top-content/'),
   },
-  
+
   posts: {
     list: (params) => apiClient.get('/posts/', { params }),
     get: (slug) => apiClient.get(`/posts/${slug}/`),
@@ -167,7 +167,7 @@ export const api = {
     },
     tags: () => apiClient.get('/posts/tags/'),
   },
-  
+
   videos: {
     list: (params) => apiClient.get('/videos/', { params }),
     get: (slug) => apiClient.get(`/videos/${slug}/`),
@@ -191,7 +191,7 @@ export const api = {
       }),
     },
   },
-  
+
   resources: {
     list: (params) => apiClient.get('/resources/', { params }),
     get: (slug) => apiClient.get(`/resources/${slug}/`),
@@ -213,7 +213,7 @@ export const api = {
       }),
     },
   },
-  
+
   faqs: {
     list: (params) => apiClient.get('/faqs/', { params }),
     get: (id) => apiClient.get(`/faqs/${id}/`),
@@ -231,7 +231,7 @@ export const api = {
       }),
     },
   },
-  
+
   partners: {
     list: (params) => apiClient.get('/partners/', { params }),
     get: (slug) => apiClient.get(`/partners/${slug}/`),
@@ -243,20 +243,48 @@ export const api = {
     }),
     delete: (slug) => apiClient.delete(`/partners/${slug}/`),
   },
-  
+
   reports: {
     list: (params) => apiClient.get('/reports/list/', { params }),
     get: (id) => apiClient.get(`/reports/${id}/`),
     update: (id, data) => apiClient.put(`/reports/${id}/`, data),
     addFollowUp: (id, data) => apiClient.post(`/reports/${id}/followup/`, data),
   },
-  
+
   users: {
     list: (params) => apiClient.get('/auth/users/', { params }),
     get: (id) => apiClient.get(`/auth/users/${id}/`),
     create: (data) => apiClient.post('/auth/register/', data),
     update: (id, data) => apiClient.put(`/auth/users/${id}/`, data),
     delete: (id) => apiClient.delete(`/auth/users/${id}/`),
+  },
+
+  coreValues: {
+    list: (params) => apiClient.get('/content/core-values/', { params }),
+    get: (id) => apiClient.get(`/content/core-values/${id}/`),
+    create: (data) => apiClient.post('/content/core-values/', data),
+    update: (id, data) => apiClient.put(`/content/core-values/${id}/`, data),
+    delete: (id) => apiClient.delete(`/content/core-values/${id}/`),
+  },
+
+  teamMembers: {
+    list: (params) => apiClient.get('/content/team-members/', { params }),
+    get: (id) => apiClient.get(`/content/team-members/${id}/`),
+    create: (data) => apiClient.post('/content/team-members/', createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (id, data) => apiClient.put(`/content/team-members/${id}/`, createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (id) => apiClient.delete(`/content/team-members/${id}/`),
+  },
+
+  protectionApproaches: {
+    list: (params) => apiClient.get('/content/protection-approach/', { params }),
+    get: (id) => apiClient.get(`/content/protection-approach/${id}/`),
+    create: (data) => apiClient.post('/content/protection-approach/', data),
+    update: (id, data) => apiClient.put(`/content/protection-approach/${id}/`, data),
+    delete: (id) => apiClient.delete(`/content/protection-approach/${id}/`),
   },
 
   socialMedia: {

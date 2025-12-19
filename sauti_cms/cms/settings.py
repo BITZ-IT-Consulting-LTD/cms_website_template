@@ -185,6 +185,7 @@ CORS_ALLOW_ALL_ORIGINS = False # Temporarily set to True for debugging
 CORS_ALLOWED_ORIGINS = [
     "https://sauti.mglsd.go.ug",
     "http://localhost:8085",  # Public frontend local dev/docker
+    "http://localhost:3000",  # Admin frontend local dev/docker
     "http://localhost:3001",  # Admin frontend local dev/docker
     "http://localhost:3002",  # Admin frontend local dev/docker
     "http://localhost:8000",  # Backend itself (for direct access/testing)

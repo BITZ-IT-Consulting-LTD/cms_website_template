@@ -189,23 +189,23 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
-import { useContentStore } from '@/store/content'
+import { useSettingsStore } from '@/store/settings'
 
-const contentStore = useContentStore()
+const settingsStore = useSettingsStore()
 const currentYear = computed(() => new Date().getFullYear())
 
 // Dynamic content
-const socialFacebook = computed(() => contentStore.getContent('social_facebook', 'https://www.facebook.com/Sauti116Helpline'))
-const socialTwitter = computed(() => contentStore.getContent('social_twitter', 'https://x.com/sauti116'))
-const socialWhatsapp = computed(() => contentStore.getContent('social_whatsapp', 'https://wa.me/256743889999'))
-const socialUreport = computed(() => contentStore.getContent('social_ureport', 'https://ureport.in'))
-const socialSafepal = computed(() => contentStore.getContent('social_safepal', 'https://www.unicef.org/uganda/safepal-app'))
-const contactEmailInfo = computed(() => contentStore.getContent('contact_email_info', 'info@sauti.mglsd.go.ug'))
-const contactEmailSautichl = computed(() => contentStore.getContent('contact_email_sautichl', 'sautichl@mglsd.go.ug'))
-const contactWebsite = computed(() => contentStore.getContent('contact_website', 'https://sauti.mglsd.go.ug'))
-const contactPhone = computed(() => contentStore.getContent('contact_phone_main', '116'))
+const socialFacebook = computed(() => settingsStore.settings.social_facebook || 'https://www.facebook.com/Sauti116Helpline')
+const socialTwitter = computed(() => settingsStore.settings.social_twitter || 'https://x.com/sauti116')
+const socialWhatsapp = computed(() => settingsStore.settings.social_whatsapp || 'https://wa.me/256743889999')
+const socialUreport = computed(() => settingsStore.settings.social_ureport || 'https://ureport.in')
+const socialSafepal = computed(() => settingsStore.settings.social_safepal || 'https://www.unicef.org/uganda/safepal-app')
+const contactEmailInfo = computed(() => settingsStore.settings.contact_email_info || 'info@sauti.mglsd.go.ug')
+const contactEmailSautichl = computed(() => settingsStore.settings.contact_email_sautichl || 'sautichl@mglsd.go.ug')
+const contactWebsite = computed(() => settingsStore.settings.contact_website || 'https://sauti.mglsd.go.ug')
+const contactPhone = computed(() => settingsStore.settings.contact_phone_main || '116')
 
 onMounted(() => {
-  contentStore.fetchContent()
+  settingsStore.fetchGlobalSettings()
 })
 </script>

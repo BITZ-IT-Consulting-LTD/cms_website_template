@@ -31,6 +31,11 @@ def fetch_og_data(url):
     return None, None
 
 def populate():
+    print("Populating social media posts...")
+    # Clear existing data to prevent duplicates on re-run
+    SocialPost.objects.all().delete()
+    print("Cleared existing Social Posts.")
+
     posts = [
         {
             'platform': 'Facebook',
@@ -52,39 +57,36 @@ def populate():
         }
     ]
 
-    # Clear existing posts
-    SocialPost.objects.all().delete()
-    print("Cleared existing posts.")
-
     for i, post_data in enumerate(posts):
         print(f"Processing {post_data['platform']}...")
         
         # Try to fetch real data
         image_url, description = fetch_og_data(post_data['url'])
         
-        post = SocialPost(
+        post, created = SocialPost.objects.update_or_create(
             platform=post_data['platform'],
-            handle=post_data['handle'],
-            post_url=post_data['url'],
-            content=description or f"Follow us on {post_data['platform']}",
-            order=i,
-            is_active=True,
-            posted_at=django.utils.timezone.now()
+            defaults={
+                'handle': post_data['handle'],
+                'post_url': post_data['url'],
+                'content': description or f"Follow us on {post_data['platform']}",
+                'order': i,
+                'is_active': True,
+                'posted_at': django.utils.timezone.now()
+            }
         )
         
-        # If we got an image URL, try to save it
+        # If we got an image URL, try to save it (only if created or if you want to refresh)
         if image_url:
             try:
                 img_resp = requests.get(image_url, timeout=10)
                 if img_resp.status_code == 200:
                     file_name = f"{post_data['platform'].lower()}_og.jpg"
-                    post.image.save(file_name, ContentFile(img_resp.content), save=False)
+                    post.image.save(file_name, ContentFile(img_resp.content), save=True)
                     print(f"  - Fetched OG image for {post_data['platform']}")
             except Exception as e:
                 print(f"  - Failed to download OG image: {e}")
         
-        post.save()
-        print(f"Created post for {post_data['platform']}")
+        print(f"{'Created' if created else 'Updated'} post for {post_data['platform']}")
 
 if __name__ == '__main__':
     populate()

@@ -66,14 +66,14 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import BlogCard from '@/components/blog/BlogCard.vue'
 import AppLoader from '@/components/common/AppLoader.vue'
 import { useBlogStore } from '@/store/blog'
-import { useContentStore } from '@/store/content'
+import { useSettingsStore } from '@/store/settings'
 
 defineOptions({
   name: 'BlogPage'
 })
 
 const blogStore = useBlogStore()
-const contentStore = useContentStore()
+const settingsStore = useSettingsStore()
 
 const posts = ref([])
 const categories = ref([])
@@ -81,15 +81,15 @@ const loading = ref(false)
 const totalPages = ref(1)
 
 // Computed properties for content
-const blogTitle = computed(() => contentStore.getContent('blog_title', 'Blogs'))
-const blogSubtitle = computed(() => contentStore.getContent('blog_subtitle', 'Insights, stories, and news from the front lines of child protection in Uganda.'))
-const blogSearchPlaceholder = computed(() => contentStore.getContent('blog_search_placeholder', 'Search stories...'))
-const blogAllButton = computed(() => contentStore.getContent('blog_all_button', 'All'))
-const blogArticlesButton = computed(() => contentStore.getContent('blog_articles_button', 'Articles'))
-const blogCategoriesDropdown = computed(() => contentStore.getContent('blog_categories_dropdown', 'Categories'))
-const blogLoading = computed(() => contentStore.getContent('blog_loading', 'Loading stories...'))
-const blogNoResults = computed(() => contentStore.getContent('blog_no_results', 'No stories found'))
-const blogNoResultsSubtitle = computed(() => contentStore.getContent('blog_no_results_subtitle', 'Try adjusting your filters or check back later for new content.'))
+const blogTitle = computed(() => settingsStore.settings.blog_title || 'Blogs')
+const blogSubtitle = computed(() => settingsStore.settings.blog_subtitle || 'Insights, stories, and news from the front lines of child protection in Uganda.')
+const blogSearchPlaceholder = computed(() => settingsStore.settings.blog_search_placeholder || 'Search stories...')
+const blogAllButton = computed(() => settingsStore.settings.blog_all_button || 'All')
+const blogArticlesButton = computed(() => settingsStore.settings.blog_articles_button || 'Articles')
+const blogCategoriesDropdown = computed(() => settingsStore.settings.blog_categories_dropdown || 'Categories')
+const blogLoading = computed(() => settingsStore.settings.blog_loading || 'Loading stories...')
+const blogNoResults = computed(() => settingsStore.settings.blog_no_results || 'No stories found')
+const blogNoResultsSubtitle = computed(() => settingsStore.settings.blog_no_results_subtitle || 'Try adjusting your filters or check back later for new content.')
 
 const filters = reactive({
   category: '',
@@ -101,6 +101,7 @@ const filters = reactive({
 let debounceTimer = null
 
 onMounted(async () => {
+  await settingsStore.fetchGlobalSettings()
   await Promise.all([
     fetchCategories(),
     fetchFilteredPosts()

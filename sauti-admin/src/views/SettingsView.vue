@@ -56,7 +56,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div v-for="setting in filteredSettings" :key="setting.key" class="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between">
         <div>
-          <h2 class="text-xl font-semibold mb-2">{{ setting.key.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') }}</h2>
+          <h2 class="text-xl font-semibold mb-2">
+            {{ setting.label || setting.key.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') }}
+          </h2>
           <p class="text-gray-600 mb-4">{{ setting.description }}</p>
           <div class="bg-gray-100 rounded-md p-4 text-gray-800">
             <p class="truncate">{{ setting.value }}</p>
@@ -79,7 +81,9 @@
 
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Edit Setting: {{ currentSetting.key.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') }}</h3>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Edit Setting: {{ currentSetting.label || currentSetting.key.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') }}
+            </h3>
             <div class="mt-2">
               <textarea v-model="currentSetting.value" rows="10" class="w-full border border-gray-300 rounded-md p-2"></textarea>
             </div>
@@ -1021,14 +1025,21 @@ const loading = ref(false)
 const error = ref(null)
 const showModal = ref(false)
 const currentSetting = ref(null)
-const activePage = ref('home') // Default active page
+const activePage = ref('general') // Default active page
 const allSettings = ref([]) // Stores all settings fetched from the API
+const rawGlobalSettings = ref({}) // Stores the raw object from API for saving
 
 const pages = [
+  { value: 'general', label: 'General' },
   { value: 'home', label: 'Home Page' },
   { value: 'about', label: 'About Page' },
-  { value: 'contact', label: 'Contact Page' },
-  // Add more pages as needed, matching the backend PAGE_CHOICES
+  { value: 'resources', label: 'Resources' },
+  { value: 'contact', label: 'Contact Info' },
+  { value: 'footer', label: 'Footer' },
+  { value: 'social', label: 'Social Media' },
+  { value: 'seo', label: 'SEO' },
+  { value: 'operations', label: 'Operations' },
+  { value: 'header', label: 'Header' },
 ]
 
 const filteredSettings = computed(() => {
@@ -1039,8 +1050,60 @@ const fetchSettings = async () => {
   loading.value = true
   error.value = null
   try {
-    const response = await api.get('/sitesettings/') // Fetch all settings
-    allSettings.value = Array.isArray(response.data) ? response.data : [response.data]
+    const [globalRes, contentRes] = await Promise.all([
+      api.get('/sitesettings/'),
+      api.get('/content/site-content/')
+    ])
+
+    const rawSettings = Array.isArray(globalRes.data) ? globalRes.data[0] : globalRes.data;
+    rawGlobalSettings.value = rawSettings;
+    
+    // Transform GlobalSettings
+    const globalTransformed = Object.keys(rawSettings).map(key => {
+      let page = 'general'; 
+      const homePrefixes = ['hero_', 'quick_access_', 'card_', 'journey_', 'publications_', 'trust_partners_', 'final_cta_'];
+      
+      if (key.startsWith('contact_')) page = 'contact';
+      else if (key.startsWith('social_')) page = 'social';
+      else if (key.startsWith('resources_')) page = 'resources';
+      else if (key.startsWith('about_')) page = 'about';
+      else if (homePrefixes.some(p => key.startsWith(p))) page = 'home';
+      else if (['footer_text', 'ministry_attribution_text', 'disclaimer_text'].includes(key)) page = 'footer';
+      else if (key.includes('meta_') || key.includes('seo')) page = 'seo';
+      else if (['hotline_text', 'support_email_text', 'operating_hours_text'].includes(key)) page = 'contact';
+      
+      return {
+        key: key,
+        value: rawSettings[key],
+        page: page,
+        description: `Setting for ${key.replace(/_/g, ' ')}`,
+        model: 'GlobalSettings'
+      };
+    });
+
+    // Transform SiteContent
+    const siteContentItems = Array.isArray(contentRes.data) ? contentRes.data : (contentRes.data.results || []);
+    const contentTransformed = siteContentItems.map(item => ({
+      id: item.id,
+      key: item.key,
+      value: item.value,
+      page: item.page,
+      label: item.label,
+      description: item.description || item.label,
+      model: 'SiteContent'
+    }));
+
+    // Unified list with deduplication (GlobalSettings takes precedence)
+    const combined = [...globalTransformed];
+    const globalKeys = new Set(globalTransformed.map(s => s.key));
+    
+    contentTransformed.forEach(item => {
+      if (!globalKeys.has(item.key)) {
+        combined.push(item);
+      }
+    });
+
+    allSettings.value = combined;
   } catch (err) {
     console.error('Error fetching site settings:', err)
     error.value = 'Failed to load site settings.'
@@ -1054,7 +1117,7 @@ onMounted(async () => {
 })
 
 function openEditModal(setting) {
-  currentSetting.value = { ...setting } // Create a copy to avoid direct mutation
+  currentSetting.value = { ...setting }
   showModal.value = true
 }
 
@@ -1064,16 +1127,33 @@ function closeModal() {
 }
 
 async function saveSetting() {
-  if (currentSetting.value && currentSetting.value.id) {
+  if (currentSetting.value && currentSetting.value.key) {
     loading.value = true
     error.value = null
     try {
-      await api.put(`/sitesettings/${currentSetting.value.id}/`, currentSetting.value)
+      if (currentSetting.value.model === 'GlobalSettings') {
+        const payload = { 
+          ...rawGlobalSettings.value,
+          [currentSetting.value.key]: currentSetting.value.value 
+        };
+        await api.put('/sitesettings/', payload)
+      } else {
+        // SiteContent
+        await api.put(`/content/site-content/${currentSetting.value.id}/`, {
+          key: currentSetting.value.key,
+          value: currentSetting.value.value,
+          label: currentSetting.value.label,
+          page: currentSetting.value.page
+        })
+      }
+      
+      toast.success('Setting updated successfully')
       closeModal()
-      await fetchSettings() // Refresh settings after save
+      await fetchSettings()
     } catch (err) {
       console.error('Error saving setting:', err)
       error.value = 'Failed to save setting.'
+      toast.error('Failed to update setting')
     } finally {
       loading.value = false
     }

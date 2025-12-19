@@ -2,8 +2,8 @@
   <div class="section-padding">
     <div class="container-custom max-w-4xl">
       <div class="text-center mb-12">
-        <h1 class="mb-4">Contact Us</h1>
-        <p class="text-lg" style="color: #555555;">We're here to help 24/7. Reach out to us anytime.</p>
+        <h1 class="mb-4">{{ settingsStore.settings.contact_title || 'Contact Us' }}</h1>
+        <p class="text-lg" style="color: #555555;">{{ settingsStore.settings.contact_subtitle || "We're here to help 24/7. Reach out to us anytime." }}</p>
       </div>
 
       <!-- Contact Information Cards -->
@@ -75,14 +75,14 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { useContentStore } from '@/store/content'
+import { useSettingsStore } from '@/store/settings'
 import { api } from '@/utils/axios' // Import api for fetching contacts
 
 defineOptions({
   name: 'ContactPage'
 })
 
-const contentStore = useContentStore()
+const settingsStore = useSettingsStore()
 
 const contacts = ref([])
 const loading = ref(true)
@@ -101,7 +101,7 @@ const fetchContacts = async () => {
 }
 
 onMounted(() => {
-  contentStore.fetchContent()
+  settingsStore.fetchGlobalSettings()
   fetchContacts()
 })
 

@@ -241,6 +241,49 @@
                 />
                 <span class="flex-1">Site Content</span>
               </router-link>
+
+              <router-link
+                to="/team"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/team') }"
+              >
+                <UserGroupIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/team') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Organization Team</span>
+              </router-link>
+
+              <router-link
+                to="/core-values"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/core-values') }"
+              >
+                <HeartIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/core-values') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Core Values</span>
+              </router-link>
+
+              <router-link
+                to="/protection-approach"
+                class="sidebar-link group"
+                :class="{ active: $route.path.startsWith('/protection-approach') }"
+              >
+                <ShieldCheckIcon
+                  :class="[
+                    'h-5 w-5 mr-3 transition-colors duration-300',
+                    $route.path.startsWith('/protection-approach') ? 'text-white' : 'text-[#009EDB] group-hover:text-[#007BAA]'
+                  ]"
+                />
+                <span class="flex-1">Protection Approach</span>
+              </router-link>
+
               <router-link
                 to="/timeline"
                 class="sidebar-link group"
@@ -301,7 +344,7 @@
                     $route.path.startsWith('/users') ? 'text-white' : 'text-[#555555] group-hover:text-[#222222]'
                   ]"
                 />
-                <span class="flex-1">Team Members</span>
+                <span class="flex-1">Admin Users</span>
               </router-link>
               
               <router-link
@@ -431,6 +474,7 @@ import {
   UserGroupIcon,
   UsersIcon,
   ShieldExclamationIcon,
+  ShieldCheckIcon,
   PhotoIcon,
   ShareIcon,
   BookOpenIcon,
