@@ -25,7 +25,7 @@ const ContentManagerView = () => import('@/views/ContentManager.vue')
 const TimelineAdmin = () => import('@/views/TimelineAdmin.vue')
 const ServiceAdmin = () => import('@/views/ServiceAdmin.vue')
 const ContactAdmin = () => import('@/views/ContactAdmin.vue')
-const SiteSettings = () => import('@/views/SiteSettings.vue') // New: Import SiteSettings component
+const SiteSettingsPage = () => import('@/views/SiteSettingsPage.vue') // New: Import SiteSettings component
 
 const routes = [
   {
@@ -249,7 +249,7 @@ const routes = [
       {
         path: 'site-settings', // New route path
         name: 'site-settings', // New route name
-        component: SiteSettings, // New component
+        component: SiteSettingsPage, // New component
         meta: {
           title: 'Site Settings - Sauti Admin'
         }

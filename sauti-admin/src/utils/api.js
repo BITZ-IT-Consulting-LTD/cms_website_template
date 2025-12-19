@@ -279,6 +279,11 @@ export const api = {
       update: (data) => apiClient.put('/social/contact/', data),
     },
   },
+
+  siteSettings: {
+    get: () => apiClient.get('/api/sitesettings/settings/'),
+    update: (data) => apiClient.put('/api/sitesettings/settings/', data),
+  },
 }
 
 export default apiClient
