@@ -10,6 +10,11 @@ done
 echo "PostgreSQL is ready!"
 
 echo "Running database migrations..."
+echo "Cleaning up old migrations and cache..."
+find . -path "*/migrations/*.pyc" -delete
+find . -path "*/__pycache__/*" -delete
+rm -f users/migrations/0001_initial.py # Remove the initial migration for users
+python manage.py makemigrations users # Recreate it
 python manage.py migrate --noinput --verbosity 2
 
 echo "Populating site content..."
