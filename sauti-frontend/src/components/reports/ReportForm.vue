@@ -188,9 +188,11 @@ const conversationFlow = [
   {
     step: 'victim_name',
     type: 'input',
-    question: 'What is the name of the victim? <span class="text-sm text-red-500">[Required]</span>',
+    question: () => form.value.reporting_for === 'SELF' 
+      ? 'What is your name? <span class="text-sm text-red-500">[Required]</span>' 
+      : 'What is the name of the victim? <span class="text-sm text-red-500">[Required]</span>',
     field: 'victim_name',
-    placeholder: 'Enter victim\'s name',
+    placeholder: 'Enter name',
     required: true
   },
   // Step 2: Category
@@ -227,7 +229,8 @@ const conversationFlow = [
     question: 'May I have your name? <span class="text-sm text-gray-500">(Optional - you can skip this)</span>',
     field: 'contact_name',
     placeholder: 'Your name or type "skip" to remain anonymous',
-    skippable: true
+    skippable: true,
+    skipIf: () => form.value.reporting_for === 'SELF'
   },
   {
     step: 'ask_phone',
@@ -241,7 +244,9 @@ const conversationFlow = [
   {
     step: 'victim_sex',
     type: 'options',
-    question: 'What is the sex of the victim?',
+    question: () => form.value.reporting_for === 'SELF'
+      ? 'What is your sex?'
+      : 'What is the sex of the victim?',
     field: 'victim_sex',
     options: [
       { value: 'MALE', label: 'Male', icon: '♂️' },
@@ -251,7 +256,9 @@ const conversationFlow = [
   {
     step: 'victim_age',
     type: 'input',
-    question: 'What is the approximate age of the victim? <span class="text-sm text-red-500">[Required]</span>',
+    question: () => form.value.reporting_for === 'SELF'
+      ? 'What is your approximate age? <span class="text-sm text-red-500">[Required]</span>'
+      : 'What is the approximate age of the victim? <span class="text-sm text-red-500">[Required]</span>',
     field: 'victim_age',
     placeholder: 'Enter age (e.g., 12 years old)',
     required: true
@@ -412,6 +419,12 @@ const proceedToNextStep = () => {
 
   const nextStep = conversationFlow[currentStep]
 
+  // Check if this step should be skipped
+  if (nextStep.skipIf && nextStep.skipIf()) {
+    proceedToNextStep()
+    return
+  }
+
   // Get question (could be a function or string)
   const question = typeof nextStep.question === 'function'
     ? nextStep.question()
@@ -434,6 +447,8 @@ const showReview = () => {
   const category = conversationFlow.find(s => s.step === 'category')?.options.find(o => o.value === form.value.category)?.label
   const incidentType = conversationFlow.find(s => s.step === 'incident_type')?.options.find(o => o.value === form.value.incident_type)?.label
   const victimSex = conversationFlow.find(s => s.step === 'victim_sex')?.options.find(o => o.value === form.value.victim_sex)?.label
+  
+  const displayContactName = form.value.reporting_for === 'SELF' ? form.value.victim_name : form.value.contact_name
 
   addBotMessage(`
     <div class="space-y-2">
@@ -442,7 +457,7 @@ const showReview = () => {
       <p><strong>Victim Name:</strong> ${form.value.victim_name}</p>
       <p><strong>Category:</strong> ${category}</p>
       <p><strong>Incident Type:</strong> ${incidentType}</p>
-      ${form.value.contact_name ? `<p><strong>Your Name:</strong> ${form.value.contact_name}</p>` : '<p><em>Reporting anonymously</em></p>'}
+      ${displayContactName ? `<p><strong>Your Name:</strong> ${displayContactName}</p>` : '<p><em>Reporting anonymously</em></p>'}
       ${form.value.contact_phone ? `<p><strong>Phone:</strong> ${form.value.contact_phone}</p>` : ''}
       <p><strong>Victim Sex:</strong> ${victimSex}</p>
       ${form.value.victim_age ? `<p><strong>Victim Age:</strong> ${form.value.victim_age}</p>` : ''}
@@ -471,14 +486,21 @@ const submitReport = async () => {
     const reportingForLabel = form.value.reporting_for === 'SELF' ? 'Reporting for self' : 'Reporting on behalf of someone else'
     const sexLabel = form.value.victim_sex === 'MALE' ? 'Male' : 'Female'
 
+    const descriptionFull = `Incident Type: ${form.value.incident_type}\n` +
+      `${reportingForLabel}\n` +
+      `Victim Name: ${form.value.victim_name}\n` +
+      `Victim Sex: ${sexLabel}\n` +
+      `Victim Age: ${form.value.victim_age}\n` +
+      `Location: ${form.value.location}\n\n` +
+      `Narrative: ${form.value.description}`
+
     const reportData = {
       category: form.value.category,
-      contact_name: form.value.contact_name || 'Anonymous',
+      description: descriptionFull,
+      is_anonymous: false,
+      contact_name: (form.value.reporting_for === 'SELF' ? form.value.victim_name : form.value.contact_name) || 'Anonymous',
       contact_phone: form.value.contact_phone,
-      incident_type: form.value.incident_type,
-      description: `${reportingForLabel}\n\nVictim Name: ${form.value.victim_name}\nVictim Sex: ${sexLabel}\nVictim Age: ${form.value.victim_age}\nLocation: ${form.value.location}\n\n${form.value.description}`,
-      status: 'PENDING',
-      source: 'ONLINE'
+      location: form.value.location
     }
 
     const response = await api.reports.submit(reportData)
@@ -486,7 +508,8 @@ const submitReport = async () => {
     submitted.value = true
     scrollToBottom()
   } catch (err) {
-    error.value = 'Failed to submit report. Please try again.'
+    const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'Failed to submit report. Please try again.'
+    error.value = errorMsg
     console.error('Error submitting report:', err)
   } finally {
     isTyping.value = false

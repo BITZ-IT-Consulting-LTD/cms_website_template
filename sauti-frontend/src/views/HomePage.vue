@@ -31,7 +31,7 @@
                   <span>{{ settingsStore.settings.hero_cta_call }}</span>
                 </a>
                 <router-link to="/report"
-                  class="btn-primary text-lg px-6 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
+                  class="btn-primary text-lg px-6 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2 hover:bg-white hover:text-[#009EDB]"
                   aria-label="Report a case">
                   <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -43,33 +43,6 @@
 
               <!-- Secondary Actions -->
               <div class="flex flex-wrap gap-3">
-                <!-- Report a Case Button with Tooltip -->
-                <div class="relative group">
-                  <router-link to="/report" class="pill pill-report transition-all duration-200"
-                    aria-label="Report a Case">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <!-- Child head silhouette -->
-                      <circle cx="8" cy="6" r="3" stroke-width="1.5" />
-                      <!-- Body/neck -->
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M5 13c0-1.5 1.5-3 3-3s3 1.5 3 3" />
-                      <!-- Sound waves from mouth -->
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                        d="M11 6c1 0 1.5.5 2 1M13 6c1.5 0 2 1 2.5 1.5M15 7c1.5.5 2 1.5 2.5 2.5" />
-                    </svg>
-                    Report
-                  </router-link>
-                  <!-- Hover Tooltip -->
-                  <div
-                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-white rounded-xl shadow-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 border border-red-100 text-left">
-                    <h4 class="font-bold text-red-600 mb-1">Report a Case</h4>
-                    <p class="text-xs text-gray-600">Need help? Report a case of child protection, GBV, or migrant
-                      issues. Your report is confidential and secure.</p>
-                    <div
-                      class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-red-100">
-                    </div>
-                  </div>
-                </div>
 
                 <a href="https://wa.me/256743889999" target="_blank" rel="noopener"
                   class="pill pill-outline hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-all duration-200"
@@ -137,7 +110,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <router-link to="/report" class="group">
+          <router-link to="/report" class="group no-underline">
             <div
               class="avm-card hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-blue-200">
               <div class="avm-icon bg-blue-100 text-blue-600 group-hover:bg-blue-200 transition-colors duration-300">
@@ -151,7 +124,7 @@
             </div>
           </router-link>
 
-          <router-link to="/resources" class="group">
+          <router-link to="/resources" class="group no-underline">
             <div
               class="avm-card hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-green-200">
               <div class="avm-icon bg-green-100 text-green-600 group-hover:bg-green-200 transition-colors duration-300">
@@ -166,7 +139,7 @@
             </div>
           </router-link>
 
-          <router-link to="/faqs" class="group">
+          <router-link to="/faqs" class="group no-underline">
             <div
               class="avm-card hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-purple-200">
               <div
@@ -181,7 +154,7 @@
             </div>
           </router-link>
 
-          <router-link to="/partners" class="group">
+          <router-link to="/partners" class="group no-underline">
             <div
               class="avm-card hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-orange-200">
               <div
@@ -503,8 +476,40 @@
   })
 
   const partnersStore = usePartnersStore()
+  import { computed } from 'vue'
+  import { useContentStore } from '@/store/content'
+  import { useSettingsStore } from '@/store/settings'
+
+  const partnersStore = usePartnersStore()
   const blogStore = useBlogStore()
+  const contentStore = useContentStore()
   const settingsStore = useSettingsStore()
+
+  // Get dynamic content - computed properties that reactively access content store
+  const heroTitle = computed(() => contentStore.getContent('hero_title', 'Every One Deserves to Be Heard.'))
+  const heroSubtitle = computed(() => contentStore.getContent('hero_subtitle', 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.'))
+  const heroCtaCall = computed(() => contentStore.getContent('hero_cta_call', 'Call 116 Now'))
+  const heroCtaReport = computed(() => contentStore.getContent('hero_cta_report', 'Report a Case'))
+  const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Services'))
+  const quickAccessDesc = computed(() => contentStore.getContent('quick_access_description', 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.'))
+  const cardReportTitle = computed(() => contentStore.getContent('card_report_title', 'Report a Case'))
+  const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.'))
+  const cardResourcesTitle = computed(() => contentStore.getContent('card_resources_title', 'Resources'))
+  const cardResourcesText = computed(() => contentStore.getContent('card_resources_text', 'Access vital information, safety guides, and educational materials to protect children.'))
+  const cardFaqsTitle = computed(() => contentStore.getContent('card_faqs_title', 'FAQs'))
+  const cardFaqsText = computed(() => contentStore.getContent('card_faqs_text', 'Find quick answers to common questions about our services, reporting process, and safety.'))
+  const cardPartnersTitle = computed(() => contentStore.getContent('card_partners_title', 'Partners'))
+  const cardPartnersText = computed(() => contentStore.getContent('card_partners_text', 'Collaborating with government and international organizations to ensure child safety.'))
+  const publicationsTitle = computed(() => contentStore.getContent('publications_title', 'Success Stories'))
+  const publicationsDesc = computed(() => contentStore.getContent('publications_description', 'Latest success stories, videos and resources to help children, families, and communities stay safe and informed.'))
+  const publicationsLink = computed(() => contentStore.getContent('publications_link', 'View all stories'))
+  const trustPartnersTitle = computed(() => contentStore.getContent('trust_partners_title', 'Partners and Affiliations'))
+  const trustPartnersDesc = computed(() => contentStore.getContent('trust_partners_description', 'Working in partnership with government and international agencies'))
+  const finalCtaTitle = computed(() => contentStore.getContent('final_cta_title', 'Need Help Right Now?'))
+  const finalCtaText = computed(() => contentStore.getContent('final_cta_text', 'Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.'))
+  const finalCtaCall = computed(() => contentStore.getContent('final_cta_call', 'Call 116 Now'))
+  const finalCtaReport = computed(() => contentStore.getContent('final_cta_report', 'Report a Case'))
+  const finalCtaContact = computed(() => contentStore.getContent('final_cta_contact', 'Contact Us'))
 
   // Video data from backend
   const latestVideos = ref([])

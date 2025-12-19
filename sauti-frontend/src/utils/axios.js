@@ -4,7 +4,7 @@ import router from '@/router'
 
 // Create axios instance
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -15,16 +15,16 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore()
-    
+
     if (authStore.token) {
       config.headers.Authorization = `Bearer ${authStore.token}`
     }
-    
+
     // Log request in development
     if (import.meta.env.DEV) {
       console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`)
     }
-    
+
     return config
   },
   (error) => {
@@ -46,37 +46,37 @@ apiClient.interceptors.response.use(
     // Handle different error status codes
     if (error.response) {
       const status = error.response.status
-      
+
       switch (status) {
         case 401: { // Added curly braces
           // Unauthorized - clear auth and redirect to login
           console.error('❌ 401 Unauthorized')
           const authStore = useAuthStore()
           authStore.logout()
-          
+
           // Only redirect if not already on login page
           if (router.currentRoute.value.path !== '/login') {
             router.push('/login')
           }
           break
         } // Added curly braces
-          
+
         case 400:
           console.error('❌ 400 Bad Request:', error.response.data)
           break
-          
+
         case 403:
           console.error('❌ 403 Forbidden')
           break
-          
+
         case 404:
           console.error('❌ 404 Not Found')
           break
-          
+
         case 500:
           console.error('❌ 500 Server Error')
           break
-          
+
         default:
           console.error(`❌ ${status} Error:`, error.response.data)
       }
@@ -87,7 +87,7 @@ apiClient.interceptors.response.use(
       // Error in request setup
       console.error('❌ Request Setup Error:', error.message)
     }
-    
+
     return Promise.reject(error)
   }
 )
@@ -100,7 +100,7 @@ export const api = {
   put: (url, data, config) => apiClient.put(url, data, config),
   patch: (url, data, config) => apiClient.patch(url, data, config),
   delete: (url, config) => apiClient.delete(url, config),
-  
+
   // Auth endpoints
   auth: {
     login: (credentials) => apiClient.post('/auth/login/', credentials),
@@ -109,7 +109,7 @@ export const api = {
     updateProfile: (data) => apiClient.put('/auth/profile/', data),
     refreshToken: (refreshToken) => apiClient.post('/auth/token/refresh/', { refresh: refreshToken }),
   },
-  
+
   // Blog/Posts endpoints
   posts: {
     list: (params) => apiClient.get('/posts/', { params }),
@@ -120,41 +120,41 @@ export const api = {
     categories: () => apiClient.get('/posts/categories/'),
     tags: () => apiClient.get('/posts/tags/'),
   },
-  
+
   // Videos endpoints
   videos: {
     list: (params) => apiClient.get('/videos/', { params }),
     get: (slug) => apiClient.get(`/videos/${slug}/`),
     categories: () => apiClient.get('/videos/categories/'),
   },
-  
+
   // Resources endpoints
   resources: {
     list: (params) => apiClient.get('/resources/', { params }),
     get: (slug) => apiClient.get(`/resources/${slug}/`),
     categories: () => apiClient.get('/resources/categories/'),
   },
-  
+
   // FAQs endpoints
   faqs: {
     list: (params) => apiClient.get('/faqs/', { params }),
     get: (id) => apiClient.get(`/faqs/${id}/`),
     categories: () => apiClient.get('/faqs/categories/'),
   },
-  
+
   // Partners endpoints
   partners: {
     list: () => apiClient.get('/partners/'),
     get: (slug) => apiClient.get(`/partners/${slug}/`),
   },
-  
+
   // Content/Uploads endpoints
   content: {
     list: () => apiClient.get('/content/'),
     get: (key) => apiClient.get(`/content/${key}/`),
     update: (key, data) => apiClient.put(`/content/${key}/`, data),
   },
-  
+
   // Reports endpoints (anonymous submission)
   reports: {
     submit: (data) => {

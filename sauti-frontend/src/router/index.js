@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
+import { useSettingsStore } from '@/store/settings'
 
 const routes = [
   {
@@ -83,7 +84,7 @@ const routes = [
   {
     path: '/articles',
     name: 'articles',
-    component: () => import('@/views/VideosPage.vue'), 
+    component: () => import('@/views/VideosPage.vue'),
     meta: {
       title: 'Articles',
       description: 'Featured articles and stories',
@@ -195,14 +196,25 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
+  const settingsStore = useSettingsStore()
 
   // Update page title
-  document.title = to.meta.title || 'Sauti 116 helpline'
+  const suffix = settingsStore.settings?.default_meta_title_suffix || ' | Sauti'
+  const baseTitle = to.meta.title || 'Sauti 116 helpline'
+
+  // If the title doesn't already contain the suffix (or similar), append it
+  // This is a simple check, might need refinement
+  if (baseTitle.includes('| Sauti')) {
+    document.title = baseTitle
+  } else {
+    document.title = `${baseTitle}${suffix}`
+  }
 
   // Update meta description
   const descriptionTag = document.querySelector('meta[name="description"]')
-  if (descriptionTag && to.meta.description) {
-    descriptionTag.setAttribute('content', to.meta.description)
+  if (descriptionTag) {
+    const desc = to.meta.description || settingsStore.settings?.default_meta_description || 'Sauti 116 helpline'
+    descriptionTag.setAttribute('content', desc)
   }
 
   // Check authentication requirements

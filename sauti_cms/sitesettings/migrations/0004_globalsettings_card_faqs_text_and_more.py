@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sitesettings', '0003_globalsettings_alter_sitesetting_options'),
+        ('sitesettings', '0002_globalsettings_alter_sitesetting_options'),
     ]
 
     operations = [

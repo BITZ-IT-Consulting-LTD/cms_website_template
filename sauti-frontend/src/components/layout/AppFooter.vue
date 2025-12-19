@@ -5,9 +5,9 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- About Section -->
         <div>
-          <h3 class="text-xl font-bold mb-4">Sauti</h3>
+          <h3 class="text-xl font-bold mb-4">{{ settings.site_name }}</h3>
           <p class="text-gray-400 mb-4">
-            Supporting children, GBV survivors, and migrant workers across Uganda with confidential helpline services.
+            {{ settings.site_description }}
           </p>
           <div class="flex space-x-4">
             <!-- Facebook -->
@@ -151,7 +151,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
-              <span>Ministry of Gender, Labour & Social Development, Kampala, Uganda</span>
+              <span>{{ settings.ministry_attribution_text }}</span>
             </li>
           </ul>
         </div>
@@ -174,7 +174,7 @@
       <div class="container-custom py-6">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p class="text-gray-400 text-sm text-center md:text-left">
-            © {{ currentYear }} Sauti 116 helpline. All rights reserved. | Ministry of Gender, Labour & Social Development
+            {{ settings.footer_text }}
           </p>
           <div class="flex space-x-6 text-sm">
             <router-link to="/privacy" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</router-link>
@@ -189,23 +189,29 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
+import { useContentStore } from '@/store/content'
 import { useSettingsStore } from '@/store/settings'
 
+const contentStore = useContentStore()
 const settingsStore = useSettingsStore()
 const currentYear = computed(() => new Date().getFullYear())
 
-// Dynamic content
-const socialFacebook = computed(() => settingsStore.settings.social_facebook || 'https://www.facebook.com/Sauti116Helpline')
-const socialTwitter = computed(() => settingsStore.settings.social_twitter || 'https://x.com/sauti116')
-const socialWhatsapp = computed(() => settingsStore.settings.social_whatsapp || 'https://wa.me/256743889999')
-const socialUreport = computed(() => settingsStore.settings.social_ureport || 'https://ureport.in')
-const socialSafepal = computed(() => settingsStore.settings.social_safepal || 'https://www.unicef.org/uganda/safepal-app')
-const contactEmailInfo = computed(() => settingsStore.settings.contact_email_info || 'info@sauti.mglsd.go.ug')
-const contactEmailSautichl = computed(() => settingsStore.settings.contact_email_sautichl || 'sautichl@mglsd.go.ug')
-const contactWebsite = computed(() => settingsStore.settings.contact_website || 'https://sauti.mglsd.go.ug')
-const contactPhone = computed(() => settingsStore.settings.contact_phone_main || '116')
+// Dynamic content from Content Store (Socials, Contacts)
+const socialFacebook = computed(() => contentStore.getContent('social_facebook', 'https://www.facebook.com/Sauti116Helpline'))
+const socialTwitter = computed(() => contentStore.getContent('social_twitter', 'https://x.com/sauti116'))
+const socialWhatsapp = computed(() => contentStore.getContent('social_whatsapp', 'https://wa.me/256743889999'))
+const socialUreport = computed(() => contentStore.getContent('social_ureport', 'https://ureport.in'))
+const socialSafepal = computed(() => contentStore.getContent('social_safepal', 'https://www.unicef.org/uganda/safepal-app'))
+const contactEmailInfo = computed(() => contentStore.getContent('contact_email_info', 'info@sauti.mglsd.go.ug'))
+const contactEmailSautichl = computed(() => contentStore.getContent('contact_email_sautichl', 'sautichl@mglsd.go.ug'))
+const contactWebsite = computed(() => contentStore.getContent('contact_website', 'https://sauti.mglsd.go.ug'))
+const contactPhone = computed(() => contentStore.getContent('contact_phone_main', '116'))
+
+// Dynamic content from Settings Store (Global Text)
+const settings = computed(() => settingsStore.settings)
 
 onMounted(() => {
-  settingsStore.fetchGlobalSettings()
+  contentStore.fetchContent()
+  settingsStore.fetchSettings()
 })
 </script>

@@ -35,7 +35,14 @@ export default ({ mode }) => {
         '/api': {
           target: env.VITE_API_URL || 'http://localhost:8000',
           changeOrigin: true,
-          secure: false
+          secure: false,
+          rewrite: (path) => {
+            const target = env.VITE_API_URL || 'http://localhost:8000';
+            if (target.replace(/\/+$/, '').endsWith('/api')) {
+              return path.replace(/^\/api/, '');
+            }
+            return path;
+          }
         }
       }
     },

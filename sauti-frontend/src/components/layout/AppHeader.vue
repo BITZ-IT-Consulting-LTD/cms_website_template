@@ -12,7 +12,7 @@
           </template>
           <div>
             <h1 class="text-xl md:text-2xl font-bold group-hover:text-[#009EDB] transition-colors duration-300" style="font-family: 'Poppins', sans-serif; color: #222222;">
-              Sauti
+              {{ settings.site_name }}
             </h1>
             <p class="text-xs -mt-1" style="color: #555555;">116 helpline</p>
           </div>
@@ -175,17 +175,21 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useContentStore } from '@/store/content'
 import { useSettingsStore } from '@/store/settings'
 
+const contentStore = useContentStore()
 const settingsStore = useSettingsStore()
 const mobileMenuOpen = ref(false)
 const useFallback = ref(false)
 const logoUrl = new URL('@/assets/sauti-logo.jpeg', import.meta.url).href
 
-const contactPhone = computed(() => settingsStore.settings.contact_phone_main || '116')
+const contactPhone = computed(() => contentStore.getContent('contact_phone_main', '116'))
+const settings = computed(() => settingsStore.settings)
 
 onMounted(() => {
-  settingsStore.fetchGlobalSettings()
+  contentStore.fetchContent()
+  settingsStore.fetchSettings()
 })
 </script>
 

@@ -817,21 +817,7 @@ const handleResponse = (input) => {
 
   // Store response
   responses.value[currentStep.value] = input;
-  
-  // Handle logic check for branching
-  if (currentStep.value === 'check_reporting_type' || currentStep.value === 'check_reporting_type_for_passport') {
-    const reportingType = responses.value.reporting_for_who;
-    let nextStep;
-    
-    if (currentStep.value === 'check_reporting_type_for_passport') {
-      nextStep = reportingType === "For myself" ? "reporter_passport" : "check_reporting_type";
-    } else {
-      nextStep = reportingType === "For myself" ? "job_title_self" : "victim_names";
-    }
-    
-    moveToNextStep(nextStep);
-    return;
-  }
+  // Logic check handled dynamically by handleInfoQuestion
 
   // Determine next step based on question type
   let nextStep;
@@ -1500,173 +1486,120 @@ const getAllContactMethods = (data) => {
   };
 };
 
-// Get primary complaint category
-const getPrimaryCategory = (categories) => {
-  if (!categories || categories.length === 0) return "Labor Issues";
-  return categories[0];
+// Helper to map specific categories to backend Report.Category choices
+const mapCategoryToBackend = (categories) => {
+  if (!categories || categories.length === 0) return 'MIGRANT'; // Default
+  
+  const primary = categories[0];
+  
+  if (primary.includes('Sexual') || primary.includes('Rape') || primary.includes('Defilement')) {
+    return 'GBV'; // Gender-Based Violence
+  }
+  
+  if (primary.includes('Child')) {
+    return 'CHILD_PROTECTION';
+  }
+  
+  // Default for labor issues
+  return 'MIGRANT'; 
 };
 
-// API submission - UPDATED with data cleaning and new structure
+// API submission - UPDATED for Sauti CMS Backend
 const sendToServer = async (data) => {
   isSubmitting.value = true;
 
   console.log("Original data:", data);
   
-  // Clean the data by replacing "SKIPPED" with empty strings
   const cleanedData = cleanSkippedData(data);
-  console.log("Cleaned data:", cleanedData);
-  console.log("Selected categories:", selectedCategories.value);
-  console.log("Uploaded files:", uploadedFiles.value);
-
   const employment = getEmploymentData(cleanedData);
   const contacts = getAllContactMethods(cleanedData);
+  
+  // Construct a detailed description string from all collected data
+  let fullDescription = `NARRATIVE:\n${cleanedData.complaint_narrative || 'No narrative provided.'}\n\n`;
+  
+  fullDescription += `--- CATEGORIES ---\n${cleanedData.complaint_categories?.join(', ') || 'None'}\n\n`;
+  
+  if (cleanedData.reporting_for_who === 'For someone else') {
+    const victim = getVictimData(cleanedData);
+    fullDescription += `--- VICTIM DETAILS ---\n`;
+    fullDescription += `Name: ${victim.fname || ''} ${victim.other_names || ''}\n`;
+    if (cleanedData.victim_sex) fullDescription += `Sex: ${cleanedData.victim_sex}\n`;
+    if (cleanedData.victim_dob) fullDescription += `DOB: ${cleanedData.victim_dob}\n`;
+    if (cleanedData.victim_location) fullDescription += `Location: ${cleanedData.victim_location}\n`;
+    if (cleanedData.victim_passport) fullDescription += `Passport: ${cleanedData.victim_passport}\n\n`;
+  }
+  
+  fullDescription += `--- EMPLOYMENT DETAILS ---\n`;
+  fullDescription += `Job Title: ${employment.job_title}\n`;
+  fullDescription += `Employer: ${employment.employer_name}\n`;
+  if (employment.employer_phone || employment.employer_email) {
+      fullDescription += `Employer Contact: ${employment.employer_phone || ''} / ${employment.employer_email || ''}\n`;
+  }
+  fullDescription += `Work Location: ${employment.work_town || ''}, ${employment.work_country || ''}\n\n`;
+  
+  fullDescription += `--- PERPETRATOR DETAILS ---\n`;
+  const perp = getPerpetratorData(cleanedData);
+  fullDescription += `Name: ${perp.fname || ''} ${perp.other_names || ''}\n`;
+  fullDescription += `Relationship: ${perp.relationship || ''}\n`;
+  fullDescription += `Notes: ${perp.notes || ''}\n`;
 
-  // Construct the proper payload structure
+  // Construct the payload matching ReportCreateSerializer
   const payload = {
-    "src": "mglsd_webform",
-    "src_uid": generateUUID(),
-    "src_address": contacts.whatsapp || contacts.phone || "0110110110",
-    "src_uid2": generateUUID(),
-    "src_usr": "100",
-    "src_vector": "2",
-    "src_callid": generateUUID(),
-    "src_ts": Math.floor(Date.now() / 1000).toString() + "." + (Date.now() % 1000),
-    "reporter_nickname": parseNames(cleanedData.reporter_names).givenNames || "Anonymous",
-    "case_category": getPrimaryCategory(cleanedData.complaint_categories),
-    "case_category_id": "362484", // Default MGLSD category ID
-    "narrative": cleanedData.complaint_narrative || "",
-    "complaint_text": cleanedData.complaint_narrative || "",
-    "complaint_image": null,
-    "complaint_audio": null,
-    "complaint_video": null,
-    "message_id_ref": "53183",
-    "session_id": generateUUID(),
-    "plan": "---",
-    "priority": "1",
-    "status": "1",
-    "escalated_to_id": "0",
-    "gbv_related": "0",
-    
-    // Reporter UUID (person making the report)
-    "reporters_uuid": getReporterData(cleanedData),
-    
-    // Clients case (victim - could be same as reporter)
-    "clients_case": [getVictimData(cleanedData)],
-    
-    // Perpetrators case
-    "perpetrators_case": [getPerpetratorData(cleanedData)],
-    
-    // Attachments
-    "attachments_case": uploadedFiles.value.map(file => ({
-      "filename": file.name,
-      "filesize": file.size.toString(),
-      "filetype": file.type,
-      "file_data": null // Files would need to be uploaded separately or base64 encoded
-    })),
-    
-    // Services (empty for now)
-    "services": [],
-    
-    // Employment details
-    "employment_details": employment,
-    
-    // Contact preferences - all methods collected
-    "contact_preferences": contacts,
-    
-    "complaint_categories_selected": cleanedData.complaint_categories || [],
-    "additional_support": cleanedData.additional_support || "",
-    "submission_timestamp": new Date().toISOString(),
-    
-    // New fields for updated structure
-    "reporting_type": cleanedData.reporting_for_who || "",
-    "all_contact_methods": {
-      "whatsapp": contacts.whatsapp,
-      "email": contacts.email, 
-      "phone": contacts.phone,
-      "safe_contact_time": contacts.safe_time
-    }
+    category: mapCategoryToBackend(cleanedData.complaint_categories),
+    description: fullDescription,
+    is_anonymous: false, 
+    contact_name: cleanedData.reporter_names || "Anonymous Web User",
+    contact_phone: contacts.phone || contacts.whatsapp || "",
+    contact_email: contacts.email || "",
+    location: cleanedData.reporter_location || "",
   };
 
-  console.log("Final payload:", payload);
+  console.log("Final payload for /api/reports/:", payload);
 
   try {
-    // Post to the MGLSD endpoint
-    const response = await apiClient.post("/webhook/webform/", payload);
+    // Post to the Sauti CMS Reports endpoint
+    const response = await apiClient.post("/reports/", payload);
     console.log("Server response:", response);
     
-    // Extract response data
-    const responseData = response.data;
-    const caseReference = responseData.case_reference || payload.src_uid;
+    // Default to PENDING if no ref number returned (though backend should generate one)
+    const referenceNumber = response.data.reference_number || "PENDING";
     
-    // Move to final message
-    isSubmitting.value = false;
-    
-    // Add success message if not already added by final step
+    // Move to final message or success state
     if (currentStep.value !== 'final_message') {
       moveToNextStep('final_message');
     }
 
     messages.value.push({
-      text: "✅ Your report has been submitted successfully! Your case reference ID is: " + caseReference + ". Please save this ID for tracking your case.",
+      text: `✅ Report Submitted. Reference Number: ${referenceNumber}`,
       type: "bot",
       time: getCurrentTime()
     });
 
-    // Clear stored responses after successful submission
-    // alert("Case submitted successfully!"); // Removed alert to be less intrusive
-    localStorage.removeItem("responses");
+    messages.value.push({
+      text: "We have received your report. Please keep this reference number safe.",
+      type: "bot",
+      time: getCurrentTime()
+    });
 
-    // Redirect to case success page with server response data
+    // Clear stored responses
+    localStorage.removeItem("mglsd_responses");
+    localStorage.removeItem("mglsd_navigation_history");
+    
     setTimeout(() => {
-      try {
-        router.push({ 
-          name: 'CaseSuccess', 
-          params: { caseId: caseReference },
-          query: { 
-            complaintId: responseData.complaint_id || payload.src_uid,
-            status: responseData.status || 'submitted',
-            message: responseData.message || '',
-            trackingInfo: responseData.tracking_info || ''
-          }
-        });
-      } catch (routerError) {
-        console.error('Router navigation error:', routerError);
-        // Fallback: try different route name variations
-        try {
-          router.push({ 
-            name: 'CaseSuccessView', 
-            params: { caseId: caseReference },
-            query: { 
-              complaintId: responseData.complaint_id || payload.src_uid,
-              status: responseData.status || 'submitted',
-              message: responseData.message || '',
-              trackingInfo: responseData.tracking_info || ''
-            }
-          });
-        } catch (fallbackError) {
-          console.error('Fallback router error:', fallbackError);
-          // Last resort: navigate by path
-          router.push(`/case-success/${caseReference}?complaintId=${responseData.complaint_id || payload.src_uid}&status=${responseData.status || 'submitted'}`);
-        }
-      }
-    }, 3000);
+        // Optional: Reset or close
+    }, 5000);
 
   } catch (error) {
-    console.error("Submission failed:", error);
-    isSubmitting.value = false;
+    console.error("Submission error:", error);
     
-    let errorMessage = "Sorry, we couldn't submit your report. Please try again later.";
+    let errorMsg = "I'm having trouble connecting to the server. Please try again later or call our hotline directly.";
     
-    if (error.response) {
-      if (error.response.status === 401) {
-        errorMessage = "Authentication failed. Please contact support.";
-      } else if (error.response.data && error.response.data.message) {
-        errorMessage = `Submission error: ${error.response.data.message}`;
-      }
+    if (error.response && error.response.data) {
+        console.error("Validation errors:", error.response.data);
     }
     
     messages.value.push({
-      text: errorMessage,
+      text: errorMsg,
       type: "bot",
       time: getCurrentTime()
     });
@@ -1674,6 +1607,7 @@ const sendToServer = async (data) => {
     isSubmitting.value = false;
   }
 };
+
 
 // Watchers
 watch(messages, () => {

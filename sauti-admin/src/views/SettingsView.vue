@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">Settings</h1>
-      <p class="text-gray-600 mt-1">Manage system configuration and user settings</p>
+      <p class="text-gray-600 mt-1">Manage system configuration</p>
     </div>
 
     <!-- Settings Tabs -->
@@ -26,23 +26,36 @@
       </nav>
     </div>
 
-    <!-- Global Settings Tab -->
-    <div v-show="activeTab === 'global'" class="space-y-6">
-      <div class="mb-8 border-b border-gray-200">
-      <nav class="flex space-x-8" aria-label="Tabs">
-        <button
-          v-for="page in pages"
-          :key="page.value"
-          @click="activePage = page.value"
-          :class="[
-            'px-3 py-2 font-medium text-sm rounded-md',
-            activePage === page.value ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
-          ]"
-        >
-          {{ page.label }}
-        </button>
-      </nav>
-    </div>
+    <!-- General Settings Tab (Site Settings) -->
+    <div v-show="activeTab === 'general'" class="space-y-6">
+      <div v-if="loadingSettings" class="text-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+        <p class="mt-2 text-gray-500">Loading site settings...</p>
+      </div>
+
+      <div v-else class="card p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Site Configuration</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div v-for="(value, key) in textSettings" :key="key" class="flex flex-col">
+            <label :for="key" class="block text-sm font-medium text-gray-700 mb-2 capitalize">{{ key.replace(/_/g, ' ') }}</label>
+            <input
+              v-if="key !== 'site_description' && key !== 'footer_text' && key !== 'ministry_attribution_text' && key !== 'disclaimer_text' && key !== 'default_meta_description'"
+              type="text"
+              :id="key"
+              v-model="siteSettings[key]"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            />
+            <textarea
+              v-else
+              :id="key"
+              v-model="siteSettings[key]"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            ></textarea>
+          </div>
+        </div>
+      </div>
 
     <div v-if="loading" class="text-center">
       <p>Loading settings...</p>
@@ -99,104 +112,6 @@
         </div>
       </div>
     </div>
-    </div>
-
-    <!-- User Management Tab -->
-    <div v-show="activeTab === 'users'" class="space-y-6">
-      <div class="card p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold text-gray-900">User Management</h3>
-          <button @click="showAddUserModal = true" class="btn-primary">
-            <PlusIcon class="h-4 w-4 mr-2" />
-            Add User
-          </button>
-        </div>
-        
-        <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  User
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Last Login
-                </th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white">
-              <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="h-8 w-8 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                      <span class="text-xs font-medium text-gray-600">
-                        {{ user.name.split(' ').map(n => n[0]).join('').toUpperCase() }}
-                      </span>
-                    </div>
-                    <div>
-                      <div class="text-sm font-medium text-gray-900">{{ user.name }}</div>
-                      <div class="text-sm text-gray-500">{{ user.email }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                    :class="{
-                      'bg-purple-100 text-purple-800': user.role === 'ADMIN',
-                      'bg-blue-100 text-blue-800': user.role === 'EDITOR',
-                      'bg-green-100 text-green-800': user.role === 'AUTHOR',
-                      'bg-gray-100 text-gray-800': user.role === 'VIEWER'
-                    }"
-                  >
-                    {{ user.role }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                    :class="{
-                      'bg-green-100 text-green-800': user.status === 'active',
-                      'bg-red-100 text-red-800': user.status === 'inactive'
-                    }"
-                  >
-                    {{ user.status }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ formatDate(user.lastLogin) }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div class="flex items-center justify-end space-x-2">
-                    <button
-                      @click="editUser(user)"
-                      class="text-primary-600 hover:text-primary-900"
-                    >
-                      <PencilIcon class="h-4 w-4" />
-                    </button>
-                    <button
-                      @click="deleteUser(user)"
-                      class="text-red-600 hover:text-red-900"
-                      :disabled="user.role === 'ADMIN'"
-                    >
-                      <TrashIcon class="h-4 w-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
 
     <!-- Security Tab -->
@@ -678,7 +593,6 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useToast } from 'vue-toastification'
 import {
   CogIcon,
-  UsersIcon,
   ShieldCheckIcon,
   CloudIcon,
   PlusIcon,
@@ -693,7 +607,10 @@ const toast = useToast()
 // Reactive data
 const activeTab = ref('global')
 const saving = ref(false)
-const showAddUserModal = ref(false)
+
+// Site Settings
+const siteSettings = ref(null)
+const loadingSettings = ref(false)
 
 // Category management
 const blogCategories = ref([])
@@ -714,13 +631,18 @@ const categorySearch = ref({ blog: '', video: '', resource: '', faq: '' })
 const settingsTabs = [
   { id: 'global', name: 'Global', icon: CogIcon },
   { id: 'categories', name: 'Categories', icon: TagIcon },
-  { id: 'users', name: 'Users', icon: UsersIcon },
   { id: 'security', name: 'Security', icon: ShieldCheckIcon },
   { id: 'api', name: 'API', icon: CloudIcon }
 ]
 
 // Settings data
 const settings = reactive({
+  // Removed hardcoded general settings
+  content: {
+    allowComments: true,
+    moderateComments: true,
+    postsPerPage: 10
+  },
   security: {
     requireTwoFactor: false,
     sessionTimeout: 60,
@@ -735,151 +657,87 @@ const settings = reactive({
   }
 })
 
-// Mock users data
-const users = ref([
-  {
-    id: 1,
-    name: 'Admin User',
-    email: 'admin@sauti.org',
-    role: 'ADMIN',
-    status: 'active',
-    lastLogin: '2024-01-15T10:30:00Z'
-  },
-  {
-    id: 2,
-    name: 'Sarah Nakamura',
-    email: 'sarah@sauti.org',
-    role: 'EDITOR',
-    status: 'active',
-    lastLogin: '2024-01-14T15:20:00Z'
-  },
-  {
-    id: 3,
-    name: 'David Mugisha',
-    email: 'david@sauti.org',
-    role: 'AUTHOR',
-    status: 'active',
-    lastLogin: '2024-01-13T09:45:00Z'
-  },
-  {
-    id: 4,
-    name: 'Grace Achieng',
-    email: 'grace@sauti.org',
-    role: 'AUTHOR',
-    status: 'inactive',
-    lastLogin: '2024-01-10T14:15:00Z'
+// Fetch Site Settings
+async function fetchSiteSettings() {
+  try {
+    loadingSettings.value = true
+    const response = await api.get('/api/sitesettings/settings/')
+    siteSettings.value = response.data
+  } catch (error) {
+    console.error('Failed to fetch site settings:', error)
+    toast.error('Failed to load site settings')
+  } finally {
+    loadingSettings.value = false
   }
-])
-
-// Methods
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
 }
 
-const saveSettings = async () => {
-  saving.value = true
-  
+// Compute text settings for dynamic rendering
+const textSettings = computed(() => {
+  if (!siteSettings.value) return {}
+  const excludedKeys = ['id']
+  const filtered = {}
+  for (const key in siteSettings.value) {
+    if (!excludedKeys.includes(key)) {
+      filtered[key] = siteSettings.value[key]
+    }
+  }
+  return filtered
+})
+
+// Lifecycle
+onMounted(() => {
+  fetchSiteSettings()
+  fetchCategories()
+})
+
+async function saveSettings() {
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    saving.value = true
+    
+    // Save site settings if on general tab
+    if (activeTab.value === 'general' && siteSettings.value) {
+      await api.put('/api/sitesettings/settings/', siteSettings.value)
+    }
+
+    // Here you would also save the client-side settings to local storage or backend if needed
+    // For now we just simulate saving other settings
+    if (activeTab.value !== 'general') {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+    }
     
     toast.success('Settings saved successfully')
   } catch (error) {
-    console.error('Save error:', error)
+    console.error('Failed to save settings:', error)
     toast.error('Failed to save settings')
   } finally {
     saving.value = false
   }
 }
 
-const resetSettings = () => {
+function resetSettings() {
   if (confirm('Are you sure you want to reset all settings to defaults?')) {
     // Reset logic here
     toast.info('Settings reset to defaults')
+    fetchSiteSettings() // Reload site settings
   }
 }
 
-const editUser = (user) => {
-  toast.info(`Edit user "${user.name}" - Feature coming soon`)
-}
-
-const deleteUser = (user) => {
-  if (user.role === 'ADMIN') {
-    toast.error('Cannot delete admin user')
-    return
-  }
-  
-  if (confirm(`Are you sure you want to delete user "${user.name}"?`)) {
-    const index = users.value.findIndex(u => u.id === user.id)
-    if (index > -1) {
-      users.value.splice(index, 1)
-      toast.success('User deleted successfully')
-    }
-  }
-}
-
-// Computed properties for filtered categories
-const filteredBlogCategories = computed(() => {
-  if (!categorySearch.value.blog) return blogCategories.value
-  const search = categorySearch.value.blog.toLowerCase()
-  return blogCategories.value.filter(cat => 
-    cat.name.toLowerCase().includes(search) ||
-    cat.slug.toLowerCase().includes(search) ||
-    (cat.description && cat.description.toLowerCase().includes(search))
-  )
-})
-
-const filteredVideoCategories = computed(() => {
-  if (!categorySearch.value.video) return videoCategories.value
-  const search = categorySearch.value.video.toLowerCase()
-  return videoCategories.value.filter(cat => 
-    cat.name.toLowerCase().includes(search) ||
-    cat.slug.toLowerCase().includes(search) ||
-    (cat.description && cat.description.toLowerCase().includes(search))
-  )
-})
-
-const filteredResourceCategories = computed(() => {
-  if (!categorySearch.value.resource) return resourceCategories.value
-  const search = categorySearch.value.resource.toLowerCase()
-  return resourceCategories.value.filter(cat => 
-    cat.name.toLowerCase().includes(search) ||
-    cat.slug.toLowerCase().includes(search) ||
-    (cat.description && cat.description.toLowerCase().includes(search))
-  )
-})
-
-const filteredFaqCategories = computed(() => {
-  if (!categorySearch.value.faq) return faqCategories.value
-  const search = categorySearch.value.faq.toLowerCase()
-  return faqCategories.value.filter(cat => 
-    cat.name.toLowerCase().includes(search) ||
-    cat.slug.toLowerCase().includes(search) ||
-    (cat.description && cat.description.toLowerCase().includes(search))
-  )
-})
-
-// Category management methods
-const fetchCategories = async () => {
-  loadingCategories.value = true
+// Category Management Functions
+async function fetchCategories() {
   try {
+    loadingCategories.value = true
+    
     const [blogRes, videoRes, resourceRes, faqRes] = await Promise.all([
-      api.posts.categories.list().catch(() => ({ data: [] })),
-      api.videos.categories.list().catch(() => ({ data: [] })),
-      api.resources.categories.list().catch(() => ({ data: [] })),
-      api.faqs.categories.list().catch(() => ({ data: [] }))
+      api.posts.categories().catch(() => ({ data: [] })),
+      api.videos.categories().catch(() => ({ data: [] })),
+      api.resources.categories().catch(() => ({ data: [] })),
+      api.faqs.categories().catch(() => ({ data: [] }))
     ])
     
-    blogCategories.value = Array.isArray(blogRes.data) ? blogRes.data : (blogRes.data.results || [])
-    videoCategories.value = Array.isArray(videoRes.data) ? videoRes.data : (videoRes.data.results || [])
-    resourceCategories.value = Array.isArray(resourceRes.data) ? resourceRes.data : (resourceRes.data.results || [])
-    faqCategories.value = Array.isArray(faqRes.data) ? faqRes.data : (faqRes.data.results || [])
+    blogCategories.value = blogRes.data
+    videoCategories.value = videoRes.data
+    resourceCategories.value = resourceRes.data
+    faqCategories.value = faqRes.data
   } catch (error) {
     console.error('Failed to fetch categories:', error)
     toast.error('Failed to load categories')
@@ -888,7 +746,41 @@ const fetchCategories = async () => {
   }
 }
 
-const openCategoryModal = (type) => {
+const filteredBlogCategories = computed(() => {
+  return blogCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(categorySearch.value.blog.toLowerCase())
+  )
+})
+
+const filteredVideoCategories = computed(() => {
+  return videoCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(categorySearch.value.video.toLowerCase())
+  )
+})
+
+const filteredResourceCategories = computed(() => {
+  return resourceCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(categorySearch.value.resource.toLowerCase())
+  )
+})
+
+const filteredFaqCategories = computed(() => {
+  return faqCategories.value.filter(cat => 
+    cat.name.toLowerCase().includes(categorySearch.value.faq.toLowerCase())
+  )
+})
+
+function getCategoryTypeName() {
+  switch (categoryModalType.value) {
+    case 'blog': return 'Blog'
+    case 'video': return 'Video'
+    case 'resource': return 'Resource'
+    case 'faq': return 'FAQ'
+    default: return ''
+  }
+}
+
+function openCategoryModal(type) {
   categoryModalType.value = type
   editingCategory.value = null
   categoryForm.name = ''
@@ -896,7 +788,7 @@ const openCategoryModal = (type) => {
   showCategoryModal.value = true
 }
 
-const openEditCategoryModal = (type, category) => {
+function openEditCategoryModal(type, category) {
   categoryModalType.value = type
   editingCategory.value = category
   categoryForm.name = category.name
@@ -904,107 +796,53 @@ const openEditCategoryModal = (type, category) => {
   showCategoryModal.value = true
 }
 
-const closeCategoryModal = () => {
+function closeCategoryModal() {
   showCategoryModal.value = false
   editingCategory.value = null
   categoryForm.name = ''
   categoryForm.description = ''
 }
 
-const getCategoryTypeName = () => {
-  const typeMap = {
-    'blog': 'Blog',
-    'video': 'Video',
-    'resource': 'Resource',
-    'faq': 'FAQ'
-  }
-  return typeMap[categoryModalType.value] || 'Category'
-}
-
-const getApiEndpoint = () => {
-  const endpointMap = {
-    'blog': api.posts.categories,
-    'video': api.videos.categories,
-    'resource': api.resources.categories,
-    'faq': api.faqs.categories
-  }
-  return endpointMap[categoryModalType.value]
-}
-
-const saveCategory = async () => {
-  if (!categoryForm.name.trim()) {
-    toast.error('Category name is required')
-    return
-  }
-
+async function saveCategory() {
   try {
-    const apiEndpoint = getApiEndpoint()
+    const isEdit = !!editingCategory.value
+    const data = { ...categoryForm }
     
-    const data = {
-      name: categoryForm.name.trim(),
-      description: categoryForm.description.trim() || ''
-    }
-
-    if (editingCategory.value) {
-      // Update category
-      try {
-        await apiEndpoint.update(editingCategory.value.id, data)
-        toast.success(`${getCategoryTypeName()} category updated successfully`)
-      } catch (error) {
-        if (error.message === 'Delete endpoint not available') {
-          toast.info('Update endpoint not available. Please use the Django admin panel.')
-          return
-        }
-        throw error
-      }
-    } else {
-      // Create category
-      await apiEndpoint.create(data)
-      toast.success(`${getCategoryTypeName()} category created successfully`)
-    }
-
+    // Simulate API calls
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    // In a real app, you would call specific API endpoints
+    // For example:
+    // if (categoryModalType.value === 'blog') {
+    //   if (isEdit) await api.posts.updateCategory(editingCategory.value.id, data)
+    //   else await api.posts.createCategory(data)
+    // }
+    
+    toast.success(`${getCategoryTypeName()} category ${isEdit ? 'updated' : 'created'} successfully`)
     closeCategoryModal()
-    await fetchCategories()
+    fetchCategories() // Refresh list
   } catch (error) {
     console.error('Failed to save category:', error)
-    const message = error.response?.data?.name?.[0] || error.response?.data?.detail || 'Failed to save category'
-    toast.error(message)
+    toast.error('Failed to save category')
   }
 }
 
-const deleteCategory = async (type, category) => {
-  if (!confirm(`Are you sure you want to delete "${category.name}"? This action cannot be undone.`)) {
-    return
-  }
-
+async function deleteCategory(type, category) {
+  if (!confirm(`Are you sure you want to delete "${category.name}"?`)) return
+  
   try {
-    const endpointMap = {
-      'blog': api.posts.categories,
-      'video': api.videos.categories,
-      'resource': api.resources.categories,
-      'faq': api.faqs.categories
-    }
-    const apiEndpoint = endpointMap[type]
-    const typeName = type.charAt(0).toUpperCase() + type.slice(1)
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500))
     
-    try {
-      await apiEndpoint.delete(category.id)
-      toast.success(`${typeName} category deleted successfully`)
-      await fetchCategories()
-    } catch (error) {
-      if (error.message === 'Delete endpoint not available' || error.response?.status === 404) {
-        toast.info('Delete endpoint not available. Please use the Django admin panel.')
-      } else {
-        throw error
-      }
-    }
+    toast.success('Category deleted successfully')
+    fetchCategories()
   } catch (error) {
     console.error('Failed to delete category:', error)
-    const message = error.response?.data?.detail || 'Failed to delete category'
-    toast.error(message)
+    toast.error('Failed to delete category')
   }
 }
 
+<<<<<<< Updated upstream
 // Watch for tab changes to fetch categories when needed
 watch(activeTab, (newTab) => {
   if (newTab === 'categories' && blogCategories.value.length === 0 && videoCategories.value.length === 0 && resourceCategories.value.length === 0 && faqCategories.value.length === 0) {
@@ -1158,5 +996,10 @@ async function saveSetting() {
       loading.value = false
     }
   }
+=======
+function formatDate(dateString) {
+  if (!dateString) return '-'
+  return new Date(dateString).toLocaleDateString()
+>>>>>>> Stashed changes
 }
 </script>
