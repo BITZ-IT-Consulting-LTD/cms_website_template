@@ -1,4 +1,4 @@
-#!/Users/mac/clientfacing/cms_website_template/venv/bin/python3
+#!/Users/newtonbrian/Documents/Bitz/cms_website_template/venv/bin/python3.14
 import sys
 from django.core.management import execute_from_command_line
 if __name__ == '__main__':
