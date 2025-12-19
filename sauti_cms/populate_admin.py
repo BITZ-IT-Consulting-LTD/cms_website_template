@@ -17,7 +17,7 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 
-def create_admin():
+def populate_admin():
     User = get_user_model()
 
     if not User.objects.filter(username='admin').exists():
@@ -66,4 +66,4 @@ def create_admin():
         print('ℹ️ User Tony already exists')
 
 if __name__ == '__main__':
-    create_admin()
+    populate_admin()

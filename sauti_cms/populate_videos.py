@@ -13,7 +13,7 @@ django.setup()
 from videos.models import Video, VideoCategory
 from users.models import User
 
-def create_sample_videos():
+def populate_videos():
     """Create sample video categories and videos"""
     
     # Create video categories
@@ -38,12 +38,12 @@ def create_sample_videos():
     
     categories = []
     for cat_data in categories_data:
-        category, created = VideoCategory.objects.get_or_create(
+        category, created = VideoCategory.objects.update_or_create(
             name=cat_data['name'],
             defaults={'description': cat_data['description']}
         )
         categories.append(category)
-        print(f"{'Created' if created else 'Found'} category: {category.name}")
+        print(f"{'Created' if created else 'Updated'} category: {category.name}")
     
     # Get admin user
     try:
@@ -107,7 +107,7 @@ def create_sample_videos():
     ]
     
     for video_data in videos_data:
-        video, created = Video.objects.get_or_create(
+        video, created = Video.objects.update_or_create(
             title=video_data['title'],
             defaults={
                 'description': video_data['description'],
@@ -120,9 +120,9 @@ def create_sample_videos():
                 'author': admin_user
             }
         )
-        print(f"{'Created' if created else 'Found'} video: {video.title}")
+        print(f"{'Created' if created else 'Updated'} video: {video.title}")
     
     print(f"\n✅ Created {len(categories)} video categories and {len(videos_data)} videos")
 
 if __name__ == '__main__':
-    create_sample_videos()
+    populate_videos()

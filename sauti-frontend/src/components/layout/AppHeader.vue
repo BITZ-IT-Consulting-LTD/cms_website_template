@@ -5,7 +5,7 @@
         <!-- Enhanced Logo -->
         <router-link to="/" class="flex items-center space-x-3 group no-underline">
           <template v-if="!useFallback">
-            <img :src="logoUrl" alt="Sauti" class="h-16 w-16 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
+            <img :src="settingsStore.settings.logo || logoUrl" alt="Sauti" class="h-16 w-16 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
           </template>
           <template v-else>
             <div class="h-16 w-16 rounded-2xl flex items-center justify-center text-white font-bold text-2xl group-hover:scale-110 transition-transform duration-300" style="background-color: #009EDB;">S</div>
@@ -175,17 +175,17 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useContentStore } from '@/store/content'
+import { useSettingsStore } from '@/store/settings'
 
-const contentStore = useContentStore()
+const settingsStore = useSettingsStore()
 const mobileMenuOpen = ref(false)
 const useFallback = ref(false)
 const logoUrl = new URL('@/assets/sauti-logo.jpeg', import.meta.url).href
 
-const contactPhone = computed(() => contentStore.getContent('contact_phone_main', '116'))
+const contactPhone = computed(() => settingsStore.settings.contact_phone_main || '116')
 
 onMounted(() => {
-  contentStore.fetchContent()
+  settingsStore.fetchGlobalSettings()
 })
 </script>
 

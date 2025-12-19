@@ -83,6 +83,31 @@ class CoreValue(models.Model):
         verbose_name_plural = 'Core Values'
 
 
+class TimelineEvent(models.Model):
+    """Events for the 'Our Journey' timeline on the About page."""
+    title = models.CharField(max_length=200, help_text="Title of the timeline event")
+    description = models.TextField(help_text="Detailed description of the event")
+    date = models.DateField(help_text="Date of the event")
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="Icon name (e.g., Heroicon name) for this event"
+    )
+    order = models.IntegerField(default=0, help_text="Display order (lower numbers first)")
+    is_active = models.BooleanField(default=True, help_text="Whether this event is visible on the site")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['date', 'order']
+        verbose_name = 'Timeline Event'
+        verbose_name_plural = 'Timeline Events'
+
+    def __str__(self):
+        return f"{self.title} ({self.date.year})"
+
+
 class Contact(models.Model):
     """Contact information for the website"""
     CONTACT_TYPES = (
@@ -109,3 +134,57 @@ class Contact(models.Model):
         ordering = ['order', 'name']
         verbose_name = 'Contact Item'
         verbose_name_plural = 'Contact Items'
+
+
+class ProtectionApproach(models.Model):
+    """Sections detailing the organization's protection approach."""
+    title = models.CharField(max_length=200, help_text="Title of the approach section or step")
+    description = models.TextField(help_text="Detailed description of this approach section")
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="Icon name (e.g., Heroicon name) for this approach section"
+    )
+    color = models.CharField(
+        max_length=20,
+        default='blue',
+        help_text="Tailwind color class for styling (e.g., blue, teal, orange)"
+    )
+    order = models.IntegerField(default=0, help_text="Display order (lower numbers first)")
+    is_active = models.BooleanField(default=True, help_text="Whether this approach section is visible on the site")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order', 'title']
+        verbose_name = 'Protection Approach'
+        verbose_name_plural = 'Protection Approaches'
+
+    def __str__(self):
+        return self.title
+
+
+class TeamMember(models.Model):
+    """Information about a team member."""
+    name = models.CharField(max_length=100, help_text="Full name of the team member")
+    role = models.CharField(max_length=100, help_text="Role or title of the team member")
+    bio = models.TextField(blank=True, null=True, help_text="Short biography of the team member")
+    image = models.ImageField(
+        upload_to='team_members/',
+        blank=True,
+        null=True,
+        help_text="Profile image of the team member"
+    )
+    order = models.IntegerField(default=0, help_text="Display order (lower numbers first)")
+    is_active = models.BooleanField(default=True, help_text="Whether this team member is visible on the site")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = 'Team Member'
+        verbose_name_plural = 'Team Members'
+
+    def __str__(self):
+        return f"{self.name} ({self.role})"

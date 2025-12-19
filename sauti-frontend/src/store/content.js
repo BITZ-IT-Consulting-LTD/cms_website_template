@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '@/utils/axios'
 
+// DEPRECATED: This store is deprecated and will be removed in a future version.
+// Global site settings are now managed by the `useSettingsStore`.
 export const useContentStore = defineStore('content', () => {
   // State
   const content = ref({})

@@ -58,6 +58,91 @@ class GlobalSettings(models.Model):
     environment_label = models.CharField(max_length=50, blank=True,
                                          help_text="e.g., 'Development', 'Staging', 'Production'. Will be displayed in the admin UI.")
 
+    # Hero Section
+    hero_title = models.CharField(max_length=255, blank=True)
+    hero_subtitle = models.TextField(blank=True)
+    hero_cta_call = models.CharField(max_length=255, blank=True)
+    hero_cta_report = models.CharField(max_length=255, blank=True)
+
+    # Quick Access Section
+    quick_access_title = models.CharField(max_length=255, blank=True)
+    quick_access_description = models.TextField(blank=True)
+    card_report_title = models.CharField(max_length=255, blank=True)
+    card_report_text = models.TextField(blank=True)
+    card_resources_title = models.CharField(max_length=255, blank=True)
+    card_resources_text = models.TextField(blank=True)
+    card_faqs_title = models.CharField(max_length=255, blank=True)
+    card_faqs_text = models.TextField(blank=True)
+    card_partners_title = models.CharField(max_length=255, blank=True)
+    card_partners_text = models.TextField(blank=True)
+
+    # Journey Section
+    journey_title = models.CharField(max_length=255, blank=True)
+    journey_description = models.TextField(blank=True)
+
+    # Publications Section
+    publications_title = models.CharField(max_length=255, blank=True)
+    publications_description = models.TextField(blank=True)
+    publications_link = models.CharField(max_length=255, blank=True)
+
+    # Trust Partners Section
+    trust_partners_title = models.CharField(max_length=255, blank=True)
+    trust_partners_description = models.TextField(blank=True)
+
+    # Final CTA Section
+    final_cta_title = models.CharField(max_length=255, blank=True)
+    final_cta_text = models.TextField(blank=True)
+    final_cta_call = models.CharField(max_length=255, blank=True)
+    final_cta_report = models.CharField(max_length=255, blank=True)
+    final_cta_contact = models.CharField(max_length=255, blank=True)
+
+    # Social Media & External Links
+    social_facebook = models.URLField(max_length=255, blank=True)
+    social_twitter = models.URLField(max_length=255, blank=True)
+    social_whatsapp = models.URLField(max_length=255, blank=True)
+    social_ureport = models.URLField(max_length=255, blank=True)
+    social_safepal = models.URLField(max_length=255, blank=True)
+
+    # Contact Info
+    contact_email_info = models.EmailField(max_length=255, blank=True)
+    contact_email_sautichl = models.EmailField(max_length=255, blank=True)
+    contact_website = models.URLField(max_length=255, blank=True)
+    contact_phone_main = models.CharField(max_length=50, blank=True)
+
+    # Resources Page
+    resources_title = models.CharField(max_length=255, blank=True)
+    resources_subtitle = models.TextField(blank=True)
+    resources_stats_title = models.CharField(max_length=255, blank=True)
+    resources_stats_updated = models.CharField(max_length=255, blank=True)
+    resources_stats_loading = models.CharField(max_length=255, blank=True)
+    resources_stats_error = models.CharField(max_length=255, blank=True)
+    resources_total_reports = models.CharField(max_length=255, blank=True)
+    resources_child_protection = models.CharField(max_length=255, blank=True)
+    resources_gbv_cases = models.CharField(max_length=255, blank=True)
+    resources_migrant_worker = models.CharField(max_length=255, blank=True)
+    resources_cases_by_category = models.CharField(max_length=255, blank=True)
+    resources_interactive = models.CharField(max_length=255, blank=True)
+    resources_reports_over_time = models.CharField(max_length=255, blank=True)
+    resources_last_6_months = models.CharField(max_length=255, blank=True)
+    resources_status_distribution = models.CharField(max_length=255, blank=True)
+    resources_pending = models.CharField(max_length=255, blank=True)
+    resources_in_progress = models.CharField(max_length=255, blank=True)
+    resources_resolved = models.CharField(max_length=255, blank=True)
+    resources_closed = models.CharField(max_length=255, blank=True)
+    resources_downloads_title = models.CharField(max_length=255, blank=True)
+    resources_downloads_subtitle = models.TextField(blank=True)
+    resources_available = models.CharField(max_length=255, blank=True)
+    resources_search_placeholder = models.CharField(max_length=255, blank=True)
+    resources_all_categories = models.CharField(max_length=255, blank=True)
+    resources_all_languages = models.CharField(max_length=255, blank=True)
+    resources_loading = models.CharField(max_length=255, blank=True)
+    resources_coming_soon = models.CharField(max_length=255, blank=True)
+    resources_no_results = models.CharField(max_length=255, blank=True)
+    resources_no_results_subtitle = models.TextField(blank=True)
+    resources_previous = models.CharField(max_length=255, blank=True)
+    resources_next = models.CharField(max_length=255, blank=True)
+
+
     def save(self, *args, **kwargs):
         if not self.pk and GlobalSettings.objects.exists():
             raise ValidationError('There can be only one GlobalSettings instance.')

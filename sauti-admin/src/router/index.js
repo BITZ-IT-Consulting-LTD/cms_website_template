@@ -25,7 +25,9 @@ const ContentManagerView = () => import('@/views/ContentManager.vue')
 const TimelineAdmin = () => import('@/views/TimelineAdmin.vue')
 const ServiceAdmin = () => import('@/views/ServiceAdmin.vue')
 const ContactAdmin = () => import('@/views/ContactAdmin.vue')
-const SiteSettingsPage = () => import('@/views/SiteSettingsPage.vue') // New: Import SiteSettings component
+const CoreValuesAdmin = () => import('@/views/CoreValuesAdmin.vue')
+const TeamAdmin = () => import('@/views/TeamAdmin.vue')
+const ProtectionApproachAdmin = () => import('@/views/ProtectionApproachAdmin.vue')
 
 const routes = [
   {
@@ -189,7 +191,31 @@ const routes = [
         name: 'users',
         component: UsersView,
         meta: {
-          title: 'Team Members - Sauti Admin'
+          title: 'Admin Users - Sauti Admin'
+        }
+      },
+      {
+        path: 'team',
+        name: 'team-admin',
+        component: TeamAdmin,
+        meta: {
+          title: 'Organization Team - Sauti Admin'
+        }
+      },
+      {
+        path: 'core-values',
+        name: 'core-values-admin',
+        component: CoreValuesAdmin,
+        meta: {
+          title: 'Core Values - Sauti Admin'
+        }
+      },
+      {
+        path: 'protection-approach',
+        name: 'protection-approach-admin',
+        component: ProtectionApproachAdmin,
+        meta: {
+          title: 'Protection Approach - Sauti Admin'
         }
       },
       {
@@ -216,12 +242,12 @@ const routes = [
           title: 'Social Media Posts - Sauti Admin'
         }
       },
-    {
-      path: '/content',
-      name: 'ContentManager',
-      component: ContentManagerView,
-      meta: { requiresAuth: true }
-    },
+      {
+        path: '/content',
+        name: 'ContentManager',
+        component: ContentManagerView,
+        meta: { requiresAuth: true }
+      },
       {
         path: 'timeline',
         name: 'timeline-admin',
@@ -244,14 +270,6 @@ const routes = [
         component: ContactAdmin,
         meta: {
           title: 'Contact Info - Sauti Admin'
-        }
-      },
-      {
-        path: 'site-settings', // New route path
-        name: 'site-settings', // New route name
-        component: SiteSettingsPage, // New component
-        meta: {
-          title: 'Site Settings - Sauti Admin'
         }
       }
     ]

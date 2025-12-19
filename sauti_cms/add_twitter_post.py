@@ -59,18 +59,11 @@ def fetch_twitter_metadata(url):
         return None
 
 def add_twitter_post(url, handle='@sauti116'):
-    """Add a Twitter post to the database"""
-    # Check if post already exists
-    existing = SocialPost.objects.filter(post_url=url).first()
-    if existing:
-        print(f"Post already exists: {existing.id}")
-        return existing
-
+    """Add or update a Twitter post in the database"""
     # Fetch metadata
     print(f"Fetching metadata from: {url}")
     metadata = fetch_twitter_metadata(url)
 
-    # Create post
     content = "No content available"
     thumbnail = ""
 
@@ -78,28 +71,38 @@ def add_twitter_post(url, handle='@sauti116'):
         content = metadata.get('description') or content
         thumbnail = metadata.get('image') or thumbnail
 
+    # Check if post already exists
+    existing = SocialPost.objects.filter(post_url=url).first()
+    
     post_data = {
         'platform': 'Twitter',
         'handle': handle,
         'content': content,
         'post_url': url,
         'thumbnail_url': thumbnail,
-        'posted_at': datetime.now().isoformat(),
         'is_active': True,
+    }
+
+    if existing:
+        print(f"Updating existing post: {existing.id}")
+        for key, value in post_data.items():
+            setattr(existing, key, value)
+        existing.save()
+        return existing
+
+    print(f"Creating new post...")
+    post_data.update({
+        'posted_at': datetime.now().isoformat(),
         'order': 0,
         'likes_count': '0',
         'comments_count': '0',
         'shares_count': '0',
-    }
-
-    print(f"Creating post with data: {post_data}")
+    })
 
     serializer = SocialPostSerializer(data=post_data)
     if serializer.is_valid():
         post = serializer.save()
         print(f"✓ Created Twitter post: {post.id}")
-        print(f"  Content: {post.content}")
-        print(f"  Image: {post.image}")
         return post
     else:
         print(f"✗ Error: {serializer.errors}")

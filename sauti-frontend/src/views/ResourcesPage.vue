@@ -1,3 +1,4 @@
+
 <template>
   <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
     <div class="section-padding">
@@ -5,24 +6,24 @@
         <!-- Header -->
         <div class="text-center mb-12">
           <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-            {{ resourcesTitle }}
+            {{ settingsStore.settings.publications_title || 'Resources & Publications' }}
           </h1>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            {{ resourcesSubtitle }}
+            {{ settingsStore.settings.publications_description || 'Explore our library of guidance materials and research updates.' }}
           </p>
         </div>
 
         <!-- Statistics Dashboard -->
         <div class="mb-16">
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">{{ resourcesStatsTitle }}</h2>
-            <div class="text-sm text-gray-500">{{ resourcesStatsUpdated }}</div>
+            <h2 class="text-2xl font-bold text-gray-900">{{ settingsStore.settings.resources_stats_title || 'Statistics Dashboard' }}</h2>
+            <div class="text-sm text-gray-500">{{ settingsStore.settings.resources_stats_updated || 'Real-time Data' }}</div>
           </div>
 
           <!-- Loading State for Stats -->
           <div v-if="statsLoading" class="bg-white rounded-3xl shadow-xl p-12 text-center">
             <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p class="text-gray-600">{{ resourcesStatsLoading }}</p>
+            <p class="text-gray-600">{{ settingsStore.settings.resources_stats_loading || 'Loading dynamic statistics...' }}</p>
           </div>
 
           <!-- Error State for Stats -->
@@ -30,7 +31,7 @@
             <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <p class="text-red-700 font-medium">{{ resourcesStatsError }}</p>
+            <p class="text-red-700 font-medium">{{ settingsStore.settings.resources_stats_error }}</p>
           </div>
 
           <!-- Stats Content -->
@@ -47,7 +48,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ stats.total_reports || 0 }}</h3>
-                  <p class="text-blue-100 text-sm font-medium">{{ resourcesTotalReports }}</p>
+                  <p class="text-blue-100 text-sm font-medium">{{ settingsStore.settings.resources_total_reports || 'Total Reports' }}</p>
                 </div>
               </div>
 
@@ -61,7 +62,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('CHILD_PROTECTION') }}</h3>
-                  <p class="text-purple-100 text-sm font-medium">{{ resourcesChildProtection }}</p>
+                  <p class="text-purple-100 text-sm font-medium">{{ settingsStore.settings.resources_child_protection || 'Child Protection' }}</p>
                 </div>
               </div>
 
@@ -75,7 +76,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('GBV') }}</h3>
-                  <p class="text-teal-100 text-sm font-medium">{{ resourcesGbvCases }}</p>
+                  <p class="text-teal-100 text-sm font-medium">{{ settingsStore.settings.resources_gbv_cases || 'GBV Cases' }}</p>
                 </div>
               </div>
 
@@ -89,7 +90,7 @@
                     </svg>
                   </div>
                   <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('MIGRANT') }}</h3>
-                  <p class="text-orange-100 text-sm font-medium">{{ resourcesMigrantWorker }}</p>
+                  <p class="text-orange-100 text-sm font-medium">{{ settingsStore.settings.resources_migrant_worker || 'Migrant Worker' }}</p>
                 </div>
               </div>
             </div>
@@ -99,9 +100,9 @@
               <!-- Doughnut Chart - Cases by Category -->
               <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-xl font-bold text-gray-900">{{ resourcesCasesByCategory }}</h3>
+                  <h3 class="text-xl font-bold text-gray-900">{{ settingsStore.settings.resources_cases_by_category }}</h3>
                   <div class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
-                    {{ resourcesInteractive }}
+                    {{ settingsStore.settings.resources_interactive }}
                   </div>
                 </div>
                 <div class="h-80 flex items-center justify-center">
@@ -112,9 +113,9 @@
               <!-- Bar Chart - Reports Over Time -->
               <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-xl font-bold text-gray-900">{{ resourcesReportsOverTime }}</h3>
+                  <h3 class="text-xl font-bold text-gray-900">{{ settingsStore.settings.resources_reports_over_time }}</h3>
                   <div class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full">
-                    {{ resourcesLast6Months }}
+                    {{ settingsStore.settings.resources_last_6_months }}
                   </div>
                 </div>
                 <div class="h-80">
@@ -125,23 +126,23 @@
 
             <!-- Status Distribution -->
             <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-              <h3 class="text-xl font-bold text-gray-900 mb-6">{{ resourcesStatusDistribution }}</h3>
+              <h3 class="text-xl font-bold text-gray-900 mb-6">{{ settingsStore.settings.resources_status_distribution || 'Case Status Distribution' }}</h3>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div class="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl border-2 border-yellow-200">
                   <div class="text-4xl font-extrabold text-yellow-700 mb-2">{{ getStatusCount('PENDING') }}</div>
-                  <div class="text-sm font-semibold text-yellow-800">{{ resourcesPending }}</div>
+                  <div class="text-sm font-semibold text-yellow-800">{{ settingsStore.settings.resources_pending || 'Pending' }}</div>
                 </div>
                 <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-200">
                   <div class="text-4xl font-extrabold text-blue-700 mb-2">{{ getStatusCount('IN_PROGRESS') }}</div>
-                  <div class="text-sm font-semibold text-blue-800">{{ resourcesInProgress }}</div>
+                  <div class="text-sm font-semibold text-blue-800">{{ settingsStore.settings.resources_in_progress || 'In Progress' }}</div>
                 </div>
                 <div class="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-green-200">
                   <div class="text-4xl font-extrabold text-green-700 mb-2">{{ getStatusCount('RESOLVED') }}</div>
-                  <div class="text-sm font-semibold text-green-800">{{ resourcesResolved }}</div>
+                  <div class="text-sm font-semibold text-green-800">{{ settingsStore.settings.resources_resolved || 'Resolved' }}</div>
                 </div>
                 <div class="text-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200">
                   <div class="text-4xl font-extrabold text-gray-700 mb-2">{{ getStatusCount('CLOSED') }}</div>
-                  <div class="text-sm font-semibold text-gray-800">{{ resourcesClosed }}</div>
+                  <div class="text-sm font-semibold text-gray-800">{{ settingsStore.settings.resources_closed || 'Closed' }}</div>
                 </div>
               </div>
             </div>
@@ -152,11 +153,11 @@
         <div>
           <div class="flex items-center justify-between mb-8">
             <div>
-              <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ resourcesDownloadsTitle }}</h2>
-              <p class="text-gray-600">{{ resourcesDownloadsSubtitle }}</p>
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ settingsStore.settings.resources_downloads_title || 'Downloadable Resources' }}</h2>
+              <p class="text-gray-600">{{ settingsStore.settings.resources_downloads_subtitle || 'Public awareness materials and guidance.' }}</p>
             </div>
             <div class="text-sm text-gray-500">
-              <span class="font-semibold text-gray-900">{{ resources.length }}</span> {{ resourcesAvailable }}
+              <span class="font-semibold text-gray-900">{{ resources.length }}</span> {{ settingsStore.settings.resources_available || 'items available' }}
             </div>
           </div>
 
@@ -170,7 +171,7 @@
                 <input
                   v-model="search"
                   type="text"
-                  :placeholder="resourcesSearchPlaceholder"
+                  :placeholder="settingsStore.settings.resources_search_placeholder"
                   class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -178,7 +179,7 @@
                 v-model="category"
                 class="px-4 py-3 border border-gray-200 rounded-xl min-w-[200px] focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">{{ resourcesAllCategories }}</option>
+                <option value="">{{ settingsStore.settings.resources_all_categories }}</option>
                 <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
                   {{ cat.name }}
                 </option>
@@ -187,7 +188,7 @@
                 v-model="language"
                 class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">{{ resourcesAllLanguages }}</option>
+                <option value="">{{ settingsStore.settings.resources_all_languages }}</option>
                 <option value="en">English</option>
                 <option value="lg">Luganda</option>
                 <option value="sw">Swahili</option>
@@ -196,7 +197,7 @@
           </div>
 
           <!-- Resources Loading -->
-          <AppLoader v-if="loading" :message="resourcesLoading" />
+          <AppLoader v-if="loading" :message="settingsStore.settings.resources_loading" />
 
           <!-- Resources Grid -->
           <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -278,7 +279,7 @@
                     Download
                   </a>
                   <span v-else class="px-6 py-3 bg-gray-100 text-gray-500 text-sm font-semibold rounded-xl">
-                    {{ resourcesComingSoon }}
+                    {{ settingsStore.settings.resources_coming_soon }}
                   </span>
 
                   <!-- Download Count -->
@@ -298,8 +299,8 @@
             <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ resourcesNoResults }}</h3>
-            <p class="text-gray-600">{{ resourcesNoResultsSubtitle }}</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ settingsStore.settings.resources_no_results }}</h3>
+            <p class="text-gray-600">{{ settingsStore.settings.resources_no_results_subtitle }}</p>
           </div>
 
           <!-- Pagination -->
@@ -309,14 +310,14 @@
               @click="prevPage"
               class="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
             >
-              {{ resourcesPrevious }}
+              {{ settingsStore.settings.resources_previous }}
             </button>
             <button
               :disabled="!pagination.next || loading"
               @click="nextPage"
               class="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
             >
-              {{ resourcesNext }}
+              {{ settingsStore.settings.resources_next }}
             </button>
           </div>
         </div>
@@ -328,6 +329,7 @@
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
 import { useResourcesStore } from '@/store/resources'
+import { useSettingsStore } from '@/store/settings'
 import { api } from '@/utils/axios'
 import AppLoader from '@/components/common/AppLoader.vue'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title } from 'chart.js'
@@ -340,39 +342,8 @@ defineOptions({
 })
 
 const resourcesStore = useResourcesStore()
+const settingsStore = useSettingsStore()
 
-// Content strings (hardcoded for now)
-const resourcesTitle = 'Resources'
-const resourcesSubtitle = 'Download educational materials, guides, and resources to help protect children and support communities.'
-const resourcesStatsTitle = 'Statistics Dashboard'
-const resourcesStatsUpdated = 'Updated in real-time'
-const resourcesStatsLoading = 'Loading statistics...'
-const resourcesStatsError = 'Failed to load statistics'
-const resourcesTotalReports = 'Total Reports'
-const resourcesChildProtection = 'Child Protection'
-const resourcesGbvCases = 'GBV Cases'
-const resourcesMigrantWorker = 'Migrant Worker'
-const resourcesCasesByCategory = 'Cases by Category'
-const resourcesInteractive = 'Interactive'
-const resourcesReportsOverTime = 'Reports Over Time'
-const resourcesLast6Months = 'Last 6 months'
-const resourcesStatusDistribution = 'Status Distribution'
-const resourcesPending = 'Pending'
-const resourcesInProgress = 'In Progress'
-const resourcesResolved = 'Resolved'
-const resourcesClosed = 'Closed'
-const resourcesDownloadsTitle = 'Downloadable Resources'
-const resourcesDownloadsSubtitle = 'Access guides, toolkits, and educational materials'
-const resourcesAvailable = 'resources available'
-const resourcesSearchPlaceholder = 'Search resources...'
-const resourcesAllCategories = 'All Categories'
-const resourcesAllLanguages = 'All Languages'
-const resourcesLoading = 'Loading resources...'
-const resourcesComingSoon = 'Coming Soon'
-const resourcesNoResults = 'No resources found'
-const resourcesNoResultsSubtitle = 'Try adjusting your filters or check back later'
-const resourcesPrevious = 'Previous'
-const resourcesNext = 'Next'
 const resources = ref([])
 const loading = ref(true)
 const search = ref('')
@@ -388,6 +359,7 @@ const stats = ref(null)
 
 // Fetch statistics
 onMounted(async () => {
+  await settingsStore.fetchGlobalSettings()
   try {
     const [cats] = await Promise.all([
       resourcesStore.fetchCategories(),

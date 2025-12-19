@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SiteContent, CoreValue, Contact
+from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember
 
 @admin.register(SiteContent)
 class SiteContentAdmin(admin.ModelAdmin):
@@ -26,4 +26,24 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ('name', 'value')
     readonly_fields = ('created_at', 'updated_at')
     list_editable = ('order', 'is_visible')
+    ordering = ('order', 'name')
+
+
+@admin.register(ProtectionApproach)
+class ProtectionApproachAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'is_active', 'icon', 'color', 'updated_at')
+    list_filter = ('is_active',)
+    search_fields = ('title', 'description')
+    readonly_fields = ('created_at', 'updated_at')
+    list_editable = ('order', 'is_active')
+    ordering = ('order', 'title')
+
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'role', 'order', 'is_active', 'updated_at')
+    list_filter = ('is_active',)
+    search_fields = ('name', 'role', 'bio')
+    readonly_fields = ('created_at', 'updated_at')
+    list_editable = ('order', 'is_active')
     ordering = ('order', 'name')

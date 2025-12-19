@@ -11,7 +11,7 @@ django.setup()
 
 from partners.models import Partner
 
-def create_sample_partners():
+def populate_partners():
     """Create sample partner organizations"""
     
     partners_data = [
@@ -109,7 +109,7 @@ def create_sample_partners():
     created_count = 0
     
     for partner_data in partners_data:
-        partner, created = Partner.objects.get_or_create(
+        partner, created = Partner.objects.update_or_create(
             name=partner_data['name'],
             defaults=partner_data
         )
@@ -118,11 +118,11 @@ def create_sample_partners():
             print(f"✓ Created: {partner.name}")
             created_count += 1
         else:
-            print(f"- Already exists: {partner.name}")
+            print(f"🔄 Updated: {partner.name}")
     
     print(f"\n✅ Done! Created {created_count} new partners.")
     print(f"📊 Total partners in database: {Partner.objects.count()}")
 
 if __name__ == '__main__':
-    create_sample_partners()
+    populate_partners()
 

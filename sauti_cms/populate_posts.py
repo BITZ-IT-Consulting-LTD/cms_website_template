@@ -17,7 +17,7 @@ from posts.models import Post, Category, Tag
 User = get_user_model()
 
 
-def create_sample_posts():
+def populate_posts():
     """Create sample blog posts for testing"""
 
     # -------------------------
@@ -80,8 +80,12 @@ def create_sample_posts():
 
     categories = {}
     for data in categories_data:
-        category, _ = Category.objects.get_or_create(
-            slug=data["slug"], defaults=data
+        category, _ = Category.objects.update_or_create(
+            slug=data["slug"], 
+            defaults={
+                "name": data["name"],
+                "description": data["description"]
+            }
         )
         categories[data["slug"]] = category
 
@@ -102,7 +106,10 @@ def create_sample_posts():
 
     tags = {}
     for data in tags_data:
-        tag, _ = Tag.objects.get_or_create(slug=data["slug"], defaults=data)
+        tag, _ = Tag.objects.update_or_create(
+            slug=data["slug"], 
+            defaults={"name": data["name"]}
+        )
         tags[data["slug"]] = tag
 
     # -------------------------
@@ -236,17 +243,17 @@ These stories highlight the importance of speaking up and seeking help when faci
 
         post_tags = post_data.pop("tags")
 
-        post, created = Post.objects.get_or_create(
+        post, created = Post.objects.update_or_create(
             slug=post_data["slug"],
             defaults={**post_data, "author": admin_user},
         )
 
+        post.tags.set(post_tags)
         if created:
-            post.tags.set(post_tags)
             created_posts += 1
             print(f"✅ Created post: {post.title}")
         else:
-            print(f"ℹ️ Post already exists: {post.title}")
+            print(f"🔄 Updated post: {post.title}")
 
     print("\n🎉 Sample content setup complete")
     print(f"📊 Total posts: {Post.objects.count()}")
@@ -255,4 +262,4 @@ These stories highlight the importance of speaking up and seeking help when faci
 
 
 if __name__ == "__main__":
-    create_sample_posts()
+    populate_posts()

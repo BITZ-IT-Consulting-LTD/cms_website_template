@@ -26,109 +26,79 @@
       </nav>
     </div>
 
-    <!-- General Settings Tab -->
-    <div v-show="activeTab === 'general'" class="space-y-6">
-      <div class="card p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Site Configuration</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Site Name</label>
-            <input
-              v-model="settings.general.siteName"
-              type="text"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Site URL</label>
-            <input
-              v-model="settings.general.siteUrl"
-              type="url"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </div>
-          
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Site Description</label>
-            <textarea
-              v-model="settings.general.siteDescription"
-              rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            ></textarea>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Admin Email</label>
-            <input
-              v-model="settings.general.adminEmail"
-              type="email"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
-            <select
-              v-model="settings.general.timezone"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option value="Africa/Kampala">Africa/Kampala (UTC+3)</option>
-              <option value="UTC">UTC (UTC+0)</option>
-              <option value="America/New_York">America/New_York (UTC-5)</option>
-              <option value="Europe/London">Europe/London (UTC+0)</option>
-            </select>
-          </div>
-        </div>
-      </div>
+    <!-- Global Settings Tab -->
+    <div v-show="activeTab === 'global'" class="space-y-6">
+      <div class="mb-8 border-b border-gray-200">
+      <nav class="flex space-x-8" aria-label="Tabs">
+        <button
+          v-for="page in pages"
+          :key="page.value"
+          @click="activePage = page.value"
+          :class="[
+            'px-3 py-2 font-medium text-sm rounded-md',
+            activePage === page.value ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-gray-700'
+          ]"
+        >
+          {{ page.label }}
+        </button>
+      </nav>
+    </div>
 
-      <div class="card p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Content Settings</h3>
-        
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h4 class="text-sm font-medium text-gray-900">Allow Comments</h4>
-              <p class="text-sm text-gray-500">Enable comments on blog posts</p>
-            </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input
-                v-model="settings.content.allowComments"
-                type="checkbox"
-                class="sr-only peer"
-              />
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
-            </label>
+    <div v-if="loading" class="text-center">
+      <p>Loading settings...</p>
+    </div>
+
+    <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ error }}</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="setting in filteredSettings" :key="setting.key" class="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between">
+        <div>
+          <h2 class="text-xl font-semibold mb-2">
+            {{ setting.label || setting.key.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') }}
+          </h2>
+          <p class="text-gray-600 mb-4">{{ setting.description }}</p>
+          <div class="bg-gray-100 rounded-md p-4 text-gray-800">
+            <p class="truncate">{{ setting.value }}</p>
           </div>
-          
-          <div class="flex items-center justify-between">
-            <div>
-              <h4 class="text-sm font-medium text-gray-900">Moderate Comments</h4>
-              <p class="text-sm text-gray-500">Require admin approval for comments</p>
+        </div>
+        <button @click="openEditModal(setting)" class="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div v-if="showModal" class="fixed z-10 inset-0 overflow-y-auto">
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Edit Setting: {{ currentSetting.label || currentSetting.key.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') }}
+            </h3>
+            <div class="mt-2">
+              <textarea v-model="currentSetting.value" rows="10" class="w-full border border-gray-300 rounded-md p-2"></textarea>
             </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input
-                v-model="settings.content.moderateComments"
-                type="checkbox"
-                class="sr-only peer"
-              />
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
-            </label>
           </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Posts per Page</label>
-            <input
-              v-model.number="settings.content.postsPerPage"
-              type="number"
-              min="1"
-              max="50"
-              class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
+          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button @click="saveSetting" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+              Save
+            </button>
+            <button @click="closeModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+              Cancel
+            </button>
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     <!-- User Management Tab -->
@@ -721,7 +691,7 @@ import { api } from '@/utils/api'
 const toast = useToast()
 
 // Reactive data
-const activeTab = ref('general')
+const activeTab = ref('global')
 const saving = ref(false)
 const showAddUserModal = ref(false)
 
@@ -742,7 +712,7 @@ const categorySearch = ref({ blog: '', video: '', resource: '', faq: '' })
 
 // Settings tabs
 const settingsTabs = [
-  { id: 'general', name: 'General', icon: CogIcon },
+  { id: 'global', name: 'Global', icon: CogIcon },
   { id: 'categories', name: 'Categories', icon: TagIcon },
   { id: 'users', name: 'Users', icon: UsersIcon },
   { id: 'security', name: 'Security', icon: ShieldCheckIcon },
@@ -751,18 +721,6 @@ const settingsTabs = [
 
 // Settings data
 const settings = reactive({
-  general: {
-    siteName: 'Sauti 116 helpline',
-    siteUrl: 'https://sauti.org',
-    siteDescription: 'A safe and accessible helpline for children in Uganda.',
-    adminEmail: 'admin@sauti.org',
-    timezone: 'Africa/Kampala'
-  },
-  content: {
-    allowComments: true,
-    moderateComments: true,
-    postsPerPage: 10
-  },
   security: {
     requireTwoFactor: false,
     sessionTimeout: 60,
@@ -1062,4 +1020,143 @@ onMounted(() => {
     fetchCategories()
   }
 })
+
+const loading = ref(false)
+const error = ref(null)
+const showModal = ref(false)
+const currentSetting = ref(null)
+const activePage = ref('general') // Default active page
+const allSettings = ref([]) // Stores all settings fetched from the API
+const rawGlobalSettings = ref({}) // Stores the raw object from API for saving
+
+const pages = [
+  { value: 'general', label: 'General' },
+  { value: 'home', label: 'Home Page' },
+  { value: 'about', label: 'About Page' },
+  { value: 'resources', label: 'Resources' },
+  { value: 'contact', label: 'Contact Info' },
+  { value: 'footer', label: 'Footer' },
+  { value: 'social', label: 'Social Media' },
+  { value: 'seo', label: 'SEO' },
+  { value: 'operations', label: 'Operations' },
+  { value: 'header', label: 'Header' },
+]
+
+const filteredSettings = computed(() => {
+  return allSettings.value.filter(setting => setting.page === activePage.value)
+})
+
+const fetchSettings = async () => {
+  loading.value = true
+  error.value = null
+  try {
+    const [globalRes, contentRes] = await Promise.all([
+      api.get('/sitesettings/'),
+      api.get('/content/site-content/')
+    ])
+
+    const rawSettings = Array.isArray(globalRes.data) ? globalRes.data[0] : globalRes.data;
+    rawGlobalSettings.value = rawSettings;
+    
+    // Transform GlobalSettings
+    const globalTransformed = Object.keys(rawSettings).map(key => {
+      let page = 'general'; 
+      const homePrefixes = ['hero_', 'quick_access_', 'card_', 'journey_', 'publications_', 'trust_partners_', 'final_cta_'];
+      
+      if (key.startsWith('contact_')) page = 'contact';
+      else if (key.startsWith('social_')) page = 'social';
+      else if (key.startsWith('resources_')) page = 'resources';
+      else if (key.startsWith('about_')) page = 'about';
+      else if (homePrefixes.some(p => key.startsWith(p))) page = 'home';
+      else if (['footer_text', 'ministry_attribution_text', 'disclaimer_text'].includes(key)) page = 'footer';
+      else if (key.includes('meta_') || key.includes('seo')) page = 'seo';
+      else if (['hotline_text', 'support_email_text', 'operating_hours_text'].includes(key)) page = 'contact';
+      
+      return {
+        key: key,
+        value: rawSettings[key],
+        page: page,
+        description: `Setting for ${key.replace(/_/g, ' ')}`,
+        model: 'GlobalSettings'
+      };
+    });
+
+    // Transform SiteContent
+    const siteContentItems = Array.isArray(contentRes.data) ? contentRes.data : (contentRes.data.results || []);
+    const contentTransformed = siteContentItems.map(item => ({
+      id: item.id,
+      key: item.key,
+      value: item.value,
+      page: item.page,
+      label: item.label,
+      description: item.description || item.label,
+      model: 'SiteContent'
+    }));
+
+    // Unified list with deduplication (GlobalSettings takes precedence)
+    const combined = [...globalTransformed];
+    const globalKeys = new Set(globalTransformed.map(s => s.key));
+    
+    contentTransformed.forEach(item => {
+      if (!globalKeys.has(item.key)) {
+        combined.push(item);
+      }
+    });
+
+    allSettings.value = combined;
+  } catch (err) {
+    console.error('Error fetching site settings:', err)
+    error.value = 'Failed to load site settings.'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(async () => {
+  await fetchSettings()
+})
+
+function openEditModal(setting) {
+  currentSetting.value = { ...setting }
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  currentSetting.value = null
+}
+
+async function saveSetting() {
+  if (currentSetting.value && currentSetting.value.key) {
+    loading.value = true
+    error.value = null
+    try {
+      if (currentSetting.value.model === 'GlobalSettings') {
+        const payload = { 
+          ...rawGlobalSettings.value,
+          [currentSetting.value.key]: currentSetting.value.value 
+        };
+        await api.put('/sitesettings/', payload)
+      } else {
+        // SiteContent
+        await api.put(`/content/site-content/${currentSetting.value.id}/`, {
+          key: currentSetting.value.key,
+          value: currentSetting.value.value,
+          label: currentSetting.value.label,
+          page: currentSetting.value.page
+        })
+      }
+      
+      toast.success('Setting updated successfully')
+      closeModal()
+      await fetchSettings()
+    } catch (err) {
+      console.error('Error saving setting:', err)
+      error.value = 'Failed to save setting.'
+      toast.error('Failed to update setting')
+    } finally {
+      loading.value = false
+    }
+  }
+}
 </script>

@@ -300,7 +300,19 @@
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           </div>
           <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AppServiceCard v-for="service in services" :key="service.id" :service="service" :icon="service.icon" :color="service.icon === 'phone' ? 'blue' : service.icon === 'walk' ? 'teal' : service.icon === 'media' ? 'orange' : service.icon === 'guidance' ? 'purple' : 'green'" />
+            <AppServiceCard 
+              v-for="service in services" 
+              :key="service.id" 
+              :service="service" 
+              :icon="service.icon" 
+              :color="service.icon === 'phone' ? 'blue' : 
+                      service.icon === 'shield' ? 'orange' : 
+                      service.icon === 'guidance' ? 'purple' : 
+                      service.icon === 'document' ? 'teal' : 
+                      service.icon === 'community' ? 'green' : 
+                      service.icon === 'media' ? 'orange' : 
+                      'blue'" 
+            />
           </div>
         </div>
       </div>
@@ -324,7 +336,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { useContentStore } from '@/store/content'
+import { useSettingsStore } from '@/store/settings'
 import { api } from '@/utils/axios' // Import api for fetching services
 import operationsImage from '@/assets/operations-case-flow.jpg'
 import AppServiceCard from '@/components/AppServiceCard.vue' // Import the AppServiceCard component
@@ -333,7 +345,7 @@ defineOptions({
   name: 'OperationsPage'
 })
 
-const contentStore = useContentStore()
+const settingsStore = useSettingsStore()
 
 // Services
 const services = ref([])
@@ -353,45 +365,45 @@ const fetchServices = async () => {
 }
 
 onMounted(() => {
-  contentStore.fetchContent()
+  settingsStore.fetchGlobalSettings()
   fetchServices() // Fetch services on mount
 })
 
-const operationsTitle = computed(() => contentStore.getContent('operations_title', 'Our Operations and Case Flow'))
-const operationsSubtitle = computed(() => contentStore.getContent('operations_subtitle', 'A transparent look into how we handle every call to ensure every child\'s voice is heard and acted upon with care and urgency.'))
-const operationsPathTitle = computed(() => contentStore.getContent('operations_path_title', 'The Path to Resolution'))
-const operationsPathSubtitle = computed(() => contentStore.getContent('operations_path_subtitle', 'Our streamlined process from report to resolution, ensuring every case receives the attention and action it deserves.'))
-const operationsStep1Title = computed(() => contentStore.getContent('operations_step_1_title', 'Initial Contact'))
-const operationsStep1Text = computed(() => contentStore.getContent('operations_step_1_text', 'A child or concerned individual calls the toll-free 116 helpline or reaches out via WhatsApp.'))
-const operationsStep1Tag = computed(() => contentStore.getContent('operations_step_1_tag', 'Immediate Response'))
-const operationsStep2Title = computed(() => contentStore.getContent('operations_step_2_title', 'Counselor Support'))
-const operationsStep2Text = computed(() => contentStore.getContent('operations_step_2_text', 'Trained counselors provide immediate emotional support and gather essential information with empathy.'))
-const operationsStep2Tag = computed(() => contentStore.getContent('operations_step_2_tag', 'Professional Care'))
-const operationsStep3Title = computed(() => contentStore.getContent('operations_step_3_title', 'Case Assessment'))
-const operationsStep3Text = computed(() => contentStore.getContent('operations_step_3_text', 'The case is documented, assessed for urgency level, and classified according to protection needs.'))
-const operationsStep3Tag = computed(() => contentStore.getContent('operations_step_3_tag', 'Detailed Documentation'))
-const operationsStep4Title = computed(() => contentStore.getContent('operations_step_4_title', 'Referral & Follow-up'))
-const operationsStep4Text = computed(() => contentStore.getContent('operations_step_4_text', 'Referrals are made to relevant authorities and continuous follow-up ensures case resolution.'))
-const operationsStep4Tag = computed(() => contentStore.getContent('operations_step_4_tag', 'Action & Closure'))
-const operationsMetrics1Title = computed(() => contentStore.getContent('operations_metrics_1_title', '24/7'))
-const operationsMetrics1Text = computed(() => contentStore.getContent('operations_metrics_1_text', 'Always Available'))
-const operationsMetrics2Title = computed(() => contentStore.getContent('operations_metrics_2_title', '100%'))
-const operationsMetrics2Text = computed(() => contentStore.getContent('operations_metrics_2_text', 'Confidential'))
-const operationsMetrics3Title = computed(() => contentStore.getContent('operations_metrics_3_title', 'Free'))
-const operationsMetrics3Text = computed(() => contentStore.getContent('operations_metrics_3_text', 'Toll-Free Service'))
-const operationsHighlightsTitle = computed(() => contentStore.getContent('operations_highlights_title', 'Operational Highlights'))
-const operationsHighlight1Title = computed(() => contentStore.getContent('operations_highlight_1_title', '116 Toll-Free Helpline'))
-const operationsHighlight1Text = computed(() => contentStore.getContent('operations_highlight_1_text', 'Accessible nationwide across all telecom networks.'))
-const operationsHighlight2Title = computed(() => contentStore.getContent('operations_highlight_2_title', '24/7 Availability'))
-const operationsHighlight2Text = computed(() => contentStore.getContent('operations_highlight_2_text', 'Help any time of day, all year round.'))
-const operationsHighlight3Title = computed(() => contentStore.getContent('operations_highlight_3_title', 'Language Support'))
-const operationsHighlight3Text = computed(() => contentStore.getContent('operations_highlight_3_text', 'English, Luganda, Swahili, and additional local languages.'))
-const operationsHighlight4Title = computed(() => contentStore.getContent('operations_highlight_4_title', 'Strict Confidentiality'))
-const operationsHighlight4Text = computed(() => contentStore.getContent('operations_highlight_4_text', 'Handled with the utmost privacy.'))
-const operationsHighlight5Title = computed(() => contentStore.getContent('operations_highlight_5_title', 'Trained Professionals'))
-const operationsHighlight5Text = computed(() => contentStore.getContent('operations_highlight_5_text', 'Counselors undergo rigorous training.'))
-const operationsHighlight6Title = computed(() => contentStore.getContent('operations_highlight_6_title', 'Multiple Channels'))
-const operationsHighlight6Text = computed(() => contentStore.getContent('operations_highlight_6_text', 'WhatsApp, U-Report, SafePal App, email, and walk-ins.'))
+const operationsTitle = computed(() => settingsStore.settings.operations_title || 'Our Operations and Case Flow')
+const operationsSubtitle = computed(() => settingsStore.settings.operations_subtitle || 'A transparent look into how we handle every call to ensure every child\'s voice is heard and acted upon with care and urgency.')
+const operationsPathTitle = computed(() => settingsStore.settings.operations_path_title || 'The Path to Resolution')
+const operationsPathSubtitle = computed(() => settingsStore.settings.operations_path_subtitle || 'Our streamlined process from report to resolution, ensuring every case receives the attention and action it deserves.')
+const operationsStep1Title = computed(() => settingsStore.settings.operations_step_1_title || 'Initial Contact')
+const operationsStep1Text = computed(() => settingsStore.settings.operations_step_1_text || 'A child or concerned individual calls the toll-free 116 helpline or reaches out via WhatsApp.')
+const operationsStep1Tag = computed(() => settingsStore.settings.operations_step_1_tag || 'Immediate Response')
+const operationsStep2Title = computed(() => settingsStore.settings.operations_step_2_title || 'Counselor Support')
+const operationsStep2Text = computed(() => settingsStore.settings.operations_step_2_text || 'Trained counselors provide immediate emotional support and gather essential information with empathy.')
+const operationsStep2Tag = computed(() => settingsStore.settings.operations_step_2_tag || 'Professional Care')
+const operationsStep3Title = computed(() => settingsStore.settings.operations_step_3_title || 'Case Assessment')
+const operationsStep3Text = computed(() => settingsStore.settings.operations_step_3_text || 'The case is documented, assessed for urgency level, and classified according to protection needs.')
+const operationsStep3Tag = computed(() => settingsStore.settings.operations_step_3_tag || 'Detailed Documentation')
+const operationsStep4Title = computed(() => settingsStore.settings.operations_step_4_title || 'Referral & Follow-up')
+const operationsStep4Text = computed(() => settingsStore.settings.operations_step_4_text || 'Referrals are made to relevant authorities and continuous follow-up ensures case resolution.')
+const operationsStep4Tag = computed(() => settingsStore.settings.operations_step_4_tag || 'Action & Closure')
+const operationsMetrics1Title = computed(() => settingsStore.settings.operations_metrics_1_title || '24/7')
+const operationsMetrics1Text = computed(() => settingsStore.settings.operations_metrics_1_text || 'Always Available')
+const operationsMetrics2Title = computed(() => settingsStore.settings.operations_metrics_2_title || '100%')
+const operationsMetrics2Text = computed(() => settingsStore.settings.operations_metrics_2_text || 'Confidential')
+const operationsMetrics3Title = computed(() => settingsStore.settings.operations_metrics_3_title || 'Free')
+const operationsMetrics3Text = computed(() => settingsStore.settings.operations_metrics_3_text || 'Toll-Free Service')
+const operationsHighlightsTitle = computed(() => settingsStore.settings.operations_highlights_title || 'Operational Highlights')
+const operationsHighlight1Title = computed(() => settingsStore.settings.operations_highlight_1_title || '116 Toll-Free Helpline')
+const operationsHighlight1Text = computed(() => settingsStore.settings.operations_highlight_1_text || 'Accessible nationwide across all telecom networks.')
+const operationsHighlight2Title = computed(() => settingsStore.settings.operations_highlight_2_title || '24/7 Availability')
+const operationsHighlight2Text = computed(() => settingsStore.settings.operations_highlight_2_text || 'Help any time of day, all year round.')
+const operationsHighlight3Title = computed(() => settingsStore.settings.operations_highlight_3_title || 'Language Support')
+const operationsHighlight3Text = computed(() => settingsStore.settings.operations_highlight_3_text || 'English, Luganda, Swahili, and additional local languages.')
+const operationsHighlight4Title = computed(() => settingsStore.settings.operations_highlight_4_title || 'Strict Confidentiality')
+const operationsHighlight4Text = computed(() => settingsStore.settings.operations_highlight_4_text || 'Handled with the utmost privacy.')
+const operationsHighlight5Title = computed(() => settingsStore.settings.operations_highlight_5_title || 'Trained Professionals')
+const operationsHighlight5Text = computed(() => settingsStore.settings.operations_highlight_5_text || 'Counselors undergo rigorous training.')
+const operationsHighlight6Title = computed(() => settingsStore.settings.operations_highlight_6_title || 'Multiple Channels')
+const operationsHighlight6Text = computed(() => settingsStore.settings.operations_highlight_6_text || 'WhatsApp, U-Report, SafePal App, email, and walk-ins.')
 
 </script>
 

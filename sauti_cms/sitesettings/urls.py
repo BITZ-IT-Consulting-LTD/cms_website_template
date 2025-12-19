@@ -9,5 +9,5 @@ from .views import GlobalSettingsView
 # router.register(r'sitesettings', SiteSettingViewSet, basename='sitesetting')
 
 urlpatterns = [
-    path('settings/', GlobalSettingsView.as_view(), name='global-settings'),
+    path('', GlobalSettingsView.as_view(), name='global-settings'),
 ]

@@ -71,7 +71,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useVideosStore } from '@/store/videos'
-import { useContentStore } from '@/store/content'
+import { useSettingsStore } from '@/store/settings'
 import VideoPlayerModal from '@/components/videos/VideoPlayerModal.vue'
 
 defineOptions({
@@ -79,7 +79,7 @@ defineOptions({
 })
 
 const videosStore = useVideosStore()
-const contentStore = useContentStore()
+const settingsStore = useSettingsStore()
 const query = ref('')
 const activeChip = ref('All')
 const loading = ref(false)
@@ -87,16 +87,16 @@ const isModalOpen = ref(false)
 const selectedVideo = ref(null)
 
 // Computed properties for content
-const videosTitle = computed(() => contentStore.getContent('videos_title', 'Videos'))
-const videosResourcesLink = computed(() => contentStore.getContent('videos_resources_link', 'Resources →'))
-const videosSearchPlaceholder = computed(() => contentStore.getContent('videos_search_placeholder', 'Search videos...'))
-const videosSearchButton = computed(() => contentStore.getContent('videos_search_button', 'Search'))
-const videosChipAll = computed(() => contentStore.getContent('videos_chip_all', 'All'))
-const videosChipEducation = computed(() => contentStore.getContent('videos_chip_education', 'Education'))
-const videosChipSafety = computed(() => contentStore.getContent('videos_chip_safety', 'Safety'))
-const videosChipSupport = computed(() => contentStore.getContent('videos_chip_support', 'Support'))
-const videosChipRecency = computed(() => contentStore.getContent('videos_chip_recency', 'Recency'))
-const videosChipPopular = computed(() => contentStore.getContent('videos_chip_popular', 'Popular'))
+const videosTitle = computed(() => settingsStore.settings.videos_title || 'Videos')
+const videosResourcesLink = computed(() => settingsStore.settings.videos_resources_link || 'Resources →')
+const videosSearchPlaceholder = computed(() => settingsStore.settings.videos_search_placeholder || 'Search videos...')
+const videosSearchButton = computed(() => settingsStore.settings.videos_search_button || 'Search')
+const videosChipAll = computed(() => settingsStore.settings.videos_chip_all || 'All')
+const videosChipEducation = computed(() => settingsStore.settings.videos_chip_education || 'Education')
+const videosChipSafety = computed(() => settingsStore.settings.videos_chip_safety || 'Safety')
+const videosChipSupport = computed(() => settingsStore.settings.videos_chip_support || 'Support')
+const videosChipRecency = computed(() => settingsStore.settings.videos_chip_recency || 'Recency')
+const videosChipPopular = computed(() => settingsStore.settings.videos_chip_popular || 'Popular')
 
 const videos = ref([])
 
@@ -180,7 +180,8 @@ function formatDate(dateString) {
   return `${Math.ceil(diffDays / 365)} years ago`
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await settingsStore.fetchGlobalSettings()
   fetchVideos()
 })
 </script>
