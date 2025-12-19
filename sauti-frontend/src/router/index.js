@@ -83,7 +83,7 @@ const routes = [
   {
     path: '/articles',
     name: 'articles',
-    component: () => import('@/views/VideosPage.vue'), // Assuming Articles also uses VideosPage
+    component: () => import('@/views/VideosPage.vue'), 
     meta: {
       title: 'Articles',
       description: 'Featured articles and stories',
