@@ -1,4 +1,4 @@
-#!/Users/mac/clientfacing/cms_website_template/venv/bin/python3
+#!/Users/newtonbrian/Documents/Bitz/cms_website_template/venv/bin/python3.14
 import sys
 from gunicorn.app.wsgiapp import run
 if __name__ == '__main__':
