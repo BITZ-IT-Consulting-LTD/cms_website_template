@@ -7,7 +7,7 @@ const mglsdQuestions = [
     },
     {
         "id": "reporter_role",
-        "question": "Who is reporting this issue?",
+        "question": "Kindly tell us who is reporting this issue?",
         "type": "choice",
         "options": [
             "I am the person affected (Victim/Worker)",
@@ -27,13 +27,13 @@ const mglsdQuestions = [
     },
     {
         "id": "reporter_phone",
-        "question": "What is your Ugandan phone number?",
+        "question": "What is your phone number?",
         "type": "text",
         "placeholder": "e.g., 0772123456 or +256752...",
         "validation": {
             "required": true,
             "pattern": "^(?:\\+256|256|0)?(7[0-9]|20|3[1-9])[0-9]{7}$",
-            "error_message": "Please enter a valid Ugandan phone number."
+            "error_message": "Please enter a valid phone number."
         },
         "next": "issue_primary_category"
     },
@@ -174,7 +174,7 @@ const mglsdQuestions = [
     {
         "id": "final_message",
         "question": "Thank you. Your report has been submitted to the MGLSD Sauti system. A caseworker will review this. If this is a life-threatening emergency, please call the Police (999) or the Child Helpline (116).",
-        "type": "end"
+        "type": "the end"
     }
 ];
 
