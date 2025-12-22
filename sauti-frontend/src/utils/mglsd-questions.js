@@ -27,13 +27,13 @@ const mglsdQuestions = [
     },
     {
         "id": "reporter_phone",
-        "question": "What is your Ugandan phone number?",
+        "question": "What is your phone number?",
         "type": "text",
         "placeholder": "e.g., 0772123456 or +256752...",
         "validation": {
             "required": true,
             "pattern": "^(?:\\+256|256|0)?(7[0-9]|20|3[1-9])[0-9]{7}$",
-            "error_message": "Please enter a valid Ugandan phone number."
+            "error_message": "Please enter a valid phone number."
         },
         "next": "issue_primary_category"
     },
