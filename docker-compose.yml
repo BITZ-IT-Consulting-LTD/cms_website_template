@@ -65,7 +65,7 @@ services:
       context: ./sauti-frontend
       dockerfile: Dockerfile
       args:
-        - VITE_BASE_URL=/
+        - VITE_BASE_PATH=/sauti/
         - VITE_API_URL=/api
     container_name: sauti_frontend
     ports:
@@ -87,7 +87,7 @@ services:
       context: ./sauti-admin
       dockerfile: Dockerfile
       args:
-        - VITE_BASE_URL=/admin/
+        - VITE_BASE_PATH=/admin/
         - VITE_API_URL=/api
     container_name: sauti_admin
     ports:

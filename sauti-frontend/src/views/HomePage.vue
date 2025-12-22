@@ -465,20 +465,16 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { usePartnersStore } from '@/store/partners'
   import { useBlogStore } from '@/store/blog'
   import { useSettingsStore } from '@/store/settings'
+  import { useContentStore } from '@/store/content'
   import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
 
   defineOptions({
     name: 'HomePage'
   })
-
-  const partnersStore = usePartnersStore()
-  import { computed } from 'vue'
-  import { useContentStore } from '@/store/content'
-  import { useSettingsStore } from '@/store/settings'
 
   const partnersStore = usePartnersStore()
   const blogStore = useBlogStore()
