@@ -7,7 +7,7 @@ const mglsdQuestions = [
     },
     {
         "id": "reporter_role",
-        "question": "Who is reporting this issue?",
+        "question": "Kindly tell us who is reporting this issue?",
         "type": "choice",
         "options": [
             "I am the person affected (Victim/Worker)",
@@ -174,7 +174,7 @@ const mglsdQuestions = [
     {
         "id": "final_message",
         "question": "Thank you. Your report has been submitted to the MGLSD Sauti system. A caseworker will review this. If this is a life-threatening emergency, please call the Police (999) or the Child Helpline (116).",
-        "type": "end"
+        "type": "the end"
     }
 ];
 
