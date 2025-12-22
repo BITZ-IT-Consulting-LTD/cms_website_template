@@ -33,11 +33,8 @@ RUN npm run build
 # Production stage
 FROM nginx:1.25-alpine
 
-# Create sub-directory for /sauti/ path
-RUN mkdir -p /usr/share/nginx/html/sauti
-
-# Copy built files into the sub-directory
-COPY --from=build-stage /app/dist /usr/share/nginx/html/sauti
+# Copy built files into the root directory
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
