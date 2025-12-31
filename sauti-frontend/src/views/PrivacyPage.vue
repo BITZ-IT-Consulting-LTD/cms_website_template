@@ -119,5 +119,13 @@
 defineOptions({
   name: 'PrivacyPage'
 })
-// No script logic needed for this static page
+import { computed } from 'vue'
+
+const lastUpdated = computed(() => {
+  return new Date().toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })
+})
 </script>

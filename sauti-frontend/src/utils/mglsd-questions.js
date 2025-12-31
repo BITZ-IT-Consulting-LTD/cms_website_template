@@ -15,7 +15,7 @@ const mglsdQuestions = [
             "I am a Neighbor/Concerned Citizen",
             "I am a relative"
         ],
-        "next": "reporter_names"
+        "next": "check_self_report"
     },
     {
         "id": "reporter_names",

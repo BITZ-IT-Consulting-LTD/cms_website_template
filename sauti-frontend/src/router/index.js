@@ -82,9 +82,7 @@ const routes = [
     },
   },
   {
-    path: '/articles',
-    name: 'articles',
-    component: () => import('@/views/VideosPage.vue'),
+    component: () => import('@/views/BlogPage.vue'),
     meta: {
       title: 'Articles',
       description: 'Featured articles and stories',

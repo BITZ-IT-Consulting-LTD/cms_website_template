@@ -19,6 +19,11 @@ class AllowAnyPost(permissions.BasePermission):
         return request.user.is_authenticated and request.user.is_editor
 
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 class ReportCreateView(generics.CreateAPIView):
     """
     POST /api/reports/ - Submit a report (anonymous allowed, no auth required)
@@ -52,6 +57,7 @@ class ReportCreateView(generics.CreateAPIView):
     
     def send_notification_email(self, report):
         """Send email notification about new report"""
+        logger.info("Attempting to send notification email...")
         try:
             subject = f'New Report Submitted - {report.reference_number}'
             message = f'''
@@ -81,23 +87,30 @@ Please log in to the CMS to review this report.
                     message,
                     settings.EMAIL_HOST_USER,
                     list(admin_emails),
-                    fail_silently=True,
+                    fail_silently=False,
                 )
+                logger.info("Notification email sent successfully.")
+            else:
+                logger.warning("No admin emails found to send notification.")
         except Exception as e:
             # Log error but don't fail the request
-            print(f"Failed to send notification email: {e}")
+            logger.error(f"Failed to send notification email: {e}", exc_info=True)
     
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        
-        # Return only reference number to user
-        return Response({
-            'message': 'Report submitted successfully',
-            'reference_number': serializer.instance.reference_number,
-            'status': 'Your report has been received and will be reviewed by our team.'
-        }, status=status.HTTP_201_CREATED)
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            
+            # Return only reference number to user
+            return Response({
+                'message': 'Report submitted successfully',
+                'reference_number': serializer.instance.reference_number,
+                'status': 'Your report has been received and will be reviewed by our team.'
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(f"Error creating report: {e}", exc_info=True)
+            return Response({"detail": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ReportListView(generics.ListAPIView):

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
 
-console.log('Vite Environment Variables:', import.meta.env);
+
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -130,6 +130,11 @@ export const api = {
   put: (url, data, config) => apiClient.put(url, data, config),
   patch: (url, data, config) => apiClient.patch(url, data, config),
   delete: (url, config) => apiClient.delete(url, config),
+  // Site content endpoints (full URL to avoid /api prefix)
+  siteContent: {
+    update: (key, data) => axios.put(`${import.meta.env.VITE_API_URL}/content/site-content/${key}/`, data),
+    create: (data) => axios.post(`${import.meta.env.VITE_API_URL}/content/site-content/`, data),
+  },
 
   auth: {
     login: (credentials) => apiClient.post('/auth/login/', credentials),
@@ -309,8 +314,8 @@ export const api = {
   },
 
   siteSettings: {
-    get: () => apiClient.get('/api/sitesettings/settings/'),
-    update: (data) => apiClient.put('/api/sitesettings/settings/', data),
+    get: () => apiClient.get('/sitesettings/'),
+    update: (data) => apiClient.put('/sitesettings/', data),
   },
 }
 

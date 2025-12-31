@@ -194,7 +194,6 @@ import { useSettingsStore } from '@/store/settings'
 
 const contentStore = useContentStore()
 const settingsStore = useSettingsStore()
-const currentYear = computed(() => new Date().getFullYear())
 
 // Dynamic content from Content Store (Socials, Contacts)
 const socialFacebook = computed(() => contentStore.getContent('social_facebook', 'https://www.facebook.com/Sauti116Helpline'))

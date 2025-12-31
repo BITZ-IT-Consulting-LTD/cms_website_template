@@ -904,10 +904,10 @@ const handleInfoQuestion = () => {
   
   // Handle logic check questions (for branching after reporter details)
   if (currentQuestion.value && currentQuestion.value.type === 'logic_check') {
-    const reportingType = responses.value.reporting_for_who;
-    if (reportingType && currentQuestion.value.next[reportingType]) {
+    const nextStep = currentQuestion.value.next(responses.value);
+    if (nextStep) {
       setTimeout(() => {
-        moveToNextStep(currentQuestion.value.next[reportingType]);
+        moveToNextStep(nextStep);
       }, 100);
     }
   }
@@ -1280,7 +1280,7 @@ const determineGenderLabel = (gender) => {
 
 // Helper to determine if self-reporting or reporting for someone else
 const isSelfReporting = (data) => {
-  return data.reporting_for_who === "For myself";
+  return data.reporter_role === "I am the person affected (Victim/Worker)";
 };
 
 // Parse names function to split the single names field
@@ -1543,12 +1543,15 @@ const sendToServer = async (data) => {
   fullDescription += `Relationship: ${perp.relationship || ''}\n`;
   fullDescription += `Notes: ${perp.notes || ''}\n`;
 
+  const contactName = cleanedData.reporter_names || "Anonymous";
+  const isAnonymous = contactName === "Anonymous";
+
   // Construct the payload matching ReportCreateSerializer
   const payload = {
     category: mapCategoryToBackend(cleanedData.complaint_categories),
     description: fullDescription,
-    is_anonymous: false, 
-    contact_name: cleanedData.reporter_names || "Anonymous Web User",
+    is_anonymous: isAnonymous, 
+    contact_name: contactName,
     contact_phone: contacts.phone || contacts.whatsapp || "",
     contact_email: contacts.email || "",
     location: cleanedData.reporter_location || "",

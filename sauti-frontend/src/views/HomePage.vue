@@ -465,12 +465,10 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { usePartnersStore } from '@/store/partners'
   import { useBlogStore } from '@/store/blog'
-  import { useSettingsStore } from '@/store/settings'
-  import { useContentStore } from '@/store/content'
-  import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
+  import { useSettingsStore } from '@/store/settings';  import SocialMediaCarousel from '@/components/home/SocialMediaCarousel.vue'
 
   defineOptions({
     name: 'HomePage'
@@ -478,34 +476,7 @@
 
   const partnersStore = usePartnersStore()
   const blogStore = useBlogStore()
-  const contentStore = useContentStore()
   const settingsStore = useSettingsStore()
-
-  // Get dynamic content - computed properties that reactively access content store
-  const heroTitle = computed(() => contentStore.getContent('hero_title', 'Every One Deserves to Be Heard.'))
-  const heroSubtitle = computed(() => contentStore.getContent('hero_subtitle', 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.'))
-  const heroCtaCall = computed(() => contentStore.getContent('hero_cta_call', 'Call 116 Now'))
-  const heroCtaReport = computed(() => contentStore.getContent('hero_cta_report', 'Report a Case'))
-  const quickAccessTitle = computed(() => contentStore.getContent('quick_access_title', 'Services'))
-  const quickAccessDesc = computed(() => contentStore.getContent('quick_access_description', 'Access our comprehensive support services and resources designed to protect and empower children across Uganda.'))
-  const cardReportTitle = computed(() => contentStore.getContent('card_report_title', 'Report a Case'))
-  const cardReportText = computed(() => contentStore.getContent('card_report_text', 'Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you.'))
-  const cardResourcesTitle = computed(() => contentStore.getContent('card_resources_title', 'Resources'))
-  const cardResourcesText = computed(() => contentStore.getContent('card_resources_text', 'Access vital information, safety guides, and educational materials to protect children.'))
-  const cardFaqsTitle = computed(() => contentStore.getContent('card_faqs_title', 'FAQs'))
-  const cardFaqsText = computed(() => contentStore.getContent('card_faqs_text', 'Find quick answers to common questions about our services, reporting process, and safety.'))
-  const cardPartnersTitle = computed(() => contentStore.getContent('card_partners_title', 'Partners'))
-  const cardPartnersText = computed(() => contentStore.getContent('card_partners_text', 'Collaborating with government and international organizations to ensure child safety.'))
-  const publicationsTitle = computed(() => contentStore.getContent('publications_title', 'Success Stories'))
-  const publicationsDesc = computed(() => contentStore.getContent('publications_description', 'Latest success stories, videos and resources to help children, families, and communities stay safe and informed.'))
-  const publicationsLink = computed(() => contentStore.getContent('publications_link', 'View all stories'))
-  const trustPartnersTitle = computed(() => contentStore.getContent('trust_partners_title', 'Partners and Affiliations'))
-  const trustPartnersDesc = computed(() => contentStore.getContent('trust_partners_description', 'Working in partnership with government and international agencies'))
-  const finalCtaTitle = computed(() => contentStore.getContent('final_cta_title', 'Need Help Right Now?'))
-  const finalCtaText = computed(() => contentStore.getContent('final_cta_text', 'Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential.'))
-  const finalCtaCall = computed(() => contentStore.getContent('final_cta_call', 'Call 116 Now'))
-  const finalCtaReport = computed(() => contentStore.getContent('final_cta_report', 'Report a Case'))
-  const finalCtaContact = computed(() => contentStore.getContent('final_cta_contact', 'Contact Us'))
 
   // Video data from backend
   const latestVideos = ref([])
