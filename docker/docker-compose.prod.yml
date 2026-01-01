@@ -1,0 +1,39 @@
+# /docker/docker-compose.prod.yml
+version: '3.8'
+
+services:
+  # Django Backend (Gunicorn)
+  backend:
+    build:
+      context: ../sauti_cms
+      dockerfile: Dockerfile
+    env_file:
+      - ../sauti_cms/.env
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn sauti_cms.wsgi:application --bind 0.0.0.0:8000"
+
+  # Public Frontend (Nginx)
+  frontend:
+    build:
+      context: ..
+      dockerfile: sauti-frontend/Dockerfile.prod
+    env_file:
+      - ../sauti-frontend/.env.production
+
+  # Admin Frontend (Nginx)
+  admin:
+    build:
+      context: ..
+      dockerfile: sauti-admin/Dockerfile.prod
+    env_file:
+      - ../sauti-admin/.env.production
+
+  # Nginx Reverse Proxy for Prod
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf

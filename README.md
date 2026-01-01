@@ -1,109 +1,53 @@
-# Sauti 116 helpline CMS
+# CMS Website Template
 
-Full-stack Content Management System for Sauti 116 helpline - Ministry of Gender, Labour and Social Development (MGLSD), Uganda.
+This project is a monorepo-style system that contains multiple Vite frontends and a Django backend.
 
-## 🚀 Quick Start
+## Infrastructure Overview
 
-```bash
-# Clone and start
-git clone <repository-url>
-cd cms_website_template
-docker compose --env-file .env.docker -f docker-compose-full.yml up -d --build
-```
+The infrastructure has been refactored to use a clean, environment-driven Docker setup.
 
-**Wait 1-2 minutes for services to initialize**, then:
-- Admin Dashboard: http://localhost:3001
-- Public Website: http://localhost:3000
-- Login: `admin` / `admin123`
+- **Centralized Configuration:** All Docker and Nginx configurations are located in the `/docker` directory.
+- **Separation of Concerns:** There are separate Dockerfiles and Docker Compose files for development and production environments.
+- **Environment-Driven:** All configurations, such as base paths and API URLs, are driven by environment variables.
 
-📖 **Full setup guide**: [`docs/FIRST_TIME_SETUP.md`](./docs/FIRST_TIME_SETUP.md)
+## Getting Started
 
----
+### Prerequisites
 
-## 📚 Documentation
+- Docker
+- Docker Compose
 
-All documentation is in the [`docs/`](./docs/) folder:
+### 1. Create Environment Files
 
-- **First-Time Setup**: [`docs/FIRST_TIME_SETUP.md`](./docs/FIRST_TIME_SETUP.md) ⭐
-- **Developer Guide**: [`docs/CLAUDE.md`](./docs/CLAUDE.md)
-- **API Documentation**: [`docs/CATEGORY_MANAGEMENT_ENDPOINTS.md`](./docs/CATEGORY_MANAGEMENT_ENDPOINTS.md)
-- **Complete Index**: [`docs/README.md`](./docs/README.md)
+Before running the project, you need to create the environment files. Copy the `env.example` file to the following locations and fill in the required values:
 
----
+- `sauti_cms/.env`
+- `sauti-admin/.env.development`
+- `sauti-admin/.env.production`
+- `sauti-frontend/.env.development`
+- `sauti-frontend/.env.production`
 
-## 🏗️ Stack
+### 2. Run the Project
 
-- **Backend**: Django 4.2 + Django REST Framework + PostgreSQL
-- **Admin UI**: Vue 3 + Vite + TailwindCSS (Port 3001)
-- **Public Frontend**: Vue 3 + Vite + TailwindCSS (Port 3000)
-- **Deployment**: Docker + Docker Compose
-
----
-
-## ✨ Key Features
-
-- 🔐 Anonymous case reporting with encryption
-- 📝 Blog posts & news management
-- 🎥 Video management (YouTube & uploads)
-- 📚 Resource library
-- ❓ FAQ management
-- 🤝 Partner management
-- 👥 Role-based access control (ADMIN, EDITOR, AUTHOR, VIEWER)
-- 🌍 Multilingual support (EN, LG, SW)
-
----
-
-## 🔑 Default Credentials
-
-**Username**: `admin`  
-**Password**: `admin123`
-
-⚠️ **Change these immediately after first login!**
-
----
-
-## 🐳 Docker Commands
+**For Local Development (with Hot Reload):**
 
 ```bash
-# Start all services
-docker compose --env-file .env.docker -f docker-compose-full.yml up -d
-
-# Stop all services
-docker compose --env-file .env.docker -f docker-compose-full.yml down
-
-# View logs
-docker compose --env-file .env.docker -f docker-compose-full.yml logs -f
-
-# Restart a service
-docker compose --env-file .env.docker -f docker-compose-full.yml restart backend
+docker-compose -f docker/docker-compose.dev.yml up --build
 ```
 
----
+**For Production Build & Run:**
 
-## 🆘 Troubleshooting
-
-**Login not working?**
 ```bash
-# Check if admin user was created
-docker compose --env-file .env.docker -f docker-compose-full.yml logs backend | grep "Admin user"
-
-# Manually create admin
-docker compose --env-file .env.docker -f docker-compose-full.yml exec backend python create_admin.py
+docker-compose -f docker/docker-compose.prod.yml up --build -d
 ```
 
-**Images not displaying?**  
-See [`docs/DOCKER_MEDIA_FILES_FIX.md`](./docs/DOCKER_MEDIA_FILES_FIX.md)
+## Validation Checklist
 
-**More help**: [`docs/FIRST_TIME_SETUP.md`](./docs/FIRST_TIME_SETUP.md)
-
----
-
-## 📞 Support
-
-- **Hotline**: 116
-- **Email**: info@sauti.mglsd.go.ug
-
----
-
-**Built with ❤️ for Sauti 116 helpline**  
-**Ministry of Gender, Labour and Social Development (MGLSD), Uganda**
+- **How do I know which env file is active?**
+    - For Vite, `vite` logs the mode (`development` or `production`) to the console on startup/build, which determines the file loaded. For Django, the `env_file` directive in the active `docker-compose.*.yml` file is the source of truth.
+- **How do I verify the correct Vite mode?**
+    - When running `docker-compose ... up`, check the logs for the frontend services. Vite will print `Vite build mode: development` or `Vite build mode: production`.
+- **How do I confirm assets resolve correctly?**
+    - Open your browser's developer tools. In the "Network" tab, check that requests for JS/CSS files (e.g., `/admin/assets/index-....js`) return a `200 OK` status with the correct `Content-Type` (`application/javascript`, `text/css`), not `text/html`.
+- **How do I confirm the frontend is talking to the correct backend?**
+    - In the "Network" tab, find the API requests (e.g., to `/api/posts/`). Inspect the request URL. In development, it should be a request to your local Nginx proxy (e.g., `http://localhost/api/posts/`), not a hard-coded production URL.

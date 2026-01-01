@@ -1,56 +1,37 @@
-import { loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { fileURLToPath, URL } from 'node:url';
+import { defineConfig, loadEnv } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
 
-export default ({ mode }) => {
-  // Load env file based on `mode`
-  const env = loadEnv(mode, process.cwd(), '');
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
 
-  const basePath = env.VITE_BASE_PATH;
-
-  // Build-time guard to ensure VITE_BASE_PATH is set
-  if (basePath === undefined) {
-    throw new Error('VITE_BASE_PATH is not defined in your .env file.');
+  // Only enforce VITE_BASE_PATH in production
+  if (mode === 'production' && !env.VITE_BASE_PATH) {
+    throw new Error('VITE_BASE_PATH is not defined for production build.')
   }
 
-  console.log(`Vite build mode: ${mode}`);
-  console.log(`Using base path: ${basePath}`);
-
   return {
-    // Use the basePath from the .env file
-    base: basePath,
+    /**
+     * 🚨 CRITICAL RULE
+     * - DEV  → base MUST be '/'
+     * - PROD → base comes from VITE_BASE_PATH
+     */
+    base: mode === 'development' ? '/' : env.VITE_BASE_PATH,
 
     plugins: [vue()],
 
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
-      }
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
     },
 
-    server: {
-      host: true,
-      port: 3000,
-      proxy: {
-        '/api': {
-          target: env.VITE_API_URL || 'http://localhost:8000',
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) => {
-            const target = env.VITE_API_URL || 'http://localhost:8000';
-            if (target.replace(/\/+$/, '').endsWith('/api')) {
-              return path.replace(/^\/api/, '');
-            }
-            return path;
-          }
-        }
+    server: mode === 'development'
+      ? {
+        host: true,
+        port: 5173,
+        allowedHosts: ['sauti.local'],
       }
-    },
-
-    build: {
-      outDir: 'dist',
-      assetsDir: 'assets',
-      sourcemap: false
-    }
-  };
-};
+      : undefined,
+  }
+})

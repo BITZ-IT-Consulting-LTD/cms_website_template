@@ -3,47 +3,30 @@ import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig(({ mode }) => {
-  // Load env file based on `mode`
+  // Load env vars from the correct file
   const env = loadEnv(mode, process.cwd(), '');
 
-  const basePath = env.VITE_BASE_PATH;
-
-  // Build-time guard to ensure VITE_BASE_PATH is set
-  if (basePath === undefined) {
-    throw new Error('VITE_BASE_PATH is not defined in your .env file.');
+  // Validate that the required env var is set
+  if (!env.VITE_BASE_PATH) {
+    throw new Error('VITE_BASE_PATH is not defined. Please check your .env file.');
   }
 
-  console.log(`Vite build mode: ${mode}`);
-  console.log(`Using base path: ${basePath}`);
-
   return {
-    // Use the basePath from the .env file
-    base: basePath,
+    // Base path is driven ONLY by the env var
+    base: env.VITE_BASE_PATH,
 
     plugins: [vue()],
 
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
-      }
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
     },
 
     server: {
-      host: true,
-      port: 3000,
-      proxy: {
-        '/api': {
-          target: env.VITE_API_URL || 'http://localhost:8000',
-          changeOrigin: true,
-          secure: false
-        }
-      }
+      host: true, // Listen on all network interfaces
+      port: 5173, // Vite's default port
+      // Proxy is handled by the top-level Nginx service in docker-compose.dev.yml
     },
-
-    build: {
-      outDir: 'dist',
-      assetsDir: 'assets',
-      sourcemap: false
-    }
   };
 });

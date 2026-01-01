@@ -1,170 +1,22 @@
-# General
-.DS_Store
-*.log
-*~
-*.swp
-*.swo
-.idea/
-.vscode/
+# Dependencies
+/node_modules
+/venv
 
-# Node / Vue
-/sauti-frontend/node_modules
-/sauti-frontend/dist
-/sauti-frontend/dist-ssr
-/sauti-frontend/*.local
-/sauti-frontend/logs
-/sauti-frontend/npm-debug.log*
-/sauti-frontend/yarn-debug.log*
-/sauti-frontend/yarn-error.log*
-/sauti-frontend/pnpm-debug.log*
-/sauti-frontend/lerna-debug.log*
-/sauti-frontend/.env
-/sauti-frontend/.env.local
-/sauti-frontend/.env.*.local
-/sauti-frontend/coverage
-/sauti-frontend/.nyc_output
-/sauti-frontend/.vite/
-/sauti-frontend/.output/
-/sauti-frontend/.temp
-/sauti-frontend/.tmp
-/sauti-frontend/.cache
+# Build artifacts
+/dist
+/staticfiles
+/media
 
-# Python / Django
-/sauti_cms/__pycache__/
-/sauti_cms/*.py[cod]
-/sauti_cms/*$py.class
-/sauti_cms/*.so
-/sauti_cms/*.egg-info/
-/sauti_cms/dist/
-/sauti_cms/build/
-/sauti_cms/db.sqlite3
-/sauti_cms/db.sqlite3-journal
-/sauti_cms/media/
-/sauti_cms/staticfiles/
-/sauti_cms/static/
-/sauti_cms/.env
-/sauti_cms/.venv
-/sauti_cms/venv/
-/sauti_cms/ENV/
-/sauti_cms/.coverage
-/sauti_cms/htmlcov/
-/sauti_cms/.pytest_cache/
-
-
-############################
-# General
-############################
-.DS_Store
-Thumbs.db
+# Environment variables
 .env
 .env.*
-*.log
-*.tmp
-*.swp
-*.bak
-.idea/
+!/env.example
+
+# IDE / OS
 .vscode/
-*.code-workspace
+.idea/
+*.DS_Store
 
-############################
-# Node / Vue
-############################
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-dist/
-build/
-.cache/
-.vite/
-.vite-ssg/
-.eslintcache
-
-############################
-# Vue / Vite / Webpack
-############################
-*.local
-*.map
-stats.json
-
-############################
 # Python
-############################
 __pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.so
-*.egg
-*.egg-info/
-.eggs/
-
-############################
-# Virtual Environments
-############################
-venv/
-env/
-ENV/
-.venv/
-.virtualenv/
-pip-wheel-metadata/
-
-############################
-# Python Packaging
-############################
-build/
-dist/
-develop-eggs/
-downloads/
-sdist/
-wheels/
-MANIFEST
-
-############################
-# Django / FastAPI / Flask
-############################
-*.sqlite3
-db.sqlite3
-media/
-staticfiles/
-instance/
-.webassets-cache
-
-############################
-# Jupyter / Notebooks
-############################
-.ipynb_checkpoints/
-*.nbconvert.ipynb
-
-############################
-# Testing / Coverage
-############################
-.coverage
-coverage.xml
-htmlcov/
-.pytest_cache/
-.tox/
-.nox/
-
-############################
-# Logs
-############################
-*.log
-logs/
-
-############################
-# Docker
-############################
-*.env.docker
-docker-compose.override.yml
-
-############################
-# OS / Editors
-############################
-*.orig
-*.rej
-
-venv/
-
+*.pyc

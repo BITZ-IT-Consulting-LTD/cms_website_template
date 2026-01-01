@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-produc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,0.0.0.0,backend', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,0.0.0.0,backend,sauti.local,sauti.mglsd.go.ug', cast=lambda v: [s.strip() for s in v.split(',')])
 
 # Application definition
 INSTALLED_APPS = [
@@ -98,7 +98,7 @@ else:
             'NAME': config('DB_NAME', default='sauti_cms'),
             'USER': config('DB_USER', default='postgres'),
             'PASSWORD': config('DB_PASSWORD', default='postgres'),
-            'HOST': config('DB_HOST', default='localhost'),
+            'HOST': config('DB_HOST', default='db'),
             'PORT': config('DB_PORT', default='5432'),
         }
     }
@@ -182,20 +182,7 @@ SIMPLE_JWT = {
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = False # Temporarily set to True for debugging
-CORS_ALLOWED_ORIGINS = [
-    "https://sauti.mglsd.go.ug",
-    "http://localhost:8085",  # Public frontend local dev/docker
-    "http://localhost:3000",  # Admin frontend local dev/docker
-    "http://localhost:3001",  # Admin frontend local dev/docker
-    "http://localhost:3002",  # Admin frontend local dev/docker
-    "http://localhost:8000",  # Backend itself (for direct access/testing)
-    # Add your production frontend origins here
-    "http://your-server-domain.com:8085", # Public frontend production
-    "http://your-server-domain.com:3001", # Admin frontend production
-    # If your frontend is served on a standard port (80/443) without explicit port in URL
-    "http://your-server-domain.com",
-    "https://your-server-domain.com", # If you eventually set up HTTPS
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost').split(',')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -207,6 +194,14 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://sauti.local",
+    "https://sauti.mglsd.go.ug",
+    "http://localhost:8085",
+    "http://localhost:3000",
+    "http://localhost:3001", 
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
