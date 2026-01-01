@@ -2,38 +2,93 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: sauti_postgres_prod
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME:-sauti_cms}
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sauti_network_prod
+
   # Django Backend (Gunicorn)
   backend:
     build:
       context: ../sauti_cms
       dockerfile: Dockerfile
+    container_name: sauti_backend_prod
+    volumes:
+      - static_volume_prod:/app/staticfiles
+      - media_volume_prod:/app/media
     env_file:
       - ../sauti_cms/.env
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn sauti_cms.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DEBUG=False
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sauti_network_prod
 
   # Public Frontend (Nginx)
   frontend:
     build:
       context: ..
       dockerfile: sauti-frontend/Dockerfile.prod
+      args:
+        - VITE_BASE_PATH=/sauti/
+    container_name: sauti_frontend_prod
     env_file:
       - ../sauti-frontend/.env.production
+    networks:
+      - sauti_network_prod
 
   # Admin Frontend (Nginx)
   admin:
     build:
       context: ..
       dockerfile: sauti-admin/Dockerfile.prod
+      args:
+        - VITE_BASE_PATH=/sauti/admin/
+    container_name: sauti_admin_prod
     env_file:
       - ../sauti-admin/.env.production
+    networks:
+      - sauti_network_prod
 
   # Nginx Reverse Proxy for Prod
   nginx:
     image: nginx:1.25-alpine
+    container_name: sauti_nginx_prod
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
+      - static_volume_prod:/app/staticfiles:ro
+      - media_volume_prod:/app/media:ro
+    depends_on:
+      - backend
+      - frontend
+      - admin
+    networks:
+      - sauti_network_prod
+
+volumes:
+  postgres_data_prod:
+  static_volume_prod:
+  media_volume_prod:
+
+networks:
+  sauti_network_prod:
+    driver: bridge

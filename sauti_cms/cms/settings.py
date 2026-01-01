@@ -136,11 +136,11 @@ LANGUAGES = [
 ]
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+STATIC_URL = config('STATIC_URL', default='/sauti/static/')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files
-MEDIA_URL = '/media/'
+MEDIA_URL = config('MEDIA_URL', default='/sauti/media/')
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # File upload settings - Allow up to 500MB for video uploads
