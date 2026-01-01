@@ -25,7 +25,11 @@ export default defineConfig(({ mode }) => {
 
     server: {
       host: true, // Listen on all network interfaces
-      port: 5173, // Vite's default port
+      port: 5174, // Vite's default port
+      allowedHosts: ['sauti.local'],
+      hmr: {
+        clientPort: 80, // Matches the Nginx port inside the container network
+      },
       // Proxy is handled by the top-level Nginx service in docker-compose.dev.yml
     },
   };

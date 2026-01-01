@@ -42,8 +42,8 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
       - DB_HOST=db
       - DB_PORT=5432
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,backend,sauti.local,sauti.mglsd.go.ug,www.sauti.mglsd.go.ug}
-      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://sauti.local,http://localhost:3000,http://localhost:3001,http://localhost:8085,http://localhost:80,https://sauti.mglsd.go.ug}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,backend,sauti.mglsd.go.ug,www.sauti.mglsd.go.ug}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:8085,http://localhost:80,https://sauti.mglsd.go.ug,sauti.local}
       - EMAIL_BACKEND=${EMAIL_BACKEND:-django.core.mail.backends.console.EmailBackend}
       - EMAIL_HOST=${EMAIL_HOST}
       - EMAIL_PORT=${EMAIL_PORT}

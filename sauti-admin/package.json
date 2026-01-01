@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Sauti 116 helpline - Vue 3 Admin Dashboard",
   "scripts": {
-    "dev": "vite --port 3002",
+    "dev": "vite",
     "build": "vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
@@ -26,10 +26,12 @@
     "vue-router": "^4.3.0",
     "vue-toastification": "^2.0.0-rc.5"
   },
-"devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
+  "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.0",
-    "dotenv": "^16.4.5",
-    "vite": "^5.4.20"
+    "vite": "^5.4.21",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.38",
+    "autoprefixer": "^10.4.19",
+    "dotenv": "^16.4.5"
   }
 }

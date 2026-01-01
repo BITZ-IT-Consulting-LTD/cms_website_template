@@ -1,13 +1,11 @@
-# /sauti-admin/Dockerfile.dev
-
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install --include=dev
+COPY package.json package-lock.json ./
+RUN npm install
 
-# Expose the Vite dev server port
-EXPOSE 5173
+COPY . .
+
+EXPOSE 5174
 CMD ["npm", "run", "dev", "--", "--host"]

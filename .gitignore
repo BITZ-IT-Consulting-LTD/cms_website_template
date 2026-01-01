@@ -1,22 +1,33 @@
-# Dependencies
-/node_modules
-/venv
-
-# Build artifacts
-/dist
-/staticfiles
-/media
-
-# Environment variables
-.env
-.env.*
-!/env.example
-
-# IDE / OS
-.vscode/
-.idea/
-*.DS_Store
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+bin/
+include/
+lib/
+lib64/
+share/
+pyvenv.cfg
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Node
+node_modules/
+.npm
+dist/
+dist-ssr/
+*.local
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Docker
+.docker-compose.dev.yml.swp

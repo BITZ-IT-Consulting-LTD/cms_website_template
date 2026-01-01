@@ -33,9 +33,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000
     networks:
       - sauti_network_dev
 
@@ -65,7 +63,7 @@ services:
       - ../sauti-admin:/app
       - /app/node_modules # Cache node_modules outside the bind mount
     ports:
-      - "5174:5173" # Map to a different host port
+      - "5174:5174" # Map to a different host port
     env_file:
       - ../sauti-admin/.env.development
     networks:

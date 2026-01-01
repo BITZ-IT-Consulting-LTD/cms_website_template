@@ -170,7 +170,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/sauti/'),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
     // Scroll to saved position if available (back/forward navigation)

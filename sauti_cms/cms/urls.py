@@ -16,24 +16,24 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # API endpoints
-    path('api/auth/', include('users.urls')),
-    path('api/posts/', include('posts.urls')),
-    path('api/videos/', include('videos.urls')),
-    path('api/resources/', include('resources.urls')),
-    path('api/faqs/', include('faqs.urls')),
-    path('api/partners/', include('partners.urls')),
-    path('api/reports/', include('reports.urls')),
-    path('api/dashboard/', include('dashboard.urls')),
-    path('api/content/', include('content.urls')),
-    path('api/social/', include('social_media.urls')),
-    path('api/timeline/', include('timeline.urls')), # Include timeline app URLs
-    path('api/services/', include('services.urls')), # Include services app URLs
-    path('api/sitesettings/', include('sitesettings.urls')), # Include sitesettings app URLs
+    path('auth/', include('users.urls')),
+    path('posts/', include('posts.urls')),
+    path('videos/', include('videos.urls')),
+    path('resources/', include('resources.urls')),
+    path('faqs/', include('faqs.urls')),
+    path('partners/', include('partners.urls')),
+    path('reports/', include('reports.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('content/', include('content.urls')),
+    path('social/', include('social_media.urls')),
+    path('timeline/', include('timeline.urls')), 
+    path('services/', include('services.urls')), 
+    path('sitesettings/', include('sitesettings.urls')), 
     
     # API Documentation (Swagger/OpenAPI)
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
 # Serve media files in development and production

@@ -1,0 +1,22 @@
+# Dependencies
+/node_modules
+/venv
+
+# Build artifacts
+/dist
+/staticfiles
+/media
+
+# Environment variables
+.env
+.env.*
+!/env.example
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+
+# Python
+__pycache__/
+*.pyc
