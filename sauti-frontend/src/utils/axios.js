@@ -157,21 +157,7 @@ export const api = {
 
   // Reports endpoints (anonymous submission)
   reports: {
-    submit: (data) => {
-      // Use FormData for file upload
-      const formData = new FormData()
-      Object.keys(data).forEach(key => {
-        if (data[key] !== null && data[key] !== undefined) {
-          formData.append(key, data[key])
-        }
-      })
-
-      return apiClient.post('/reports/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-    },
+    submit: (data) => apiClient.post('/reports/', data),
     list: (params) => apiClient.get('/reports/list/', { params }),
     get: (id) => apiClient.get(`/reports/${id}/`),
     update: (id, data) => apiClient.put(`/reports/${id}/`, data),

@@ -20,7 +20,7 @@ class ResourceListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'slug', 'description', 'category_name',
             'file', 'file_size', 'file_type', 'thumbnail', 'language',
-            'download_count', 'is_featured', 'published_at'
+            'status', 'download_count', 'is_featured', 'published_at'
         ]
 
 
@@ -32,7 +32,7 @@ class ResourceDetailSerializer(serializers.ModelSerializer):
         model = Resource
         fields = [
             'id', 'title', 'slug', 'description', 'category',
-            'file', 'file_size', 'file_type', 'thumbnail', 'language',
+            'file', 'file_size', 'file_type', 'thumbnail', 'language', 'status',
             'download_count', 'is_featured', 'published_at', 'updated_at'
         ]
 
@@ -43,7 +43,7 @@ class ResourceCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = [
-            'title', 'slug', 'description', 'category', 'file',
-            'thumbnail', 'language', 'is_featured'
+            'title', 'description', 'category', 'file', 'thumbnail', 
+            'language', 'status', 'is_featured'
         ]
         extra_kwargs = {'slug': {'required': False}}

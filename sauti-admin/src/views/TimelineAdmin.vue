@@ -1,168 +1,245 @@
 <template>
-  <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Manage Timeline Events</h1>
+  <div class="p-6">
+    <!-- Page Header -->
+    <PageHeader title="Timeline Events" description="Manage the timeline events of Sauti 116." action-label="Add Event"
+      :action-icon="PlusIcon" @action="openCreateModal" />
 
-    <!-- Create/Edit Form -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-      <h2 class="text-2xl font-semibold mb-4">{{ editingEvent ? 'Edit Timeline Event' : 'Create New Timeline Event' }}</h2>
-      <form @submit.prevent="saveEvent">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="year" class="block text-sm font-medium text-gray-700">Year/Date</label>
-            <input type="text" id="year" v-model="form.year" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+    <!-- Stats -->
+    <StatsGrid>
+      <StatCard label="Total Events" :value="stats.total" :icon="CalendarDaysIcon" color="blue" />
+      <StatCard label="Visible Events" :value="stats.visible" :icon="CheckCircleIcon" color="green" />
+      <StatCard label="Hidden Events" :value="stats.hidden" :icon="EyeSlashIcon" color="gray" />
+    </StatsGrid>
+
+    <!-- Loading State -->
+    <LoadingState v-if="loading" message="Loading timeline events..." />
+
+    <!-- Empty State -->
+    <EmptyState v-else-if="timelineEvents.length === 0" title="No Events Found"
+      message="Create your first timeline event to get started." action-label="Add Event" :action-icon="PlusIcon"
+      :icon="ClockIcon" @action="openCreateModal" />
+
+    <!-- Timeline Grid -->
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="event in timelineEvents" :key="event.id"
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-xl transition-all relative">
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-4">
+            <span
+              class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-bold border border-indigo-100">
+              {{ event.year }}
+            </span>
+            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button @click="editEvent(event)" class="text-gray-400 hover:text-indigo-600 transition-colors">
+                <PencilIcon class="h-5 w-5" />
+              </button>
+              <button @click="deleteEvent(event.id)" class="text-gray-400 hover:text-red-600 transition-colors">
+                <TrashIcon class="h-5 w-5" />
+              </button>
+            </div>
           </div>
-          <div>
-            <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-            <input type="text" id="title" v-model="form.title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+
+          <h3 class="font-bold text-gray-900 text-lg mb-2">{{ event.title }}</h3>
+          <p class="text-gray-500 text-sm line-clamp-3 mb-4 leading-relaxed">{{ event.description }}</p>
+
+          <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+            <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Order: {{ event.order }}</span>
+            <span class="flex items-center gap-1.5 text-xs font-semibold px-2 py-1 rounded-md"
+              :class="event.is_visible ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600'">
+              <span class="w-1.5 h-1.5 rounded-full" :class="event.is_visible ? 'bg-green-500' : 'bg-gray-400'"></span>
+              {{ event.is_visible ? 'Visible' : 'Hidden' }}
+            </span>
           </div>
         </div>
-        <div class="mt-4">
-          <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-          <textarea id="description" v-model="form.description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required></textarea>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div>
-            <label for="order" class="block text-sm font-medium text-gray-700">Order</label>
-            <input type="number" id="order" v-model="form.order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-          </div>
-          <div class="flex items-center mt-5">
-            <input type="checkbox" id="is_visible" v-model="form.is_visible" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-            <label for="is_visible" class="ml-2 block text-sm text-gray-900">Is Visible</label>
-          </div>
-        </div>
-        <div class="mt-6">
-          <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {{ editingEvent ? 'Update Event' : 'Create Event' }}
-          </button>
-          <button type="button" @click="cancelEdit" v-if="editingEvent" class="ml-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Cancel
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
 
-    <!-- Timeline Events List -->
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <h2 class="text-2xl font-semibold mb-4">Existing Timeline Events</h2>
-      <div v-if="loading" class="text-center py-4">Loading events...</div>
-      <div v-else-if="timelineEvents.length === 0" class="text-center py-4">No timeline events found.</div>
-      <div v-else class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visible</th>
-              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="event in timelineEvents" :key="event.id">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ event.year }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ event.title }}</td>
-              <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ event.description }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ event.order }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <span :class="{'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800': event.is_visible, 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800': !event.is_visible}">
-                  {{ event.is_visible ? 'Yes' : 'No' }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button @click="editEvent(event)" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                <button @click="deleteEvent(event.id)" class="text-red-600 hover:text-red-900">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Create/Edit Modal -->
+    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" @click="closeModal"></div>
+      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg relative overflow-hidden transition-all transform">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+          <h3 class="text-xl font-bold text-gray-900">{{ editingEvent ? 'Edit Event' : 'New Event' }}</h3>
+          <button @click="closeModal"
+            class="p-2 hover:bg-white rounded-full transition-all shadow-sm text-gray-400 hover:text-gray-600">
+            <XMarkIcon class="h-6 w-6" />
+          </button>
+        </div>
+
+        <form @submit.prevent="saveEvent" class="p-6 space-y-5">
+          <div class="grid grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-1.5">Year</label>
+              <input v-model="form.year" type="text" required placeholder="2024"
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition-all" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-1.5">Sort Order</label>
+              <input v-model="form.order" type="number" required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition-all" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1.5">Title</label>
+            <input v-model="form.title" type="text" required placeholder="Event title..."
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition-all" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1.5">Description</label>
+            <textarea v-model="form.description" rows="4" required placeholder="Describe what happened..."
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition-all resize-none"></textarea>
+          </div>
+
+          <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+            <input type="checkbox" id="is_visible" v-model="form.is_visible"
+              class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-600 border-gray-300" />
+            <label for="is_visible" class="text-sm font-semibold text-gray-700 cursor-pointer select-none">
+              Visible on website
+            </label>
+          </div>
+
+          <div class="pt-4 flex gap-3">
+            <button type="button" @click="closeModal"
+              class="flex-1 px-6 py-3 rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50 transition-all focus:ring-2 focus:ring-gray-200 focus:outline-none">
+              Cancel
+            </button>
+            <button type="submit" :disabled="saving"
+              class="flex-1 px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center justify-center focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 focus:outline-none">
+              <div v-if="saving" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+              {{ editingEvent ? 'Update Event' : 'Create Event' }}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+  import { ref, computed, onMounted } from 'vue';
+  import { api } from '@/utils/api';
+  import { useToast } from 'vue-toastification';
+  import { PageHeader, StatsGrid, StatCard, LoadingState, EmptyState } from '@/components/admin';
+  import {
+    PlusIcon,
+    ClockIcon,
+    CheckCircleIcon,
+    EyeSlashIcon,
+    PencilIcon,
+    TrashIcon,
+    XMarkIcon,
+    CalendarDaysIcon
+  } from '@heroicons/vue/24/outline';
 
-const timelineEvents = ref([]);
-const loading = ref(true);
-const form = ref({
-  year: '',
-  title: '',
-  description: '',
-  order: 0,
-  is_visible: true,
-});
-const editingEvent = ref(null); // Stores the event being edited
+  const timelineEvents = ref([]);
+  const loading = ref(true);
+  const toast = useToast();
+  const showModal = ref(false);
+  const editingEvent = ref(null);
+  const saving = ref(false);
 
-const API_URL = '/api/timeline/';
-
-const fetchEvents = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get(API_URL);
-    timelineEvents.value = response.data.results;
-  } catch (error) {
-    console.error('Error fetching timeline events:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const saveEvent = async () => {
-  try {
-    if (editingEvent.value) {
-      // Update existing event
-      await axios.put(`${API_URL}${editingEvent.value.id}/`, form.value);
-      console.log('Event updated successfully!');
-    } else {
-      // Create new event
-      await axios.post(API_URL, form.value);
-      console.log('Event created successfully!');
-    }
-    resetForm();
-    await fetchEvents(); // Refresh the list
-  } catch (error) {
-    console.error('Error saving event:', error);
-  }
-};
-
-const editEvent = (event) => {
-  editingEvent.value = event;
-  form.value = { ...event }; // Populate form with event data
-};
-
-const cancelEdit = () => {
-  resetForm();
-  editingEvent.value = null;
-};
-
-const deleteEvent = async (id) => {
-  if (confirm('Are you sure you want to delete this event?')) {
-    try {
-      await axios.delete(`${API_URL}${id}/`);
-      console.log('Event deleted successfully!');
-      await fetchEvents(); // Refresh the list
-    } catch (error) {
-      console.error('Error deleting event:', error);
-    }
-  }
-};
-
-const resetForm = () => {
-  form.value = {
+  const form = ref({
     year: '',
     title: '',
     description: '',
     order: 0,
     is_visible: true,
-  };
-};
+  });
 
-onMounted(fetchEvents);
+  const stats = computed(() => {
+    const events = timelineEvents.value || [];
+    const total = events.length;
+    const visible = events.filter(e => e.is_visible).length;
+    const hidden = total - visible;
+
+    return {
+      total,
+      visible,
+      hidden
+    };
+  });
+
+  const fetchEvents = async () => {
+    loading.value = true;
+    try {
+      const response = await api.timeline.list();
+      timelineEvents.value = response.data.results || response.data;
+    } catch (error) {
+      console.error('Error fetching timeline events:', error);
+      toast.error('Failed to load timeline events');
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const openCreateModal = () => {
+    editingEvent.value = null;
+    form.value = {
+      year: '',
+      title: '',
+      description: '',
+      order: timelineEvents.value.length + 1,
+      is_visible: true,
+    };
+    showModal.value = true;
+  };
+
+  const closeModal = () => {
+    showModal.value = false;
+    editingEvent.value = null;
+    form.value = {
+      year: '',
+      title: '',
+      description: '',
+      order: 0,
+      is_visible: true,
+    };
+  };
+
+  const saveEvent = async () => {
+    saving.value = true;
+    try {
+      if (editingEvent.value) {
+        await api.timeline.update(editingEvent.value.id, form.value);
+        toast.success('Timeline event updated successfully');
+      } else {
+        await api.timeline.create(form.value);
+        toast.success('Timeline event created successfully');
+      }
+      await fetchEvents();
+      closeModal();
+    } catch (error) {
+      console.error('Error saving event:', error);
+      toast.error(error.response?.data?.detail || 'Error saving event');
+    } finally {
+      saving.value = false;
+    }
+  };
+
+  const editEvent = (event) => {
+    editingEvent.value = event;
+    form.value = { ...event };
+    showModal.value = true;
+  };
+
+  const deleteEvent = async (id) => {
+    if (confirm('Are you sure you want to delete this event?')) {
+      try {
+        await api.timeline.delete(id);
+        toast.success('Timeline event deleted successfully');
+        await fetchEvents();
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        toast.error('Failed to delete timeline event');
+      }
+    }
+  };
+
+  onMounted(fetchEvents);
 </script>
 
 <style scoped>
-/* Add Tailwind CSS or custom styles here */
+  /* Add Tailwind CSS or custom styles here */
 </style>

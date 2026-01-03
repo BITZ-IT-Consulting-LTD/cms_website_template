@@ -13,6 +13,7 @@ const apiClient = axios.create({
 })
 
 const createFormData = (data) => {
+  if (data instanceof FormData) return data
   const formData = new FormData()
   Object.keys(data).forEach(key => {
     const value = data[key]
@@ -38,7 +39,7 @@ const createFormData = (data) => {
     }
 
     // Handle file fields - only append if it's a File object
-    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file']
+    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo']
     if (fileFields.includes(key)) {
       if (value instanceof File) {
         formData.append(key, value)
@@ -158,6 +159,7 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
     delete: (slug) => apiClient.delete(`/posts/${slug}/`),
+    history: (id) => apiClient.get(`/posts/${id}/history/`),
     categories: {
       list: () => apiClient.get('/posts/categories/'),
       create: (data) => apiClient.post('/posts/categories/', data),
@@ -254,6 +256,7 @@ export const api = {
     get: (id) => apiClient.get(`/reports/${id}/`),
     update: (id, data) => apiClient.put(`/reports/${id}/`, data),
     addFollowUp: (id, data) => apiClient.post(`/reports/${id}/followup/`, data),
+    history: (id) => apiClient.get(`/reports/${id}/history/`),
   },
 
   users: {
@@ -316,6 +319,42 @@ export const api = {
   siteSettings: {
     get: () => apiClient.get('/sitesettings/'),
     update: (data) => apiClient.put('/sitesettings/', data),
+    history: () => apiClient.get('/sitesettings/history/'),
+  },
+
+  services: {
+    list: (params) => apiClient.get('/services/', { params }),
+    get: (id) => apiClient.get(`/services/${id}/`),
+    create: (data) => apiClient.post('/services/', data),
+    update: (id, data) => apiClient.put(`/services/${id}/`, data),
+    delete: (id) => apiClient.delete(`/services/${id}/`),
+  },
+
+  helpServices: {
+    list: (params) => apiClient.get('/services/help-services/', { params }),
+    get: (id) => apiClient.get(`/services/help-services/${id}/`),
+    create: (data) => apiClient.post('/services/help-services/', data),
+    update: (id, data) => apiClient.put(`/services/help-services/${id}/`, data),
+    delete: (id) => apiClient.delete(`/services/help-services/${id}/`),
+    steps: {
+      create: (data) => apiClient.post('/services/help-steps/', data),
+      update: (id, data) => apiClient.put(`/services/help-steps/${id}/`, data),
+      delete: (id) => apiClient.delete(`/services/help-steps/${id}/`),
+    }
+  },
+
+  feedback: {
+    list: (params) => apiClient.get('/contact/feedback/list/', { params }),
+    update: (id, data) => apiClient.patch(`/contact/feedback/${id}/`, data),
+    delete: (id) => apiClient.delete(`/contact/feedback/${id}/`),
+  },
+
+  timeline: {
+    list: (params) => apiClient.get('/timeline/', { params }),
+    get: (id) => apiClient.get(`/timeline/${id}/`),
+    create: (data) => apiClient.post('/timeline/', data),
+    update: (id, data) => apiClient.put(`/timeline/${id}/`, data),
+    delete: (id) => apiClient.delete(`/timeline/${id}/`),
   },
 }
 

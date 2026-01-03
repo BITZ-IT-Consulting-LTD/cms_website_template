@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
+from simple_history.models import HistoricalRecords
 
 
 class Category(models.Model):
@@ -55,8 +56,18 @@ class Post(models.Model):
         LUGANDA = 'lg', 'Luganda'
         SWAHILI = 'sw', 'Swahili'
     
+    class PostType(models.TextChoices):
+        NEWS = 'NEWS', 'News'
+        BLOG = 'BLOG', 'Blog'
+
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique=True, blank=True)
+    post_type = models.CharField(
+        max_length=10,
+        choices=PostType.choices,
+        default=PostType.NEWS,
+        help_text='Type of content: Official News or Blog/Story'
+    )
     content = models.TextField(help_text='Rich text content')
     excerpt = models.TextField(max_length=500, blank=True, help_text='Short summary')
     
@@ -105,12 +116,30 @@ class Post(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+    
+    history = HistoricalRecords()
     
     class Meta:
         ordering = ['-published_at', '-created_at']
         indexes = [
             models.Index(fields=['-published_at']),
             models.Index(fields=['status', '-published_at']),
+            models.Index(fields=['post_type', '-published_at']),
         ]
     
     def __str__(self):

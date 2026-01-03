@@ -1,4 +1,5 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 from .models import Resource, ResourceCategory
 
 
@@ -10,7 +11,7 @@ class ResourceCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
+class ResourceAdmin(SimpleHistoryAdmin):
     list_display = ['title', 'category', 'file_type', 'language', 'is_featured', 'download_count', 'published_at']
     list_filter = ['category', 'language', 'is_featured', 'published_at']
     search_fields = ['title', 'description']
@@ -26,12 +27,18 @@ class ResourceAdmin(admin.ModelAdmin):
             'fields': ('file', 'file_type', 'file_size', 'thumbnail')
         }),
         ('Settings', {
-            'fields': ('language', 'is_featured')
+            'fields': ('language', 'status', 'is_featured')
         }),
         ('Stats', {
-            'fields': ('download_count',),
+            'fields': ('download_count', 'created_by', 'last_updated_by'),
             'classes': ('collapse',)
         }),
     )
     
-    readonly_fields = ['file_size', 'file_type']
+    readonly_fields = ['file_size', 'file_type', 'created_by', 'last_updated_by']
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)

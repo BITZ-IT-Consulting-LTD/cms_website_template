@@ -1,77 +1,25 @@
 /* Root CSS Variables - Scoped to Giz Chat Wrapper */
 .giz-chat-wrapper {
-    /* Colors */
-    --primary: #D90429;
-    /* Deep Red */
-    --secondary: #FF6700;
-    /* Spanish Orange */
-    --accent: #E63946;
-    /* Scarlet */
-    --highlight: #FFD60A;
-    /* Lemon */
-    --neutral-light: #D6D6D6;
-    /* Silver */
-    --neutral-dark: #1D1D1D;
-    /* Shark */
-    --text-dark: #000000;
-    --text-light: #FFFFFF;
-
-    /* 🌿 Light Backgrounds (For pages, chat backgrounds, sidebars) */
-    --gradient-bg-primary: linear-gradient(45deg, #FAE3E3, #FFFDE1);
-    /* Soft Pink to Off-White */
-    --gradient-bg-secondary: linear-gradient(90deg, #F7F7F7, #FFEBCB);
-    /* Almost White to Pale Beige */
-    --gradient-bg-sidebar: linear-gradient(180deg, #FFFFFF, #F5F5F5);
-    /* Pure White to Light Gray */
-    --gradient-bg-header: linear-gradient(90deg, #FFFFFF, #F0F0F0);
-    /* Subtle Gray Gradient */
-
-    /* 💬 Chat Bubbles */
-    --gradient-chat-sent: linear-gradient(45deg, #E63946, #FFD60A);
-    /* Scarlet to Lemon */
-    --gradient-chat-received: linear-gradient(90deg, #F5F5F5, #EAEAEA);
-    /* Light Gray to Silver */
-
-    /* 🔘 Buttons & Interactive Elements */
-    --gradient-btn-primary: linear-gradient(45deg, #D90429, #FF6700);
-    /* Deep Red to Spanish Orange */
-    --gradient-btn-secondary: linear-gradient(90deg, #E63946, #FFD60A);
-    /* Scarlet to Lemon */
-    --gradient-btn-floating: linear-gradient(180deg, #FF6700, #D90429);
-    /* Bright to Deep Red */
-
-    /* 📝 Input Fields & Forms */
-    --gradient-input-field: linear-gradient(45deg, #FFFFFF, #F8F8F8);
-    /* White to Very Light Gray */
-    --gradient-input-focus: linear-gradient(90deg, #FFD60A, #FFAA33);
-    /* Lemon to Soft Orange */
-
-    /* ⚠ Notifications & Alerts */
-    --gradient-alert-success: linear-gradient(45deg, #D4EDDA, #A8E6A3);
-    /* Light Green Variants */
-    --gradient-alert-warning: linear-gradient(90deg, #FFF3CD, #FFD966);
-    /* Pale Yellow to Gold */
-    --gradient-alert-error: linear-gradient(45deg, #F8D7DA, #F1948A);
-    /* Light Red to Soft Pink */
-
-    /* 🏷 Cards & Popups */
-    --gradient-card: linear-gradient(45deg, #FFFFFF, #F5F5F5);
-    /* White to Light Gray */
-    --gradient-modal: linear-gradient(90deg, #FFFFFF, #ECECEC);
-    /* Subtle Gradient */
-
-
+    /* SAUTI Brand Colors */
+    --primary: #007BBF;         /* blue */
+    --secondary: #FF9933;        /* orange */
+    --accent: #ED1C24;           /* red */
+    --highlight: #FFF200;        /* yellow */
+    --neutral-light: #FFFFFF;    /* white */
+    --neutral-dark: #006633;     /* darkGreen */
+    --text-dark: #000000;         /* black */
+    --text-light: #FFFFFF;        /* white */
 
     /* Backgrounds */
-    --bg-primary: var(--gradient-bg-primary);
-    --bg-secondary: var(--gradient-bg-secondary);
+    --bg-primary: var(--neutral-light);
+    --bg-secondary: #f0f0f0; /* A light gray for secondary backgrounds, not in brand guide but needed for differentiation */
 
     /* Buttons */
-    --btn-primary: var(--gradient-btn-primary);
-    --btn-secondary: var(--gradient-btn-secondary);
+    --btn-primary: var(--primary);
+    --btn-secondary: var(--secondary);
 
     /* Typography */
-    --font-family: Arial, sans-serif;
+    --font-family: 'Cronos Pro', sans-serif;
     --heading-font-weight: bold;
 
     /* Spacing */
@@ -127,7 +75,7 @@
 }
 
 .giz-chat-wrapper button:hover {
-    background: var(--gradient-btn-secondary);
+    background: var(--btn-secondary);
     transform: scale(1.05);
 }
 
@@ -140,9 +88,9 @@
 .giz-chat-wrapper input,
 .giz-chat-wrapper textarea,
 .giz-chat-wrapper select {
-    background-color: var(--gradient-input-field);
+    background-color: var(--neutral-light);
     color: var(--text-dark);
-    border: 1px solid var(--secondary);
+    border: 1px solid var(--primary);
     padding: var(--sm-spacing);
     border-radius: var(--base-radius);
     font-size: 1rem;
@@ -152,7 +100,7 @@
 .giz-chat-wrapper input:focus,
 .giz-chat-wrapper textarea:focus,
 .giz-chat-wrapper select:focus {
-    border-color: var(--gradient-input-focus);
+    border-color: var(--secondary);
     outline: none;
 }
 

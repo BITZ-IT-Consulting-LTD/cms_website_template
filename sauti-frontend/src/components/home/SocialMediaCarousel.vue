@@ -73,8 +73,8 @@
               <div class="fb-post" :data-href="post.post_url" data-width="auto" data-show-text="true"></div>
             </div>
 
-            <!-- Twitter Embed -->
-            <div v-else-if="post.platform === 'Twitter'" class="relative w-full bg-gray-50 p-4" style="min-height: 500px;">
+            <!-- Twitter (X) Embed -->
+            <div v-else-if="post.platform === 'Twitter (X)'" class="relative w-full bg-gray-50 p-4" style="min-height: 500px;">
               <blockquote class="twitter-tweet" data-theme="light">
                 <a :href="post.post_url"></a>
               </blockquote>
@@ -184,7 +184,7 @@ const detectPlatform = (url) => {
   const lowerUrl = url.toLowerCase()
   if (lowerUrl.includes('tiktok.com')) return 'TikTok'
   if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) return 'YouTube'
-  if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'Twitter'
+  if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'Twitter (X)'
   if (lowerUrl.includes('facebook.com')) return 'Facebook'
   if (lowerUrl.includes('instagram.com')) return 'Instagram'
   return 'Unknown'
@@ -205,7 +205,7 @@ const getTikTokEmbedUrl = (url) => {
 const getPlatformColor = (platform) => {
   switch (platform) {
     case 'Facebook': return '#1877F2'
-    case 'Twitter': return '#1DA1F2'
+    case 'Twitter (X)': return '#000000'
     case 'TikTok': return '#000000'
     case 'Instagram': return '#E4405F'
     case 'YouTube': return '#FF0000'

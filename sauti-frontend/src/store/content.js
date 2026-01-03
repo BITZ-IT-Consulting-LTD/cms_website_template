@@ -169,7 +169,7 @@ export const useContentStore = defineStore('content', () => {
   })
 
   // Listen for custom content-updated event from admin
-  window.addEventListener('sauti-content-updated', (e) => {
+  window.addEventListener('content-updated', (e) => {
     if (e.detail && e.detail.content) {
       // Create a new object to trigger Vue reactivity
       content.value = { ...e.detail.content }

@@ -2,29 +2,37 @@ from rest_framework import serializers
 from .models import Report, ReportFollowUp
 
 
+class ReporterSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    phone = serializers.CharField(required=True)
+    safe_to_contact = serializers.BooleanField(required=True)
+
 class ReportCreateSerializer(serializers.ModelSerializer):
     """Serializer for submitting reports (public, no auth required)"""
+    
+    intake_category = serializers.CharField(source='category')
+    reporter = ReporterSerializer(write_only=True)
+    affected_persons = serializers.ListField(child=serializers.DictField(), required=False)
     
     class Meta:
         model = Report
         fields = [
-            'category', 'description', 'is_anonymous',
-            'contact_name', 'contact_phone', 'contact_email',
-            'location', 'attachment'
+            'intake_category', 'description', 'reporting_for',
+            'location', 
+            'reporter', 'affected_persons'
         ]
     
-    def validate(self, attrs):
-        """Ensure contact info is provided if not anonymous"""
-        if not attrs.get('is_anonymous'):
-            if not any([
-                attrs.get('contact_name'),
-                attrs.get('contact_phone'),
-                attrs.get('contact_email')
-            ]):
-                raise serializers.ValidationError(
-                    "Please provide at least one contact method if not submitting anonymously."
-                )
-        return attrs
+    def create(self, validated_data):
+        reporter_data = validated_data.pop('reporter', {})
+        
+        # Map nested reporter data to flat model fields
+        validated_data['contact_name'] = reporter_data.get('name')
+        validated_data['contact_phone'] = reporter_data.get('phone')
+        validated_data['safe_to_contact'] = reporter_data.get('safe_to_contact', True)
+        # Determine anonymity based on whether name is provided
+        validated_data['is_anonymous'] = not bool(reporter_data.get('name'))
+        
+        return super().create(validated_data)
 
 
 class ReportListSerializer(serializers.ModelSerializer):
@@ -38,7 +46,9 @@ class ReportListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'reference_number', 'category', 'category_display',
             'status', 'status_display', 'is_anonymous', 'location',
-            'assigned_to_name', 'created_at', 'updated_at'
+            'assigned_to_name', 'created_at', 'updated_at',
+            'reporting_for', 'affected_persons', 'safe_to_contact',
+            'openchs_case_id'
         ]
     
     def get_assigned_to_name(self, obj):
@@ -59,7 +69,10 @@ class ReportDetailSerializer(serializers.ModelSerializer):
             'description', 'is_anonymous', 'contact_name', 'contact_phone',
             'contact_email', 'location', 'attachment', 'status',
             'status_display', 'assigned_to', 'notes', 'followups',
-            'created_at', 'updated_at', 'resolved_at'
+            'reported_person_age', 'reported_person_gender', 'is_self_report',
+            'created_at', 'updated_at', 'resolved_at',
+            'reporting_for', 'affected_persons', 'safe_to_contact',
+            'escalated_at', 'forwarded_to_openchs_at', 'openchs_case_id'
         ]
     
     def get_followups(self, obj):
@@ -74,7 +87,11 @@ class ReportUpdateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Report
-        fields = ['status', 'assigned_to', 'notes']
+        fields = [
+            'status', 'assigned_to', 'notes',
+            'reported_person_age', 'reported_person_gender', 'is_self_report',
+            'reporting_for', 'affected_persons', 'safe_to_contact'
+        ]
 
 
 class ReportFollowUpSerializer(serializers.ModelSerializer):

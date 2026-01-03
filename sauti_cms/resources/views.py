@@ -33,6 +33,15 @@ class ResourceListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
         
+        # Filter by status (public sees only published)
+        if not self.request.user.is_authenticated or not self.request.user.is_editor:
+            queryset = queryset.filter(status=Resource.Status.PUBLISHED)
+        else:
+            # Editors can filter by status
+            status = self.request.query_params.get('status')
+            if status:
+                queryset = queryset.filter(status=status)
+        
         # Filter by category
         category = self.request.query_params.get('category')
         if category:
@@ -54,6 +63,12 @@ class ResourceListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return ResourceCreateUpdateSerializer
         return ResourceListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(
+            created_by=self.request.user,
+            last_updated_by=self.request.user
+        )
 
 
 class ResourceDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -79,6 +94,9 @@ class ResourceDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.save(update_fields=['download_count'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save(last_updated_by=self.request.user)
 
 
 class ResourceCategoryListView(generics.ListCreateAPIView):

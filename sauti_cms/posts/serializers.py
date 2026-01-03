@@ -29,7 +29,7 @@ class PostListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id', 'title', 'slug', 'excerpt', 'author_name',
+            'id', 'title', 'slug', 'post_type', 'excerpt', 'author_name',
             'category_name', 'tags', 'featured_image', 'status',
             'language', 'views_count', 'is_featured', 'published_at',
             'scheduled_publish_at', 'created_at'
@@ -45,7 +45,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id', 'title', 'slug', 'content', 'excerpt', 'author',
+            'id', 'title', 'slug', 'post_type', 'content', 'excerpt', 'author',
             'category', 'tags', 'featured_image', 'status', 'language',
             'views_count', 'is_featured', 'published_at', 'scheduled_publish_at',
             'created_at', 'updated_at'
@@ -63,7 +63,7 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'title', 'slug', 'content', 'excerpt', 'category',
+            'title', 'slug', 'post_type', 'content', 'excerpt', 'category',
             'tags', 'featured_image', 'status', 'language', 'is_featured',
             'scheduled_publish_at'
         ]

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 class SocialPost(models.Model):
     PLATFORM_CHOICES = [
         ('Facebook', 'Facebook'),
-        ('Twitter', 'Twitter'),
+        ('Twitter (X)', 'Twitter (X)'),
         ('TikTok', 'TikTok'),
         ('Instagram', 'Instagram'),
         ('LinkedIn', 'LinkedIn'),
@@ -129,47 +129,43 @@ class ContactInformation(models.Model):
         help_text=_('Physical office address')
     )
 
-    # Social media links
+    # DEPRECATED: These social media links are now governed by GlobalSettings.
+    # Use sitesettings.GlobalSettings for authoritative configuration.
     facebook_url = models.URLField(
-        _('Facebook URL'),
+        _('Facebook URL (DEPRECATED)'),
         blank=True,
         null=True,
-        help_text=_('Link to Facebook page')
+        help_text=_('DEPRECATED: Use GlobalSettings instead.')
     )
-
     twitter_url = models.URLField(
-        _('Twitter URL'),
+        _('Twitter URL (DEPRECATED)'),
         blank=True,
         null=True,
-        help_text=_('Link to Twitter/X profile')
+        help_text=_('DEPRECATED: Use GlobalSettings instead.')
     )
-
     instagram_url = models.URLField(
-        _('Instagram URL'),
+        _('Instagram URL (DEPRECATED)'),
         blank=True,
         null=True,
-        help_text=_('Link to Instagram profile')
+        help_text=_('DEPRECATED: Use GlobalSettings instead.')
     )
-
     linkedin_url = models.URLField(
-        _('LinkedIn URL'),
+        _('LinkedIn URL (DEPRECATED)'),
         blank=True,
         null=True,
-        help_text=_('Link to LinkedIn page')
+        help_text=_('DEPRECATED: Use GlobalSettings instead.')
     )
-
     youtube_url = models.URLField(
-        _('YouTube URL'),
+        _('YouTube URL (DEPRECATED)'),
         blank=True,
         null=True,
-        help_text=_('Link to YouTube channel')
+        help_text=_('DEPRECATED: Use GlobalSettings instead.')
     )
-
     tiktok_url = models.URLField(
-        _('TikTok URL'),
+        _('TikTok URL (DEPRECATED)'),
         blank=True,
         null=True,
-        help_text=_('Link to TikTok profile')
+        help_text=_('DEPRECATED: Use GlobalSettings instead.')
     )
 
     # Working hours

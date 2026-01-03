@@ -1,4 +1,5 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 class TimelineEvent(models.Model):
     year = models.CharField(max_length=10, help_text="Year or specific date of the event (e.g., '2013', 'Aug 2013')")
@@ -6,6 +7,23 @@ class TimelineEvent(models.Model):
     description = models.TextField(help_text="Detailed description of the event")
     order = models.IntegerField(unique=True, help_text="Order in which the event appears on the timeline (lower numbers first)")
     is_visible = models.BooleanField(default=True, help_text="Whether this event should be visible on the timeline")
+
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+    
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['order', 'year']

@@ -23,6 +23,7 @@ class SiteContent(models.Model):
         ('reports', 'Reports'),
         ('header', 'Header'),
         ('footer', 'Footer'),
+        ('global', 'Global Settings'),
     )
 
     key = models.CharField(max_length=100, unique=True, db_index=True, help_text="Unique identifier for this content")
@@ -34,6 +35,21 @@ class SiteContent(models.Model):
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
 
     def __str__(self):
         return f"{self.label} ({self.key})"
@@ -73,6 +89,21 @@ class CoreValue(models.Model):
     is_active = models.BooleanField(default=True, help_text="Show this value on the site")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
 
     def __str__(self):
         return self.title
@@ -127,6 +158,21 @@ class Contact(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+
     def __str__(self):
         return f"{self.name}: {self.value}"
 
@@ -156,6 +202,21 @@ class ProtectionApproach(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+
     class Meta:
         ordering = ['order', 'title']
         verbose_name = 'Protection Approach'
@@ -180,6 +241,21 @@ class TeamMember(models.Model):
     is_active = models.BooleanField(default=True, help_text="Whether this team member is visible on the site")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
 
     class Meta:
         ordering = ['order', 'name']

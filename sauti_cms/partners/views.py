@@ -39,6 +39,12 @@ class PartnerListCreateView(generics.ListCreateAPIView):
             return PartnerListSerializer
         return PartnerSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(
+            created_by=self.request.user,
+            last_updated_by=self.request.user
+        )
+
 
 class PartnerDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -50,3 +56,6 @@ class PartnerDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
     serializer_class = PartnerSerializer
     permission_classes = [IsEditorOrReadOnly]
+    
+    def perform_update(self, serializer):
+        serializer.save(last_updated_by=self.request.user)

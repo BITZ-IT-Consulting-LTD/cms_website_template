@@ -1,23 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    @apply antialiased;
-    color: #222222; /* Text Primary */
-    background-color: #FFFFFF; /* Background Light */
+    color: theme('colors.darkGreen');
+    background-color: theme('colors.white');
     line-height: 1.6;
+    @apply antialiased font-sans;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    color: #222222; /* Text Primary */
+    @apply font-bold tracking-tight font-sans;
+    color: theme('colors.darkGreen');
   }
   
   h1 {
@@ -44,476 +39,172 @@
     letter-spacing: -0.01em;
   }
   
-  h5 {
-    @apply text-lg md:text-xl lg:text-2xl font-semibold tracking-tight;
-    line-height: 1.3;
-  }
-  
-  h6 {
-    @apply text-base md:text-lg lg:text-xl font-semibold tracking-tight;
-    line-height: 1.35;
-  }
-  
   p {
     line-height: 1.7;
-    color: #222222; /* Text Primary */
+    color: theme('colors.darkGreen');
   }
   
   a {
-    color: #009EDB; /* Sauti Blue */
-    text-decoration: underline;
+    color: theme('colors.blue');
+    @apply underline transition-colors duration-300;
   }
   
   a:hover {
-    color: #007BAA; /* Darkened blue */
+    color: theme('colors.darkGreen');
   }
   
-  /* Helper for removing underline on interactive components */
+  /* Focus visible for accessibility - National Standard */
+  *:focus-visible {
+    outline: 2px solid theme('colors.blue');
+    outline-offset: 2px;
+  }
+
   .no-underline { text-decoration: none !important; }
-  
-  .text-large {
-    @apply text-lg md:text-xl lg:text-2xl;
-    line-height: 1.6;
-  }
 }
 
 @layer components {
-  /* Enhanced Button Styles */
+  /* Brand-Locked Button System */
   .btn {
-    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 transform hover:scale-105 active:scale-95;
-    font-family: 'Poppins', 'Inter', sans-serif;
-    text-decoration: none; /* Prevent underline on links styled as buttons */
+    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 focus:outline-none transform hover:scale-105 active:scale-95;
+    text-decoration: none;
   }
   
-  /* Enhanced Pills */
-  .pill {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95;
-    font-family: 'Poppins', 'Inter', sans-serif;
-    text-decoration: none; /* Prevent underline */
+  /* Emergency CTA - Primary (Report Violence) */
+  .btn-emergency {
+    @apply btn text-white shadow-xl animate-emergency-glow;
+    background-color: theme('colors.red');
+  }
+  .btn-emergency:hover {
+    background-color: theme('colors.red');
+    filter: brightness(0.95);
   }
   
-  .pill-primary {
-    @apply pill text-white shadow-lg;
-    background-color: #009EDB; /* Sauti Blue */
-  }
-  .pill-primary:hover {
-    background-color: #007BAA; /* Darkened blue */
-  }
-  
-  .pill-outline {
-    @apply pill border-2;
-    border-color: #009EDB; /* Sauti Blue */
-    color: #222222; /* Text Primary */
-  }
-  .pill-outline:hover {
-    border-color: #007BAA;
-    background-color: #FFFFFF;
-  }
-
-  .pill-report {
-    @apply pill border-2;
-    border-color: #DC2626; /* Red border */
-    color: #DC2626; /* Red text */
-    background-color: transparent;
-  }
-  .pill-report:hover {
-    background-color: #FEF2F2; /* Light red background */
-    border-color: #EF4444; /* Brighter red border */
-    color: #B91C1C; /* Darker red text for contrast */
-  }
-  
-  .pill-light {
-    @apply pill border-2;
-    background-color: #FFFFFF;
-    color: #222222; /* Text Primary */
-    border-color: #DDDDDD; /* Borders */
-  }
-  .pill-light:hover {
-    border-color: #CCCCCC;
-    background-color: #F9F9F9;
-  }
-  
-  .pill-dark {
-    @apply pill text-white shadow-lg;
-    background-color: #006633; /* Sauti Dark Green */
-  }
-  .pill-dark:hover {
-    background-color: #005522;
-  }
-  
-  /* Enhanced Primary Buttons */
+  /* Primary Action CTA (Secondary in Hierarchy) */
   .btn-primary {
-    @apply btn text-white focus:ring-4 shadow-lg;
-    background-color: #009EDB; /* Sauti Blue */
-    box-shadow: 0 4px 15px rgba(0, 158, 219, 0.3);
+    @apply btn text-white shadow-lg;
+    background-color: theme('colors.orange');
   }
   .btn-primary:hover {
-    background-color: #007BAA; /* Darkened blue */
-    box-shadow: 0 6px 20px rgba(0, 158, 219, 0.4);
-  }
-  .btn-primary:focus {
-    --tw-ring-color: rgba(0, 158, 219, 0.5);
+    background-color: theme('colors.orange');
+    filter: brightness(0.95);
   }
   
-  .btn-secondary {
-    @apply btn focus:ring-4 shadow-lg;
-    background-color: #FF9900; /* Sauti Orange */
-    color: #222222; /* Text Primary */
-    box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
-  }
-  .btn-secondary:hover {
-    background-color: #E68A00; /* Darkened orange */
-    box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
-  }
-  
-  .btn-success {
-    @apply btn text-white focus:ring-4 shadow-lg;
-    background-color: #99CC00; /* Sauti Light Green */
-    box-shadow: 0 4px 15px rgba(153, 204, 0, 0.3);
-  }
-  .btn-success:hover {
-    background-color: #88BB00;
-    box-shadow: 0 6px 20px rgba(153, 204, 0, 0.4);
+  /* Informational CTA */
+  .btn-info {
+    @apply btn text-white shadow-lg;
+    background-color: theme('colors.blue');
   }
   
   .btn-outline {
-    @apply btn border-2 focus:ring-4 shadow-lg rounded-full;
-    border-color: #009EDB; /* Sauti Blue */
-    color: #009EDB;
-    background-color: #FFFFFF;
+    @apply btn border-2 bg-white;
+    border-color: theme('colors.blue');
+    color: theme('colors.blue');
   }
   .btn-outline:hover {
-    background-color: #FFFFFF;
-    border-color: #007BAA;
-    color: #007BAA;
-  }
-  .btn-outline:focus {
-    --tw-ring-color: rgba(0, 158, 219, 0.5);
+    background-color: theme('colors.white');
   }
   
-  .btn-emergency {
-    @apply btn text-white focus:ring-4 shadow-xl animate-pulse;
-    background-color: #EC0000; /* Sauti Red */
-    box-shadow: 0 4px 15px rgba(236, 0, 0, 0.4);
-    animation: emergencyPulse 2s infinite;
-  }
-  .btn-emergency:hover {
-    background-color: #CC0000; /* Darkened red */
-    box-shadow: 0 6px 20px rgba(236, 0, 0, 0.5);
-  }
-  
-  @keyframes emergencyPulse {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(236, 0, 0, 0.7);
-    }
-    50% {
-      box-shadow: 0 0 0 10px rgba(236, 0, 0, 0);
-    }
-  }
-  
-  /* Enhanced Card Styles */
+  /* Pillar / Brand Cards */
   .card {
-    @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100;
+    @apply rounded-2xl shadow-lg transition-all duration-300 overflow-hidden border;
+    background-color: theme('colors.white');
+    border-color: theme('colors.white');
+  }
+  .card:hover {
+    @apply shadow-xl;
+    border-color: theme('colors.blue');
+  }
+
+  /* Status Badges / Pills */
+  .pill {
+    @apply inline-flex items-center justify-center px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300;
   }
   
-  /* Enhanced About/Vision/Mission cards */
-  .avm-card {
-    @apply bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300 hover:scale-105;
+  .pill-report {
+    @apply pill text-white;
+    background-color: theme('colors.red');
   }
   
-  .avm-icon {
-    @apply inline-flex items-center justify-center h-16 w-16 rounded-2xl mb-6 transition-all duration-300;
+  .pill-support {
+    @apply pill text-white;
+    background-color: theme('colors.lightGreen');
   }
-  
-  .avm-title {
-    @apply text-xl font-bold mb-4 leading-tight;
-    font-family: 'Poppins', 'Inter', sans-serif;
-    color: #222222; /* Text Primary */
-  }
-  
-  .avm-text {
-    @apply leading-relaxed;
-    color: #555555; /* Text Secondary */
-    line-height: 1.7;
-  }
-  
-  .card-body {
-    @apply p-6;
-  }
-  
-  /* Enhanced Navigation Links */
-  .nav-link {
-    @apply px-4 py-2 rounded-full font-medium hover:bg-gray-100 transition-all duration-300 relative;
-    font-family: 'Poppins', 'Inter', sans-serif;
-    color: #222222; /* Text Primary */
-    text-decoration: none; /* Prevent underline for nav */
-  }
-  
-  .nav-link:hover {
-    color: #009EDB; /* Sauti Blue */
-  }
-  
-  .nav-link-active {
-    @apply font-semibold;
-    color: #009EDB; /* Sauti Blue */
-    background-color: #F0F9FF;
-  }
-  
-  .nav-link::after {
-    content: '';
-    @apply absolute bottom-0 left-1/2 w-0 h-0.5 transition-all duration-300;
-    background-color: #009EDB; /* Sauti Blue */
-    transform: translateX(-50%);
-  }
-  
-  .nav-link:hover::after,
-  .nav-link-active::after {
-    @apply w-3/4;
-  }
-  
-  /* Enhanced Mobile Navigation Links */
-  .mobile-nav-link {
-    @apply flex items-center gap-3 px-4 py-3 rounded-xl font-medium hover:bg-white transition-all duration-300;
-    font-family: 'Poppins', 'Inter', sans-serif;
-    color: #222222; /* Text Primary */
-    text-decoration: none; /* Prevent underline */
-  }
-  
-  .mobile-nav-link:hover {
-    color: #009EDB; /* Sauti Blue */
-  }
-  
-  .mobile-nav-link-active {
-    @apply font-semibold;
-    color: #009EDB; /* Sauti Blue */
-    background-color: #F0F9FF;
-  }
-  
-  /* Form Styles */
+
+  /* Form Styles - Compliance */
   .form-label {
-    @apply block text-sm font-medium mb-2;
-    color: #555555; /* Text Secondary */
+    @apply block text-sm font-bold mb-2;
+    color: theme('colors.darkGreen');
   }
   
   .form-input {
-    @apply w-full px-4 py-3 border-2 rounded-lg focus:ring-4 transition-all duration-300 font-medium;
-    border-color: #DDDDDD; /* Borders / Disabled */
-    color: #222222; /* Text Primary */
+    @apply w-full px-4 py-3 border-2 rounded-lg transition-all duration-300 font-medium;
+    border-color: theme('colors.white');
+    background-color: theme('colors.white');
+    color: theme('colors.darkGreen');
   }
   
   .form-input:focus {
-    border-color: #009EDB; /* Sauti Blue - Active border */
-    --tw-ring-color: rgba(0, 158, 219, 0.5);
-  }
-  
-  .form-input.error {
-    border-color: #EC0000; /* Sauti Red - Error state */
-  }
-  
-  .form-input.success {
-    border-color: #99CC00; /* Sauti Light Green - Success state */
-  }
-  
-  .form-textarea {
-    @apply form-input resize-none;
-    border-radius: 10px;
-  }
-  
-  .form-select {
-    @apply form-input;
+    border-color: theme('colors.blue');
   }
   
   .form-error {
-    @apply text-sm mt-1;
-    color: #EC0000; /* Sauti Red */
+    @apply text-xs font-bold mt-1;
+    color: theme('colors.red');
+  }
+
+  /* Identity Specifics */
+  .hotline-btn {
+    @apply text-5xl md:text-6xl font-black transition-transform duration-300 hover:scale-110 block text-center;
+    color: theme('colors.red');
+    text-decoration: none;
   }
   
-  /* Container */
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-    gap: 0.5rem; /* 8pt spacing increments */
   }
   
-  /* Section Spacing */
   .section-padding {
-    @apply py-12 md:py-16 lg:py-20;
-  }
-  
-  /* Emergency Banner */
-  .emergency-banner {
-    @apply text-white py-3 px-4 flex items-center justify-center gap-2 font-medium;
-    background-color: #EC0000; /* Sauti Red */
-  }
-  
-  /* Hotline Button */
-  .hotline-btn {
-    @apply text-4xl md:text-5xl font-bold transition-colors;
-    color: #EC0000; /* Sauti Red */
-  }
-  .hotline-btn:hover {
-    color: #CC0000; /* Darkened red */
-  }
-  
-  /* Service Card */
-  .service-card {
-    @apply card hover:scale-105 transform transition-all duration-300 cursor-pointer;
-  }
-  
-  /* Badge */
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
-  }
-  
-  .badge-blue {
-    @apply badge;
-    background-color: #E6F7FF; /* Light blue background */
-    color: #007BAA; /* Dark blue text */
-  }
-  
-  .badge-orange {
-    @apply badge;
-    background-color: #FFF4E6; /* Light orange background */
-    color: #E68A00; /* Dark orange text */
-  }
-  
-  .badge-purple {
-    @apply badge;
-    background-color: #F3E8FF; /* Light purple background */
-    color: #7C3AED; /* Dark purple text */
-  }
-  
-  .badge-teal {
-    @apply badge;
-    background-color: #E0F2FE; /* Light teal background */
-    color: #0D9488; /* Dark teal text */
+    @apply py-16 md:py-24 lg:py-32;
   }
 }
 
 @layer utilities {
-  /* Accessibility */
   .sr-only {
     @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
   }
-  
-  /* Animations */
-  .fade-in {
-    animation: fadeIn 0.5s ease-in;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
+
+  @keyframes emergencyGlow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.7); /* Using the brand red #ED1C24 */
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    50% {
+      box-shadow: 0 0 0 10px rgba(237, 28, 36, 0);
     }
   }
-  
-  .slide-in {
-    animation: slideIn 0.3s ease-out;
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+
+  .animate-emergency-glow {
+    animation: emergencyGlow 2s infinite;
   }
 }
 
-/* Enhanced Timeline styles for the Journey section */
+/* Timeline Brand Implementation */
 .timeline-line {
   @apply absolute left-1/2 -translate-x-1/2 top-0 bottom-0 rounded z-0 w-[6px];
-  background: linear-gradient(to bottom, #009EDB, #007BAA, #006633);
-}
-
-.timeline-item {
-  @apply relative flex mb-16 md:mb-20;
-}
-
-.timeline-item:last-child {
-  @apply mb-0;
-}
-
-.timeline-item.left { 
-  @apply justify-start; 
-}
-
-.timeline-item.left .timeline-card {
-  @apply md:mr-[calc(50%-30px)];
-}
-
-.timeline-item.right { 
-  @apply justify-end; 
-}
-
-.timeline-item.right .timeline-card {
-  @apply md:ml-[calc(50%-30px)];
-}
-
-.timeline-card {
-  @apply bg-white rounded-2xl shadow-lg p-6 md:p-8 w-full md:w-[420px] hover:shadow-xl transition-all duration-300 hover:scale-105;
-  border: none;
-  position: relative;
-}
-
-.timeline-card::before {
-  content: '';
-  @apply absolute top-6 hidden md:block w-[30px] h-[2px] bg-gray-300;
-  z-index: 5;
-}
-
-.timeline-item.left .timeline-card::before {
-  @apply right-[-30px];
-}
-
-.timeline-item.right .timeline-card::before {
-  @apply left-[-30px];
+  background-color: theme('colors.blue');
 }
 
 .timeline-dot {
   @apply absolute left-1/2 -translate-x-1/2 top-6 w-10 h-10 rounded-full border-4 border-white shadow-lg z-10;
-  background: linear-gradient(135deg, #009EDB, #007BAA);
+  background-color: theme('colors.blue');
 }
 
-/* Mobile-first responsive design */
-@media (max-width: 640px) {
-  .btn {
-    @apply px-4 py-2 text-sm;
-  }
+.timeline-card {
+  @apply card p-6 md:p-8 w-full md:w-[420px] hover:scale-105;
 }
 
-/* Print styles */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-}
-
-/* Focus visible for accessibility */
-*:focus-visible {
-  @apply outline-2 outline-offset-2;
-  outline-color: #009EDB; /* Sauti Blue */
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Loading spinner */
+/* Loading State */
 .spinner {
   @apply inline-block w-8 h-8 border-4 rounded-full animate-spin;
-  border-color: #DDDDDD; /* Borders */
-  border-top-color: #009EDB; /* Sauti Blue */
-}
-
-
-/* Css to hide a section */
-.hide-section {
-  display: none;
+  border-color: theme('colors.white');
+  border-top-color: theme('colors.blue');
 }

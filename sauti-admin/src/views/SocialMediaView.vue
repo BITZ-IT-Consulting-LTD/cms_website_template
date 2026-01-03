@@ -22,7 +22,7 @@
                 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
               ]"
             >
-              Social Media Channels
+              Featured Content Feed
             </button>
             <button
               @click="activeTab = 'contact'"
@@ -33,7 +33,18 @@
                 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
               ]"
             >
-              Contact Information
+              Official Profiles & Contact
+            </button>
+            <button
+              @click="activeTab = 'additional'"
+              :class="[
+                activeTab === 'additional'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+              ]"
+            >
+              Additional Contact Lists
             </button>
           </nav>
         </div>
@@ -65,16 +76,34 @@
                 <label for="channel1" class="block text-sm font-medium text-gray-700 mb-2">
                   Channel 1 URL
                 </label>
-                <input
-                  id="channel1"
-                  v-model="channels.channel_1_url"
-                  type="url"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://www.tiktok.com/@sauti116/video/..."
-                />
-                <p class="mt-1 text-sm text-gray-500">
-                  Paste your TikTok, YouTube, Twitter, Facebook, or Instagram post URL
-                </p>
+                <div class="flex gap-2">
+                  <input
+                    id="channel1"
+                    v-model="channels.channel_1_url"
+                    type="url"
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="https://www.tiktok.com/..."
+                  />
+                  <button
+                    type="button"
+                    @click="fetchMetadata('channel_1')"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium whitespace-nowrap"
+                    :disabled="fetchingMetadata['channel_1']"
+                  >
+                    {{ fetchingMetadata['channel_1'] ? 'Fetching...' : 'Preview' }}
+                  </button>
+                </div>
+                <!-- Preview Card 1 -->
+                <div v-if="previews.channel_1" class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 flex gap-4">
+                  <img v-if="previews.channel_1.image" :src="previews.channel_1.image" class="w-20 h-20 object-cover rounded shadow-sm" alt="Preview" />
+                  <div class="flex-1 min-w-0">
+                    <p class="font-bold text-gray-900 truncate">{{ previews.channel_1.title || 'No Title' }}</p>
+                    <p class="text-sm text-gray-600 line-clamp-2 mt-1">{{ previews.channel_1.description || 'No description found' }}</p>
+                    <span class="mt-2 inline-block px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">
+                      {{ previews.channel_1.platform || 'General URL' }}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <!-- Channel 2 -->
@@ -82,13 +111,34 @@
                 <label for="channel2" class="block text-sm font-medium text-gray-700 mb-2">
                   Channel 2 URL
                 </label>
-                <input
-                  id="channel2"
-                  v-model="channels.channel_2_url"
-                  type="url"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://www.youtube.com/watch?v=..."
-                />
+                <div class="flex gap-2">
+                  <input
+                    id="channel2"
+                    v-model="channels.channel_2_url"
+                    type="url"
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                  />
+                  <button
+                    type="button"
+                    @click="fetchMetadata('channel_2')"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium whitespace-nowrap"
+                    :disabled="fetchingMetadata['channel_2']"
+                  >
+                    {{ fetchingMetadata['channel_2'] ? 'Fetching...' : 'Preview' }}
+                  </button>
+                </div>
+                <!-- Preview Card 2 -->
+                <div v-if="previews.channel_2" class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 flex gap-4">
+                  <img v-if="previews.channel_2.image" :src="previews.channel_2.image" class="w-20 h-20 object-cover rounded shadow-sm" alt="Preview" />
+                  <div class="flex-1 min-w-0">
+                    <p class="font-bold text-gray-900 truncate">{{ previews.channel_2.title || 'No Title' }}</p>
+                    <p class="text-sm text-gray-600 line-clamp-2 mt-1">{{ previews.channel_2.description || 'No description found' }}</p>
+                    <span class="mt-2 inline-block px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">
+                      {{ previews.channel_2.platform || 'General URL' }}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <!-- Channel 3 -->
@@ -96,13 +146,34 @@
                 <label for="channel3" class="block text-sm font-medium text-gray-700 mb-2">
                   Channel 3 URL
                 </label>
-                <input
-                  id="channel3"
-                  v-model="channels.channel_3_url"
-                  type="url"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://twitter.com/sauti116/status/..."
-                />
+                <div class="flex gap-2">
+                  <input
+                    id="channel3"
+                    v-model="channels.channel_3_url"
+                    type="url"
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="https://twitter.com/..."
+                  />
+                  <button
+                    type="button"
+                    @click="fetchMetadata('channel_3')"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium whitespace-nowrap"
+                    :disabled="fetchingMetadata['channel_3']"
+                  >
+                    {{ fetchingMetadata['channel_3'] ? 'Fetching...' : 'Preview' }}
+                  </button>
+                </div>
+                <!-- Preview Card 3 -->
+                <div v-if="previews.channel_3" class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 flex gap-4">
+                  <img v-if="previews.channel_3.image" :src="previews.channel_3.image" class="w-20 h-20 object-cover rounded shadow-sm" alt="Preview" />
+                  <div class="flex-1 min-w-0">
+                    <p class="font-bold text-gray-900 truncate">{{ previews.channel_3.title || 'No Title' }}</p>
+                    <p class="text-sm text-gray-600 line-clamp-2 mt-1">{{ previews.channel_3.description || 'No description found' }}</p>
+                    <span class="mt-2 inline-block px-2 py-0.5 bg-sky-100 text-sky-700 rounded text-xs font-medium">
+                      {{ previews.channel_3.platform || 'General URL' }}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <!-- Channel 4 -->
@@ -110,13 +181,34 @@
                 <label for="channel4" class="block text-sm font-medium text-gray-700 mb-2">
                   Channel 4 URL
                 </label>
-                <input
-                  id="channel4"
-                  v-model="channels.channel_4_url"
-                  type="url"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://www.facebook.com/sauti116/posts/..."
-                />
+                <div class="flex gap-2">
+                  <input
+                    id="channel4"
+                    v-model="channels.channel_4_url"
+                    type="url"
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="https://www.facebook.com/..."
+                  />
+                  <button
+                    type="button"
+                    @click="fetchMetadata('channel_4')"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium whitespace-nowrap"
+                    :disabled="fetchingMetadata['channel_4']"
+                  >
+                    {{ fetchingMetadata['channel_4'] ? 'Fetching...' : 'Preview' }}
+                  </button>
+                </div>
+                <!-- Preview Card 4 -->
+                <div v-if="previews.channel_4" class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 flex gap-4">
+                  <img v-if="previews.channel_4.image" :src="previews.channel_4.image" class="w-20 h-20 object-cover rounded shadow-sm" alt="Preview" />
+                  <div class="flex-1 min-w-0">
+                    <p class="font-bold text-gray-900 truncate">{{ previews.channel_4.title || 'No Title' }}</p>
+                    <p class="text-sm text-gray-600 line-clamp-2 mt-1">{{ previews.channel_4.description || 'No description found' }}</p>
+                    <span class="mt-2 inline-block px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-medium">
+                      {{ previews.channel_4.platform || 'General URL' }}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -265,7 +357,10 @@
 
               <!-- Social Media Links Section -->
               <div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Social Media Links</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Official Organization Profiles</h3>
+                <p class="text-sm text-gray-500 mb-6 italic">
+                  These links are the authoritative "Source of Truth" for the organization's social media presence across the entire website.
+                </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label for="facebook_url" class="block text-sm font-medium text-gray-700 mb-2">
@@ -339,6 +434,30 @@
                       placeholder="https://tiktok.com/@sauti116"
                     />
                   </div>
+                  <div>
+                    <label for="ureport_url" class="block text-sm font-medium text-gray-700 mb-2">
+                      U-Report URL
+                    </label>
+                    <input
+                      id="ureport_url"
+                      v-model="contact.social_ureport"
+                      type="url"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="https://ureport.ug/..."
+                    />
+                  </div>
+                  <div>
+                    <label for="safepal_url" class="block text-sm font-medium text-gray-700 mb-2">
+                      SafePal URL
+                    </label>
+                    <input
+                      id="safepal_url"
+                      v-model="contact.social_safepal"
+                      type="url"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="https://safepal.co/..."
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -369,19 +488,49 @@
               Last updated: {{ formatDate(contact.updated_at) }}
             </p>
           </div>
+          </div>
+        </div>
+
+        <!-- Additional Contacts Tab -->
+        <div v-if="activeTab === 'additional'" class="p-8">
+          <div class="mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-2">Extended Contact Registry</h2>
+            <p class="text-gray-600 text-sm">
+              Manage additional contact items such as regional offices, specific department emails, or secondary phone lines.
+            </p>
+          </div>
+          <ContactItemList />
         </div>
       </div>
     </div>
-  </div>
-</template>
+  </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { api } from '@/utils/api'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { 
+  MagnifyingGlassIcon, 
+  ArrowTopRightOnSquareIcon,
+  InformationCircleIcon,
+  GlobeAltIcon,
+  PhoneIcon,
+  EnvelopeIcon,
+  ShareIcon
+} from '@heroicons/vue/24/outline'
+import { api } from '@/utils/api'
+import ContactItemList from '@/components/contacts/ContactItemList.vue'
 
 const toast = useToast()
-const activeTab = ref('channels')
+const route = useRoute()
+const router = useRouter()
+const activeTab = ref(route.query.tab || 'channels')
+
+watch(activeTab, (newTab) => {
+  router.replace({ 
+    query: { ...route.query, tab: newTab } 
+  })
+})
 
 // Channels state
 const channelsLoading = ref(true)
@@ -392,6 +541,20 @@ const channels = ref({
   channel_3_url: '',
   channel_4_url: '',
   updated_at: null
+})
+
+// Metadata fetching state
+const fetchingMetadata = ref({
+  channel_1: false,
+  channel_2: false,
+  channel_3: false,
+  channel_4: false
+})
+const previews = ref({
+  channel_1: null,
+  channel_2: null,
+  channel_3: null,
+  channel_4: null
 })
 
 // Contact state
@@ -426,6 +589,28 @@ const loadChannels = async () => {
   }
 }
 
+const fetchMetadata = async (channelKey) => {
+  const url = channels.value[`${channelKey}_url`]
+  if (!url) {
+    toast.warning('Please enter a URL first')
+    return
+  }
+
+  fetchingMetadata.value[channelKey] = true
+  previews.value[channelKey] = null
+  
+  try {
+    const response = await api.socialMedia.fetchMetadata(url)
+    previews.value[channelKey] = response.data
+    toast.success('Metadata fetched successfully!')
+  } catch (error) {
+    console.error('Failed to fetch metadata:', error)
+    toast.error(error.response?.data?.error || 'Failed to fetch metadata. The URL might be private or blocked.')
+  } finally {
+    fetchingMetadata.value[channelKey] = false
+  }
+}
+
 const saveChannels = async () => {
   channelsSaving.value = true
   try {
@@ -448,10 +633,30 @@ const saveChannels = async () => {
 const loadContact = async () => {
   contactLoading.value = true
   try {
-    const response = await api.socialMedia.contact.get()
-    contact.value = response.data
+    // Shifting to GlobalSettings as the authoritative source
+    const response = await api.siteSettings.get()
+    const gs = response.data
+    
+    // Map GlobalSettings fields to the local contact reactive object
+    contact.value = {
+      primary_email: gs.contact_email_info || '',
+      support_email: gs.contact_email_sautichl || '',
+      primary_phone: gs.contact_phone_main || '',
+      whatsapp_number: gs.social_whatsapp || '',
+      office_address: gs.office_address || '',
+      working_hours: gs.operating_hours_text || '',
+      facebook_url: gs.social_facebook || '',
+      twitter_url: gs.social_twitter || '',
+      instagram_url: gs.social_instagram || '',
+      linkedin_url: gs.social_linkedin || '',
+      youtube_url: gs.social_youtube || '',
+      tiktok_url: gs.social_tiktok || '',
+      social_ureport: gs.social_ureport || '',
+      social_safepal: gs.social_safepal || '',
+      updated_at: gs.updated_at || gs.last_updated
+    }
   } catch (error) {
-    console.error('Failed to load contact information:', error)
+    console.error('Failed to load authoritative contact information:', error)
     toast.error('Failed to load contact information')
   } finally {
     contactLoading.value = false
@@ -461,31 +666,37 @@ const loadContact = async () => {
 const saveContact = async () => {
   contactSaving.value = true
   try {
-    const response = await api.socialMedia.contact.update({
-      primary_email: contact.value.primary_email || null,
-      support_email: contact.value.support_email || null,
-      primary_phone: contact.value.primary_phone || null,
-      whatsapp_number: contact.value.whatsapp_number || null,
+    // Map local state back to GlobalSettings schema
+    const payload = {
+      contact_email_info: contact.value.primary_email || null,
+      contact_email_sautichl: contact.value.support_email || null,
+      contact_phone_main: contact.value.primary_phone || null,
+      social_whatsapp: contact.value.whatsapp_number || null,
       office_address: contact.value.office_address || null,
-      facebook_url: contact.value.facebook_url || null,
-      twitter_url: contact.value.twitter_url || null,
-      instagram_url: contact.value.instagram_url || null,
-      linkedin_url: contact.value.linkedin_url || null,
-      youtube_url: contact.value.youtube_url || null,
-      tiktok_url: contact.value.tiktok_url || null,
-      working_hours: contact.value.working_hours || null
-    })
-    contact.value = response.data
-    toast.success('Contact information updated successfully!')
+      operating_hours_text: contact.value.working_hours || null,
+      social_facebook: contact.value.facebook_url || null,
+      social_twitter: contact.value.twitter_url || null,
+      social_instagram: contact.value.instagram_url || null,
+      social_linkedin: contact.value.linkedin_url || null,
+      social_youtube: contact.value.youtube_url || null,
+      social_tiktok: contact.value.tiktok_url || null,
+      social_ureport: contact.value.social_ureport || null,
+      social_safepal: contact.value.social_safepal || null
+    }
+
+    await api.siteSettings.update(payload)
+    toast.success('Authoritative settings updated successfully!')
+    await loadContact()
   } catch (error) {
-    console.error('Failed to save contact information:', error)
-    toast.error('Failed to save contact information')
+    console.error('Failed to save authoritative settings:', error)
+    toast.error('Failed to save settings')
   } finally {
     contactSaving.value = false
   }
 }
 
 const formatDate = (dateString) => {
+  if (!dateString) return 'Never'
   const date = new Date(dateString)
   return date.toLocaleString('en-US', {
     year: 'numeric',

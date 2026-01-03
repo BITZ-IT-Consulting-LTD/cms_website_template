@@ -102,58 +102,23 @@
               </div>
             </div>
 
-            <!-- Contact Details (Official Info) -->
-            <div class="card p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <EnvelopeIcon class="h-5 w-5 mr-2 text-primary-500" />
-                Official Contact Details
-              </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Main Phone Number</label>
-                  <input v-model="siteSettings.contact_phone_main" type="text" class="input-primary" />
+            <!-- Redirection to Social Media & Contact Management -->
+            <div class="card p-6 bg-blue-50 border-blue-100">
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <ShareIcon class="h-8 w-8 text-blue-600" />
                 </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Official Website URL</label>
-                  <input v-model="siteSettings.contact_website" type="url" class="input-primary" />
-                </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">General Info Email</label>
-                  <input v-model="siteSettings.contact_email_info" type="email" class="input-primary" />
-                </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Sauti CHL Email</label>
-                  <input v-model="siteSettings.contact_email_sautichl" type="email" class="input-primary" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Social Media -->
-            <div class="card p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <ShareIcon class="h-5 w-5 mr-2 text-primary-500" />
-                Social Media Links
-              </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Facebook URL</label>
-                  <input v-model="siteSettings.social_facebook" type="url" class="input-primary" />
-                </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Twitter URL</label>
-                  <input v-model="siteSettings.social_twitter" type="url" class="input-primary" />
-                </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp Link/Number</label>
-                  <input v-model="siteSettings.social_whatsapp" type="text" class="input-primary" />
-                </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">U-Report URL</label>
-                  <input v-model="siteSettings.social_ureport" type="url" class="input-primary" />
-                </div>
-                <div class="flex flex-col">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">SafePal URL</label>
-                  <input v-model="siteSettings.social_safepal" type="url" class="input-primary" />
+                <div class="ml-4">
+                  <h3 class="text-lg font-bold text-gray-900">Profiles & Contact Management</h3>
+                  <p class="text-sm text-gray-600 mt-1 mb-4">
+                    Social media profiles, official emails, and phone numbers are now managed in a dedicated central section to ensure consistency across the platform.
+                  </p>
+                  <router-link
+                    to="/social-media?tab=contact"
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Go to Profiles & Contact Management
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -245,6 +210,9 @@
               </div>
             </div>
           </div>
+
+          <!-- Audit History -->
+          <AuditHistory :history="history" :loading="loadingHistory" />
         </div>
       </div>
     </div>
@@ -260,7 +228,7 @@
               <h4 class="text-sm font-medium text-gray-900">Two-Factor Authentication</h4>
               <p class="text-sm text-gray-500">Require 2FA for all admin users</p>
             </div>
-            <label class="relative inline-flex items-center cursor-pointer">
+            <label v-if="settings?.security" class="relative inline-flex items-center cursor-pointer">
               <input v-model="settings.security.requireTwoFactor" type="checkbox" class="sr-only peer" />
               <div
                 class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600">
@@ -268,13 +236,13 @@
             </label>
           </div>
 
-          <div>
+          <div v-if="settings?.security">
             <label class="block text-sm font-medium text-gray-700 mb-2">Session Timeout (minutes)</label>
             <input v-model.number="settings.security.sessionTimeout" type="number" min="15" max="480"
               class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
           </div>
 
-          <div>
+          <div v-if="settings?.security">
             <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Login Attempts</label>
             <input v-model.number="settings.security.maxLoginAttempts" type="number" min="3" max="10"
               class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
@@ -297,7 +265,7 @@
               <h4 class="text-sm font-medium text-gray-900">Require Special Characters</h4>
               <p class="text-sm text-gray-500">Passwords must contain special characters</p>
             </div>
-            <label class="relative inline-flex items-center cursor-pointer">
+            <label v-if="settings?.security" class="relative inline-flex items-center cursor-pointer">
               <input v-model="settings.security.requireSpecialChars" type="checkbox" class="sr-only peer" />
               <div
                 class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600">
@@ -585,19 +553,19 @@
         <h3 class="text-lg font-semibold text-gray-900 mb-4">API Configuration</h3>
 
         <div class="space-y-4">
-          <div>
+          <div v-if="settings?.api">
             <label class="block text-sm font-medium text-gray-700 mb-2">API Base URL</label>
             <input v-model="settings.api.baseUrl" type="url"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
           </div>
 
-          <div>
+          <div v-if="settings?.api">
             <label class="block text-sm font-medium text-gray-700 mb-2">Rate Limit (requests per minute)</label>
             <input v-model.number="settings.api.rateLimit" type="number" min="10" max="1000"
               class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
           </div>
 
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between" v-if="settings?.api">
             <div>
               <h4 class="text-sm font-medium text-gray-900">Enable CORS</h4>
               <p class="text-sm text-gray-500">Allow cross-origin requests</p>
@@ -663,6 +631,7 @@
 
 <script setup>
   import { ref, reactive, computed, onMounted, watch } from 'vue'
+  import { useRoute } from 'vue-router'
   import { useToast } from 'vue-toastification'
   import {
     CogIcon,
@@ -677,14 +646,18 @@
     EnvelopeIcon,
     ShareIcon,
     ScaleIcon,
-    MagnifyingGlassIcon,
-    DocumentTextIcon,
     HomeIcon
   } from '@heroicons/vue/24/outline'
   import { api } from '@/utils/api'
+  import AuditHistory from '@/components/common/AuditHistory.vue'
   import ContentManager from '@/views/ContentManager.vue'
+  import { useSettingsStore } from '@/stores/settings'
+  import { storeToRefs } from 'pinia'
 
   const toast = useToast()
+  const route = useRoute()
+  const settingsStore = useSettingsStore()
+  const { settings } = storeToRefs(settingsStore)
 
   // Reactive data
   const activeTab = ref('global')
@@ -693,6 +666,8 @@
 
   // Site Settings
   const siteSettings = ref(null)
+  const history = ref([])
+  const loadingHistory = ref(false)
   const loadingSettings = ref(false)
 
   // Category management
@@ -746,6 +721,18 @@
     }
   }
 
+  async function fetchHistory() {
+    loadingHistory.value = true
+    try {
+      const response = await api.siteSettings.history()
+      history.value = response.data
+    } catch (err) {
+      console.error('❌ Error fetching history:', err)
+    } finally {
+      loadingHistory.value = false
+    }
+  }
+
   // Compute text settings for dynamic rendering
   const textSettings = computed(() => {
     if (!siteSettings.value) return {}
@@ -761,9 +748,15 @@
 
   // Lifecycle
   onMounted(() => {
+    // Handle query params for deep linking
+    if (route.query.tab) activeTab.value = route.query.tab
+    if (route.query.sub) activeSubTab.value = route.query.sub
+    
     console.log('SettingsView mounted, activeTab:', activeTab.value, 'activeSubTab:', activeSubTab.value)
     fetchSiteSettings()
+    fetchHistory()
     fetchCategories()
+    settingsStore.fetchSettings()
   })
 
   // Watch for tab changes to handle re-initialization if needed
@@ -806,9 +799,12 @@
 
       // Handle other tabs (security, api)
       if (activeTab.value === 'security' || activeTab.value === 'api') {
-        // For these tabs we just simulate saving since there's no backend yet
-        await new Promise(resolve => setTimeout(resolve, 800))
-        toast.success(`${activeTab.value.charAt(0).toUpperCase() + activeTab.value.slice(1)} settings updated successfully`)
+        const success = await settingsStore.updateSettings(settings.value)
+        if (success) {
+          toast.success(`${activeTab.value.charAt(0).toUpperCase() + activeTab.value.slice(1)} settings updated successfully`)
+        } else {
+          toast.error(`Failed to update ${activeTab.value} settings`)
+        }
       }
 
       if (activeTab.value === 'categories') {

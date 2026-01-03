@@ -1,3 +1,12 @@
+import os
+import django
+import sys
+from pathlib import Path
+
+# Setup Django environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cms.settings')
+django.setup()
+
 from content.models import SiteContent
 from sitesettings.models import GlobalSettings
 
@@ -852,6 +861,234 @@ INITIAL_CONTENT = [
         "type": "photo",
         "description": "Main site logo"
     },
+
+    # =========================
+    # CONTACT PAGE INFO
+    # =========================
+    {
+        "key": "contact_phone_main",
+        "label": "Main Support Phone",
+        "value": "116",
+        "page": "contact",
+        "type": "text",
+        "description": "Primary hotline number"
+    },
+    {
+        "key": "contact_email_info",
+        "label": "General Info Email",
+        "value": "info@sauti.mglsd.go.ug",
+        "page": "contact",
+        "type": "text",
+        "description": "General inquiries email"
+    },
+    {
+        "key": "contact_email_sautichl",
+        "label": "Sauti CHL Email",
+        "value": "sautichl@mglsd.go.ug",
+        "page": "contact",
+        "type": "text",
+        "description": "Helpline specific email"
+    },
+    {
+        "key": "contact_website",
+        "label": "Website URL",
+        "value": "https://sauti.mglsd.go.ug",
+        "page": "contact",
+        "type": "text",
+        "description": "Official website link"
+    },
+    {
+        "key": "office_address",
+        "label": "Office Address",
+        "value": "Ministry of Gender, Labour and Social Development, P.O. Box 7136, Kampala, Uganda",
+        "page": "contact",
+        "type": "text",
+        "description": "Physical office address"
+    },
+
+    # =========================
+    # FOOTER / SOCIAL MEDIA
+    # =========================
+    {
+        "key": "social_facebook",
+        "label": "Facebook URL",
+        "value": "https://www.facebook.com/Sauti116Helpline",
+        "page": "footer",
+        "type": "text",
+        "description": "Facebook page link"
+    },
+    {
+        "key": "social_twitter",
+        "label": "Twitter/X URL",
+        "value": "https://x.com/sauti116",
+        "page": "footer",
+        "type": "text",
+        "description": "Twitter profile link"
+    },
+    {
+        "key": "social_whatsapp",
+        "label": "WhatsApp URL",
+        "value": "https://wa.me/256743889999",
+        "page": "footer",
+        "type": "text",
+        "description": "WhatsApp contact link"
+    },
+    {
+        "key": "social_instagram",
+        "label": "Instagram URL",
+        "value": "https://instagram.com",
+        "page": "footer",
+        "type": "text",
+        "description": "Instagram profile link"
+    },
+    {
+        "key": "social_linkedin",
+        "label": "LinkedIn URL",
+        "value": "https://linkedin.com",
+        "page": "footer",
+        "type": "text",
+        "description": "LinkedIn profile link"
+    },
+    {
+        "key": "social_youtube",
+        "label": "YouTube URL",
+        "value": "https://youtube.com",
+        "page": "footer",
+        "type": "text",
+        "description": "YouTube channel link"
+    },
+    {
+        "key": "social_tiktok",
+        "label": "TikTok URL",
+        "value": "https://tiktok.com",
+        "page": "footer",
+        "type": "text",
+        "description": "TikTok profile link"
+    },
+    {
+        "key": "social_ureport",
+        "label": "U-Report URL",
+        "value": "https://ureport.in",
+        "page": "footer",
+        "type": "text",
+        "description": "U-Report link"
+    },
+    {
+        "key": "social_safepal",
+        "label": "SafePal URL",
+        "value": "https://www.unicef.org/uganda/safepal-app",
+        "page": "footer",
+        "type": "text",
+        "description": "SafePal link"
+    },
+    {
+        "key": "footer_text",
+        "label": "Footer Copyright Text",
+        "value": "© 2025 Sauti 116. All rights reserved.",
+        "page": "footer",
+        "type": "text",
+        "description": "Copyright notice"
+    },
+    {
+        "key": "ministry_attribution_text",
+        "label": "Ministry Attribution",
+        "value": "A project of the Ministry of Gender, Labour and Social Development, supported by UNICEF & partners.",
+        "page": "footer",
+        "type": "text",
+        "description": "Ministry attribution text"
+    },
+    {
+        "key": "disclaimer_text",
+        "label": "Disclaimer Text",
+        "value": "Information shared on this platform is for guidance and assistance. In case of emergency, always call 116 immediately.",
+        "page": "footer",
+        "type": "text",
+        "description": "Legal disclaimer"
+    },
+    {
+        "key": "privacy_policy_url",
+        "label": "Privacy Policy URL",
+        "value": "/privacy",
+        "page": "footer",
+        "type": "text",
+        "description": "Link to privacy policy"
+    },
+    {
+        "key": "terms_of_service_url",
+        "label": "Terms of Service URL",
+        "value": "/terms",
+        "page": "footer",
+        "type": "text",
+        "description": "Link to terms of service"
+    },
+    {
+        "key": "accessibility_url",
+        "label": "Accessibility URL",
+        "value": "/accessibility",
+        "page": "footer",
+        "type": "text",
+        "description": "Link to accessibility statement"
+    },
+
+    # =========================
+    # GLOBAL SETTINGS
+    # =========================
+    {
+        "key": "site_name",
+        "label": "Site Name",
+        "value": "Sauti 116",
+        "page": "global",
+        "type": "text",
+        "description": "Global application name"
+    },
+    {
+        "key": "site_description",
+        "label": "Site Description",
+        "value": "Sauti is Uganda’s national toll-free helpline operated under the Ministry of Gender, Labour and Social Development.",
+        "page": "global",
+        "type": "text",
+        "description": "Meta description for SEO"
+    },
+    {
+        "key": "mission_statement",
+        "label": "Mission Statement",
+        "value": "To provide a confidential, toll-free, and 24/7 helpline service for reporting abuse and seeking help.",
+        "page": "global",
+        "type": "text",
+        "description": "Organization mission"
+    },
+    {
+        "key": "vision_statement",
+        "label": "Vision Statement",
+        "value": "A society where every child and vulnerable person is safe, heard, and protected.",
+        "page": "global",
+        "type": "text",
+        "description": "Organization vision"
+    },
+    {
+        "key": "hotline_text",
+        "label": "Hotline Text",
+        "value": "Toll-free National Helpline",
+        "page": "global",
+        "type": "text",
+        "description": "Text displayed next to hotline"
+    },
+    {
+        "key": "operating_hours_text",
+        "label": "Operating Hours",
+        "value": "24/7",
+        "page": "global",
+        "type": "text",
+        "description": "Operating hours definition"
+    },
+    {
+        "key": "primary_cta_text",
+        "label": "Primary CTA Text",
+        "value": "Get Help Now",
+        "page": "global",
+        "type": "text",
+        "description": "Text for primary call to action buttons"
+    }
 ]
 
 def populate_initial_content():
@@ -901,84 +1138,71 @@ def populate_initial_content():
 
 def populate_global_settings():
     settings, created = GlobalSettings.objects.get_or_create()
-    settings.site_name = "Sauti"
+    settings.site_name = "Sauti 116"
     settings.site_description = "Sauti is Uganda’s national toll-free helpline operated under the Ministry of Gender, Labour and Social Development."
-    settings.hotline_text = "Call 116 Now"
-    settings.support_email_text = "support@sauti.org"
+    settings.hotline_number = "116"
+    settings.primary_cta_text = "Get Help Now"
+    settings.hotline_text = "Toll-free National Helpline"
+    settings.support_email_text = "info@sauti.mglsd.go.ug"
     settings.operating_hours_text = "24/7"
-    settings.footer_text = "© 2025 Sauti. All rights reserved."
-    settings.ministry_attribution_text = "A project of the Ministry of Gender, Labour and Social Development."
-    settings.disclaimer_text = "The information on this website is for general information purposes only."
-    settings.default_meta_title_suffix = " | Sauti"
-    settings.default_meta_description = "Sauti provides free, confidential support services for children and adults facing violence, abuse, exploitation, or distress."
-    settings.environment_label = "Development"
-    settings.hero_title = "Every One Deserves to Be Heard."
-    settings.hero_subtitle = "Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language."
-    settings.hero_cta_call = "Call 116 Now"
-    settings.hero_cta_report = "Report a Case"
-    settings.quick_access_title = "Get Help & Information"
-    settings.quick_access_description = "Access our comprehensive support services and resources designed to protect and empower children across Uganda."
-    settings.card_report_title = "Report a Case"
-    settings.card_report_text = "Report abuse confidentially. Our trained counselors are available 24/7 to listen and support you."
-    settings.card_resources_title = "Resources"
-    settings.card_resources_text = "Access vital information, safety guides, and educational materials to protect children."
-    settings.card_faqs_title = "FAQs"
-    settings.card_faqs_text = "Find quick answers to common questions about our services, reporting process, and safety."
-    settings.card_partners_title = "Partners"
-    settings.card_partners_text = "Collaborating with government and international organizations to ensure child safety."
+    
+    settings.footer_text = "© 2025 Sauti 116. All rights reserved."
+    settings.ministry_attribution_text = "A project of the Ministry of Gender, Labour and Social Development, supported by UNICEF & partners."
+    settings.disclaimer_text = "Information shared on this platform is for guidance and assistance. In case of emergency, always call 116 immediately."
+    settings.privacy_policy_url = "https://sauti.mglsd.go.ug/privacy"
 
-    settings.publications_title = "Recent Publications"
-    settings.publications_description = "Latest articles, videos and resources to help children, families, and communities stay safe and informed."
-    settings.publications_link = "View all posts"
-    settings.trust_partners_title = "Trusted by Leading Organizations"
-    settings.trust_partners_description = "Working in partnership with government and international agencies"
-    settings.final_cta_title = "Need Help Right Now?"
-    settings.final_cta_text = "Accessible 24/7 across all telecom networks. Support in multiple local languages. All services are free and confidential."
-    settings.final_cta_call = "Call 116 Now"
-    settings.final_cta_report = "Report a Case"
-    settings.final_cta_contact = "Contact Us"
+    # 1. Hero
+    settings.hero_title = "Every voice matters. Every life deserves protection."
+    settings.hero_subtitle = "Sauti 116 provides confidential, 24/7 support for children, survivors of gender-based violence, and migrant workers."
+    settings.hero_value_prop = "Free and accessible across all telecom networks in multiple local languages."
+
+    # 2. Intro
+    settings.intro_title = "Who We Are"
+    settings.intro_description = "Sauti 116 is Uganda’s National Child Helpline, a confidential service that provides support, guidance, and crisis intervention for children and individuals facing violence, exploitation, or abuse."
+
+    # 3. Quick Access
+    settings.quick_access_title = "How Can We Help?"
+    settings.quick_access_description = "Our trained counselors offer immediate assistance and referrals for various protection needs."
+    
+    settings.qa_child_protection_title = "Child Protection"
+    settings.qa_child_protection_text = "Report abuse, exploitation, or neglect. We provide immediate safety guidance and referrals."
+    settings.qa_child_protection_icon = "UserGroupIcon"
+    
+    settings.qa_gbv_title = "GBV Support"
+    settings.qa_gbv_text = "Safe space for survivors of gender-based violence to seek support and legal guidance."
+    settings.qa_gbv_icon = "ShieldCheckIcon"
+    
+    settings.qa_migrants_title = "Migrant Workers"
+    settings.qa_migrants_text = "Support for migrant workers in distress or facing exploitation, both home and abroad."
+    settings.qa_migrants_icon = "GlobeAltIcon"
+    
+    settings.qa_psea_title = "PSEA"
+    settings.qa_psea_text = "Protection from Sexual Exploitation and Abuse. Report misconduct and seek justice."
+    settings.qa_psea_icon = "ScaleIcon"
+
+    # 4. News
+    settings.news_title = "Latest Stories & Updates"
+    settings.news_description = "Stay informed with the latest news from Sauti and our work across communities."
+    settings.news_link_text = "View All Articles"
+
+    # 5. Partners
+    settings.partners_title = "Our Trusted Partners"
+    settings.partners_description = "Working together with national and international organizations to protect every voice."
+
+    # Social & Links
     settings.social_facebook = "https://www.facebook.com/Sauti116Helpline"
     settings.social_twitter = "https://x.com/sauti116"
     settings.social_whatsapp = "https://wa.me/256743889999"
     settings.social_ureport = "https://ureport.in"
     settings.social_safepal = "https://www.unicef.org/uganda/safepal-app"
+    
     settings.contact_email_info = "info@sauti.mglsd.go.ug"
     settings.contact_email_sautichl = "sautichl@mglsd.go.ug"
     settings.contact_website = "https://sauti.mglsd.go.ug"
     settings.contact_phone_main = "116"
-    settings.resources_title = "Resources"
-    settings.resources_subtitle = "Download educational materials, guides, and resources to help protect children and support communities."
-    settings.resources_stats_title = "Statistics Dashboard"
-    settings.resources_stats_updated = "Updated in real-time"
-    settings.resources_stats_loading = "Loading statistics..."
-    settings.resources_stats_error = "Failed to load statistics"
-    settings.resources_total_reports = "Total Reports"
-    settings.resources_child_protection = "Child Protection"
-    settings.resources_gbv_cases = "GBV Cases"
-    settings.resources_migrant_worker = "Migrant Worker"
-    settings.resources_cases_by_category = "Cases by Category"
-    settings.resources_interactive = "Interactive"
-    settings.resources_reports_over_time = "Reports Over Time"
-    settings.resources_last_6_months = "Last 6 months"
-    settings.resources_status_distribution = "Status Distribution"
-    settings.resources_pending = "Pending"
-    settings.resources_in_progress = "In Progress"
-    settings.resources_resolved = "Resolved"
-    settings.resources_closed = "Closed"
-    settings.resources_downloads_title = "Downloadable Resources"
-    settings.resources_downloads_subtitle = "Access guides, toolkits, and educational materials"
-    settings.resources_available = "resources available"
-    settings.resources_search_placeholder = "Search resources..."
-    settings.resources_all_categories = "All Categories"
-    settings.resources_all_languages = "All Languages"
-    settings.resources_loading = "Loading resources..."
-    settings.resources_coming_soon = "Coming Soon"
-    settings.resources_no_results = "No resources found"
-    settings.resources_no_results_subtitle = "Try adjusting your filters or check back later"
-    settings.resources_previous = "Previous"
-    settings.resources_next = "Next"
+    
     settings.save()
-    print("Global settings created/updated.")
+    print("Unified Homepage Settings successfully populated.")
 
 
 if __name__ == "__main__":

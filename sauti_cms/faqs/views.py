@@ -31,9 +31,14 @@ class FAQListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = FAQ.objects.select_related('category')
         
-        # Only show active FAQs to public
+        # Only show active and published FAQs to public
         if not self.request.user.is_authenticated or not self.request.user.is_editor:
-            queryset = queryset.filter(is_active=True)
+            queryset = queryset.filter(is_active=True, status=FAQ.Status.PUBLISHED)
+        else:
+            # Editors can filter by status
+            status = self.request.query_params.get('status')
+            if status:
+                queryset = queryset.filter(status=status)
         
         # Filter by category
         category = self.request.query_params.get('category')
@@ -51,6 +56,12 @@ class FAQListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return FAQCreateUpdateSerializer
         return FAQSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(
+            created_by=self.request.user,
+            last_updated_by=self.request.user
+        )
 
 
 class FAQDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -75,6 +86,9 @@ class FAQDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.save(update_fields=['views_count'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save(last_updated_by=self.request.user)
 
 
 class FAQCategoryListView(generics.ListCreateAPIView):

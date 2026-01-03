@@ -80,14 +80,21 @@ const routes = [
       title: 'Blogs',
       description: 'Latest stories, updates, and insights from Sauti',
     },
-  },
-  {
-    component: () => import('@/views/BlogPage.vue'),
     meta: {
-      title: 'Articles',
-      description: 'Featured articles and stories',
+      title: 'Blogs',
+      description: 'Latest stories, updates, and insights from Sauti',
     },
   },
+  {
+    path: '/news',
+    name: 'news',
+    component: () => import('@/views/NewsPage.vue'),
+    meta: {
+      title: 'News',
+      description: 'Official news and updates from Sauti',
+    },
+  },
+
   {
     path: '/blogs/:slug',
     name: 'blog-detail',
@@ -149,6 +156,14 @@ const routes = [
       title: 'Donate',
       description: 'Support Sauti 116 helpline and make a difference',
     },
+  },
+
+  {
+    path: '/get-help/:service',
+    name: 'get-help-redirect',
+    redirect: to => {
+      return { path: '/', hash: `#${to.params.service}` }
+    }
   },
   {
     path: '/login',

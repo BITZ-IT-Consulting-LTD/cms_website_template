@@ -28,7 +28,8 @@ urlpatterns = [
     path('social/', include('social_media.urls')),
     path('timeline/', include('timeline.urls')), 
     path('services/', include('services.urls')), 
-    path('sitesettings/', include('sitesettings.urls')), 
+    path('sitesettings/', include('sitesettings.urls')),
+    path('contact/', include('contact.urls')),
     
     # API Documentation (Swagger/OpenAPI)
     path('schema/', SpectacularAPIView.as_view(), name='schema'),

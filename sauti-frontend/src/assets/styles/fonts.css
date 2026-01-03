@@ -1,0 +1,36 @@
+/* 
+  This file is a template for defining the custom fonts for the SAUTI 116 website.
+  Please replace the placeholder `src` URLs with the actual paths to your font files.
+*/
+
+/* Cronos Pro - Regular */
+@font-face {
+  font-family: 'Cronos Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/CronosPro-Regular.woff2') format('woff2'); /* Placeholder path */
+}
+
+/* Cronos Pro - Bold */
+@font-face {
+  font-family: 'Cronos Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/CronosPro-Bold.woff2') format('woff2'); /* Placeholder path */
+}
+
+/* Helvetica Neue - Bold */
+@font-face {
+  font-family: 'Helvetica Neue';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/HelveticaNeue-Bold.woff2') format('woff2'); /* Placeholder path */
+}
+
+/* Helvetica Neue - Condensed Black */
+@font-face {
+  font-family: 'Helvetica Neue';
+  font-style: normal;
+  font-weight: 900;
+  src: url('../fonts/HelveticaNeue-CondensedBlack.woff2') format('woff2'); /* Placeholder path */
+}
