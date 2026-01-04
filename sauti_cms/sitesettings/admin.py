@@ -1,6 +1,6 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import SiteSetting, GlobalSettings, HomePageSettings, AboutPageSettings
+from .models import SiteSetting, GlobalSettings, HomePageSettings, AboutPageSettings, OrganizationProfile
 
 @admin.register(SiteSetting)
 class SiteSettingAdmin(SimpleHistoryAdmin):
@@ -83,4 +83,24 @@ class AboutPageSettingsAdmin(BaseSettingsAdmin):
             'fields': ('mission', 'vision')
         }),
         # Add other about-page specific fields here if they exist in GlobalSettings
+    )
+
+@admin.register(OrganizationProfile)
+class OrganizationProfileAdmin(BaseSettingsAdmin):
+    fieldsets = (
+        ('Basic Identity', {
+            'fields': ('name', 'tagline', 'logo', 'favicon')
+        }),
+        ('Branding / Colors', {
+            'fields': ('primary_color', 'secondary_color', 'accent_color')
+        }),
+        ('Contact Information', {
+            'fields': ('address', 'primary_phone', 'primary_email', 'alternate_email')
+        }),
+        ('Legal & History', {
+            'fields': ('registration_info', 'founded_date', 'about_us_summary')
+        }),
+        ('Social Media Defaults', {
+            'fields': ('twitter_handle', 'facebook_page')
+        }),
     )

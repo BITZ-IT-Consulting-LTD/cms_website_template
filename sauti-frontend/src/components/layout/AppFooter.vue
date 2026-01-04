@@ -9,7 +9,7 @@
           <div class="flex items-center gap-4">
             <BaseLogo size="md" variant="white" :alt="settings.site_name" />
             <h3 id="footer-about" class="text-2xl font-bold tracking-tight leading-tight text-sauti-white">
-              {{ settings.site_name || 'Sauti 116' }}
+              {{ orgProfile?.name || settings.site_name || 'Sauti 116' }}
             </h3>
           </div>
 
@@ -142,6 +142,7 @@
 
   const settingsStore = useSettingsStore()
   const settings = computed(() => settingsStore.settings)
+  const orgProfile = computed(() => settingsStore.orgProfile)
 
   const socialMedia = computed(() => ({
     Facebook: { url: settings.value.social_facebook || 'https://facebook.com/sauti116', icon: 'fab fa-facebook-f' },
@@ -178,9 +179,6 @@
     ]
   })
 
-  onMounted(async () => {
-    await settingsStore.fetchGlobalSettings()
-  })
 </script>
 
 <style scoped></style>

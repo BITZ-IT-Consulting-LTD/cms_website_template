@@ -18,7 +18,7 @@
           <div class="hidden md:block">
             <h1
               class="text-xl font-semibold tracking-tight text-sauti-darkGreen group-hover:text-sauti-blue transition-colors duration-300 m-0 leading-none">
-              {{ settings.site_name || 'Sauti 116' }}
+              {{ orgProfile?.name || settings.site_name || 'Sauti 116' }}
             </h1>
             <p class="text-[11px] font-normal uppercase tracking-[0.1em] text-sauti-blue/80 mt-1">National Helpline</p>
           </div>
@@ -104,7 +104,8 @@
               <PhoneIcon class="w-8 h-8" />
               <div class="text-left">
                 <div class="text-xs font-bold uppercase tracking-[0.2em] opacity-80">Emergency Hotline</div>
-                <div class="text-3xl font-bold uppercase tracking-[0.1em]">Call {{ settings.hotline_number || '116' }}</div>
+                <div class="text-3xl font-bold uppercase tracking-[0.1em]">Call {{ settings.hotline_number || '116' }}
+                </div>
               </div>
             </BaseCTA>
             <BaseCTA to="/report" variant="primary" class="w-full justify-center !py-6 !text-lg !rounded-3xl shadow-xl"
@@ -134,10 +135,8 @@
   const mobileMenuOpen = ref(false)
 
   const settings = computed(() => settingsStore.settings)
+  const orgProfile = computed(() => settingsStore.orgProfile)
 
-  onMounted(async () => {
-    await settingsStore.fetchGlobalSettings()
-  })
 </script>
 
 <style scoped></style>

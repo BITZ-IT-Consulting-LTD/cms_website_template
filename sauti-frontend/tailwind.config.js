@@ -5,15 +5,16 @@ export default {
     extend: {
       colors: {
         sauti: {
-          blue: '#007BBF',
+          blue: 'rgba(var(--sauti-primary-rgb, 0, 123, 191), <alpha-value>)',
           yellow: '#FFF200',
           orange: '#FF9933',
           red: '#ED1C24',
-          darkGreen: '#006633',
+          darkGreen: 'rgba(var(--sauti-secondary-rgb, 0, 102, 51), <alpha-value>)',
           lightGreen: '#8CC63F',
           black: '#000000',
           white: '#FFFFFF',
           neutral: '#F4F4F5',
+          accent: 'rgba(var(--sauti-accent-rgb, 255, 242, 0), <alpha-value>)',
         },
       },
       fontFamily: {

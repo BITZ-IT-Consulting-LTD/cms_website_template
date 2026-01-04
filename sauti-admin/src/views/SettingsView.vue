@@ -111,12 +111,11 @@
                 <div class="ml-4">
                   <h3 class="text-lg font-bold text-gray-900">Profiles & Contact Management</h3>
                   <p class="text-sm text-gray-600 mt-1 mb-4">
-                    Social media profiles, official emails, and phone numbers are now managed in a dedicated central section to ensure consistency across the platform.
+                    Social media profiles, official emails, and phone numbers are now managed in a dedicated central
+                    section to ensure consistency across the platform.
                   </p>
-                  <router-link
-                    to="/social-media?tab=contact"
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
+                  <router-link to="/social-media?tab=contact"
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Go to Profiles & Contact Management
                   </router-link>
                 </div>
@@ -214,6 +213,135 @@
           <!-- Audit History -->
           <AuditHistory :history="history" :loading="loadingHistory" />
         </div>
+      </div>
+    </div>
+
+    <!-- Organization Tab -->
+    <div v-if="activeTab === 'organization'">
+      <div v-if="loadingOrg" class="text-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+        <p class="mt-2 text-gray-500">Loading organization profile...</p>
+      </div>
+
+      <div v-else-if="orgProfile" class="space-y-6">
+        <!-- Basic Identity -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <BuildingOfficeIcon class="h-5 w-5 mr-2 text-primary-500" />
+            Basic Identity
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Organization Name</label>
+              <input v-model="orgProfile.name" type="text" class="input-primary" />
+            </div>
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Tagline</label>
+              <input v-model="orgProfile.tagline" type="text" class="input-primary" />
+            </div>
+            <!-- Logo Upload -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Organization Logo</label>
+              <div class="flex items-center space-x-4">
+                <img v-if="orgProfile.logo && typeof orgProfile.logo === 'string'" :src="orgProfile.logo"
+                  class="h-12 w-auto object-contain bg-gray-50 rounded p-1 border" />
+                <input type="file" @change="handleLogoUpload" accept="image/*"
+                  class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" />
+              </div>
+            </div>
+            <!-- Favicon Upload -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Favicon</label>
+              <div class="flex items-center space-x-4">
+                <img v-if="orgProfile.favicon && typeof orgProfile.favicon === 'string'" :src="orgProfile.favicon"
+                  class="h-8 w-8 object-contain bg-gray-50 rounded p-1 border" />
+                <input type="file" @change="handleFaviconUpload" accept="image/*"
+                  class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Branding / Colors -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <SwatchIcon class="h-5 w-5 mr-2 text-primary-500" />
+            Branding Colors
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+              <div class="flex items-center space-x-2">
+                <input v-model="orgProfile.primary_color" type="color"
+                  class="h-10 w-10 border-0 rounded p-0 cursor-pointer" />
+                <input v-model="orgProfile.primary_color" type="text" class="input-primary flex-1" />
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+              <div class="flex items-center space-x-2">
+                <input v-model="orgProfile.secondary_color" type="color"
+                  class="h-10 w-10 border-0 rounded p-0 cursor-pointer" />
+                <input v-model="orgProfile.secondary_color" type="text" class="input-primary flex-1" />
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
+              <div class="flex items-center space-x-2">
+                <input v-model="orgProfile.accent_color" type="color"
+                  class="h-10 w-10 border-0 rounded p-0 cursor-pointer" />
+                <input v-model="orgProfile.accent_color" type="text" class="input-primary flex-1" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <EnvelopeIcon class="h-5 w-5 mr-2 text-primary-500" />
+            Contact Information
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Office Address</label>
+              <textarea v-model="orgProfile.address" rows="2" class="input-primary"></textarea>
+            </div>
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Primary Phone</label>
+              <input v-model="orgProfile.primary_phone" type="text" class="input-primary" />
+            </div>
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Primary Email</label>
+              <input v-model="orgProfile.primary_email" type="email" class="input-primary" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Legal & History -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <ScaleIcon class="h-5 w-5 mr-2 text-primary-500" />
+            Legal & History
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Founded Date</label>
+              <input v-model="orgProfile.founded_date" type="date" class="input-primary" />
+            </div>
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Legal/Registration Info</label>
+              <input v-model="orgProfile.registration_info" type="text" class="input-primary" />
+            </div>
+            <div class="flex flex-col md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Organization Summary</label>
+              <textarea v-model="orgProfile.about_us_summary" rows="3" class="input-primary"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organization History -->
+        <AuditHistory :history="orgHistory" :loading="loadingOrg" title="Organization Profile History" />
       </div>
     </div>
 
@@ -646,7 +774,9 @@
     EnvelopeIcon,
     ShareIcon,
     ScaleIcon,
-    HomeIcon
+    HomeIcon,
+    BuildingOfficeIcon,
+    SwatchIcon
   } from '@heroicons/vue/24/outline'
   import { api } from '@/utils/api'
   import AuditHistory from '@/components/common/AuditHistory.vue'
@@ -670,6 +800,13 @@
   const loadingHistory = ref(false)
   const loadingSettings = ref(false)
 
+  // Organization Profile
+  const orgProfile = ref(null)
+  const orgHistory = ref([])
+  const loadingOrg = ref(false)
+  const uploadingLogo = ref(false)
+  const uploadingFavicon = ref(false)
+
   // Category management
   const blogCategories = ref([])
   const videoCategories = ref([])
@@ -688,6 +825,7 @@
   // Settings tabs
   const settingsTabs = [
     { id: 'global', name: 'Global', icon: CogIcon },
+    { id: 'organization', name: 'Organization', icon: BuildingOfficeIcon },
     { id: 'categories', name: 'Categories', icon: TagIcon },
     { id: 'security', name: 'Security', icon: ShieldCheckIcon },
     { id: 'api', name: 'API', icon: CloudIcon }
@@ -721,6 +859,45 @@
     }
   }
 
+  // Fetch Organization Profile
+  async function fetchOrganizationProfile() {
+    try {
+      loadingOrg.value = true
+      const response = await api.organizationProfile.get()
+      orgProfile.value = response.data
+    } catch (error) {
+      console.error('Failed to fetch organization profile:', error)
+      toast.error('Failed to load organization profile')
+    } finally {
+      loadingOrg.value = false
+    }
+  }
+
+  async function fetchOrgHistory() {
+    try {
+      const response = await api.organizationProfile.history()
+      orgHistory.value = response.data
+    } catch (err) {
+      console.error('Failed to fetch org history:', err)
+    }
+  }
+
+  // Handle Logo Upload
+  function handleLogoUpload(event) {
+    const file = event.target.files[0]
+    if (file && orgProfile.value) {
+      orgProfile.value.logo = file
+    }
+  }
+
+  // Handle Favicon Upload
+  function handleFaviconUpload(event) {
+    const file = event.target.files[0]
+    if (file && orgProfile.value) {
+      orgProfile.value.favicon = file
+    }
+  }
+
   async function fetchHistory() {
     loadingHistory.value = true
     try {
@@ -751,10 +928,12 @@
     // Handle query params for deep linking
     if (route.query.tab) activeTab.value = route.query.tab
     if (route.query.sub) activeSubTab.value = route.query.sub
-    
+
     console.log('SettingsView mounted, activeTab:', activeTab.value, 'activeSubTab:', activeSubTab.value)
     fetchSiteSettings()
+    fetchOrganizationProfile()
     fetchHistory()
+    fetchOrgHistory()
     fetchCategories()
     settingsStore.fetchSettings()
   })
@@ -795,6 +974,14 @@
             return
           }
         }
+      }
+
+      // Save Organization Profile if on organization tab
+      if (activeTab.value === 'organization' && orgProfile.value) {
+        console.log('Saving Organization Profile:', orgProfile.value)
+        const response = await api.organizationProfile.update(orgProfile.value)
+        orgProfile.value = response.data
+        toast.success('Organization profile saved successfully')
       }
 
       // Handle other tabs (security, api)

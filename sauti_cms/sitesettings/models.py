@@ -188,3 +188,49 @@ class AboutPageSettings(GlobalSettings):
         proxy = True
         verbose_name = "About Page Settings"
         verbose_name_plural = "About Page Settings"
+
+
+class OrganizationProfile(models.Model):
+    """
+    A singleton model to store organization master data, identity, and branding.
+    """
+    # Basic Identity
+    name = models.CharField(max_length=255, default="Sauti 116")
+    tagline = models.CharField(max_length=255, blank=True)
+    logo = models.ImageField(upload_to='org/identity/', blank=True, null=True)
+    favicon = models.ImageField(upload_to='org/identity/', blank=True, null=True)
+    
+    # Branding / Colors (Hex codes)
+    primary_color = models.CharField(max_length=7, default="#C8102E", help_text="Primary brand color (Hex code, e.g., #C8102E)")
+    secondary_color = models.CharField(max_length=7, default="#003366", help_text="Secondary brand color (Hex code, e.g., #003366)")
+    accent_color = models.CharField(max_length=7, default="#FFB81C", help_text="Accent color (Hex code, e.g., #FFB81C)")
+    
+    # Master Contact Data
+    address = models.TextField(blank=True)
+    primary_phone = models.CharField(max_length=20, blank=True)
+    primary_email = models.EmailField(blank=True)
+    alternate_email = models.EmailField(blank=True)
+    
+    # Legal / About
+    registration_info = models.TextField(blank=True, help_text="Legal registration details")
+    founded_date = models.DateField(null=True, blank=True)
+    about_us_summary = models.TextField(blank=True, help_text="A short summary of the organization's identity")
+    
+    # Social Media handle defaults (if they differ from site settings)
+    twitter_handle = models.CharField(max_length=50, blank=True)
+    facebook_page = models.CharField(max_length=100, blank=True)
+    
+    last_updated = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def save(self, *args, **kwargs):
+        if not self.pk and OrganizationProfile.objects.exists():
+            raise ValidationError('There can be only one OrganizationProfile instance.')
+        return super(OrganizationProfile, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Organization Profile: {self.name}"
+
+    class Meta:
+        verbose_name = "Organization Profile"
+        verbose_name_plural = "Organization Profile"
