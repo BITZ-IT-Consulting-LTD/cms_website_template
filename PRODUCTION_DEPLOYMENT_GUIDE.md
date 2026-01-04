@@ -29,71 +29,48 @@ This command:
 - Starts an internal **Nginx proxy** on port `8080`.
 
 ## 4. Host Nginx Configuration
-Update your production server's Nginx configuration (usually in `/etc/nginx/sites-available/`) to route traffic to the containerized stack.
+The platform uses a modular Nginx configuration to separate the New CMS, Legacy Helpline, and WebSockets. This avoids server-name conflicts and improves maintainability.
 
+### 4.1 Directory Setup
+On the production server, create the following directory:
+```bash
+sudo mkdir -p /etc/nginx/sauticms/
+```
+
+### 4.2 Modular Files
+The following files should be created in `/etc/nginx/sauticms/` (See **NGINX_INFRASTRUCTURE_CHANGES.md** for full content):
+
+1.  **sauti_main.conf**: Handles domain names, SSL termination, and includes the logic files.
+2.  **cms_logic.inc**: Contains the proxy rules for the Dockerized CMS.
+3.  **helpline_logic.inc**: Contains the PHP-FPM and proxy rules for the legacy apps.
+4.  **extra_ports.conf**: Handles SSL for WebSocket ports 8384/8394.
+
+### 4.3 Clean Main Config
+Ensure your `/etc/nginx/nginx.conf` is a clean loader that includes your new module folder:
 ```nginx
-server {
-    listen 80;
-    server_name sauti.mglsd.go.ug;
-
-    # Redirect all HTTP traffic to HTTPS
-    return 301 https://$host$request_uri;
-}
-
-server {
-    listen 443 ssl;
-    server_name sauti.mglsd.go.ug;
-
-    # SSL Certificates
-    ssl_certificate /path/to/your/fullchain.pem;
-    ssl_certificate_key /path/to/your/privkey.pem;
-
-    # Increase upload limit for video content
-    client_max_body_size 500M;
-
-    # Route 1: Public Frontend & API
-    location /sauti/ {
-        proxy_pass http://127.0.0.1:8080/sauti/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    # Route 2: CMS Admin Application
-    location /cms-admin/ {
-        proxy_pass http://127.0.0.1:8080/cms-admin/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    # Route 3: Django Admin (if needed for staff)
-    location /sauti/django-admin/ {
-        proxy_pass http://127.0.0.1:8080/sauti/django-admin/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    # Root redirect (Convenience)
-    location = / {
-        return 301 /sauti/;
-    }
+http {
+    # ... global settings ...
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sauticms/*.conf;
 }
 ```
 
 ## 5. Post-Deployment Steps
 Once the containers are running:
-1. **Migrations & Data:** The `entrypoint.sh` script automatically runs migrations and populates initial content.
-2. **Superuser:** If an admin user is not created, you can create one manually:
+1. **Apply Changes Locally:** Commit and push the updated environment variables.
+2. **Rebuild on Server:** 
    ```bash
-   docker exec -it sauti_backend_prod python manage.py createsuperuser
+   git pull
+   docker compose -f docker/docker-compose.prod.yml down
+   docker compose -f docker/docker-compose.prod.yml up -d --build --force-recreate
    ```
-3. **Verify Static Assets:** Check that CSS/JS files load correctly at `https://sauti.mglsd.go.ug/sauti/assets/...`.
+3. **Reload Host Nginx:**
+   ```bash
+   sudo nginx -t
+   sudo systemctl reload nginx
+   ```
 
 ## 6. Troubleshooting
-- **Logs:** View container logs with `docker-compose -f docker/docker-compose.prod.yml logs -f`.
-- **Base Path errors:** If you see white screens, ensure the `VITE_BASE_PATH` in `.env.production` files matches the Nginx location blocks exactly.
+- **502 Bad Gateway:** Usually means the Docker container (port 8080) is not accessible. Run `docker ps` to ensure the `nginx_prod` container is up.
+- **Login Errors:** If you see "cms-api" in browser logs, it means the old JS bundle is cached or was built with old ENV vars. Run Step 5.2 again with `--no-cache`.
+- **CORS Errors:** Ensure `CORS_ALLOWED_ORIGINS` in `docker-compose.prod.yml` includes `https://sauti.mglsd.go.ug`.
