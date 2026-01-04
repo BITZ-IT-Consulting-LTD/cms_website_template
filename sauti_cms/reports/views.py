@@ -237,3 +237,17 @@ class PublicReportStatsView(generics.GenericAPIView):
             'by_category': by_category,
             'over_time': over_time
         })
+
+
+class NormalizedCallStatsView(generics.GenericAPIView):
+    """
+    GET /api/reports/stats/keypair/
+    Consumes upstream SAUTI statistics and returns normalized key-pair JSON.
+    Additive resource, safe for frontend consumption.
+    """
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request):
+        from .services import fetch_normalized_call_stats
+        data = fetch_normalized_call_stats()
+        return Response(data)

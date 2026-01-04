@@ -115,6 +115,93 @@
               </div>
             </div>
           </div>
+
+          <!-- New: Helpline Statistics Interactive Infographic -->
+          <div v-if="callStats" class="bg-sauti-neutral/30 rounded-[4rem] p-12 lg:p-16 border-2 border-sauti-neutral">
+            <div class="flex flex-col lg:flex-row gap-16">
+              <!-- Info Cards Area -->
+              <div class="lg:w-1/3 space-y-10">
+                <div>
+                  <h3 class="campaign-header text-sauti-blue text-sm mb-4">Live Helpline Data</h3>
+                  <h2 class="text-4xl font-black text-sauti-darkGreen leading-tight">National Support Performance</h2>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                  <div
+                    class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sauti-blue flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-sauti-blue/10 rounded-2xl flex items-center justify-center shrink-0">
+                      <PhoneIcon class="w-8 h-8 text-sauti-blue" />
+                    </div>
+                    <div>
+                      <div class="text-3xl font-black text-sauti-darkGreen tabular-nums">{{ callStats.stats.calls_today
+                        }}</div>
+                      <div class="text-xs font-bold text-sauti-darkGreen/40 uppercase">Calls Answered Today</div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sauti-orange flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-sauti-orange/10 rounded-2xl flex items-center justify-center shrink-0">
+                      <ShieldCheckIcon class="w-8 h-8 text-sauti-orange" />
+                    </div>
+                    <div>
+                      <div class="text-3xl font-black text-sauti-darkGreen tabular-nums">{{ callStats.stats.cases_today
+                        }}</div>
+                      <div class="text-xs font-bold text-sauti-darkGreen/40 uppercase">Cases Registered Today</div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sauti-lightGreen flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-sauti-lightGreen/10 rounded-2xl flex items-center justify-center shrink-0">
+                      <ChartBarIcon class="w-8 h-8 text-sauti-lightGreen" />
+                    </div>
+                    <div>
+                      <div class="text-3xl font-black text-sauti-darkGreen tabular-nums">{{
+                        callStats.stats.cases_ongoing }}</div>
+                      <div class="text-xs font-bold text-sauti-darkGreen/40 uppercase">Active Case Load</div>
+                    </div>
+                  </div>
+
+                  <!-- Total Stats (Historic) -->
+                  <div class="pt-6 border-t border-sauti-neutral">
+                    <div class="grid grid-cols-2 gap-4">
+                      <div class="bg-sauti-darkGreen/5 p-6 rounded-[2rem] border border-sauti-darkGreen/10">
+                        <div class="text-2xl font-black text-sauti-darkGreen tabular-nums">{{
+                          Number(callStats.stats.calls_total).toLocaleString() }}</div>
+                        <div class="text-[9px] font-bold text-sauti-darkGreen/50 uppercase tracking-tighter">Lifetime
+                          Calls</div>
+                      </div>
+                      <div class="bg-sauti-blue/5 p-6 rounded-[2rem] border border-sauti-blue/10">
+                        <div class="text-2xl font-black text-sauti-blue tabular-nums">{{
+                          Number(callStats.stats.cases_total).toLocaleString() }}</div>
+                        <div class="text-[9px] font-bold text-sauti-blue/50 uppercase tracking-tighter">Total Cases
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Call Trend Graph -->
+              <div
+                class="lg:w-2/3 bg-white rounded-[4rem] p-12 shadow-2xl border border-sauti-neutral relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-10">
+                  <div class="pill bg-sauti-blue/10 text-sauti-blue text-[10px] animate-pulse">Live Link Active</div>
+                </div>
+                <div class="mb-10">
+                  <h3 class="text-2xl font-bold text-sauti-darkGreen flex items-center gap-3">
+                    Call Frequency Trends
+                  </h3>
+                  <p class="text-sauti-darkGreen/50 font-bold text-sm">Hourly distribution of incoming calls by status
+                  </p>
+                </div>
+                <div class="h-[420px]">
+                  <Line :data="callTrendData" :options="lineOptions" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -171,7 +258,7 @@
                   <DocumentTextIcon v-else class="w-8 h-8 text-sauti-blue" />
                 </div>
                 <h3 class="text-2xl font-bold text-sauti-darkGreen mb-4 leading-tight line-clamp-2">{{ resource.title
-                  }}</h3>
+                }}</h3>
                 <p class="text-lg text-sauti-darkGreen/50 font-bold leading-relaxed line-clamp-3">{{
                   resource.description }}</p>
               </div>
@@ -221,12 +308,93 @@
           <button :disabled="!pagination.next || loading" @click="nextPage" class="btn btn-outline px-10">Next</button>
         </div>
       </section>
+
+      <!-- API & Developer Resources Section -->
+      <section id="developer-resources" aria-labelledby="api-heading" class="section-padding pt-0">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-t-2 border-sauti-neutral pt-24">
+          <div>
+            <h2 id="api-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-4">
+              Developer & Data APIs
+            </h2>
+            <p class="text-sauti-darkGreen/60 font-bold text-lg">Programmatic access to normalized helpline statistics
+              and reporting data.</p>
+          </div>
+          <div class="pill bg-sauti-orange/10 text-sauti-orange uppercase tracking-widest text-[10px] font-black">
+            V1 API Stable
+          </div>
+        </div>
+
+        <div class="bg-sauti-darkGreen rounded-[4rem] overflow-hidden shadow-2xl">
+          <div class="grid grid-cols-1 lg:grid-cols-2">
+            <!-- Documentation -->
+            <div class="p-12 lg:p-16 space-y-8">
+              <div class="w-16 h-16 rounded-2xl bg-sauti-white/10 flex items-center justify-center">
+                <CodeBracketIcon class="w-8 h-8 text-sauti-lightGreen" />
+              </div>
+              <h3 class="text-3xl font-bold text-sauti-white">Normalized Call Statistics (Key-Pair Format)</h3>
+              <p class="text-sauti-white/70 text-lg leading-relaxed font-bold">
+                A semantic, chart-ready endpoint that transforms positional upstream call data into grouped key-pair
+                objects. Ideal for direct frontend consumption.
+              </p>
+
+              <div class="space-y-4 pt-4">
+                <div class="flex items-center gap-4 text-sauti-white/50 font-bold uppercase tracking-widest text-xs">
+                  <GlobeAltIcon class="w-5 h-5 text-sauti-blue" />
+                  Endpoint URL
+                </div>
+                <code
+                  class="block p-4 bg-black/30 rounded-xl text-sauti-lightGreen font-mono text-sm break-all border border-white/5">
+                  GET /api/v1/calls/stats/keypair/
+                </code>
+              </div>
+
+              <div class="pt-8">
+                <BaseCTA variant="outline" class="!border-sauti-white/20 !text-sauti-white hover:!bg-sauti-white/10"
+                  href="/api/v1/calls/stats/keypair/" external>
+                  Test Endpoint
+                </BaseCTA>
+              </div>
+            </div>
+
+            <!-- Sample Response -->
+            <div class="bg-black/40 p-12 lg:p-16 border-l border-white/10">
+              <div class="flex items-center justify-between mb-8">
+                <span class="text-sauti-white/30 font-bold uppercase tracking-widest text-xs">Sample JSON
+                  Response</span>
+                <span class="text-sauti-lightGreen font-mono text-xs">application/json</span>
+              </div>
+              <pre class="text-sauti-white/80 font-mono text-sm overflow-x-auto leading-relaxed scrollbar-hide">
+{
+  "stats": {
+    "calls_today": 342,
+    "calls_total": 89230,
+    "cases_today": 12,
+    "cases_total": 4562,
+    "cases_ongoing": 89
+  },
+  "calls": {
+    "answered": {
+      "36000": 27,
+      "39600": 42
+    },
+    "abandoned": {
+      "36000": 5,
+      "39600": 8
+    }
+  }
+}
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, watch, onMounted, computed } from 'vue'
+  import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
   import { useResourcesStore } from '@/store/resources'
   import { useSettingsStore } from '@/store/settings'
   import { api } from '@/utils/axios'
@@ -237,12 +405,38 @@
     ChevronDownIcon,
     DocumentTextIcon,
     SpeakerWaveIcon,
-    ExclamationTriangleIcon
+    ExclamationTriangleIcon,
+    CodeBracketIcon,
+    GlobeAltIcon,
+    PhoneIcon,
+    ShieldCheckIcon,
+    ChartBarIcon
   } from '@heroicons/vue/24/outline'
-  import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title } from 'chart.js'
-  import { Doughnut, Bar } from 'vue-chartjs'
+  import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    LineElement,
+    PointElement
+  } from 'chart.js'
+  import { Doughnut, Bar, Line } from 'vue-chartjs'
 
-  ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title)
+  ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    LineElement,
+    PointElement
+  )
 
   defineOptions({
     name: 'ResourcesPage'
@@ -264,6 +458,13 @@
   const statsError = ref(null)
   const stats = ref(null)
 
+  // Call Statistics (v1 Normalized)
+  const callStatsLoading = ref(true)
+  const callStats = ref(null)
+
+  // Polling reference
+  let pollingInterval = null
+
   // Fetch statistics
   onMounted(async () => {
     await settingsStore.fetchGlobalSettings()
@@ -271,14 +472,25 @@
       const [cats] = await Promise.all([
         resourcesStore.fetchCategories(),
         fetchList(),
-        fetchStats()
+        fetchStats(),
+        fetchCallStats()
       ])
       categories.value = Array.isArray(cats) ? cats : []
+
+      // Setup polling every 3 minutes (180,000 ms)
+      pollingInterval = setInterval(fetchCallStats, 180000)
     } catch (error) {
       console.error('Error initializing resources:', error)
       categories.value = []
     } finally {
       loading.value = false
+    }
+  })
+
+  onUnmounted(() => {
+    if (pollingInterval) {
+      clearInterval(pollingInterval)
+      pollingInterval = null
     }
   })
 
@@ -293,6 +505,91 @@
       statsError.value = 'Failed to load statistics. Please try again later.'
     } finally {
       statsLoading.value = false
+    }
+  }
+
+  async function fetchCallStats() {
+    callStatsLoading.value = true
+    try {
+      const response = await api.get('/v1/calls/stats/keypair/')
+      callStats.value = response.data
+    } catch (err) {
+      console.error('Failed to fetch call stats:', err)
+    } finally {
+      callStatsLoading.value = false
+    }
+  }
+
+  // Helpline Call Trends Chart
+  const callTrendData = computed(() => {
+    if (!callStats.value?.calls) return { labels: [], datasets: [] }
+
+    // Get all unique buckets (X-axis)
+    const buckets = new Set()
+    Object.values(callStats.value.calls).forEach(statusData => {
+      Object.keys(statusData).forEach(bucket => buckets.add(bucket))
+    })
+    const sortedBuckets = Array.from(buckets).sort((a, b) => parseInt(a) - parseInt(b))
+
+    // Format buckets as HH:MM
+    const labels = sortedBuckets.map(b => {
+      const totalSeconds = parseInt(b)
+      const hours = Math.floor(totalSeconds / 3600) % 24
+      const minutes = Math.floor((totalSeconds % 3600) / 60)
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+    })
+
+    const statusColors = {
+      'answered': '#007BBF',   // Sauti Blue
+      'abandoned': '#FF9933',  // Sauti Orange
+      'busy': '#006633'        // Sauti Dark Green
+    }
+
+    const datasets = Object.keys(callStats.value.calls).map(status => {
+      return {
+        label: status.charAt(0).toUpperCase() + status.slice(1),
+        borderColor: statusColors[status.toLowerCase()] || '#8CC63F',
+        backgroundColor: (statusColors[status.toLowerCase()] || '#8CC63F') + '22',
+        data: sortedBuckets.map(b => callStats.value.calls[status][b] || 0),
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }
+    })
+
+    return { labels, datasets }
+  })
+
+  const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          font: { family: 'Cronos Pro', weight: 'bold' }
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: '#006633',
+        titleFont: { family: 'Cronos Pro', size: 14, weight: 'bold' },
+        bodyFont: { family: 'Cronos Pro', size: 12 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#E2E8F0' },
+        ticks: { font: { family: 'Cronos Pro', weight: 'bold' } }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: 'Cronos Pro', weight: 'bold' } }
+      }
     }
   }
 

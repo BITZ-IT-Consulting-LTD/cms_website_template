@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     ReportCreateView, ReportListView, ReportDetailView, ReportFollowUpCreateView,
-    PublicReportStatsView
+    PublicReportStatsView, NormalizedCallStatsView
 )
 from cms.views import HistoryAPIView
 from .models import Report
@@ -15,4 +15,5 @@ urlpatterns = [
     path('<int:pk>/history/', HistoryAPIView.as_view(model=Report), name='report-history'),
     path('<int:report_id>/followup/', ReportFollowUpCreateView.as_view(), name='followup-create'),
     path('stats/public/', PublicReportStatsView.as_view(), name='report-stats-public'),
+    path('stats/keypair/', NormalizedCallStatsView.as_view(), name='report-stats-keypair'),
 ]
