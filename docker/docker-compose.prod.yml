@@ -29,12 +29,18 @@ services:
     volumes:
       - static_volume_prod:/app/staticfiles
       - media_volume_prod:/app/media
-    env_file:
-      - ../sauti_cms/.env
+    # env_file:
+    #   - ../sauti_cms/.env
     environment:
       - DEBUG=False
       - DB_HOST=db
       - DB_PORT=5432
+      - DB_NAME=sauti_cms
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - SECRET_KEY=django-insecure-prod-key-please-change
+      - ALLOWED_HOSTS=sauti.mglsd.go.ug,backend
+      - CSRF_TRUSTED_ORIGINS=https://sauti.mglsd.go.ug
     command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000
     depends_on:
       db:
