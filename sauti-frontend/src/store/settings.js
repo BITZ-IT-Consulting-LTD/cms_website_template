@@ -4,11 +4,13 @@ import { api } from '@/utils/axios'
 
 export const useSettingsStore = defineStore('settings', () => {
   const settings = ref({})
+  const orgProfile = ref({})
   const loading = ref(false)
   const error = ref(null)
 
   async function fetchSettings() {
     // Legacy support: redirect to the new unified fetchGlobalSettings
+    await fetchOrganizationProfile()
     return await fetchGlobalSettings()
   }
 
@@ -16,6 +18,8 @@ export const useSettingsStore = defineStore('settings', () => {
     loading.value = true
     error.value = null
     try {
+      // Ensure organization profile is also fetched
+      await fetchOrganizationProfile()
       // Fetch from both sources
       const [contentRes, settingsRes] = await Promise.all([
         api.get('/content/site-content/'),
@@ -77,5 +81,26 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
-  return { settings, loading, error, fetchSettings, fetchGlobalSettings }
+  async function fetchOrganizationProfile() {
+    try {
+      const response = await api.get('/sitesettings/organization/')
+      orgProfile.value = response.data
+
+      // Also inject into settings for easier access in legacy components if needed
+      if (orgProfile.value) {
+        settings.value.org_name = orgProfile.value.name
+        settings.value.org_logo = orgProfile.value.logo
+        settings.value.org_favicon = orgProfile.value.favicon
+        settings.value.primary_color = orgProfile.value.primary_color
+        settings.value.secondary_color = orgProfile.value.secondary_color
+      }
+
+      return response.data
+    } catch (err) {
+      console.error('Failed to fetch organization profile:', err)
+      return null
+    }
+  }
+
+  return { settings, orgProfile, loading, error, fetchSettings, fetchGlobalSettings, fetchOrganizationProfile }
 })

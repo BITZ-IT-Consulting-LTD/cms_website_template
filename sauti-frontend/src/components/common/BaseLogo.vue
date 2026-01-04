@@ -38,6 +38,7 @@
 
     const settingsStore = useSettingsStore()
     const settings = computed(() => settingsStore.settings)
+    const orgProfile = computed(() => settingsStore.orgProfile)
 
     const logoSrc = computed(() => {
         if (props.customSrc) return props.customSrc
@@ -46,6 +47,12 @@
             return settings.value.logo_white
         }
 
+        // Priority 1: Organization Profile Logo (from Master Data)
+        if (orgProfile.value && orgProfile.value.logo) {
+            return orgProfile.value.logo
+        }
+
+        // Priority 2: Legacy Site Settings Logo
         return settings.value.logo
     })
 

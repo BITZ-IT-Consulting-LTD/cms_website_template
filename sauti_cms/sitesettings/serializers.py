@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SiteSetting, GlobalSettings
+from .models import SiteSetting, GlobalSettings, OrganizationProfile
 
 # DEPRECATED: This serializer is deprecated and will be removed in a future version.
 class SiteSettingSerializer(serializers.ModelSerializer):
@@ -12,4 +12,8 @@ class SiteSettingSerializer(serializers.ModelSerializer):
 class GlobalSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = GlobalSettings
+
+class OrganizationProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrganizationProfile
         fields = '__all__'

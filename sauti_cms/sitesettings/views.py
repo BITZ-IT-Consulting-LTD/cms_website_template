@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import SiteSetting, GlobalSettings
-from .serializers import SiteSettingSerializer, GlobalSettingsSerializer
+from .models import SiteSetting, GlobalSettings, OrganizationProfile
+from .serializers import SiteSettingSerializer, GlobalSettingsSerializer, OrganizationProfileSerializer
 
 # DEPRECATED: This viewset is deprecated and will be removed in a future version.
 class SiteSettingViewSet(viewsets.ModelViewSet):
@@ -45,6 +45,27 @@ class GlobalSettingsView(APIView):
     def put(self, request, *args, **kwargs):
         settings, created = GlobalSettings.objects.get_or_create()
         serializer = GlobalSettingsSerializer(settings, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrganizationProfileView(APIView):
+    """
+    API endpoint to manage organization profile.
+    Provides GET and PUT methods for the singleton OrganizationProfile object.
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, *args, **kwargs):
+        profile, created = OrganizationProfile.objects.get_or_create()
+        serializer = OrganizationProfileSerializer(profile, context={'request': request})
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        profile, created = OrganizationProfile.objects.get_or_create()
+        serializer = OrganizationProfileSerializer(profile, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

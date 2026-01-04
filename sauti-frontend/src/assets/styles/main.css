@@ -96,7 +96,8 @@
   }
 
   .card-base {
-    @apply bg-white rounded-[2.5rem] p-8 md:p-10 border border-sauti-blue/10 shadow-sm hover:shadow-xl transition-all duration-500;
+    @apply bg-white rounded-[2.5rem] p-8 md:p-10 border shadow-sm hover:shadow-xl transition-all duration-500;
+    border-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.1);
   }
 
   .section-padding {
@@ -104,7 +105,9 @@
   }
 
   .page-header {
-    @apply bg-sauti-blue/5 border-b border-sauti-blue/10 py-20 md:py-32;
+    @apply py-20 md:py-32 border-b;
+    background-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.05);
+    border-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.1);
   }
 
   .page-header-title {
@@ -125,16 +128,29 @@
   }
 
   .form-input {
-    @apply w-full px-4 py-3 rounded-xl border border-sauti-blue/20 focus:border-sauti-blue focus:ring-2 focus:ring-sauti-blue/20 transition-all font-normal;
+    @apply w-full px-4 py-3 rounded-xl border transition-all font-normal;
+    border-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.2);
+  }
+
+  .form-input:focus {
+    @apply ring-2;
+    border-color: theme('colors.sauti.blue');
+    --tw-ring-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.2);
   }
   
   /* Navbar Overrides */
   .nav-link {
-    @apply px-4 py-2 rounded-lg text-sauti-darkGreen font-normal transition-all hover:bg-sauti-blue/5 hover:text-sauti-blue;
+    @apply px-4 py-2 rounded-lg text-sauti-darkGreen font-normal transition-all;
+  }
+  
+  .nav-link:hover {
+    @apply text-sauti-blue;
+    background-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.05);
   }
   
   .nav-link-active {
-    @apply bg-sauti-blue/10 text-sauti-blue font-semibold;
+    @apply font-semibold text-sauti-blue;
+    background-color: rgba(var(--sauti-primary-rgb, 0, 123, 191), 0.1);
   }
 
   .mobile-nav-link {

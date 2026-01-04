@@ -39,7 +39,7 @@ const createFormData = (data) => {
     }
 
     // Handle file fields - only append if it's a File object
-    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo']
+    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo', 'favicon']
     if (fileFields.includes(key)) {
       if (value instanceof File) {
         formData.append(key, value)
@@ -320,6 +320,14 @@ export const api = {
     get: () => apiClient.get('/sitesettings/'),
     update: (data) => apiClient.put('/sitesettings/', data),
     history: () => apiClient.get('/sitesettings/history/'),
+  },
+
+  organizationProfile: {
+    get: () => apiClient.get('/sitesettings/organization/'),
+    update: (data) => apiClient.put('/sitesettings/organization/', createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    history: () => apiClient.get('/sitesettings/organization/history/'),
   },
 
   services: {
