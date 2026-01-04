@@ -11,7 +11,8 @@ The platform is configured to run across two distinct subdirectory routes:
 ## 2. Prerequisites
 1. Docker and Docker Compose installed on the production server.
 2. Nginx (or another reverse proxy) installed on the host machine to handle SSL/HTTPS.
-3. Access to the environment variables for PostgreSQL and Django (found in `.env` files).
+3. Access to the environment variables for PostgreSQL and Django.
+   > **Note:** The `docker-compose.prod.yml` currently uses hardcoded defaults for quick setup. For a secure production environment, create a `.env` file in `sauti_cms/` based on `.env.example` or update the `environment` section in the compose file.
 
 ## 3. Container Deployment
 From the root of the project directory, run the following command to build and start the production stack:
