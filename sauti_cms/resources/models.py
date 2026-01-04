@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from simple_history.models import HistoricalRecords
 
 
 class ResourceCategory(models.Model):
@@ -32,6 +33,11 @@ class Resource(models.Model):
         LUGANDA = 'lg', 'Luganda'
         SWAHILI = 'sw', 'Swahili'
     
+    class Status(models.TextChoices):
+        DRAFT = 'DRAFT', 'Draft'
+        PUBLISHED = 'PUBLISHED', 'Published'
+        ARCHIVED = 'ARCHIVED', 'Archived'
+
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique=True, blank=True)
     description = models.TextField(help_text='Brief description of the resource')
@@ -63,17 +69,41 @@ class Resource(models.Model):
         default=Language.ENGLISH
     )
     
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PUBLISHED
+    )
+    
     download_count = models.PositiveIntegerField(default=0)
     is_featured = models.BooleanField(default=False)
     
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+    
+    history = HistoricalRecords()
     
     class Meta:
         ordering = ['-published_at']
         indexes = [
             models.Index(fields=['-published_at']),
             models.Index(fields=['category', '-published_at']),
+            models.Index(fields=['status', '-published_at']),
         ]
     
     def __str__(self):

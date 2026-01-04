@@ -35,6 +35,7 @@ services:
       - DEBUG=False
       - DB_HOST=db
       - DB_PORT=5432
+    command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000
     depends_on:
       db:
         condition: service_healthy
@@ -60,7 +61,7 @@ services:
       context: ..
       dockerfile: sauti-admin/Dockerfile.prod
       args:
-        - VITE_BASE_PATH=/sauti/admin/
+        - VITE_BASE_PATH=/cms-admin/
     container_name: sauti_admin_prod
     env_file:
       - ../sauti-admin/.env.production

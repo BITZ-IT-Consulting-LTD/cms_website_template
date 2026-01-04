@@ -1,49 +1,56 @@
 from django.contrib import admin
 from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember
 
+class OwnershipAdminMixin:
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
+
 @admin.register(SiteContent)
-class SiteContentAdmin(admin.ModelAdmin):
+class SiteContentAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     list_display = ('label', 'key', 'type', 'page', 'is_published', 'updated_at')
     list_filter = ('page', 'type', 'is_published')
     search_fields = ('label', 'key', 'value', 'description')
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'created_by', 'last_updated_by')
 
 
 @admin.register(CoreValue)
-class CoreValueAdmin(admin.ModelAdmin):
+class CoreValueAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     list_display = ('title', 'order', 'is_active', 'color_from', 'updated_at')
     list_filter = ('is_active',)
     search_fields = ('title', 'description')
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'created_by', 'last_updated_by')
     list_editable = ('order', 'is_active')
     ordering = ('order', 'title')
 
 
 @admin.register(Contact)
-class ContactAdmin(admin.ModelAdmin):
+class ContactAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'value', 'type', 'order', 'is_visible', 'updated_at')
     list_filter = ('type', 'is_visible')
     search_fields = ('name', 'value')
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'created_by', 'last_updated_by')
     list_editable = ('order', 'is_visible')
     ordering = ('order', 'name')
 
 
 @admin.register(ProtectionApproach)
-class ProtectionApproachAdmin(admin.ModelAdmin):
+class ProtectionApproachAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     list_display = ('title', 'order', 'is_active', 'icon', 'color', 'updated_at')
     list_filter = ('is_active',)
     search_fields = ('title', 'description')
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'created_by', 'last_updated_by')
     list_editable = ('order', 'is_active')
     ordering = ('order', 'title')
 
 
 @admin.register(TeamMember)
-class TeamMemberAdmin(admin.ModelAdmin):
+class TeamMemberAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'role', 'order', 'is_active', 'updated_at')
     list_filter = ('is_active',)
     search_fields = ('name', 'role', 'bio')
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'created_by', 'last_updated_by')
     list_editable = ('order', 'is_active')
     ordering = ('order', 'name')

@@ -10,7 +10,6 @@ const PostEditView = () => import('@/views/PostEditView.vue')
 const VideosView = () => import('@/views/VideosView.vue')
 const VideoEditView = () => import('@/views/VideoEditView.vue')
 const SettingsView = () => import('@/views/SettingsView.vue')
-const DraftsView = () => import('@/views/DraftsView.vue')
 const ReportsView = () => import('@/views/ReportsView.vue')
 const ReportDetailView = () => import('@/views/ReportDetailView.vue')
 const ReportEditView = () => import('@/views/ReportEditView.vue')
@@ -18,7 +17,6 @@ const ResourcesView = () => import('@/views/ResourcesView.vue')
 const FaqsView = () => import('@/views/FaqsView.vue')
 const PartnersView = () => import('@/views/PartnersView.vue')
 const UsersView = () => import('@/views/UsersView.vue')
-const BlogsView = () => import('@/views/BlogsView.vue')
 const UploadsView = () => import('@/views/UploadsView.vue')
 const SocialMediaView = () => import('@/views/SocialMediaView.vue')
 const ContentManagerView = () => import('@/views/ContentManager.vue')
@@ -28,6 +26,9 @@ const ContactAdmin = () => import('@/views/ContactAdmin.vue')
 const CoreValuesAdmin = () => import('@/views/CoreValuesAdmin.vue')
 const TeamAdmin = () => import('@/views/TeamAdmin.vue')
 const ProtectionApproachAdmin = () => import('@/views/ProtectionApproachAdmin.vue')
+const ContentHubView = () => import('@/views/ContentHubView.vue')
+const LegalFooterView = () => import('@/views/LegalFooterView.vue')
+
 
 const routes = [
   {
@@ -83,14 +84,6 @@ const routes = [
         }
       },
       {
-        path: 'drafts',
-        name: 'drafts',
-        component: DraftsView,
-        meta: {
-          title: 'Drafts - Sauti Admin'
-        }
-      },
-      {
         path: 'videos',
         name: 'videos',
         component: VideosView,
@@ -127,7 +120,7 @@ const routes = [
         name: 'reports',
         component: ReportsView,
         meta: {
-          title: 'Active Reports - Sauti Admin'
+          title: 'Reports & Case Management - Sauti Admin'
         }
       },
       {
@@ -144,22 +137,6 @@ const routes = [
         component: ReportEditView,
         meta: {
           title: 'Edit Report - Sauti Admin'
-        }
-      },
-      {
-        path: 'reports/urgent',
-        name: 'reports-urgent',
-        component: ReportsView,
-        meta: {
-          title: 'Urgent Cases - Sauti Admin'
-        }
-      },
-      {
-        path: 'reports/archive',
-        name: 'reports-archive',
-        component: ReportsView,
-        meta: {
-          title: 'Closed Cases - Sauti Admin'
         }
       },
       {
@@ -219,19 +196,11 @@ const routes = [
         }
       },
       {
-        path: 'blogs',
-        name: 'blogs',
-        component: BlogsView,
-        meta: {
-          title: 'Blogs - Sauti Admin'
-        }
-      },
-      {
         path: 'uploads',
         name: 'uploads',
         component: UploadsView,
         meta: {
-          title: 'Frontend Content - Sauti Admin'
+          title: 'Media Library - Sauti Admin'
         }
       },
       {
@@ -240,6 +209,15 @@ const routes = [
         component: SocialMediaView,
         meta: {
           title: 'Social Media Posts - Sauti Admin'
+        }
+      },
+      {
+        path: 'content-hub',
+        name: 'ContentHub',
+        component: ContentHubView,
+        meta: {
+          requiresAuth: true,
+          title: 'Content Management Hub - Sauti Admin'
         }
       },
       {
@@ -265,13 +243,30 @@ const routes = [
         }
       },
       {
+        path: 'feedback',
+        name: 'feedback-admin',
+        component: () => import('@/views/FeedbackAdmin.vue'),
+        meta: {
+          title: 'Feedback - Sauti Admin'
+        }
+      },
+      {
         path: 'contacts',
         name: 'contacts-admin',
         component: ContactAdmin,
         meta: {
           title: 'Contact Info - Sauti Admin'
         }
-      }
+      },
+      {
+        path: 'legal-footer',
+        name: 'legal-footer',
+        component: LegalFooterView,
+        meta: {
+          title: 'Legal & Footer - Sauti Admin'
+        }
+      },
+
     ]
   },
   {

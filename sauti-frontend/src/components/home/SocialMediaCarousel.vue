@@ -20,7 +20,7 @@
         <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <p class="text-lg font-medium">No posts found for this category</p>
+        <p class="text-lg font-normal">No posts found for this category</p>
         <p class="text-sm text-gray-400 mt-2">Try selecting a different filter</p>
       </div>
     </div>
@@ -73,8 +73,8 @@
               <div class="fb-post" :data-href="post.post_url" data-width="auto" data-show-text="true"></div>
             </div>
 
-            <!-- Twitter Embed -->
-            <div v-else-if="post.platform === 'Twitter'" class="relative w-full bg-gray-50 p-4" style="min-height: 500px;">
+            <!-- Twitter (X) Embed -->
+            <div v-else-if="post.platform === 'Twitter (X)'" class="relative w-full bg-gray-50 p-4" style="min-height: 500px;">
               <blockquote class="twitter-tweet" data-theme="light">
                 <a :href="post.post_url"></a>
               </blockquote>
@@ -98,7 +98,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                   </svg>
                 </div>
-                <p class="text-gray-600 font-medium">View Post</p>
+                <p class="text-gray-600 font-normal">View Post</p>
                 <p class="text-sm text-gray-400 mt-2">{{ post.platform }}</p>
               </a>
             </div>
@@ -184,7 +184,7 @@ const detectPlatform = (url) => {
   const lowerUrl = url.toLowerCase()
   if (lowerUrl.includes('tiktok.com')) return 'TikTok'
   if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) return 'YouTube'
-  if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'Twitter'
+  if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'Twitter (X)'
   if (lowerUrl.includes('facebook.com')) return 'Facebook'
   if (lowerUrl.includes('instagram.com')) return 'Instagram'
   return 'Unknown'
@@ -205,7 +205,7 @@ const getTikTokEmbedUrl = (url) => {
 const getPlatformColor = (platform) => {
   switch (platform) {
     case 'Facebook': return '#1877F2'
-    case 'Twitter': return '#1DA1F2'
+    case 'Twitter (X)': return '#000000'
     case 'TikTok': return '#000000'
     case 'Instagram': return '#E4405F'
     case 'YouTube': return '#FF0000'

@@ -74,8 +74,12 @@ class VideoListCreateView(generics.ListCreateAPIView):
         return queryset
     
     def perform_create(self, serializer):
-        # Set author to current user
-        serializer.save(author=self.request.user)
+        # Set author to current user and ownership fields
+        serializer.save(
+            author=self.request.user,
+            created_by=self.request.user,
+            last_updated_by=self.request.user
+        )
 
 
 class VideoDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -93,7 +97,7 @@ class VideoDetailView(generics.RetrieveUpdateDestroyAPIView):
         video = self.get_object()
         if video.author != self.request.user and not self.request.user.is_staff:
             raise PermissionDenied("You can only edit your own videos")
-        serializer.save()
+        serializer.save(last_updated_by=self.request.user)
     
     def perform_destroy(self, instance):
         # Only allow author or admin to delete

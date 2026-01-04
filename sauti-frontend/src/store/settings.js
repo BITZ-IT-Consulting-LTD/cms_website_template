@@ -29,23 +29,32 @@ export const useSettingsStore = defineStore('settings', () => {
 
       const mapped = {}
 
-      // 1. Load from SiteContent (legacy/key-value)
+      // 1. Load from GlobalSettings (base)
+      const globalData = Array.isArray(settingsRes.data) ? settingsRes.data[0] : settingsRes.data
+      if (globalData && typeof globalData === 'object') {
+        Object.keys(globalData).forEach(key => {
+          if (!['id', 'created_at', 'updated_at'].includes(key) && globalData[key] !== null) {
+            // Parse JSON fields if they come as strings (e.g. hero_badges, footer_links, impact_stats)
+            if ((key === 'hero_badges' || key === 'footer_links' || key === 'impact_stats') && typeof globalData[key] === 'string') {
+              try {
+                mapped[key] = JSON.parse(globalData[key])
+              } catch (e) {
+                console.warn(`Failed to parse ${key}:`, e)
+                mapped[key] = []
+              }
+            } else {
+              mapped[key] = globalData[key]
+            }
+          }
+        })
+      }
+
+      // 2. Load from SiteContent (overrides)
       if (Array.isArray(contentData)) {
         contentData.forEach(item => {
           const key = item.key || item.name || item.slug
           if (key) {
             mapped[key] = item.value || item.content || ''
-          }
-        })
-      }
-
-      // 2. Load from GlobalSettings (new singleton) - Overwrite if keys conflict
-      const globalData = Array.isArray(settingsRes.data) ? settingsRes.data[0] : settingsRes.data
-      if (globalData && typeof globalData === 'object') {
-        Object.keys(globalData).forEach(key => {
-          // Only add non-internal keys
-          if (!['id', 'created_at', 'updated_at'].includes(key) && globalData[key] !== null) {
-            mapped[key] = globalData[key]
           }
         })
       }

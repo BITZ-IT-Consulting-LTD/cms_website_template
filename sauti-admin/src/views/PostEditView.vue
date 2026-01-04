@@ -138,6 +138,9 @@ Each paragraph will be properly formatted when displayed."
               </div>
             </div>
         </div>
+
+        <!-- Audit History -->
+        <AuditHistory v-if="isEditing" :history="history" :loading="loadingHistory" />
       </div>
 
         <!-- Enhanced Metadata Sidebar (Right Column) -->
@@ -359,6 +362,8 @@ import {
   PhotoIcon,
   XMarkIcon
 } from '@heroicons/vue/24/outline'
+import { api } from '@/utils/api'
+import AuditHistory from '@/components/common/AuditHistory.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -373,6 +378,8 @@ const autoSaveTimeout = ref(null)
 
 // Reactive data
 const loading = ref(false)
+const history = ref([])
+const loadingHistory = ref(false)
 const imagePreview = ref(null)
 const tagsInput = ref('')
 
@@ -488,6 +495,19 @@ const handleImageUpload = (event) => {
       toast.success('Image uploaded successfully')
     }
     reader.readAsDataURL(file)
+  }
+}
+
+async function fetchHistory(id) {
+  if (!id) return
+  loadingHistory.value = true
+  try {
+    const response = await api.posts.history(id)
+    history.value = response.data
+  } catch (err) {
+    console.error('❌ Error fetching history:', err)
+  } finally {
+    loadingHistory.value = false
   }
 }
 
@@ -685,6 +705,11 @@ onMounted(async () => {
         featuredImage: post.featured_image || null,
         status: post.status || 'DRAFT',
         scheduledPublishAt: post.scheduled_publish_at ? new Date(post.scheduled_publish_at).toISOString().slice(0, 16) : null
+      }
+      
+      // Fetch history using the post ID
+      if (post.id) {
+        fetchHistory(post.id)
       }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''

@@ -1,130 +1,175 @@
 <template>
-  <div class="bg-white py-16">
-    <div class="container-custom">
-      <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#8B4000] to-[#A0522D] bg-clip-text text-transparent mb-4">
-            Terms of Service
-          </h1>
-          <p class="text-gray-600 text-lg">Terms and conditions for using our services</p>
-          <p class="text-sm text-gray-500 mt-2">Last updated: {{ lastUpdated }}</p>
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <h1 class="page-header-title">Terms of Service</h1>
+        <p class="page-header-subtitle">Terms and conditions for using our services</p>
+        <div class="mt-8 flex justify-center">
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">Last updated: {{ lastUpdated }}</div>
         </div>
+      </div>
+    </header>
 
-        <!-- Content -->
-        <div class="prose prose-lg max-w-none">
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
-            <p class="text-gray-700 mb-4">
-              By accessing and using the Sauti 116 helpline services, you accept and agree to be bound by the terms 
-              and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto section-rhythm">
+        <!-- Content Card -->
+        <div class="bg-sauti-white p-10 md:p-16 rounded-[4rem] border-2 border-sauti-neutral shadow-sm space-y-16">
+
+          <!-- Section 1 -->
+          <section aria-labelledby="acceptance-heading">
+            <h2 id="acceptance-heading"
+              class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-blue rounded-full"></span>
+              1. Acceptance of Terms
+            </h2>
+            <p class="text-sauti-darkGreen/80 font-bold text-lg leading-relaxed">
+              By accessing and using the Sauti 116 helpline services, you accept and agree to be bound by the terms
+              and provision of this agreement. If you do not agree to abide by the above, please do not use this
+              service.
             </p>
           </section>
 
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">2. Description of Service</h2>
-            <p class="text-gray-700 mb-4">
-              Sauti 116 helpline provides:
-            </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>24/7 confidential helpline services (116)</li>
-              <li>Online reporting and support services</li>
-              <li>Information and resources for child protection</li>
-              <li>Referrals to appropriate services</li>
-              <li>Counseling and guidance services</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">3. User Responsibilities</h2>
-            <p class="text-gray-700 mb-4">When using our services, you agree to:</p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Provide accurate and truthful information</li>
-              <li>Use the service for legitimate purposes only</li>
-              <li>Respect the confidentiality of other users</li>
-              <li>Not misuse or abuse our services</li>
-              <li>Report any technical issues or concerns</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">4. Confidentiality</h2>
-            <p class="text-gray-700 mb-4">
-              We are committed to maintaining the confidentiality of all information shared with us. However, we may 
-              be required to share information in the following circumstances:
-            </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>When there is immediate risk of harm to a child</li>
-              <li>When required by law or court order</li>
-              <li>With your explicit consent</li>
-              <li>In emergency situations requiring immediate action</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">5. Service Availability</h2>
-            <p class="text-gray-700 mb-4">
-              While we strive to provide continuous service availability, we cannot guarantee that our services 
-              will be available at all times. We reserve the right to:
-            </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Suspend services for maintenance</li>
-              <li>Modify or discontinue services</li>
-              <li>Implement security measures</li>
-              <li>Respond to technical issues</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">6. Limitation of Liability</h2>
-            <p class="text-gray-700 mb-4">
-              Sauti 116 helpline and its partners are not liable for any direct, indirect, incidental, special, 
-              or consequential damages resulting from the use or inability to use our services.
-            </p>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">7. Emergency Situations</h2>
-            <p class="text-gray-700 mb-4">
-              In case of emergency or immediate danger, please:
-            </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Call emergency services (999) immediately</li>
-              <li>Contact local police authorities</li>
-              <li>Seek immediate medical attention if needed</li>
-              <li>Contact us at 116 for additional support</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">8. Contact Information</h2>
-            <p class="text-gray-700 mb-4">
-              For questions about these terms or our services, please contact us:
-            </p>
-            <div class="bg-gray-50 p-6 rounded-lg">
-              <p class="text-gray-700 mb-2"><strong>Helpline:</strong> 116 (Toll Free)</p>
-              <p class="text-gray-700 mb-2"><strong>Email:</strong> info@sauti.mglsd.go.ug</p>
-              <p class="text-gray-700"><strong>Address:</strong> Ministry of Gender, Labour & Social Development, Kampala, Uganda</p>
+          <!-- Section 2 -->
+          <section aria-labelledby="description-heading">
+            <h2 id="description-heading"
+              class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-orange rounded-full"></span>
+              2. Description of Service
+            </h2>
+            <p class="text-sauti-darkGreen font-bold mb-6 uppercase tracking-widest text-xs">Sauti 116 helpline
+              provides:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div v-for="service in services" :key="service"
+                class="flex items-center gap-4 p-5 bg-sauti-neutral/30 rounded-2xl border-2 border-transparent hover:border-sauti-orange transition-all">
+                <div class="w-2.5 h-2.5 bg-sauti-orange rounded-full"></div>
+                <span class="text-sauti-darkGreen font-bold text-sm uppercase tracking-wide">{{ service }}</span>
+              </div>
             </div>
           </section>
 
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">9. Changes to Terms</h2>
-            <p class="text-gray-700">
-              We reserve the right to modify these terms at any time. Changes will be posted on this page with 
-              an updated revision date. Continued use of our services constitutes acceptance of the modified terms.
+          <!-- Section 3 -->
+          <section aria-labelledby="responsibilities-heading">
+            <h2 id="responsibilities-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8">3. User
+              Responsibilities</h2>
+            <div class="space-y-6">
+              <div v-for="resp in responsibilities" :key="resp" class="flex items-start gap-6">
+                <div
+                  class="w-10 h-10 rounded-xl bg-sauti-blue/10 flex-shrink-0 flex items-center justify-center text-sauti-blue mt-1">
+                  <CheckIcon class="w-6 h-6" />
+                </div>
+                <span class="text-sauti-darkGreen font-bold text-lg pt-1">{{ resp }}</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 4 -->
+          <section aria-labelledby="confidentiality-heading">
+            <h2 id="confidentiality-heading"
+              class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-lightGreen rounded-full"></span>
+              4. Confidentiality
+            </h2>
+            <div class="bg-sauti-neutral/30 p-10 rounded-[2.5rem] border-2 border-sauti-neutral">
+              <p class="text-sauti-darkGreen font-bold text-lg leading-relaxed mb-8">
+                We are committed to maintaining the confidentiality of all information shared with us. However, we may
+                be required to share information in the following circumstances:
+              </p>
+              <ul class="space-y-4">
+                <li v-for="conf in confidentiality" :key="conf"
+                  class="flex items-center gap-4 text-sauti-darkGreen font-bold text-sm uppercase tracking-wider">
+                  <div class="w-2 h-2 bg-sauti-lightGreen rounded-full"></div>
+                  {{ conf }}
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Section 5 -->
+          <section aria-labelledby="availability-heading">
+            <h2 id="availability-heading"
+              class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-blue rounded-full"></span>
+              5. Service Availability
+            </h2>
+            <p class="text-sauti-darkGreen/80 font-bold text-lg leading-relaxed mb-10">
+              While we strive to provide continuous service availability, we cannot guarantee that our services will be
+              available at all times.
             </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div v-for="rights in availabilityRights" :key="rights"
+                class="p-8 bg-sauti-white border-2 border-sauti-neutral rounded-3xl shadow-sm hover:border-sauti-blue transition-colors">
+                <p class="text-sauti-darkGreen font-bold text-sm">{{ rights }}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 6 -->
+          <section aria-labelledby="emergency-heading">
+            <h2 id="emergency-heading" class="campaign-header text-3xl text-sauti-red mb-8">6. Emergency Situations</h2>
+            <div class="bg-sauti-red/5 p-10 rounded-[3rem] border-2 border-sauti-red/20 space-y-8">
+              <p class="text-sauti-darkGreen font-bold text-xl">In case of immediate danger, please:</p>
+              <div class="grid gap-4">
+                <div v-for="step in emergencySteps" :key="step"
+                  class="flex items-center gap-6 p-6 bg-sauti-white rounded-2xl border-2 border-sauti-red/10 shadow-sm">
+                  <div
+                    class="w-10 h-10 rounded-full bg-sauti-red text-sauti-white flex items-center justify-center font-bold flex-shrink-0">
+                    !
+                  </div>
+                  <span class="text-sauti-darkGreen font-bold text-sm uppercase tracking-wide">{{ step }}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 7 -->
+          <section aria-labelledby="contact-heading">
+            <h2 id="contact-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8">7. Contact Information
+            </h2>
+            <div
+              class="bg-sauti-blue/5 p-10 rounded-[3rem] border-2 border-sauti-blue/20 grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div class="space-y-8">
+                <div class="flex items-center gap-6">
+                  <div
+                    class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-red">
+                    <PhoneIcon class="w-7 h-7" />
+                  </div>
+                  <div>
+                    <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Helpline</p>
+                    <p class="text-sauti-darkGreen font-bold text-2xl">116</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-6">
+                  <div
+                    class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-blue">
+                    <EnvelopeIcon class="w-7 h-7" />
+                  </div>
+                  <div>
+                    <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Support Admin</p>
+                    <p class="text-sauti-darkGreen font-bold break-all">info@sauti.gov.ug</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-6">
+                <div
+                  class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-blue">
+                  <MapPinIcon class="w-7 h-7" />
+                </div>
+                <div>
+                  <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Location</p>
+                  <p class="text-sauti-darkGreen font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
 
         <!-- Back to Home -->
-        <div class="text-center mt-12">
-          <router-link to="/" class="btn-primary inline-flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            Back to Home
-          </router-link>
+        <div class="text-center">
+          <BaseCTA href="/" variant="outline" class="inline-flex items-center gap-3">
+            <ArrowLeftIcon class="w-5 h-5" />
+            Back to Sanctuary
+          </BaseCTA>
         </div>
       </div>
     </div>
@@ -132,17 +177,62 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+  import { computed } from 'vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import {
+    CheckIcon,
+    EnvelopeIcon,
+    PhoneIcon,
+    MapPinIcon,
+    ArrowLeftIcon
+  } from '@heroicons/vue/24/outline'
 
-defineOptions({
-  name: 'TermsPage'
-})
-
-const lastUpdated = computed(() => {
-  return new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  defineOptions({
+    name: 'TermsPage'
   })
-})
+
+  const services = [
+    '24/7 confidential helpline (116)',
+    'Online reporting & support',
+    'Child protection resources',
+    'Referrals to specialist services',
+    'Counseling & guidance services'
+  ]
+
+  const responsibilities = [
+    'Provide accurate & truthful information',
+    'Use the service for legitimate purposes only',
+    'Respect the confidentiality of other users',
+    'No misuse or abuse of our services',
+    'Report technical issues promptly'
+  ]
+
+  const confidentiality = [
+    'Immediate risk of harm to a child',
+    'When required by law or court order',
+    'With your explicit consent',
+    'Emergency situations requiring action'
+  ]
+
+  const availabilityRights = [
+    'Suspension for maintenance',
+    'Service modification or discontinuation',
+    'Critical security implementations',
+    'Response to technical outages'
+  ]
+
+  const emergencySteps = [
+    'Call emergency services (999)',
+    'Contact local police authorities',
+    'Seek immediate medical attention',
+    'Call 116 for further assistance'
+  ]
+
+  const lastUpdated = computed(() => {
+    return new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  })
 </script>

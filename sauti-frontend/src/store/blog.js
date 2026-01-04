@@ -15,19 +15,40 @@ export const useBlogStore = defineStore('blog', () => {
     next: null,
     previous: null,
   })
-  
+
+  // Helper to normalize post data (fix broken URLs etc)
+  function normalizePost(post) {
+    if (!post) return post
+
+    // Fix broken featured_image URLs (improperly prefixed external URLs)
+    if (post.featured_image && typeof post.featured_image === 'string') {
+      if (post.featured_image.includes('https%3A') || post.featured_image.includes('http%3A')) {
+        try {
+          const decoded = decodeURIComponent(post.featured_image)
+          const match = decoded.match(/https?:\/\/[^\s"'<>]+/)
+          if (match) {
+            post.featured_image = match[0]
+          }
+        } catch (e) { /* ignore */ }
+      }
+    }
+
+    return post
+  }
+
   // Actions
   async function fetchPosts(params = {}) {
     loading.value = true
     error.value = null
-    
+
     try {
       const response = await api.posts.list(params)
       const data = response.data
-      
-      // Ensure posts is always an array
-      posts.value = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
-      
+
+      // Ensure posts is always an array and normalize each post
+      const rawPosts = Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : [])
+      posts.value = rawPosts.map(normalizePost)
+
       // Handle pagination
       if (data.count !== undefined) {
         pagination.value = {
@@ -36,7 +57,7 @@ export const useBlogStore = defineStore('blog', () => {
           previous: data.previous,
         }
       }
-      
+
       return data
     } catch (err) {
       error.value = err.response?.data || 'Failed to fetch posts'
@@ -48,15 +69,15 @@ export const useBlogStore = defineStore('blog', () => {
       loading.value = false
     }
   }
-  
+
   async function fetchPost(slug) {
     loading.value = true
     error.value = null
-    
+
     try {
       const response = await api.posts.get(slug)
-      currentPost.value = response.data
-      return response.data
+      currentPost.value = normalizePost(response.data)
+      return currentPost.value
     } catch (err) {
       error.value = err.response?.data || 'Failed to fetch post'
       throw err
@@ -64,7 +85,7 @@ export const useBlogStore = defineStore('blog', () => {
       loading.value = false
     }
   }
-  
+
   async function fetchCategories() {
     try {
       const response = await api.posts.categories()
@@ -79,7 +100,7 @@ export const useBlogStore = defineStore('blog', () => {
       return []
     }
   }
-  
+
   async function fetchTags() {
     try {
       const response = await api.posts.tags()
@@ -94,11 +115,11 @@ export const useBlogStore = defineStore('blog', () => {
       return []
     }
   }
-  
+
   async function createPost(data) {
     loading.value = true
     error.value = null
-    
+
     try {
       const response = await api.posts.create(data)
       posts.value.unshift(response.data)
@@ -110,25 +131,25 @@ export const useBlogStore = defineStore('blog', () => {
       loading.value = false
     }
   }
-  
+
   async function updatePost(slug, data) {
     loading.value = true
     error.value = null
-    
+
     try {
       const response = await api.posts.update(slug, data)
-      
+
       // Update in list
       const index = posts.value.findIndex(p => p.slug === slug)
       if (index !== -1) {
         posts.value[index] = response.data
       }
-      
+
       // Update current post if it's the one being edited
       if (currentPost.value?.slug === slug) {
         currentPost.value = response.data
       }
-      
+
       return response.data
     } catch (err) {
       error.value = err.response?.data || 'Failed to update post'
@@ -137,15 +158,15 @@ export const useBlogStore = defineStore('blog', () => {
       loading.value = false
     }
   }
-  
+
   async function deletePost(slug) {
     loading.value = true
     error.value = null
-    
+
     try {
       await api.posts.delete(slug)
       posts.value = posts.value.filter(p => p.slug !== slug)
-      
+
       if (currentPost.value?.slug === slug) {
         currentPost.value = null
       }
@@ -156,15 +177,15 @@ export const useBlogStore = defineStore('blog', () => {
       loading.value = false
     }
   }
-  
+
   function clearError() {
     error.value = null
   }
-  
+
   function clearCurrentPost() {
     currentPost.value = null
   }
-  
+
   return {
     // State
     posts,
@@ -174,7 +195,7 @@ export const useBlogStore = defineStore('blog', () => {
     loading,
     error,
     pagination,
-    
+
     // Actions
     fetchPosts,
     fetchPost,

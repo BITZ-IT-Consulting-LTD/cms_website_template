@@ -1,120 +1,151 @@
 <template>
-  <div>
-    <!-- Hero / reassurance banner -->
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50"></div>
-      <div class="container-custom relative py-12 md:py-16">
-        <div class="max-w-3xl mx-auto text-center">
-          <h1 class="mb-3">Report a Case</h1>
-          <p class="text-lg md:text-xl text-gray-600">Free, confidential, and available 24/7. Your safety is our priority.</p>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm text-gray-600">
-            <span class="badge-blue">Anonymous option</span>
-            <span class="badge-orange">All telecoms</span>
-            <span class="badge-teal">EN • LG • SW</span>
-          </div>
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <h1 class="page-header-title">
+          Report <span class="text-sauti-blue">a Case</span>
+        </h1>
+        <p class="page-header-subtitle">
+          Professional, Secure, and Immediate Response to Any Form of Violence.
+        </p>
+        <div class="mt-8 flex justify-center">
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">Support Available in: EN • LG • SW • LS</div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- Two-column layout: form + help panel -->
-    <section class="section-padding">
-      <div class="container-custom">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <!-- Left: Form card -->
-          <div class="lg:col-span-8">
-            <!-- Stepper / how it works -->
-            <div class="card p-5 mb-6">
-              <ol class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
-                <li class="flex items-start gap-3">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-gray-900 font-bold">1</span>
+    <!-- 2. Main Content Grid -->
+    <div class="container-custom section-padding">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
+        <!-- Left Column: Form & Instructions -->
+        <div class="lg:col-span-8 section-rhythm">
+
+          <!-- Stepper / Process -->
+          <section aria-labelledby="process-heading">
+            <div class="bg-sauti-neutral rounded-[3rem] p-10 md:p-12 shadow-sm">
+              <h2 id="process-heading" class="campaign-header text-sm text-sauti-darkGreen mb-10 opacity-50">How the
+                reporting process works</h2>
+              <ol class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <li v-for="(step, idx) in [
+                  { title: 'Fill in details', text: 'Provide as much as you can. Anonymous reports are welcome.', color: 'sauti-blue' },
+                  { title: 'Submit securely', text: 'Information is encrypted and strictly confidential.', color: 'sauti-orange' },
+                  { title: 'We follow up', text: 'Our team of experts reviews and initiates action immediately.', color: 'sauti-lightGreen' }
+                ]" :key="idx" class="flex flex-col gap-6">
+                  <span
+                    :class="['inline-flex h-12 w-12 items-center justify-center rounded-2xl text-sauti-white font-bold text-xl shadow-lg', `bg-sauti-${step.color.split('-')[1]}`]">
+                    {{ idx + 1 }}
+                  </span>
                   <div>
-                    <p class="font-semibold text-gray-900">Fill in details</p>
-                    <p>Provide as much as you can. Anonymous is okay.</p>
-                  </div>
-                </li>
-                <li class="flex items-start gap-3">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-gray-900 font-bold">2</span>
-                  <div>
-                    <p class="font-semibold text-gray-900">Submit securely</p>
-                    <p>Information is encrypted and confidential.</p>
-                  </div>
-                </li>
-                <li class="flex items-start gap-3">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-gray-900 font-bold">3</span>
-                  <div>
-                    <p class="font-semibold text-gray-900">We follow up</p>
-                    <p>Our team reviews and reaches out if needed.</p>
+                    <p class="campaign-header text-lg text-sauti-darkGreen mb-2">{{ step.title }}</p>
+                    <p class="text-sauti-darkGreen/60 text-sm font-bold leading-relaxed">{{ step.text }}</p>
                   </div>
                 </li>
               </ol>
             </div>
+          </section>
 
-            <!-- Confidentiality Notice -->
-            <div class="card p-5 mb-6">
-              <div class="flex items-start">
-                <svg class="w-6 h-6 text-green-600 mt-1 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-7a1 1 0 112 0v3a1 1 0 11-2 0v-3zm1-5a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
-                </svg>
-                <p class="text-green-700">All information is kept confidential and handled with care. You may choose to remain anonymous.</p>
+          <!-- Confidentiality Notice -->
+          <div class="bg-sauti-lightGreen/10 p-8 rounded-[2.5rem] flex items-start gap-6">
+            <div
+              class="w-12 h-12 bg-sauti-white rounded-2xl flex items-center justify-center text-sauti-lightGreen shrink-0 shadow-sm border border-sauti-lightGreen/20">
+              <ShieldCheckIcon class="w-7 h-7" />
+            </div>
+            <p class="text-sauti-darkGreen font-bold text-lg leading-relaxed pt-1">
+              All information is kept <span class="font-bold">strictly confidential</span> and handled with care by
+              government experts. You may choose to remain <span class="font-bold">anonymous</span> throughout the
+              process.
+            </p>
+          </div>
+
+          <!-- Report Form Component -->
+          <section aria-labelledby="form-heading">
+            <div class="bg-sauti-blue/5 rounded-[3rem] overflow-hidden shadow-sm">
+              <div class="bg-sauti-blue/5 p-8 border-b-2 border-sauti-blue/10">
+                <h2 id="form-heading" class="campaign-header text-xl text-sauti-darkGreen">Formal Incident Report</h2>
+              </div>
+              <div class="p-8 md:p-12">
+                <ReportForm />
               </div>
             </div>
+          </section>
+        </div>
 
-            <!-- Report Form -->
-            <div class="card p-0">
-              <div class="card-body">
-                <ReportForm />
+        <!-- Right Column: Sidebar -->
+        <aside class="lg:col-span-4 space-y-8">
+
+          <!-- Immediate Help Card -->
+          <div class="bg-sauti-red/5 rounded-[3rem] p-10 shadow-sm">
+            <h3 class="campaign-header text-xl text-sauti-darkGreen mb-4">Urgent Help?</h3>
+            <p class="text-sauti-darkGreen font-bold leading-relaxed opacity-70 mb-8">
+              If someone is in immediate danger, do not wait. Use our priority channels for instant response.
+            </p>
+            <div class="space-y-4">
+              <BaseCTA href="tel:116" variant="emergency" class="w-full justify-center gap-3">
+                <PhoneIcon class="w-5 h-5" />
+                Call 116 Now
+              </BaseCTA>
+              <BaseCTA href="https://wa.me/256743889999" variant="outline"
+                class="w-full justify-center gap-3 !border-sauti-orange !text-sauti-orange hover:!bg-sauti-orange hover:!text-white">
+                <ChatBubbleLeftRightIcon class="w-5 h-5" />
+                WhatsApp Chat
+              </BaseCTA>
+            </div>
+          </div>
+
+          <!-- Other Channels -->
+          <div class="bg-sauti-neutral rounded-[3rem] p-10 shadow-sm">
+            <h3 class="campaign-header text-xl text-sauti-darkGreen mb-6">Secondary Channels</h3>
+            <div class="space-y-6">
+              <div v-for="channel in [
+                { label: 'U-Report SMS', val: '8500', icon: ChatBubbleBottomCenterTextIcon, color: 'text-sauti-blue' },
+                { label: 'Official Email', val: 'info@sauti.mglsd.go.ug', icon: EnvelopeIcon, color: 'text-sauti-blue' }
+              ]" :key="channel.label"
+                class="flex items-start gap-4 p-4 hover:bg-sauti-neutral/30 rounded-2xl transition-colors">
+                <div
+                  :class="['w-10 h-10 rounded-xl bg-sauti-white border border-sauti-neutral flex items-center justify-center shrink-0 shadow-sm', channel.color]">
+                  <component :is="channel.icon" class="w-5 h-5" />
+                </div>
+                <div>
+                  <p class="campaign-header text-[10px] text-sauti-darkGreen/40 mb-1">{{ channel.label }}</p>
+                  <p class="text-sauti-darkGreen font-bold break-all">{{ channel.val }}</p>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Right: Help / alternative channels -->
-          <aside class="lg:col-span-4">
-            <div class="card p-5 mb-6">
-              <h3 class="text-lg font-semibold mb-2">Need immediate help?</h3>
-              <p class="text-gray-600">If you are in danger or need urgent assistance, call now.</p>
-              <div class="mt-4 flex flex-wrap gap-2">
-                <a href="tel:116" class="pill pill-primary" aria-label="Call the 116 helpline">Call 116</a>
-                <a href="https://wa.me/256743889999" target="_blank" rel="noopener" class="pill pill-outline" aria-label="Chat on WhatsApp">WhatsApp</a>
-              </div>
-            </div>
-
-            <div class="card p-5 mb-6">
-              <h3 class="text-lg font-semibold mb-2">Other channels</h3>
-              <ul class="space-y-2 text-gray-700 text-sm">
-                <li>U-Report SMS: <strong>8500</strong></li>
-                <li>SafePal App: <a href="https://www.unicef.org/uganda/safepal-app" target="_blank" rel="noopener" class="text-primary-600 hover:text-primary-700">Install</a></li>
-                <li>Email: <a href="mailto:info@sauti.mglsd.go.ug" class="text-primary-600 hover:text-primary-700">info@sauti.mglsd.go.ug</a></li>
-                <li>Email: <a href="mailto:sautichildhelpline@gmail.com" class="text-primary-600 hover:text-primary-700">sautichildhelpline@gmail.com</a></li>
-              </ul>
-            </div>
-
-            <div class="card p-5">
-              <h3 class="text-lg font-semibold mb-2">Privacy & Safety</h3>
-              <p class="text-gray-600 text-sm">We never share your information without consent, unless required to prevent immediate harm. Read our <router-link to="/privacy" class="text-primary-600 hover:text-primary-700">Privacy Policy</router-link>.</p>
-            </div>
-          </aside>
-        </div>
+          <!-- Privacy & Safety Footer -->
+          <div class="bg-sauti-darkGreen rounded-[3rem] p-10 shadow-xl text-sauti-white relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+            <h3 class="campaign-header text-lg text-white mb-4">Safety First</h3>
+            <p class="text-sm opacity-70 leading-relaxed font-bold mb-6">
+              Your safety is our priority. We never share your data without legal necessity or absolute prevention of
+              harm.
+            </p>
+            <router-link to="/privacy"
+              class="text-sauti-blue font-bold uppercase text-[10px] tracking-widest hover:text-white transition-colors">
+              Read Safety Protocol →
+            </router-link>
+          </div>
+        </aside>
       </div>
-    </section>
-
-    <!-- Footer links -->
-    <section class="pb-12">
-      <div class="container-custom">
-        <div class="max-w-5xl mx-auto text-center text-sm text-gray-500">
-          <router-link to="/privacy" class="hover:text-gray-700">Privacy Policy</router-link>
-          <span class="mx-2">•</span>
-          <router-link to="/terms" class="hover:text-gray-700">Terms of Service</router-link>
-          <span class="mx-2">•</span>
-          <router-link to="/contact" class="hover:text-gray-700">Contact Us</router-link>
-        </div>
-      </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineOptions({
-  name: 'ReportPage'
-})
-import ReportForm from '@/components/reports/ReportForm.vue'
+  import ReportForm from '@/components/reports/ReportForm.vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import {
+    ShieldCheckIcon,
+    PhoneIcon,
+    ChatBubbleLeftRightIcon,
+    ChatBubbleBottomCenterTextIcon,
+    EnvelopeIcon
+  } from '@heroicons/vue/24/outline'
+
+  defineOptions({
+    name: 'ReportPage'
+  })
 </script>

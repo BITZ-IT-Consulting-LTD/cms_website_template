@@ -22,11 +22,11 @@ a {
 
 /* Reset typography */
 body {
-  font-family: sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: 'Cronos Pro', sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
   background-color: #fff;
-  color: #000;
+  color: #006633;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

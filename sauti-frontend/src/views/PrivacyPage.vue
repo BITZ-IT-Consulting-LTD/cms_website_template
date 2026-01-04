@@ -1,114 +1,172 @@
 <template>
-  <div class="bg-white py-16">
-    <div class="container-custom">
-      <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#8B4000] to-[#A0522D] bg-clip-text text-transparent mb-4">
-            Privacy Policy
-          </h1>
-          <p class="text-gray-600 text-lg">How we protect your information and privacy</p>
-          <p class="text-sm text-gray-500 mt-2">Last updated: {{ lastUpdated }}</p>
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <h1 class="page-header-title">Privacy Policy</h1>
+        <p class="page-header-subtitle">How we protect your information and privacy</p>
+        <div class="mt-8 flex justify-center">
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">Last updated: {{ lastUpdated }}</div>
         </div>
+      </div>
+    </header>
 
-        <!-- Content -->
-        <div class="prose prose-lg max-w-none">
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">1. Information We Collect</h2>
-            <p class="text-gray-700 mb-4">
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto section-rhythm">
+        <!-- Content Card -->
+        <div class="bg-sauti-white p-10 md:p-16 rounded-[4rem] border-2 border-sauti-neutral shadow-sm space-y-16">
+
+          <!-- Section 1 -->
+          <section aria-labelledby="collect-heading">
+            <h2 id="collect-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-blue rounded-full"></span>
+              1. Information We Collect
+            </h2>
+            <p class="text-sauti-darkGreen/80 font-bold text-lg leading-relaxed mb-8">
               We collect information you provide directly to us, such as when you:
             </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Call our helpline (116)</li>
-              <li>Submit reports through our website</li>
-              <li>Contact us via email or WhatsApp</li>
-              <li>Use our mobile applications</li>
-            </ul>
-            <p class="text-gray-700">
-              This may include your name, contact information, location, and details about the situation you're reporting.
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div v-for="item in collectionMethods" :key="item"
+                class="flex items-center gap-4 p-5 bg-sauti-neutral/30 rounded-2xl border-2 border-transparent hover:border-sauti-blue transition-all">
+                <div class="w-2.5 h-2.5 bg-sauti-blue rounded-full"></div>
+                <span class="text-sauti-darkGreen font-bold text-sm uppercase tracking-wide">{{ item }}</span>
+              </div>
+            </div>
+            <p class="text-sauti-darkGreen/60 font-bold italic text-base">
+              This may include your name, contact information, location, and details about the situation you're
+              reporting.
             </p>
           </section>
 
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">2. How We Use Your Information</h2>
-            <p class="text-gray-700 mb-4">We use the information we collect to:</p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Provide immediate support and counseling</li>
-              <li>Connect you with appropriate services</li>
-              <li>Follow up on cases when necessary</li>
-              <li>Improve our services and training</li>
-              <li>Comply with legal requirements</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">3. Information Sharing</h2>
-            <p class="text-gray-700 mb-4">
-              We do not share your personal information except in the following circumstances:
-            </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>With your explicit consent</li>
-              <li>When required by law to protect a child</li>
-              <li>With authorized service providers who assist us</li>
-              <li>In emergency situations where immediate action is needed</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">4. Data Security</h2>
-            <p class="text-gray-700 mb-4">
-              We implement appropriate security measures to protect your information against unauthorized access, 
-              alteration, disclosure, or destruction. This includes:
-            </p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Encrypted data transmission</li>
-              <li>Secure data storage</li>
-              <li>Regular security audits</li>
-              <li>Limited access to authorized personnel only</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">5. Your Rights</h2>
-            <p class="text-gray-700 mb-4">You have the right to:</p>
-            <ul class="list-disc list-inside text-gray-700 mb-4 space-y-2">
-              <li>Access your personal information</li>
-              <li>Correct inaccurate information</li>
-              <li>Request deletion of your information</li>
-              <li>Withdraw consent at any time</li>
-              <li>File a complaint if you believe your rights have been violated</li>
-            </ul>
-          </section>
-
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">6. Contact Us</h2>
-            <p class="text-gray-700 mb-4">
-              If you have questions about this Privacy Policy or our data practices, please contact us:
-            </p>
-            <div class="bg-gray-50 p-6 rounded-lg">
-              <p class="text-gray-700 mb-2"><strong>Email:</strong> privacy@sauti.mglsd.go.ug</p>
-              <p class="text-gray-700 mb-2"><strong>Phone:</strong> 116 (Toll Free)</p>
-              <p class="text-gray-700"><strong>Address:</strong> Ministry of Gender, Labour & Social Development, Kampala, Uganda</p>
+          <!-- Section 2 -->
+          <section aria-labelledby="usage-heading">
+            <h2 id="usage-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-orange rounded-full"></span>
+              2. How We Use Your Information
+            </h2>
+            <div class="space-y-6">
+              <div v-for="use in infoUsage" :key="use" class="flex items-start gap-6">
+                <div
+                  class="w-10 h-10 rounded-xl bg-sauti-blue/10 flex-shrink-0 flex items-center justify-center text-sauti-blue mt-1">
+                  <CheckIcon class="w-6 h-6" />
+                </div>
+                <span class="text-sauti-darkGreen font-bold text-lg pt-1">{{ use }}</span>
+              </div>
             </div>
           </section>
 
-          <section class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">7. Changes to This Policy</h2>
-            <p class="text-gray-700">
-              We may update this Privacy Policy from time to time. We will notify you of any changes by posting 
+          <!-- Section 3 -->
+          <section aria-labelledby="sharing-heading">
+            <h2 id="sharing-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-lightGreen rounded-full"></span>
+              3. Information Sharing
+            </h2>
+            <div class="bg-sauti-neutral/30 p-10 rounded-[2.5rem] border-2 border-sauti-neutral">
+              <p class="text-sauti-darkGreen font-bold text-lg leading-relaxed mb-8">
+                We do not share your personal information except in the following circumstances:
+              </p>
+              <ul class="space-y-4">
+                <li v-for="sh in sharing" :key="sh"
+                  class="flex items-center gap-4 text-sauti-darkGreen font-bold text-sm uppercase tracking-wider">
+                  <div class="w-2 h-2 bg-sauti-lightGreen rounded-full"></div>
+                  {{ sh }}
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Section 4 -->
+          <section aria-labelledby="security-heading">
+            <h2 id="security-heading"
+              class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-blue rounded-full"></span>
+              4. Data Security
+            </h2>
+            <p class="text-sauti-darkGreen/80 font-bold text-lg leading-relaxed mb-10">
+              We implement appropriate security measures to protect your information against unauthorized access,
+              alteration, disclosure, or destruction.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div v-for="sec in security" :key="sec.title"
+                class="p-8 bg-sauti-white border-2 border-sauti-neutral rounded-3xl shadow-sm hover:border-sauti-blue transition-colors">
+                <h4 class="campaign-header text-sauti-blue text-xs mb-3">{{ sec.title }}</h4>
+                <p class="text-sauti-darkGreen font-bold">{{ sec.desc }}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 5 -->
+          <section aria-labelledby="rights-heading">
+            <h2 id="rights-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-10">5. Your Rights</h2>
+            <div class="grid gap-4">
+              <div v-for="right in rights" :key="right"
+                class="flex items-center justify-between p-6 bg-sauti-neutral/30 rounded-2xl border-2 border-transparent hover:border-sauti-blue transition-all group">
+                <span class="text-sauti-darkGreen font-bold text-lg">{{ right }}</span>
+                <CheckCircleIcon
+                  class="w-8 h-8 text-sauti-blue opacity-20 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 6 -->
+          <section aria-labelledby="contact-heading">
+            <h2 id="contact-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8">6. Contact Us</h2>
+            <p class="text-sauti-darkGreen/80 font-bold mb-10 text-lg leading-relaxed">
+              If you have questions about this Privacy Policy or our data practices, please contact us:
+            </p>
+            <div
+              class="bg-sauti-blue/5 p-10 rounded-[3rem] border-2 border-sauti-blue/20 grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div class="space-y-8">
+                <div class="flex items-center gap-6">
+                  <div
+                    class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-blue">
+                    <EnvelopeIcon class="w-7 h-7" />
+                  </div>
+                  <div>
+                    <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Privacy Admin</p>
+                    <p class="text-sauti-darkGreen font-bold break-all">privacy@sauti.gov.ug</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-6">
+                  <div
+                    class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-red">
+                    <PhoneIcon class="w-7 h-7" />
+                  </div>
+                  <div>
+                    <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Helpline</p>
+                    <p class="text-sauti-darkGreen font-bold text-2xl">116</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-6">
+                <div
+                  class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-blue">
+                  <MapPinIcon class="w-7 h-7" />
+                </div>
+                <div>
+                  <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Location</p>
+                  <p class="text-sauti-darkGreen font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 7 -->
+          <section>
+            <h2 class="campaign-header text-2xl text-sauti-darkGreen mb-6">7. Changes to This Policy</h2>
+            <p class="text-sauti-darkGreen/60 font-bold leading-relaxed">
+              We may update this Privacy Policy from time to time. We will notify you of any changes by posting
               the new Privacy Policy on this page and updating the "Last updated" date.
             </p>
           </section>
         </div>
 
         <!-- Back to Home -->
-        <div class="text-center mt-12">
-          <router-link to="/" class="btn-primary inline-flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            Back to Home
-          </router-link>
+        <div class="text-center">
+          <BaseCTA href="/" variant="outline" class="inline-flex items-center gap-3">
+            <ArrowLeftIcon class="w-5 h-5" />
+            Back to Sanctuary
+          </BaseCTA>
         </div>
       </div>
     </div>
@@ -116,16 +174,63 @@
 </template>
 
 <script setup>
-defineOptions({
-  name: 'PrivacyPage'
-})
-import { computed } from 'vue'
+  import { computed } from 'vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import {
+    CheckIcon,
+    CheckCircleIcon,
+    EnvelopeIcon,
+    PhoneIcon,
+    MapPinIcon,
+    ArrowLeftIcon
+  } from '@heroicons/vue/24/outline'
 
-const lastUpdated = computed(() => {
-  return new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  defineOptions({
+    name: 'PrivacyPage'
   })
-})
+
+  const collectionMethods = [
+    'Call our helpline (116)',
+    'Submit reports through our website',
+    'Contact us via official channels',
+    'Use our mobile applications'
+  ]
+
+  const infoUsage = [
+    'Provide immediate support and counseling',
+    'Connect you with appropriate services',
+    'Follow up on cases when necessary',
+    'Improve our services and training',
+    'Comply with legal requirements'
+  ]
+
+  const sharing = [
+    'With your explicit consent',
+    'When required by law to protect a child',
+    'With authorized service providers who assist us',
+    'In emergency situations where action is needed'
+  ]
+
+  const security = [
+    { title: 'Encryption', desc: 'Secure data transmission and storage' },
+    { title: 'Access Control', desc: 'Limited access to authorized personnel only' },
+    { title: 'Audit', desc: 'Regular security and practice audits' },
+    { title: 'Infrastructure', desc: 'Secure enterprise grade infrastructure' }
+  ]
+
+  const rights = [
+    'Access your information',
+    'Correct inaccuracies',
+    'Request data deletion',
+    'Withdraw consent',
+    'File a complaint'
+  ]
+
+  const lastUpdated = computed(() => {
+    return new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  })
 </script>

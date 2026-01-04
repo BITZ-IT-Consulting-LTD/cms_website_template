@@ -140,6 +140,8 @@ If you or someone you know is experiencing violence or exploitation, call 116. T
             "language": "en",
             "is_featured": True,
             "views_count": 3100,
+            "featured_image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop",
+            "post_type": "BLOG",
         },
         {
             "title": "Responding to Gender-Based Violence: How Help Is Available",
@@ -164,6 +166,8 @@ Seeking help is a sign of strength. If you are experiencing GBV or know someone 
             "language": "en",
             "is_featured": True,
             "views_count": 2450,
+            "featured_image": "https://images.unsplash.com/photo-1573497620053-ea5310f94f17?q=80&w=1200&auto=format&fit=crop",
+            "post_type": "BLOG",
         },
         {
             "title": "Mental Health and Psychosocial Support: You Are Not Alone",
@@ -189,6 +193,8 @@ Help is available. Call 116 to speak to a trained counselor, anytime.""",
             "language": "en",
             "is_featured": False,
             "views_count": 1800,
+            "featured_image": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1200&auto=format&fit=crop",
+            "post_type": "BLOG",
         },
         {
             "title": "Protecting Migrant Workers from Abuse and Exploitation",
@@ -211,6 +217,8 @@ If you are a migrant worker in distress, or know someone who is being exploited,
             "language": "en",
             "is_featured": False,
             "views_count": 1650,
+            "featured_image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1200&auto=format&fit=crop",
+            "post_type": "BLOG",
         },
         {
             "title": "Impact Stories: When Calling 116 Makes a Difference",
@@ -230,6 +238,31 @@ These stories highlight the importance of speaking up and seeking help when faci
             "language": "en",
             "is_featured": False,
             "views_count": 0,
+            "featured_image": "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=1200&auto=format&fit=crop",
+            "post_type": "BLOG",
+        },
+        {
+            "title": "Sauti 116 Launches New Digital Support Portal",
+            "slug": "sauti-116-launches-new-digital-support-portal",
+            "content": """Sauti 116 is proud to announce the launch of its new digital support portal.
+
+This new platform enables:
+- Faster reporting of cases
+- Better tracking of case status
+- Improved access to resources and information
+
+We are committed to using technology to enhance child protection and support for survivors of violence.""",
+            "excerpt": "Official launch of the new Sauti 116 digital platform for enhanced service delivery.",
+            "category": categories["impact-success-stories"],
+            "tags": [
+                tags["community"],
+            ],
+            "status": "PUBLISHED",
+            "language": "en",
+            "is_featured": True,
+            "views_count": 500,
+            "featured_image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
+            "post_type": "NEWS",
         },
     ]
 

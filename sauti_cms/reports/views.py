@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, serializers
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -32,6 +32,11 @@ class ReportCreateView(generics.CreateAPIView):
     serializer_class = ReportCreateSerializer
     permission_classes = [permissions.AllowAny]
     
+    # Support file uploads
+    # Support file uploads and JSON
+    from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
+
     def perform_create(self, serializer):
         # Capture IP address and user agent for security
         request = self.request
@@ -98,18 +103,26 @@ Please log in to the CMS to review this report.
     
     def create(self, request, *args, **kwargs):
         try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            
-            # Return only reference number to user
-            return Response({
-                'message': 'Report submitted successfully',
-                'reference_number': serializer.instance.reference_number,
-                'status': 'Your report has been received and will be reviewed by our team.'
-            }, status=status.HTTP_201_CREATED)
+            from django.db import transaction
+            with transaction.atomic():
+                serializer = self.get_serializer(data=request.data)
+                if not serializer.is_valid():
+                     logger.error(f"Validation Errors: {serializer.errors}")
+                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+                self.perform_create(serializer)
+                
+                # Database committed due to transaction block success
+                
+                # Return only reference number as per strict contract
+                return Response({
+                    'reference_number': serializer.instance.reference_number
+                }, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.error(f"Error creating report: {e}", exc_info=True)
+            # Re-raise validation errors or handle gracefully
+            if isinstance(e, (serializers.ValidationError, PermissionDenied)):
+                 raise e
             return Response({"detail": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -163,6 +176,25 @@ class ReportDetailView(generics.RetrieveUpdateAPIView):
             return ReportUpdateSerializer
         return ReportDetailSerializer
 
+    def perform_update(self, serializer):
+        from django.utils import timezone
+        
+        # Check for status changes
+        instance = self.get_object()
+        old_status = instance.status
+        
+        obj = serializer.save()
+        
+        if obj.status == Report.Status.ESCALATED and old_status != Report.Status.ESCALATED:
+            obj.escalated_at = timezone.now()
+            obj.save(update_fields=['escalated_at'])
+            logger.info(f"Report {obj.reference_number} escalated by {self.request.user}")
+            
+        if obj.status == Report.Status.FORWARDED and old_status != Report.Status.FORWARDED:
+            obj.forwarded_to_openchs_at = timezone.now()
+            obj.save(update_fields=['forwarded_to_openchs_at'])
+            logger.info(f"Report {obj.reference_number} forwarded to OpenCHS by {self.request.user}")
+
 
 class ReportFollowUpCreateView(generics.CreateAPIView):
     """
@@ -205,3 +237,17 @@ class PublicReportStatsView(generics.GenericAPIView):
             'by_category': by_category,
             'over_time': over_time
         })
+
+
+class NormalizedCallStatsView(generics.GenericAPIView):
+    """
+    GET /api/reports/stats/keypair/
+    Consumes upstream SAUTI statistics and returns normalized key-pair JSON.
+    Additive resource, safe for frontend consumption.
+    """
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request):
+        from .services import fetch_normalized_call_stats
+        data = fetch_normalized_call_stats()
+        return Response(data)

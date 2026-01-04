@@ -1,65 +1,80 @@
 <template>
-  <div class="chat-container max-w-2xl mx-auto">
+  <div class="chat-container max-w-2xl mx-auto font-sans">
     <!-- Chat Messages Area -->
-    <div ref="messagesContainer" class="chat-messages bg-gradient-to-b from-gray-50 to-white rounded-2xl p-6 mb-4 h-[600px] overflow-y-auto scroll-smooth">
-      <!-- Welcome Message -->
-      <div class="message-group mb-6">
-        <div class="bot-message">
-          <div class="avatar bg-blue-500">
-            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-              <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+    <div ref="messagesContainer"
+      class="chat-messages bg-sauti-white rounded-[1.5rem] shadow-xl border-2 border-sauti-blue p-6 mb-6 h-[700px] overflow-y-auto scroll-smooth relative">
+      <div class="message-group mb-8">
+        <div class="bot-message flex gap-4">
+          <div class="avatar bg-sauti-blue w-12 h-12 rounded-xl flex items-center justify-center shadow-md">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <div class="message-bubble bot">
-            <p class="font-semibold mb-2">👋 Hello! I'm here to help you report a case.</p>
-            <p class="text-sm">This conversation is confidential and secure. You can remain anonymous if you wish. Let's start...</p>
+          <div
+            class="message-bubble bot bg-sauti-white text-sauti-darkGreen p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-sauti-blue">
+            <p class="font-bold text-sauti-blue mb-1 uppercase tracking-wider text-xs">Official Secure Intake</p>
+            <p class="text-base leading-relaxed font-normal">I am here to help you report a case. Your safety is our
+              priority.</p>
           </div>
         </div>
       </div>
 
-      <!-- Dynamic Messages -->
       <div v-for="(message, index) in messages" :key="index" class="message-group mb-6">
         <!-- Bot Message -->
-        <div v-if="message.type === 'bot'" class="bot-message">
-          <div class="avatar bg-blue-500">
-            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+        <div v-if="message.type === 'bot'" class="bot-message flex gap-4 animate-fade-in-up">
+          <div
+            class="avatar bg-sauti-blue w-12 h-12 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
           </div>
-          <div class="message-bubble bot">
-            <p v-html="message.text"></p>
+          <div
+            class="message-bubble bot bg-sauti-white text-sauti-darkGreen p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-sauti-blue">
+            <p v-html="message.text" class="text-base leading-relaxed font-semibold"></p>
           </div>
         </div>
 
         <!-- User Message -->
-        <div v-if="message.type === 'user'" class="user-message">
-          <div class="message-bubble user">
-            <p>{{ message.text }}</p>
+        <div v-if="message.type === 'user'" class="user-message flex justify-end mb-4 animate-fade-in-up">
+          <div
+            class="message-bubble user bg-sauti-blue text-sauti-white p-5 rounded-2xl rounded-tr-none shadow-md max-w-[85%]">
+            <p class="text-base leading-relaxed font-bold">{{ message.text }}</p>
           </div>
         </div>
 
-        <!-- Options (Category, Incident Type) -->
-        <div v-if="message.type === 'options'" class="bot-message">
-          <div class="avatar bg-blue-500">
-            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+        <!-- Options -->
+        <div v-if="message.type === 'options'" class="bot-message flex gap-4 w-full animate-fade-in-up">
+          <div
+            class="avatar bg-sauti-blue w-12 h-12 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
-          <div class="message-bubble bot">
-            <p class="mb-3" v-html="message.question"></p>
-            <div class="space-y-2">
-              <button
-                v-for="option in message.options"
-                :key="option.value"
-                @click="selectOption(message.field, option.value, option.label)"
-                class="option-button"
-              >
-                <span v-if="option.icon" class="mr-2">{{ option.icon }}</span>
-                <div class="text-left flex-1">
-                  <div class="font-medium">{{ option.label }}</div>
-                  <div v-if="option.description" class="text-xs text-gray-500 mt-0.5">{{ option.description }}</div>
+          <div class="message-bubble bot w-full max-w-[90%]">
+            <p class="mb-6 font-bold text-sauti-darkGreen text-lg ml-1" v-html="message.question"></p>
+            <div class="grid gap-3">
+              <button v-for="option in message.options" :key="option.value"
+                @click="selectOption(option.value, option.label)"
+                class="option-button group relative overflow-hidden bg-sauti-white hover:bg-sauti-blue/5 border-2 border-sauti-neutral hover:border-sauti-blue p-5 rounded-xl transition-all duration-300 text-left flex items-center shadow-sm">
+                <span
+                  class="w-12 h-12 flex items-center justify-center mr-5 rounded-lg bg-sauti-white border-2 border-sauti-blue group-hover:bg-sauti-blue group-hover:text-sauti-white text-sauti-blue text-xl transition-all duration-300">
+                  {{ option.icon || '•' }}
+                </span>
+                <div class="flex-1">
+                  <span
+                    class="font-bold text-sauti-darkGreen text-base group-hover:text-sauti-blue block transition-colors">{{
+                      option.label }}</span>
+                  <span v-if="option.description" class="text-xs text-sauti-darkGreen/80 mt-1 block font-bold">{{
+                    option.description }}</span>
                 </div>
+                <svg
+                  class="w-6 h-6 text-sauti-blue group-hover:text-sauti-darkGreen transform group-hover:translate-x-1 transition-all"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
           </div>
@@ -67,612 +82,545 @@
       </div>
 
       <!-- Typing Indicator -->
-      <div v-if="isTyping" class="bot-message">
-        <div class="avatar bg-blue-500">
-          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+      <div v-if="isTyping" class="bot-message flex gap-3">
+        <div class="avatar bg-sauti-blue w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+          <svg class="w-4 h-4 text-sauti-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
           </svg>
         </div>
-        <div class="message-bubble bot">
-          <div class="typing-indicator">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div
+          class="message-bubble bot bg-sauti-white border-2 border-sauti-blue p-4 rounded-2xl rounded-tl-none w-16 flex items-center justify-center">
+          <div class="typing-indicator flex gap-1">
+            <span class="bg-sauti-blue"></span><span class="bg-sauti-blue"></span><span class="bg-sauti-blue"></span>
           </div>
         </div>
       </div>
 
-      <!-- Success Message -->
-      <div v-if="submitted" class="message-group">
-        <div class="bot-message">
-          <div class="avatar bg-green-500">
-            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      <!-- Success Card -->
+      <div v-if="submitted && referenceNumber" class="message-group animate-fade-in-up">
+        <div class="bot-message flex gap-3">
+          <div class="avatar bg-sauti-darkGreen w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <div class="message-bubble bot bg-green-50 border-green-200">
-            <p class="font-semibold text-green-800 mb-2">✓ Report Submitted Successfully</p>
-            <p class="text-sm text-green-700">Your reference number is: <strong>{{ referenceNumber }}</strong></p>
-            <p class="text-sm text-green-700 mt-2">Our team will review your report and may reach out if you provided contact information. Thank you for trusting us.</p>
-            <button @click="resetForm" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
-              Submit Another Report
-            </button>
+          <div
+            class="message-bubble bot bg-sauti-white border-4 border-sauti-darkGreen w-full p-6 rounded-2xl rounded-tl-none shadow-sm">
+            <h3 class="font-bold text-sauti-darkGreen text-xl mb-2">Report Securely Filed</h3>
+            <div class="my-6 p-6 bg-sauti-white rounded-xl border-2 border-sauti-darkGreen shadow-inner text-center">
+              <p class="text-[10px] text-sauti-darkGreen uppercase tracking-widest font-bold mb-2">Reference Number</p>
+              <p class="text-3xl font-mono font-bold text-sauti-darkGreen tracking-widest">{{ referenceNumber }}</p>
+            </div>
+            <p class="text-sauti-darkGreen font-bold">Please save this number. Our protection team will review this case
+              shortly.</p>
+            <button @click="resetForm"
+              class="mt-6 w-full py-4 bg-sauti-darkGreen text-sauti-white rounded-xl font-bold uppercase tracking-widest hover:brightness-95 transition shadow-lg">File
+              Another Report</button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Input Area -->
-    <div v-if="!submitted" class="chat-input bg-white rounded-2xl shadow-lg p-4">
-      <form @submit.prevent="handleSubmit">
-        <div class="flex gap-3">
-          <textarea
-            v-if="currentStep < conversationFlow.length && conversationFlow[currentStep]?.multiline"
-            v-model="userInput"
-            :placeholder="currentPlaceholder"
-            :disabled="isTyping || waitingForOption"
-            class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
-            ref="inputField"
-            rows="4"
-          ></textarea>
-          <input
-            v-else
-            v-model="userInput"
-            :placeholder="currentPlaceholder"
-            :disabled="isTyping || waitingForOption"
-            class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-            ref="inputField"
-          />
-          <button
-            type="submit"
-            :disabled="!userInput.trim() || isTyping || waitingForOption"
-            class="px-6 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2 self-start"
-          >
-            <span>Send</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-            </svg>
+    <div v-if="!submitted && currentStepType === 'input'"
+      class="chat-input bg-sauti-white rounded-3xl shadow-2xl p-6 border-4 border-sauti-blue transition-all duration-300">
+      <form @submit.prevent="handleInputSubmit">
+        <div class="flex gap-4">
+          <input v-model="inputValue" :type="currentInputType" :placeholder="inputPlaceholder" :disabled="isTyping"
+            class="flex-1 px-6 py-5 border-2 border-sauti-blue rounded-2xl focus:border-sauti-darkGreen outline-none transition text-sauti-darkGreen font-bold placeholder:text-sauti-blue text-lg"
+            ref="inputRef" autofocus />
+          <button type="submit" :disabled="!inputValue.trim() || isTyping"
+            class="px-10 py-5 bg-sauti-blue text-sauti-white rounded-2xl font-bold text-lg hover:brightness-95 disabled:bg-sauti-neutral disabled:text-sauti-darkGreen/30 transition shadow-xl">
+            SEND
           </button>
         </div>
-        <!-- Character Counter for Narrative -->
-        <div v-if="currentStep < conversationFlow.length && conversationFlow[currentStep]?.showCounter" class="mt-2 text-right">
-          <span class="text-sm" :class="userInput.length > 0 ? 'text-blue-600' : 'text-gray-400'">
-            {{ userInput.length }} characters
-          </span>
-        </div>
+        <p v-if="validationError" class="text-sauti-red text-sm mt-4 ml-2 flex items-center font-bold">
+          <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {{ validationError }}
+        </p>
       </form>
-      <p v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</p>
     </div>
+
+    <!-- Textarea for Narrative -->
+    <div v-if="!submitted && currentStepType === 'textarea'"
+      class="chat-input bg-sauti-white rounded-3xl shadow-2xl p-8 border-4 border-sauti-blue transition-all duration-300">
+      <form @submit.prevent="handleInputSubmit">
+        <label class="block text-lg font-bold text-sauti-darkGreen mb-4">{{ inputPlaceholder }}</label>
+        <textarea v-model="inputValue" placeholder="Start typing here..." :disabled="isTyping"
+          class="w-full px-6 py-5 border-2 border-sauti-blue rounded-2xl focus:border-sauti-darkGreen outline-none transition mb-6 resize-none h-48 text-sauti-darkGreen font-bold placeholder:text-sauti-blue text-lg"
+          ref="inputRef"></textarea>
+        <div class="flex justify-end">
+          <button type="submit" :disabled="!inputValue.trim() || isTyping"
+            class="px-12 py-5 bg-sauti-blue text-sauti-white rounded-2xl font-bold text-lg hover:bg-sauti-darkGreen shadow-xl transition-all">
+            Submit Description
+          </button>
+        </div>
+        <p v-if="validationError" class="text-sauti-red text-sm mt-4 font-bold">{{ validationError }}</p>
+      </form>
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import { ref, computed, nextTick, onMounted } from 'vue'
-import { api } from '@/utils/axios'
+  import { ref, computed, nextTick, onMounted } from 'vue'
+  import { api } from '@/utils/axios'
 
-const messagesContainer = ref(null)
-const inputField = ref(null)
-const userInput = ref('')
-const messages = ref([])
-const isTyping = ref(false)
-const waitingForOption = ref(false)
-const submitted = ref(false)
-const referenceNumber = ref('')
-const error = ref('')
+  // --- State ---
+  const messagesContainer = ref(null)
+  const inputRef = ref(null)
+  const isTyping = ref(false)
+  const inputValue = ref('')
+  const inputPlaceholder = ref('')
+  const validationError = ref('')
+  const messages = ref([])
+  const submitted = ref(false)
+  const referenceNumber = ref('')
 
-const form = ref({
-  reporting_for: '',
-  category: '',
-  contact_name: '',
-  contact_phone: '',
-  victim_name: '',
-  victim_sex: '',
-  victim_age: '',
-  location: '',
-  description: '',
-  incident_type: ''
-})
+  const currentStepId = ref(null)
+  const currentInputType = ref('text')
+  const currentStepType = ref('none')
+  const lastSubmittedValue = ref(null) // Track decision
 
-const conversationFlow = [
-  // Step 1: Names - Who is reporting and victim name
-  {
-    step: 'reporting_for',
-    type: 'options',
-    question: 'Are you reporting for yourself or on behalf of someone else?',
-    field: 'reporting_for',
-    options: [
-      { value: 'SELF', label: 'For Myself', icon: '👤', description: 'I am the person affected' },
-      { value: 'BEHALF', label: 'On Behalf of Someone', icon: '👥', description: 'I am reporting for someone else' }
-    ]
-  },
-  {
-    step: 'victim_name',
-    type: 'input',
-    question: () => form.value.reporting_for === 'SELF' 
-      ? 'What is your name? <span class="text-sm text-red-500">[Required]</span>' 
-      : 'What is the name of the victim? <span class="text-sm text-red-500">[Required]</span>',
-    field: 'victim_name',
-    placeholder: 'Enter name',
-    required: true
-  },
-  // Step 2: Category
-  {
-    step: 'category',
-    type: 'options',
-    question: 'What type of case would you like to report?',
-    field: 'category',
-    options: [
-      { value: 'CHILD_PROTECTION', label: 'Child Protection', icon: '👶', description: 'Abuse, neglect, or exploitation of a child' },
-      { value: 'GBV', label: 'Gender-Based Violence', icon: '🚨', description: 'Violence based on gender' },
-      { value: 'MIGRANT', label: 'Migrant Issues', icon: '✈️', description: 'Issues related to migration and labor' },
-      { value: 'PSEA', label: 'Sexual Exploitation & Abuse', icon: '⚠️', description: 'Sexual exploitation or abuse' }
-    ]
-  },
-  {
-    step: 'incident_type',
-    type: 'options',
-    question: 'What type of incident occurred?',
-    field: 'incident_type',
-    options: [
-      { value: 'physical', label: 'Physical Abuse', icon: '🤕' },
-      { value: 'sexual', label: 'Sexual Abuse', icon: '⚠️' },
-      { value: 'emotional', label: 'Emotional Abuse', icon: '💔' },
-      { value: 'neglect', label: 'Neglect', icon: '🏚️' },
-      { value: 'exploitation', label: 'Exploitation', icon: '⛓️' },
-      { value: 'other', label: 'Other', icon: '📝' }
-    ]
-  },
-  // Step 3: Contacts
-  {
-    step: 'ask_name',
-    type: 'input',
-    question: 'May I have your name? <span class="text-sm text-gray-500">(Optional - you can skip this)</span>',
-    field: 'contact_name',
-    placeholder: 'Your name or type "skip" to remain anonymous',
-    skippable: true,
-    skipIf: () => form.value.reporting_for === 'SELF'
-  },
-  {
-    step: 'ask_phone',
-    type: 'input',
-    question: 'Please provide a phone number where we can reach you. <span class="text-sm text-red-500">[Required]</span>',
-    field: 'contact_phone',
-    placeholder: 'Enter phone number',
-    required: true
-  },
-  // Step 4: Sex
-  {
-    step: 'victim_sex',
-    type: 'options',
-    question: () => form.value.reporting_for === 'SELF'
-      ? 'What is your sex?'
-      : 'What is the sex of the victim?',
-    field: 'victim_sex',
-    options: [
-      { value: 'MALE', label: 'Male', icon: '♂️' },
-      { value: 'FEMALE', label: 'Female', icon: '♀️' }
-    ]
-  },
-  {
-    step: 'victim_age',
-    type: 'input',
-    question: () => form.value.reporting_for === 'SELF'
-      ? 'What is your approximate age? <span class="text-sm text-red-500">[Required]</span>'
-      : 'What is the approximate age of the victim? <span class="text-sm text-red-500">[Required]</span>',
-    field: 'victim_age',
-    placeholder: 'Enter age (e.g., 12 years old)',
-    required: true
-  },
-  // Step 5: Location
-  {
-    step: 'location',
-    type: 'input',
-    question: 'Where are you? Please provide your location (District, Village/Town, or area). <span class="text-sm text-red-500">[Required]</span>',
-    field: 'location',
-    placeholder: 'e.g., Kampala, Nakawa Division or Gulu, Bardege Village',
-    required: true
-  },
-  // Step 6: Narrative (moved after phone call)
-  {
-    step: 'description',
-    type: 'input',
-    question: 'Please describe what happened in as much detail as you feel comfortable sharing. <span class="text-sm text-gray-500">Who was involved? When did it happen?</span>',
-    field: 'description',
-    placeholder: 'Describe the incident...',
-    multiline: true,
-    showCounter: true
-  }
-]
+  // Form Data Model
+  const formData = ref({
+    reporter: { name: null, phone: '', safe_to_contact: true },
+    reporting_for: '',
+    affected_persons: [],
+    intake_category: '',
+    description: '',
+    location: ''
+  })
 
-let currentStep = 0
+  // --- Flow Logic ---
+  const STEPS = {
+    REPORTER_NAME: 'reporter_name',
+    REPORTER_PHONE: 'reporter_phone',
+    SAFE_TO_CONTACT: 'safe_to_contact',
+    REPORTING_FOR: 'reporting_for',
 
-const currentPlaceholder = computed(() => {
-  const step = conversationFlow[currentStep]
-  return step?.placeholder || 'Type your response...'
-})
+    // Single Person
+    AFFECTED_SELF_AGE: 'affected_self_age',
+    AFFECTED_SELF_GENDER: 'affected_self_gender',
+    AFFECTED_OTHER_NAME: 'affected_other_name',
+    AFFECTED_OTHER_AGE: 'affected_other_age',
+    AFFECTED_OTHER_GENDER: 'affected_other_gender',
+    AFFECTED_OTHER_RELATION: 'affected_other_relation',
 
-const scrollToBottom = async () => {
-  await nextTick()
-  if (messagesContainer.value) {
-    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
-  }
-}
+    // Multiple Loop
+    MULTIPLE_INTRO: 'multiple_intro',
+    MULTIPLE_NAME: 'multiple_name',
+    MULTIPLE_AGE: 'multiple_age',
+    MULTIPLE_GENDER: 'multiple_gender',
+    MULTIPLE_IS_CHILD: 'multiple_is_child',
+    MULTIPLE_ADD_MORE: 'multiple_add_more',
 
-const addBotMessage = (text) => {
-  messages.value.push({ type: 'bot', text })
-  scrollToBottom()
-}
-
-const addUserMessage = (text) => {
-  messages.value.push({ type: 'user', text })
-  scrollToBottom()
-}
-
-const addOptionsMessage = (question, options, field) => {
-  messages.value.push({ type: 'options', question, options, field })
-  waitingForOption.value = true
-  scrollToBottom()
-}
-
-const typeMessage = async (callback, delay = 1000) => {
-  isTyping.value = true
-  await scrollToBottom()
-  setTimeout(() => {
-    isTyping.value = false
-    callback()
-  }, delay)
-}
-
-const selectOption = async (field, value, label) => {
-  // Handle confirmation response separately
-  if (field === 'confirm') {
-    waitingForOption.value = false
-    addUserMessage(label)
-
-    if (value === 'yes') {
-      await typeMessage(() => {
-        addBotMessage('Thank you. Submitting your report securely...')
-        setTimeout(() => submitReport(), 1000)
-      }, 800)
-    } else {
-      await typeMessage(() => {
-        addBotMessage('No problem! Let\'s start fresh.')
-        setTimeout(() => resetForm(), 1000)
-      }, 800)
-    }
-    return
+    INTAKE_CATEGORY: 'intake_category',
+    NARRATIVE: 'description',
+    LOCATION_DISTRICT: 'location_district',
+    REVIEW: 'review',
   }
 
-  // Handle regular option selection
-  waitingForOption.value = false
-  form.value[field] = value
-  addUserMessage(label)
+  const startConversation = async () => {
+    await promptStep(STEPS.REPORTER_NAME)
+  }
 
-  await typeMessage(() => {
-    proceedToNextStep()
-  }, 800)
-}
+  const promptStep = async (stepId) => {
+    currentStepId.value = stepId
+    isTyping.value = true
+    await scrollToBottom()
 
-const handleSubmit = async () => {
-  if (!userInput.value.trim()) return
+    setTimeout(async () => {
+      isTyping.value = false
+      inputValue.value = ''
+      validationError.value = ''
 
-  const step = conversationFlow[currentStep]
-  const value = userInput.value.trim()
+      switch (stepId) {
+        // --- Reporter ---
+        case STEPS.REPORTER_NAME:
+          askInput('May we have your name? You can say "No" to remain anonymous.', 'Your Name (Optional)', 'input')
+          break
+        case STEPS.REPORTER_PHONE:
+          askInput('Please provide a phone number where we can reach you.', 'Phone Number (Required)', 'input')
+          break
+        case STEPS.SAFE_TO_CONTACT:
+          askOptions('Is it safe for us to contact you on this number?', [
+            { value: 'yes', label: 'Yes, it is safe', icon: '✅' },
+            { value: 'no', label: 'No, do not contact me', icon: '🚫' }
+          ])
+          break
 
-  // Check if user wants to skip (only for skippable fields)
-  if (step.skippable && (value.toLowerCase() === 'skip' || value.toLowerCase() === 'anonymous')) {
-    addUserMessage('Skip')
-    userInput.value = ''
-    await typeMessage(() => {
-      addBotMessage('No problem, moving on...')
-      setTimeout(() => proceedToNextStep(), 500)
+        // --- Reporting For ---
+        case STEPS.REPORTING_FOR:
+          askOptions('Who is affected by the incident you are reporting?', [
+            { value: 'SELF', label: 'Myself', icon: '👤' },
+            { value: 'ADULT_OTHER', label: 'Another Person (Adult)', icon: '🧑' },
+            { value: 'CHILD', label: 'A Child (Under 18)', icon: '👶' },
+            { value: 'MULTIPLE', label: 'Multiple People', icon: '👥' },
+            { value: 'UNSPECIFIED', label: 'Prefer not to say', icon: '🤐' }
+          ])
+          break
+
+        // --- Self ---
+        case STEPS.AFFECTED_SELF_AGE:
+          askInput('What is your approximate age?', 'Age e.g. 25', 'input')
+          break
+        case STEPS.AFFECTED_SELF_GENDER:
+          askOptions('How do you identify?', [
+            { value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }, { value: 'OTHER', label: 'Other' }, { value: 'UNKNOWN', label: 'Prefer not to say' }
+          ])
+          break
+
+        // --- Other (Single) ---
+        case STEPS.AFFECTED_OTHER_NAME:
+          askInput('What is the name of the person affected?', 'Their Name (Optional)', 'input')
+          break
+        case STEPS.AFFECTED_OTHER_AGE:
+          askInput('What is their approximate age?', 'Age e.g. 30', 'input')
+          break
+        case STEPS.AFFECTED_OTHER_GENDER:
+          askOptions('Gender of the affected person?', [
+            { value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }, { value: 'OTHER', label: 'Other' }, { value: 'UNKNOWN', label: 'Prefer not to say' }
+          ])
+          break
+        case STEPS.AFFECTED_OTHER_RELATION:
+          askInput('What is your relationship to them?', 'e.g. Neighbor, Friend', 'input')
+          break
+
+        // --- Multiple Loop ---
+        case STEPS.MULTIPLE_INTRO:
+          addBotMessage("Please tell us about the people affected one by one.")
+          setTimeout(() => promptStep(STEPS.MULTIPLE_NAME), 800)
+          break
+        case STEPS.MULTIPLE_NAME:
+          askInput(`Person ${formData.value.affected_persons.length + 1}: Name?`, 'Name (Optional)', 'input')
+          break
+        case STEPS.MULTIPLE_AGE:
+          askInput('Approximate age?', 'Age', 'input')
+          break
+        case STEPS.MULTIPLE_GENDER:
+          askOptions('Gender?', [{ value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }, { value: 'OTHER', label: 'Other' }])
+          break
+        case STEPS.MULTIPLE_IS_CHILD:
+          askOptions('Is this person under 18?', [{ value: 'yes', label: 'Yes (Child)' }, { value: 'no', label: 'No (Adult)' }])
+          break
+        case STEPS.MULTIPLE_ADD_MORE:
+          askOptions('Would you like to add another person?', [{ value: 'yes', label: 'Yes, add another' }, { value: 'no', label: 'No, continue' }])
+          break
+
+        // --- Common ---
+        case STEPS.INTAKE_CATEGORY:
+          askOptions('What best describes the issue you are reporting?', [
+            { value: 'CHILD_PROTECTION', label: 'Harm or abuse involving a child', icon: '🚸' },
+            { value: 'GBV', label: 'Violence or abuse related to gender/relationships', icon: '💔' },
+            { value: 'PSEA', label: 'Sexual violence or exploitation', icon: '⚠️' },
+            { value: 'MIGRANT', label: 'Migration or displacement-related issue', icon: '🚶' },
+            { value: 'OTHER', label: 'Something else / Not sure', icon: '❓' }
+          ])
+          break
+
+        case STEPS.NARRATIVE:
+          askInput('Please describe what happened, in your own words. Include when and where. Do not include names inside the story if unsafe.', 'Please describe the incident...', 'textarea')
+          break
+
+        case STEPS.LOCATION_DISTRICT:
+          askInput('Location: Please provide the District and Town/Village', 'e.g. Kampala, Nakawa', 'input')
+          break
+
+        case STEPS.REVIEW:
+          showReview()
+          break
+      }
     }, 500)
-    return
   }
 
-  // Validate required fields - don't allow "skip", "unknown", empty-like responses
-  if (step.required) {
-    const invalidResponses = ['skip', 'unknown', 'none', 'n/a', 'na', 'no', '-', '.']
-    const isInvalidResponse = invalidResponses.includes(value.toLowerCase()) || value.length < 2
+  // Helpers
+  const askInput = (text, placeholder, type, inputType = 'text') => {
+    addBotMessage(text)
+    inputPlaceholder.value = placeholder
+    currentStepType.value = type
+    currentInputType.value = inputType
+    nextTick(() => inputRef.value?.focus())
+  }
 
-    if (isInvalidResponse) {
-      userInput.value = ''
-      await typeMessage(() => {
-        addBotMessage('I need this information to help you. Please provide a valid response.')
-        nextTick(() => inputField.value?.focus())
-      }, 500)
+  const askOptions = (question, options) => {
+    messages.value.push({ type: 'options', question, options })
+    currentStepType.value = 'options'
+    scrollToBottom()
+  }
+
+  const addBotMessage = (text) => {
+    messages.value.push({ type: 'bot', text })
+    scrollToBottom()
+  }
+
+  const addUserMessage = (text) => {
+    messages.value.push({ type: 'user', text })
+    scrollToBottom()
+  }
+
+  // Input Handling
+  const handleInputSubmit = async () => {
+    const val = inputValue.value.trim()
+    if (!val) return
+
+    if (currentStepId.value === STEPS.REPORTER_PHONE && val.length < 5) {
+      validationError.value = 'Please enter a valid phone number.'
       return
     }
 
-    // Special validation for phone numbers - should contain digits
-    if (step.field === 'contact_phone') {
-      const hasDigits = /\d/.test(value)
-      if (!hasDigits) {
-        userInput.value = ''
-        await typeMessage(() => {
-          addBotMessage('Please provide a valid phone number with digits.')
-          nextTick(() => inputField.value?.focus())
-        }, 500)
-        return
+    saveData(currentStepId.value, val)
+    addUserMessage(val)
+    lastSubmittedValue.value = val
+    currentStepType.value = 'none'
+    nextStep()
+  }
+
+  const selectOption = async (value, label) => {
+    if (currentStepType.value !== 'options') return
+
+    if (currentStepId.value === STEPS.REVIEW) {
+      if (value === 'submit') {
+        addUserMessage(label)
+        submitReport()
+      } else {
+        window.location.reload()
       }
+      return
+    }
+
+    saveData(currentStepId.value, value)
+    addUserMessage(label)
+    lastSubmittedValue.value = value
+    currentStepType.value = 'none'
+    nextStep()
+  }
+
+  const saveData = (step, value) => {
+    switch (step) {
+      case STEPS.REPORTER_NAME:
+        if (value.toLowerCase() === 'no' || value.toLowerCase() === 'anonymous') formData.value.reporter.name = null
+        else formData.value.reporter.name = value
+        break
+      case STEPS.REPORTER_PHONE:
+        formData.value.reporter.phone = value
+        break
+      case STEPS.SAFE_TO_CONTACT:
+        formData.value.reporter.safe_to_contact = (value === 'yes')
+        break
+      case STEPS.REPORTING_FOR:
+        formData.value.reporting_for = value
+        if (['SELF', 'ADULT_OTHER', 'CHILD'].includes(value)) formData.value.affected_persons = [{}]
+        else if (value === 'MULTIPLE') formData.value.affected_persons = [] // Reset
+        break
+
+      // Single 
+      case STEPS.AFFECTED_SELF_AGE:
+      case STEPS.AFFECTED_OTHER_AGE:
+        if (formData.value.affected_persons[0]) formData.value.affected_persons[0].age = value
+        break
+      case STEPS.AFFECTED_SELF_GENDER:
+      case STEPS.AFFECTED_OTHER_GENDER:
+        if (formData.value.affected_persons[0]) formData.value.affected_persons[0].gender = value
+        break
+      case STEPS.AFFECTED_OTHER_NAME:
+        if (formData.value.affected_persons[0]) formData.value.affected_persons[0].name = value
+        break
+
+      // Multiple Loop Data
+      case STEPS.MULTIPLE_NAME:
+        // New person start
+        formData.value.affected_persons.push({ name: value })
+        break
+      case STEPS.MULTIPLE_AGE:
+        getLastPerson().age = value
+        break
+      case STEPS.MULTIPLE_GENDER:
+        getLastPerson().gender = value
+        break
+      case STEPS.MULTIPLE_IS_CHILD:
+        getLastPerson().is_child = (value === 'yes')
+        break
+
+      case STEPS.INTAKE_CATEGORY:
+        formData.value.intake_category = value
+        break
+      case STEPS.NARRATIVE:
+        formData.value.description = value
+        break
+      case STEPS.LOCATION_DISTRICT:
+        formData.value.location = value
+        break
     }
   }
 
-  // Save the input
-  form.value[step.field] = value
-  addUserMessage(value)
-  userInput.value = ''
+  const getLastPerson = () => formData.value.affected_persons[formData.value.affected_persons.length - 1]
 
-  await typeMessage(() => {
-    proceedToNextStep()
-  }, 800)
-}
+  const nextStep = () => {
+    const current = currentStepId.value
 
-const proceedToNextStep = () => {
-  currentStep++
+    if (current === STEPS.REPORTER_NAME) return promptStep(STEPS.REPORTER_PHONE)
+    if (current === STEPS.REPORTER_PHONE) return promptStep(STEPS.SAFE_TO_CONTACT)
+    if (current === STEPS.SAFE_TO_CONTACT) return promptStep(STEPS.REPORTING_FOR)
 
-  if (currentStep >= conversationFlow.length) {
-    // Show review and submit
-    showReview()
-    return
-  }
-
-  const nextStep = conversationFlow[currentStep]
-
-  // Check if this step should be skipped
-  if (nextStep.skipIf && nextStep.skipIf()) {
-    proceedToNextStep()
-    return
-  }
-
-  // Get question (could be a function or string)
-  const question = typeof nextStep.question === 'function'
-    ? nextStep.question()
-    : nextStep.question
-
-  if (nextStep.type === 'options') {
-    addOptionsMessage(question, nextStep.options, nextStep.step)
-  } else {
-    addBotMessage(question)
-  }
-
-  // Focus input if it's a text input step
-  if (nextStep.type === 'input') {
-    nextTick(() => inputField.value?.focus())
-  }
-}
-
-const showReview = () => {
-  const reportingFor = conversationFlow.find(s => s.step === 'reporting_for')?.options.find(o => o.value === form.value.reporting_for)?.label
-  const category = conversationFlow.find(s => s.step === 'category')?.options.find(o => o.value === form.value.category)?.label
-  const incidentType = conversationFlow.find(s => s.step === 'incident_type')?.options.find(o => o.value === form.value.incident_type)?.label
-  const victimSex = conversationFlow.find(s => s.step === 'victim_sex')?.options.find(o => o.value === form.value.victim_sex)?.label
-  
-  const displayContactName = form.value.reporting_for === 'SELF' ? form.value.victim_name : form.value.contact_name
-
-  addBotMessage(`
-    <div class="space-y-2">
-      <p class="font-semibold">Let me confirm the details:</p>
-      <p><strong>Reporting:</strong> ${reportingFor}</p>
-      <p><strong>Victim Name:</strong> ${form.value.victim_name}</p>
-      <p><strong>Category:</strong> ${category}</p>
-      <p><strong>Incident Type:</strong> ${incidentType}</p>
-      ${displayContactName ? `<p><strong>Your Name:</strong> ${displayContactName}</p>` : '<p><em>Reporting anonymously</em></p>'}
-      ${form.value.contact_phone ? `<p><strong>Phone:</strong> ${form.value.contact_phone}</p>` : ''}
-      <p><strong>Victim Sex:</strong> ${victimSex}</p>
-      ${form.value.victim_age ? `<p><strong>Victim Age:</strong> ${form.value.victim_age}</p>` : ''}
-      <p><strong>Location:</strong> ${form.value.location}</p>
-      <p><strong>Description:</strong> ${form.value.description}</p>
-    </div>
-  `)
-
-  setTimeout(() => {
-    addOptionsMessage(
-      'Is this information correct?',
-      [
-        { value: 'yes', label: 'Yes, submit my report', icon: '✓' },
-        { value: 'no', label: 'No, let me start over', icon: '↺' }
-      ],
-      'confirm'
-    )
-  }, 1500)
-}
-
-const submitReport = async () => {
-  try {
-    isTyping.value = true
-    error.value = ''
-
-    const reportingForLabel = form.value.reporting_for === 'SELF' ? 'Reporting for self' : 'Reporting on behalf of someone else'
-    const sexLabel = form.value.victim_sex === 'MALE' ? 'Male' : 'Female'
-
-    const descriptionFull = `Incident Type: ${form.value.incident_type}\n` +
-      `${reportingForLabel}\n` +
-      `Victim Name: ${form.value.victim_name}\n` +
-      `Victim Sex: ${sexLabel}\n` +
-      `Victim Age: ${form.value.victim_age}\n` +
-      `Location: ${form.value.location}\n\n` +
-      `Narrative: ${form.value.description}`
-
-    const reportData = {
-      category: form.value.category,
-      description: descriptionFull,
-      is_anonymous: false,
-      contact_name: (form.value.reporting_for === 'SELF' ? form.value.victim_name : form.value.contact_name) || 'Anonymous',
-      contact_phone: form.value.contact_phone,
-      location: form.value.location
+    if (current === STEPS.REPORTING_FOR) {
+      const type = formData.value.reporting_for
+      if (type === 'SELF') return promptStep(STEPS.AFFECTED_SELF_AGE)
+      if (type === 'ADULT_OTHER') return promptStep(STEPS.AFFECTED_OTHER_NAME)
+      if (type === 'CHILD') return promptStep(STEPS.AFFECTED_OTHER_NAME)
+      if (type === 'MULTIPLE') return promptStep(STEPS.MULTIPLE_INTRO)
+      if (type === 'UNSPECIFIED') return promptStep(STEPS.INTAKE_CATEGORY)
     }
 
-    const response = await api.reports.submit(reportData)
-    referenceNumber.value = response.data.reference_number
-    submitted.value = true
-    scrollToBottom()
-  } catch (err) {
-    const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'Failed to submit report. Please try again.'
-    error.value = errorMsg
-    console.error('Error submitting report:', err)
-  } finally {
-    isTyping.value = false
+    // Single Flow
+    if (current === STEPS.AFFECTED_SELF_AGE) return promptStep(STEPS.AFFECTED_SELF_GENDER)
+    if (current === STEPS.AFFECTED_SELF_GENDER) return promptStep(STEPS.INTAKE_CATEGORY)
+
+    if (current === STEPS.AFFECTED_OTHER_NAME) return promptStep(STEPS.AFFECTED_OTHER_AGE)
+    if (current === STEPS.AFFECTED_OTHER_AGE) return promptStep(STEPS.AFFECTED_OTHER_GENDER)
+    if (current === STEPS.AFFECTED_OTHER_GENDER) return promptStep(STEPS.AFFECTED_OTHER_RELATION)
+    if (current === STEPS.AFFECTED_OTHER_RELATION) return promptStep(STEPS.INTAKE_CATEGORY)
+
+    // Multiple Loop
+    if (current === STEPS.MULTIPLE_NAME) return promptStep(STEPS.MULTIPLE_AGE)
+    if (current === STEPS.MULTIPLE_AGE) return promptStep(STEPS.MULTIPLE_GENDER)
+    if (current === STEPS.MULTIPLE_GENDER) return promptStep(STEPS.MULTIPLE_IS_CHILD)
+    if (current === STEPS.MULTIPLE_IS_CHILD) return promptStep(STEPS.MULTIPLE_ADD_MORE)
+    if (current === STEPS.MULTIPLE_ADD_MORE) {
+      if (lastSubmittedValue.value === 'yes') return promptStep(STEPS.MULTIPLE_NAME)
+      else return promptStep(STEPS.INTAKE_CATEGORY)
+    }
+
+    if (current === STEPS.INTAKE_CATEGORY) return promptStep(STEPS.NARRATIVE)
+    if (current === STEPS.NARRATIVE) return promptStep(STEPS.LOCATION_DISTRICT)
+    if (current === STEPS.LOCATION_DISTRICT) return promptStep(STEPS.REVIEW)
   }
-}
 
-const resetForm = () => {
-  messages.value = []
-  currentStep = 0
-  form.value = {
-    reporting_for: '',
-    category: '',
-    contact_name: '',
-    contact_phone: '',
-    victim_name: '',
-    victim_sex: '',
-    victim_age: '',
-    location: '',
-    description: '',
-    incident_type: ''
+  const showReview = () => {
+    const personCount = formData.value.affected_persons.length
+    const html = `
+      <div class="border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+        <h4 class="font-bold text-gray-800 mb-2">Review Details</h4>
+        <p class="text-sm"><strong>Reporter:</strong> ${formData.value.reporter.name || 'Anonymous'}</p>
+        <p class="text-sm"><strong>Safe to Contact:</strong> ${formData.value.reporter.safe_to_contact ? 'Yes' : 'No'}</p>
+        <p class="text-sm"><strong>Reporting For:</strong> ${formData.value.reporting_for}</p>
+        <p class="text-sm"><strong>Affected Persons:</strong> ${personCount > 0 ? personCount + ' person(s) listed' : 'As described'}</p>
+        <p class="text-sm text-gray-500 italic mt-2">Category selected is provisional.</p>
+        <p class="text-sm mt-1"><strong>Category:</strong> ${formData.value.intake_category}</p>
+      </div>
+    `
+    addBotMessage(html)
+    setTimeout(() => {
+      askOptions('Is this correct? Submitting will securely save this report.', [
+        { value: 'submit', label: 'Yes, Submit Report', icon: '✅' },
+        { value: 'edit', label: 'No, Start Over', icon: '🔄' }
+      ])
+    }, 1000)
   }
-  submitted.value = false
-  referenceNumber.value = ''
-  error.value = ''
-  startConversation()
-}
 
-const startConversation = async () => {
-  await typeMessage(() => {
-    const firstStep = conversationFlow[0]
-    addOptionsMessage(firstStep.question, firstStep.options, firstStep.step)
-  }, 1500)
-}
+  const submitReport = async () => {
+    try {
+      isTyping.value = true
+      formData.value.description = formData.value.description || "No description provided." // Safety
 
-onMounted(() => {
-  startConversation()
-})
+      console.log('Submitting Payload:', JSON.stringify(formData.value, null, 2))
+
+      const payload = {
+        reporter: formData.value.reporter,
+        reporting_for: formData.value.reporting_for,
+        affected_persons: formData.value.affected_persons,
+        intake_category: formData.value.intake_category,
+        description: formData.value.description,
+        location: formData.value.location
+      }
+
+      const response = await api.reports.submit(payload)
+
+      if (response.data && response.data.reference_number) {
+        referenceNumber.value = response.data.reference_number
+        submitted.value = true
+      } else {
+        throw new Error('Reference number missing')
+      }
+    } catch (err) {
+      let msg = 'Submission failed. Network or Server Error.'
+      if (err.response?.data?.detail) msg = err.response.data.detail
+      errorMessage(msg)
+    } finally {
+      isTyping.value = false
+    }
+  }
+
+  const errorMessage = (msg) => {
+    addBotMessage(`<span class="text-red-600 font-bold">❌ Error:</span> ${msg}`)
+  }
+
+  const resetForm = () => window.location.reload()
+
+  const scrollToBottom = async () => {
+    await nextTick()
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+    }
+  }
+
+  onMounted(() => startConversation())
 </script>
 
 <style scoped>
-.chat-messages::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
-  border-radius: 10px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #a0aec0;
-}
-
-.message-group {
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+  .chat-messages::-webkit-scrollbar {
+    width: 6px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .chat-messages::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 10px;
   }
-}
 
-.bot-message {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.user-message {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.message-bubble {
-  max-width: 80%;
-  padding: 14px 18px;
-  border-radius: 18px;
-  line-height: 1.5;
-}
-
-.message-bubble.bot {
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: #2d3748;
-  border-bottom-left-radius: 4px;
-}
-
-.message-bubble.user {
-  background: #3b82f6;
-  color: white;
-  border-bottom-right-radius: 4px;
-}
-
-.option-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background: #f7fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  text-align: left;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-
-.option-button:hover {
-  background: #edf2f7;
-  border-color: #3b82f6;
-  transform: translateX(4px);
-}
-
-.typing-indicator {
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-}
-
-.typing-indicator span {
-  width: 8px;
-  height: 8px;
-  background: #cbd5e0;
-  border-radius: 50%;
-  animation: typing 1.4s infinite;
-}
-
-.typing-indicator span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-indicator span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.7;
+  .typing-indicator span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: type 1.4s infinite;
   }
-  30% {
-    transform: translateY(-10px);
-    opacity: 1;
+
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
   }
-}
+
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes type {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 from .models import Post, Category, Tag
 
 
@@ -17,7 +18,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(SimpleHistoryAdmin):
     list_display = ['title', 'author', 'category', 'status', 'language', 'is_featured', 'published_at', 'views_count']
     list_filter = ['status', 'language', 'is_featured', 'category', 'created_at']
     search_fields = ['title', 'content', 'excerpt']
@@ -34,15 +35,21 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('author', 'category', 'tags')
         }),
         ('Publication', {
-            'fields': ('status', 'language', 'is_featured', 'published_at')
+            'fields': ('status', 'post_type', 'language', 'is_featured', 'published_at', 'scheduled_publish_at')
         }),
         ('Stats', {
-            'fields': ('views_count',),
+            'fields': ('views_count', 'created_by', 'last_updated_by'),
             'classes': ('collapse',)
         }),
     )
     
+    readonly_fields = ['created_by', 'last_updated_by']
+    
     def save_model(self, request, obj, form, change):
         if not obj.author_id:
             obj.author = request.user
+        
+        if not change:
+            obj.created_by = request.user
+        obj.last_updated_by = request.user
         super().save_model(request, obj, form, change)

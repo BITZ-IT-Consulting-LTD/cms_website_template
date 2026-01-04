@@ -1,187 +1,223 @@
 <template>
-  <div class="bg-gradient-to-br from-[#FFF8DC] via-white to-[#F5F5DC] py-16">
-    <div class="container-custom">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <!-- Left visuals -->
-        <div class="lg:col-span-5 order-2 lg:order-1 space-y-5">
-          <!-- Hero image -->
-          <div class="rounded-3xl bg-gradient-to-br from-[#8B4000] to-[#A0522D] h-72 flex items-center justify-center">
-            <div class="text-center text-white">
-              <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-              <h3 class="text-xl font-bold">{{ faqsSupportTitle }}</h3>
-              <p class="text-sm opacity-90">{{ faqsSupportSubtitle }}</p>
-            </div>
-          </div>
-          
-          <!-- Info cards -->
-          <div class="rounded-3xl bg-white shadow-lg p-6 border border-gray-100">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="h-12 w-12 rounded-full bg-[#8B4000] text-white flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <p class="text-sm uppercase tracking-[0.4em] text-sauti-blue font-bold mb-4">{{ faqsPageTitle }}</p>
+        <h1 class="page-header-title">
+          {{ faqsPageSubtitle }}
+        </h1>
+      </div>
+    </header>
+
+    <div class="container-custom section-padding">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+        <!-- Left Sidebar (Support Info) -->
+        <div class="lg:col-span-4 order-2 lg:order-1 space-y-10 lg:sticky lg:top-32">
+          <!-- Hero Card -->
+          <div class="rounded-[3rem] bg-sauti-blue p-10 text-sauti-white shadow-xl relative overflow-hidden">
+            <div class="relative z-10 text-center space-y-6">
+              <div
+                class="w-20 h-20 mx-auto bg-sauti-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                <svg class="w-10 h-10 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900">{{ faqsQuickResponseTitle }}</h4>
-                <p class="text-gray-600 text-sm">{{ faqsQuickResponseSubtitle }}</p>
+                <h3 class="text-3xl font-bold mb-2 tracking-tight">{{ faqsSupportTitle }}</h3>
+                <p class="text-sauti-white/80 font-bold leading-relaxed">{{ faqsSupportSubtitle }}</p>
               </div>
             </div>
-            <p class="text-gray-600 text-sm">{{ faqsQuickResponseText }}</p>
           </div>
 
-          <!-- Contact card -->
-          <div class="rounded-3xl bg-gradient-to-r from-[#8B4000] to-[#A0522D] p-6 text-white">
-            <h4 class="font-bold text-lg mb-2">{{ faqsImmediateHelpTitle }}</h4>
-            <p class="text-sm opacity-90 mb-4">{{ faqsImmediateHelpSubtitle }}</p>
-            <a href="tel:116" class="btn-emergency inline-flex items-center gap-2">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-              </svg>
+          <!-- Emergency Contact Card -->
+          <div class="rounded-[3rem] bg-sauti-red/5 p-10 shadow-2xl space-y-6">
+            <h4 class="campaign-header text-2xl text-sauti-red">{{ faqsImmediateHelpTitle }}</h4>
+            <p class="text-sauti-darkGreen font-bold leading-relaxed">{{ faqsImmediateHelpSubtitle }}</p>
+            <BaseCTA :href="`tel:116`" variant="emergency" class="w-full justify-center !py-4 font-bold" external>
               {{ faqsCallButton }}
-            </a>
+            </BaseCTA>
           </div>
         </div>
 
-        <!-- Right content -->
-        <div class="lg:col-span-7 order-1 lg:order-2">
-          <p class="text-sm uppercase tracking-widest text-[#8B4000] font-semibold">{{ faqsPageTitle }}</p>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-[#8B4000] to-[#A0522D] bg-clip-text text-transparent mt-2">{{ faqsPageSubtitle }}</h1>
-
-          <!-- Search -->
-          <div class="mt-8 mb-4">
-            <div class="relative">
-              <input v-model="query" type="text" :placeholder="faqsSearchPlaceholder" class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white shadow-sm pl-12 focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
-              <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/></svg>
+        <!-- Right Content (FAQs) -->
+        <div class="lg:col-span-8 order-1 lg:order-2 space-y-12">
+          <!-- Search Bar -->
+          <div class="relative mb-12 group">
+            <div class="absolute inset-y-0 left-0 pl-8 flex items-center pointer-events-none">
+              <svg class="h-8 w-8 text-sauti-blue group-focus-within:text-sauti-darkGreen transition-colors" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
+            <input v-model="query" type="text" :placeholder="faqsSearchPlaceholder"
+              class="w-full pl-20 pr-8 py-8 bg-white shadow-lg rounded-[2.5rem] text-sauti-darkGreen font-bold placeholder:text-sauti-blue/40 focus:outline-none focus:shadow-2xl transition-all text-xl" />
           </div>
 
           <AppLoader v-if="loading" />
 
-          <!-- FAQ Categories and Accordion -->
           <div v-else>
             <!-- Category Filter -->
-            <div v-if="categories.length" class="mb-6">
-              <div class="flex flex-wrap gap-2">
-                <button 
-                  @click="selectedCategory = ''"
-                  :class="selectedCategory === '' ? 'bg-[#8B4000] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-                  class="px-4 py-2 rounded-full text-sm font-medium transition-colors"
-                >
+            <div v-if="categories.length" class="mb-12 overflow-x-auto pb-6 -mx-2 px-2 scrollbar-hide">
+              <div class="flex flex-nowrap gap-4">
+                <button @click="selectedCategory = ''"
+                  :class="selectedCategory === '' ? 'bg-sauti-darkGreen text-sauti-white shadow-xl' : 'bg-white text-sauti-darkGreen shadow-md hover:shadow-lg'"
+                  class="px-10 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300">
                   {{ faqsAllCategoriesButton }}
                 </button>
-                <button 
-                  v-for="category in categories" 
-                  :key="category.id"
-                  @click="selectedCategory = category.id"
-                  :class="selectedCategory === category.id ? 'bg-[#8B4000] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-                  class="px-4 py-2 rounded-full text-sm font-medium transition-colors"
-                >
+                <button v-for="category in categories" :key="category.id" @click="selectedCategory = category.id"
+                  :class="selectedCategory === category.id ? 'bg-sauti-darkGreen text-sauti-white shadow-xl' : 'bg-white text-sauti-darkGreen shadow-md hover:shadow-lg'"
+                  class="px-10 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300">
                   {{ category.name }}
                 </button>
               </div>
             </div>
 
             <!-- FAQ List -->
-            <div v-if="filteredFaqs.length" class="space-y-4">
-              <div
-                v-for="(faq, index) in filteredFaqs"
-                :key="faq.id || index"
-                class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-              >
-                <button @click="toggleFaq(index)" class="w-full text-left px-6 py-5 flex justify-between items-center hover:bg-gray-50 transition-colors">
+            <div v-if="filteredFaqs.length" class="space-y-8">
+              <div v-for="(faq, index) in filteredFaqs" :key="faq.id || index"
+                class="group bg-white rounded-[3rem] shadow-lg transition-all duration-500 overflow-hidden"
+                :class="{ 'shadow-2xl': openFaq === index }">
+                <button @click="toggleFaq(index)"
+                  class="w-full text-left px-10 py-10 flex items-start gap-8 hover:bg-sauti-neutral/30 transition-colors focus:outline-none"
+                  :aria-expanded="openFaq === index">
+                  <div class="mt-2 flex-shrink-0">
+                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500"
+                      :class="openFaq === index ? 'bg-sauti-darkGreen text-sauti-white shadow-md' : 'bg-sauti-neutral text-sauti-blue'">
+                      <svg class="w-5 h-5 transition-transform duration-500 transform"
+                        :class="{ 'rotate-180': openFaq === index }" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
                   <div class="flex-1">
-                    <span class="font-semibold text-gray-900 block">{{ faq.question }}</span>
-                    <span v-if="faq.category_name" class="text-xs text-[#8B4000] font-medium mt-1">{{ faq.category_name }}</span>
+                    <span
+                      class="font-bold text-sauti-darkGreen text-2xl block mb-4 leading-tight group-hover:text-sauti-blue transition-colors">{{
+                        faq.question
+                      }}</span>
+                    <span v-if="faq.category_name"
+                      class="inline-block px-4 py-1.5 rounded-xl text-[10px] uppercase font-bold tracking-widest bg-sauti-blue text-sauti-white">{{
+                        faq.category_name }}</span>
                   </div>
-                  <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#8B4000] bg-opacity-10 text-[#8B4000] ml-4 flex-shrink-0">
-                    <svg class="w-5 h-5 transition-transform" :class="{ 'rotate-180': openFaq === index }" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                  </span>
                 </button>
-                <Transition name="fade">
-                  <div v-if="openFaq === index" class="px-6 pb-6 text-gray-600 border-t border-gray-100">
-                    <div class="pt-4">{{ faq.answer }}</div>
-                  </div>
-                </Transition>
+
+                <div v-show="openFaq === index"
+                  class="px-10 pb-12 pl-[6.5rem] text-sauti-darkGreen font-bold text-lg leading-relaxed pt-2 animate-fade-in bg-sauti-white">
+                  <p class="max-w-3xl">{{ faq.answer }}</p>
+                </div>
               </div>
             </div>
-            <div v-else class="text-center py-12">
-              <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <p class="text-gray-600 text-lg">{{ faqsNoResults }}</p>
-              <p class="text-gray-500 text-sm mt-2">{{ faqsNoResultsSubtitle }}</p>
+
+            <!-- Empty State -->
+            <div v-else
+              class="text-center py-24 bg-white rounded-[4rem] shadow-lg max-w-2xl mx-auto">
+              <div
+                class="w-24 h-24 mx-auto bg-sauti-neutral/10 rounded-3xl flex items-center justify-center mb-8 shadow-sm">
+                <svg class="w-12 h-12 text-sauti-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 class="text-3xl font-bold text-sauti-darkGreen mb-4">{{ faqsNoResults }}</h3>
+              <p class="text-xl text-sauti-darkGreen/50 font-bold mb-10">{{ faqsNoResultsSubtitle }}</p>
+              <button @click="query = ''; selectedCategory = ''"
+                class="px-12 py-4 bg-sauti-blue text-sauti-white rounded-2xl font-bold uppercase tracking-widest text-xs shadow-xl shadow-sauti-blue/20 hover:scale-105 transition-all">
+                Clear all filters
+              </button>
             </div>
           </div>
 
-          <!-- Footer links -->
-          <div class="text-sm text-gray-500 mt-10">
-            <router-link to="/privacy" class="hover:text-gray-700">{{ faqsPrivacyPolicy }}</router-link>
-            <span class="mx-2">•</span>
-            <router-link to="/terms" class="hover:text-gray-700">{{ faqsTermsOfService }}</router-link>
-            <span class="mx-2">•</span>
-            <router-link to="/contact" class="hover:text-gray-700">{{ faqsContactUs }}</router-link>
-            <p class="mt-2">{{ faqsFooterText }}</p>
+          <!-- Footer Links -->
+          <div
+            class="mt-32 py-10 border-t-2 border-sauti-blue flex flex-col md:flex-row items-center justify-between text-[10px] text-sauti-blue gap-8 text-center md:text-left font-bold uppercase tracking-widest">
+            <p>{{ faqsFooterText }}</p>
+            <div class="flex flex-wrap justify-center gap-8">
+              <router-link to="/privacy" class="hover:text-sauti-blue transition-colors">{{ faqsPrivacyPolicy
+                }}</router-link>
+              <router-link to="/terms" class="hover:text-sauti-blue transition-colors">{{ faqsTermsOfService
+                }}</router-link>
+              <router-link to="/contact" class="hover:text-sauti-blue transition-colors">{{ faqsContactUs
+                }}</router-link>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useFaqsStore } from '@/store/faqs'
-import { useSettingsStore } from '@/store/settings'
-import AppLoader from '@/components/common/AppLoader.vue'
+  import { ref, computed, onMounted } from 'vue'
+  import { useFaqsStore } from '@/store/faqs'
+  import { useSettingsStore } from '@/store/settings'
+  import AppLoader from '@/components/common/AppLoader.vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
 
-defineOptions({
-  name: 'FaqsPage'
-})
+  defineOptions({
+    name: 'FaqsPage'
+  })
 
-const faqsStore = useFaqsStore()
-const settingsStore = useSettingsStore()
-const faqs = ref([])
-const categories = ref([])
-const loading = ref(true)
-const openFaq = ref(null)
-const query = ref('')
-const selectedCategory = ref('')
+  const faqsStore = useFaqsStore()
+  const settingsStore = useSettingsStore()
+  const faqs = ref([])
+  const categories = ref([])
+  const loading = ref(true)
+  const openFaq = ref(null)
+  const query = ref('')
+  const selectedCategory = ref('')
 
-// Computed properties for content
-const faqsSupportTitle = computed(() => settingsStore.settings.faqs_support_title || '24/7 Support')
-const faqsSupportSubtitle = computed(() => settingsStore.settings.faqs_support_subtitle || 'Always here to help')
-const faqsQuickResponseTitle = computed(() => settingsStore.settings.faqs_quick_response_title || 'Quick Response')
-const faqsQuickResponseSubtitle = computed(() => settingsStore.settings.faqs_quick_response_subtitle || 'Get help immediately')
-const faqsQuickResponseText = computed(() => settingsStore.settings.faqs_quick_response_text || 'Our trained counselors are available 24/7 to provide immediate support and guidance.')
-const faqsImmediateHelpTitle = computed(() => settingsStore.settings.faqs_immediate_help_title || 'Need Immediate Help?')
-const faqsImmediateHelpSubtitle = computed(() => settingsStore.settings.faqs_immediate_help_subtitle || 'Call our toll-free helpline')
-const faqsCallButton = computed(() => settingsStore.settings.faqs_call_button || 'Call 116')
-const faqsPageTitle = computed(() => settingsStore.settings.faqs_page_title || 'Frequently Asked')
-const faqsPageSubtitle = computed(() => settingsStore.settings.faqs_page_subtitle || 'Questions & Answers')
-const faqsSearchPlaceholder = computed(() => settingsStore.settings.faqs_search_placeholder || 'Search questions')
-const faqsAllCategoriesButton = computed(() => settingsStore.settings.faqs_all_categories_button || 'All Categories')
-const faqsNoResults = computed(() => settingsStore.settings.faqs_no_results || 'No FAQs found')
-const faqsNoResultsSubtitle = computed(() => settingsStore.settings.faqs_no_results_subtitle || 'Try adjusting your search or category filter')
-const faqsPrivacyPolicy = computed(() => settingsStore.settings.faqs_privacy_policy || 'Privacy Policy')
-const faqsTermsOfService = computed(() => settingsStore.settings.faqs_terms_of_service || 'Terms of Service')
-const faqsContactUs = computed(() => settingsStore.settings.faqs_contact_us || 'Contact Us')
-const faqsFooterText = computed(() => settingsStore.settings.faqs_footer_text || '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.')
+  // Computed properties for content
+  const faqsSupportTitle = computed(() => settingsStore.settings.faqs_support_title || '24/7 Support')
+  const faqsSupportSubtitle = computed(() => settingsStore.settings.faqs_support_subtitle || 'Always here to help')
+  const faqsQuickResponseTitle = computed(() => settingsStore.settings.faqs_quick_response_title || 'Quick Response')
+  const faqsQuickResponseSubtitle = computed(() => settingsStore.settings.faqs_quick_response_subtitle || 'Get help immediately')
+  const faqsQuickResponseText = computed(() => settingsStore.settings.faqs_quick_response_text || 'Our trained counselors are available 24/7 to provide immediate support and guidance.')
+  const faqsImmediateHelpTitle = computed(() => settingsStore.settings.faqs_immediate_help_title || 'Need Immediate Help?')
+  const faqsImmediateHelpSubtitle = computed(() => settingsStore.settings.faqs_immediate_help_subtitle || 'Call our toll-free helpline')
+  const faqsCallButton = computed(() => settingsStore.settings.faqs_call_button || 'Call 116')
+  const faqsPageTitle = computed(() => settingsStore.settings.faqs_page_title || 'Frequently Asked')
+  const faqsPageSubtitle = computed(() => settingsStore.settings.faqs_page_subtitle || 'Questions & Answers')
+  const faqsSearchPlaceholder = computed(() => settingsStore.settings.faqs_search_placeholder || 'Search questions')
+  const faqsAllCategoriesButton = computed(() => settingsStore.settings.faqs_all_categories_button || 'All Categories')
+  const faqsNoResults = computed(() => settingsStore.settings.faqs_no_results || 'No FAQs found')
+  const faqsNoResultsSubtitle = computed(() => settingsStore.settings.faqs_no_results_subtitle || 'Try adjusting your search or category filter')
+  const faqsPrivacyPolicy = computed(() => settingsStore.settings.faqs_privacy_policy || 'Privacy Policy')
+  const faqsTermsOfService = computed(() => settingsStore.settings.faqs_terms_of_service || 'Terms of Service')
+  const faqsContactUs = computed(() => settingsStore.settings.faqs_contact_us || 'Contact Us')
+  const faqsFooterText = computed(() => settingsStore.settings.faqs_footer_text || '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.')
 
-onMounted(async () => {
-  await settingsStore.fetchGlobalSettings()
-  try {
-    await faqsStore.fetchFaqs({ status: 'PUBLISHED' })
-    faqs.value = Array.isArray(faqsStore.faqs) ? faqsStore.faqs : []
-    
-    // Try to fetch categories from API first
+  onMounted(async () => {
+    await settingsStore.fetchGlobalSettings()
     try {
-      const fetchedCategories = await faqsStore.fetchCategories()
-      if (Array.isArray(fetchedCategories) && fetchedCategories.length > 0) {
-        categories.value = fetchedCategories
-      } else {
-        // Fallback: Extract unique categories from FAQs
+      await faqsStore.fetchFaqs({ status: 'PUBLISHED' })
+      faqs.value = Array.isArray(faqsStore.faqs) ? faqsStore.faqs : []
+
+      // Try to fetch categories from API first
+      try {
+        const fetchedCategories = await faqsStore.fetchCategories()
+        if (Array.isArray(fetchedCategories) && fetchedCategories.length > 0) {
+          categories.value = fetchedCategories
+        } else {
+          // Fallback: Extract unique categories from FAQs
+          const categoryMap = new Map()
+          faqs.value.forEach(faq => {
+            if (faq.category_name && !categoryMap.has(faq.category)) {
+              categoryMap.set(faq.category, {
+                id: faq.category,
+                name: faq.category_name
+              })
+            }
+          })
+          categories.value = Array.from(categoryMap.values())
+        }
+      } catch (catError) {
+        console.log('Categories API not available, extracting from FAQs')
+        // Extract unique categories from FAQs
         const categoryMap = new Map()
         faqs.value.forEach(faq => {
           if (faq.category_name && !categoryMap.has(faq.category)) {
@@ -193,50 +229,36 @@ onMounted(async () => {
         })
         categories.value = Array.from(categoryMap.values())
       }
-    } catch (catError) {
-      console.log('Categories API not available, extracting from FAQs')
-      // Extract unique categories from FAQs
-      const categoryMap = new Map()
-      faqs.value.forEach(faq => {
-        if (faq.category_name && !categoryMap.has(faq.category)) {
-          categoryMap.set(faq.category, {
-            id: faq.category,
-            name: faq.category_name
-          })
-        }
-      })
-      categories.value = Array.from(categoryMap.values())
+    } catch (error) {
+      console.error('Error fetching FAQs:', error)
+      faqs.value = []
+    } finally {
+      loading.value = false
     }
-  } catch (error) {
-    console.error('Error fetching FAQs:', error)
-    faqs.value = []
-  } finally {
-    loading.value = false
-  }
-})
+  })
 
-const filteredFaqs = computed(() => {
-  // Ensure faqs is an array
-  let filtered = Array.isArray(faqs.value) ? faqs.value : []
-  
-  // Filter by category
-  if (selectedCategory.value) {
-    filtered = filtered.filter(f => f.category == selectedCategory.value)
-  }
-  
-  // Filter by search query
-  const q = query.value.trim().toLowerCase()
-  if (q) {
-    filtered = filtered.filter(f =>
-      String(f.question).toLowerCase().includes(q) || 
-      String(f.answer).toLowerCase().includes(q)
-    )
-  }
-  
-  return filtered
-})
+  const filteredFaqs = computed(() => {
+    // Ensure faqs is an array
+    let filtered = Array.isArray(faqs.value) ? faqs.value : []
 
-function toggleFaq(index) {
-  openFaq.value = openFaq.value === index ? null : index
-}
+    // Filter by category
+    if (selectedCategory.value) {
+      filtered = filtered.filter(f => f.category == selectedCategory.value)
+    }
+
+    // Filter by search query
+    const q = query.value.trim().toLowerCase()
+    if (q) {
+      filtered = filtered.filter(f =>
+        String(f.question).toLowerCase().includes(q) ||
+        String(f.answer).toLowerCase().includes(q)
+      )
+    }
+
+    return filtered
+  })
+
+  function toggleFaq(index) {
+    openFaq.value = openFaq.value === index ? null : index
+  }
 </script>

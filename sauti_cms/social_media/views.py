@@ -2,7 +2,13 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from .models import SocialPost, SocialMediaChannels, ContactInformation
-from .serializers import SocialPostSerializer, ContactInformationSerializer
+from .serializers import SocialPostSerializer, ContactInformationSerializer, SocialMediaChannelsSerializer
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SocialPostViewSet(viewsets.ModelViewSet):
@@ -104,7 +110,7 @@ class SocialPostViewSet(viewsets.ModelViewSet):
             elif 'facebook.com' in domain or 'fb.com' in domain:
                 platform = 'Facebook'
             elif 'twitter.com' in domain or 'x.com' in domain:
-                platform = 'Twitter'
+                platform = 'Twitter (X)'
             elif 'instagram.com' in domain:
                 platform = 'Instagram'
             elif 'linkedin.com' in domain:
@@ -117,15 +123,36 @@ class SocialPostViewSet(viewsets.ModelViewSet):
             return Response(metadata, status=status.HTTP_200_OK)
 
         except requests.exceptions.RequestException as e:
+            logger.error(f"Request error fetching metadata for {url}: {e}")
             return Response(
                 {'error': f'Failed to fetch URL: {str(e)}'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
+            logger.error(f"Unexpected error processing metadata for {url}: {e}")
             return Response(
                 {'error': f'Error processing URL: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+@api_view(['GET', 'PUT'])
+def social_media_channels(request):
+    """
+    Get or update the 4 social media channel URLs for the homepage
+    """
+    channels = SocialMediaChannels.get_channels()
+
+    if request.method == 'GET':
+        serializer = SocialMediaChannelsSerializer(channels)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = SocialMediaChannelsSerializer(channels, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT'])

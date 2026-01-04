@@ -135,7 +135,7 @@
           <button
             @click="displayMode = 'carousel'"
             :class="[
-              'px-4 py-2 text-sm font-medium rounded-l-lg border',
+              'px-4 py-2 text-sm font-normal rounded-l-lg border',
               displayMode === 'carousel'
                 ? 'bg-primary text-white border-primary'
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
@@ -149,7 +149,7 @@
           <button
             @click="displayMode = 'grid'"
             :class="[
-              'px-4 py-2 text-sm font-medium rounded-r-lg border-t border-r border-b',
+              'px-4 py-2 text-sm font-normal rounded-r-lg border-t border-r border-b',
               displayMode === 'grid'
                 ? 'bg-primary text-white border-primary'
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'

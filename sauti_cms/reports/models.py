@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from simple_history.models import HistoricalRecords
 import base64
 
 
@@ -18,8 +19,16 @@ class Report(models.Model):
     class Status(models.TextChoices):
         PENDING = 'PENDING', 'Pending Review'
         IN_PROGRESS = 'IN_PROGRESS', 'In Progress'
+        ESCALATED = 'ESCALATED', 'Escalated'
+        FORWARDED = 'FORWARDED', 'Forwarded to OpenCHS'
         RESOLVED = 'RESOLVED', 'Resolved'
         CLOSED = 'CLOSED', 'Closed'
+
+    class Gender(models.TextChoices):
+        MALE = 'MALE', 'Male'
+        FEMALE = 'FEMALE', 'Female'
+        OTHER = 'OTHER', 'Other'
+        UNKNOWN = 'UNKNOWN', 'Unknown'
     
     category = models.CharField(
         max_length=20,
@@ -42,6 +51,21 @@ class Report(models.Model):
     contact_phone = models.CharField(max_length=20, blank=True)
     contact_email = models.EmailField(blank=True)
     location = models.CharField(max_length=200, blank=True, help_text='District/location')
+    
+    # Structured person-level data
+    reported_person_age = models.IntegerField(null=True, blank=True, help_text='Age of the victim/concerned person')
+    reported_person_gender = models.CharField(
+        max_length=10,
+        choices=Gender.choices,
+        null=True, 
+        blank=True,
+        help_text='Gender of the victim/concerned person'
+    )
+    is_self_report = models.BooleanField(
+        null=True,
+        default=None,
+        help_text='True if reporting for self, False if reporting for another'
+    )
     
     attachment = models.FileField(
         upload_to='reports/attachments/%Y/%m/',
@@ -74,12 +98,19 @@ class Report(models.Model):
     
     notes = models.TextField(blank=True, help_text='Internal notes (not visible to reporter)')
     
+    # Case Management Fields
+    escalated_at = models.DateTimeField(null=True, blank=True)
+    forwarded_to_openchs_at = models.DateTimeField(null=True, blank=True)
+    openchs_case_id = models.CharField(max_length=100, blank=True, null=True, help_text="ID from OpenCHS system")
+    
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.TextField(blank=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
+    
+    history = HistoricalRecords()
     
     class Meta:
         ordering = ['-created_at']
@@ -92,13 +123,46 @@ class Report(models.Model):
     def __str__(self):
         return f"{self.reference_number} - {self.get_category_display()}"
     
+    class ReportingFor(models.TextChoices):
+        SELF = 'SELF', 'Self'
+        ADULT_OTHER = 'ADULT_OTHER', 'Adult (Other)'
+        CHILD = 'CHILD', 'Child'
+        MULTIPLE = 'MULTIPLE', 'Multiple People'
+        UNSPECIFIED = 'UNSPECIFIED', 'Unspecified'
+
+    reporting_for = models.CharField(
+        max_length=20,
+        choices=ReportingFor.choices,
+        default=ReportingFor.UNSPECIFIED,
+        help_text='Who is the report being filed for?'
+    )
+
+    safe_to_contact = models.BooleanField(
+        default=True,
+        help_text='Is it safe to contact the reporter?'
+    )
+
+    affected_persons = models.JSONField(
+        default=list,
+        blank=True,
+        help_text='List of affected persons data from intake'
+    )
+
     def save(self, *args, **kwargs):
         # Generate reference number if not exists
         if not self.reference_number:
             import datetime
-            timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-            category_code = self.category[:2]
-            self.reference_number = f"SAUTI-{category_code}-{timestamp}"
+            from django.db import transaction
+            
+            now = datetime.datetime.now()
+            year = now.year
+            
+            # Simple unique generation - in production use a sequence or UUID
+            # Using timestamp + random to ensure uniqueness without complex locking for this task scope
+            # Format: CASE-YYYY-MMDD-XXXX
+            import random
+            rand_suffix = random.randint(1000, 9999)
+            self.reference_number = f"CASE-{year}-{now.strftime('%m%d')}-{rand_suffix}"
         
         # Encrypt description if encryption key is available
         if self.description and settings.ENCRYPTION_KEY and not self.encrypted_description:

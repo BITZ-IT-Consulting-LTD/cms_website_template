@@ -3,10 +3,7 @@
     <!-- Header -->
     <div class="flex justify-between items-start">
       <div class="flex items-center gap-4">
-        <button
-          @click="goBack"
-          class="p-2 hover:bg-gray-100 rounded-md transition-colors"
-        >
+        <button @click="goBack" class="p-2 hover:bg-gray-100 rounded-md transition-colors">
           <ArrowLeftIcon class="h-6 w-6 text-gray-600" />
         </button>
         <div>
@@ -15,10 +12,18 @@
         </div>
       </div>
       <div class="flex gap-3">
-        <button
-          @click="editReport"
-          class="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors duration-200 flex items-center font-medium shadow-sm"
-        >
+        <button v-if="report.status !== 'ESCALATED' && report.status !== 'CLOSED'" @click="updateStatus('ESCALATED')"
+          class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center font-medium shadow-sm">
+          <ExclamationTriangleIcon class="h-5 w-5 mr-2" />
+          Escalate
+        </button>
+        <button v-if="report.status !== 'FORWARDED' && report.status !== 'CLOSED'" @click="updateStatus('FORWARDED')"
+          class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-200 flex items-center font-medium shadow-sm">
+          <ShareIcon class="h-5 w-5 mr-2" />
+          Forward of OpenCHS
+        </button>
+        <button @click="editReport"
+          class="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors duration-200 flex items-center font-medium shadow-sm">
           <PencilIcon class="h-5 w-5 mr-2" />
           Edit Report
         </button>
@@ -44,13 +49,15 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <p class="text-sm font-medium text-gray-600">Category</p>
-          <span :class="getCategoryClass(report.category)" class="mt-2 px-3 py-1 inline-flex text-sm font-semibold rounded-full">
+          <span :class="getCategoryClass(report.category)"
+            class="mt-2 px-3 py-1 inline-flex text-sm font-semibold rounded-full">
             {{ formatCategory(report.category) }}
           </span>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <p class="text-sm font-medium text-gray-600">Status</p>
-          <span :class="getStatusClass(report.status)" class="mt-2 px-3 py-1 inline-flex text-sm font-semibold rounded-full">
+          <span :class="getStatusClass(report.status)"
+            class="mt-2 px-3 py-1 inline-flex text-sm font-semibold rounded-full">
             {{ formatStatus(report.status) }}
           </span>
         </div>
@@ -59,7 +66,58 @@
           <p class="mt-2 text-lg font-bold text-gray-900">{{ report.is_anonymous ? 'Yes' : 'No' }}</p>
         </div>
       </div>
+      <!-- Case Information -->
+      <!-- Case Information -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <p class="text-sm font-medium text-gray-600">Reporting For</p>
+          <p class="mt-2 text-lg font-bold text-gray-900">
+            {{ report.reporting_for || (report.is_self_report ? 'Self' : 'Another Person') }}
+          </p>
+        </div>
+      </div>
 
+      <!-- Affected Persons -->
+      <div v-if="report.affected_persons && report.affected_persons.length > 0"
+        class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Affected Persons</h2>
+        <div class="space-y-4">
+          <div v-for="(person, index) in report.affected_persons" :key="index"
+            class="bg-gray-50 p-4 rounded border border-gray-100">
+            <h3 class="font-bold text-sm text-gray-700 mb-2">Person {{ index + 1 }}</h3>
+            <dl class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div v-if="person.name">
+                <dt class="text-gray-500">Name</dt>
+                <dd class="text-gray-900 font-medium">{{ person.name }}</dd>
+              </div>
+              <div v-if="person.age">
+                <dt class="text-gray-500">Age</dt>
+                <dd class="text-gray-900 font-medium">{{ person.age }}</dd>
+              </div>
+              <div v-if="person.gender">
+                <dt class="text-gray-500">Gender</dt>
+                <dd class="text-gray-900 font-medium">{{ person.gender }}</dd>
+              </div>
+              <div v-if="person.relationship">
+                <dt class="text-gray-500">Relationship</dt>
+                <dd class="text-gray-900 font-medium">{{ person.relationship }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legacy Fields (if affected_persons empty) -->
+      <div v-else-if="report.reported_person_age" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <p class="text-sm font-medium text-gray-600">Person Age</p>
+          <p class="mt-2 text-lg font-bold text-gray-900">{{ report.reported_person_age }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <p class="text-sm font-medium text-gray-600">Person Gender</p>
+          <p class="mt-2 text-lg font-bold text-gray-900">{{ report.reported_person_gender }}</p>
+        </div>
+      </div>
       <!-- Main Content -->
       <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Report Description</h2>
@@ -86,6 +144,14 @@
             <dt class="text-sm font-medium text-gray-600">Location</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ report.location }}</dd>
           </div>
+          <div v-if="report.safe_to_contact !== undefined">
+            <dt class="text-sm font-medium text-gray-600">Safe to Contact</dt>
+            <dd class="mt-1 text-sm text-gray-900">
+              <span :class="report.safe_to_contact ? 'text-green-600' : 'text-red-600'" class="font-bold">
+                {{ report.safe_to_contact ? 'Yes' : 'No' }}
+              </span>
+            </dd>
+          </div>
         </dl>
       </div>
 
@@ -97,9 +163,17 @@
             <dt class="text-sm font-medium text-gray-600">Assigned To</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ report.assigned_to || 'Unassigned' }}</dd>
           </div>
+          <div v-if="report.openchs_case_id">
+            <dt class="text-sm font-medium text-gray-600">OpenCHS ID</dt>
+            <dd class="mt-1 text-sm text-gray-900 font-mono">{{ report.openchs_case_id }}</dd>
+          </div>
           <div>
             <dt class="text-sm font-medium text-gray-600">Created At</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ formatDateTime(report.created_at) }}</dd>
+          </div>
+          <div v-if="report.escalated_at">
+            <dt class="text-sm font-medium text-red-600">Escalated At</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ formatDateTime(report.escalated_at) }}</dd>
           </div>
           <div>
             <dt class="text-sm font-medium text-gray-600">Last Updated</dt>
@@ -117,123 +191,159 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Internal Notes</h2>
         <p class="text-gray-700 whitespace-pre-wrap">{{ report.notes }}</p>
       </div>
+
+      <!-- Audit History -->
+      <AuditHistory :history="history" :loading="loadingHistory" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { api } from '@/utils/api'
-import {
-  ArrowLeftIcon,
-  PencilIcon,
-  ExclamationTriangleIcon
-} from '@heroicons/vue/24/outline'
+  import { ref, onMounted } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
+  import { api } from '@/utils/api'
+  import {
+    ArrowLeftIcon,
+    PencilIcon,
+    ExclamationTriangleIcon,
+    ShareIcon
+  } from '@heroicons/vue/24/outline'
+  import AuditHistory from '@/components/common/AuditHistory.vue'
 
-const router = useRouter()
-const route = useRoute()
+  const router = useRouter()
+  const route = useRoute()
 
-const report = ref({})
-const loading = ref(false)
-const error = ref(null)
+  const report = ref({})
+  const history = ref([])
+  const loading = ref(false)
+  const loadingHistory = ref(false)
+  const error = ref(null)
 
-async function fetchReport() {
-  loading.value = true
-  error.value = null
-  
-  try {
-    const response = await api.reports.get(route.params.id)
-    report.value = response.data
-    console.log('✅ Fetched report:', report.value)
-  } catch (err) {
-    console.error('❌ Error fetching report:', err)
-    error.value = 'Failed to load report details.'
-    
-    if (err.response?.status === 404) {
-      error.value = 'Report not found.'
+  async function fetchReport() {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await api.reports.get(route.params.id)
+      report.value = response.data
+      console.log('✅ Fetched report:', report.value)
+      fetchHistory()
+    } catch (err) {
+      console.error('❌ Error fetching report:', err)
+      error.value = 'Failed to load report details.'
+
+      if (err.response?.status === 404) {
+        error.value = 'Report not found.'
+      }
+    } finally {
+      loading.value = false
     }
-  } finally {
-    loading.value = false
   }
-}
 
-function formatCategory(category) {
-  const map = {
-    'CHILD_PROTECTION': 'Child Protection',
-    'GBV': 'Gender-Based Violence',
-    'MIGRANT': 'Migrant Worker',
-    'PSEA': 'PSEA'
+  async function fetchHistory() {
+    loadingHistory.value = true
+    try {
+      const response = await api.reports.history(route.params.id)
+      history.value = response.data
+    } catch (err) {
+      console.error('❌ Error fetching history:', err)
+    } finally {
+      loadingHistory.value = false
+    }
   }
-  return map[category] || category
-}
 
-function formatStatus(status) {
-  const map = {
-    'PENDING': 'Pending Review',
-    'IN_PROGRESS': 'In Progress',
-    'RESOLVED': 'Resolved',
-    'CLOSED': 'Closed'
+  function formatCategory(category) {
+    const map = {
+      'CHILD_PROTECTION': 'Child Protection',
+      'GBV': 'Gender-Based Violence',
+      'MIGRANT': 'Migrant Worker',
+      'PSEA': 'PSEA'
+    }
+    return map[category] || category
   }
-  return map[status] || status
-}
 
-function getCategoryClass(category) {
-  const map = {
-    'CHILD_PROTECTION': 'bg-blue-100 text-blue-800',
-    'GBV': 'bg-purple-100 text-purple-800',
-    'MIGRANT': 'bg-teal-100 text-teal-800',
-    'PSEA': 'bg-orange-100 text-orange-800'
+  function formatStatus(status) {
+    const map = {
+      'PENDING': 'Pending Review',
+      'IN_PROGRESS': 'In Progress',
+      'RESOLVED': 'Resolved',
+      'CLOSED': 'Closed'
+    }
+    return map[status] || status
   }
-  return map[category] || 'bg-gray-100 text-gray-800'
-}
 
-function getStatusClass(status) {
-  const map = {
-    'PENDING': 'bg-yellow-100 text-yellow-800',
-    'IN_PROGRESS': 'bg-orange-100 text-orange-800',
-    'RESOLVED': 'bg-green-100 text-green-800',
-    'CLOSED': 'bg-gray-100 text-gray-800'
+  function getCategoryClass(category) {
+    const map = {
+      'CHILD_PROTECTION': 'bg-blue-100 text-blue-800',
+      'GBV': 'bg-purple-100 text-purple-800',
+      'MIGRANT': 'bg-teal-100 text-teal-800',
+      'PSEA': 'bg-orange-100 text-orange-800'
+    }
+    return map[category] || 'bg-gray-100 text-gray-800'
   }
-  return map[status] || 'bg-gray-100 text-gray-800'
-}
 
-function formatDateTime(dateStr) {
-  if (!dateStr) return 'N/A'
-  const date = new Date(dateStr)
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  function getStatusClass(status) {
+    const map = {
+      'PENDING': 'bg-yellow-100 text-yellow-800',
+      'IN_PROGRESS': 'bg-orange-100 text-orange-800',
+      'RESOLVED': 'bg-green-100 text-green-800',
+      'CLOSED': 'bg-gray-100 text-gray-800'
+    }
+    return map[status] || 'bg-gray-100 text-gray-800'
+  }
+
+  function formatDateTime(dateStr) {
+    if (!dateStr) return 'N/A'
+    const date = new Date(dateStr)
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+
+  function goBack() {
+    router.push('/reports')
+  }
+
+  function editReport() {
+    router.push(`/reports/${route.params.id}/edit`)
+  }
+
+  async function updateStatus(newStatus) {
+    if (!confirm(`Are you sure you want to change status to ${newStatus}?`)) return
+
+    loading.value = true
+    try {
+      await api.reports.update(report.value.id, { status: newStatus })
+      await fetchReport()
+    } catch (err) {
+      console.error('Failed to update status:', err)
+      error.value = 'Failed to update status.'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  onMounted(() => {
+    fetchReport()
   })
-}
-
-function goBack() {
-  router.push('/reports')
-}
-
-function editReport() {
-  router.push(`/reports/${route.params.id}/edit`)
-}
-
-onMounted(() => {
-  fetchReport()
-})
 </script>
 
 <style scoped>
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
 </style>

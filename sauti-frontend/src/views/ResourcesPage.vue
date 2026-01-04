@@ -1,593 +1,801 @@
-
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-    <div class="section-padding">
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
       <div class="container-custom">
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-            {{ settingsStore.settings.publications_title || 'Resources & Publications' }}
-          </h1>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            {{ settingsStore.settings.publications_description || 'Explore our library of guidance materials and research updates.' }}
-          </p>
-        </div>
+        <h1 class="page-header-title">RESOURCE CENTER</h1>
+        <p class="page-header-subtitle">
+          {{ settingsStore.settings.publications_description || `Access official guidance, research, and child
+          protection materials provided by the National Helpline.` }}
+        </p>
+      </div>
+    </header>
 
-        <!-- Statistics Dashboard -->
-        <div class="mb-16">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">{{ settingsStore.settings.resources_stats_title || 'Statistics Dashboard' }}</h2>
-            <div class="text-sm text-gray-500">{{ settingsStore.settings.resources_stats_updated || 'Real-time Data' }}</div>
-          </div>
-
-          <!-- Loading State for Stats -->
-          <div v-if="statsLoading" class="bg-white rounded-3xl shadow-xl p-12 text-center">
-            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p class="text-gray-600">{{ settingsStore.settings.resources_stats_loading || 'Loading dynamic statistics...' }}</p>
-          </div>
-
-          <!-- Error State for Stats -->
-          <div v-else-if="statsError" class="bg-red-50 rounded-3xl border-2 border-red-200 p-8 text-center">
-            <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <p class="text-red-700 font-medium">{{ settingsStore.settings.resources_stats_error }}</p>
-          </div>
-
-          <!-- Stats Content -->
-          <div v-else>
-            <!-- Key Metrics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <!-- Total Reports -->
-              <div class="group relative bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
-                <div class="relative">
-                  <div class="flex items-center justify-between mb-2">
-                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-4xl font-extrabold mb-1">{{ stats.total_reports || 0 }}</h3>
-                  <p class="text-blue-100 text-sm font-medium">{{ settingsStore.settings.resources_total_reports || 'Total Reports' }}</p>
-                </div>
-              </div>
-
-              <!-- Child Protection -->
-              <div class="group relative bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
-                <div class="relative">
-                  <div class="flex items-center justify-between mb-2">
-                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('CHILD_PROTECTION') }}</h3>
-                  <p class="text-purple-100 text-sm font-medium">{{ settingsStore.settings.resources_child_protection || 'Child Protection' }}</p>
-                </div>
-              </div>
-
-              <!-- GBV Cases -->
-              <div class="group relative bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
-                <div class="relative">
-                  <div class="flex items-center justify-between mb-2">
-                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('GBV') }}</h3>
-                  <p class="text-teal-100 text-sm font-medium">{{ settingsStore.settings.resources_gbv_cases || 'GBV Cases' }}</p>
-                </div>
-              </div>
-
-              <!-- Migrant Worker -->
-              <div class="group relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
-                <div class="relative">
-                  <div class="flex items-center justify-between mb-2">
-                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </div>
-                  <h3 class="text-4xl font-extrabold mb-1">{{ getCategoryCount('MIGRANT') }}</h3>
-                  <p class="text-orange-100 text-sm font-medium">{{ settingsStore.settings.resources_migrant_worker || 'Migrant Worker' }}</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <!-- Doughnut Chart - Cases by Category -->
-              <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-                <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-xl font-bold text-gray-900">{{ settingsStore.settings.resources_cases_by_category }}</h3>
-                  <div class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
-                    {{ settingsStore.settings.resources_interactive }}
-                  </div>
-                </div>
-                <div class="h-80 flex items-center justify-center">
-                  <Doughnut :data="categoryChartData" :options="doughnutOptions" />
-                </div>
-              </div>
-
-              <!-- Bar Chart - Reports Over Time -->
-              <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-                <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-xl font-bold text-gray-900">{{ settingsStore.settings.resources_reports_over_time }}</h3>
-                  <div class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full">
-                    {{ settingsStore.settings.resources_last_6_months }}
-                  </div>
-                </div>
-                <div class="h-80">
-                  <Bar :data="timeChartData" :options="barOptions" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Status Distribution -->
-            <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-              <h3 class="text-xl font-bold text-gray-900 mb-6">{{ settingsStore.settings.resources_status_distribution || 'Case Status Distribution' }}</h3>
-              <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl border-2 border-yellow-200">
-                  <div class="text-4xl font-extrabold text-yellow-700 mb-2">{{ getStatusCount('PENDING') }}</div>
-                  <div class="text-sm font-semibold text-yellow-800">{{ settingsStore.settings.resources_pending || 'Pending' }}</div>
-                </div>
-                <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-200">
-                  <div class="text-4xl font-extrabold text-blue-700 mb-2">{{ getStatusCount('IN_PROGRESS') }}</div>
-                  <div class="text-sm font-semibold text-blue-800">{{ settingsStore.settings.resources_in_progress || 'In Progress' }}</div>
-                </div>
-                <div class="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-green-200">
-                  <div class="text-4xl font-extrabold text-green-700 mb-2">{{ getStatusCount('RESOLVED') }}</div>
-                  <div class="text-sm font-semibold text-green-800">{{ settingsStore.settings.resources_resolved || 'Resolved' }}</div>
-                </div>
-                <div class="text-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200">
-                  <div class="text-4xl font-extrabold text-gray-700 mb-2">{{ getStatusCount('CLOSED') }}</div>
-                  <div class="text-sm font-semibold text-gray-800">{{ settingsStore.settings.resources_closed || 'Closed' }}</div>
-                </div>
-              </div>
-            </div>
+    <div class="container-custom section-padding section-rhythm">
+      <!-- Statistics Dashboard -->
+      <section aria-labelledby="stats-heading">
+        <div class="flex items-center justify-between mb-12">
+          <h2 id="stats-heading" class="campaign-header text-3xl text-sauti-darkGreen">
+            {{ settingsStore.settings.resources_stats_title || `Impact Dashboard` }}
+          </h2>
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">
+            {{ settingsStore.settings.resources_stats_updated || `Real-time Statistics` }}
           </div>
         </div>
 
-        <!-- Downloadable Resources Section -->
-        <div>
-          <div class="flex items-center justify-between mb-8">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ settingsStore.settings.resources_downloads_title || 'Downloadable Resources' }}</h2>
-              <p class="text-gray-600">{{ settingsStore.settings.resources_downloads_subtitle || 'Public awareness materials and guidance.' }}</p>
+        <div v-if="statsLoading" class="py-20 text-center">
+          <div class="spinner mx-auto mb-6"></div>
+          <p class="text-sauti-darkGreen/50 font-bold">Fetching latest data...</p>
+        </div>
+
+        <div v-else-if="statsError" class="bg-sauti-red/5 rounded-[3rem] border-2 border-sauti-red/20 p-16 text-center">
+          <ExclamationTriangleIcon class="w-16 h-16 text-sauti-red mx-auto mb-6" />
+          <p class="text-sauti-red font-bold text-xl">{{ settingsStore.settings.resources_stats_error || `Resource
+            statistics temporary unavailable` }}</p>
+        </div>
+
+        <div v-else class="space-y-12">
+          <!-- Key Metrics -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div
+              class="bg-sauti-darkGreen rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ stats.total_reports || 0 }}</h3>
+              <p class="campaign-header text-xs opacity-60">Total Reports Received</p>
             </div>
-            <div class="text-sm text-gray-500">
-              <span class="font-semibold text-gray-900">{{ resources.length }}</span> {{ settingsStore.settings.resources_available || 'items available' }}
+
+            <div
+              class="bg-sauti-blue rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('CHILD_PROTECTION') }}</h3>
+              <p class="campaign-header text-xs opacity-60">Child Protection Cases</p>
+            </div>
+
+            <div
+              class="bg-sauti-orange rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('GBV') }}</h3>
+              <p class="campaign-header text-xs opacity-60">GBV Reports Managed</p>
+            </div>
+
+            <div
+              class="bg-sauti-lightGreen rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('MIGRANT') }}</h3>
+              <p class="campaign-header text-xs opacity-60">Migrant Worker Assistance</p>
             </div>
           </div>
 
-          <!-- Filters -->
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-            <div class="flex flex-col md:flex-row gap-4">
-              <div class="flex-1 relative">
-                <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input
-                  v-model="search"
-                  type="text"
-                  :placeholder="settingsStore.settings.resources_search_placeholder"
-                  class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+          <!-- Charts Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <!-- Doughnut Chart - Cases by Category -->
+            <div
+              class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-10 shadow-sm transition-all duration-500 hover:shadow-2xl">
+              <div class="flex items-center justify-between mb-10">
+                <h3 class="text-2xl font-bold text-sauti-darkGreen">{{
+                  settingsStore.settings.resources_cases_by_category || `Cases by Category` }}</h3>
+                <div class="pill bg-sauti-blue/10 text-sauti-blue">Interactive</div>
               </div>
-              <select
-                v-model="category"
-                class="px-4 py-3 border border-gray-200 rounded-xl min-w-[200px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">{{ settingsStore.settings.resources_all_categories }}</option>
+              <div class="h-80 flex items-center justify-center">
+                <Doughnut :data="categoryChartData" :options="doughnutOptions" />
+              </div>
+            </div>
+
+            <!-- Bar Chart - Reports Over Time -->
+            <div
+              class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-10 shadow-sm transition-all duration-500 hover:shadow-2xl">
+              <div class="flex items-center justify-between mb-10">
+                <h3 class="text-2xl font-bold text-sauti-darkGreen">{{
+                  settingsStore.settings.resources_reports_over_time || `Reports Over Time` }}</h3>
+                <div class="pill bg-sauti-lightGreen/10 text-sauti-lightGreen">Last 6 Months</div>
+              </div>
+              <div class="h-80">
+                <Bar :data="timeChartData" :options="barOptions" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Distribution -->
+          <div class="bg-sauti-white rounded-[3.5rem] border-4 border-sauti-blue p-10 shadow-sm transition-all">
+            <h3 class="text-2xl font-bold text-sauti-darkGreen mb-10">Case Status Distribution</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-orange group transition-all">
+                <div class="text-5xl font-bold text-sauti-orange mb-3">{{ getStatusCount('PENDING') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">Pending</div>
+              </div>
+              <div class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-blue group transition-all">
+                <div class="text-5xl font-bold text-sauti-blue mb-3">{{ getStatusCount('IN_PROGRESS') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">In Progress</div>
+              </div>
+              <div
+                class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-lightGreen group transition-all">
+                <div class="text-5xl font-bold text-sauti-lightGreen mb-3">{{ getStatusCount('RESOLVED') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">Resolved</div>
+              </div>
+              <div
+                class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-darkGreen group transition-all">
+                <div class="text-5xl font-bold text-sauti-darkGreen mb-3">{{ getStatusCount('CLOSED') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">Closed</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- New: Helpline Statistics Interactive Infographic -->
+          <div v-if="callStats" class="bg-sauti-neutral/30 rounded-[4rem] p-12 lg:p-16 border-2 border-sauti-neutral">
+            <div class="flex flex-col lg:flex-row gap-16">
+              <!-- Info Cards Area -->
+              <div class="lg:w-1/3 space-y-10">
+                <div>
+                  <h3 class="campaign-header text-sauti-blue text-sm mb-4">Live Helpline Data</h3>
+                  <h2 class="text-4xl font-black text-sauti-darkGreen leading-tight">National Support Performance</h2>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                  <div
+                    class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sauti-blue flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-sauti-blue/10 rounded-2xl flex items-center justify-center shrink-0">
+                      <PhoneIcon class="w-8 h-8 text-sauti-blue" />
+                    </div>
+                    <div>
+                      <div class="text-3xl font-black text-sauti-darkGreen tabular-nums">{{ callStats.stats.calls_today
+                        }}</div>
+                      <div class="text-xs font-bold text-sauti-darkGreen/40 uppercase">Calls Answered Today</div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sauti-orange flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-sauti-orange/10 rounded-2xl flex items-center justify-center shrink-0">
+                      <ShieldCheckIcon class="w-8 h-8 text-sauti-orange" />
+                    </div>
+                    <div>
+                      <div class="text-3xl font-black text-sauti-darkGreen tabular-nums">{{ callStats.stats.cases_today
+                        }}</div>
+                      <div class="text-xs font-bold text-sauti-darkGreen/40 uppercase">Cases Registered Today</div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sauti-lightGreen flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-sauti-lightGreen/10 rounded-2xl flex items-center justify-center shrink-0">
+                      <ChartBarIcon class="w-8 h-8 text-sauti-lightGreen" />
+                    </div>
+                    <div>
+                      <div class="text-3xl font-black text-sauti-darkGreen tabular-nums">{{
+                        callStats.stats.cases_ongoing }}</div>
+                      <div class="text-xs font-bold text-sauti-darkGreen/40 uppercase">Active Case Load</div>
+                    </div>
+                  </div>
+
+                  <!-- Total Stats (Historic) -->
+                  <div class="pt-6 border-t border-sauti-neutral">
+                    <div class="grid grid-cols-2 gap-4">
+                      <div class="bg-sauti-darkGreen/5 p-6 rounded-[2rem] border border-sauti-darkGreen/10">
+                        <div class="text-2xl font-black text-sauti-darkGreen tabular-nums">{{
+                          Number(callStats.stats.calls_total).toLocaleString() }}</div>
+                        <div class="text-[9px] font-bold text-sauti-darkGreen/50 uppercase tracking-tighter">Lifetime
+                          Calls</div>
+                      </div>
+                      <div class="bg-sauti-blue/5 p-6 rounded-[2rem] border border-sauti-blue/10">
+                        <div class="text-2xl font-black text-sauti-blue tabular-nums">{{
+                          Number(callStats.stats.cases_total).toLocaleString() }}</div>
+                        <div class="text-[9px] font-bold text-sauti-blue/50 uppercase tracking-tighter">Total Cases
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Call Trend Graph -->
+              <div
+                class="lg:w-2/3 bg-white rounded-[4rem] p-12 shadow-2xl border border-sauti-neutral relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-10">
+                  <div class="pill bg-sauti-blue/10 text-sauti-blue text-[10px] animate-pulse">Live Link Active</div>
+                </div>
+                <div class="mb-10">
+                  <h3 class="text-2xl font-bold text-sauti-darkGreen flex items-center gap-3">
+                    Call Frequency Trends
+                  </h3>
+                  <p class="text-sauti-darkGreen/50 font-bold text-sm">Hourly distribution of incoming calls by status
+                  </p>
+                </div>
+                <div class="h-[420px]">
+                  <Line :data="callTrendData" :options="lineOptions" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Downloadable Resources Section -->
+      <section aria-labelledby="downloads-heading">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <h2 id="downloads-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-4">
+              {{ settingsStore.settings.resources_downloads_title || `Downloadable Resources` }}
+            </h2>
+            <p class="text-sauti-darkGreen/60 font-bold text-lg">Public awareness materials and official guidance.</p>
+          </div>
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">
+            {{ resources.length }} {{ settingsStore.settings.resources_available || `items available` }}
+          </div>
+        </div>
+
+        <!-- Search & Filters -->
+        <div class="bg-sauti-neutral rounded-[2.5rem] p-8 mb-16 shadow-none">
+          <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1 relative group">
+              <MagnifyingGlassIcon
+                class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-sauti-blue group-focus-within:text-sauti-darkGreen transition-colors" />
+              <input v-model="search" type="text"
+                :placeholder="settingsStore.settings.resources_search_placeholder || `Search keywords...`"
+                class="w-full pl-16 pr-6 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-sauti-darkGreen outline-none transition-all" />
+            </div>
+            <div class="relative min-w-[240px]">
+              <select v-model="category"
+                class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-sauti-darkGreen uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                <option value="">{{ settingsStore.settings.resources_all_categories || `All Categories` }}</option>
                 <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
                   {{ cat.name }}
                 </option>
               </select>
-              <select
-                v-model="language"
-                class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">{{ settingsStore.settings.resources_all_languages }}</option>
-                <option value="en">English</option>
-                <option value="lg">Luganda</option>
-                <option value="sw">Swahili</option>
-              </select>
+              <ChevronDownIcon
+                class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sauti-blue pointer-events-none" />
             </div>
           </div>
+        </div>
 
-          <!-- Resources Loading -->
-          <AppLoader v-if="loading" :message="settingsStore.settings.resources_loading" />
+        <!-- Resources Loading -->
+        <AppLoader v-if="loading" :message="settingsStore.settings.resources_loading" />
 
-          <!-- Resources Grid -->
-          <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <article
-              v-for="resource in resources"
-              :key="resource.id"
-              class="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border-2 border-transparent hover:border-blue-300 transform hover:-translate-y-2"
-            >
-              <!-- Featured Badge -->
-              <div v-if="resource.is_featured" class="absolute top-0 right-0 z-10">
-                <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white text-xs font-bold px-4 py-2 rounded-bl-3xl shadow-lg flex items-center gap-1">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                  Featured
+        <!-- Resources Grid -->
+        <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <article v-for="resource in resources" :key="resource.id"
+            class="group bg-sauti-white rounded-[3.5rem] border-2 border-sauti-neutral transition-all duration-500 hover:shadow-2xl hover:border-sauti-blue/30 transform hover:-translate-y-2 overflow-hidden flex flex-col">
+
+            <div class="p-10 flex-1 flex flex-col">
+              <div class="mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-sauti-blue/10 flex items-center justify-center mb-8">
+                  <SpeakerWaveIcon v-if="isAudio(resource)" class="w-8 h-8 text-sauti-blue" />
+                  <DocumentTextIcon v-else class="w-8 h-8 text-sauti-blue" />
                 </div>
+                <h3 class="text-2xl font-bold text-sauti-darkGreen mb-4 leading-tight line-clamp-2">{{ resource.title
+                }}</h3>
+                <p class="text-lg text-sauti-darkGreen/50 font-bold leading-relaxed line-clamp-3">{{
+                  resource.description }}</p>
               </div>
 
-              <!-- Decorative Background -->
-              <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div class="flex flex-wrap gap-3 mb-10 mt-auto">
+                <span v-if="resource.category_name" class="pill bg-sauti-blue text-sauti-white">{{
+                  resource.category_name }}</span>
+                <span v-if="resource.language" class="pill bg-sauti-lightGreen text-sauti-white">{{
+                  getLanguageName(resource.language) }}</span>
+              </div>
 
-              <div class="relative p-8">
-                <!-- Icon and Title -->
-                <div class="flex items-start gap-4 mb-6">
-                  <div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                    <svg v-if="isAudio(resource)" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M9 19V6l12-2v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-2"/>
-                    </svg>
-                    <svg v-else class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                    </svg>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                      {{ resource.title }}
-                    </h3>
-                    <p class="text-sm text-gray-600 line-clamp-2">
-                      {{ resource.description }}
-                    </p>
-                  </div>
-                </div>
+              <div v-if="isAudio(resource) && resource.file" class="mb-8 p-4 bg-sauti-neutral rounded-2xl">
+                <audio :src="resource.file" controls class="w-full"></audio>
+              </div>
 
-                <!-- Tags -->
-                <div class="flex flex-wrap gap-2 mb-6">
-                  <span v-if="resource.category_name" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
-                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
-                    </svg>
-                    {{ resource.category_name }}
-                  </span>
-                  <span v-if="resource.language" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
-                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z" clip-rule="evenodd"/>
-                    </svg>
-                    {{ getLanguageName(resource.language) }}
-                  </span>
-                  <span v-if="resource.file_type" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                    {{ resource.file_type.toUpperCase() }}
-                  </span>
-                </div>
-
-                <!-- Audio Player -->
-                <div v-if="isAudio(resource) && resource.file" class="mb-6">
-                  <audio :src="resource.file" controls class="w-full rounded-xl"></audio>
-                </div>
-
-                <!-- Actions -->
-                <div class="flex items-center justify-between pt-6 border-t border-gray-100">
-                  <a
-                    v-if="resource.file"
-                    :href="resource.file"
-                    target="_blank"
-                    rel="noopener"
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                    </svg>
-                    Download
-                  </a>
-                  <span v-else class="px-6 py-3 bg-gray-100 text-gray-500 text-sm font-semibold rounded-xl">
-                    {{ settingsStore.settings.resources_coming_soon }}
-                  </span>
-
-                  <!-- Download Count -->
-                  <div class="flex items-center gap-2 text-sm text-gray-500">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                    </svg>
-                    <span class="font-bold text-gray-700">{{ resource.download_count || 0 }}</span>
-                  </div>
+              <div class="flex items-center justify-between pt-8 border-t-2 border-sauti-neutral">
+                <BaseCTA v-if="resource.file" :href="resource.file" variant="primary" class="!py-3 !px-6 text-[10px]"
+                  external download>
+                  Download
+                </BaseCTA>
+                <div class="text-[10px] font-bold text-sauti-darkGreen/40 uppercase tracking-widest">
+                  <span class="text-sauti-darkGreen">{{ resource.download_count || 0 }}</span> Downloads
                 </div>
               </div>
-            </article>
-          </div>
+            </div>
+          </article>
+        </div>
 
-          <!-- Empty State -->
-          <div v-else class="text-center py-20">
-            <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ settingsStore.settings.resources_no_results }}</h3>
-            <p class="text-gray-600">{{ settingsStore.settings.resources_no_results_subtitle }}</p>
+        <!-- Empty State -->
+        <div v-else
+          class="text-center py-24 bg-sauti-neutral/30 rounded-[3rem] border-2 border-dashed border-sauti-blue max-w-2xl mx-auto">
+          <div
+            class="w-20 h-20 bg-sauti-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-sauti-blue">
+            <MagnifyingGlassIcon class="w-10 h-10 text-sauti-blue" />
           </div>
+          <h3 class="text-2xl font-bold text-sauti-darkGreen mb-2">{{ settingsStore.settings.resources_no_results ||
+            'No Resources Found' }}</h3>
+          <p class="text-sauti-darkGreen/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
+            'Try adjusting your search criteria.' }}</p>
+          <button @click="search = ''; category = ''" class="btn btn-outline">Clear all filters</button>
+        </div>
 
-          <!-- Pagination -->
-          <div v-if="pagination.next || pagination.previous" class="mt-12 flex justify-center gap-4">
-            <button
-              :disabled="!pagination.previous || loading"
-              @click="prevPage"
-              class="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
-            >
-              {{ settingsStore.settings.resources_previous }}
-            </button>
-            <button
-              :disabled="!pagination.next || loading"
-              @click="nextPage"
-              class="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
-            >
-              {{ settingsStore.settings.resources_next }}
-            </button>
+        <!-- Pagination -->
+        <div v-if="pagination.next || pagination.previous" class="mt-20 flex justify-center gap-6">
+          <button :disabled="!pagination.previous || loading" @click="prevPage"
+            class="btn btn-outline px-10">Previous</button>
+          <button :disabled="!pagination.next || loading" @click="nextPage" class="btn btn-outline px-10">Next</button>
+        </div>
+      </section>
+
+      <!-- API & Developer Resources Section -->
+      <section id="developer-resources" aria-labelledby="api-heading" class="section-padding pt-0">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-t-2 border-sauti-neutral pt-24">
+          <div>
+            <h2 id="api-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-4">
+              Developer & Data APIs
+            </h2>
+            <p class="text-sauti-darkGreen/60 font-bold text-lg">Programmatic access to normalized helpline statistics
+              and reporting data.</p>
+          </div>
+          <div class="pill bg-sauti-orange/10 text-sauti-orange uppercase tracking-widest text-[10px] font-black">
+            V1 API Stable
           </div>
         </div>
-      </div>
+
+        <div class="bg-sauti-darkGreen rounded-[4rem] overflow-hidden shadow-2xl">
+          <div class="grid grid-cols-1 lg:grid-cols-2">
+            <!-- Documentation -->
+            <div class="p-12 lg:p-16 space-y-8">
+              <div class="w-16 h-16 rounded-2xl bg-sauti-white/10 flex items-center justify-center">
+                <CodeBracketIcon class="w-8 h-8 text-sauti-lightGreen" />
+              </div>
+              <h3 class="text-3xl font-bold text-sauti-white">Normalized Call Statistics (Key-Pair Format)</h3>
+              <p class="text-sauti-white/70 text-lg leading-relaxed font-bold">
+                A semantic, chart-ready endpoint that transforms positional upstream call data into grouped key-pair
+                objects. Ideal for direct frontend consumption.
+              </p>
+
+              <div class="space-y-4 pt-4">
+                <div class="flex items-center gap-4 text-sauti-white/50 font-bold uppercase tracking-widest text-xs">
+                  <GlobeAltIcon class="w-5 h-5 text-sauti-blue" />
+                  Endpoint URL
+                </div>
+                <code
+                  class="block p-4 bg-black/30 rounded-xl text-sauti-lightGreen font-mono text-sm break-all border border-white/5">
+                  GET /api/v1/calls/stats/keypair/
+                </code>
+              </div>
+
+              <div class="pt-8">
+                <BaseCTA variant="outline" class="!border-sauti-white/20 !text-sauti-white hover:!bg-sauti-white/10"
+                  href="/api/v1/calls/stats/keypair/" external>
+                  Test Endpoint
+                </BaseCTA>
+              </div>
+            </div>
+
+            <!-- Sample Response -->
+            <div class="bg-black/40 p-12 lg:p-16 border-l border-white/10">
+              <div class="flex items-center justify-between mb-8">
+                <span class="text-sauti-white/30 font-bold uppercase tracking-widest text-xs">Sample JSON
+                  Response</span>
+                <span class="text-sauti-lightGreen font-mono text-xs">application/json</span>
+              </div>
+              <pre class="text-sauti-white/80 font-mono text-sm overflow-x-auto leading-relaxed scrollbar-hide">
+{
+  "stats": {
+    "calls_today": 342,
+    "calls_total": 89230,
+    "cases_today": 12,
+    "cases_total": 4562,
+    "cases_ongoing": 89
+  },
+  "calls": {
+    "answered": {
+      "36000": 27,
+      "39600": 42
+    },
+    "abandoned": {
+      "36000": 5,
+      "39600": 8
+    }
+  }
+}
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
-import { useResourcesStore } from '@/store/resources'
-import { useSettingsStore } from '@/store/settings'
-import { api } from '@/utils/axios'
-import AppLoader from '@/components/common/AppLoader.vue'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title } from 'chart.js'
-import { Doughnut, Bar } from 'vue-chartjs'
+  import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+  import { useResourcesStore } from '@/store/resources'
+  import { useSettingsStore } from '@/store/settings'
+  import { api } from '@/utils/axios'
+  import AppLoader from '@/components/common/AppLoader.vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import {
+    MagnifyingGlassIcon,
+    ChevronDownIcon,
+    DocumentTextIcon,
+    SpeakerWaveIcon,
+    ExclamationTriangleIcon,
+    CodeBracketIcon,
+    GlobeAltIcon,
+    PhoneIcon,
+    ShieldCheckIcon,
+    ChartBarIcon
+  } from '@heroicons/vue/24/outline'
+  import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    LineElement,
+    PointElement
+  } from 'chart.js'
+  import { Doughnut, Bar, Line } from 'vue-chartjs'
 
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title)
+  ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    LineElement,
+    PointElement
+  )
 
-defineOptions({
-  name: 'ResourcesPage'
-})
-
-const resourcesStore = useResourcesStore()
-const settingsStore = useSettingsStore()
-
-const resources = ref([])
-const loading = ref(true)
-const search = ref('')
-const category = ref('')
-const language = ref('')
-const categories = ref([])
-const pagination = ref({ count: 0, next: null, previous: null })
-
-// Statistics
-const statsLoading = ref(true)
-const statsError = ref(null)
-const stats = ref(null)
-
-// Fetch statistics
-onMounted(async () => {
-  await settingsStore.fetchGlobalSettings()
-  try {
-    const [cats] = await Promise.all([
-      resourcesStore.fetchCategories(),
-      fetchList(),
-      fetchStats()
-    ])
-    categories.value = Array.isArray(cats) ? cats : []
-  } catch (error) {
-    console.error('Error initializing resources:', error)
-    categories.value = []
-  } finally {
-    loading.value = false
-  }
-})
-
-async function fetchStats() {
-  statsLoading.value = true
-  statsError.value = null
-  try {
-    const response = await api.get('/reports/stats/public/')
-    stats.value = response.data
-  } catch (err) {
-    console.error('Failed to fetch stats:', err)
-    statsError.value = 'Failed to load statistics. Please try again later.'
-  } finally {
-    statsLoading.value = false
-  }
-}
-
-// Chart data
-const categoryChartData = computed(() => {
-  if (!stats.value?.by_category) return { labels: [], datasets: [] }
-
-  const labels = stats.value.by_category.map(item => formatCategory(item.category))
-  const data = stats.value.by_category.map(item => item.count)
-
-  return {
-    labels,
-    datasets: [{
-      backgroundColor: [
-        '#6366F1', // Indigo
-        '#8B5CF6', // Purple
-        '#14B8A6', // Teal
-        '#F59E0B'  // Amber
-      ],
-      borderWidth: 0,
-      data
-    }]
-  }
-})
-
-const timeChartData = computed(() => {
-  if (!stats.value?.over_time) return { labels: [], datasets: [] }
-
-  const labels = stats.value.over_time.map(item => {
-    const date = new Date(item.month)
-    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  defineOptions({
+    name: 'ResourcesPage'
   })
-  const data = stats.value.over_time.map(item => item.count)
 
-  return {
-    labels,
-    datasets: [{
-      label: 'Reports',
-      backgroundColor: '#3B82F6',
-      borderRadius: 8,
-      data
-    }]
+  const resourcesStore = useResourcesStore()
+  const settingsStore = useSettingsStore()
+
+  const resources = ref([])
+  const loading = ref(true)
+  const search = ref('')
+  const category = ref('')
+  const language = ref('')
+  const categories = ref([])
+  const pagination = ref({ count: 0, next: null, previous: null })
+
+  // Statistics
+  const statsLoading = ref(true)
+  const statsError = ref(null)
+  const stats = ref(null)
+
+  // Call Statistics (v1 Normalized)
+  const callStatsLoading = ref(true)
+  const callStats = ref(null)
+
+  // Polling reference
+  let pollingInterval = null
+
+  // Fetch statistics
+  onMounted(async () => {
+    await settingsStore.fetchGlobalSettings()
+    try {
+      const [cats] = await Promise.all([
+        resourcesStore.fetchCategories(),
+        fetchList(),
+        fetchStats(),
+        fetchCallStats()
+      ])
+      categories.value = Array.isArray(cats) ? cats : []
+
+      // Setup polling every 3 minutes (180,000 ms)
+      pollingInterval = setInterval(fetchCallStats, 180000)
+    } catch (error) {
+      console.error('Error initializing resources:', error)
+      categories.value = []
+    } finally {
+      loading.value = false
+    }
+  })
+
+  onUnmounted(() => {
+    if (pollingInterval) {
+      clearInterval(pollingInterval)
+      pollingInterval = null
+    }
+  })
+
+  async function fetchStats() {
+    statsLoading.value = true
+    statsError.value = null
+    try {
+      const response = await api.get('/reports/stats/public/')
+      stats.value = response.data
+    } catch (err) {
+      console.error('Failed to fetch stats:', err)
+      statsError.value = 'Failed to load statistics. Please try again later.'
+    } finally {
+      statsLoading.value = false
+    }
   }
-})
 
-const doughnutOptions = {
-  responsive: true,
-  maintainAspectRatio: true,
-  plugins: {
-    legend: {
-      position: 'bottom',
-      labels: {
-        padding: 20,
-        font: {
-          size: 13,
-          weight: '600'
+  async function fetchCallStats() {
+    callStatsLoading.value = true
+    try {
+      const response = await api.get('/v1/calls/stats/keypair/')
+      callStats.value = response.data
+    } catch (err) {
+      console.error('Failed to fetch call stats:', err)
+    } finally {
+      callStatsLoading.value = false
+    }
+  }
+
+  // Helpline Call Trends Chart
+  const callTrendData = computed(() => {
+    if (!callStats.value?.calls) return { labels: [], datasets: [] }
+
+    // Get all unique buckets (X-axis)
+    const buckets = new Set()
+    Object.values(callStats.value.calls).forEach(statusData => {
+      Object.keys(statusData).forEach(bucket => buckets.add(bucket))
+    })
+    const sortedBuckets = Array.from(buckets).sort((a, b) => parseInt(a) - parseInt(b))
+
+    // Format buckets as HH:MM
+    const labels = sortedBuckets.map(b => {
+      const totalSeconds = parseInt(b)
+      const hours = Math.floor(totalSeconds / 3600) % 24
+      const minutes = Math.floor((totalSeconds % 3600) / 60)
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+    })
+
+    const statusColors = {
+      'answered': '#007BBF',   // Sauti Blue
+      'abandoned': '#FF9933',  // Sauti Orange
+      'busy': '#006633'        // Sauti Dark Green
+    }
+
+    const datasets = Object.keys(callStats.value.calls).map(status => {
+      return {
+        label: status.charAt(0).toUpperCase() + status.slice(1),
+        borderColor: statusColors[status.toLowerCase()] || '#8CC63F',
+        backgroundColor: (statusColors[status.toLowerCase()] || '#8CC63F') + '22',
+        data: sortedBuckets.map(b => callStats.value.calls[status][b] || 0),
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }
+    })
+
+    return { labels, datasets }
+  })
+
+  const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          font: { family: 'Cronos Pro', weight: 'bold' }
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: '#006633',
+        titleFont: { family: 'Cronos Pro', size: 14, weight: 'bold' },
+        bodyFont: { family: 'Cronos Pro', size: 12 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#E2E8F0' },
+        ticks: { font: { family: 'Cronos Pro', weight: 'bold' } }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: 'Cronos Pro', weight: 'bold' } }
+      }
+    }
+  }
+
+  // Chart data
+  const categoryChartData = computed(() => {
+    if (!stats.value?.by_category) return { labels: [], datasets: [] }
+
+    const labels = stats.value.by_category.map(item => formatCategory(item.category))
+    const data = stats.value.by_category.map(item => item.count)
+
+    return {
+      labels,
+      datasets: [{
+        backgroundColor: [
+          '#007BBF', // Sauti Blue
+          '#FF9933', // Sauti Orange
+          '#006633', // Sauti Dark Green
+          '#8CC63F'  // Sauti Light Green
+        ],
+        borderWidth: 0,
+        data
+      }]
+    }
+  })
+
+  const timeChartData = computed(() => {
+    if (!stats.value?.over_time) return { labels: [], datasets: [] }
+
+    const labels = stats.value.over_time.map(item => {
+      const date = new Date(item.month)
+      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    })
+    const data = stats.value.over_time.map(item => item.count)
+
+    return {
+      labels,
+      datasets: [{
+        label: 'Reports',
+        backgroundColor: '#007BBF', // Sauti Blue
+        borderRadius: 16,
+        barThickness: 24,
+        data
+      }]
+    }
+  })
+
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    cutout: '75%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 32,
+          font: {
+            size: 11,
+            weight: '900',
+            family: 'Cronos Pro'
+          },
+          usePointStyle: true,
+          pointStyle: 'rectRounded',
+          color: '#006633'
+        }
+      },
+      tooltip: {
+        backgroundColor: '#006633',
+        padding: 16,
+        titleFont: {
+          size: 14,
+          weight: '900'
         },
-        usePointStyle: true,
-        pointStyle: 'circle'
+        bodyFont: {
+          size: 13,
+          weight: '700'
+        },
+        cornerRadius: 16,
+        displayColors: false
       }
-    },
-    tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      padding: 12,
-      titleFont: {
-        size: 14,
-        weight: 'bold'
-      },
-      bodyFont: {
-        size: 13
-      },
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      borderWidth: 1
     }
   }
-}
 
-const barOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false
-    },
-    tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      padding: 12,
-      titleFont: {
-        size: 14,
-        weight: 'bold'
-      },
-      bodyFont: {
-        size: 13
-      }
-    }
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: {
-        stepSize: 1,
-        font: {
-          size: 12,
-          weight: '600'
-        }
-      },
-      grid: {
-        color: 'rgba(0, 0, 0, 0.05)'
-      }
-    },
-    x: {
-      ticks: {
-        font: {
-          size: 12,
-          weight: '600'
-        }
-      },
-      grid: {
+  const barOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
         display: false
+      },
+      tooltip: {
+        backgroundColor: '#006633',
+        padding: 16,
+        titleFont: {
+          size: 14,
+          weight: '900'
+        },
+        bodyFont: {
+          size: 13,
+          weight: '700'
+        },
+        cornerRadius: 16,
+        displayColors: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+          font: {
+            size: 11,
+            weight: '900',
+            family: 'Cronos Pro'
+          },
+          color: '#007BBF'
+        },
+        grid: {
+          color: '#007BBF',
+          drawBorder: false
+        }
+      },
+      x: {
+        ticks: {
+          font: {
+            size: 11,
+            weight: '900',
+            family: 'Cronos Pro'
+          },
+          color: '#007BBF'
+        },
+        grid: {
+          display: false
+        }
       }
     }
   }
-}
 
-function formatCategory(code) {
-  const map = {
-    'CHILD_PROTECTION': 'Child Protection',
-    'GBV': 'Gender-Based Violence',
-    'MIGRANT': 'Migrant Worker',
-    'PSEA': 'PSEA'
-  }
-  return map[code] || code
-}
-
-function getCategoryCount(category) {
-  if (!stats.value?.by_category) return 0
-  const found = stats.value.by_category.find(item => item.category === category)
-  return found ? found.count : 0
-}
-
-function getStatusCount(status) {
-  if (!stats.value?.by_status) return 0
-  const found = stats.value.by_status.find(item => item.status === status)
-  return found ? found.count : 0
-}
-
-watch([search, category, language], () => {
-  fetchList()
-})
-
-async function fetchList() {
-  loading.value = true
-  try {
-    const params = {
-      status: 'PUBLISHED'
+  function formatCategory(code) {
+    const map = {
+      'CHILD_PROTECTION': 'Child Protection',
+      'GBV': 'Gender-Based Violence',
+      'MIGRANT': 'Migrant Worker',
+      'PSEA': 'PSEA'
     }
-    if (search.value) params.search = search.value
-    if (category.value) params.category = category.value
-    if (language.value) params.language = language.value
-    await resourcesStore.fetchResources(params)
-    resources.value = Array.isArray(resourcesStore.resources) ? resourcesStore.resources : []
-    pagination.value = resourcesStore.pagination || { count: 0, next: null, previous: null }
-  } catch (error) {
-    console.error('Error fetching resources:', error)
-    resources.value = []
-  } finally {
-    loading.value = false
+    return map[code] || code
   }
-}
 
-function nextPage() {
-  if (!pagination.value.next) return
-  fetchList()
-}
-
-function prevPage() {
-  if (!pagination.value.previous) return
-  fetchList()
-}
-
-function getLanguageName(code) {
-  const languages = {
-    'en': 'English',
-    'lg': 'Luganda',
-    'sw': 'Swahili'
+  function getCategoryCount(category) {
+    if (!stats.value?.by_category) return 0
+    const found = stats.value.by_category.find(item => item.category === category)
+    return found ? found.count : 0
   }
-  return languages[code] || code.toUpperCase()
-}
 
-function isAudio(resource) {
-  const type = (resource.file_type || '').toLowerCase()
-  const url = (resource.file || '').toLowerCase()
-  const exts = ['mp3', 'm4a', 'wav', 'ogg']
-  return exts.some(ext => type.includes(ext) || url.endsWith(`.${ext}`))
-}
+  function getStatusCount(status) {
+    if (!stats.value?.by_status) return 0
+    const found = stats.value.by_status.find(item => item.status === status)
+    return found ? found.count : 0
+  }
+
+  watch([search, category, language], () => {
+    fetchList()
+  })
+
+  async function fetchList() {
+    loading.value = true
+    try {
+      const params = {
+        status: 'PUBLISHED'
+      }
+      if (search.value) params.search = search.value
+      if (category.value) params.category = category.value
+      if (language.value) params.language = language.value
+      await resourcesStore.fetchResources(params)
+      resources.value = Array.isArray(resourcesStore.resources) ? resourcesStore.resources : []
+      pagination.value = resourcesStore.pagination || { count: 0, next: null, previous: null }
+    } catch (error) {
+      console.error('Error fetching resources:', error)
+      resources.value = []
+    } finally {
+      loading.value = false
+    }
+  }
+
+  function nextPage() {
+    if (!pagination.value.next) return
+    fetchList()
+  }
+
+  function prevPage() {
+    if (!pagination.value.previous) return
+    fetchList()
+  }
+
+  function getLanguageName(code) {
+    const languages = {
+      'en': 'English',
+      'lg': 'Luganda',
+      'sw': 'Swahili'
+    }
+    return languages[code] || code.toUpperCase()
+  }
+
+  function isAudio(resource) {
+    const type = (resource.file_type || '').toLowerCase()
+    const url = (resource.file || '').toLowerCase()
+    const exts = ['mp3', 'm4a', 'wav', 'ogg']
+    return exts.some(ext => type.includes(ext) || url.endsWith(`.${ext}`))
+  }
 </script>
-
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

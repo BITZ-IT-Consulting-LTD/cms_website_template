@@ -1,0 +1,61 @@
+/* 
+  SAUTI 116 OFFICIAL TYPOGRAPHY ENFORCEMENT
+  
+  ✅ LOCAL FONTS LOADED:
+  Cronos Pro is now correctly loaded via local assets.
+  This implementation provides 100% Brand Compliance.
+*/
+
+:root {
+  --font-cronos: "Cronos Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 
+  Weight Mapping:
+  300: Cronos Pro Light
+  400: Cronos Pro Regular
+  600: Cronos Pro Semi-Bold
+  700: Cronos Pro Bold
+*/
+
+/* Cronos Pro - Regular */
+@font-face {
+  font-family: 'Cronos Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Cronos Pro Regular'), 
+       local('CronosPro-Regular'),
+       url('../fonts/cronospro/Cronos-Pro_12459.ttf') format('truetype');
+}
+
+/* Cronos Pro - Light */
+@font-face {
+  font-family: 'Cronos Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Cronos Pro Light'), 
+       local('CronosPro-Light'),
+       url('../fonts/cronospro/Cronos-Pro-Light_12448.ttf') format('truetype');
+}
+
+/* Cronos Pro - Semi-Bold */
+@font-face {
+  font-family: 'Cronos Pro';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Cronos Pro SemiBold'), 
+       local('CronosPro-SemiBold'),
+       url('../fonts/cronospro/Cronos-Pro-Semibold_12456.ttf') format('truetype');
+}
+
+/* Cronos Pro - Bold */
+@font-face {
+  font-family: 'Cronos Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Cronos Pro Bold'), 
+       local('CronosPro-Bold'),
+       url('../fonts/cronospro/Cronos-Pro-Bold_12435.ttf') format('truetype');
+}
+
+/* REMOVED: Inter, Outfit, Helvetica Neue, and all other non-compliant fonts */

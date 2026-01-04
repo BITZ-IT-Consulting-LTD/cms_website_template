@@ -66,6 +66,11 @@ class PostListCreateView(generics.ListCreateAPIView):
         status = self.request.query_params.get('status')
         if status:
             queryset = queryset.filter(status=status)
+            
+        # Filter by post_type
+        post_type = self.request.query_params.get('post_type')
+        if post_type:
+            queryset = queryset.filter(post_type=post_type)
         
         return queryset
     
@@ -75,7 +80,11 @@ class PostListCreateView(generics.ListCreateAPIView):
         return PostListSerializer
     
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user,
+            created_by=self.request.user,
+            last_updated_by=self.request.user
+        )
 
 
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -108,6 +117,9 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.save(update_fields=['views_count'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+        
+    def perform_update(self, serializer):
+        serializer.save(last_updated_by=self.request.user)
 
 
 class CategoryListView(generics.ListCreateAPIView):

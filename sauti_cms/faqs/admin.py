@@ -23,10 +23,18 @@ class FAQAdmin(admin.ModelAdmin):
             'fields': ('question', 'answer')
         }),
         ('Organization', {
-            'fields': ('category', 'language', 'order', 'is_active')
+            'fields': ('category', 'language', 'order', 'status', 'is_active')
         }),
         ('Stats', {
-            'fields': ('views_count',),
+            'fields': ('views_count', 'created_by', 'last_updated_by'),
             'classes': ('collapse',)
         }),
     )
+
+    readonly_fields = ['created_by', 'last_updated_by']
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)

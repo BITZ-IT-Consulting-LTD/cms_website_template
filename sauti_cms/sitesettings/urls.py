@@ -1,13 +1,9 @@
 from django.urls import path
 from .views import GlobalSettingsView
-
-# DEPRECATED: The router and SiteSettingViewSet are deprecated.
-# from rest_framework.routers import DefaultRouter
-# from .views import SiteSettingViewSet
-
-# router = DefaultRouter()
-# router.register(r'sitesettings', SiteSettingViewSet, basename='sitesetting')
+from cms.views import SingletonHistoryAPIView
+from .models import GlobalSettings
 
 urlpatterns = [
     path('', GlobalSettingsView.as_view(), name='global-settings'),
+    path('history/', SingletonHistoryAPIView.as_view(model=GlobalSettings), name='global-settings-history'),
 ]

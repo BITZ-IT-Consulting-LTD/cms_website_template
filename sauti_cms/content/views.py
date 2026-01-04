@@ -2,7 +2,17 @@ from rest_framework import viewsets, permissions
 from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember
 from .serializers import SiteContentSerializer, CoreValueSerializer, ContactSerializer, ProtectionApproachSerializer, TeamMemberSerializer
 
-class SiteContentViewSet(viewsets.ModelViewSet):
+class OwnershipViewSetMixin:
+    def perform_create(self, serializer):
+        serializer.save(
+            created_by=self.request.user,
+            last_updated_by=self.request.user
+        )
+
+    def perform_update(self, serializer):
+        serializer.save(last_updated_by=self.request.user)
+
+class SiteContentViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
     queryset = SiteContent.objects.all()
     serializer_class = SiteContentSerializer
     lookup_field = 'key'
@@ -19,7 +29,7 @@ class SiteContentViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class CoreValueViewSet(viewsets.ModelViewSet):
+class CoreValueViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
     queryset = CoreValue.objects.filter(is_active=True)
     serializer_class = CoreValueSerializer
     pagination_class = None  # Disable pagination
@@ -35,7 +45,7 @@ class CoreValueViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class ContactViewSet(viewsets.ModelViewSet):
+class ContactViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
     queryset = Contact.objects.filter(is_visible=True).order_by('order')
     serializer_class = ContactSerializer
     pagination_class = None
@@ -51,7 +61,7 @@ class ContactViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class ProtectionApproachViewSet(viewsets.ModelViewSet):
+class ProtectionApproachViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
     queryset = ProtectionApproach.objects.filter(is_active=True).order_by('order')
     serializer_class = ProtectionApproachSerializer
     pagination_class = None
@@ -67,7 +77,7 @@ class ProtectionApproachViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class TeamMemberViewSet(viewsets.ModelViewSet):
+class TeamMemberViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
     queryset = TeamMember.objects.filter(is_active=True).order_by('order')
     serializer_class = TeamMemberSerializer
     pagination_class = None

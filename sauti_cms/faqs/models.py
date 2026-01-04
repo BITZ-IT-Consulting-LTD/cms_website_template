@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from simple_history.models import HistoricalRecords
 
 
 class FAQCategory(models.Model):
@@ -33,6 +34,11 @@ class FAQ(models.Model):
         LUGANDA = 'lg', 'Luganda'
         SWAHILI = 'sw', 'Swahili'
     
+    class Status(models.TextChoices):
+        DRAFT = 'DRAFT', 'Draft'
+        PUBLISHED = 'PUBLISHED', 'Published'
+        ARCHIVED = 'ARCHIVED', 'Archived'
+
     question = models.CharField(max_length=500)
     answer = models.TextField()
     
@@ -51,10 +57,32 @@ class FAQ(models.Model):
     
     order = models.PositiveIntegerField(default=0, help_text='Display order within category')
     is_active = models.BooleanField(default=True)
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PUBLISHED
+    )
     views_count = models.PositiveIntegerField(default=0)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+    
+    history = HistoricalRecords()
     
     class Meta:
         verbose_name = 'FAQ'
@@ -63,6 +91,7 @@ class FAQ(models.Model):
         indexes = [
             models.Index(fields=['category', 'order']),
             models.Index(fields=['is_active', 'language']),
+            models.Index(fields=['status', 'language']),
         ]
     
     def __str__(self):

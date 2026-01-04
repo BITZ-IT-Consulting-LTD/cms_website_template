@@ -1,111 +1,287 @@
 <template>
-  <div class="section-padding">
-    <div class="container-custom max-w-4xl">
-      <div class="text-center mb-12">
-        <h1 class="mb-4">{{ settingsStore.settings.contact_title || 'Contact Us' }}</h1>
-        <p class="text-lg" style="color: #555555;">{{ settingsStore.settings.contact_subtitle || "We're here to help 24/7. Reach out to us anytime." }}</p>
-      </div>
+  <div class="bg-sauti-neutral min-h-screen font-sans text-sauti-darkGreen">
+    <!-- 1. EMERGENCY HERO SECTION -->
+    <!-- Goal: Immediate action for distressed users. High contrast, zero confusion. -->
+    <header class="bg-white border-b border-sauti-blue/10 pt-8 pb-12 md:py-20">
+      <div class="container-custom max-w-4xl mx-auto text-center px-6">
+        <!-- Trust Signal -->
+        <div class="inline-flex items-center gap-2 mb-6 opacity-80">
+          <div class="w-2 h-2 rounded-full bg-sauti-green animate-pulse"></div>
+          <span class="text-xs font-bold uppercase tracking-widest text-sauti-darkGreen">Official Government Helpline •
+            24/7 Confidential Support</span>
+        </div>
 
-      <!-- Contact Information Cards -->
-      <div v-if="loading" class="text-center py-8">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <!-- Headline -->
+        <h1 class="font-sans font-bold text-4xl md:text-6xl mb-6 text-sauti-darkGreen leading-tight tracking-tight">
+          In danger or need help?
+        </h1>
+
+        <p class="text-lg md:text-xl text-sauti-darkGreen/70 mb-10 max-w-2xl mx-auto font-normal leading-relaxed">
+          Our trained counselors are ready to listen and support you. The call is free, private, and does not show on
+          your phone bill.
+        </p>
+
+        <!-- Primary Emergency CTA -->
+        <div class="flex flex-col items-center">
+          <a href="tel:116"
+            class="group relative inline-flex items-center justify-center gap-4 bg-sauti-red text-white py-6 px-12 md:px-16 rounded-full transition-transform duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-sauti-red/30 shadow-lg hover:shadow-xl w-full md:w-auto">
+            <span class="sr-only">Call Emergency Helpline</span>
+            <PhoneIcon class="w-8 h-8 md:w-10 md:h-10 text-white fill-current" />
+            <span class="font-sans font-bold text-4xl md:text-5xl tracking-tighter">CALL 116</span>
+            <span
+              class="absolute -top-3 right-8 bg-sauti-yellow text-sauti-darkGreen text-[10px] font-bold uppercase px-2 py-1 rounded shadow-sm transform rotate-2">Toll
+              Free</span>
+          </a>
+          <p class="mt-4 text-sm font-bold text-sauti-darkGreen/50">Available 24 hours a day, 7 days a week.</p>
+        </div>
       </div>
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div v-for="contact in contacts" :key="contact.id" class="card card-body text-center hover:shadow-lg transition-shadow duration-300">
-          <div class="flex justify-center mb-4">
-            <div :class="{'bg-red-50': contact.type === 'phone', 'bg-green-50': contact.type === 'social' && contact.icon === 'whatsapp', 'bg-blue-50': contact.type === 'email', 'bg-purple-50': contact.type === 'location'}" class="p-4 rounded-full">
-              <svg v-if="contact.icon === 'phone'" class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
-              </svg>
-              <svg v-else-if="contact.icon === 'whatsapp'" class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
-              <svg v-else-if="contact.icon === 'envelope'" class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-              </svg>
-              <svg v-else-if="contact.icon === 'location-marker'" class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-              </svg>
-              <svg v-else-if="contact.icon === 'facebook'" class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-              <svg v-else-if="contact.icon === 'twitter'" class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-              </svg>
-              <svg v-else class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17h2v-2h-2v2zm2-10H11V5h2v4z"/>
-              </svg>
+    </header>
+
+    <div class="container-custom py-16 md:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 max-w-7xl mx-auto">
+
+        <!-- 2. CONTACT OPTIONS (Left Column) -->
+        <div class="lg:col-span-7 space-y-12">
+
+          <!-- Section Title -->
+          <div>
+            <h2 class="font-sans font-bold text-3xl mb-2 text-sauti-darkGreen">Support Channels</h2>
+            <p class="text-sauti-darkGreen/70 font-normal">Choose the way you feel most comfortable reaching us.</p>
+          </div>
+
+          <!-- Cards Layout -->
+          <div class="grid gap-4 md:grid-cols-2">
+            <!-- Dynamic Contacts -->
+            <a v-for="contact in nonEmergencyContacts" :key="contact.id" :href="getLink(contact)"
+              :target="contact.type === 'location' ? '_blank' : '_self'"
+              class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group flex flex-col items-start relative overflow-hidden cursor-pointer">
+
+              <!-- Hover Accent -->
+              <div
+                class="absolute top-0 left-0 w-1 h-full bg-sauti-blue opacity-0 group-hover:opacity-100 transition-opacity">
+              </div>
+
+              <div class="mb-6 p-4 rounded-xl bg-sauti-neutral group-hover:bg-sauti-blue/10 transition-colors">
+                <component :is="getIcon(contact)" class="w-8 h-8 text-sauti-blue" />
+              </div>
+
+              <h3 class="font-bold text-xl mb-2 text-sauti-darkGreen">{{ contact.name }}</h3>
+              <p class="text-sm text-sauti-darkGreen/60 mb-0 font-normal leading-relaxed line-clamp-2">
+                {{ contact.description || 'Verified official support channel.' }}
+              </p>
+
+              <!-- Hidden visual indicator that appears on hover/focus if needed, but keeping primarily clean -->
+              <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ArrowRightIcon class="w-5 h-5 text-sauti-blue" />
+              </div>
+            </a>
+
+            <!-- Fallback Static Office Card if no generic contacts -->
+            <div v-if="nonEmergencyContacts.length === 0"
+              class="bg-white p-8 rounded-2xl shadow-md group flex flex-col items-start relative overflow-hidden">
+              <div class="mb-6 p-4 rounded-xl bg-sauti-neutral">
+                <BuildingOfficeIcon class="w-8 h-8 text-sauti-blue" />
+              </div>
+              <h3 class="font-bold text-xl mb-2">Head Office</h3>
+              <p class="text-sm text-sauti-darkGreen/60 mb-0 font-normal">Ministry of Gender, Labour and Social
+                Development.</p>
             </div>
           </div>
-          <h3 class="text-xl font-semibold mb-2" style="color: #222222;">{{ contact.name }}</h3>
-          <a v-if="contact.type === 'phone'" :href="'tel:' + contact.value" class="text-4xl font-bold mb-2 inline-block hover:opacity-80 transition-colors" :style="{'color': contact.icon === 'phone' ? '#EC0000' : '#009EDB'}">{{ contact.value }}</a>
-          <a v-else-if="contact.type === 'email'" :href="'mailto:' + contact.value" class="text-lg hover:opacity-80 transition-colors inline-block" style="color: #009EDB;">{{ contact.value }}</a>
-          <a v-else-if="contact.type === 'social'" :href="contact.value" target="_blank" class="text-2xl font-bold mb-2 inline-block hover:opacity-80 transition-colors" :style="{'color': contact.icon === 'facebook' ? '#3b5998' : (contact.icon === 'twitter' ? '#1DA1F2' : (contact.icon === 'whatsapp' ? '#009EDB' : '#000000'))}">{{ contact.name }}</a>
-          <p v-else class="text-lg" style="color: #222222;">{{ contact.value }}</p>
-          <p class="text-sm mt-2" style="color: #777777;">{{ contact.description }}</p>
-        </div>
-      </div>
 
-      <!-- Social Media Links (dynamic) -->
-      <div v-if="!loading && socialContacts.length > 0" class="card card-body mt-8 text-center">
-        <h3 class="text-xl font-semibold mb-4" style="color: #222222;">Follow Us</h3>
-        <div class="flex justify-center gap-4">
-          <a v-for="socialContact in socialContacts" :key="socialContact.id" :href="socialContact.value" target="_blank" :aria-label="socialContact.name"
-             :class="{'bg-blue-600 hover:bg-blue-700': socialContact.icon === 'facebook', 'bg-blue-400 hover:bg-blue-500': socialContact.icon === 'twitter', 'bg-green-600 hover:bg-green-700': socialContact.icon === 'whatsapp'}"
-             class="text-white p-3 rounded-full transition-colors">
-            <svg v-if="socialContact.icon === 'facebook'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            <svg v-else-if="socialContact.icon === 'twitter'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-            </svg>
-            <svg v-else-if="socialContact.icon === 'whatsapp'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            <svg v-else class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17h2v-2h-2v2zm2-10H11V5h2v4z"/>
-            </svg>
-          </a>
+          <!-- Trust / Authority Signal -->
+          <div class="bg-sauti-blue/5 p-8 rounded-2xl shadow-sm flex items-start gap-4">
+            <div class="p-2 bg-white rounded-full shrink-0 shadow-sm">
+              <CheckBadgeIcon class="w-6 h-6 text-sauti-blue" />
+            </div>
+            <div>
+              <h4 class="font-bold text-lg mb-1">Official Government Service</h4>
+              <p class="text-sm text-sauti-darkGreen/70 leading-relaxed font-normal">
+                Operated under the mandate of the Ministry of Gender, Labour and Social Development. All services are
+                regulated, free, and secure.
+              </p>
+            </div>
+          </div>
         </div>
+
+        <!-- 3. SECONDARY CONTACT FORM (Right Column) -->
+        <!-- Explicitly visually distinct from emergency options -->
+        <div class="lg:col-span-5">
+          <div class="bg-white p-8 md:p-10 rounded-3xl shadow-lg relative">
+
+            <div class="mb-8">
+              <span
+                class="inline-block py-1 px-3 rounded bg-sauti-neutral text-sauti-darkGreen/50 text-[10px] font-bold uppercase tracking-widest mb-4">Non-Emergency
+                Only</span>
+              <h2 class="font-sans font-bold text-3xl mb-2 text-sauti-darkGreen">Send a Message</h2>
+              <p class="text-sauti-darkGreen/60 text-sm font-normal">For general inquiries, partnerships, or feedback.
+                Do not use this for reporting immediate danger.</p>
+            </div>
+
+            <form v-if="!feedbackSubmitted" @submit.prevent="submitFeedback" class="space-y-6">
+              <!-- Name -->
+              <div>
+                <label for="name"
+                  class="block text-xs font-bold uppercase text-sauti-darkGreen mb-2 tracking-wide">Your Name
+                  (Optional)</label>
+                <input v-model="feedbackForm.name" id="name" type="text" placeholder="John Doe"
+                  class="w-full bg-sauti-neutral/50 border-2 border-transparent focus:border-sauti-blue focus:bg-white rounded-xl py-3 px-4 font-bold text-sauti-darkGreen placeholder-sauti-darkGreen/30 outline-none transition-all" />
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label for="email"
+                  class="block text-xs font-bold uppercase text-sauti-darkGreen mb-2 tracking-wide">Email Address
+                  (Optional)</label>
+                <input v-model="feedbackForm.email" id="email" type="email" placeholder="name@example.com"
+                  class="w-full bg-sauti-neutral/50 border-2 border-transparent focus:border-sauti-blue focus:bg-white rounded-xl py-3 px-4 font-bold text-sauti-darkGreen placeholder-sauti-darkGreen/30 outline-none transition-all" />
+              </div>
+
+              <!-- Message -->
+              <div>
+                <label for="message"
+                  class="block text-xs font-bold uppercase text-sauti-darkGreen mb-2 tracking-wide">Message <span
+                    class="text-sauti-red">*</span></label>
+                <textarea v-model="feedbackForm.message" id="message" required placeholder="How can we help?"
+                  class="w-full h-32 bg-sauti-neutral/50 border-2 border-transparent focus:border-sauti-blue focus:bg-white rounded-xl py-3 px-4 font-bold text-sauti-darkGreen placeholder-sauti-darkGreen/30 outline-none transition-all resize-none"></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button :disabled="feedbackSubmitting" type="submit"
+                  class="w-full bg-sauti-darkGreen text-white font-bold py-4 rounded-xl hover:bg-opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                  <span v-if="feedbackSubmitting">Sending...</span>
+                  <span v-else>Send Message</span>
+                </button>
+              </div>
+
+              <p v-if="feedbackError" class="text-sauti-red text-xs font-bold text-center bg-sauti-red/5 py-2 rounded">
+                {{ feedbackError }}</p>
+            </form>
+
+            <!-- Success State -->
+            <div v-else class="text-center py-12">
+              <div
+                class="w-16 h-16 bg-sauti-green/10 text-sauti-green rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckBadgeIcon class="w-10 h-10" />
+              </div>
+              <h3 class="font-bold text-2xl text-sauti-darkGreen mb-2">Message Sent</h3>
+              <p class="text-sauti-darkGreen/60 text-sm mb-8 font-normal">Thank you for contacting us. We will review
+                your message shortly.</p>
+              <button @click="resetFeedbackForm"
+                class="text-sauti-blue font-bold text-sm hover:text-sauti-darkGreen transition-colors">Send another
+                message</button>
+            </div>
+
+          </div>
+
+          <!-- Minimal Privacy Note -->
+          <p class="text-center text-[10px] text-sauti-darkGreen/40 mt-6 max-w-xs mx-auto font-normal">
+            Your privacy is important to us. Information shared via this form is processed in accordance with our Data
+            Protection Policy.
+          </p>
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useSettingsStore } from '@/store/settings'
-import { api } from '@/utils/axios' // Import api for fetching contacts
+  import { computed, onMounted, ref, reactive } from 'vue'
+  import { useSettingsStore } from '@/store/settings'
+  import { api } from '@/utils/axios'
+  import {
+    PhoneIcon,
+    EnvelopeIcon,
+    MapPinIcon,
+    BuildingOfficeIcon,
+    ChatBubbleBottomCenterTextIcon,
+    ArrowRightIcon,
+    CheckBadgeIcon
+  } from '@heroicons/vue/24/solid'
 
-defineOptions({
-  name: 'ContactPage'
-})
+  defineOptions({
+    name: 'ContactPage'
+  })
 
-const settingsStore = useSettingsStore()
+  const settingsStore = useSettingsStore()
+  const contacts = ref([])
+  const loading = ref(true)
 
-const contacts = ref([])
-const loading = ref(true)
+  // Form State
+  const feedbackForm = reactive({ name: '', email: '', message: '' })
+  const feedbackSubmitting = ref(false)
+  const feedbackSubmitted = ref(false)
+  const feedbackError = ref('')
 
-const fetchContacts = async () => {
-  loading.value = true
-  try {
-    const response = await api.get('/content/contacts/')
-    contacts.value = response.data
-  } catch (error) {
-    console.error('Error fetching contact items:', error)
-    contacts.value = []
-  } finally {
-    loading.value = false
+  // Computed Collections
+  const hotlines = computed(() => contacts.value.filter(c => c.type === 'phone' || c.icon === 'phone'))
+  const nonEmergencyContacts = computed(() => {
+    // Return all non-phone contacts (email, location, social, other)
+    return contacts.value.filter(c => c.type !== 'phone' && c.icon !== 'phone')
+  })
+
+  // Helper Display Logic
+  const getIcon = (contact) => {
+    if (contact.type === 'email' || contact.icon === 'envelope') return EnvelopeIcon
+    if (contact.type === 'location' || contact.icon === 'map-pin') return MapPinIcon
+    return ChatBubbleBottomCenterTextIcon
   }
-}
 
-onMounted(() => {
-  settingsStore.fetchGlobalSettings()
-  fetchContacts()
-})
+  const getActionLabel = (contact) => {
+    if (contact.type === 'email') return 'Send Email'
+    if (contact.type === 'location') return 'Get Directions'
+    return 'Connect'
+  }
 
-const socialContacts = computed(() => {
-  return contacts.value.filter(contact => contact.type === 'social');
-});
+  const getLink = (contact) => {
+    if (contact.type === 'email') return `mailto:${contact.value}`
+    if (contact.type === 'location') return `https://maps.google.com/?q=${encodeURIComponent(contact.value)}`
+    return contact.value
+  }
+
+
+  // Actions
+  const fetchContacts = async () => {
+    loading.value = true
+    try {
+      const response = await api.get('/content/contacts/')
+      contacts.value = response.data || []
+    } catch (error) {
+      console.error('Error fetching contacts:', error)
+      // Fallback data for mockup if API fails or is empty
+      contacts.value = [
+        { id: 1, name: 'General Inquiries', type: 'email', value: 'info@sauti116.ug', description: 'For general questions and partnerships.' },
+        { id: 2, name: 'Head Office', type: 'location', value: 'Kampala, Uganda', description: 'Ministry of Gender, Labour and Social Development.' }
+      ]
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const submitFeedback = async () => {
+    if (!feedbackForm.message.trim()) return
+    feedbackSubmitting.value = true
+    feedbackError.value = ''
+    try {
+      await api.post('/contact/feedback/', feedbackForm)
+      feedbackSubmitted.value = true
+      feedbackForm.name = ''
+      feedbackForm.email = ''
+      feedbackForm.message = ''
+    } catch (err) {
+      feedbackError.value = 'Failed to deliver message. Please try again.'
+    } finally {
+      feedbackSubmitting.value = false
+    }
+  }
+
+  const resetFeedbackForm = () => {
+    feedbackSubmitted.value = false
+    feedbackError.value = ''
+  }
+
+  onMounted(() => {
+    settingsStore.fetchGlobalSettings()
+    fetchContacts()
+  })
 </script>

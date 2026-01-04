@@ -1,211 +1,143 @@
 <template>
-  <header class="bg-white backdrop-blur-md sticky top-0 z-50 shadow-sm">
-    <nav class="container-custom py-4">
-      <div class="flex items-center justify-between min-h-[72px]">
-        <!-- Enhanced Logo -->
-        <router-link to="/" class="flex items-center space-x-3 group no-underline">
-          <template v-if="!useFallback">
-            <img :src="settingsStore.settings.logo || logoUrl" alt="Sauti" class="h-16 w-16 object-contain group-hover:scale-110 transition-transform duration-300" @error="useFallback = true" />
-          </template>
-          <template v-else>
-            <div class="h-16 w-16 rounded-2xl flex items-center justify-center text-white font-bold text-2xl group-hover:scale-110 transition-transform duration-300" style="background-color: #009EDB;">S</div>
-          </template>
-          <div>
-            <h1 class="text-xl md:text-2xl font-bold group-hover:text-[#009EDB] transition-colors duration-300" style="font-family: 'Poppins', sans-serif; color: #222222;">
-              {{ settings.site_name }}
+  <header
+    class="sticky top-0 z-50 bg-sauti-white/95 backdrop-blur-md border-b border-sauti-blue/10 shadow-sm transition-all duration-300">
+    <a href="#main-content"
+      class="absolute top-0 left-0 -translate-y-full focus:translate-y-0 z-[100] bg-sauti-blue text-sauti-white px-6 py-3 font-bold transition-transform duration-300 rounded-br-xl shadow-lg">
+      Skip to main content
+    </a>
+    <nav class="container-custom">
+      <div class="flex items-center justify-between h-[88px]">
+        <!-- Enhanced Logo Section -->
+        <router-link to="/" class="flex items-center gap-3 group no-underline shrink-0 relative z-20">
+          <div class="relative">
+            <div
+              class="absolute -inset-2 bg-sauti-blue/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300">
+            </div>
+            <BaseLogo size="md" variant="default" alt="Sauti 116" class="relative" />
+          </div>
+          <div class="hidden md:block">
+            <h1
+              class="text-xl font-semibold tracking-tight text-sauti-darkGreen group-hover:text-sauti-blue transition-colors duration-300 m-0 leading-none">
+              {{ settings.site_name || 'Sauti 116' }}
             </h1>
-            <p class="text-xs -mt-1" style="color: #555555;">116 helpline</p>
+            <p class="text-[11px] font-normal uppercase tracking-[0.1em] text-sauti-blue/80 mt-1">National Helpline</p>
           </div>
         </router-link>
 
-        <!-- Enhanced Desktop Navigation -->
-        <div class="hidden lg:flex flex-1 items-center justify-center gap-2 xl:gap-4 whitespace-nowrap">
-          <router-link to="/" class="nav-link" :class="{ 'nav-link-active': $route.path === '/' }">Home</router-link>
-          <router-link to="/about" class="nav-link" :class="{ 'nav-link-active': $route.path === '/about' }">About</router-link>
-          
-          <router-link to="/operations" class="nav-link" :class="{ 'nav-link-active': $route.path === '/operations' }">Services</router-link>
-          <router-link to="/resources" class="nav-link" :class="{ 'nav-link-active': $route.path === '/resources' }">Reports & Resources</router-link>
-          <router-link to="/blogs" class="nav-link" :class="{ active: $route.path === '/blogs' }">Blogs</router-link>
-          <router-link to="/videos" class="nav-link" :class="{ 'nav-link-active': $route.path === '/videos' }">Videos</router-link>
-          <router-link to="/faqs" class="nav-link" :class="{ 'nav-link-active': $route.path === '/faqs' }">FAQs</router-link>
-          <router-link to="/contact" class="nav-link" :class="{ 'nav-link-active': $route.path === '/contact' }">Contact</router-link>
-        </div>
-
-        <!-- Enhanced Right Actions -->
-        <div class="hidden lg:flex items-center gap-4 whitespace-nowrap shrink-0">
-          <a :href="`tel:${contactPhone}`" class="btn-emergency text-sm px-6 py-3 flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-            <span>Call {{ contactPhone }}</span>
-          </a>
-        </div>
-
-        <!-- Enhanced Mobile Menu Button -->
-        <button
-          @click="mobileMenuOpen = !mobileMenuOpen"
-          class="lg:hidden p-3 text-gray-700 hover:text-blue-600 hover:bg-gray-100 rounded-xl transition-all duration-300"
-          aria-label="Toggle menu"
-        >
-          <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Enhanced Mobile Menu -->
-      <Transition name="slide">
-        <div v-if="mobileMenuOpen" class="lg:hidden mt-6 pb-6 bg-gray-50 rounded-2xl p-6 space-y-4">
-          <!-- Primary pages in required order -->
-          <router-link 
-            to="/" 
-            class="mobile-nav-link" 
-            :class="{ 'mobile-nav-link-active': $route.path === '/' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Home
-          </router-link>
-          
-          <router-link 
-            to="/about" 
-            class="mobile-nav-link" 
-            :class="{ 'mobile-nav-link-active': $route.path === '/about' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            About
-          </router-link>
-          
-
-          
-          <router-link
-            to="/operations"
-            class="mobile-nav-link"
-            :class="{ 'mobile-nav-link-active': $route.path === '/operations' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-            Services
-          </router-link>
-
-          <router-link
-            to="/resources"
-            class="mobile-nav-link"
-            :class="{ 'mobile-nav-link-active': $route.path === '/resources' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            Reports & Resources
-          </router-link>
-
-          <router-link
-            to="/blogs"
-            class="mobile-nav-link"
-            :class="{ 'mobile-nav-link-active': $route.path === '/blogs' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-            </svg>
-            Blogs
-          </router-link>
-
-          <router-link
-            to="/videos"
-            class="mobile-nav-link"
-            :class="{ 'mobile-nav-link-active': $route.path === '/videos' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-            Videos
-          </router-link>
-          
-          <router-link 
-            to="/faqs" 
-            class="mobile-nav-link" 
-            :class="{ 'mobile-nav-link-active': $route.path === '/faqs' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            FAQs
-          </router-link>
-          
-          <router-link 
-            to="/contact" 
-            class="mobile-nav-link" 
-            :class="{ 'mobile-nav-link-active': $route.path === '/contact' }"
-            @click="mobileMenuOpen = false"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            Contact
-          </router-link>
-
-          <!-- Mobile CTA Buttons -->
-          <div class="pt-6">
-            <a :href="`tel:${contactPhone}`" class="w-full btn-emergency text-center justify-center flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span>Call {{ contactPhone }}</span>
-            </a>
+        <!-- Premium Desktop Navigation -->
+        <div class="hidden lg:flex flex-1 items-center justify-center pl-8 pr-8">
+          <div class="flex items-center gap-1 bg-sauti-neutral/50 p-1.5 rounded-full border border-sauti-blue/5">
+            <router-link v-for="link in [
+              { to: '/', label: 'Home' },
+              { to: '/about', label: 'About' },
+              { to: '/blogs', label: 'News/Blog' },
+              { to: '/videos', label: 'Videos' },
+              { to: '/resources', label: 'Resources' },
+              { to: '/faqs', label: 'FAQs' },
+              { to: '/contact', label: 'Contact' }
+            ]" :key="link.to" :to="link.to"
+              class="px-5 py-2.5 rounded-full text-sauti-darkGreen text-sm font-normal transition-all duration-300 hover:text-sauti-blue relative overflow-hidden group"
+              active-class="bg-white text-sauti-blue shadow-sm ring-1 ring-black/5 !font-semibold">
+              <span class="relative z-10">{{ link.label }}</span>
+            </router-link>
           </div>
         </div>
-      </Transition>
+
+        <!-- Refined Right Actions -->
+        <div class="hidden lg:flex items-center gap-4 shrink-0">
+          <!-- Helpline Number Display -->
+          <!-- Helpline Number Display -->
+          <BaseCTA :href="`tel:${settings.hotline_number || '116'}`" variant="emergency" external
+            class="!rounded-full !px-6 !py-2.5 animate-emergency-glow shadow-sauti-red/30 gap-2.5 !border-0 flex items-center">
+            <PhoneIcon class="w-5 h-5" stroke-width="2.5" />
+            <div class="flex flex-col items-start leading-none ml-0.5">
+              <span class="text-[10px] uppercase font-bold tracking-[0.25em] opacity-90">Emergency</span>
+              <span class="text-xl font-bold tracking-[0.1em] uppercase">Call 116</span>
+            </div>
+          </BaseCTA>
+
+          <!-- Primary CTA -->
+          <BaseCTA to="/report" variant="primary"
+            class="!rounded-full !px-8 !py-3 !text-sm shadow-lg shadow-sauti-blue/20 hover:shadow-sauti-blue/30 !font-bold tracking-[0.1em] border-2 border-transparent uppercase">
+            {{ settings.primary_cta_text || 'Report Case' }}
+          </BaseCTA>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen"
+          class="lg:hidden relative z-20 p-2.5 text-sauti-darkGreen hover:bg-sauti-neutral rounded-full transition-all duration-300"
+          aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
+          <Bars3Icon v-if="!mobileMenuOpen" class="w-8 h-8" stroke-width="2" />
+          <XMarkIcon v-else class="w-8 h-8" stroke-width="2" />
+        </button>
+      </div>
     </nav>
+
+    <!-- Full Screen Mobile Menu -->
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 translate-y-4"
+      enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-4">
+      <div v-if="mobileMenuOpen"
+        class="lg:hidden absolute inset-x-0 top-full h-[calc(100vh-88px)] bg-sauti-white/95 backdrop-blur-xl border-t border-sauti-neutral/50 overflow-y-auto">
+        <div class="container-custom py-8 space-y-8">
+          <nav class="grid gap-2">
+            <router-link v-for="link in [
+              { to: '/', label: 'Home' },
+              { to: '/about', label: 'About Us' },
+              { to: '/blogs', label: 'News/Blog' },
+              { to: '/videos', label: 'Videos' },
+              { to: '/resources', label: 'Resources' },
+              { to: '/faqs', label: 'FAQs' },
+              { to: '/contact', label: 'Contact' }
+            ]" :key="link.to" :to="link.to"
+              class="text-2xl font-normal text-sauti-darkGreen py-4 border-b border-sauti-neutral/50 flex items-center justify-between group"
+              active-class="text-sauti-blue border-sauti-blue/30 !font-semibold" @click="mobileMenuOpen = false">
+              {{ link.label }}
+              <ArrowRightIcon
+                class="w-6 h-6 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all text-sauti-blue" />
+            </router-link>
+          </nav>
+
+          <div class="grid gap-4 pt-4">
+            <BaseCTA :href="`tel:${settings.hotline_number || '116'}`" variant="emergency" external
+              class="flex items-center justify-center gap-4 w-full p-6 !rounded-3xl animate-emergency-glow text-center">
+              <PhoneIcon class="w-8 h-8" />
+              <div class="text-left">
+                <div class="text-xs font-bold uppercase tracking-[0.2em] opacity-80">Emergency Hotline</div>
+                <div class="text-3xl font-bold uppercase tracking-[0.1em]">Call {{ settings.hotline_number || '116' }}</div>
+              </div>
+            </BaseCTA>
+            <BaseCTA to="/report" variant="primary" class="w-full justify-center !py-6 !text-lg !rounded-3xl shadow-xl"
+              @click="mobileMenuOpen = false">
+              {{ settings.primary_cta_text || 'Report a Case' }}
+            </BaseCTA>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </header>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useContentStore } from '@/store/content'
-import { useSettingsStore } from '@/store/settings'
+  import { ref, computed, onMounted } from 'vue'
+  import { useSettingsStore } from '@/store/settings'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import BaseLogo from '@/components/common/BaseLogo.vue'
+  import {
+    PhoneIcon,
+    Bars3Icon,
+    XMarkIcon,
+    ArrowRightIcon
+  } from '@heroicons/vue/24/outline'
 
-const contentStore = useContentStore()
-const settingsStore = useSettingsStore()
-const mobileMenuOpen = ref(false)
-const useFallback = ref(false)
-const logoUrl = new URL('@/assets/sauti-logo.jpeg', import.meta.url).href
+  const settingsStore = useSettingsStore()
+  const mobileMenuOpen = ref(false)
 
-const contactPhone = computed(() => contentStore.getContent('contact_phone_main', '116'))
-const settings = computed(() => settingsStore.settings)
+  const settings = computed(() => settingsStore.settings)
 
-onMounted(() => {
-  contentStore.fetchContent()
-  settingsStore.fetchSettings()
-})
+  onMounted(async () => {
+    await settingsStore.fetchGlobalSettings()
+  })
 </script>
 
-<style scoped>
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-enter-from {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.slide-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-</style>
+<style scoped></style>

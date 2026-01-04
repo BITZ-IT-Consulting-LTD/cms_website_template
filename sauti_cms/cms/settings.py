@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'social_media',
     'timeline',
     'services',
+    'contact',
     'sitesettings', # Added sitesettings app
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'cms.urls'
@@ -98,7 +101,7 @@ else:
             'NAME': config('DB_NAME', default='sauti_cms'),
             'USER': config('DB_USER', default='postgres'),
             'PASSWORD': config('DB_PASSWORD', default='postgres'),
-            'HOST': config('DB_HOST', default='db'),
+            'HOST': config('DB_HOST', default='localhost'),
             'PORT': config('DB_PORT', default='5432'),
         }
     }

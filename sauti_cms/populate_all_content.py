@@ -30,7 +30,7 @@ from populate_contacts import populate_contacts
 from populate_about_page_content import populate_about_page_content
 from populate_faqs import populate_faqs
 from populate_services import populate_services
-
+from populate_help_services import populate_help_services
 
 def populate_all():
     """
@@ -80,6 +80,7 @@ def populate_all():
 
     print("\n[14/14] Populating services...")
     populate_services()
+    populate_help_services()
 
     print("\n--- All content population complete! ---")
 
