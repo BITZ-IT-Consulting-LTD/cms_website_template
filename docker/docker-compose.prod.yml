@@ -39,8 +39,9 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - SECRET_KEY=django-insecure-prod-key-please-change
-      - ALLOWED_HOSTS=sauti.mglsd.go.ug,backend
+      - ALLOWED_HOSTS=sauti.mglsd.go.ug,backend,127.0.0.1,localhost
       - CSRF_TRUSTED_ORIGINS=https://sauti.mglsd.go.ug
+      - CORS_ALLOWED_ORIGINS=https://sauti.mglsd.go.ug,http://localhost:8080,http://localhost:8085
     command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000
     depends_on:
       db:
