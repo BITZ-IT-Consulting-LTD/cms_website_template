@@ -13,12 +13,11 @@ export default {
           lightGreen: '#8CC63F',
           black: '#000000',
           white: '#FFFFFF',
-          neutral: '#F5F5F5', // For borders and subtle backgrounds
+          neutral: '#F4F4F5',
         },
       },
       fontFamily: {
-        sans: ['"Cronos Pro"', 'Arial', 'sans-serif'],
-        display: ['"Helvetica Neue"', 'Arial', 'sans-serif'],
+        sans: ['"Cronos Pro"', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif'],
       },
       boxShadow: {
         'sauti-red': '0 0 12px rgba(237, 28, 36, 0.4)',

@@ -1,17 +1,20 @@
 <template>
   <article
-    class="group bg-sauti-white p-4 rounded-[2rem] border-2 border-sauti-neutral transition-all duration-500 hover:shadow-2xl hover:shadow-sauti-blue/10 hover:border-sauti-blue/30">
+    class="group bg-white p-4 rounded-[2rem] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-sauti-blue/10">
     <router-link :to="`/blogs/${post.slug}`" class="block">
       <!-- Featured Image -->
       <div class="relative bg-sauti-neutral rounded-2xl overflow-hidden aspect-video cursor-pointer">
-        <img :src="post.featured_image || `https://picsum.photos/seed/${post.id + 116}/800/450`" :alt="post.title"
+        <img :src="post.featured_image || helplineAction" :alt="post.title"
           class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy"
           @error="setPlaceholder" />
+
+        <!-- Brand Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-sauti-darkGreen/20 via-transparent to-transparent"></div>
 
         <!-- Category Badge -->
         <div v-if="post.category" class="absolute top-4 left-4">
           <span
-            class="text-[10px] font-black uppercase tracking-widest bg-sauti-darkGreen text-sauti-white px-3 py-1.5 rounded-xl shadow-lg">
+            class="text-[10px] font-bold uppercase tracking-widest bg-sauti-darkGreen text-sauti-white px-3 py-1.5 rounded-xl shadow-lg">
             {{ post.category.name }}
           </span>
         </div>
@@ -19,7 +22,7 @@
         <!-- Featured Badge -->
         <div v-if="post.is_featured" class="absolute top-4 right-4">
           <span
-            class="bg-sauti-blue text-sauti-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg">
+            class="bg-sauti-blue text-sauti-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg">
             Featured
           </span>
         </div>
@@ -29,7 +32,7 @@
       <div class="mt-6 flex gap-4">
         <!-- Author Avatar -->
         <div
-          class="h-10 w-10 rounded-xl bg-sauti-orange flex items-center justify-center text-sauti-white font-black text-sm flex-shrink-0 shadow-lg shadow-sauti-orange/20 transition-transform group-hover:scale-110">
+          class="h-10 w-10 rounded-xl bg-sauti-orange flex items-center justify-center text-sauti-white font-bold text-sm flex-shrink-0 shadow-lg shadow-sauti-orange/20 transition-transform group-hover:scale-110">
           {{ getAuthorInitial() }}
         </div>
 
@@ -37,17 +40,17 @@
         <div class="min-w-0">
           <!-- Title -->
           <h3
-            class="text-base font-black text-sauti-darkGreen leading-tight mb-2 line-clamp-2 group-hover:text-sauti-blue transition-colors">
+            class="text-base font-bold text-sauti-darkGreen leading-tight mb-2 line-clamp-2 group-hover:text-sauti-blue transition-colors">
             {{ post.title }}
           </h3>
 
           <!-- Meta -->
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span class="text-[10px] text-sauti-darkGreen/60 font-black uppercase tracking-widest whitespace-nowrap">
+            <span class="text-[10px] text-sauti-darkGreen/60 font-bold uppercase tracking-widest whitespace-nowrap">
               {{ post.author?.username || post.author_name || 'Sauti Uganda' }}
             </span>
             <span class="w-1 h-1 bg-sauti-neutral rounded-full"></span>
-            <span class="text-[10px] text-sauti-darkGreen/40 font-black uppercase tracking-widest whitespace-nowrap">
+            <span class="text-[10px] text-sauti-darkGreen/40 font-bold uppercase tracking-widest whitespace-nowrap">
               {{ formatViews(post.views_count) }} • {{ formatTimeAgo(post.published_at) }}
             </span>
           </div>
@@ -59,6 +62,7 @@
 
 <script setup>
   import { defineProps } from 'vue'
+  import helplineAction from '@/assets/helpline-action.png'
 
   const props = defineProps({
     post: {
@@ -98,8 +102,7 @@
 
   function setPlaceholder(event) {
     const img = event.target
-    // Using Picsum for more reliable varied placeholders
-    const ph = `https://picsum.photos/seed/${props.post.id + 116}/800/450`
+    const ph = helplineAction
     if (img.src !== ph) {
       img.src = ph
     }

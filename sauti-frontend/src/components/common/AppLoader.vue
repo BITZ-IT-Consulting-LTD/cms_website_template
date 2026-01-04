@@ -7,7 +7,7 @@
       </div>
 
       <!-- Optional message -->
-      <p v-if="message" class="mt-4 text-sauti-darkGreen font-medium" :class="textSizeClass">
+      <p v-if="message" class="mt-4 text-sauti-darkGreen font-normal" :class="textSizeClass">
         {{ message }}
       </p>
     </div>

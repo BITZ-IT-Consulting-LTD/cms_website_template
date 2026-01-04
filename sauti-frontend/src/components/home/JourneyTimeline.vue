@@ -39,7 +39,7 @@
             </div>
             
             <div class="w-5/12 pl-12">
-              <span class="text-6xl font-black text-blue-100/50 absolute top-1/2 -translate-y-1/2 left-12 select-none pointer-events-none group-hover:text-blue-200/50 transition-colors">2013</span>
+              <span class="text-6xl font-bold text-blue-100/50 absolute top-1/2 -translate-y-1/2 left-12 select-none pointer-events-none group-hover:text-blue-200/50 transition-colors">2013</span>
             </div>
           </div>
 
@@ -59,7 +59,7 @@
             </div>
             
             <div class="w-5/12 text-right pr-12">
-              <span class="text-6xl font-black text-green-100/50 absolute top-1/2 -translate-y-1/2 right-12 select-none pointer-events-none group-hover:text-green-200/50 transition-colors">Aug</span>
+              <span class="text-6xl font-bold text-green-100/50 absolute top-1/2 -translate-y-1/2 right-12 select-none pointer-events-none group-hover:text-green-200/50 transition-colors">Aug</span>
             </div>
           </div>
 
@@ -78,7 +78,7 @@
             </div>
             
             <div class="w-5/12 pl-12">
-              <span class="text-6xl font-black text-purple-100/50 absolute top-1/2 -translate-y-1/2 left-12 select-none pointer-events-none group-hover:text-purple-200/50 transition-colors">Nov</span>
+              <span class="text-6xl font-bold text-purple-100/50 absolute top-1/2 -translate-y-1/2 left-12 select-none pointer-events-none group-hover:text-purple-200/50 transition-colors">Nov</span>
             </div>
           </div>
 
@@ -97,7 +97,7 @@
             </div>
             
             <div class="w-5/12 text-right pr-12">
-              <span class="text-6xl font-black text-orange-100/50 absolute top-1/2 -translate-y-1/2 right-12 select-none pointer-events-none group-hover:text-orange-200/50 transition-colors">2014</span>
+              <span class="text-6xl font-bold text-orange-100/50 absolute top-1/2 -translate-y-1/2 right-12 select-none pointer-events-none group-hover:text-orange-200/50 transition-colors">2014</span>
             </div>
           </div>
 
@@ -116,7 +116,7 @@
             </div>
             
             <div class="w-5/12 pl-12">
-              <span class="text-6xl font-black text-red-100/50 absolute top-1/2 -translate-y-1/2 left-12 select-none pointer-events-none group-hover:text-red-200/50 transition-colors">2016</span>
+              <span class="text-6xl font-bold text-red-100/50 absolute top-1/2 -translate-y-1/2 left-12 select-none pointer-events-none group-hover:text-red-200/50 transition-colors">2016</span>
             </div>
           </div>
 
@@ -135,7 +135,7 @@
             </div>
             
             <div class="w-5/12 text-right pr-12">
-              <span class="text-6xl font-black text-teal-100/50 absolute top-1/2 -translate-y-1/2 right-12 select-none pointer-events-none group-hover:text-teal-200/50 transition-colors">2021</span>
+              <span class="text-6xl font-bold text-teal-100/50 absolute top-1/2 -translate-y-1/2 right-12 select-none pointer-events-none group-hover:text-teal-200/50 transition-colors">2021</span>
             </div>
           </div>
         </div>

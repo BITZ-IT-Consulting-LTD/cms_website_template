@@ -26,7 +26,7 @@ INITIAL_CONTENT = [
     {
         "key": "hero_title",
         "label": "Hero Title",
-        "value": "Every voice matters. Every life deserves protection.",
+        "value": "REPORT ANY FORM OF VIOLENCE. CALL 116.",
         "page": "home",
         "type": "heading",
         "description": "Main heading on homepage"
@@ -35,11 +35,9 @@ INITIAL_CONTENT = [
         "key": "hero_subtitle",
         "label": "Hero Subtitle",
         "value": (
-            "Sauti 116 is Uganda’s national toll-free helpline providing confidential, "
-            "24/7 support for children affected by violence, survivors of gender-based "
-            "violence, migrant workers in distress, and individuals experiencing sexual "
-            "exploitation. Support is available across all telecom networks and in "
-            "multiple local languages."
+            "Uganda’s National Helpline providing authoritative, 24/7 "
+            "protection and immediate response. Confidential support is "
+            "available across all telecom networks in multiple local languages."
         ),
         "page": "home",
         "type": "text",
@@ -48,7 +46,7 @@ INITIAL_CONTENT = [
     {
         "key": "hero_cta_call",
         "label": "Hero Call Button",
-        "value": "Call 116 Now",
+        "value": "CALL 116 NOW",
         "page": "home",
         "type": "button",
         "description": "Call-to-action button text"
@@ -56,7 +54,7 @@ INITIAL_CONTENT = [
     {
         "key": "hero_cta_report",
         "label": "Hero Report Button",
-        "value": "Report a Case",
+        "value": "REPORT VIOLENCE",
         "page": "home",
         "type": "button",
         "description": "Report button text"
@@ -68,7 +66,7 @@ INITIAL_CONTENT = [
     {
         "key": "quick_access_title",
         "label": "Quick Access Section Title",
-        "value": "Get Help, Protection & Information",
+        "value": "IMMEDIATE RESPONSE & PROTECTION",
         "page": "home",
         "type": "heading",
         "description": "Section heading for quick access cards"
@@ -77,10 +75,10 @@ INITIAL_CONTENT = [
         "key": "quick_access_description",
         "label": "Quick Access Description",
         "value": (
-            "Sauti provides free, confidential support services for children and adults "
-            "facing violence, abuse, exploitation, or distress. Our trained counselors "
-            "offer immediate assistance, guidance, and referrals to appropriate "
-            "protection and response services nationwide."
+            "Sauti provides rapid, confidential response for children and adults "
+            "facing violence or exploitation. Our trained response team "
+            "offers immediate assistance and direct referrals to national "
+            "protection services."
         ),
         "page": "home",
         "type": "text",
@@ -91,7 +89,7 @@ INITIAL_CONTENT = [
     {
         "key": "card_report_title",
         "label": "Report Card Title",
-        "value": "Report a Case",
+        "value": "REPORT VIOLENCE",
         "page": "home",
         "type": "heading",
         "description": "Title for Report a Case card"
@@ -157,8 +155,8 @@ INITIAL_CONTENT = [
         "key": "card_partners_text",
         "label": "Partners Card Text",
         "value": (
-            "Delivered in collaboration with Government of Uganda institutions, UNICEF, "
-            "civil society organizations, and international partners."
+            "Official collaboration with the Government of Uganda, UNICEF, "
+            "and national security agencies for rapid response."
         ),
         "page": "home",
         "type": "text",
@@ -227,7 +225,7 @@ INITIAL_CONTENT = [
     {
         "key": "final_cta_title",
         "label": "Final CTA Title",
-        "value": "Need Help Right Now?",
+        "value": "URGENT ASSISTANCE AVAILABLE",
         "page": "home",
         "type": "heading",
         "description": "Final CTA section title"
@@ -236,10 +234,8 @@ INITIAL_CONTENT = [
         "key": "final_cta_text",
         "label": "Final CTA Text",
         "value": (
-            "Call 116 for immediate, free, and confidential support. Services are available "
-            "24/7 across all telecom networks and in multiple local languages for children, "
-            "survivors of gender-based violence, migrant workers, and individuals affected "
-            "by sexual exploitation."
+            "Report violence now. Call 116 for immediate, free, and "
+            "confidential protection. Our response team is standing by 24/7."
         ),
         "page": "home",
         "type": "text",
@@ -276,7 +272,7 @@ INITIAL_CONTENT = [
     {
         "key": "about_hero_title",
         "label": "About Page Hero Title",
-        "value": "About Sauti: Your Voice, Our Mission",
+        "value": "NATIONAL CHILD HELPLINE",
         "page": "about",
         "type": "heading",
         "description": "Main heading for the About Page hero section"
@@ -285,14 +281,10 @@ INITIAL_CONTENT = [
         "key": "about_hero_description",
         "label": "About Page Hero Description",
         "value": (
-            "Sauti is Uganda’s national toll-free helpline operated under the Ministry of "
-            "Gender, Labour and Social Development. It provides confidential, "
-            "survivor-centered support services for children affected by violence, "
-            "survivors of gender-based violence, migrant workers in distress, and "
-            "individuals at risk of or affected by sexual exploitation. "
-            "Through trained counselors, case management systems, and referral networks, "
-            "Sauti connects callers to protection, health, psychosocial, legal, and social "
-            "support services across the country."
+            "Sauti 116 is Uganda’s National Helpline, mandated by the Ministry of "
+            "Gender, Labour and Social Development to provide rapid, authoritative "
+            "protection for every child and vulnerable person. We operate 24/7 "
+            "with a mission to eliminate violence through compassionate yet decisive action."
         ),
         "page": "about",
         "type": "text",
@@ -536,6 +528,25 @@ INITIAL_CONTENT = [
         "page": "about",
         "type": "text",
         "description": "Tailwind gradient end color for stat card 4"
+    },
+    # =========================
+    # NATIONAL MANDATE SECTION
+    # =========================
+    {
+        "key": "mandate_title",
+        "label": "Mandate Title",
+        "value": "NATIONAL MANDATE",
+        "page": "about",
+        "type": "heading",
+        "description": "About page mandate title"
+    },
+    {
+        "key": "mandate_description",
+        "label": "Mandate Description",
+        "value": "Operating under the statutory authority of the Ministry of Gender, Labour and Social Development to protect all Ugandan children.",
+        "page": "about",
+        "type": "text",
+        "description": "About page mandate description"
     },
 
     # =========================
@@ -1044,7 +1055,7 @@ INITIAL_CONTENT = [
     {
         "key": "site_description",
         "label": "Site Description",
-        "value": "Sauti is Uganda’s national toll-free helpline operated under the Ministry of Gender, Labour and Social Development.",
+        "value": "Sauti 116: Uganda’s National Helpline for rapid, authoritative protection and response to violence.",
         "page": "global",
         "type": "text",
         "description": "Meta description for SEO"
@@ -1052,7 +1063,7 @@ INITIAL_CONTENT = [
     {
         "key": "mission_statement",
         "label": "Mission Statement",
-        "value": "To provide a confidential, toll-free, and 24/7 helpline service for reporting abuse and seeking help.",
+        "value": "To provide immediate, 24/7 protection and response services to every citizen in distress.",
         "page": "global",
         "type": "text",
         "description": "Organization mission"
@@ -1060,7 +1071,7 @@ INITIAL_CONTENT = [
     {
         "key": "vision_statement",
         "label": "Vision Statement",
-        "value": "A society where every child and vulnerable person is safe, heard, and protected.",
+        "value": "A Uganda where every form of violence is met with a rapid, authoritative response.",
         "page": "global",
         "type": "text",
         "description": "Organization vision"
@@ -1084,7 +1095,7 @@ INITIAL_CONTENT = [
     {
         "key": "primary_cta_text",
         "label": "Primary CTA Text",
-        "value": "Get Help Now",
+        "value": "REPORT VIOLENCE",
         "page": "global",
         "type": "text",
         "description": "Text for primary call to action buttons"
@@ -1152,13 +1163,13 @@ def populate_global_settings():
     settings.privacy_policy_url = "https://sauti.mglsd.go.ug/privacy"
 
     # 1. Hero
-    settings.hero_title = "Every voice matters. Every life deserves protection."
-    settings.hero_subtitle = "Sauti 116 provides confidential, 24/7 support for children, survivors of gender-based violence, and migrant workers."
-    settings.hero_value_prop = "Free and accessible across all telecom networks in multiple local languages."
+    settings.hero_title = "REPORT ANY FORM OF VIOLENCE. CALL 116."
+    settings.hero_subtitle = "Uganda’s National Helpline. Immediate, confidential protection for every citizen. Available 24/7."
+    settings.hero_value_prop = "Free and accessible across all telecom networks. Professional response in multiple languages."
 
     # 2. Intro
-    settings.intro_title = "Who We Are"
-    settings.intro_description = "Sauti 116 is Uganda’s National Child Helpline, a confidential service that provides support, guidance, and crisis intervention for children and individuals facing violence, exploitation, or abuse."
+    settings.intro_title = "NATIONAL MANDATE"
+    settings.intro_description = "Sauti 116 is the Government of Uganda's primary response mechanism for child protection and social safety."
 
     # 3. Quick Access
     settings.quick_access_title = "How Can We Help?"

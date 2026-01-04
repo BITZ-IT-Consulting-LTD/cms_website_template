@@ -1,166 +1,162 @@
 <template>
-  <div class="bg-sauti-white">
-    <!-- Hero / Header -->
-    <header class="relative bg-sauti-blue text-sauti-white py-24 overflow-hidden">
-      <!-- Decorative background circles -->
-      <div
-        class="absolute top-0 right-0 -transtale-y-1/2 translate-x-1/2 w-96 h-96 bg-sauti-white rounded-full opacity-10 blur-3xl">
-      </div>
-      <div
-        class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-64 h-64 bg-sauti-white rounded-full opacity-10 blur-2xl">
-      </div>
-
-      <div class="container-custom relative z-10 text-center">
-        <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight text-sauti-white">
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <h1 class="page-header-title">
           About Sauti 116
         </h1>
-        <p class="mt-6 max-w-3xl mx-auto text-xl md:text-2xl text-sauti-white font-medium leading-relaxed">
-          Championing the safety, protection, and rights of every child in Uganda through accessible reporting and
-          support.
+        <p class="page-header-subtitle">
+          Uganda’s National Helpline championed by the Ministry of Gender, Labour and Social Development.
         </p>
       </div>
     </header>
 
-    <!-- Section: Mission & Vision -->
-    <section id="mission-vision" class="py-20 bg-sauti-white">
-      <div class="container-custom">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-          <!-- Mission -->
-          <div
-            class="bg-sauti-neutral/50 rounded-[2.5rem] p-10 md:p-12 border border-sauti-neutral hover:shadow-xl transition-all duration-300 group">
-            <div
-              class="w-16 h-16 bg-sauti-blue rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-              <svg class="w-8 h-8 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h2 class="text-3xl font-bold text-sauti-darkGreen mb-6">Our Mission</h2>
-            <p v-if="settings" class="text-lg text-sauti-darkGreen leading-relaxed font-medium">
-              {{ settings.mission || 'To provide a confidential, accessible, and effective platform for reporting and
-              responding to cases of child abuse, ensuring the safety and well - being of every child.' }}
-            </p>
-          </div>
+    <div>
+      <!-- 2. Mission & Vision -->
+      <section id="mission-vision" aria-labelledby="mission-heading" class="section-padding bg-sauti-white">
+        <div class="container-custom">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <div class="lg:col-span-7 space-y-12">
+              <!-- Mission -->
+              <div class="card-base group">
+                <div
+                  class="w-20 h-20 bg-sauti-blue/10 rounded-2xl flex items-center justify-center mb-10 group-hover:scale-110 transition-transform duration-500">
+                  <BoltIcon class="w-10 h-10 text-sauti-blue" />
+                </div>
+                <h2 id="mission-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-6">Our Mission</h2>
+                <p v-if="settings" class="text-xl text-sauti-darkGreen leading-relaxed font-bold">
+                  {{ settings.mission || `To provide a confidential, accessible, and effective platform for reporting
+                  and
+                  responding to cases of child abuse, ensuring the safety and well-being of every child.` }}
+                </p>
+              </div>
 
-          <!-- Vision -->
-          <div
-            class="bg-sauti-neutral/50 rounded-[2.5rem] p-10 md:p-12 border border-sauti-neutral hover:shadow-xl transition-all duration-300 group">
-            <div
-              class="w-16 h-16 bg-sauti-lightGreen rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-              <svg class="w-8 h-8 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
+              <!-- Vision -->
+              <div class="card-base group border-sauti-lightGreen hover:border-sauti-lightGreen">
+                <div
+                  class="w-20 h-20 bg-sauti-lightGreen/10 rounded-2xl flex items-center justify-center mb-10 group-hover:scale-110 transition-transform duration-500">
+                  <EyeIcon class="w-10 h-10 text-sauti-lightGreen" />
+                </div>
+                <h2 class="campaign-header text-3xl text-sauti-darkGreen mb-6">Our Vision</h2>
+                <p v-if="settings" class="text-xl text-sauti-darkGreen leading-relaxed font-bold">
+                  {{ settings.vision || `A Uganda where every child is safe, protected, and empowered to reach their
+                  full
+                  potential, free from all forms of violence and exploitation.` }}
+                </p>
+              </div>
             </div>
-            <h2 class="text-3xl font-bold text-sauti-darkGreen mb-6">Our Vision</h2>
-            <p v-if="settings" class="text-lg text-sauti-darkGreen leading-relaxed font-medium">
-              {{ settings.vision || 'A Uganda where every child is safe, protected, and empowered to reach their full
-              potential, free from all forms of violence and exploitation.' }}
-            </p>
+
+            <div class="lg:col-span-5">
+              <div class="relative group">
+                <div
+                  class="absolute -inset-4 bg-sauti-orange/10 rounded-[4rem] rotate-3 group-hover:rotate-0 transition-transform duration-700">
+                </div>
+                <div class="relative rounded-[4rem] overflow-hidden border-4 border-sauti-orange shadow-2xl">
+                  <img src="@/assets/community-protection.png" alt="Community protection in action"
+                    class="w-full h-[600px] object-cover transition-transform duration-1000 group-hover:scale-110" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-sauti-darkGreen/40 to-transparent"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Section: Impact Statistics -->
-    <section id="impact-stats" class="py-20 relative overflow-hidden bg-sauti-darkGreen">
-      <div class="container-custom relative z-10">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-black text-sauti-white mb-6">
-            Our Impact
-          </h2>
-          <p class="text-xl text-sauti-neutral max-w-2xl mx-auto">
-            Real numbers representing real lives changed through our intervention and support.
+      <!-- 3. Impact Statistics (Break Section) -->
+    </div>
+
+    <!-- Impact Stats - Full Width Break -->
+    <section id="impact-stats" class="py-24 bg-sauti-darkGreen relative overflow-hidden">
+      <div class="container-custom relative z-10 text-center">
+        <div class="mb-20">
+          <h2 class="campaign-header text-4xl md:text-5xl text-sauti-white mb-6">Our National Impact</h2>
+          <p class="text-xl text-sauti-white/80 max-w-2xl mx-auto font-bold">
+            Verifiable data showcasing our commitment to Ugandan citizens.
           </p>
         </div>
 
         <div v-if="settings" class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           <div v-for="stat in impactStats" :key="stat.title" class="text-center group">
             <div
-              class="inline-flex items-center justify-center p-4 rounded-full bg-sauti-white/10 mb-6 backdrop-blur-sm group-hover:bg-sauti-white/20 transition-colors">
-              <!-- Dynamic large text -->
-              <p class="text-4xl md:text-5xl lg:text-6xl font-black text-sauti-white tracking-tight">
+              class="inline-flex items-center justify-center p-8 rounded-[3rem] bg-sauti-white/10 mb-6 backdrop-blur-sm group-hover:bg-sauti-white/20 transition-all duration-500 border border-sauti-white/10">
+              <p class="text-5xl md:text-6xl font-bold text-sauti-white tracking-tighter">
                 {{ stat.title }}
               </p>
             </div>
-            <p class="text-base md:text-lg font-bold text-sauti-neutral uppercase tracking-widest">{{ stat.text }}</p>
+            <p class="campaign-header text-xs text-sauti-white/60 tracking-[0.2em]">{{ stat.text }}</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section: Core Values -->
-    <section id="core-values" class="py-24 bg-sauti-neutral">
-      <div class="container-custom">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-extrabold text-sauti-darkGreen mb-6">
-            Our Core Values
-          </h2>
-          <p class="text-xl text-sauti-darkGreen max-w-3xl mx-auto">
-            The principles that guide every interaction, decision, and action we take.
-          </p>
-        </div>
+    <div>
+      <!-- 4. Core Values -->
+      <section id="core-values" aria-labelledby="values-heading" class="section-padding bg-sauti-white">
+        <div class="container-custom">
+          <div class="text-center mb-20">
+            <h2 id="values-heading" class="campaign-header text-4xl text-sauti-darkGreen mb-6">Our Core Values</h2>
+            <p class="text-xl text-sauti-darkGreen max-w-3xl mx-auto font-bold opacity-70">
+              The principles that guide every interaction, decision, and action we take.
+            </p>
+          </div>
 
-        <div v-if="loading.coreValues" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-sauti-blue mx-auto"></div>
-        </div>
+          <div v-if="loading.coreValues" class="py-20 text-center">
+            <div class="spinner mx-auto"></div>
+          </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div v-for="value in coreValues" :key="value.id"
-            class="bg-sauti-white p-8 md:p-10 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-sauti-neutral">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-sauti-neutral">
-              <component :is="getIconComponent(value.icon)" class="w-8 h-8 text-sauti-blue" />
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div v-for="value in coreValues" :key="value.id" class="card-base group">
+              <div
+                class="w-16 h-16 rounded-2xl flex items-center justify-center mb-8 bg-sauti-blue/10 group-hover:scale-110 transition-transform duration-500">
+                <component :is="getIconComponent(value.icon)" class="w-8 h-8 text-sauti-blue" />
+              </div>
+              <h3 class="campaign-header text-2xl text-sauti-darkGreen mb-4">{{ value.title }}</h3>
+              <p class="text-lg text-sauti-darkGreen/70 leading-relaxed font-bold">{{ value.description }}</p>
             </div>
-            <h3 class="text-2xl font-bold text-sauti-darkGreen mb-4">{{ value.title }}</h3>
-            <p class="text-sauti-darkGreen leading-relaxed">{{ value.description }}</p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Section: History / Journey -->
-    <section id="history" class="py-24 bg-sauti-white">
-      <div class="container-custom">
-        <div class="text-center mb-20">
-          <h2 class="text-3xl md:text-5xl font-extrabold text-sauti-darkGreen mb-6">
-            Our Journey
-          </h2>
-          <p class="text-xl text-sauti-darkGreen max-w-2xl mx-auto">
-            Milestones that define our commitment to child protection.
-          </p>
+      <!-- 5. History / Journey -->
+      <section id="history" aria-labelledby="history-heading" class="section-padding bg-sauti-blue/5">
+        <div class="container-custom">
+          <div class="text-center mb-20">
+            <h2 id="history-heading" class="campaign-header text-4xl text-sauti-darkGreen mb-6">Our Journey</h2>
+            <p class="text-xl text-sauti-darkGreen max-w-2xl mx-auto font-bold opacity-70">
+              Milestones that define our commitment to child protection.
+            </p>
+          </div>
+
+          <div v-if="loading.timeline" class="py-20 text-center">
+            <div class="spinner mx-auto"></div>
+          </div>
+
+          <AppTimeline v-else :timeline-events="timelineEvents" />
         </div>
+      </section>
 
-        <div v-if="loading.timeline" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-sauti-blue mx-auto"></div>
+      <!-- 6. Partners -->
+      <section id="partners" aria-labelledby="partners-heading" class="section-padding bg-sauti-white">
+        <div class="container-custom">
+          <div class="text-center mb-20">
+            <h2 id="partners-heading" class="campaign-header text-4xl text-sauti-darkGreen mb-4">Trusted Partners</h2>
+            <p class="text-xl text-sauti-darkGreen max-w-3xl mx-auto font-bold opacity-70">
+              We work alongside leading organizations to deliver comprehensive support.
+            </p>
+          </div>
+
+          <div v-if="loading.partners" class="py-20 text-center">
+            <div class="spinner mx-auto"></div>
+          </div>
+
+          <div v-else class="bg-sauti-white rounded-[4rem] p-12 border-2 border-sauti-neutral">
+            <PartnerGrid :partners="partners"
+              class="opacity-80 grayscale hover:grayscale-0 transition-all duration-700" />
+          </div>
         </div>
-
-        <AppTimeline v-else :timeline-events="timelineEvents" />
-      </div>
-    </section>
-
-    <!-- Section: Partners -->
-    <section id="partners" class="py-24 bg-sauti-neutral/30">
-      <div class="container-custom">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-sauti-darkGreen mb-6">
-            Trusted Partners
-          </h2>
-          <p class="text-lg text-sauti-darkGreen max-w-3xl mx-auto">
-            We work alongside leading organizations to deliver comprehensive support.
-          </p>
-        </div>
-
-        <div v-if="loading.partners" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-sauti-blue mx-auto"></div>
-        </div>
-
-        <div v-else>
-          <PartnerGrid :partners="partners"
-            class="opacity-90 grayscale hover:grayscale-0 transition-all duration-500" />
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -172,7 +168,13 @@
   import AppTimeline from '@/components/AppTimeline.vue'
   import PartnerGrid from '@/components/common/PartnerGrid.vue'
   import {
-    ShieldCheckIcon, UserGroupIcon, LockClosedIcon, GlobeAltIcon, HeartIcon
+    ShieldCheckIcon,
+    UserGroupIcon,
+    LockClosedIcon,
+    GlobeAltIcon,
+    HeartIcon,
+    BoltIcon,
+    EyeIcon
   } from '@heroicons/vue/24/outline'
 
   defineOptions({
@@ -202,7 +204,6 @@
   }
 
   const getIconComponent = (iconName) => {
-    // A simple map to return an icon component. Add more as needed.
     return iconMap[iconName] || ShieldCheckIcon
   }
 
@@ -212,11 +213,11 @@
     // Prefer new JSON list structure
     if (settings.value.impact_stats && Array.isArray(settings.value.impact_stats)) {
       return settings.value.impact_stats
-        .filter(stat => stat.is_active !== false) // default true if undefined
+        .filter(stat => stat.is_active !== false)
         .sort((a, b) => (a.order || 0) - (b.order || 0))
         .map(stat => ({
-          title: stat.value, // Map value to title for template compatibility
-          text: stat.label   // Map label to text for template compatibility
+          title: stat.value,
+          text: stat.label
         }))
     }
 
@@ -268,7 +269,6 @@
   }
 
   onMounted(async () => {
-    // Settings are fetched globally in the app layout, but we ensure they are loaded.
     if (!settings.value) {
       await settingsStore.fetchGlobalSettings()
     }
@@ -278,26 +278,4 @@
   })
 </script>
 
-<style scoped>
-  .container-custom {
-    max-width: 80rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  @media (min-width: 640px) {
-    .container-custom {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container-custom {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-  }
-</style>
+<style scoped></style>

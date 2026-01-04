@@ -1,137 +1,103 @@
 <template>
-  <div class="space-y-6">
-    <!-- Category Filter -->
-    <div v-if="categories && categories.length > 0" class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Filter by Category</h2>
-      <div class="flex flex-wrap gap-2">
-        <button
-          @click="selectCategory(null)"
-          :class="[
-            'px-4 py-2 rounded-full text-sm font-semibold transition-colors',
-            selectedCategory === null
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          ]"
-        >
-          All FAQs
+  <div class="space-y-12">
+    <!-- 1. Category Filter -->
+    <div v-if="categories && categories.length > 0"
+      class="bg-sauti-white rounded-[2.5rem] border-2 border-sauti-neutral p-8 shadow-sm">
+      <h2 class="campaign-header text-sm text-sauti-darkGreen mb-6 opacity-40">Knowledge Base Categories</h2>
+      <div class="flex flex-wrap gap-3">
+        <button @click="selectCategory(null)" :class="[
+          'px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border-2',
+          selectedCategory === null
+            ? 'bg-sauti-blue border-sauti-blue text-sauti-white shadow-lg scale-105'
+            : 'bg-sauti-white border-sauti-neutral text-sauti-darkGreen/50 hover:border-sauti-blue hover:text-sauti-blue'
+        ]">
+          All Topics
         </button>
-        <button
-          v-for="cat in categories"
-          :key="cat.slug"
-          @click="selectCategory(cat.slug)"
-          :class="[
-            'px-4 py-2 rounded-full text-sm font-semibold transition-colors',
-            selectedCategory === cat.slug
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          ]"
-        >
+        <button v-for="cat in categories" :key="cat.slug" @click="selectCategory(cat.slug)" :class="[
+          'px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border-2',
+          selectedCategory === cat.slug
+            ? 'bg-sauti-blue border-sauti-blue text-sauti-white shadow-xl scale-105'
+            : 'bg-sauti-white border-sauti-neutral text-sauti-darkGreen/50 hover:border-sauti-blue hover:text-sauti-blue'
+        ]">
           {{ cat.name }}
         </button>
       </div>
     </div>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center py-12">
-      <AppLoader />
+    <!-- 2. Loading State -->
+    <div v-if="loading" class="flex justify-center py-20">
+      <div class="spinner"></div>
     </div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-      <p class="text-red-700">{{ error }}</p>
-      <button @click="$emit('retry')" class="mt-4 btn-primary">
-        Try Again
-      </button>
+    <!-- 3. Error State -->
+    <div v-else-if="error" class="bg-sauti-red/5 border-2 border-sauti-red/20 rounded-[2.5rem] p-12 text-center">
+      <ExclamationTriangleIcon class="w-12 h-12 text-sauti-red mx-auto mb-6" />
+      <p class="text-sauti-darkGreen/70 font-bold mb-8">{{ error }}</p>
+      <BaseCTA @click="$emit('retry')" variant="primary">
+        Try Reconnecting
+      </BaseCTA>
     </div>
 
-    <!-- Empty State -->
-    <div v-else-if="filteredFaqs.length === 0" class="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
-      <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <h3 class="text-lg font-semibold text-gray-700 mb-2">No FAQs Found</h3>
-      <p class="text-gray-500">
-        {{ selectedCategory ? 'No FAQs in this category.' : 'Check back later for frequently asked questions.' }}
+    <!-- 4. Empty State -->
+    <div v-else-if="filteredFaqs.length === 0"
+      class="bg-sauti-neutral/10 border-2 border-dashed border-sauti-neutral rounded-[3rem] p-16 text-center">
+      <QuestionMarkCircleIcon class="w-16 h-16 mx-auto text-sauti-darkGreen/20 mb-6" />
+      <h3 class="campaign-header text-xl text-sauti-darkGreen mb-4">No insights found</h3>
+      <p class="text-lg font-bold text-sauti-darkGreen/40">
+        {{ selectedCategory ? 'There are currently no listed questions in this category.' : 'Check back later as we
+        update our knowledge base.' }}
       </p>
     </div>
 
-    <!-- FAQ Accordion -->
-    <div v-else class="space-y-3">
-      <div
-        v-for="(faq, index) in filteredFaqs"
-        :key="faq.id"
-        class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300"
-        :class="{ 'ring-2 ring-purple-500': openIndex === index }"
-      >
-        <!-- Question (Toggle Button) -->
-        <button
-          @click="toggleFaq(index)"
-          class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-inset"
-          :aria-expanded="openIndex === index"
-          :aria-controls="`faq-answer-${faq.id}`"
-        >
-          <div class="flex-1 pr-4">
-            <!-- Category Badge -->
-            <span
-              v-if="faq.category && !selectedCategory"
-              class="inline-block px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-700 rounded-full mb-2"
-            >
-              {{ faq.category.name }}
-            </span>
+    <!-- 5. FAQ Accordion Grid -->
+    <div v-else class="space-y-4">
+      <div v-for="(faq, index) in filteredFaqs" :key="faq.id"
+        class="rounded-[2rem] transition-all duration-500 overflow-hidden"
+        :class="openIndex === index ? 'bg-white shadow-xl' : 'bg-white shadow-sm hover:shadow-md'">
+        <!-- Question Toggle -->
+        <button @click="toggleFaq(index)"
+          class="w-full px-8 py-6 text-left flex items-start justify-between gap-6 group"
+          :aria-expanded="openIndex === index">
+          <div class="flex-1">
+            <!-- Badges -->
+            <div class="flex items-center gap-3 mb-4">
+              <span v-if="faq.category" class="pill bg-sauti-blue/10 text-sauti-blue text-[8px]">
+                {{ faq.category.name }}
+              </span>
+              <span v-if="faq.language" class="pill bg-sauti-neutral/50 text-sauti-darkGreen/60 text-[8px]">
+                {{ getLanguageName(faq.language) }}
+              </span>
+            </div>
 
-            <!-- Question -->
-            <h3 class="text-lg font-semibold text-gray-900">
+            <!-- Question Text -->
+            <h3
+              class="text-xl md:text-2xl font-bold text-sauti-darkGreen leading-tight group-hover:text-sauti-blue transition-colors">
               {{ faq.question }}
             </h3>
-
-            <!-- Language Badge -->
-            <span
-              v-if="faq.language"
-              class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-            >
-              {{ getLanguageName(faq.language) }}
-            </span>
           </div>
 
-          <!-- Toggle Icon -->
-          <div class="flex-shrink-0">
-            <svg
-              :class="[
-                'w-6 h-6 text-purple-500 transition-transform duration-300',
-                { 'transform rotate-180': openIndex === index }
-              ]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+          <!-- Icon -->
+          <div
+            :class="['w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 shrink-0', openIndex === index ? 'bg-sauti-blue text-white rotate-180' : 'bg-sauti-neutral text-sauti-blue group-hover:bg-sauti-blue/10']">
+            <ChevronDownIcon class="w-6 h-6" stroke-width="3" />
           </div>
         </button>
 
-        <!-- Answer (Collapsible) -->
-        <transition
-          name="accordion"
-          @enter="enter"
-          @leave="leave"
-        >
-          <div
-            v-show="openIndex === index"
-            :id="`faq-answer-${faq.id}`"
-            class="px-6 pb-6"
-          >
-            <div class="pt-4 border-t border-gray-200">
-              <p class="text-gray-700 leading-relaxed whitespace-pre-line">
-                {{ faq.answer }}
-              </p>
+        <!-- Answer Content -->
+        <transition name="accordion" @enter="enter" @leave="leave">
+          <div v-show="openIndex === index" class="px-8 pb-8">
+            <div class="pt-8 border-t-2 border-sauti-neutral/30">
+              <div
+                class="text-lg md:text-xl font-bold text-sauti-darkGreen/70 leading-relaxed whitespace-pre-line prose-faq"
+                v-html="faq.answer"></div>
 
-              <!-- Views Count -->
-              <div v-if="faq.views_count" class="mt-4 flex items-center text-sm text-gray-500">
-                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                </svg>
-                Viewed {{ faq.views_count }} times
+              <!-- Metadata footer -->
+              <div v-if="faq.views_count" class="mt-8 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-sauti-neutral/50 flex items-center justify-center text-sauti-blue">
+                  <EyeIcon class="w-4 h-4" />
+                </div>
+                <span class="campaign-header text-[10px] text-sauti-darkGreen/30">Verified and viewed {{ faq.views_count
+                  }} times</span>
               </div>
             </div>
           </div>
@@ -139,27 +105,25 @@
       </div>
     </div>
 
-    <!-- Help Contact Section -->
-    <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-6 mt-8">
-      <div class="flex items-start space-x-4">
-        <div class="flex-shrink-0">
-          <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-          </svg>
+    <!-- 6. Help Banner Overlay -->
+    <div class="bg-sauti-darkGreen p-10 md:p-16 rounded-[4rem] text-sauti-white shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-80 h-80 bg-sauti-blue/10 rounded-full blur-3xl"></div>
+      <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-12 text-center md:text-left">
+        <div
+          class="w-16 h-16 bg-white/10 rounded-[1.5rem] flex items-center justify-center shrink-0 border border-white/20">
+          <InformationCircleIcon class="w-8 h-8 text-sauti-blue" />
         </div>
         <div class="flex-1">
-          <h3 class="text-lg font-bold text-gray-900 mb-2">Didn't find your answer?</h3>
-          <p class="text-gray-600 mb-4">Our team is here to help you. Contact us through any of these channels:</p>
-          <div class="flex flex-wrap gap-3">
-            <a href="tel:116" class="btn-primary">
-              Call 116
-            </a>
-            <router-link to="/contact" class="btn-secondary">
-              Contact Us
-            </router-link>
-            <router-link to="/report" class="btn-secondary">
-              Report a Case
-            </router-link>
+          <h3 class="campaign-header text-2xl text-white mb-4">Didn't find your answer?</h3>
+          <p class="text-lg font-bold text-white/50 mb-10 leading-relaxed">
+            Our professional support team is available 24/7 to provide personalized assistance for your specific
+            situation.
+          </p>
+          <div class="cta-group justify-center md:justify-start">
+            <BaseCTA href="tel:116" variant="primary"
+              class="!bg-sauti-white !text-sauti-darkGreen hover:!bg-sauti-blue hover:!text-white">Call 116</BaseCTA>
+            <BaseCTA href="/contact" variant="outline" class="text-white border-white/20">Message Support</BaseCTA>
+            <BaseCTA href="/report" variant="outline" class="text-white border-white/20">Log Statement</BaseCTA>
           </div>
         </div>
       </div>
@@ -168,97 +132,84 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import AppLoader from '../common/AppLoader.vue'
+  import { ref, computed } from 'vue'
+  import BaseCTA from '../common/BaseCTA.vue'
+  import {
+    ChevronDownIcon,
+    QuestionMarkCircleIcon,
+    EyeIcon,
+    InformationCircleIcon,
+    ExclamationTriangleIcon
+  } from '@heroicons/vue/24/outline'
 
-const props = defineProps({
-  faqs: {
-    type: Array,
-    default: () => []
-  },
-  categories: {
-    type: Array,
-    default: () => []
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  error: {
-    type: String,
-    default: null
+  const props = defineProps({
+    faqs: { type: Array, default: () => [] },
+    categories: { type: Array, default: () => [] },
+    loading: { type: Boolean, default: false },
+    error: { type: String, default: null }
+  })
+
+  const emit = defineEmits(['retry', 'view'])
+
+  const openIndex = ref(null)
+  const selectedCategory = ref(null)
+
+  const filteredFaqs = computed(() => {
+    if (!selectedCategory.value) return props.faqs
+    return props.faqs.filter(faq => faq.category?.slug === selectedCategory.value)
+  })
+
+  const toggleFaq = (index) => {
+    if (openIndex.value === index) {
+      openIndex.value = null
+    } else {
+      openIndex.value = index
+      emit('view', filteredFaqs.value[index])
+    }
   }
-})
 
-const emit = defineEmits(['retry', 'view'])
-
-// State
-const openIndex = ref(null)
-const selectedCategory = ref(null)
-
-// Computed
-const filteredFaqs = computed(() => {
-  if (!selectedCategory.value) return props.faqs
-  
-  return props.faqs.filter(faq => 
-    faq.category && faq.category.slug === selectedCategory.value
-  )
-})
-
-// Methods
-const toggleFaq = (index) => {
-  if (openIndex.value === index) {
+  const selectCategory = (categorySlug) => {
+    selectedCategory.value = categorySlug
     openIndex.value = null
-  } else {
-    openIndex.value = index
-    // Emit view event for tracking
-    emit('view', filteredFaqs.value[index])
   }
-}
 
-const selectCategory = (categorySlug) => {
-  selectedCategory.value = categorySlug
-  openIndex.value = null // Close any open FAQ when changing category
-}
-
-const getLanguageName = (code) => {
-  const languages = {
-    en: 'English',
-    lg: 'Luganda',
-    sw: 'Swahili'
+  const getLanguageName = (code) => {
+    const languages = { en: 'English', lg: 'Luganda', sw: 'Swahili' }
+    return languages[code] || code.toUpperCase()
   }
-  return languages[code] || code
-}
 
-// Accordion animation methods
-const enter = (element) => {
-  element.style.height = '0'
-  element.style.overflow = 'hidden'
-  
-  requestAnimationFrame(() => {
-    element.style.height = element.scrollHeight + 'px'
-    element.style.transition = 'height 0.3s ease'
-  })
-}
+  // Animation helpers
+  const enter = (el) => {
+    el.style.height = '0'
+    el.style.overflow = 'hidden'
+    requestAnimationFrame(() => {
+      el.style.height = el.scrollHeight + 'px'
+      el.style.transition = 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+    })
+  }
 
-const leave = (element) => {
-  element.style.height = element.scrollHeight + 'px'
-  element.style.overflow = 'hidden'
-  
-  requestAnimationFrame(() => {
-    element.style.height = '0'
-    element.style.transition = 'height 0.3s ease'
-  })
-}
+  const leave = (el) => {
+    el.style.height = el.scrollHeight + 'px'
+    el.style.overflow = 'hidden'
+    requestAnimationFrame(() => {
+      el.style.height = '0'
+      el.style.transition = 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+    })
+  }
 </script>
 
 <style scoped>
-.accordion-enter-active,
-.accordion-leave-active {
-  overflow: hidden;
-}
 
-.whitespace-pre-line {
-  white-space: pre-line;
-}
+  .accordion-enter-active,
+  .accordion-leave-active {
+    overflow: hidden;
+  }
+
+  :deep(.prose-faq p) {
+    margin-bottom: 1.5rem;
+  }
+
+  :deep(.prose-faq p:last-child) {
+    margin-bottom: 0;
+  }
 </style>

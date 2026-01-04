@@ -20,7 +20,7 @@
         <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <p class="text-lg font-medium">No posts found for this category</p>
+        <p class="text-lg font-normal">No posts found for this category</p>
         <p class="text-sm text-gray-400 mt-2">Try selecting a different filter</p>
       </div>
     </div>
@@ -98,7 +98,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                   </svg>
                 </div>
-                <p class="text-gray-600 font-medium">View Post</p>
+                <p class="text-gray-600 font-normal">View Post</p>
                 <p class="text-sm text-gray-400 mt-2">{{ post.platform }}</p>
               </a>
             </div>

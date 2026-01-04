@@ -2,20 +2,19 @@
   <div class="chat-container max-w-2xl mx-auto font-sans">
     <!-- Chat Messages Area -->
     <div ref="messagesContainer"
-      class="chat-messages bg-white rounded-[2.5rem] shadow-2xl border border-neutral p-8 mb-6 h-[700px] overflow-y-auto scroll-smooth relative">
+      class="chat-messages bg-sauti-white rounded-[1.5rem] shadow-xl border-2 border-sauti-blue p-6 mb-6 h-[700px] overflow-y-auto scroll-smooth relative">
       <div class="message-group mb-8">
         <div class="bot-message flex gap-4">
-          <div
-            class="avatar bg-blue w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
-            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="avatar bg-sauti-blue w-12 h-12 rounded-xl flex items-center justify-center shadow-md">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
           <div
-            class="message-bubble bot bg-neutral text-darkGreen p-5 rounded-3xl rounded-tl-none shadow-sm max-w-[85%] border border-neutral/50">
-            <p class="font-black text-blue mb-1 uppercase tracking-wider text-xs">Secure Intake</p>
-            <p class="text-base leading-relaxed font-medium">I am here to help you report a case. Your safety is our
+            class="message-bubble bot bg-sauti-white text-sauti-darkGreen p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-sauti-blue">
+            <p class="font-bold text-sauti-blue mb-1 uppercase tracking-wider text-xs">Official Secure Intake</p>
+            <p class="text-base leading-relaxed font-normal">I am here to help you report a case. Your safety is our
               priority.</p>
           </div>
         </div>
@@ -25,22 +24,22 @@
         <!-- Bot Message -->
         <div v-if="message.type === 'bot'" class="bot-message flex gap-4 animate-fade-in-up">
           <div
-            class="avatar bg-blue w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            class="avatar bg-sauti-blue w-12 h-12 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
           </div>
           <div
-            class="message-bubble bot bg-neutral text-darkGreen p-5 rounded-3xl rounded-tl-none shadow-sm max-w-[85%] border border-neutral/50">
-            <p v-html="message.text" class="text-base leading-relaxed font-medium"></p>
+            class="message-bubble bot bg-sauti-white text-sauti-darkGreen p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-sauti-blue">
+            <p v-html="message.text" class="text-base leading-relaxed font-semibold"></p>
           </div>
         </div>
 
         <!-- User Message -->
         <div v-if="message.type === 'user'" class="user-message flex justify-end mb-4 animate-fade-in-up">
           <div
-            class="message-bubble user bg-blue text-white p-5 rounded-3xl rounded-tr-none shadow-lg max-w-[85%]">
+            class="message-bubble user bg-sauti-blue text-sauti-white p-5 rounded-2xl rounded-tr-none shadow-md max-w-[85%]">
             <p class="text-base leading-relaxed font-bold">{{ message.text }}</p>
           </div>
         </div>
@@ -48,31 +47,31 @@
         <!-- Options -->
         <div v-if="message.type === 'options'" class="bot-message flex gap-4 w-full animate-fade-in-up">
           <div
-            class="avatar bg-blue w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            class="avatar bg-sauti-blue w-12 h-12 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
           <div class="message-bubble bot w-full max-w-[90%]">
-            <p class="mb-6 font-bold text-darkGreen text-lg ml-1" v-html="message.question"></p>
+            <p class="mb-6 font-bold text-sauti-darkGreen text-lg ml-1" v-html="message.question"></p>
             <div class="grid gap-3">
               <button v-for="option in message.options" :key="option.value"
                 @click="selectOption(option.value, option.label)"
-                class="option-button group relative overflow-hidden bg-white hover:bg-blue/5 border-2 border-neutral hover:border-blue p-5 rounded-2xl transition-all duration-300 text-left flex items-center shadow-sm hover:shadow-xl">
+                class="option-button group relative overflow-hidden bg-sauti-white hover:bg-sauti-blue/5 border-2 border-sauti-neutral hover:border-sauti-blue p-5 rounded-xl transition-all duration-300 text-left flex items-center shadow-sm">
                 <span
-                  class="w-12 h-12 flex items-center justify-center mr-5 rounded-xl bg-neutral group-hover:bg-blue group-hover:text-white text-blue text-xl transition-all duration-300">
+                  class="w-12 h-12 flex items-center justify-center mr-5 rounded-lg bg-sauti-white border-2 border-sauti-blue group-hover:bg-sauti-blue group-hover:text-sauti-white text-sauti-blue text-xl transition-all duration-300">
                   {{ option.icon || '•' }}
                 </span>
                 <div class="flex-1">
                   <span
-                    class="font-bold text-darkGreen text-base group-hover:text-blue block transition-colors">{{
-                    option.label }}</span>
-                  <span v-if="option.description" class="text-xs text-darkGreen/60 mt-1 block font-medium">{{
+                    class="font-bold text-sauti-darkGreen text-base group-hover:text-sauti-blue block transition-colors">{{
+                      option.label }}</span>
+                  <span v-if="option.description" class="text-xs text-sauti-darkGreen/80 mt-1 block font-bold">{{
                     option.description }}</span>
                 </div>
                 <svg
-                  class="w-6 h-6 text-neutral group-hover:text-blue transform group-hover:translate-x-1 transition-all"
+                  class="w-6 h-6 text-sauti-blue group-hover:text-sauti-darkGreen transform group-hover:translate-x-1 transition-all"
                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -84,17 +83,16 @@
 
       <!-- Typing Indicator -->
       <div v-if="isTyping" class="bot-message flex gap-3">
-        <div
-          class="avatar bg-gradient-to-br from-blue-500 to-blue-600 w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-          <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+        <div class="avatar bg-sauti-blue w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+          <svg class="w-4 h-4 text-sauti-white" fill="currentColor" viewBox="0 0 20 20">
             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
           </svg>
         </div>
         <div
-          class="message-bubble bot bg-gray-100 p-4 rounded-2xl rounded-tl-none w-16 flex items-center justify-center">
+          class="message-bubble bot bg-sauti-white border-2 border-sauti-blue p-4 rounded-2xl rounded-tl-none w-16 flex items-center justify-center">
           <div class="typing-indicator flex gap-1">
-            <span class="bg-gray-400"></span><span class="bg-gray-400"></span><span class="bg-gray-400"></span>
+            <span class="bg-sauti-blue"></span><span class="bg-sauti-blue"></span><span class="bg-sauti-blue"></span>
           </div>
         </div>
       </div>
@@ -102,22 +100,22 @@
       <!-- Success Card -->
       <div v-if="submitted && referenceNumber" class="message-group animate-fade-in-up">
         <div class="bot-message flex gap-3">
-          <div class="avatar bg-green-500 w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="avatar bg-sauti-darkGreen w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+            <svg class="w-6 h-6 text-sauti-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <div
-            class="message-bubble bot bg-green-50 border border-green-200 w-full p-6 rounded-2xl rounded-tl-none shadow-sm">
-            <h3 class="font-bold text-green-800 text-xl mb-2">Report Securely Filed</h3>
-            <div class="my-6 p-6 bg-white rounded-xl border border-green-100 shadow-inner text-center">
-              <p class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-2">Reference Number</p>
-              <p class="text-3xl font-mono font-bold text-gray-800 tracking-widest">{{ referenceNumber }}</p>
+            class="message-bubble bot bg-sauti-white border-4 border-sauti-darkGreen w-full p-6 rounded-2xl rounded-tl-none shadow-sm">
+            <h3 class="font-bold text-sauti-darkGreen text-xl mb-2">Report Securely Filed</h3>
+            <div class="my-6 p-6 bg-sauti-white rounded-xl border-2 border-sauti-darkGreen shadow-inner text-center">
+              <p class="text-[10px] text-sauti-darkGreen uppercase tracking-widest font-bold mb-2">Reference Number</p>
+              <p class="text-3xl font-mono font-bold text-sauti-darkGreen tracking-widest">{{ referenceNumber }}</p>
             </div>
-            <p class="text-green-800 font-medium">Please save this number. Our protection team will review this case
+            <p class="text-sauti-darkGreen font-bold">Please save this number. Our protection team will review this case
               shortly.</p>
             <button @click="resetForm"
-              class="mt-6 w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition shadow-lg transform hover:-translate-y-0.5">File
+              class="mt-6 w-full py-4 bg-sauti-darkGreen text-sauti-white rounded-xl font-bold uppercase tracking-widest hover:brightness-95 transition shadow-lg">File
               Another Report</button>
           </div>
         </div>
@@ -126,18 +124,18 @@
 
     <!-- Input Area -->
     <div v-if="!submitted && currentStepType === 'input'"
-      class="chat-input bg-white rounded-3xl shadow-2xl p-6 border border-neutral transition-all duration-300">
+      class="chat-input bg-sauti-white rounded-3xl shadow-2xl p-6 border-4 border-sauti-blue transition-all duration-300">
       <form @submit.prevent="handleInputSubmit">
         <div class="flex gap-4">
           <input v-model="inputValue" :type="currentInputType" :placeholder="inputPlaceholder" :disabled="isTyping"
-            class="flex-1 px-6 py-5 border-2 border-neutral rounded-2xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition text-darkGreen font-bold placeholder:text-darkGreen/30 text-lg"
+            class="flex-1 px-6 py-5 border-2 border-sauti-blue rounded-2xl focus:border-sauti-darkGreen outline-none transition text-sauti-darkGreen font-bold placeholder:text-sauti-blue text-lg"
             ref="inputRef" autofocus />
           <button type="submit" :disabled="!inputValue.trim() || isTyping"
-            class="px-10 py-5 bg-blue text-white rounded-2xl font-black text-lg hover:bg-darkGreen disabled:bg-neutral disabled:text-darkGreen/30 transition shadow-xl transform hover:-translate-y-1 active:scale-95">
-            Send
+            class="px-10 py-5 bg-sauti-blue text-sauti-white rounded-2xl font-bold text-lg hover:brightness-95 disabled:bg-sauti-neutral disabled:text-sauti-darkGreen/30 transition shadow-xl">
+            SEND
           </button>
         </div>
-        <p v-if="validationError" class="text-red text-sm mt-4 ml-2 flex items-center font-bold">
+        <p v-if="validationError" class="text-sauti-red text-sm mt-4 ml-2 flex items-center font-bold">
           <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -149,19 +147,19 @@
 
     <!-- Textarea for Narrative -->
     <div v-if="!submitted && currentStepType === 'textarea'"
-      class="chat-input bg-white rounded-3xl shadow-2xl p-8 border border-neutral transition-all duration-300">
+      class="chat-input bg-sauti-white rounded-3xl shadow-2xl p-8 border-4 border-sauti-blue transition-all duration-300">
       <form @submit.prevent="handleInputSubmit">
-        <label class="block text-lg font-black text-darkGreen mb-4">{{ inputPlaceholder }}</label>
+        <label class="block text-lg font-bold text-sauti-darkGreen mb-4">{{ inputPlaceholder }}</label>
         <textarea v-model="inputValue" placeholder="Start typing here..." :disabled="isTyping"
-          class="w-full px-6 py-5 border-2 border-neutral rounded-2xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition mb-6 resize-none h-48 text-darkGreen font-bold placeholder:text-darkGreen/30 text-lg"
+          class="w-full px-6 py-5 border-2 border-sauti-blue rounded-2xl focus:border-sauti-darkGreen outline-none transition mb-6 resize-none h-48 text-sauti-darkGreen font-bold placeholder:text-sauti-blue text-lg"
           ref="inputRef"></textarea>
         <div class="flex justify-end">
           <button type="submit" :disabled="!inputValue.trim() || isTyping"
-            class="px-12 py-5 bg-blue text-white rounded-2xl font-black text-lg hover:bg-darkGreen shadow-xl transform transition hover:-translate-y-1">
+            class="px-12 py-5 bg-sauti-blue text-sauti-white rounded-2xl font-bold text-lg hover:bg-sauti-darkGreen shadow-xl transition-all">
             Submit Description
           </button>
         </div>
-        <p v-if="validationError" class="text-red text-sm mt-4 font-bold">{{ validationError }}</p>
+        <p v-if="validationError" class="text-sauti-red text-sm mt-4 font-bold">{{ validationError }}</p>
       </form>
     </div>
 

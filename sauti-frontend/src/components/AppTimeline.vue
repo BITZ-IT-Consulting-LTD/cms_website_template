@@ -22,15 +22,15 @@
 
         <!-- Content Card -->
         <div
-          class="order-1 rounded-2xl shadow-md bg-sauti-white w-[calc(100%-5rem)] ml-[4.5rem] md:ml-0 md:w-5/12 px-8 py-6 transition-all duration-300 hover:shadow-xl border border-sauti-neutral relative group">
+          class="order-1 rounded-[2.5rem] shadow-sm bg-sauti-white w-[calc(100%-5rem)] ml-[4.5rem] md:ml-0 md:w-5/12 px-8 py-10 transition-all duration-500 hover:shadow-2xl border-2 border-sauti-neutral hover:border-sauti-blue relative group">
 
           <!-- Connector arrow (desktop only) -->
           <div
             class="hidden md:block absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-sauti-white border-t border-l border-sauti-neutral rotate-45 transform group-hover:bg-sauti-neutral/20 transition-colors"
             :class="index % 2 !== 0 ? '-right-2 border-r-0 border-b-0' : '-left-2 border-r-0 border-b-0'"></div>
 
-          <h3 class="mb-2 font-bold text-sauti-darkGreen text-xl">{{ event.title }}</h3>
-          <p class="text-base leading-relaxed text-sauti-darkGreen">{{ event.description }}</p>
+          <h3 class="mb-4 font-bold text-sauti-darkGreen text-2xl tracking-tight">{{ event.title }}</h3>
+          <p class="text-lg leading-relaxed text-sauti-darkGreen/70 font-bold">{{ event.description }}</p>
         </div>
       </div>
     </div>

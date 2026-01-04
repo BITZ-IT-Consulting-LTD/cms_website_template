@@ -20,40 +20,40 @@ def populate_about_page_content():
     # Core Values
     core_values_data = [
         {
-            "title": "Integrity",
-            "description": "Upholding the highest ethical standards in all our actions.",
+            "title": "Unwavering Integrity",
+            "description": "Upholding uncompromising ethical standards in National Protection.",
             "icon": "ShieldCheck",
             "color_from": "blue-500",
             "color_to": "blue-600",
             "border_color": "blue-500",
         },
         {
-            "title": "Compassion",
-            "description": "Responding to every call with empathy and understanding.",
+            "title": "Active Compassion",
+            "description": "Responding to every crisis with immediate, decisive support.",
             "icon": "Heart",
             "color_from": "red-500",
             "color_to": "red-600",
             "border_color": "red-500",
         },
         {
-            "title": "Empowerment",
-            "description": "Enabling individuals to make informed decisions and take control.",
+            "title": "True Empowerment",
+            "description": "Enabling citizens to reclaim their safety and rights.",
             "icon": "Bolt",
             "color_from": "yellow-500",
             "color_to": "yellow-600",
             "border_color": "yellow-500",
         },
         {
-            "title": "Confidentiality",
-            "description": "Ensuring privacy and trust in every interaction.",
+            "title": "Total Confidentiality",
+            "description": "Absolute privacy and security in every National report.",
             "icon": "LockClosed",
             "color_from": "gray-500",
             "color_to": "gray-600",
             "border_color": "gray-500",
         },
         {
-            "title": "Collaboration",
-            "description": "Working with partners for a stronger, unified response.",
+            "title": "National Collaboration",
+            "description": "Coordinating with Security Agencies for a unified response.",
             "icon": "UserGroup",
             "color_from": "green-500",
             "color_to": "green-600",
@@ -67,14 +67,14 @@ def populate_about_page_content():
     # Timeline Events
     timeline_events_data = [
         {
-            "title": "Sauti Helpline Established",
-            "description": "Uganda's national toll-free helpline 116 officially launched.",
+            "title": "National Mandated Created",
+            "description": "Uganda's national toll-free helpline 116 formally established by the Ministry.",
             "date": datetime(2015, 1, 1),
             "icon": "Phone",
         },
         {
-            "title": "Nationwide Expansion",
-            "description": "Services expanded to cover all telecom networks across Uganda.",
+            "title": "Total National Coverage",
+            "description": "Unrestricted access across all telecom networks nationwide.",
             "date": datetime(2017, 6, 15),
             "icon": "GlobeAlt",
         },
@@ -104,28 +104,28 @@ def populate_about_page_content():
     # Protection Approaches
     protection_approaches_data = [
         {
-            "title": "24/7 Helpline Access",
-            "description": "Ensuring immediate support is always available, day or night.",
+            "title": "Rapid 24/7 Response",
+            "description": "Immediate protection is always active, day or night.",
             "icon": "Clock",
         },
         {
-            "title": "Confidentiality & Anonymity",
-            "description": "Protecting caller identities and sensitive information.",
+            "title": "Uncompromising Privacy",
+            "description": "Total security for caller identities and case data.",
             "icon": "LockClosed",
         },
         {
-            "title": "Trained Counselors",
-            "description": "Expert counselors providing trauma-informed and empathetic support.",
+            "title": "Expert Response Team",
+            "description": "Specialized counselors providing rapid and authoritative support.",
             "icon": "AcademicCap",
         },
         {
-            "title": "Nationwide Referral Network",
-            "description": "Connecting callers to local services across all regions.",
+            "title": "National Intervention Network",
+            "description": "Direct coordination with security and local services across all regions.",
             "icon": "MapPin",
         },
         {
-            "title": "Case Management",
-            "description": "Structured follow-up to ensure effective resolution and support.",
+            "title": "Active Case Management",
+            "description": "Decisive follow-up to ensure full resolution and protection.",
             "icon": "ClipboardDocumentList",
         },
     ]

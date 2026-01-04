@@ -1,165 +1,159 @@
 <template>
-  <div class="bg-sauti-neutral py-16 md:py-24 min-h-screen">
-    <div class="container-custom">
-      <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-16">
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-sauti-darkGreen mb-4 tracking-tight">
-            Privacy Policy
-          </h1>
-          <p class="text-xl text-sauti-darkGreen/70 font-medium">How we protect your information and privacy</p>
-          <div class="mt-6 inline-flex items-center px-4 py-2 bg-sauti-blue/10 rounded-full">
-            <p class="text-xs text-sauti-blue font-black uppercase tracking-widest">Last updated: {{ lastUpdated }}</p>
-          </div>
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <h1 class="page-header-title">Privacy Policy</h1>
+        <p class="page-header-subtitle">How we protect your information and privacy</p>
+        <div class="mt-8 flex justify-center">
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">Last updated: {{ lastUpdated }}</div>
         </div>
+      </div>
+    </header>
 
-        <!-- Content -->
-        <div class="bg-sauti-white p-8 md:p-12 rounded-[3.5rem] border border-sauti-neutral shadow-sm space-y-12">
-          <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-6 flex items-center gap-3">
-              <span class="w-3 h-3 bg-sauti-blue rounded-full"></span>
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto section-rhythm">
+        <!-- Content Card -->
+        <div class="bg-sauti-white p-10 md:p-16 rounded-[4rem] border-2 border-sauti-neutral shadow-sm space-y-16">
+
+          <!-- Section 1 -->
+          <section aria-labelledby="collect-heading">
+            <h2 id="collect-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-blue rounded-full"></span>
               1. Information We Collect
             </h2>
-            <p class="text-sauti-darkGreen/80 font-medium text-lg leading-relaxed mb-6">
+            <p class="text-sauti-darkGreen/80 font-bold text-lg leading-relaxed mb-8">
               We collect information you provide directly to us, such as when you:
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div v-for="item in collectionMethods" :key="item"
-                class="flex items-center gap-3 p-4 bg-sauti-neutral/30 rounded-2xl border border-sauti-neutral">
-                <div class="w-2 h-2 bg-sauti-blue rounded-full"></div>
-                <span class="text-sauti-darkGreen font-bold">{{ item }}</span>
+                class="flex items-center gap-4 p-5 bg-sauti-neutral/30 rounded-2xl border-2 border-transparent hover:border-sauti-blue transition-all">
+                <div class="w-2.5 h-2.5 bg-sauti-blue rounded-full"></div>
+                <span class="text-sauti-darkGreen font-bold text-sm uppercase tracking-wide">{{ item }}</span>
               </div>
             </div>
-            <p class="text-sauti-darkGreen/60 font-medium italic">
+            <p class="text-sauti-darkGreen/60 font-bold italic text-base">
               This may include your name, contact information, location, and details about the situation you're
               reporting.
             </p>
           </section>
 
-          <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-6 flex items-center gap-3">
-              <span class="w-3 h-3 bg-sauti-orange rounded-full"></span>
+          <!-- Section 2 -->
+          <section aria-labelledby="usage-heading">
+            <h2 id="usage-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-orange rounded-full"></span>
               2. How We Use Your Information
             </h2>
-            <div class="space-y-4">
-              <div v-for="use in infoUsage" :key="use" class="flex items-start gap-3">
+            <div class="space-y-6">
+              <div v-for="use in infoUsage" :key="use" class="flex items-start gap-6">
                 <div
-                  class="w-6 h-6 rounded-full bg-sauti-neutral flex-shrink-0 flex items-center justify-center text-sauti-darkGreen mt-1">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg>
+                  class="w-10 h-10 rounded-xl bg-sauti-blue/10 flex-shrink-0 flex items-center justify-center text-sauti-blue mt-1">
+                  <CheckIcon class="w-6 h-6" />
                 </div>
-                <span class="text-sauti-darkGreen font-bold text-lg">{{ use }}</span>
+                <span class="text-sauti-darkGreen font-bold text-lg pt-1">{{ use }}</span>
               </div>
             </div>
           </section>
 
-          <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-6 flex items-center gap-3">
-              <span class="w-3 h-3 bg-sauti-lightGreen rounded-full"></span>
+          <!-- Section 3 -->
+          <section aria-labelledby="sharing-heading">
+            <h2 id="sharing-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-lightGreen rounded-full"></span>
               3. Information Sharing
             </h2>
-            <div class="bg-sauti-neutral/30 p-8 rounded-3xl border border-sauti-neutral">
-              <p class="text-sauti-darkGreen/80 font-medium text-lg leading-relaxed mb-6">
+            <div class="bg-sauti-neutral/30 p-10 rounded-[2.5rem] border-2 border-sauti-neutral">
+              <p class="text-sauti-darkGreen font-bold text-lg leading-relaxed mb-8">
                 We do not share your personal information except in the following circumstances:
               </p>
-              <ul class="space-y-3">
-                <li v-for="sh in sharing" :key="sh" class="flex items-center gap-3 text-sauti-darkGreen font-bold">
-                  <span class="w-1.5 h-1.5 bg-sauti-lightGreen rounded-full"></span>
+              <ul class="space-y-4">
+                <li v-for="sh in sharing" :key="sh"
+                  class="flex items-center gap-4 text-sauti-darkGreen font-bold text-sm uppercase tracking-wider">
+                  <div class="w-2 h-2 bg-sauti-lightGreen rounded-full"></div>
                   {{ sh }}
                 </li>
               </ul>
             </div>
           </section>
 
-          <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-6 flex items-center gap-3">
-              <span class="w-2 h-8 bg-sauti-blue rounded-full"></span>
+          <!-- Section 4 -->
+          <section aria-labelledby="security-heading">
+            <h2 id="security-heading"
+              class="campaign-header text-3xl text-sauti-darkGreen mb-8 flex items-center gap-4">
+              <span class="w-1.5 h-8 bg-sauti-blue rounded-full"></span>
               4. Data Security
             </h2>
-            <p class="text-sauti-darkGreen/80 font-medium text-lg leading-relaxed mb-8">
+            <p class="text-sauti-darkGreen/80 font-bold text-lg leading-relaxed mb-10">
               We implement appropriate security measures to protect your information against unauthorized access,
               alteration, disclosure, or destruction.
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div v-for="sec in security" :key="sec.title"
-                class="p-6 bg-sauti-white border-2 border-sauti-neutral rounded-3xl shadow-sm">
-                <h4 class="text-sauti-blue font-black uppercase tracking-widest text-xs mb-2">{{ sec.title }}</h4>
+                class="p-8 bg-sauti-white border-2 border-sauti-neutral rounded-3xl shadow-sm hover:border-sauti-blue transition-colors">
+                <h4 class="campaign-header text-sauti-blue text-xs mb-3">{{ sec.title }}</h4>
                 <p class="text-sauti-darkGreen font-bold">{{ sec.desc }}</p>
               </div>
             </div>
           </section>
 
-          <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-8">5. Your Rights</h2>
+          <!-- Section 5 -->
+          <section aria-labelledby="rights-heading">
+            <h2 id="rights-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-10">5. Your Rights</h2>
             <div class="grid gap-4">
               <div v-for="right in rights" :key="right"
-                class="group flex items-center justify-between p-6 bg-sauti-neutral/10 hover:bg-sauti-blue/5 rounded-3xl border border-sauti-neutral hover:border-sauti-blue transition-all duration-300">
-                <span class="text-sauti-darkGreen font-black text-lg">{{ right }}</span>
-                <svg class="w-6 h-6 text-sauti-darkGreen/20 group-hover:text-sauti-blue transition-colors" fill="none"
-                  stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                class="flex items-center justify-between p-6 bg-sauti-neutral/30 rounded-2xl border-2 border-transparent hover:border-sauti-blue transition-all group">
+                <span class="text-sauti-darkGreen font-bold text-lg">{{ right }}</span>
+                <CheckCircleIcon
+                  class="w-8 h-8 text-sauti-blue opacity-20 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
           </section>
 
-          <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-4">6. Contact Us</h2>
-            <p class="text-sauti-darkGreen/80 font-medium mb-8 leading-relaxed">
+          <!-- Section 6 -->
+          <section aria-labelledby="contact-heading">
+            <h2 id="contact-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-8">6. Contact Us</h2>
+            <p class="text-sauti-darkGreen/80 font-bold mb-10 text-lg leading-relaxed">
               If you have questions about this Privacy Policy or our data practices, please contact us:
             </p>
             <div
-              class="bg-sauti-neutral p-8 rounded-[2.5rem] border-2 border-sauti-neutral shadow-inner grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div class="space-y-4">
-                <div class="flex items-center gap-4">
+              class="bg-sauti-blue/5 p-10 rounded-[3rem] border-2 border-sauti-blue/20 grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div class="space-y-8">
+                <div class="flex items-center gap-6">
                   <div
-                    class="w-12 h-12 bg-sauti-white rounded-xl shadow-sm flex items-center justify-center text-sauti-blue">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
+                    class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-blue">
+                    <EnvelopeIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="text-xs uppercase tracking-widest text-sauti-darkGreen/50 font-black">Privacy Admin</p>
+                    <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Privacy Admin</p>
                     <p class="text-sauti-darkGreen font-bold break-all">privacy@sauti.gov.ug</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-6">
                   <div
-                    class="w-12 h-12 bg-sauti-white rounded-xl shadow-sm flex items-center justify-center text-sauti-red">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
+                    class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-red">
+                    <PhoneIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="text-xs uppercase tracking-widest text-sauti-darkGreen/50 font-black">Helpline</p>
-                    <p class="text-sauti-darkGreen font-black text-xl">116 (Toll Free)</p>
+                    <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Helpline</p>
+                    <p class="text-sauti-darkGreen font-bold text-2xl">116</p>
                   </div>
                 </div>
               </div>
-              <div class="flex items-center gap-4">
+              <div class="flex items-center gap-6">
                 <div
-                  class="w-12 h-12 bg-sauti-white rounded-xl shadow-sm flex items-center justify-center text-sauti-blue">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                  class="w-14 h-14 bg-sauti-white rounded-2xl shadow-sm flex items-center justify-center text-sauti-blue">
+                  <MapPinIcon class="w-7 h-7" />
                 </div>
                 <div>
-                  <p class="text-xs uppercase tracking-widest text-sauti-darkGreen/50 font-black">Location</p>
-                  <p class="text-sauti-darkGreen font-bold leading-tight">MGLSD, Kampala, Uganda</p>
+                  <p class="campaign-header text-[10px] text-sauti-darkGreen/50 mb-1">Location</p>
+                  <p class="text-sauti-darkGreen font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
                 </div>
               </div>
             </div>
           </section>
 
+          <!-- Section 7 -->
           <section>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-4">7. Changes to This Policy</h2>
+            <h2 class="campaign-header text-2xl text-sauti-darkGreen mb-6">7. Changes to This Policy</h2>
             <p class="text-sauti-darkGreen/60 font-bold leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of any changes by posting
               the new Privacy Policy on this page and updating the "Last updated" date.
@@ -168,14 +162,11 @@
         </div>
 
         <!-- Back to Home -->
-        <div class="text-center mt-16">
-          <router-link to="/" class="btn btn-outline inline-flex items-center gap-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
-            </svg>
+        <div class="text-center">
+          <BaseCTA href="/" variant="outline" class="inline-flex items-center gap-3">
+            <ArrowLeftIcon class="w-5 h-5" />
             Back to Sanctuary
-          </router-link>
+          </BaseCTA>
         </div>
       </div>
     </div>
@@ -183,15 +174,25 @@
 </template>
 
 <script setup>
+  import { computed } from 'vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import {
+    CheckIcon,
+    CheckCircleIcon,
+    EnvelopeIcon,
+    PhoneIcon,
+    MapPinIcon,
+    ArrowLeftIcon
+  } from '@heroicons/vue/24/outline'
+
   defineOptions({
     name: 'PrivacyPage'
   })
-  import { computed } from 'vue'
 
   const collectionMethods = [
     'Call our helpline (116)',
     'Submit reports through our website',
-    'Contact us via email or WhatsApp',
+    'Contact us via official channels',
     'Use our mobile applications'
   ]
 

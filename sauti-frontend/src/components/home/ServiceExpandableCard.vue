@@ -55,7 +55,7 @@
                         </h4>
                         <ul class="space-y-2">
                             <li v-for="(item, idx) in service.scope_items" :key="idx"
-                                class="flex items-start gap-2 text-sm text-sauti-darkGreen font-medium">
+                                class="flex items-start gap-2 text-sm text-sauti-darkGreen font-normal">
                                 <CheckCircleIcon class="w-4 h-4 text-sauti-lightGreen mt-1 shrink-0" />
                                 <span>{{ item }}</span>
                             </li>
@@ -70,20 +70,20 @@
                         <div v-for="(step, idx) in service.steps" :key="step.id"
                             class="bg-sauti-white p-4 rounded-xl border border-sauti-neutral shadow-sm relative overflow-hidden">
                             <div
-                                class="absolute -right-4 -top-4 w-16 h-16 bg-sauti-neutral rounded-full flex items-center justify-center text-4xl font-black text-sauti-blue/10">
+                                class="absolute -right-4 -top-4 w-16 h-16 bg-sauti-neutral rounded-full flex items-center justify-center text-4xl font-bold text-sauti-blue/10">
                                 {{ idx + 1 }}
                             </div>
                             <h5 class="font-bold text-sauti-darkGreen mb-2 relative z-10">{{ step.title }}</h5>
-                            <p class="text-sm text-sauti-darkGreen relative z-10 font-medium">{{ step.description }}</p>
+                            <p class="text-sm text-sauti-darkGreen relative z-10 font-normal">{{ step.description }}</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- CTA -->
                 <div class="flex flex-wrap gap-4 pt-4 border-t border-sauti-neutral mt-4 justify-end">
-                    <BaseCTA variant="primary" :href="`tel:${hotlineNumber}`" external
-                        class="w-full sm:w-auto justify-center">
-                        Call {{ hotlineNumber }} for Help
+                    <BaseCTA variant="emergency" :href="`tel:${hotlineNumber}`" external
+                        class="w-full sm:w-auto justify-center font-bold">
+                        CALL {{ hotlineNumber }} FOR HELP
                     </BaseCTA>
                 </div>
             </div>

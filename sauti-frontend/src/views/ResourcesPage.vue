@@ -1,131 +1,76 @@
 <template>
-  <div class="min-h-screen bg-sauti-neutral py-16 md:py-24">
-    <div class="container-custom">
-      <!-- Header -->
-      <div class="text-center mb-20 max-w-4xl mx-auto">
-        <h1 class="text-4xl md:text-5xl lg:text-7xl font-black text-sauti-darkGreen mb-6 tracking-tight">
-          Resources <span class="text-sauti-blue">&</span> Publications
-        </h1>
-        <p class="text-xl md:text-2xl text-sauti-darkGreen/70 font-bold leading-relaxed">
-          {{ settingsStore.settings.publications_description || 'Explore our library of guidance materials and research
-          updates.' }}
+  <div class="bg-sauti-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header">
+      <div class="container-custom">
+        <h1 class="page-header-title">RESOURCE CENTER</h1>
+        <p class="page-header-subtitle">
+          {{ settingsStore.settings.publications_description || `Access official guidance, research, and child
+          protection materials provided by the National Helpline.` }}
         </p>
       </div>
+    </header>
 
+    <div class="container-custom section-padding section-rhythm">
       <!-- Statistics Dashboard -->
-      <div class="mb-24">
-        <div class="flex items-center justify-between mb-10">
-          <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen">{{
-            settingsStore.settings.resources_stats_title || 'Statistics Dashboard' }}</h2>
-          <div class="text-[10px] font-black uppercase tracking-widest text-sauti-darkGreen/40">{{
-            settingsStore.settings.resources_stats_updated || 'Real-time Data' }}</div>
+      <section aria-labelledby="stats-heading">
+        <div class="flex items-center justify-between mb-12">
+          <h2 id="stats-heading" class="campaign-header text-3xl text-sauti-darkGreen">
+            {{ settingsStore.settings.resources_stats_title || `Impact Dashboard` }}
+          </h2>
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">
+            {{ settingsStore.settings.resources_stats_updated || `Real-time Statistics` }}
+          </div>
         </div>
 
-        <!-- Loading State for Stats -->
-        <div v-if="statsLoading"
-          class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-20 text-center shadow-sm">
-          <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-sauti-blue mx-auto mb-6"></div>
-          <p class="text-sauti-darkGreen/50 font-bold">{{ settingsStore.settings.resources_stats_loading || 'Loading
-            dynamic statistics...' }}</p>
+        <div v-if="statsLoading" class="py-20 text-center">
+          <div class="spinner mx-auto mb-6"></div>
+          <p class="text-sauti-darkGreen/50 font-bold">Fetching latest data...</p>
         </div>
 
-        <!-- Error State for Stats -->
-        <div v-else-if="statsError" class="bg-sauti-red/5 rounded-[3rem] border-2 border-sauti-red/20 p-12 text-center">
-          <svg class="w-16 h-16 text-sauti-red mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p class="text-sauti-red font-black text-xl">{{ settingsStore.settings.resources_stats_error || 'Failed to
-            load statistics' }}</p>
+        <div v-else-if="statsError" class="bg-sauti-red/5 rounded-[3rem] border-2 border-sauti-red/20 p-16 text-center">
+          <ExclamationTriangleIcon class="w-16 h-16 text-sauti-red mx-auto mb-6" />
+          <p class="text-sauti-red font-bold text-xl">{{ settingsStore.settings.resources_stats_error || `Resource
+            statistics temporary unavailable` }}</p>
         </div>
 
-        <!-- Stats Content -->
-        <div v-else>
-          <!-- Key Metrics Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-            <!-- Total Reports -->
+        <div v-else class="space-y-12">
+          <!-- Key Metrics -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div
-              class="group relative bg-sauti-darkGreen rounded-[2rem] p-8 text-sauti-white shadow-2xl shadow-sauti-darkGreen/10 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-              <div class="absolute -right-6 -top-6 w-32 h-32 bg-sauti-white/5 rounded-full"></div>
-              <div class="relative">
-                <div class="w-12 h-12 bg-sauti-white/10 rounded-xl flex items-center justify-center mb-6">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <h3 class="text-5xl font-black mb-1 tabular-nums tracking-tighter">{{ stats.total_reports || 0 }}</h3>
-                <p class="text-[10px] font-black uppercase tracking-widest text-sauti-white/40">{{
-                  settingsStore.settings.resources_total_reports || 'Total Reports' }}</p>
-              </div>
+              class="bg-sauti-darkGreen rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ stats.total_reports || 0 }}</h3>
+              <p class="campaign-header text-xs opacity-60">Total Reports Received</p>
             </div>
 
-            <!-- Child Protection -->
             <div
-              class="group relative bg-sauti-blue rounded-[2rem] p-8 text-sauti-white shadow-2xl shadow-sauti-blue/10 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-              <div class="absolute -right-6 -top-6 w-32 h-32 bg-sauti-white/5 rounded-full"></div>
-              <div class="relative">
-                <div class="w-12 h-12 bg-sauti-white/10 rounded-xl flex items-center justify-center mb-6">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
-                <h3 class="text-5xl font-black mb-1 tabular-nums tracking-tighter">{{
-                  getCategoryCount('CHILD_PROTECTION') }}</h3>
-                <p class="text-[10px] font-black uppercase tracking-widest text-sauti-white/40">{{
-                  settingsStore.settings.resources_child_protection || 'Child Protection' }}</p>
-              </div>
+              class="bg-sauti-blue rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('CHILD_PROTECTION') }}</h3>
+              <p class="campaign-header text-xs opacity-60">Child Protection Cases</p>
             </div>
 
-            <!-- GBV Cases -->
             <div
-              class="group relative bg-sauti-orange rounded-[2rem] p-8 text-sauti-white shadow-2xl shadow-sauti-orange/10 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-              <div class="absolute -right-6 -top-6 w-32 h-32 bg-sauti-white/5 rounded-full"></div>
-              <div class="relative">
-                <div class="w-12 h-12 bg-sauti-white/10 rounded-xl flex items-center justify-center mb-6">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <h3 class="text-5xl font-black mb-1 tabular-nums tracking-tighter">{{ getCategoryCount('GBV') }}</h3>
-                <p class="text-[10px] font-black uppercase tracking-widest text-sauti-white/40">{{
-                  settingsStore.settings.resources_gbv_cases || 'GBV Cases' }}</p>
-              </div>
+              class="bg-sauti-orange rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('GBV') }}</h3>
+              <p class="campaign-header text-xs opacity-60">GBV Reports Managed</p>
             </div>
 
-            <!-- Migrant Worker -->
             <div
-              class="group relative bg-sauti-lightGreen rounded-[2rem] p-8 text-sauti-white shadow-2xl shadow-sauti-lightGreen/10 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-              <div class="absolute -right-6 -top-6 w-32 h-32 bg-sauti-white/5 rounded-full"></div>
-              <div class="relative">
-                <div class="w-12 h-12 bg-sauti-white/10 rounded-xl flex items-center justify-center mb-6">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 class="text-5xl font-black mb-1 tabular-nums tracking-tighter">{{ getCategoryCount('MIGRANT') }}
-                </h3>
-                <p class="text-[10px] font-black uppercase tracking-widest text-sauti-white/40">{{
-                  settingsStore.settings.resources_migrant_worker || 'Migrant Worker' }}</p>
-              </div>
+              class="bg-sauti-lightGreen rounded-[2.5rem] p-10 text-sauti-white shadow-xl hover:scale-105 transition-transform duration-500">
+              <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('MIGRANT') }}</h3>
+              <p class="campaign-header text-xs opacity-60">Migrant Worker Assistance</p>
             </div>
           </div>
 
           <!-- Charts Section -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <!-- Doughnut Chart - Cases by Category -->
             <div
-              class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-10 shadow-sm transition-all duration-500 hover:shadow-2xl hover:shadow-sauti-darkGreen/5">
+              class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-10 shadow-sm transition-all duration-500 hover:shadow-2xl">
               <div class="flex items-center justify-between mb-10">
-                <h3 class="text-2xl font-black text-sauti-darkGreen">{{
-                  settingsStore.settings.resources_cases_by_category || 'Cases by Category' }}</h3>
-                <div
-                  class="px-5 py-2 bg-sauti-blue/10 text-sauti-blue text-[10px] font-black uppercase tracking-widest rounded-full">
-                  {{ settingsStore.settings.resources_interactive || 'Interactive' }}
-                </div>
+                <h3 class="text-2xl font-bold text-sauti-darkGreen">{{
+                  settingsStore.settings.resources_cases_by_category || `Cases by Category` }}</h3>
+                <div class="pill bg-sauti-blue/10 text-sauti-blue">Interactive</div>
               </div>
               <div class="h-80 flex items-center justify-center">
                 <Doughnut :data="categoryChartData" :options="doughnutOptions" />
@@ -134,14 +79,11 @@
 
             <!-- Bar Chart - Reports Over Time -->
             <div
-              class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-10 shadow-sm transition-all duration-500 hover:shadow-2xl hover:shadow-sauti-darkGreen/5">
+              class="bg-sauti-white rounded-[3rem] border-2 border-sauti-neutral p-10 shadow-sm transition-all duration-500 hover:shadow-2xl">
               <div class="flex items-center justify-between mb-10">
-                <h3 class="text-2xl font-black text-sauti-darkGreen">{{
-                  settingsStore.settings.resources_reports_over_time || 'Reports Over Time' }}</h3>
-                <div
-                  class="px-5 py-2 bg-sauti-lightGreen/10 text-sauti-lightGreen text-[10px] font-black uppercase tracking-widest rounded-full">
-                  {{ settingsStore.settings.resources_last_6_months || 'Last 6 Months' }}
-                </div>
+                <h3 class="text-2xl font-bold text-sauti-darkGreen">{{
+                  settingsStore.settings.resources_reports_over_time || `Reports Over Time` }}</h3>
+                <div class="pill bg-sauti-lightGreen/10 text-sauti-lightGreen">Last 6 Months</div>
               </div>
               <div class="h-80">
                 <Bar :data="timeChartData" :options="barOptions" />
@@ -150,101 +92,66 @@
           </div>
 
           <!-- Status Distribution -->
-          <div class="bg-sauti-white rounded-[3.5rem] border-2 border-sauti-neutral p-10 shadow-sm">
-            <h3 class="text-2xl font-black text-sauti-darkGreen mb-10">{{
-              settingsStore.settings.resources_status_distribution || 'Case Status Distribution' }}</h3>
+          <div class="bg-sauti-white rounded-[3.5rem] border-4 border-sauti-blue p-10 shadow-sm transition-all">
+            <h3 class="text-2xl font-bold text-sauti-darkGreen mb-10">Case Status Distribution</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div
-                class="text-center p-10 bg-sauti-neutral/30 rounded-3xl border-2 border-transparent hover:border-sauti-orange hover:bg-sauti-white transition-all group">
-                <div class="text-5xl font-black text-sauti-orange mb-3 transition-transform group-hover:scale-110">{{
-                  getStatusCount('PENDING') }}</div>
-                <div class="text-[10px] font-black uppercase tracking-widest text-sauti-darkGreen/40">{{
-                  settingsStore.settings.resources_pending || 'Pending' }}</div>
+              <div class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-orange group transition-all">
+                <div class="text-5xl font-bold text-sauti-orange mb-3">{{ getStatusCount('PENDING') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">Pending</div>
+              </div>
+              <div class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-blue group transition-all">
+                <div class="text-5xl font-bold text-sauti-blue mb-3">{{ getStatusCount('IN_PROGRESS') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">In Progress</div>
               </div>
               <div
-                class="text-center p-10 bg-sauti-neutral/30 rounded-3xl border-2 border-transparent hover:border-sauti-blue hover:bg-sauti-white transition-all group">
-                <div class="text-5xl font-black text-sauti-blue mb-3 transition-transform group-hover:scale-110">{{
-                  getStatusCount('IN_PROGRESS') }}</div>
-                <div class="text-[10px] font-black uppercase tracking-widest text-sauti-darkGreen/40">{{
-                  settingsStore.settings.resources_in_progress || 'In Progress' }}</div>
+                class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-lightGreen group transition-all">
+                <div class="text-5xl font-bold text-sauti-lightGreen mb-3">{{ getStatusCount('RESOLVED') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">Resolved</div>
               </div>
               <div
-                class="text-center p-10 bg-sauti-neutral/30 rounded-3xl border-2 border-transparent hover:border-sauti-lightGreen hover:bg-sauti-white transition-all group">
-                <div class="text-5xl font-black text-sauti-lightGreen mb-3 transition-transform group-hover:scale-110">
-                  {{ getStatusCount('RESOLVED') }}</div>
-                <div class="text-[10px] font-black uppercase tracking-widest text-sauti-darkGreen/40">{{
-                  settingsStore.settings.resources_resolved || 'Resolved' }}</div>
-              </div>
-              <div
-                class="text-center p-10 bg-sauti-neutral/30 rounded-3xl border-2 border-transparent hover:border-sauti-darkGreen hover:bg-sauti-white transition-all group">
-                <div class="text-5xl font-black text-sauti-darkGreen mb-3 transition-transform group-hover:scale-110">{{
-                  getStatusCount('CLOSED') }}</div>
-                <div class="text-[10px] font-black uppercase tracking-widest text-sauti-darkGreen/40">{{
-                  settingsStore.settings.resources_closed || 'Closed' }}</div>
+                class="text-center p-8 bg-sauti-white rounded-3xl border-2 border-sauti-darkGreen group transition-all">
+                <div class="text-5xl font-bold text-sauti-darkGreen mb-3">{{ getStatusCount('CLOSED') }}</div>
+                <div class="campaign-header text-[10px] text-sauti-darkGreen">Closed</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Downloadable Resources Section -->
-      <div>
-        <div class="flex items-center justify-between mb-10">
+      <section aria-labelledby="downloads-heading">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <h2 class="text-2xl md:text-3xl font-black text-sauti-darkGreen mb-2">{{
-              settingsStore.settings.resources_downloads_title || 'Downloadable Resources' }}</h2>
-            <p class="text-sauti-darkGreen/60 font-bold text-lg">{{ settingsStore.settings.resources_downloads_subtitle
-              || 'Public awareness materials and guidance.' }}</p>
+            <h2 id="downloads-heading" class="campaign-header text-3xl text-sauti-darkGreen mb-4">
+              {{ settingsStore.settings.resources_downloads_title || `Downloadable Resources` }}
+            </h2>
+            <p class="text-sauti-darkGreen/60 font-bold text-lg">Public awareness materials and official guidance.</p>
           </div>
-          <div class="text-[10px] font-black uppercase tracking-widest text-sauti-darkGreen/40">
-            <span class="text-sauti-darkGreen">{{ resources.length }}</span> {{
-              settingsStore.settings.resources_available || 'items available' }}
+          <div class="pill bg-sauti-blue/10 text-sauti-blue">
+            {{ resources.length }} {{ settingsStore.settings.resources_available || `items available` }}
           </div>
         </div>
 
         <!-- Search & Filters -->
-        <div class="bg-sauti-white rounded-[2.5rem] border-2 border-sauti-neutral p-6 mb-12 shadow-sm">
-          <div class="flex flex-col md:flex-row gap-6">
+        <div class="bg-sauti-neutral rounded-[2.5rem] p-8 mb-16 shadow-none">
+          <div class="flex flex-col md:flex-row gap-8">
             <div class="flex-1 relative group">
-              <svg
-                class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-sauti-darkGreen/30 group-focus-within:text-sauti-blue transition-colors"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <MagnifyingGlassIcon
+                class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-sauti-blue group-focus-within:text-sauti-darkGreen transition-colors" />
               <input v-model="search" type="text"
-                :placeholder="settingsStore.settings.resources_search_placeholder || 'Search resources...'"
-                class="w-full pl-16 pr-6 py-4 bg-sauti-neutral border-2 border-transparent focus:border-sauti-blue focus:bg-sauti-white rounded-2xl font-bold text-sauti-darkGreen outline-none transition-all" />
+                :placeholder="settingsStore.settings.resources_search_placeholder || `Search keywords...`"
+                class="w-full pl-16 pr-6 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-sauti-darkGreen outline-none transition-all" />
             </div>
-            <div class="flex flex-col md:flex-row gap-4">
-              <div class="relative">
-                <select v-model="category"
-                  class="appearance-none pl-6 pr-12 py-4 bg-sauti-neutral border-2 border-transparent focus:border-sauti-blue focus:bg-sauti-white rounded-2xl font-black text-sauti-darkGreen uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer min-w-[200px]">
-                  <option value="">{{ settingsStore.settings.resources_all_categories || 'All Categories' }}</option>
-                  <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
-                    {{ cat.name }}
-                  </option>
-                </select>
-                <svg
-                  class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sauti-darkGreen/40 pointer-events-none"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              <div class="relative">
-                <select v-model="language"
-                  class="appearance-none pl-6 pr-12 py-4 bg-sauti-neutral border-2 border-transparent focus:border-sauti-blue focus:bg-sauti-white rounded-2xl font-black text-sauti-darkGreen uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer min-w-[150px]">
-                  <option value="">{{ settingsStore.settings.resources_all_languages || 'All Languages' }}</option>
-                  <option value="en">English</option>
-                  <option value="lg">Luganda</option>
-                  <option value="sw">Swahili</option>
-                </select>
-                <svg
-                  class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sauti-darkGreen/40 pointer-events-none"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+            <div class="relative min-w-[240px]">
+              <select v-model="category"
+                class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-sauti-darkGreen uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                <option value="">{{ settingsStore.settings.resources_all_categories || `All Categories` }}</option>
+                <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
+                  {{ cat.name }}
+                </option>
+              </select>
+              <ChevronDownIcon
+                class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sauti-blue pointer-events-none" />
             </div>
           </div>
         </div>
@@ -255,81 +162,38 @@
         <!-- Resources Grid -->
         <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           <article v-for="resource in resources" :key="resource.id"
-            class="group relative bg-sauti-white rounded-[3.5rem] border-2 border-sauti-neutral transition-all duration-500 hover:shadow-2xl hover:shadow-sauti-blue/10 hover:border-sauti-blue/30 transform hover:-translate-y-2 overflow-hidden">
-            <!-- Featured Badge -->
-            <div v-if="resource.is_featured" class="absolute top-6 right-6 z-10">
-              <div
-                class="bg-sauti-orange text-sauti-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl shadow-lg shadow-sauti-orange/20 flex items-center gap-2">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                Featured
-              </div>
-            </div>
+            class="group bg-sauti-white rounded-[3.5rem] border-2 border-sauti-neutral transition-all duration-500 hover:shadow-2xl hover:border-sauti-blue/30 transform hover:-translate-y-2 overflow-hidden flex flex-col">
 
-            <div class="p-8 md:p-10">
-              <!-- Icon and Title -->
+            <div class="p-10 flex-1 flex flex-col">
               <div class="mb-8">
-                <div
-                  class="w-20 h-20 rounded-[2rem] bg-sauti-blue/10 flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
-                  <svg v-if="isAudio(resource)" class="w-10 h-10 text-sauti-blue" viewBox="0 0 24 24"
-                    fill="currentColor">
-                    <path
-                      d="M9 19V6l12-2v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-2" />
-                  </svg>
-                  <svg v-else class="w-10 h-10 text-sauti-blue" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clip-rule="evenodd" />
-                  </svg>
+                <div class="w-16 h-16 rounded-2xl bg-sauti-blue/10 flex items-center justify-center mb-8">
+                  <SpeakerWaveIcon v-if="isAudio(resource)" class="w-8 h-8 text-sauti-blue" />
+                  <DocumentTextIcon v-else class="w-8 h-8 text-sauti-blue" />
                 </div>
-                <h3
-                  class="text-2xl font-black text-sauti-darkGreen mb-4 leading-tight group-hover:text-sauti-blue transition-colors line-clamp-2">
-                  {{ resource.title }}
-                </h3>
-                <p class="text-lg text-sauti-darkGreen/50 font-bold leading-relaxed line-clamp-3">
-                  {{ resource.description }}
-                </p>
+                <h3 class="text-2xl font-bold text-sauti-darkGreen mb-4 leading-tight line-clamp-2">{{ resource.title
+                  }}</h3>
+                <p class="text-lg text-sauti-darkGreen/50 font-bold leading-relaxed line-clamp-3">{{
+                  resource.description }}</p>
               </div>
 
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-3 mb-10">
-                <span v-if="resource.category_name"
-                  class="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-sauti-neutral text-sauti-darkGreen/40">
-                  {{ resource.category_name }}
-                </span>
-                <span v-if="resource.language"
-                  class="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-sauti-neutral text-sauti-darkGreen/40">
-                  {{ getLanguageName(resource.language) }}
-                </span>
+              <div class="flex flex-wrap gap-3 mb-10 mt-auto">
+                <span v-if="resource.category_name" class="pill bg-sauti-blue text-sauti-white">{{
+                  resource.category_name }}</span>
+                <span v-if="resource.language" class="pill bg-sauti-lightGreen text-sauti-white">{{
+                  getLanguageName(resource.language) }}</span>
               </div>
 
-              <!-- Audio Player -->
-              <div v-if="isAudio(resource) && resource.file" class="mb-10 p-4 bg-sauti-neutral rounded-2xl">
+              <div v-if="isAudio(resource) && resource.file" class="mb-8 p-4 bg-sauti-neutral rounded-2xl">
                 <audio :src="resource.file" controls class="w-full"></audio>
               </div>
 
-              <!-- Actions -->
               <div class="flex items-center justify-between pt-8 border-t-2 border-sauti-neutral">
-                <a v-if="resource.file" :href="resource.file" target="_blank" rel="noopener"
-                  class="inline-flex items-center gap-3 px-8 py-3.5 bg-sauti-blue text-sauti-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-xl shadow-sauti-blue/20 hover:scale-105 transition-all">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
+                <BaseCTA v-if="resource.file" :href="resource.file" variant="primary" class="!py-3 !px-6 text-[10px]"
+                  external download>
                   Download
-                </a>
-                <span v-else
-                  class="px-8 py-3.5 bg-sauti-neutral text-sauti-darkGreen/30 text-[10px] font-black uppercase tracking-widest rounded-xl">
-                  {{ settingsStore.settings.resources_coming_soon || 'Coming Soon' }}
-                </span>
-
-                <!-- Download Count -->
-                <div
-                  class="flex items-center gap-2 text-[10px] font-black text-sauti-darkGreen/40 uppercase tracking-widest">
-                  <span class="text-sauti-darkGreen">{{ resource.download_count || 0 }}</span>
-                  Downloads
+                </BaseCTA>
+                <div class="text-[10px] font-bold text-sauti-darkGreen/40 uppercase tracking-widest">
+                  <span class="text-sauti-darkGreen">{{ resource.download_count || 0 }}</span> Downloads
                 </div>
               </div>
             </div>
@@ -337,27 +201,26 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else class="text-center py-20">
-          <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ settingsStore.settings.resources_no_results }}</h3>
-          <p class="text-gray-600">{{ settingsStore.settings.resources_no_results_subtitle }}</p>
+        <div v-else
+          class="text-center py-24 bg-sauti-neutral/30 rounded-[3rem] border-2 border-dashed border-sauti-blue max-w-2xl mx-auto">
+          <div
+            class="w-20 h-20 bg-sauti-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-sauti-blue">
+            <MagnifyingGlassIcon class="w-10 h-10 text-sauti-blue" />
+          </div>
+          <h3 class="text-2xl font-bold text-sauti-darkGreen mb-2">{{ settingsStore.settings.resources_no_results ||
+            'No Resources Found' }}</h3>
+          <p class="text-sauti-darkGreen/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
+            'Try adjusting your search criteria.' }}</p>
+          <button @click="search = ''; category = ''" class="btn btn-outline">Clear all filters</button>
         </div>
 
         <!-- Pagination -->
         <div v-if="pagination.next || pagination.previous" class="mt-20 flex justify-center gap-6">
           <button :disabled="!pagination.previous || loading" @click="prevPage"
-            class="px-10 py-4 rounded-2xl border-2 border-sauti-neutral text-sauti-darkGreen hover:border-sauti-blue hover:text-sauti-blue disabled:opacity-30 disabled:cursor-not-allowed font-black uppercase tracking-widest text-xs transition-all">
-            {{ settingsStore.settings.resources_previous || 'Previous' }}
-          </button>
-          <button :disabled="!pagination.next || loading" @click="nextPage"
-            class="px-10 py-4 rounded-2xl border-2 border-sauti-neutral text-sauti-darkGreen hover:border-sauti-blue hover:text-sauti-blue disabled:opacity-30 disabled:cursor-not-allowed font-black uppercase tracking-widest text-xs transition-all">
-            {{ settingsStore.settings.resources_next || 'Next' }}
-          </button>
+            class="btn btn-outline px-10">Previous</button>
+          <button :disabled="!pagination.next || loading" @click="nextPage" class="btn btn-outline px-10">Next</button>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 </template>
@@ -368,6 +231,14 @@
   import { useSettingsStore } from '@/store/settings'
   import { api } from '@/utils/axios'
   import AppLoader from '@/components/common/AppLoader.vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
+  import {
+    MagnifyingGlassIcon,
+    ChevronDownIcon,
+    DocumentTextIcon,
+    SpeakerWaveIcon,
+    ExclamationTriangleIcon
+  } from '@heroicons/vue/24/outline'
   import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Title } from 'chart.js'
   import { Doughnut, Bar } from 'vue-chartjs'
 
@@ -436,10 +307,10 @@
       labels,
       datasets: [{
         backgroundColor: [
-          '#6366F1', // Indigo
-          '#8B5CF6', // Purple
-          '#14B8A6', // Teal
-          '#F59E0B'  // Amber
+          '#007BBF', // Sauti Blue
+          '#FF9933', // Sauti Orange
+          '#006633', // Sauti Dark Green
+          '#8CC63F'  // Sauti Light Green
         ],
         borderWidth: 0,
         data
@@ -460,7 +331,7 @@
       labels,
       datasets: [{
         label: 'Reports',
-        backgroundColor: '#0077A6', // sauti-blue
+        backgroundColor: '#007BBF', // Sauti Blue
         borderRadius: 16,
         barThickness: 24,
         data
@@ -484,11 +355,11 @@
           },
           usePointStyle: true,
           pointStyle: 'rectRounded',
-          color: '#002B52'
+          color: '#006633'
         }
       },
       tooltip: {
-        backgroundColor: '#002B52',
+        backgroundColor: '#006633',
         padding: 16,
         titleFont: {
           size: 14,
@@ -512,7 +383,7 @@
         display: false
       },
       tooltip: {
-        backgroundColor: '#002B52',
+        backgroundColor: '#006633',
         padding: 16,
         titleFont: {
           size: 14,
@@ -536,10 +407,10 @@
             weight: '900',
             family: 'Cronos Pro'
           },
-          color: '#002B5250'
+          color: '#007BBF'
         },
         grid: {
-          color: '#002B5208',
+          color: '#007BBF',
           drawBorder: false
         }
       },
@@ -550,7 +421,7 @@
             weight: '900',
             family: 'Cronos Pro'
           },
-          color: '#002B5250'
+          color: '#007BBF'
         },
         grid: {
           display: false
@@ -631,13 +502,3 @@
     return exts.some(ext => type.includes(ext) || url.endsWith(`.${ext}`))
   }
 </script>
-
-<style scoped>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    line-clamp: 2;
-    overflow: hidden;
-  }
-</style>

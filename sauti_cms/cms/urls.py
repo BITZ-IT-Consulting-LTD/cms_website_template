@@ -16,25 +16,27 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # API endpoints
-    path('auth/', include('users.urls')),
-    path('posts/', include('posts.urls')),
-    path('videos/', include('videos.urls')),
-    path('resources/', include('resources.urls')),
-    path('faqs/', include('faqs.urls')),
-    path('partners/', include('partners.urls')),
-    path('reports/', include('reports.urls')),
-    path('dashboard/', include('dashboard.urls')),
-    path('content/', include('content.urls')),
-    path('social/', include('social_media.urls')),
-    path('timeline/', include('timeline.urls')), 
-    path('services/', include('services.urls')), 
-    path('sitesettings/', include('sitesettings.urls')),
-    path('contact/', include('contact.urls')),
-    
-    # API Documentation (Swagger/OpenAPI)
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api/', include([
+        path('auth/', include('users.urls')),
+        path('posts/', include('posts.urls')),
+        path('videos/', include('videos.urls')),
+        path('resources/', include('resources.urls')),
+        path('faqs/', include('faqs.urls')),
+        path('partners/', include('partners.urls')),
+        path('reports/', include('reports.urls')),
+        path('dashboard/', include('dashboard.urls')),
+        path('content/', include('content.urls')),
+        path('social/', include('social_media.urls')),
+        path('timeline/', include('timeline.urls')), 
+        path('services/', include('services.urls')), 
+        path('sitesettings/', include('sitesettings.urls')),
+        path('contact/', include('contact.urls')),
+        
+        # API Documentation (Swagger/OpenAPI)
+        path('schema/', SpectacularAPIView.as_view(), name='schema'),
+        path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+        path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    ])),
 ]
 
 # Serve media files in development and production

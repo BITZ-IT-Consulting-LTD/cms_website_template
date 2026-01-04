@@ -19,8 +19,8 @@
     --btn-secondary: var(--secondary);
 
     /* Typography */
-    --font-family: 'Cronos Pro', sans-serif;
-    --heading-font-weight: bold;
+    --font-family: 'Cronos Pro';
+    --heading-font-weight: 600;
 
     /* Spacing */
     --base-spacing: 16px;

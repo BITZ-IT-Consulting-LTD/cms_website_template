@@ -9,7 +9,7 @@ while ! pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER}; do
 done
 echo "PostgreSQL is ready!"
 
-echo "Running database migrations..."
+pip install django-simple-history==3.2.0
 echo "Cleaning up old migrations and cache..."
 find . -path "*/migrations/*.pyc" -delete
 find . -path "*/__pycache__/*" -delete

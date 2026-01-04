@@ -1,210 +1,188 @@
+@import './fonts.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    color: theme('colors.darkGreen');
-    background-color: theme('colors.white');
-    line-height: 1.6;
+    color: theme('colors.sauti.darkGreen');
+    background-color: theme('colors.sauti.white');
     @apply antialiased font-sans;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight font-sans;
-    color: theme('colors.darkGreen');
+    color: theme('colors.sauti.darkGreen');
+    margin-bottom: 1.5rem;
   }
   
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight;
+    @apply text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter; /* ~72px, mapped from black/900 */
     line-height: 1.1;
-    letter-spacing: -0.03em;
   }
   
   h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight;
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight; /* ~60px, mapped from black/900 */
     line-height: 1.15;
-    letter-spacing: -0.02em;
   }
   
   h3 {
-    @apply text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight;
+    @apply text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight; /* ~48px, mapped from extrabold/800 */
     line-height: 1.2;
-    letter-spacing: -0.015em;
   }
   
   h4 {
-    @apply text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight;
+    @apply text-2xl md:text-3xl lg:text-4xl font-normal tracking-tight; /* ~36px, mapped from extrabold/800 */
     line-height: 1.25;
-    letter-spacing: -0.01em;
-  }
-  
-  p {
-    line-height: 1.7;
-    color: theme('colors.darkGreen');
-  }
-  
-  a {
-    color: theme('colors.blue');
-    @apply underline transition-colors duration-300;
-  }
-  
-  a:hover {
-    color: theme('colors.darkGreen');
-  }
-  
-  /* Focus visible for accessibility - National Standard */
-  *:focus-visible {
-    outline: 2px solid theme('colors.blue');
-    outline-offset: 2px;
   }
 
-  .no-underline { text-decoration: none !important; }
+  h5 {
+    @apply text-xl md:text-2xl font-bold; /* ~24px */
+    line-height: 1.3;
+  }
+
+  h6 {
+    @apply text-lg md:text-xl font-bold; /* ~20px */
+    line-height: 1.4;
+  }
+
+  p {
+    @apply mb-6 font-normal; /* Mapped from font-medium */
+    line-height: 1.625;
+  }
+
+  small, .caption {
+    @apply text-sm font-light tracking-wide; /* ~14px, mapped from font-medium */
+    line-height: 1.5;
+  }
+
+  a {
+    color: theme('colors.sauti.blue');
+    @apply no-underline transition-colors duration-300 font-normal; /* Mapped from font-bold */
+  }
+
+  a:hover {
+    color: theme('colors.sauti.darkGreen');
+  }
 }
 
 @layer components {
-  /* Brand-Locked Button System */
-  .btn {
-    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 focus:outline-none transform hover:scale-105 active:scale-95;
-    text-decoration: none;
-  }
-  
-  /* Emergency CTA - Primary (Report Violence) */
-  .btn-emergency {
-    @apply btn text-white shadow-xl animate-emergency-glow;
-    background-color: theme('colors.red');
-  }
-  .btn-emergency:hover {
-    background-color: theme('colors.red');
-    filter: brightness(0.95);
-  }
-  
-  /* Primary Action CTA (Secondary in Hierarchy) */
-  .btn-primary {
-    @apply btn text-white shadow-lg;
-    background-color: theme('colors.orange');
-  }
-  .btn-primary:hover {
-    background-color: theme('colors.orange');
-    filter: brightness(0.95);
-  }
-  
-  /* Informational CTA */
-  .btn-info {
-    @apply btn text-white shadow-lg;
-    background-color: theme('colors.blue');
-  }
-  
-  .btn-outline {
-    @apply btn border-2 bg-white;
-    border-color: theme('colors.blue');
-    color: theme('colors.blue');
-  }
-  .btn-outline:hover {
-    background-color: theme('colors.white');
-  }
-  
-  /* Pillar / Brand Cards */
-  .card {
-    @apply rounded-2xl shadow-lg transition-all duration-300 overflow-hidden border;
-    background-color: theme('colors.white');
-    border-color: theme('colors.white');
-  }
-  .card:hover {
-    @apply shadow-xl;
-    border-color: theme('colors.blue');
-  }
-
-  /* Status Badges / Pills */
-  .pill {
-    @apply inline-flex items-center justify-center px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300;
-  }
-  
-  .pill-report {
-    @apply pill text-white;
-    background-color: theme('colors.red');
-  }
-  
-  .pill-support {
-    @apply pill text-white;
-    background-color: theme('colors.lightGreen');
-  }
-
-  /* Form Styles - Compliance */
-  .form-label {
-    @apply block text-sm font-bold mb-2;
-    color: theme('colors.darkGreen');
-  }
-  
-  .form-input {
-    @apply w-full px-4 py-3 border-2 rounded-lg transition-all duration-300 font-medium;
-    border-color: theme('colors.white');
-    background-color: theme('colors.white');
-    color: theme('colors.darkGreen');
-  }
-  
-  .form-input:focus {
-    border-color: theme('colors.blue');
-  }
-  
-  .form-error {
-    @apply text-xs font-bold mt-1;
-    color: theme('colors.red');
-  }
-
-  /* Identity Specifics */
-  .hotline-btn {
-    @apply text-5xl md:text-6xl font-black transition-transform duration-300 hover:scale-110 block text-center;
-    color: theme('colors.red');
-    text-decoration: none;
-  }
-  
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-bold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-sauti-blue text-white hover:bg-sauti-darkGreen focus:ring-sauti-blue;
+  }
+
+  .btn-secondary {
+    @apply btn bg-sauti-lightGreen text-white hover:bg-sauti-darkGreen focus:ring-sauti-lightGreen;
+  }
+
+  .btn-emergency {
+    @apply btn bg-sauti-red text-white hover:bg-red-700 animate-pulse font-bold uppercase tracking-[0.15em] border-2 border-white/20 shadow-lg;
+  }
   
+  .hotline-btn {
+    @apply flex items-center gap-2 bg-sauti-red text-white px-5 py-2.5 rounded-full font-bold shadow-lg hover:bg-red-700 transition-all;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-sauti-blue text-sauti-blue hover:bg-sauti-blue hover:text-white focus:ring-sauti-blue;
+  }
+
+  .card-base {
+    @apply bg-white rounded-[2.5rem] p-8 md:p-10 border border-sauti-blue/10 shadow-sm hover:shadow-xl transition-all duration-500;
+  }
+
   .section-padding {
     @apply py-16 md:py-24 lg:py-32;
   }
-}
 
-@layer utilities {
-  .sr-only {
-    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  .page-header {
+    @apply bg-sauti-blue/5 border-b border-sauti-blue/10 py-20 md:py-32;
   }
 
-  @keyframes emergencyGlow {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.7); /* Using the brand red #ED1C24 */
-    }
-    50% {
-      box-shadow: 0 0 0 10px rgba(237, 28, 36, 0);
-    }
+  .page-header-title {
+    @apply text-4xl md:text-5xl lg:text-7xl font-bold text-sauti-darkGreen mb-6;
   }
 
-  .animate-emergency-glow {
-    animation: emergencyGlow 2s infinite;
+  .page-header-subtitle {
+    @apply text-xl md:text-2xl text-sauti-darkGreen/80 max-w-3xl font-normal; /* Mapped from font-medium */
+  }
+
+  /* Form Styles */
+  .form-group {
+    @apply mb-6;
+  }
+
+  .form-label {
+    @apply block text-sm font-semibold text-sauti-darkGreen mb-2;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-3 rounded-xl border border-sauti-blue/20 focus:border-sauti-blue focus:ring-2 focus:ring-sauti-blue/20 transition-all font-normal;
+  }
+  
+  /* Navbar Overrides */
+  .nav-link {
+    @apply px-4 py-2 rounded-lg text-sauti-darkGreen font-normal transition-all hover:bg-sauti-blue/5 hover:text-sauti-blue;
+  }
+  
+  .nav-link-active {
+    @apply bg-sauti-blue/10 text-sauti-blue font-semibold;
+  }
+
+  .mobile-nav-link {
+    @apply block px-4 py-3 rounded-xl text-lg font-normal transition-all;
+  }
+  
+  .mobile-nav-link-active {
+    @apply bg-sauti-blue/10 text-sauti-blue font-semibold;
+  }
+
+  /* Specific typography classes for campaign style */
+  .campaign-header {
+    @apply font-sans font-bold tracking-tight uppercase; /* Mapped from font-display */
+  }
+  
+  .campaign-header-black {
+    @apply font-sans font-bold tracking-tighter uppercase; /* Mapped from font-display */
   }
 }
 
-/* Timeline Brand Implementation */
-.timeline-line {
-  @apply absolute left-1/2 -translate-x-1/2 top-0 bottom-0 rounded z-0 w-[6px];
-  background-color: theme('colors.blue');
+/* Custom Utilities */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-sauti-darkGreen to-sauti-blue;
 }
 
-.timeline-dot {
-  @apply absolute left-1/2 -translate-x-1/2 top-6 w-10 h-10 rounded-full border-4 border-white shadow-lg z-10;
-  background-color: theme('colors.blue');
+.shadow-premium {
+  box-shadow: 0 10px 30px -5px rgba(0, 123, 191, 0.1), 0 4px 12px -4px rgba(0, 123, 191, 0.05);
 }
 
-.timeline-card {
-  @apply card p-6 md:p-8 w-full md:w-[420px] hover:scale-105;
-}
-
-/* Loading State */
 .spinner {
-  @apply inline-block w-8 h-8 border-4 rounded-full animate-spin;
-  border-color: theme('colors.white');
-  border-top-color: theme('colors.blue');
+  @apply w-10 h-10 border-4 border-sauti-blue/20 border-t-sauti-blue rounded-full animate-spin;
 }
+
+/* Animations */
+@keyframes emergency-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(237, 28, 36, 0.2); }
+}
+
+.animate-emergency-glow {
+  animation: emergency-glow 2s infinite;
+}
+
+/* Chatbot Global Customizations */
+#giz-chat-wrapper {
+  --font-family: 'Cronos Pro', sans-serif !important;
+  --heading-font-weight: 600 !important;
+}
+
+/* Typography Compliance Checkpoint */
+/* REVERTED TO TYPOGRAPHY ENFORCEMENT STATE */
