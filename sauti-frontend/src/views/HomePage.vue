@@ -170,8 +170,8 @@
             {{ settingsStore.settings.partners_title || `Official Protection Partners` }}
           </h2>
           <p class="text-lg md:text-xl text-black max-w-2xl mx-auto">
-            {{ settingsStore.settings.partners_description || `Working together to protect every child and survivor in
-            Uganda.` }}
+            {{ settingsStore.settings.partners_description || 'Working together to protect every child and survivor in
+            Uganda.' }}
           </p>
         </div>
 
