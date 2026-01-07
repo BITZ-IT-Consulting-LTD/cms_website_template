@@ -58,8 +58,7 @@
                   <div>
                     <h2 id="mission-heading" class="mb-4">Our <span class="text-primary">Promise</span> to You</h2>
                     <p v-if="settings" class="text-xl font-bold leading-relaxed">
-                      {{ settings.mission || `We are here to listen. We help you report harm and make sure you get the
-                      support you need to stay safe.` }}
+                      {{ aboutMission }}
                     </p>
                   </div>
                 </div>
@@ -74,8 +73,7 @@
                   <div>
                     <h2 class="mb-4">A Safer <span class="text-secondary-light">Uganda</span> for Everyone</h2>
                     <p v-if="settings" class="text-xl font-bold leading-relaxed">
-                      {{ settings.vision || `A Uganda where everyone can live without fear of violence and reach their
-                      full potential.` }}
+                      {{ aboutVision }}
                     </p>
                   </div>
                 </div>
@@ -232,6 +230,14 @@
     coreValues: false,
     timeline: false,
     partners: false
+  })
+
+  const aboutMission = computed(() => {
+    return settings.value?.mission || 'We are here to listen. We help you report harm and make sure you get the support you need to stay safe.'
+  })
+
+  const aboutVision = computed(() => {
+    return settings.value?.vision || 'A Uganda where everyone can live without fear of violence and reach their full potential.'
   })
 
   const iconMap = {

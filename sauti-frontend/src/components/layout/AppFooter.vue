@@ -14,8 +14,7 @@
           </div>
 
           <p class="text-neutral-white leading-relaxed text-lg font-bold">
-            {{ settings.site_description || `Uganda’s Child Helpline providing confidential, 24/7 support and
-            crisis intervention.` }}
+            {{ siteDescription }}
           </p>
 
           <nav class="flex flex-wrap gap-4" aria-label="Social media links">
@@ -58,8 +57,7 @@
               aria-label="Call our toll free hotline: 116">
               <span class="text-hotline font-bold text-xs uppercase tracking-[0.2em] block mb-1">Toll Free
                 Helpline</span>
-              <span
-                class="text-4xl font-bold group-hover:text-hotline transition-colors block text-neutral-white">
+              <span class="text-4xl font-bold group-hover:text-hotline transition-colors block text-neutral-white">
                 {{ settings.hotline_number || '116' }}
               </span>
             </a>
@@ -147,7 +145,7 @@
             </div>
           </div>
           <p class="text-neutral-white/40 text-[10px] font-bold uppercase tracking-[0.1em]">
-            {{ settings.footer_text || `&copy; ${new Date().getFullYear()} Sauti 116. All rights reserved.` }}
+            {{ settings.footer_text || '&copy; ' + new Date().getFullYear() + ' Sauti 116. All rights reserved.' }}
           </p>
         </div>
 
@@ -176,6 +174,8 @@
   const settingsStore = useSettingsStore()
   const settings = computed(() => settingsStore.settings)
   const orgProfile = computed(() => settingsStore.orgProfile)
+
+  const siteDescription = computed(() => settings.value?.site_description || 'Uganda’s Child Helpline providing confidential, 24/7 support and crisis intervention.')
 
   const socialMedia = computed(() => ({
     Facebook: { url: settings.value.social_facebook || 'https://facebook.com/sauti116', icon: 'fab fa-facebook-f' },

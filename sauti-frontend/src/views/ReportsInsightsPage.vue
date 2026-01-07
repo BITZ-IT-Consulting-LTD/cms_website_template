@@ -7,8 +7,7 @@
           Reports <span class="text-primary">&</span> Insights
         </h1>
         <p class="page-header-subtitle">
-          {{ reportsInsightsSubtitle || 'Explore the data collected by Sauti Uganda 116 helpline to understand the
-          trends and patterns in child abuse and neglect across the country.' }}
+          {{ reportsInsightsSubtitle }}
         </p>
       </div>
     </header>
