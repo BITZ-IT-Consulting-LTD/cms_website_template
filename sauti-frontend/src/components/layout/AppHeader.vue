@@ -82,7 +82,7 @@
       enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-200 ease-in"
       leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-4">
       <div v-if="mobileMenuOpen"
-        class="lg:hidden absolute inset-x-0 top-full h-[calc(100vh-88px)] bg-neutral-white/95 backdrop-blur-xl border-t border-neutral-offwhite/50 overflow-y-auto">
+        class="lg:hidden absolute inset-x-0 top-full h-[calc(100vh-100px)] bg-neutral-white/95 backdrop-blur-xl border-t border-neutral-offwhite/50 overflow-y-auto">
         <div class="container-custom py-8 space-y-8">
           <div class="grid gap-4 mb-8">
             <BaseCTA :href="`tel:${settings.hotline_number || '116'}`" variant="emergency" external

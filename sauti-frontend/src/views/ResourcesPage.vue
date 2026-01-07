@@ -43,10 +43,10 @@
         <section aria-labelledby="stats-heading">
           <div class="flex items-center justify-between mb-12">
             <h2 id="stats-heading" class="campaign-header text-3xl text-secondary">
-              {{ settingsStore.settings.resources_stats_title || `Live Help Performance` }}
+              {{ settingsStore.settings.resources_stats_title || 'Live Help Performance' }}
             </h2>
             <div class="pill bg-primary/10 text-primary">
-              {{ settingsStore.settings.resources_stats_updated || `Real-time Statistics` }}
+              {{ settingsStore.settings.resources_stats_updated || 'Real-time Statistics' }}
             </div>
           </div>
 
@@ -58,8 +58,8 @@
           <div v-else-if="statsError"
             class="bg-emergency/5 rounded-[3rem] border-2 border-emergency/20 p-16 text-center">
             <ExclamationTriangleIcon class="w-16 h-16 text-emergency mx-auto mb-6" />
-            <p class="text-emergency font-bold text-xl">{{ settingsStore.settings.resources_stats_error || `Resource
-              statistics temporary unavailable` }}</p>
+            <p class="text-emergency font-bold text-xl">{{ settingsStore.settings.resources_stats_error || 'Resource
+              statistics temporary unavailable' }}</p>
           </div>
 
           <div v-else class="space-y-12">
@@ -97,7 +97,7 @@
                 class="bg-neutral-white rounded-[3rem] border-2 border-neutral-offwhite p-10 shadow-sm transition-all duration-500 hover:shadow-2xl">
                 <div class="flex items-center justify-between mb-10">
                   <h3 class="text-2xl font-bold text-secondary">{{
-                    settingsStore.settings.resources_cases_by_category || `Cases by Category` }}</h3>
+                    settingsStore.settings.resources_cases_by_category || 'Cases by Category' }}</h3>
                   <div class="pill bg-primary/10 text-primary">Interactive</div>
                 </div>
                 <div class="h-80 flex items-center justify-center">
@@ -110,7 +110,7 @@
                 class="bg-neutral-white rounded-[3rem] border-2 border-neutral-offwhite p-10 shadow-sm transition-all duration-500 hover:shadow-2xl">
                 <div class="flex items-center justify-between mb-10">
                   <h3 class="text-2xl font-bold text-secondary">{{
-                    settingsStore.settings.resources_reports_over_time || `Reports Over Time` }}</h3>
+                    settingsStore.settings.resources_reports_over_time || 'Reports Over Time' }}</h3>
                   <div class="pill bg-secondary-light/10 text-secondary-light">Last 6 Months</div>
                 </div>
                 <div class="h-80">
@@ -240,12 +240,12 @@
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <h2 id="downloads-heading" class="campaign-header text-3xl text-secondary mb-4">
-                {{ settingsStore.settings.resources_downloads_title || `Life-Saving Guides` }}
+                {{ settingsStore.settings.resources_downloads_title || 'Life-Saving Guides' }}
               </h2>
               <p class="text-black/60 font-bold text-lg">Public awareness materials and official guidance.</p>
             </div>
             <div class="pill bg-primary/10 text-primary">
-              {{ resources.length }} {{ settingsStore.settings.resources_available || `items available` }}
+              {{ resources.length }} {{ settingsStore.settings.resources_available || 'items available' }}
             </div>
           </div>
 
@@ -256,13 +256,13 @@
                 <MagnifyingGlassIcon
                   class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-primary group-focus-within:text-secondary transition-colors" />
                 <input v-model="search" type="text"
-                  :placeholder="settingsStore.settings.resources_search_placeholder || `Search keywords...`"
+                  :placeholder="settingsStore.settings.resources_search_placeholder || 'Search keywords...'"
                   class="w-full pl-16 pr-6 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary outline-none transition-all" />
               </div>
               <div class="relative min-w-[240px]">
                 <select v-model="category"
                   class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                  <option value="">{{ settingsStore.settings.resources_all_categories || `All Categories` }}</option>
+                  <option value="">{{ settingsStore.settings.resources_all_categories || 'All Categories' }}</option>
                   <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
                     {{ cat.name }}
                   </option>

@@ -7,8 +7,7 @@
           Our Operational <span class="text-primary">Excellence</span>
         </h1>
         <p class="page-header-subtitle">
-          {{ operationsSubtitle || `A transparent look into how we handle every call to ensure every child's voice is
-          heard and acted upon with care and urgency.` }}
+          {{ operationsSubtitle }}
         </p>
       </div>
     </header>
@@ -62,13 +61,8 @@
         <section aria-labelledby="path-heading" class="section-padding bg-primary/5">
           <div class="container-custom">
             <div class="text-center mb-20">
-              <h2 id="path-heading" class="campaign-header text-4xl text-secondary mb-6">{{ operationsPathTitle ||
-                'Your Path to Resolution' }}</h2>
-              <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{ operationsPathSubtitle ||
-                `Our streamlined process from report to resolution, ensuring every case receives the attention and
-                action
-                it
-                deserves.` }}</p>
+              <h2 id="path-heading" class="campaign-header text-4xl text-secondary mb-6">{{ operationsPathTitle }}</h2>
+              <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{ operationsPathSubtitle }}</p>
             </div>
 
             <!-- Desktop Flow - Horizontal -->
@@ -170,7 +164,7 @@
         <section aria-labelledby="highlights-heading" class="section-padding bg-neutral-offwhite">
           <div class="container-custom">
             <h3 id="highlights-heading" class="campaign-header text-4xl text-center text-secondary mb-16">{{
-              operationsHighlightsTitle || 'Our Official Standards' }}</h3>
+              operationsHighlightsTitle }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div v-for="(h, idx) in [
                 { title: operationsHighlight1Title, text: operationsHighlight1Text, colorToken: 'primary' },
