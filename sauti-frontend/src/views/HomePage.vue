@@ -100,11 +100,8 @@
     <section id="services" class="section-padding bg-neutral-white">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="campaign-header text-4xl mb-4 text-secondary">{{ settingsStore.settings.services_title ||
-            `Ways We Protect You` }}</h2>
-          <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{
-            settingsStore.settings.services_description ||
-            `We offer support for different types of safety needs. Select an option below to learn more.` }}</p>
+          <h2 class="campaign-header text-4xl mb-4 text-secondary">{{ servicesTitle }}</h2>
+          <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{ servicesDescription }}</p>
         </div>
 
         <div class="space-y-6 max-w-5xl mx-auto">
@@ -126,14 +123,11 @@
       <div class="container-custom">
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div class="text-left">
-            <h2 class="campaign-header text-4xl text-secondary mb-4">{{ settingsStore.settings.news_title ||
-              `Impact Stories & News` }}</h2>
-            <p class="text-xl text-black max-w-2xl font-bold opacity-70">{{ settingsStore.settings.news_description
-              ||
-              `Stories and news from our team on how we are making Uganda safer.` }}</p>
+            <h2 class="campaign-header text-4xl text-secondary mb-4">{{ newsTitle }}</h2>
+            <p class="text-xl text-black max-w-2xl font-bold opacity-70">{{ newsDescription }}</p>
           </div>
           <BaseCTA to="/blogs" variant="outline" size="sm" class="!rounded-full border-primary/20 text-primary">
-            {{ settingsStore.settings.news_link_text || `See Latest Stories` }}
+            {{ settingsStore.settings.news_link_text || 'See Latest Stories' }}
             <ArrowRightIcon class="w-4 h-4 ml-2" />
           </BaseCTA>
         </div>
@@ -167,11 +161,10 @@
       <div class="container-custom">
         <div class="text-center mb-12 md:mb-16">
           <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">
-            {{ settingsStore.settings.partners_title || `Official Protection Partners` }}
+            {{ partnersTitle }}
           </h2>
           <p class="text-lg md:text-xl text-black max-w-2xl mx-auto">
-            {{ settingsStore.settings.partners_description || 'Working together to protect every child and survivor in
-            Uganda.' }}
+            {{ partnersDescription }}
           </p>
         </div>
 
@@ -210,6 +203,13 @@
   const loadingVideos = ref(false)
   const partners = ref([])
   const expandedServiceKey = ref(null)
+
+  const servicesTitle = computed(() => settingsStore.settings?.services_title || 'Ways We Protect You')
+  const servicesDescription = computed(() => settingsStore.settings?.services_description || 'We offer support for different types of safety needs. Select an option below to learn more.')
+  const newsTitle = computed(() => settingsStore.settings?.news_title || 'Impact Stories & News')
+  const newsDescription = computed(() => settingsStore.settings?.news_description || 'Stories and news from our team on how we are making Uganda safer.')
+  const partnersTitle = computed(() => settingsStore.settings?.partners_title || 'Official Protection Partners')
+  const partnersDescription = computed(() => settingsStore.settings?.partners_description || 'Working together to protect every child and survivor in Uganda.')
 
   const toggleService = (key) => {
     if (expandedServiceKey.value === key) {
