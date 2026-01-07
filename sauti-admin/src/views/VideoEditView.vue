@@ -141,12 +141,19 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
               
-              <div v-if="thumbnailPreview || videoForm.thumbnail" class="mb-3">
+              <div v-if="thumbnailPreview || videoForm.thumbnail" class="mb-3 relative">
                 <img
                   :src="thumbnailPreview || videoForm.thumbnail"
                   alt="Video thumbnail"
                   class="w-full h-32 object-cover rounded-lg"
                 />
+                <button
+                  @click="removeThumbnail"
+                  title="Remove thumbnail"
+                  class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 shadow-lg"
+                >
+                  <XMarkIcon class="h-3 w-3" />
+                </button>
               </div>
               
               <div v-else class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
@@ -294,7 +301,8 @@ import {
   EyeIcon,
   ArrowUpIcon,
   VideoCameraIcon,
-  PhotoIcon
+  PhotoIcon,
+  XMarkIcon
 } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
@@ -331,6 +339,15 @@ const videoCategories = computed(() => {
 const isEditing = computed(() => !!route.params.slug)
 
 // Methods
+
+const removeThumbnail = () => {
+  thumbnailPreview.value = null
+  videoForm.value.thumbnail = null
+  if (thumbnailInput.value) {
+    thumbnailInput.value.value = ''
+  }
+  toast.info('Thumbnail removed. Save changes to make it permanent.')
+}
 
 const handleThumbnailUpload = (event) => {
   const file = event.target.files[0]
@@ -427,27 +444,23 @@ const saveChanges = async (status = 'DRAFT') => {
     
     // Handle video source based on video_type
     if (videoForm.value.video_type === 'UPLOAD') {
-      // For uploaded videos, include video_file and clear youtube_url
+      videoData.video_type = 'UPLOAD'
+      videoData.youtube_url = '' // Clear youtube_url
+      // For uploaded videos, include video_file
       if (videoForm.value.video_file instanceof File) {
         videoData.video_file = videoForm.value.video_file
-        videoData.video_type = 'UPLOAD'
-        // Don't include youtube_url when uploading a file
-        delete videoData.youtube_url
-      } else {
-        // If video_type is UPLOAD but no file, use existing file URL if editing
-        videoData.video_type = 'UPLOAD'
       }
-    } else {
-      // For YouTube videos, include youtube_url and clear video_file
+    } else { // YOUTUBE
+      videoData.video_type = 'YOUTUBE'
       if (videoForm.value.youtube_url && videoForm.value.youtube_url.trim()) {
         videoData.youtube_url = videoForm.value.youtube_url.trim()
-        videoData.video_type = 'YOUTUBE'
       } else {
-        // Default to YOUTUBE if no URL provided yet
-        videoData.video_type = 'YOUTUBE'
+        videoData.youtube_url = ''
       }
-      // Don't include video_file when using YouTube
-      delete videoData.video_file
+      // If switching to YouTube, signal to backend to delete the stored video file
+      if (isEditing.value) {
+        videoData.video_file = null
+      }
     }
 
     // Add scheduled publish date if set
@@ -462,12 +475,14 @@ const saveChanges = async (status = 'DRAFT') => {
       videoData.scheduled_publish_at = null
     }
 
-    // Only include thumbnail if it's a File object (new upload)
-    // If it's a string (existing URL), omit it - backend will keep existing thumbnail
+    // Handle thumbnail
     if (videoForm.value.thumbnail instanceof File) {
       videoData.thumbnail = videoForm.value.thumbnail
+    } else if (isEditing.value && videoForm.value.thumbnail === null) {
+      // If thumbnail was removed, send null to delete it
+      videoData.thumbnail = null
     }
-    // For editing: if thumbnail is a string (existing URL), don't include it
+    // If it's an existing URL (string), we don't send anything, backend keeps the old image.
     
     // Debug: Log the data being sent (without file objects for cleaner console)
     const debugData = {

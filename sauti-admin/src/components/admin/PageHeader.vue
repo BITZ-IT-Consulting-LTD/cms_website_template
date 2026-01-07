@@ -34,7 +34,7 @@ const props = defineProps({
     default: null
   },
   actionIcon: {
-    type: Object,
+    type: [Object, Function],
     default: null
   }
 })

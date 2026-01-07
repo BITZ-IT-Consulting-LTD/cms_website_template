@@ -12,6 +12,7 @@ class SiteSettingSerializer(serializers.ModelSerializer):
 class GlobalSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = GlobalSettings
+        fields = '__all__'
 
 class OrganizationProfileSerializer(serializers.ModelSerializer):
     class Meta:

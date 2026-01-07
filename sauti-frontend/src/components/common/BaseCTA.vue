@@ -66,6 +66,8 @@
         return 'btn-secondary'
       case 'emergency':
         return 'btn-emergency'
+      case 'warm':
+        return 'btn-warm'
       case 'outline':
         return 'btn-outline'
       default:

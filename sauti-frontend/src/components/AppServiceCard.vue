@@ -1,21 +1,23 @@
 <template>
-  <div class="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
-       :class="`hover:border-${color}-200`">
+  <div class="group bg-neutral-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-neutral-offwhite"
+       :class="`hover:border-${colorToken}/30`">
     <div class="flex items-start gap-4">
-      <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors"
-           :class="`bg-${color}-50`">
-        <component :is="getIconComponent(icon)" class="w-6 h-6" :class="`text-${color}-600`" />
+      <div 
+        class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-colors"
+        :class="[`bg-${colorToken}/10`, `group-hover:bg-${colorToken}/20`]"
+      >
+        <component :is="getIconComponent(service.icon)" class="w-6 h-6" :class="`text-${colorToken}`" />
       </div>
       <div>
-        <h4 class="font-bold text-gray-900 mb-2">{{ service.title }}</h4>
-        <p class="text-sm leading-relaxed text-gray-500">{{ service.description }}</p>
+        <h4 class="font-bold text-secondary mb-2">{{ service.title }}</h4>
+        <p class="text-sm leading-relaxed text-secondary/60 font-bold">{{ service.description }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 import {
   PhoneIcon,
   UserGroupIcon,
@@ -54,8 +56,18 @@ const { service, color } = defineProps({
   },
   color: {
     type: String,
-    default: 'blue', // Default color if not provided
+    default: 'primary',
   },
+});
+
+const colorToken = computed(() => {
+  const map = {
+    'blue': 'primary',
+    'orange': 'accent-orange',
+    'green': 'secondary-light',
+    'red': 'emergency'
+  };
+  return map[color] || color || 'primary';
 });
 
 // Map icon names to Heroicons components

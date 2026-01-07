@@ -1,26 +1,26 @@
 <template>
-  <div class="min-h-screen bg-sauti-white">
+  <div class="min-h-screen bg-neutral-white">
     <!-- Loading State -->
     <AppLoader v-if="loading" :fullScreen="true" message="Loading article..." />
 
     <!-- Article Content -->
-    <article v-else-if="post" class="bg-sauti-white">
+    <article v-else-if="post" class="bg-neutral-white">
       <!-- 1. Article Hero Section -->
-      <section class="relative h-[60vh] min-h-[500px] overflow-hidden bg-sauti-darkGreen">
+      <section class="relative h-[60vh] min-h-[500px] overflow-hidden bg-secondary">
         <img v-if="post.featured_image" :src="post.featured_image" :alt="post.title"
           class="absolute inset-0 w-full h-full object-cover opacity-60 scale-105" @error="setPlaceholder" />
-        <div class="absolute inset-0 bg-gradient-to-t from-sauti-darkGreen via-sauti-darkGreen/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/40 to-transparent"></div>
 
         <div class="relative h-full container-custom flex flex-col justify-end pb-16 md:pb-24">
           <!-- Category Pill -->
           <div v-if="post.category" class="mb-8">
-            <span class="pill bg-sauti-orange text-sauti-white text-[10px] shadow-xl">
+            <span class="pill bg-accent-orange text-neutral-white text-[10px] shadow-xl">
               {{ post.category.name }}
             </span>
           </div>
 
           <!-- Title -->
-          <h1 class="page-header-title text-sauti-white !mb-10 max-w-5xl">
+          <h1 class="page-header-title text-neutral-white !mb-10 max-w-5xl">
             {{ post.title }}
           </h1>
 
@@ -29,32 +29,32 @@
             <!-- Author Card -->
             <div class="flex items-center gap-4">
               <div
-                class="w-14 h-14 rounded-2xl bg-sauti-white/10 backdrop-blur-md flex items-center justify-center text-sauti-white font-bold text-xl border border-white/20">
+                class="w-14 h-14 rounded-2xl bg-neutral-white/10 backdrop-blur-md flex items-center justify-center text-neutral-white font-bold text-xl border border-neutral-white/20">
                 {{ getAuthorInitial() }}
               </div>
               <div>
-                <p class="campaign-header text-[10px] text-sauti-white mb-1">
+                <p class="campaign-header text-[10px] text-neutral-white mb-1">
                   {{ post.author?.username || post.author_name || 'Sauti Uganda' }}
                 </p>
-                <p class="campaign-header text-[10px] text-sauti-white/40">
+                <p class="campaign-header text-[10px] text-neutral-white/40">
                   {{ formatDate(post.published_at) }}
                 </p>
               </div>
             </div>
 
-            <div class="hidden sm:block w-px h-8 bg-white/20"></div>
+            <div class="hidden sm:block w-px h-8 bg-neutral-white/20"></div>
 
             <!-- Reading Time -->
-            <div class="flex items-center gap-3 campaign-header text-[10px] text-sauti-white/70">
-              <ClockIcon class="w-5 h-5 text-sauti-blue" />
+            <div class="flex items-center gap-3 campaign-header text-[10px] text-neutral-white/70">
+              <ClockIcon class="w-5 h-5 text-primary" />
               <span>{{ readingTime }} min read</span>
             </div>
 
-            <div class="hidden sm:block w-px h-8 bg-white/20"></div>
+            <div class="hidden sm:block w-px h-8 bg-neutral-white/20"></div>
 
             <!-- Views -->
-            <div class="flex items-center gap-3 campaign-header text-[10px] text-sauti-white/70">
-              <EyeIcon class="w-5 h-5 text-sauti-lightGreen" />
+            <div class="flex items-center gap-3 campaign-header text-[10px] text-neutral-white/70">
+              <EyeIcon class="w-5 h-5 text-secondary-light" />
               <span>{{ formatViews(post.views_count) }}</span>
             </div>
           </div>
@@ -62,12 +62,12 @@
       </section>
 
       <!-- 2. Article Body Wrapper -->
-      <div class="section-padding bg-sauti-white">
+      <div class="section-padding bg-neutral-white">
         <div class="container-custom max-w-4xl">
           <!-- Excerpt / Summary -->
           <div v-if="post.excerpt" class="mb-20">
             <p
-              class="text-2xl md:text-3xl text-sauti-darkGreen font-bold leading-relaxed border-l-8 border-sauti-blue pl-10 py-4 opacity-80">
+              class="text-2xl md:text-3xl text-secondary font-bold leading-relaxed border-l-8 border-primary pl-10 py-4 opacity-80">
               {{ post.excerpt }}
             </p>
           </div>
@@ -77,40 +77,39 @@
 
           <!-- Tags -->
           <div v-if="post.tags && post.tags.length > 0"
-            class="flex flex-wrap gap-3 mb-16 pt-12 border-t-2 border-sauti-neutral">
+            class="flex flex-wrap gap-3 mb-16 pt-12 border-t-2 border-neutral-offwhite">
             <span v-for="tag in post.tags" :key="tag.id"
-              class="px-5 py-2 bg-sauti-neutral/30 text-sauti-blue text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-sauti-blue hover:text-sauti-white transition-all cursor-pointer">
+              class="px-5 py-2 bg-neutral-offwhite/30 text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-primary hover:text-neutral-white transition-all cursor-pointer">
               #{{ tag.name }}
             </span>
           </div>
 
           <!-- Share Action Group -->
-          <div class="bg-sauti-neutral/30 rounded-[3rem] p-10 md:p-16 border-2 border-sauti-neutral">
+          <div class="bg-neutral-offwhite/30 rounded-[3rem] p-10 md:p-16 border-2 border-neutral-offwhite">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
               <div class="text-center md:text-left">
-                <h3 class="campaign-header text-2xl text-sauti-darkGreen mb-3">Share this article</h3>
-                <p class="text-lg font-bold text-sauti-darkGreen/50">Help spread awareness about child protection in
+                <h3 class="campaign-header text-2xl text-secondary mb-3">Share this article</h3>
+                <p class="text-lg font-bold text-secondary/50">Help spread awareness about child protection in
                   Uganda.</p>
               </div>
 
               <div class="flex items-center gap-4">
                 <button v-for="social in [
                   { icon: 'Facebook', color: 'bg-[#1877F2]', action: shareOnFacebook, label: 'Facebook' },
-                  { icon: 'Twitter', color: 'bg-sauti-darkGreen', action: shareOnTwitter, label: 'Twitter' },
+                  { icon: 'Twitter', color: 'bg-secondary', action: shareOnTwitter, label: 'Twitter' },
                   { icon: 'WhatsApp', color: 'bg-[#25D366]', action: shareOnWhatsApp, label: 'WhatsApp' }
                 ]" :key="social.icon" @click="social.action"
-                  :class="['w-14 h-14 rounded-2xl text-sauti-white flex items-center justify-center hover:scale-110 transition-all shadow-xl', social.color]"
+                  :class="['w-14 h-14 rounded-2xl text-neutral-white flex items-center justify-center hover:scale-110 transition-all shadow-xl', social.color]"
                   :aria-label="`Share on ${social.label}`">
                   <span class="sr-only">{{ social.label }}</span>
                   <component :is="social.icon === 'Facebook' ? ShareIcon : ShareIcon" class="w-6 h-6" />
-                  <!-- Using generic share icon as placeholder or mapping correctly -->
                 </button>
 
                 <button @click="copyLink"
-                  class="w-14 h-14 rounded-2xl bg-sauti-white border-2 border-sauti-blue text-sauti-blue flex items-center justify-center hover:scale-110 transition-all shadow-xl"
+                  class="w-14 h-14 rounded-2xl bg-neutral-white border-2 border-primary text-primary flex items-center justify-center hover:scale-110 transition-all shadow-xl"
                   aria-label="Copy link">
                   <LinkIcon v-if="!linkCopied" class="w-6 h-6" />
-                  <CheckIcon v-else class="w-6 h-6 text-sauti-lightGreen" />
+                  <CheckIcon v-else class="w-6 h-6 text-secondary-light" />
                 </button>
               </div>
             </div>
@@ -118,17 +117,17 @@
 
           <!-- Author Biography -->
           <div
-            class="mt-20 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-10 p-10 bg-sauti-blue/5 rounded-[3rem] border-2 border-sauti-blue/10">
+            class="mt-20 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-10 p-10 bg-primary/5 rounded-[3rem] border-2 border-primary/10">
             <div
-              class="w-24 h-24 rounded-[2rem] bg-sauti-blue flex items-center justify-center text-sauti-white font-bold text-4xl shadow-xl shrink-0">
+              class="w-24 h-24 rounded-[2rem] bg-primary flex items-center justify-center text-neutral-white font-bold text-4xl shadow-xl shrink-0">
               {{ getAuthorInitial() }}
             </div>
             <div class="flex-1">
-              <p class="campaign-header text-[10px] text-sauti-darkGreen/40 mb-3">Written By</p>
-              <h4 class="campaign-header text-2xl text-sauti-darkGreen mb-4">
+              <p class="campaign-header text-[10px] text-secondary/40 mb-3">Written By</p>
+              <h4 class="campaign-header text-2xl text-secondary mb-4">
                 {{ post.author?.username || post.author_name || 'Sauti Uganda Team' }}
               </h4>
-              <p class="text-lg font-bold text-sauti-darkGreen/60 leading-relaxed">
+              <p class="text-lg font-bold text-secondary/60 leading-relaxed">
                 Contributing writer at Sauti 116 Helpline, dedicated to raising awareness about child protection and
                 safety across Uganda.
               </p>
@@ -138,11 +137,11 @@
       </div>
 
       <!-- 3. Related Content Section -->
-      <section class="section-padding bg-sauti-neutral/20 border-t-2 border-sauti-neutral">
+      <section class="section-padding bg-neutral-offwhite/20 border-t-2 border-neutral-offwhite">
         <div class="container-custom">
           <div class="text-center mb-16">
-            <p class="campaign-header text-[10px] text-sauti-blue mb-4">Keep Reading</p>
-            <h2 class="campaign-header text-4xl text-sauti-darkGreen">Related Articles</h2>
+            <p class="campaign-header text-[10px] text-primary mb-4">Keep Reading</p>
+            <h2 class="campaign-header text-4xl text-secondary">Related Articles</h2>
           </div>
 
           <div v-if="loadingRelated" class="flex justify-center py-20">
@@ -157,26 +156,26 @@
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   @error="setPlaceholder" />
                 <div
-                  class="absolute inset-0 bg-gradient-to-t from-sauti-darkGreen/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  class="absolute inset-0 bg-gradient-to-t from-secondary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 </div>
                 <span v-if="related.category"
-                  class="absolute top-6 left-6 pill bg-sauti-darkGreen text-white text-[10px]">
+                  class="absolute top-6 left-6 pill bg-secondary text-neutral-white text-[10px]">
                   {{ related.category.name }}
                 </span>
               </div>
 
               <div class="p-8">
                 <h3
-                  class="campaign-header text-xl text-sauti-darkGreen mb-4 leading-tight group-hover:text-sauti-blue transition-colors line-clamp-2">
+                  class="campaign-header text-xl text-secondary mb-4 leading-tight group-hover:text-primary transition-colors line-clamp-2">
                   {{ related.title }}
                 </h3>
-                <p class="text-base font-bold text-sauti-darkGreen/50 mb-8 line-clamp-2">
+                <p class="text-base font-bold text-secondary/50 mb-8 line-clamp-2">
                   {{ related.excerpt }}
                 </p>
-                <div class="flex items-center justify-between pt-6 border-t-2 border-sauti-neutral">
-                  <span class="campaign-header text-[10px] text-sauti-darkGreen/30">{{
+                <div class="flex items-center justify-between pt-6 border-t-2 border-neutral-offwhite">
+                  <span class="campaign-header text-[10px] text-secondary/30">{{
                     formatTimeAgo(related.published_at) }}</span>
-                  <div class="flex items-center gap-2 campaign-header text-[10px] text-sauti-darkGreen/30">
+                  <div class="flex items-center gap-2 campaign-header text-[10px] text-secondary/30">
                     <EyeIcon class="w-4 h-4" />
                     {{ formatViews(related.views_count) }}
                   </div>
@@ -186,23 +185,23 @@
           </div>
 
           <div v-else
-            class="text-center py-20 bg-sauti-white rounded-[3rem] border-2 border-dashed border-sauti-neutral">
-            <p class="campaign-header text-sauti-darkGreen/30">No related articles found</p>
+            class="text-center py-20 bg-neutral-white rounded-[3rem] border-2 border-dashed border-neutral-offwhite">
+            <p class="campaign-header text-secondary/30">No related articles found</p>
           </div>
         </div>
       </section>
     </article>
 
     <!-- 4. Not Found State -->
-    <div v-else class="min-h-screen bg-sauti-white flex items-center justify-center p-10">
+    <div v-else class="min-h-screen bg-neutral-white flex items-center justify-center p-10">
       <div
-        class="max-w-2xl w-full bg-sauti-white rounded-[4rem] p-16 text-center shadow-2xl border-2 border-sauti-blue">
+        class="max-w-2xl w-full bg-neutral-white rounded-[4rem] p-16 text-center shadow-2xl border-2 border-primary">
         <div
-          class="w-24 h-24 bg-sauti-blue/10 border-2 border-sauti-blue rounded-3xl flex items-center justify-center mx-auto mb-10 text-sauti-blue">
+          class="w-24 h-24 bg-primary/10 border-2 border-primary rounded-3xl flex items-center justify-center mx-auto mb-10 text-primary">
           <DocumentTextIcon class="w-12 h-12" />
         </div>
-        <h2 class="campaign-header text-4xl text-sauti-darkGreen mb-6">Article Not Found</h2>
-        <p class="text-xl font-bold text-sauti-darkGreen/50 mb-12">The article you're looking for doesn't exist or has
+        <h2 class="campaign-header text-4xl text-secondary mb-6">Article Not Found</h2>
+        <p class="text-xl font-bold text-secondary/50 mb-12">The article you're looking for doesn't exist or has
           been removed from our records.</p>
         <BaseCTA href="/blogs" variant="primary" class="inline-flex items-center gap-4 !px-12">
           <ArrowLeftIcon class="w-5 h-5" />
@@ -355,7 +354,7 @@
   }
 
   :deep(.prose-sauti) {
-    @apply text-xl md:text-2xl text-sauti-darkGreen leading-loose font-bold opacity-90;
+    @apply text-xl md:text-2xl text-secondary leading-loose font-bold opacity-90;
   }
 
   :deep(.prose-sauti p) {
@@ -363,19 +362,19 @@
   }
 
   :deep(.prose-sauti h2) {
-    @apply font-sans font-bold text-4xl text-sauti-darkGreen mt-20 mb-10 tracking-tight normal-case;
+    @apply font-sans font-bold text-4xl text-secondary mt-20 mb-10 tracking-tight normal-case;
   }
 
   :deep(.prose-sauti h3) {
-    @apply font-sans font-bold text-2xl text-sauti-darkGreen mt-16 mb-8 normal-case;
+    @apply font-sans font-bold text-2xl text-secondary mt-16 mb-8 normal-case;
   }
 
   :deep(.prose-sauti blockquote) {
-    @apply border-l-8 border-sauti-orange bg-sauti-neutral/30 p-12 rounded-r-[3rem] italic font-bold text-2xl my-16 border-2 border-sauti-neutral;
+    @apply border-l-8 border-accent-orange bg-neutral-offwhite/30 p-12 rounded-r-[3rem] italic font-bold text-2xl my-16 border-2 border-neutral-offwhite;
   }
 
   :deep(.prose-sauti img) {
-    @apply my-20 rounded-[4rem] border-4 border-sauti-blue shadow-2xl;
+    @apply my-20 rounded-[4rem] border-4 border-primary shadow-2xl;
   }
 
   :deep(.prose-sauti ul),
@@ -388,6 +387,6 @@
   }
 
   :deep(.prose-sauti a) {
-    @apply font-bold text-sauti-blue underline underline-offset-8 decoration-4 hover:text-sauti-darkGreen transition-all;
+    @apply font-bold text-primary underline underline-offset-8 decoration-4 hover:text-secondary transition-all;
   }
 </style>

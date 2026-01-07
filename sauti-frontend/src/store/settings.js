@@ -93,6 +93,13 @@ export const useSettingsStore = defineStore('settings', () => {
         settings.value.org_favicon = orgProfile.value.favicon
         settings.value.primary_color = orgProfile.value.primary_color
         settings.value.secondary_color = orgProfile.value.secondary_color
+
+        // Inject all brand colors for easier access
+        if (orgProfile.value.brand_colors && Array.isArray(orgProfile.value.brand_colors)) {
+          orgProfile.value.brand_colors.forEach(c => {
+            settings.value[c.id] = c.value
+          })
+        }
       }
 
       return response.data

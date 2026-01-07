@@ -122,11 +122,11 @@
     .logo-fallback {
         font-family: 'Cronos Pro', sans-serif;
         font-weight: 600;
-        color: theme('colors.sauti.blue');
+        color: theme('colors.primary');
     }
 
     /* Variant-specific adjustments if needed */
     .white .logo-fallback {
-        color: white;
+        color: theme('colors.neutral-white');
     }
 </style>
