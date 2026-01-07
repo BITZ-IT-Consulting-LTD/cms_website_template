@@ -45,7 +45,7 @@
                             <InformationCircleIcon class="w-5 h-5 text-primary" />
                             About this service
                         </h4>
-                        <p class="text-secondary leading-relaxed font-bold">{{ service.intro_text }}</p>
+                        <p class="text-black leading-relaxed font-bold">{{ service.intro_text }}</p>
                     </div>
 
                     <div v-if="service.scope_items && service.scope_items.length">
@@ -74,7 +74,7 @@
                                 {{ idx + 1 }}
                             </div>
                             <h5 class="font-bold text-secondary mb-2 relative z-10">{{ step.title }}</h5>
-                            <p class="text-sm text-secondary relative z-10 font-bold opacity-70">{{ step.description }}</p>
+                            <p class="text-sm text-black relative z-10 font-bold opacity-70">{{ step.description }}</p>
                         </div>
                     </div>
                 </div>

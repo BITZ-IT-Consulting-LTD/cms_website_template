@@ -63,7 +63,7 @@
             </div>
             <h2 class="text-secondary">Uganda’s Institutional <span class="text-secondary-light">Action Center</span>.
             </h2>
-            <p class="text-xl font-bold leading-relaxed text-secondary/60">
+            <p class="text-xl font-bold leading-relaxed text-black/60">
               Managed by the Ministry of Gender, Labour and Social Development, we coordinate a nationwide network of
               protection experts, legal advocates, and health providers to ensure immediate safety for every child and
               survivor.
@@ -81,7 +81,7 @@
             </div>
             <div class="relative rounded-[4rem] overflow-hidden shadow-2xl group">
               <img src="@/assets/diverse_helpline_operations.png"
-                alt="Diverse Sauti 116 Helpline counselors serving the nation"
+                alt="Sauti 116 helpline counselors responding to calls in a modern operations center"
                 class="w-full h-[600px] object-cover transition-transform duration-1000 group-hover:scale-110" />
               <div class="absolute inset-0 bg-gradient-to-t from-secondary/60 via-transparent to-transparent">
               </div>
@@ -102,7 +102,7 @@
         <div class="text-center mb-16">
           <h2 class="campaign-header text-4xl mb-4 text-secondary">{{ settingsStore.settings.services_title ||
             `Ways We Protect You` }}</h2>
-          <p class="text-xl text-secondary max-w-2xl mx-auto font-bold opacity-70">{{
+          <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{
             settingsStore.settings.services_description ||
             `We offer support for different types of safety needs. Select an option below to learn more.` }}</p>
         </div>
@@ -128,7 +128,7 @@
           <div class="text-left">
             <h2 class="campaign-header text-4xl text-secondary mb-4">{{ settingsStore.settings.news_title ||
               `Impact Stories & News` }}</h2>
-            <p class="text-xl text-secondary max-w-2xl font-bold opacity-70">{{ settingsStore.settings.news_description
+            <p class="text-xl text-black max-w-2xl font-bold opacity-70">{{ settingsStore.settings.news_description
               ||
               `Stories and news from our team on how we are making Uganda safer.` }}</p>
           </div>
@@ -149,7 +149,7 @@
 
               <div class="absolute bottom-6 left-6 right-6">
                 <span
-                  class="inline-block px-3 py-1 bg-accent-orange text-neutral-white text-xs font-bold rounded-lg mb-3 shadow-lg">
+                  class="inline-block px-3 py-1 bg-hotline text-neutral-white text-xs font-bold rounded-lg mb-3 shadow-lg">
                   {{ post.category }}
                 </span>
                 <h3 class="text-xl font-bold text-white leading-tight line-clamp-2">
@@ -163,18 +163,19 @@
     </section>
 
     <!-- 5. Partner Logos -->
-    <section class="section-padding bg-neutral-white">
+    <section class="section-padding bg-neutral-offwhite">
       <div class="container-custom">
-        <div class="text-center mb-16">
-          <h2 class="campaign-header text-4xl text-secondary mb-4">
+        <div class="text-center mb-12 md:mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">
             {{ settingsStore.settings.partners_title || `Official Protection Partners` }}
           </h2>
-          <p class="text-xl text-secondary font-bold opacity-70">
-            {{ settingsStore.settings.partners_description || `Partnering for a safer Uganda.` }}
+          <p class="text-lg md:text-xl text-black max-w-2xl mx-auto">
+            {{ settingsStore.settings.partners_description || `Working together to protect every child and survivor in
+            Uganda.` }}
           </p>
         </div>
 
-        <PartnerGrid :partners="partners" class="opacity-60" />
+        <PartnerGrid :partners="partners" />
       </div>
     </section>
   </div>

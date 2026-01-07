@@ -29,12 +29,12 @@
     variant: {
       type: String,
       default: 'primary',
-      validator: (value) => ['primary', 'secondary', 'emergency', 'outline', 'ghost'].includes(value)
+      validator: (value) => ['primary', 'primary-action', 'secondary', 'emergency', 'outline', 'ghost'].includes(value)
     },
     size: {
       type: String,
       default: 'default', // 'default', 'large', 'small'
-      validator: (value) => ['default', 'large', 'small', 'hero'].includes(value)
+      validator: (value) => ['default', 'large', 'small', 'hero', 'lg', 'sm'].includes(value)
     },
     external: {
       type: Boolean,
@@ -62,6 +62,8 @@
     switch (props.variant) {
       case 'primary':
         return 'btn-primary'
+      case 'primary-action':
+        return 'btn-primary-action'
       case 'secondary':
         return 'btn-secondary'
       case 'emergency':
@@ -82,7 +84,7 @@
       case 'large':
         return '!px-8 !py-4 !text-lg !rounded-xl'
       case 'hero':
-        return '!px-10 !py-5 !text-2xl !rounded-2xl !font-bold !shadow-2xl'
+        return '!px-8 !py-6 !text-2xl !rounded-2xl !font-bold !shadow-2xl'
       default:
         return '' // Default size handled by .btn class
     }

@@ -20,18 +20,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Help is Free</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">All materials and helpline calls are **100%
+              <p class="text-black font-bold text-lg">Help is Free</p>
+              <p class="text-black/60 text-sm leading-relaxed">All materials and helpline calls are **100%
                 toll-free**.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Help is Ready</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Download guides for **Child Protection and Safety**
+              <p class="text-black font-bold text-lg">Help is Ready</p>
+              <p class="text-black/60 text-sm leading-relaxed">Download guides for **Child Protection and Safety**
                 instantly.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Help is Human</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Speak to a certified counselor by **calling 116
+              <p class="text-black font-bold text-lg">Help is Human</p>
+              <p class="text-black/60 text-sm leading-relaxed">Speak to a certified counselor by **calling 116
                 anytime**.</p>
             </div>
           </div>
@@ -52,7 +52,7 @@
 
           <div v-if="statsLoading" class="py-20 text-center">
             <div class="spinner mx-auto mb-6"></div>
-            <p class="text-secondary/50 font-bold">Fetching latest data...</p>
+            <p class="text-black/50 font-bold">Fetching latest data...</p>
           </div>
 
           <div v-else-if="statsError"
@@ -78,7 +78,7 @@
               </div>
 
               <div
-                class="bg-accent-orange rounded-[2.5rem] p-10 text-neutral-white shadow-xl hover:scale-105 transition-transform duration-500">
+                class="bg-hotline rounded-[2.5rem] p-10 text-neutral-white shadow-xl hover:scale-105 transition-transform duration-500">
                 <h3 class="text-5xl font-bold mb-2 tabular-nums">{{ getCategoryCount('GBV') }}</h3>
                 <p class="campaign-header text-xs opacity-60">GBV Reports Managed</p>
               </div>
@@ -123,9 +123,8 @@
             <div class="bg-neutral-white rounded-[3.5rem] border-4 border-primary p-10 shadow-sm transition-all">
               <h3 class="text-2xl font-bold text-secondary mb-10">Case Status Distribution</h3>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div
-                  class="text-center p-8 bg-neutral-white rounded-3xl border-2 border-accent-orange group transition-all">
-                  <div class="text-5xl font-bold text-accent-orange mb-3">{{ getStatusCount('PENDING') }}</div>
+                <div class="text-center p-8 bg-neutral-white rounded-3xl border-2 border-hotline group transition-all">
+                  <div class="text-5xl font-bold text-hotline mb-3">{{ getStatusCount('PENDING') }}</div>
                   <div class="campaign-header text-[10px] text-secondary">Pending</div>
                 </div>
                 <div class="text-center p-8 bg-neutral-white rounded-3xl border-2 border-primary group transition-all">
@@ -165,19 +164,19 @@
                       <div>
                         <div class="text-3xl font-black text-secondary tabular-nums">{{ callStats.stats.calls_today
                         }}</div>
-                        <div class="text-xs font-bold text-secondary/40 uppercase">Calls Answered Today</div>
+                        <div class="text-xs font-bold text-black/40 uppercase">Calls Answered Today</div>
                       </div>
                     </div>
 
                     <div
-                      class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-accent-orange flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
-                      <div class="w-14 h-14 bg-accent-orange/10 rounded-2xl flex items-center justify-center shrink-0">
-                        <ShieldCheckIcon class="w-8 h-8 text-accent-orange" />
+                      class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-hotline flex items-center gap-6 group hover:translate-x-2 transition-transform duration-300">
+                      <div class="w-14 h-14 bg-hotline/10 rounded-2xl flex items-center justify-center shrink-0">
+                        <ShieldCheckIcon class="w-8 h-8 text-hotline" />
                       </div>
                       <div>
                         <div class="text-3xl font-black text-secondary tabular-nums">{{ callStats.stats.cases_today
                         }}</div>
-                        <div class="text-xs font-bold text-secondary/40 uppercase">Cases Registered Today</div>
+                        <div class="text-xs font-bold text-black/40 uppercase">Cases Registered Today</div>
                       </div>
                     </div>
 
@@ -190,7 +189,7 @@
                       <div>
                         <div class="text-3xl font-black text-secondary tabular-nums">{{
                           callStats.stats.cases_ongoing }}</div>
-                        <div class="text-xs font-bold text-secondary/40 uppercase">Active Case Load</div>
+                        <div class="text-xs font-bold text-black/40 uppercase">Active Case Load</div>
                       </div>
                     </div>
 
@@ -200,7 +199,7 @@
                         <div class="bg-secondary/5 p-6 rounded-[2rem] border border-secondary/10">
                           <div class="text-2xl font-black text-secondary tabular-nums">{{
                             Number(callStats.stats.calls_total).toLocaleString() }}</div>
-                          <div class="text-[9px] font-bold text-secondary/50 uppercase tracking-tighter">Lifetime
+                          <div class="text-[9px] font-bold text-black/50 uppercase tracking-tighter">Lifetime
                             Calls</div>
                         </div>
                         <div class="bg-primary/5 p-6 rounded-[2rem] border border-primary/10">
@@ -224,7 +223,7 @@
                     <h3 class="text-2xl font-bold text-secondary flex items-center gap-3">
                       Call Frequency Trends
                     </h3>
-                    <p class="text-secondary/50 font-bold text-sm">Hourly distribution of incoming calls by status
+                    <p class="text-black/50 font-bold text-sm">Hourly distribution of incoming calls by status
                     </p>
                   </div>
                   <div class="h-[420px]">
@@ -243,7 +242,7 @@
               <h2 id="downloads-heading" class="campaign-header text-3xl text-secondary mb-4">
                 {{ settingsStore.settings.resources_downloads_title || `Life-Saving Guides` }}
               </h2>
-              <p class="text-secondary/60 font-bold text-lg">Public awareness materials and official guidance.</p>
+              <p class="text-black/60 font-bold text-lg">Public awareness materials and official guidance.</p>
             </div>
             <div class="pill bg-primary/10 text-primary">
               {{ resources.length }} {{ settingsStore.settings.resources_available || `items available` }}
@@ -290,7 +289,7 @@
                   </div>
                   <h3 class="text-2xl font-bold text-secondary mb-4 leading-tight line-clamp-2">{{ resource.title
                   }}</h3>
-                  <p class="text-lg text-secondary/50 font-bold leading-relaxed line-clamp-3">{{
+                  <p class="text-lg text-black/50 font-bold leading-relaxed line-clamp-3">{{
                     resource.description }}</p>
                 </div>
 
@@ -310,7 +309,7 @@
                     external download>
                     Download
                   </BaseCTA>
-                  <div class="text-[10px] font-bold text-secondary/40 uppercase tracking-widest">
+                  <div class="text-[10px] font-bold text-black/40 uppercase tracking-widest">
                     <span class="text-secondary">{{ resource.download_count || 0 }}</span> Downloads
                   </div>
                 </div>
@@ -327,7 +326,7 @@
             </div>
             <h3 class="text-2xl font-bold text-secondary mb-2">{{ settingsStore.settings.resources_no_results ||
               'No Resources Found' }}</h3>
-            <p class="text-secondary/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
+            <p class="text-black/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
               'Try adjusting your search criteria.' }}</p>
             <button @click="search = ''; category = ''" class="btn btn-outline">Clear all filters</button>
           </div>
@@ -335,9 +334,8 @@
           <!-- Pagination -->
           <div v-if="pagination.next || pagination.previous" class="mt-20 flex justify-center gap-6">
             <button :disabled="!pagination.previous || loading" @click="prevPage"
-              class="btn btn-outline px-10">Previous</button>
-            <button :disabled="!pagination.next || loading" @click="nextPage"
-              class="btn btn-outline px-10">Next</button>
+              class="btn btn-outline px-8">Previous</button>
+            <button :disabled="!pagination.next || loading" @click="nextPage" class="btn btn-outline px-8">Next</button>
           </div>
         </section>
 
@@ -355,7 +353,7 @@
               </p>
               <div class="pt-4">
                 <BaseCTA to="/faqs" variant="outline"
-                  class="!border-white !text-white hover:!bg-white hover:!text-primary !px-12 !py-5 !text-xl !rounded-2xl">
+                  class="!border-white !text-white hover:!bg-white hover:!text-primary !px-12 !py-6 !text-xl !rounded-2xl">
                   View Common Questions
                 </BaseCTA>
               </div>
@@ -423,7 +421,7 @@
     primary: settingsStore.settings.primary_color || '#2B4C7E',
     secondary: settingsStore.settings.secondary_color || '#023047',
     'secondary-light': settingsStore.settings.secondary_light_color || '#8ECAE6',
-    'accent-orange': settingsStore.settings.accent_orange_color || '#FB8500',
+    'hotline': settingsStore.settings.accent_orange_color || '#FB8500',
     'accent-yellow': settingsStore.settings.accent_yellow_color || '#FFB703',
     'emergency': settingsStore.settings.emergency_color || '#D00000',
     'neutral-white': '#FFFFFF',
@@ -526,7 +524,7 @@
 
     const statusColors = {
       'answered': brand_colors.value['primary'],
-      'abandoned': brand_colors.value['accent-orange'],
+      'abandoned': brand_colors.value['hotline'],
       'busy': brand_colors.value['secondary']
     }
 
@@ -598,7 +596,7 @@
       datasets: [{
         backgroundColor: [
           brand_colors.value['primary'],
-          brand_colors.value['accent-orange'],
+          brand_colors.value['hotline'],
           brand_colors.value['secondary'],
           brand_colors.value['secondary-light']
         ],

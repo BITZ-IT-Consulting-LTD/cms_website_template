@@ -25,17 +25,17 @@
             <ul class="space-y-4">
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Zero Cost</strong>: All our services are 100% free to use.
+                <p class="text-black font-bold"><strong>Zero Cost</strong>: All our services are 100% free to use.
                 </p>
               </li>
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Safety First</strong>: We only share info to stop immediate
+                <p class="text-black font-bold"><strong>Safety First</strong>: We only share info to stop immediate
                   harm.</p>
               </li>
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Official Support</strong>: You are protected by Ugandan law
+                <p class="text-black font-bold"><strong>Official Support</strong>: You are protected by Ugandan law
                   (MGLSD).</p>
               </li>
             </ul>
@@ -47,7 +47,7 @@
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               1. Using Our Sanctuary
             </h2>
-            <p class="text-secondary/80 font-bold text-lg leading-relaxed">
+            <p class="text-black/80 font-bold text-lg leading-relaxed">
               By accessing and using the Sauti 116 helpline services, you accept and agree to be bound by the terms
               and provision of this agreement. If you do not agree to abide by the above, please do not use this
               service.
@@ -57,15 +57,15 @@
           <!-- Section 2 -->
           <section aria-labelledby="description-heading">
             <h2 id="description-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
-              <span class="w-1.5 h-8 bg-accent-orange rounded-full"></span>
+              <span class="w-1.5 h-8 bg-hotline rounded-full"></span>
               2. What We Provide for You
             </h2>
-            <p class="text-secondary font-bold mb-6 uppercase tracking-widest text-xs">Sauti 116 helpline
+            <p class="text-black font-bold mb-6 uppercase tracking-widest text-xs">Sauti 116 helpline
               provides:</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div v-for="service in services" :key="service"
-                class="flex items-center gap-4 p-5 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-accent-orange transition-all">
-                <div class="w-2.5 h-2.5 bg-accent-orange rounded-full"></div>
+                class="flex items-center gap-4 p-6 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-hotline transition-all">
+                <div class="w-2.5 h-2.5 bg-hotline rounded-full"></div>
                 <span class="text-secondary font-bold text-sm uppercase tracking-wide">{{ service }}</span>
               </div>
             </div>
@@ -94,7 +94,7 @@
               4. How We Protect Your Privacy
             </h2>
             <div class="bg-neutral-offwhite/30 p-10 rounded-[2.5rem] border-2 border-neutral-offwhite">
-              <p class="text-secondary font-bold text-lg leading-relaxed mb-8">
+              <p class="text-black font-bold text-lg leading-relaxed mb-8">
                 We are committed to maintaining the confidentiality of all information shared with us. However, we may
                 be required to share information in the following circumstances:
               </p>
@@ -114,14 +114,14 @@
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               5. When You Can Reach Us
             </h2>
-            <p class="text-secondary/80 font-bold text-lg leading-relaxed mb-10">
+            <p class="text-black/80 font-bold text-lg leading-relaxed mb-10">
               While we strive to provide continuous service availability, we cannot guarantee that our services will be
               available at all times.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div v-for="rights in availabilityRights" :key="rights"
                 class="p-8 bg-neutral-white border-2 border-neutral-offwhite rounded-3xl shadow-sm hover:border-primary transition-colors">
-                <p class="text-secondary font-bold text-sm">{{ rights }}</p>
+                <p class="text-black font-bold text-sm">{{ rights }}</p>
               </div>
             </div>
           </section>
@@ -130,7 +130,7 @@
           <section aria-labelledby="emergency-heading">
             <h2 id="emergency-heading" class="campaign-header text-3xl text-emergency mb-8">6. Emergency Situations</h2>
             <div class="bg-emergency/5 p-10 rounded-[3rem] border-2 border-emergency/20 space-y-8">
-              <p class="text-secondary font-bold text-xl">In case of immediate danger, please:</p>
+              <p class="text-black font-bold text-xl">In case of immediate danger, please:</p>
               <div class="grid gap-4">
                 <div v-for="step in emergencySteps" :key="step"
                   class="flex items-center gap-6 p-6 bg-neutral-white rounded-2xl border-2 border-emergency/10 shadow-sm">
@@ -157,8 +157,8 @@
                     <PhoneIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="campaign-header text-[10px] text-secondary/50 mb-1">Helpline</p>
-                    <p class="text-secondary font-bold text-2xl">116</p>
+                    <p class="campaign-header text-[10px] text-black/50 mb-1">Helpline</p>
+                    <p class="text-black font-bold text-2xl">116</p>
                   </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -167,8 +167,8 @@
                     <EnvelopeIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="campaign-header text-[10px] text-secondary/50 mb-1">Support Admin</p>
-                    <p class="text-secondary font-bold break-all">info@sauti.gov.ug</p>
+                    <p class="campaign-header text-[10px] text-black/50 mb-1">Support Admin</p>
+                    <p class="text-black font-bold break-all">info@sauti.gov.ug</p>
                   </div>
                 </div>
               </div>
@@ -178,8 +178,8 @@
                   <MapPinIcon class="w-7 h-7" />
                 </div>
                 <div>
-                  <p class="campaign-header text-[10px] text-secondary/50 mb-1">Location</p>
-                  <p class="text-secondary font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
+                  <p class="campaign-header text-[10px] text-black/50 mb-1">Location</p>
+                  <p class="text-black font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
                 </div>
               </div>
             </div>

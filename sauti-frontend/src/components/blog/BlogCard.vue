@@ -32,7 +32,7 @@
       <div class="mt-6 flex gap-4">
         <!-- Author Avatar -->
         <div
-          class="h-10 w-10 rounded-xl bg-accent-orange flex items-center justify-center text-neutral-white font-bold text-sm flex-shrink-0 shadow-lg shadow-accent-orange/20 transition-transform group-hover:scale-110">
+          class="h-10 w-10 rounded-xl bg-hotline flex items-center justify-center text-neutral-white font-bold text-sm flex-shrink-0 shadow-lg shadow-hotline/20 transition-transform group-hover:scale-110">
           {{ getAuthorInitial() }}
         </div>
 
@@ -46,11 +46,11 @@
 
           <!-- Meta -->
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span class="text-[10px] text-secondary/60 font-bold uppercase tracking-widest whitespace-nowrap">
+            <span class="text-[10px] text-muted font-bold uppercase tracking-widest whitespace-nowrap">
               {{ post.author?.username || post.author_name || 'Sauti Uganda' }}
             </span>
             <span class="w-1 h-1 bg-secondary/20 rounded-full"></span>
-            <span class="text-[10px] text-secondary/40 font-bold uppercase tracking-widest whitespace-nowrap">
+            <span class="text-[10px] text-black/40 font-bold uppercase tracking-widest whitespace-nowrap">
               {{ formatViews(post.views_count) }} • {{ formatTimeAgo(post.published_at) }}
             </span>
           </div>

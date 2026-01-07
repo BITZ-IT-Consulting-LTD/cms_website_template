@@ -2,7 +2,7 @@
   <div class="relative">
     <button
       @click="isOpen = !isOpen"
-      class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-primary/10 transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
       aria-label="Change language"
       :aria-expanded="isOpen"
       aria-haspopup="true"
@@ -27,12 +27,12 @@
           v-for="lang in languages"
           :key="lang.code"
           @click="changeLanguage(lang.code)"
-          class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+          class="w-full text-left px-4 py-2 hover:bg-primary/10 transition-colors"
           :class="{ 'bg-primary-50 text-primary-600': currentLanguageCode === lang.code }"
         >
           <div class="flex items-center justify-between">
             <span>{{ lang.name }}</span>
-            <span class="text-xs text-gray-500">{{ lang.nativeName }}</span>
+            <span class="text-xs text-black/50">{{ lang.nativeName }}</span>
           </div>
         </button>
       </div>

@@ -3,14 +3,14 @@
     class="sticky top-0 z-50 bg-neutral-white/95 backdrop-blur-md border-b border-primary/10 shadow-sm transition-all duration-300">
     <!-- Skip link handled in App.vue for better first-element accessibility -->
     <nav class="container-custom" aria-label="Main Navigation">
-      <div class="flex items-center justify-between h-[88px]">
+      <div class="flex items-center justify-between h-[100px]">
         <!-- Sauti Brand Logo Section (Re-aligned) -->
         <router-link to="/" class="flex items-center gap-4 group no-underline shrink-0 relative z-20">
           <div class="relative">
             <div
               class="absolute -inset-2 bg-primary/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300">
             </div>
-            <BaseLogo size="md" variant="default" alt="Sauti 116" class="relative" />
+            <BaseLogo size="lg" variant="default" alt="Sauti 116" class="relative" />
           </div>
           <div class="hidden md:block border-l-2 border-primary/10 pl-4 py-1">
             <h1
@@ -30,7 +30,8 @@
               { to: '/', label: 'Home' },
               { to: '/about', label: 'Who We Are' },
               { to: '/resources', label: 'Get Help' },
-              { to: '/blogs', label: 'Stories' },
+              { to: '/faqs', label: 'FAQs' },
+              { to: '/blogs', label: 'Updates' },
               { to: '/contact', label: 'Contact Us' }
             ]" :key="link.to" :to="link.to"
               class="px-5 py-2.5 rounded-full text-neutral-black text-sm font-bold transition-all duration-300 hover:text-primary relative overflow-hidden group"
@@ -105,10 +106,11 @@
               { to: '/', label: 'Home' },
               { to: '/about', label: 'Who We Are' },
               { to: '/resources', label: 'Get Help' },
-              { to: '/blogs', label: 'Stories' },
+              { to: '/faqs', label: 'FAQs' },
+              { to: '/blogs', label: 'Updates' },
               { to: '/contact', label: 'Contact Us' }
             ]" :key="link.to" :to="link.to"
-              class="text-xl font-normal text-secondary py-5 border-b border-neutral-offwhite/50 flex items-center justify-between group px-2"
+              class="text-xl font-normal text-secondary py-6 border-b border-neutral-offwhite/50 flex items-center justify-between group px-2"
               active-class="text-primary border-primary/30 !font-semibold" @click="mobileMenuOpen = false">
               {{ link.label }}
               <ArrowRightIcon class="w-5 h-5 opacity-40 group-hover:opacity-100 transition-all text-primary"

@@ -9,7 +9,7 @@
           'px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border-2',
           selectedCategory === null
             ? 'bg-primary border-primary text-neutral-white shadow-lg scale-105'
-            : 'bg-neutral-white border-neutral-offwhite text-secondary/50 hover:border-primary hover:text-primary'
+            : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
         ]">
           All Topics
         </button>
@@ -17,7 +17,7 @@
           'px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border-2',
           selectedCategory === cat.slug
             ? 'bg-primary border-primary text-neutral-white shadow-xl scale-105'
-            : 'bg-neutral-white border-neutral-offwhite text-secondary/50 hover:border-primary hover:text-primary'
+            : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
         ]">
           {{ cat.name }}
         </button>
@@ -32,7 +32,7 @@
     <!-- 3. Error State -->
     <div v-else-if="error" class="bg-emergency/5 border-2 border-emergency/20 rounded-[2.5rem] p-12 text-center">
       <ExclamationTriangleIcon class="w-12 h-12 text-emergency mx-auto mb-6" />
-      <p class="text-secondary/70 font-bold mb-8">{{ error }}</p>
+      <p class="text-black/70 font-bold mb-8">{{ error }}</p>
       <BaseCTA @click="$emit('retry')" variant="primary">
         Try Reconnecting
       </BaseCTA>
@@ -43,7 +43,7 @@
       class="bg-neutral-offwhite border-2 border-dashed border-neutral-offwhite rounded-[3rem] p-16 text-center">
       <QuestionMarkCircleIcon class="w-16 h-16 mx-auto text-secondary/20 mb-6" />
       <h3 class="campaign-header text-xl text-secondary mb-4">No insights found</h3>
-      <p class="text-lg font-bold text-secondary/40">
+      <p class="text-lg font-bold text-black/40">
         {{ selectedCategory ? 'There are currently no listed questions in this category.' : 'Check back later as we update our knowledge base.' }}
       </p>
     </div>
@@ -63,7 +63,7 @@
               <span v-if="faq.category" class="pill bg-primary/10 text-primary text-[8px]">
                 {{ faq.category.name }}
               </span>
-              <span v-if="faq.language" class="pill bg-neutral-offwhite text-secondary/60 text-[8px]">
+              <span v-if="faq.language" class="pill bg-neutral-offwhite text-muted text-[8px]">
                 {{ getLanguageName(faq.language) }}
               </span>
             </div>
@@ -87,7 +87,7 @@
           <div v-show="openIndex === index" class="px-8 pb-8">
             <div class="pt-8 border-t-2 border-neutral-offwhite">
               <div
-                class="text-lg md:text-xl font-bold text-secondary/70 leading-relaxed whitespace-pre-line prose-faq"
+                class="text-lg md:text-xl font-bold text-black/70 leading-relaxed whitespace-pre-line prose-faq"
                 v-html="faq.answer"></div>
 
               <!-- Metadata footer -->

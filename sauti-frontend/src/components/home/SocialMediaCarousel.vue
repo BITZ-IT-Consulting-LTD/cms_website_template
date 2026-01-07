@@ -2,26 +2,26 @@
   <div class="social-carousel-container relative w-full min-h-[600px] bg-transparent overflow-hidden flex flex-col items-center py-8">
     <!-- Title -->
     <div class="text-center mb-8 z-10">
-      <h2 class="text-3xl font-bold text-gray-900 mb-2">Follow Us on Social Media</h2>
-      <p class="text-gray-600">Stay connected with our latest updates</p>
+      <h2 class="text-3xl font-bold text-secondary mb-2">Follow Us on Social Media</h2>
+      <p class="text-black/60">Stay connected with our latest updates</p>
     </div>
 
     <!-- Loading State -->
     <div v-if="loading" class="flex-1 flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p class="text-gray-600">Loading social media posts...</p>
+        <p class="text-black/60">Loading social media posts...</p>
       </div>
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="allPosts.length === 0" class="flex-1 flex items-center justify-center text-gray-500 min-h-[400px]">
+    <div v-else-if="allPosts.length === 0" class="flex-1 flex items-center justify-center text-black/50 min-h-[400px]">
       <div class="text-center">
-        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-16 h-16 text-black/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <p class="text-lg font-normal">No posts found for this category</p>
-        <p class="text-sm text-gray-400 mt-2">Try selecting a different filter</p>
+        <p class="text-sm text-black/40 mt-2">Try selecting a different filter</p>
       </div>
     </div>
 
@@ -69,12 +69,12 @@
             </div>
 
             <!-- Facebook Embed -->
-            <div v-else-if="post.platform === 'Facebook'" class="relative w-full bg-gray-100 flex items-center justify-center" style="min-height: 500px;">
+            <div v-else-if="post.platform === 'Facebook'" class="relative w-full bg-primary/10 flex items-center justify-center" style="min-height: 500px;">
               <div class="fb-post" :data-href="post.post_url" data-width="auto" data-show-text="true"></div>
             </div>
 
             <!-- Twitter (X) Embed -->
-            <div v-else-if="post.platform === 'Twitter (X)'" class="relative w-full bg-gray-50 p-4" style="min-height: 500px;">
+            <div v-else-if="post.platform === 'Twitter (X)'" class="relative w-full bg-primary/5 p-4" style="min-height: 500px;">
               <blockquote class="twitter-tweet" data-theme="light">
                 <a :href="post.post_url"></a>
               </blockquote>
@@ -93,13 +93,13 @@
             <!-- Fallback for Unknown Platform -->
             <div v-else class="relative w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
               <a :href="post.post_url" target="_blank" class="text-center p-8">
-                <div class="text-gray-400 mb-4">
+                <div class="text-black/40 mb-4">
                   <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                   </svg>
                 </div>
-                <p class="text-gray-600 font-normal">View Post</p>
-                <p class="text-sm text-gray-400 mt-2">{{ post.platform }}</p>
+                <p class="text-black/60 font-normal">View Post</p>
+                <p class="text-sm text-black/40 mt-2">{{ post.platform }}</p>
               </a>
             </div>
 

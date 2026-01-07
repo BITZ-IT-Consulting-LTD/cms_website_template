@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-secondary text-neutral-white no-print border-t-8 border-accent-orange" role="contentinfo">
+  <footer class="bg-secondary text-neutral-white no-print border-t-8 border-hotline" role="contentinfo">
     <!-- Main Footer Content -->
     <div class="container-custom py-16">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -56,10 +56,10 @@
             <a :href="`tel:${settings.hotline_number || '116'}`"
               class="block group focus:outline-none rounded-2xl p-2 -m-2 transition-all"
               aria-label="Call our toll free hotline: 116">
-              <span class="text-accent-orange font-bold text-xs uppercase tracking-[0.2em] block mb-1">Toll Free
+              <span class="text-hotline font-bold text-xs uppercase tracking-[0.2em] block mb-1">Toll Free
                 Helpline</span>
               <span
-                class="text-4xl font-bold group-hover:text-accent-orange transition-colors block text-neutral-white">
+                class="text-4xl font-bold group-hover:text-hotline transition-colors block text-neutral-white">
                 {{ settings.hotline_number || '116' }}
               </span>
             </a>

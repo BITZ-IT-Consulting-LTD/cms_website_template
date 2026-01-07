@@ -1,17 +1,9 @@
 <template>
   <div id="app" class="flex flex-col min-h-screen" :style="themeStyles">
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <AppHeader />
 
-    <!-- Quick Exit (P0 Safety Action) -->
-    <div class="fixed top-24 right-4 z-[60] lg:top-8 lg:right-8 transition-all duration-500">
-      <button @click="quickExit"
-        class="bg-emergency text-neutral-white px-4 py-2 lg:px-6 lg:py-3 rounded-full font-bold uppercase tracking-widest text-[10px] lg:text-xs shadow-2xl hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 border-2 border-white/20"
-        title="Immediately leave this site">
-        <span class="hidden md:inline">Quick Exit</span>
-        <XMarkIcon class="w-4 h-4" stroke-width="3" />
-      </button>
-    </div>
+
 
     <!-- Mobile Emergency FAB (P1 Reachability) -->
     <div class="fixed bottom-24 right-6 z-[60] lg:hidden">

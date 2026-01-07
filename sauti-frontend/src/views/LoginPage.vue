@@ -39,12 +39,12 @@
           </div>
 
           <div v-if="error"
-            class="bg-emergency/10 border-2 border-emergency/20 p-5 rounded-2xl flex items-center gap-4 text-emergency">
+            class="bg-emergency/10 border-2 border-emergency/20 p-6 rounded-2xl flex items-center gap-4 text-emergency">
             <ExclamationCircleIcon class="w-6 h-6 shrink-0" />
             <span class="font-bold text-xs uppercase tracking-widest">{{ error }}</span>
           </div>
 
-          <button type="submit" class="btn btn-primary w-full justify-center !py-5 shadow-xl shadow-primary/20"
+          <button type="submit" class="btn btn-primary w-full justify-center !py-6 shadow-xl shadow-primary/20"
             :disabled="loading">
             <span v-if="!loading" class="flex items-center gap-3">
               <ShieldCheckIcon class="w-6 h-6" />
@@ -60,7 +60,7 @@
 
       <!-- Footer Help -->
       <div class="mt-12 text-center">
-        <p class="text-sm font-bold text-secondary/40">
+        <p class="text-sm font-bold text-black/40">
           Trouble logging in? Contact the <span class="text-primary font-bold underline underline-offset-4">Systems
             Administrator</span>
         </p>

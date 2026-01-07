@@ -22,18 +22,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Official Network</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Backed by the **Ministry of Gender, Labour and Social
+              <p class="text-black font-bold text-lg">Official Network</p>
+              <p class="text-muted text-sm leading-relaxed">Backed by the **Ministry of Gender, Labour and Social
                 Development**.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">National Reach</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Connected to **over 50 NGOs** and international
+              <p class="text-black font-bold text-lg">National Reach</p>
+              <p class="text-muted text-sm leading-relaxed">Connected to **over 50 NGOs** and international
                 agencies.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Expert Support</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Collaborations with **UNICEF and local district
+              <p class="text-black font-bold text-lg">Expert Support</p>
+              <p class="text-muted text-sm leading-relaxed">Collaborations with **UNICEF and local district
                 leaders**.</p>
             </div>
           </div>
@@ -74,7 +74,7 @@
               class="w-20 h-20 bg-neutral-white border-2 border-neutral-offwhite rounded-2xl flex items-center justify-center mx-auto mb-6 text-neutral-offwhite opacity-50">
               <UserGroupIcon class="w-10 h-10" />
             </div>
-            <p class="campaign-header text-secondary/40 text-xl font-bold">No partners listed yet.</p>
+            <p class="campaign-header text-black/40 text-xl font-bold">No partners listed yet.</p>
           </div>
         </section>
 
@@ -83,7 +83,7 @@
           <div
             class="bg-primary/5 p-12 md:p-16 rounded-[4rem] border-2 border-primary/20 text-center max-w-4xl mx-auto">
             <h3 class="campaign-header text-3xl text-secondary mb-6">How We Work Together</h3>
-            <p class="text-xl font-bold text-secondary/60 mb-10 leading-relaxed">
+            <p class="text-xl font-bold text-muted mb-10 leading-relaxed">
               Interested in joining our mission to protect the children of Uganda? We are always looking for
               organizations
               that share our commitment.

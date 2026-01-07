@@ -16,17 +16,17 @@
 
       <!-- Message -->
       <h2 class="campaign-header text-4xl md:text-6xl text-secondary mb-6">Lost in the Sanctuary?</h2>
-      <p class="text-xl md:text-2xl font-bold text-secondary/50 max-w-2xl mx-auto leading-relaxed mb-16">
+      <p class="text-xl md:text-2xl font-bold text-black/50 max-w-2xl mx-auto leading-relaxed mb-16">
         The page you are looking for has been moved or does not exist in our current records. Let's get you back to
         safety.
       </p>
 
       <!-- Action -->
       <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-        <BaseCTA href="/" variant="primary" class="!px-12 !py-5 shadow-2xl">
+        <BaseCTA href="/" variant="primary" class="!px-12 !py-6 shadow-2xl">
           Return to Sanctuary
         </BaseCTA>
-        <BaseCTA href="/contact" variant="outline" class="!px-12 !py-5">
+        <BaseCTA href="/contact" variant="outline" class="!px-12 !py-6">
           Report a Problem
         </BaseCTA>
       </div>

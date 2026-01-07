@@ -54,7 +54,7 @@
                   </div>
                   <div class="flex-1">
                     <p class="font-bold text-secondary">WhatsApp</p>
-                    <p class="text-xs text-secondary">Chat with us</p>
+                    <p class="text-xs text-black">Chat with us</p>
                   </div>
                 </a>
 
@@ -70,7 +70,7 @@
                   </div>
                   <div class="flex-1">
                     <p class="font-bold text-secondary">U-Report</p>
-                    <p class="text-xs text-secondary">SMS reporting</p>
+                    <p class="text-xs text-black">SMS reporting</p>
                   </div>
                 </a>
 
@@ -87,7 +87,7 @@
                   </div>
                   <div class="flex-1">
                     <p class="font-bold text-secondary">Online Form</p>
-                    <p class="text-xs text-secondary">Submit report</p>
+                    <p class="text-xs text-black">Submit report</p>
                   </div>
                 </router-link>
 
@@ -102,7 +102,7 @@
                   </div>
                   <div class="flex-1">
                     <p class="font-bold text-secondary">Email</p>
-                    <p class="text-xs text-secondary">Send us message</p>
+                    <p class="text-xs text-black">Send us message</p>
                   </div>
                 </a>
               </div>

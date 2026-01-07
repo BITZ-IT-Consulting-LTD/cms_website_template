@@ -30,7 +30,7 @@
 
       <!-- Category Badge -->
       <div v-if="resource.category" class="absolute top-3 left-3">
-        <span class="inline-block px-3 py-1 text-xs font-bold bg-white text-secondary rounded-full shadow-md">
+        <span class="inline-block px-3 py-1 text-xs font-bold bg-white text-black rounded-full shadow-md">
           {{ resource.category.name }}
         </span>
       </div>
@@ -44,7 +44,7 @@
     </div>
 
     <!-- Content -->
-    <div class="p-5">
+    <div class="p-6">
       <!-- Title -->
       <h3 class="text-lg font-bold text-neutral-black mb-2 line-clamp-2 group-hover:text-primary transition-colors">
         {{ resource.title }}
@@ -56,7 +56,7 @@
       </p>
       [diff_block_end]
       <!-- Meta Information -->
-      <div class="flex items-center justify-between text-xs text-secondary/60 mb-4">
+      <div class="flex items-center justify-between text-xs text-muted mb-4">
         <!-- File Size -->
         <div v-if="resource.file_size" class="flex items-center space-x-1">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -92,7 +92,7 @@
       </a>
 
       <!-- Published Date -->
-      <div v-if="resource.published_at" class="mt-3 text-[10px] text-secondary/40 text-center font-bold">
+      <div v-if="resource.published_at" class="mt-3 text-[10px] text-black/40 text-center font-bold">
         Published: {{ formatDate(resource.published_at) }}
       </div>
     </div>

@@ -30,7 +30,7 @@
               <ol class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <li v-for="(step, idx) in [
                   { title: 'Share Your Story', text: 'Tell us as much as you can. You can remain completely anonymous.', color: 'primary' },
-                  { title: 'Encrypted Protection', text: 'Your data is locked and handled with extreme care by the MGLSD.', color: 'accent-orange' },
+                  { title: 'Encrypted Protection', text: 'Your data is locked and handled with extreme care by the MGLSD.', color: 'hotline' },
                   { title: 'Path to Safety', text: 'Our experts review and coordinate support for you immediately.', color: 'secondary-light' }
                 ]" :key="idx" class="flex flex-col gap-6">
                   <span
@@ -39,7 +39,7 @@
                   </span>
                   <div>
                     <h3 class="campaign-header text-lg text-secondary mb-2">{{ step.title }}</h3>
-                    <p class="text-secondary/60 text-sm font-bold leading-relaxed">{{ step.text }}</p>
+                    <p class="text-muted text-sm font-bold leading-relaxed">{{ step.text }}</p>
                   </div>
                 </li>
               </ol>
@@ -52,7 +52,7 @@
               class="w-12 h-12 bg-neutral-white rounded-2xl flex items-center justify-center text-secondary-light shrink-0 shadow-sm border border-secondary-light/20">
               <ShieldCheckIcon class="w-7 h-7" />
             </div>
-            <p class="text-secondary font-bold text-lg leading-relaxed pt-1">
+            <p class="text-black font-bold text-lg leading-relaxed pt-1">
               Your voice is safe with us. All information is kept <span
                 class="text-primary underline decoration-2 decoration-primary/20">strictly private</span>.
               We are government experts dedicated to your protection, and you have the right to remain <span
@@ -79,7 +79,7 @@
           <!-- Immediate Help Card -->
           <div class="bg-emergency/5 rounded-[3rem] p-10 shadow-sm">
             <h3 class="campaign-header text-xl text-secondary mb-4">Urgent Help?</h3>
-            <p class="text-secondary font-bold leading-relaxed opacity-70 mb-8">
+            <p class="text-black font-bold leading-relaxed opacity-70 mb-8">
               If someone is in immediate danger, do not wait. Use our priority channels for instant response.
             </p>
             <div class="space-y-4">
@@ -88,7 +88,7 @@
                 Call 116 Now
               </BaseCTA>
               <BaseCTA href="https://wa.me/256743889999" variant="outline"
-                class="w-full justify-center gap-3 !border-accent-orange !text-accent-orange hover:!bg-accent-orange hover:!text-neutral-white">
+                class="w-full justify-center gap-3 !border-hotline !text-hotline hover:!bg-hotline hover:!text-neutral-white">
                 <ChatBubbleLeftRightIcon class="w-5 h-5" />
                 WhatsApp Chat
               </BaseCTA>
@@ -109,8 +109,8 @@
                   <component :is="channel.icon" class="w-5 h-5" />
                 </div>
                 <div>
-                  <p class="campaign-header text-[10px] text-secondary/40 mb-1">{{ channel.label }}</p>
-                  <p class="text-secondary font-bold break-all">{{ channel.val }}</p>
+                  <p class="campaign-header text-[10px] text-black/40 mb-1">{{ channel.label }}</p>
+                  <p class="text-black font-bold break-all">{{ channel.val }}</p>
                 </div>
               </div>
             </div>

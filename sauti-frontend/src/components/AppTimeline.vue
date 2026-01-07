@@ -30,7 +30,7 @@
             :class="index % 2 !== 0 ? '-right-2 border-r-0 border-b-0' : '-left-2 border-r-0 border-b-0'"></div>
 
           <h3 class="mb-4 font-bold text-secondary text-2xl tracking-tight">{{ event.title }}</h3>
-          <p class="text-lg leading-relaxed text-secondary/70 font-bold">{{ event.description }}</p>
+          <p class="text-lg leading-relaxed text-black/70 font-bold">{{ event.description }}</p>
         </div>
       </div>
     </div>

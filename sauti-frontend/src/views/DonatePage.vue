@@ -19,12 +19,12 @@
             hand.
           </p>
           <div class="cta-group justify-center">
-            <BaseCTA href="#donate-options" variant="primary" class="!px-12 !py-5"
+            <BaseCTA href="#donate-options" variant="primary" class="!px-12 !py-6"
               @click="scrollToSection('donate-options')">
               Donate Now
             </BaseCTA>
             <BaseCTA href="/contact" variant="outline"
-              class="!px-12 !py-5 text-neutral-white border-neutral-white/20 hover:bg-neutral-white/10">
+              class="!px-12 !py-6 text-neutral-white border-neutral-white/20 hover:bg-neutral-white/10">
               Learn More
             </BaseCTA>
           </div>
@@ -38,13 +38,13 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           <div v-for="(stat, idx) in [
             { val: '1M+', label: 'Children Helped', color: 'text-primary' },
-            { val: '24/7', label: 'Support Always', color: 'text-accent-orange' },
+            { val: '24/7', label: 'Support Always', color: 'text-hotline' },
             { val: '116', label: 'Toll-Free Help', color: 'text-secondary-light' },
             { val: '15+', label: 'Years Of Impact', color: 'text-secondary-light' }
           ]" :key="idx"
             class="bg-neutral-white p-8 rounded-[3rem] border-2 border-neutral-offwhite text-center shadow-2xl transition-all duration-500 hover:border-primary">
             <div :class="['text-4xl md:text-5xl font-bold mb-2', stat.color]">{{ stat.val }}</div>
-            <div class="campaign-header text-[10px] text-secondary/40">{{ stat.label }}</div>
+            <div class="campaign-header text-[10px] text-black/40">{{ stat.label }}</div>
           </div>
         </div>
       </div>
@@ -60,18 +60,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">100% Direct Impact</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Every shilling powers **24/7 rescue operations** for
+              <p class="text-black font-bold text-lg">100% Direct Impact</p>
+              <p class="text-black/60 text-sm leading-relaxed">Every shilling powers **24/7 rescue operations** for
                 children.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Fully Transparent</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Official government receipts provided for **every
+              <p class="text-black font-bold text-lg">Fully Transparent</p>
+              <p class="text-black/60 text-sm leading-relaxed">Official government receipts provided for **every
                 contribution**.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Secure Channels</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Donations are handled through **authorized MGLSD
+              <p class="text-black font-bold text-lg">Secure Channels</p>
+              <p class="text-black/60 text-sm leading-relaxed">Donations are handled through **authorized MGLSD
                 accounts**.</p>
             </div>
           </div>
@@ -84,7 +84,7 @@
           <div class="container-custom">
             <div class="text-center mb-20">
               <h2 id="why-heading" class="campaign-header text-4xl text-secondary mb-6">How Your Gift Saves Lives</h2>
-              <p class="text-xl text-secondary max-w-2xl mx-auto font-bold opacity-70">
+              <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">
                 Every contribution directly funds the infrastructure that keeps children safe 24 hours a day.
               </p>
             </div>
@@ -93,14 +93,14 @@
               <div v-for="(reason, idx) in [
                 { title: 'Support Children', text: 'Help us provide 24/7 helpline services to vulnerable children across Uganda, offering them a safe voice when they need it most.', colorToken: 'primary', icon: UserGroupIcon },
                 { title: 'Enable Services', text: 'Your donation helps us maintain counseling, legal support, and referral services that save lives and protect vulnerable individuals.', colorToken: 'secondary-light', icon: ShieldCheckIcon },
-                { title: 'Expand Reach', text: 'Help us reach more communities and provide training and awareness programs that prevent abuse and protect children.', colorToken: 'accent-orange', icon: ShareIcon }
+                { title: 'Expand Reach', text: 'Help us reach more communities and provide training and awareness programs that prevent abuse and protect children.', colorToken: 'hotline', icon: ShareIcon }
               ]" :key="idx" class="card-base group text-center">
                 <div
                   :class="['inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-8 transition-transform group-hover:scale-110 shadow-lg', `bg-${reason.colorToken}/10 text-${reason.colorToken}`]">
                   <component :is="reason.icon" class="w-10 h-10" />
                 </div>
                 <h3 class="campaign-header text-2xl text-secondary mb-4">{{ reason.title }}</h3>
-                <p class="text-secondary/60 font-bold leading-relaxed">{{ reason.text }}</p>
+                <p class="text-black/60 font-bold leading-relaxed">{{ reason.text }}</p>
               </div>
             </div>
           </div>
@@ -111,7 +111,7 @@
           <div class="container-custom">
             <div class="text-center mb-20">
               <h2 id="options-heading" class="campaign-header text-4xl text-secondary mb-6">Secure Ways to Help</h2>
-              <p class="text-xl text-secondary max-w-2xl mx-auto font-bold opacity-70">
+              <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">
                 Choose the method most convenient for you. All contributions directly support our programs.
               </p>
             </div>
@@ -130,11 +130,11 @@
                 <div class="space-y-6 mb-12">
                   <div v-for="info in [
                     { label: 'Bank Name', val: 'Ministry of Gender, Labour & Social Development', colorToken: 'primary' },
-                    { label: 'Account Name', val: 'Sauti 116 Helpline', colorToken: 'accent-orange' },
+                    { label: 'Account Name', val: 'Sauti 116 Helpline', colorToken: 'hotline' },
                     { label: 'Account Number', val: 'Confidential - Call 116 to verify', colorToken: 'primary' }
                   ]" :key="info.label" class="p-6 bg-neutral-offwhite/30 rounded-2xl border-l-[12px] shadow-sm"
                     :class="`border-${info.colorToken}`">
-                    <div class="campaign-header text-[10px] text-secondary/40 mb-2">{{ info.label }}</div>
+                    <div class="campaign-header text-[10px] text-black/40 mb-2">{{ info.label }}</div>
                     <div class="text-lg font-bold text-secondary">{{ info.val }}</div>
                   </div>
                 </div>
@@ -146,10 +146,10 @@
               </div>
 
               <!-- Mobile Card -->
-              <div class="bg-neutral-white p-10 md:p-16 rounded-[4rem] border-2 border-accent-orange shadow-sm">
+              <div class="bg-neutral-white p-10 md:p-16 rounded-[4rem] border-2 border-hotline shadow-sm">
                 <div class="flex items-center mb-12">
                   <div
-                    class="w-16 h-16 bg-accent-orange rounded-2xl flex items-center justify-center text-neutral-white shadow-xl mr-6">
+                    class="w-16 h-16 bg-hotline rounded-2xl flex items-center justify-center text-neutral-white shadow-xl mr-6">
                     <DevicePhoneMobileIcon class="w-8 h-8" />
                   </div>
                   <h3 class="campaign-header text-3xl text-secondary">Mobile Money</h3>

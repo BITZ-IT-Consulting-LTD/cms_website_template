@@ -77,12 +77,8 @@ const routes = [
     name: 'blog',
     component: () => import('@/views/BlogPage.vue'),
     meta: {
-      title: 'Blogs',
-      description: 'Latest stories, updates, and insights from Sauti',
-    },
-    meta: {
-      title: 'Blogs',
-      description: 'Latest stories, updates, and insights from Sauti',
+      title: 'Updates',
+      description: 'Official updates, impact reports, and protection news from Sauti 116',
     },
   },
   {

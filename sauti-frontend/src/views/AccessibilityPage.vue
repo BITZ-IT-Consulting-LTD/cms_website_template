@@ -25,17 +25,17 @@
             <ul class="space-y-4">
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Many Ways to Reach Us</strong>: Call 116, WhatsApp, or SMS.
+                <p class="text-black font-bold"><strong>Many Ways to Reach Us</strong>: Call 116, WhatsApp, or SMS.
                 </p>
               </li>
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Inclusive Design</strong>: Built for screen readers and high
+                <p class="text-black font-bold"><strong>Inclusive Design</strong>: Built for screen readers and high
                   contrast.</p>
               </li>
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Local Languages</strong>: Support in English, Luganda, and
+                <p class="text-black font-bold"><strong>Local Languages</strong>: Support in English, Luganda, and
                   Swahili.</p>
               </li>
             </ul>
@@ -47,7 +47,7 @@
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               1. How We Build for Everyone
             </h2>
-            <p class="text-secondary/70 font-bold text-xl leading-relaxed">
+            <p class="text-black/70 font-bold text-xl leading-relaxed">
               Sauti 116 helpline is committed to ensuring digital accessibility for all users, including those
               with disabilities. We strive to provide an accessible and inclusive experience for everyone who
               needs our services, adhering to the highest standards of universal design.
@@ -57,17 +57,17 @@
           <!-- Section 2 -->
           <section aria-labelledby="features-heading">
             <h2 id="features-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
-              <span class="w-1.5 h-8 bg-accent-orange rounded-full"></span>
+              <span class="w-1.5 h-8 bg-hotline rounded-full"></span>
               2. Tools We Provide for You
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div v-for="feature in accessibilityFeatures" :key="feature"
-                class="flex items-center gap-4 p-5 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-accent-orange transition-all group">
+                class="flex items-center gap-4 p-6 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-hotline transition-all group">
                 <div
-                  class="w-10 h-10 bg-accent-orange/10 rounded-xl flex items-center justify-center text-accent-orange shadow-sm group-hover:scale-110 transition-transform">
+                  class="w-10 h-10 bg-hotline/10 rounded-xl flex items-center justify-center text-hotline shadow-sm group-hover:scale-110 transition-transform">
                   <CheckIcon class="w-6 h-6" />
                 </div>
-                <span class="text-secondary font-bold text-sm uppercase tracking-wide">{{ feature }}</span>
+                <span class="text-black font-bold text-sm uppercase tracking-wide">{{ feature }}</span>
               </div>
             </div>
           </section>
@@ -79,12 +79,12 @@
               3. Alternative Communication Paths
             </h2>
             <div class="bg-neutral-offwhite/30 p-10 rounded-[2.5rem] border-2 border-neutral-offwhite space-y-6">
-              <div v-for="method in helplineMethods" :key="method" class="flex items-start gap-5">
+              <div v-for="method in helplineMethods" :key="method" class="flex items-start gap-6">
                 <div
                   class="w-10 h-10 rounded-xl bg-secondary-light/10 flex-shrink-0 flex items-center justify-center text-secondary-light mt-1">
                   <CheckCircleIcon class="w-6 h-6" />
                 </div>
-                <span class="text-secondary font-bold leading-tight text-lg pt-1">{{ method }}</span>
+                <span class="text-black font-bold leading-tight text-lg pt-1">{{ method }}</span>
               </div>
             </div>
           </section>
@@ -96,13 +96,13 @@
               Standards Compliance
             </h2>
             <div class="bg-neutral-white border-2 border-primary p-10 rounded-[3rem] shadow-sm">
-              <p class="text-secondary font-bold text-lg leading-relaxed mb-10">
+              <p class="text-black font-bold text-lg leading-relaxed mb-10">
                 We strictly aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards.
               </p>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div v-for="standard in standards" :key="standard.title" class="space-y-3">
                   <h4 class="campaign-header text-primary text-[10px]">{{ standard.title }}</h4>
-                  <p class="text-secondary font-bold text-xl leading-snug">{{ standard.desc }}</p>
+                  <p class="text-black font-bold text-xl leading-snug">{{ standard.desc }}</p>
                 </div>
               </div>
             </div>
@@ -112,7 +112,7 @@
           <section aria-labelledby="feedback-heading">
             <h2 id="feedback-heading" class="campaign-header text-3xl text-secondary mb-6">Feedback and Support
             </h2>
-            <p class="text-secondary/70 font-bold text-lg mb-10 leading-relaxed max-w-3xl">
+            <p class="text-black/70 font-bold text-lg mb-10 leading-relaxed max-w-3xl">
               We welcome feedback on the accessibility of our services. If you encounter any barriers, please contact
               our accessibility coordinator.
             </p>
@@ -125,8 +125,8 @@
                     <EnvelopeIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="campaign-header text-[10px] text-secondary/50 mb-1">Coordinator Email</p>
-                    <p class="text-secondary font-bold break-all">accessibility@sauti.gov.ug</p>
+                    <p class="campaign-header text-[10px] text-black/50 mb-1">Coordinator Email</p>
+                    <p class="text-black font-bold break-all">accessibility@sauti.gov.ug</p>
                   </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -135,8 +135,8 @@
                     <PhoneIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="campaign-header text-[10px] text-secondary/50 mb-1">Helpline</p>
-                    <p class="text-secondary font-bold text-2xl">116</p>
+                    <p class="campaign-header text-[10px] text-black/50 mb-1">Helpline</p>
+                    <p class="text-black font-bold text-2xl">116</p>
                   </div>
                 </div>
               </div>
@@ -146,8 +146,8 @@
                   <MapPinIcon class="w-7 h-7" />
                 </div>
                 <div>
-                  <p class="campaign-header text-[10px] text-secondary/50 mb-1">Location</p>
-                  <p class="text-secondary font-bold leading-tight">MGLSD, Plot 2,<br />Simbamanyo House, Kampala
+                  <p class="campaign-header text-[10px] text-black/50 mb-1">Location</p>
+                  <p class="text-black font-bold leading-tight">MGLSD, Plot 2,<br />Simbamanyo House, Kampala
                   </p>
                 </div>
               </div>

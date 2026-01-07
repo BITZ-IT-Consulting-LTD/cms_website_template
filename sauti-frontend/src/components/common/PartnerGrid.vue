@@ -1,25 +1,27 @@
 <template>
   <div v-if="partners && partners.length > 0"
-    class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+    class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-12 items-center">
 
-    <div v-for="partner in partners" :key="partner.id" class="group flex flex-col items-center text-center space-y-4">
+    <div v-for="partner in partners" :key="partner.id" class="group flex flex-col items-center text-center space-y-3">
 
-      <!-- Partner Logo with Link (Subdued Hierarchy) -->
+      <!-- Partner Logo with Link (Professional Treatment) -->
       <a v-if="partner.logo && partner.website_url" :href="partner.website_url" target="_blank"
-        rel="noopener noreferrer"
-        class="block w-full h-16 p-2 bg-transparent opacity-40 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-500">
-        <img :src="partner.logo" :alt="partner.name" class="w-full h-full object-contain" />
+        rel="noopener noreferrer" :aria-label="`Visit ${partner.name} website`"
+        class="block w-full h-20 md:h-24 p-3 bg-white rounded-xl border border-primary/10 hover:border-primary/30 hover:shadow-md transition-all duration-300">
+        <img :src="partner.logo" :alt="`${partner.name} logo`"
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
       </a>
 
       <!-- Partner Logo Only (No Link) -->
-      <div v-else-if="partner.logo" class="w-full h-16 p-2 bg-transparent opacity-30 grayscale">
-        <img :src="partner.logo" :alt="partner.name" class="w-full h-full object-contain" />
+      <div v-else-if="partner.logo"
+        class="w-full h-20 md:h-24 p-3 bg-white rounded-xl border border-primary/5 opacity-90">
+        <img :src="partner.logo" :alt="`${partner.name} logo`" class="w-full h-full object-contain" />
       </div>
 
-      <!-- Partner Name (Small & Light) -->
+      <!-- Partner Name (Legible & Accessible) -->
       <div class="px-2">
         <p
-          class="text-[10px] font-bold uppercase tracking-widest text-secondary/40 group-hover:text-primary/60 transition-colors leading-tight">
+          class="text-xs md:text-sm font-semibold text-black/70 group-hover:text-primary transition-colors leading-tight">
           {{ partner.name }}
         </p>
       </div>

@@ -26,17 +26,17 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
             <div class="space-y-4">
               <p class="text-primary font-black text-xs uppercase tracking-widest">Always Listening</p>
-              <p class="text-secondary font-bold text-lg leading-snug">Open 24/7, every day of the year, nationwide
+              <p class="text-black font-bold text-lg leading-snug">Open 24/7, every day of the year, nationwide
                 across Uganda.</p>
             </div>
             <div class="space-y-4">
               <p class="text-primary font-black text-xs uppercase tracking-widest">Always Private</p>
-              <p class="text-secondary font-bold text-lg leading-snug">Your calls and reports are strictly confidential
+              <p class="text-black font-bold text-lg leading-snug">Your calls and reports are strictly confidential
                 by law.</p>
             </div>
             <div class="space-y-4">
               <p class="text-primary font-black text-xs uppercase tracking-widest">Always Official</p>
-              <p class="text-secondary font-bold text-lg leading-snug">Managed by government protection experts (MGLSD).
+              <p class="text-black font-bold text-lg leading-snug">Managed by government protection experts (MGLSD).
               </p>
             </div>
           </div>
@@ -133,7 +133,7 @@
         <div class="container-custom">
           <div class="text-center mb-24 max-w-3xl mx-auto">
             <h2 id="values-heading" class="mb-6">The Principles That <span class="text-primary">Guide Us</span></h2>
-            <p class="text-xl font-bold text-secondary/60">
+            <p class="text-xl font-bold text-black/60">
               Clear legibility and trust are our priority. We operate under these six non-negotiable pillars of
               protection.
             </p>
@@ -150,7 +150,7 @@
                 <component :is="getIconComponent(value.icon)" class="w-8 h-8 text-primary" />
               </div>
               <h3 class="campaign-header text-2xl text-secondary mb-4">{{ value.title }}</h3>
-              <p class="text-lg text-secondary/70 leading-relaxed font-bold">{{ value.description }}</p>
+              <p class="text-lg text-black/70 leading-relaxed font-bold">{{ value.description }}</p>
             </div>
           </div>
         </div>
@@ -162,7 +162,7 @@
           <div class="text-center mb-20">
             <h2 id="history-heading" class="campaign-header text-4xl text-secondary mb-6">Years of Dedicated Protection
             </h2>
-            <p class="text-xl text-secondary max-w-2xl mx-auto font-bold opacity-70">
+            <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">
               Milestones that define our commitment to child protection.
             </p>
           </div>
@@ -180,7 +180,7 @@
         <div class="container-custom">
           <div class="text-center mb-20">
             <h2 id="partners-heading" class="campaign-header text-4xl text-secondary mb-4">Trusted Partners</h2>
-            <p class="text-xl text-secondary max-w-3xl mx-auto font-bold opacity-70">
+            <p class="text-xl text-black max-w-3xl mx-auto font-bold opacity-70">
               We work alongside leading organizations to deliver comprehensive support.
             </p>
           </div>

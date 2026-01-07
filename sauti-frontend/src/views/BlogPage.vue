@@ -19,17 +19,17 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="space-y-2">
-              <p class="text-secondary font-bold">Community Reach</p>
-              <p class="text-secondary/60 text-sm">Active protection programs in **all districts** across Uganda.</p>
+              <p class="text-black font-bold">Community Reach</p>
+              <p class="text-black/60 text-sm">Active protection programs in **all districts** across Uganda.</p>
             </div>
             <div class="space-y-2">
-              <p class="text-secondary font-bold">Verified Reports</p>
-              <p class="text-secondary/60 text-sm">Over **1,000 cases** resolved through official channels this month.
+              <p class="text-black font-bold">Verified Reports</p>
+              <p class="text-black/60 text-sm">Over **1,000 cases** resolved through official channels this month.
               </p>
             </div>
             <div class="space-y-2">
-              <p class="text-secondary font-bold">Emergency 116</p>
-              <p class="text-secondary/60 text-sm">Response times for critical reports maintained at **under 5
+              <p class="text-black font-bold">Emergency 116</p>
+              <p class="text-black/60 text-sm">Response times for critical reports maintained at **under 5
                 minutes**.</p>
             </div>
           </div>
@@ -61,7 +61,7 @@
 
         <div class="flex flex-wrap justify-center gap-4 mt-8 pt-8 border-t border-secondary/5">
           <button v-for="type in ['All', 'Articles']" :key="type" @click="setType(type)" :class="[
-            'px-10 py-3 rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-all border-none',
+            'px-8 py-3 rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-all border-none',
             filters.type === type
               ? 'bg-secondary text-neutral-white shadow-xl'
               : 'bg-neutral-white text-secondary shadow-sm hover:shadow-md'
@@ -109,7 +109,7 @@
           <ExclamationCircleIcon class="w-12 h-12 text-primary" />
         </div>
         <h3 class="text-3xl font-bold text-secondary mb-4">{{ blogNoResults }}</h3>
-        <p class="text-xl text-secondary/50 font-bold max-w-2xl mx-auto">{{ blogNoResultsSubtitle }}</p>
+        <p class="text-xl text-black/50 font-bold max-w-2xl mx-auto">{{ blogNoResultsSubtitle }}</p>
         <button @click="filters.search = ''; filters.category = ''; fetchFilteredPosts()" class="btn btn-outline mt-10">
           Clear all filters
         </button>

@@ -7,7 +7,7 @@
         <div
           class="inline-flex items-center gap-3 mb-10 bg-secondary/5 px-6 py-2 rounded-full border border-secondary/10">
           <CheckBadgeIcon class="w-4 h-4 text-secondary-light" />
-          <span class="text-[10px] font-black uppercase tracking-[0.2em] text-secondary">Official Government
+          <span class="text-[10px] font-black uppercase tracking-[0.2em] text-black">Official Government
             Service</span>
         </div>
 
@@ -18,17 +18,17 @@
         <!-- Quick Summary for Your Peace of Mind (Flash Pattern) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 text-left">
           <div class="bg-neutral-white p-6 rounded-3xl border border-primary/5 shadow-sm">
-            <p class="text-secondary font-black text-sm uppercase tracking-widest mb-2">Toll-Free</p>
+            <p class="text-black font-black text-sm uppercase tracking-widest mb-2">Toll-Free</p>
             <p class="text-black text-sm leading-relaxed text-[13px]">The call is 100% free from any phone network in
               Uganda.</p>
           </div>
           <div class="bg-neutral-white p-6 rounded-3xl border border-primary/5 shadow-sm">
-            <p class="text-secondary font-black text-sm uppercase tracking-widest mb-2">Private</p>
+            <p class="text-black font-black text-sm uppercase tracking-widest mb-2">Private</p>
             <p class="text-black text-sm leading-relaxed text-[13px]">No record of this call will appear on your monthly
               phone bill.</p>
           </div>
           <div class="bg-neutral-white p-6 rounded-3xl border border-primary/5 shadow-sm">
-            <p class="text-secondary font-black text-sm uppercase tracking-widest mb-2">Expert Care</p>
+            <p class="text-black font-black text-sm uppercase tracking-widest mb-2">Expert Care</p>
             <p class="text-black text-sm leading-relaxed text-[13px]">You will speak directly with a trained protection
               counselor.</p>
           </div>
@@ -48,7 +48,7 @@
               </div>
             </div>
           </BaseCTA>
-          <p class="mt-6 text-sm font-black text-secondary/40 uppercase tracking-[0.2em]">Available 24/7 Nationwide</p>
+          <p class="mt-6 text-sm font-black text-black/40 uppercase tracking-[0.2em]">Available 24/7 Nationwide</p>
         </div>
       </div>
     </header>
@@ -59,7 +59,7 @@
         <div class="lg:col-span-12 xl:col-span-7 space-y-16">
           <div class="max-w-2xl">
             <h2 class="mb-4">Your Path to <span class="text-primary">Expert Support</span></h2>
-            <p class="text-xl font-bold text-secondary/60">Choose the channel that feels safest for you. All messages
+            <p class="text-xl font-bold text-black/60">Choose the channel that feels safest for you. All messages
               are encrypted and private.</p>
           </div>
 
@@ -67,7 +67,7 @@
             <a v-for="contact in nonEmergencyContacts" :key="contact.id" :href="getLink(contact)"
               :target="contact.type === 'location' ? '_blank' : '_self'"
               class="bg-neutral-white p-10 rounded-[2.5rem] border border-primary/5 hover:border-primary/20 hover:shadow-xl transition-all duration-500 group flex flex-col items-start relative overflow-hidden cursor-pointer">
-              <div class="mb-8 p-5 rounded-2xl bg-primary/5 group-hover:bg-primary/10 transition-colors">
+              <div class="mb-8 p-6 rounded-2xl bg-primary/5 group-hover:bg-primary/10 transition-colors">
                 <component :is="getIcon(contact)" class="w-10 h-10 text-primary" />
               </div>
               <h3 class="mb-3">{{ contact.name }}</h3>
@@ -88,7 +88,7 @@
             <div>
               <h4 class="font-black text-xs uppercase tracking-[0.2em] text-secondary mb-2">Legal Mandate & Governance
               </h4>
-              <p class="text-sm text-secondary/70 leading-relaxed font-bold">
+              <p class="text-sm text-black/70 leading-relaxed font-bold">
                 Operated under the exclusive mandate of the **Ministry of Gender, Labour and Social Development**. All
                 interventions are regulated, strictly confidential, and provided at no cost to the public.
               </p>
@@ -102,10 +102,10 @@
             <div class="mb-8 p-6 bg-accent-yellow/10 rounded-2xl border-l-4 border-accent-yellow">
               <div class="flex items-center gap-3 mb-4">
                 <ShieldCheckIcon class="w-6 h-6 text-primary" aria-hidden="true" />
-                <span class="text-xs font-bold uppercase tracking-widest text-secondary">Secure & Private Message</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-black">Secure & Private Message</span>
               </div>
               <h2 class="text-secondary mb-2">Share Your Question</h2>
-              <p class="text-secondary/60 text-sm font-bold leading-relaxed">
+              <p class="text-black/60 text-sm font-bold leading-relaxed">
                 Everything you write here is encrypted and read only by our core protection team.
                 <span class="text-hotline block mt-2 font-black uppercase tracking-widest text-[10px]">For immediate
                   danger, please call 116.</span>
@@ -114,19 +114,19 @@
 
             <form v-if="!feedbackSubmitted" @submit.prevent="submitFeedback" class="space-y-6">
               <div>
-                <label for="name" class="block text-xs font-bold uppercase text-secondary mb-2 tracking-wide">Name
+                <label for="name" class="block text-xs font-bold uppercase text-black mb-2 tracking-wide">Name
                   (Optional)</label>
                 <input v-model="feedbackForm.name" id="name" type="text" placeholder="Your name or initials"
                   class="w-full bg-neutral-offwhite border-2 border-transparent focus:border-primary focus:bg-neutral-white rounded-xl py-3 px-4 font-bold text-secondary outline-none transition-all" />
               </div>
               <div>
-                <label for="email" class="block text-xs font-bold uppercase text-secondary mb-2 tracking-wide">Contact
+                <label for="email" class="block text-xs font-bold uppercase text-black mb-2 tracking-wide">Contact
                   Address</label>
                 <input v-model="feedbackForm.email" id="email" type="email" placeholder="email@example.com"
                   class="w-full bg-neutral-offwhite border-2 border-transparent focus:border-primary focus:bg-neutral-white rounded-xl py-3 px-4 font-bold text-secondary outline-none transition-all" />
               </div>
               <div>
-                <label for="message" class="block text-xs font-bold uppercase text-secondary mb-2 tracking-wide">Message
+                <label for="message" class="block text-xs font-bold uppercase text-black mb-2 tracking-wide">Message
                   <span class="text-emergency">*</span></label>
                 <textarea v-model="feedbackForm.message" id="message" required placeholder="How can we help?"
                   class="w-full h-32 bg-neutral-offwhite border-2 border-transparent focus:border-primary focus:bg-neutral-white rounded-xl py-3 px-4 font-bold text-secondary outline-none transition-all resize-none"></textarea>
@@ -141,7 +141,7 @@
             <div v-else class="text-center py-12">
               <CheckBadgeIcon class="w-16 h-16 text-secondary-light mx-auto mb-6 opacity-30" />
               <h3 class="font-bold text-2xl text-secondary mb-2">Message Delivered</h3>
-              <p class="text-secondary/60 text-sm mb-8 font-normal">Your message has been securely sent to our team.</p>
+              <p class="text-black/60 text-sm mb-8 font-normal">Your message has been securely sent to our team.</p>
               <button @click="resetFeedbackForm" class="text-primary font-bold text-sm">Send another</button>
             </div>
           </div>

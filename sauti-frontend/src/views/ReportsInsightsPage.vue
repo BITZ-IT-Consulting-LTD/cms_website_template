@@ -23,18 +23,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Case Volume</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Over **5,000 cases** processed this year with a **95%
+              <p class="text-black font-bold text-lg">Case Volume</p>
+              <p class="text-black/60 text-sm leading-relaxed">Over **5,000 cases** processed this year with a **95%
                 response rate**.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Leading Need</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">**Child Neglect** accounts for nearly **50% of all
+              <p class="text-black font-bold text-lg">Leading Need</p>
+              <p class="text-black/60 text-sm leading-relaxed">**Child Neglect** accounts for nearly **50% of all
                 reports** nationwide.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Regional Focus</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">The **Central Region** shows the highest engagement
+              <p class="text-black font-bold text-lg">Regional Focus</p>
+              <p class="text-black/60 text-sm leading-relaxed">The **Central Region** shows the highest engagement
                 with **Sauti 116 services**.</p>
             </div>
           </div>
@@ -83,7 +83,7 @@
 
             <!-- Date range placeholder -->
             <div
-              class="mt-12 p-8 bg-neutral-offwhite/30 rounded-[2.5rem] border-2 border-dashed border-primary flex flex-col items-center justify-center text-secondary/50 text-xs font-bold uppercase tracking-[0.2em] gap-3">
+              class="mt-12 p-8 bg-neutral-offwhite/30 rounded-[2.5rem] border-2 border-dashed border-primary flex flex-col items-center justify-center text-black/50 text-xs font-bold uppercase tracking-[0.2em] gap-3">
               <CalendarDaysIcon class="w-6 h-6 text-primary" />
               {{ reportsInsightsDateRangePlaceholder }}
             </div>
@@ -102,7 +102,7 @@
               <PieChart :labels="categoryLabels" :values="categoryValues" />
             </div>
             <div class="mt-12 p-8 bg-neutral-offwhite/30 rounded-3xl border-2 border-neutral-offwhite">
-              <p class="campaign-header text-[10px] text-secondary/40 mb-6 font-bold uppercase tracking-widest">{{
+              <p class="campaign-header text-[10px] text-black/40 mb-6 font-bold uppercase tracking-widest">{{
                 reportsInsightsKeyInsights }}</p>
               <ul class="space-y-4 font-bold text-lg text-secondary">
                 <li class="flex items-center gap-4">
@@ -112,7 +112,7 @@
                   <div class="w-3 h-3 rounded-full bg-primary"></div> {{ reportsInsightsPhysicalViolenceStat }}
                 </li>
                 <li class="flex items-center gap-4">
-                  <div class="w-3 h-3 rounded-full bg-accent-orange"></div> {{ reportsInsightsSexualViolenceStat }}
+                  <div class="w-3 h-3 rounded-full bg-hotline"></div> {{ reportsInsightsSexualViolenceStat }}
                 </li>
                 <li class="flex items-center gap-4">
                   <div class="w-3 h-3 rounded-full bg-secondary"></div> {{ reportsInsightsEconomicViolenceStat }}
@@ -127,7 +127,7 @@
               <div class="w-2 h-8 bg-primary rounded-full"></div>
               {{ reportsInsightsSummaryTitle || 'What the Data Tells Us' }}
             </h3>
-            <div class="space-y-8 text-secondary/70 leading-relaxed font-bold text-lg">
+            <div class="space-y-8 text-black/70 leading-relaxed font-bold text-lg">
               <p>Child Neglect remains the **highest reported category**, accounting for **48.1% of all cases**. This
                 reflects the critical need for child protection services.</p>
               <p>Physical Violence follows at **17.0% (817 cases)**, while Sexual Violence represents **14.7% (595
@@ -141,7 +141,7 @@
           <div class="card-base group">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
               <h3 class="campaign-header text-2xl text-secondary flex items-center gap-4">
-                <div class="w-2 h-8 bg-accent-orange rounded-full"></div>
+                <div class="w-2 h-8 bg-hotline rounded-full"></div>
                 {{ reportsInsightsCasesPerRegion }}
               </h3>
               <div class="pill bg-primary/10 text-primary text-[10px]">
@@ -159,7 +159,7 @@
               <div class="w-2 h-8 bg-secondary-light rounded-full"></div>
               {{ reportsInsightsRegionalTrends || 'Where Help is Needed Most' }}
             </h3>
-            <div class="space-y-8 text-secondary/70 leading-relaxed font-bold text-lg">
+            <div class="space-y-8 text-black/70 leading-relaxed font-bold text-lg">
               <p>{{ reportsInsightsRegionalTrendsParagraph1 }}</p>
               <p>{{ reportsInsightsRegionalTrendsParagraph2 }}</p>
               <p>{{ reportsInsightsRegionalTrendsParagraph3 }}</p>
@@ -178,9 +178,9 @@
           </div>
 
           <!-- Gender Breakdown -->
-          <div class="card-base lg:col-span-2 group border-accent-orange/30">
+          <div class="card-base lg:col-span-2 group border-hotline/30">
             <h3 class="campaign-header text-2xl text-secondary mb-10 flex items-center gap-4">
-              <div class="w-2 h-8 bg-accent-orange rounded-full"></div>
+              <div class="w-2 h-8 bg-hotline rounded-full"></div>
               {{ reportsInsightsCaseCategoriesPerGender }}
             </h3>
             <div class="h-[500px]">
@@ -231,7 +231,7 @@
     primary: settingsStore.settings.primary_color || '#2B4C7E',
     secondary: settingsStore.settings.secondary_color || '#023047',
     'secondary-light': settingsStore.settings.secondary_light_color || '#8ECAE6',
-    'accent-orange': settingsStore.settings.accent_orange_color || '#FB8500',
+    'hotline': settingsStore.settings.accent_orange_color || '#FB8500',
     'accent-yellow': settingsStore.settings.accent_yellow_color || '#FFB703',
     'emergency': settingsStore.settings.emergency_color || '#D00000',
     'neutral-white': '#FFFFFF',
@@ -316,7 +316,7 @@
           backgroundColor: [
             brand_colors.value['primary'],
             brand_colors.value['secondary-light'],
-            brand_colors.value['accent-orange'],
+            brand_colors.value['hotline'],
             brand_colors.value['secondary'],
             brand_colors.value['accent-yellow'],
             brand_colors.value['neutral-offwhite']
@@ -355,7 +355,7 @@
           backgroundColor: [
             brand_colors.value['primary'],
             brand_colors.value['secondary-light'],
-            brand_colors.value['accent-orange'],
+            brand_colors.value['hotline'],
             brand_colors.value['secondary']
           ][idx % 4],
           borderRadius: 4
@@ -388,7 +388,7 @@
           backgroundColor: [
             brand_colors.value['primary'],
             brand_colors.value['secondary-light'],
-            brand_colors.value['accent-orange'],
+            brand_colors.value['hotline'],
             brand_colors.value['secondary'],
             brand_colors.value['secondary'] // using secondary for the 5th item
           ][idx % 5],

@@ -14,7 +14,7 @@
         <div class="relative h-full container-custom flex flex-col justify-end pb-16 md:pb-24">
           <!-- Category Pill -->
           <div v-if="post.category" class="mb-8">
-            <span class="pill bg-accent-orange text-neutral-white text-[10px] shadow-xl">
+            <span class="pill bg-hotline text-neutral-white text-[10px] shadow-xl">
               {{ post.category.name }}
             </span>
           </div>
@@ -89,7 +89,7 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
               <div class="text-center md:text-left">
                 <h3 class="campaign-header text-2xl text-secondary mb-3">Share this article</h3>
-                <p class="text-lg font-bold text-secondary/50">Help spread awareness about child protection in
+                <p class="text-lg font-bold text-black/50">Help spread awareness about child protection in
                   Uganda.</p>
               </div>
 
@@ -123,11 +123,11 @@
               {{ getAuthorInitial() }}
             </div>
             <div class="flex-1">
-              <p class="campaign-header text-[10px] text-secondary/40 mb-3">Written By</p>
+              <p class="campaign-header text-[10px] text-black/40 mb-3">Written By</p>
               <h4 class="campaign-header text-2xl text-secondary mb-4">
                 {{ post.author?.username || post.author_name || 'Sauti Uganda Team' }}
               </h4>
-              <p class="text-lg font-bold text-secondary/60 leading-relaxed">
+              <p class="text-lg font-bold text-black/60 leading-relaxed">
                 Contributing writer at Sauti 116 Helpline, dedicated to raising awareness about child protection and
                 safety across Uganda.
               </p>
@@ -169,7 +169,7 @@
                   class="campaign-header text-xl text-secondary mb-4 leading-tight group-hover:text-primary transition-colors line-clamp-2">
                   {{ related.title }}
                 </h3>
-                <p class="text-base font-bold text-secondary/50 mb-8 line-clamp-2">
+                <p class="text-base font-bold text-black/50 mb-8 line-clamp-2">
                   {{ related.excerpt }}
                 </p>
                 <div class="flex items-center justify-between pt-6 border-t-2 border-neutral-offwhite">
@@ -186,7 +186,7 @@
 
           <div v-else
             class="text-center py-20 bg-neutral-white rounded-[3rem] border-2 border-dashed border-neutral-offwhite">
-            <p class="campaign-header text-secondary/30">No related articles found</p>
+            <p class="campaign-header text-black/30">No related articles found</p>
           </div>
         </div>
       </section>
@@ -201,7 +201,7 @@
           <DocumentTextIcon class="w-12 h-12" />
         </div>
         <h2 class="campaign-header text-4xl text-secondary mb-6">Article Not Found</h2>
-        <p class="text-xl font-bold text-secondary/50 mb-12">The article you're looking for doesn't exist or has
+        <p class="text-xl font-bold text-black/50 mb-12">The article you're looking for doesn't exist or has
           been removed from our records.</p>
         <BaseCTA href="/blogs" variant="primary" class="inline-flex items-center gap-4 !px-12">
           <ArrowLeftIcon class="w-5 h-5" />
@@ -370,7 +370,7 @@
   }
 
   :deep(.prose-sauti blockquote) {
-    @apply border-l-8 border-accent-orange bg-neutral-offwhite/30 p-12 rounded-r-[3rem] italic font-bold text-2xl my-16 border-2 border-neutral-offwhite;
+    @apply border-l-8 border-hotline bg-neutral-offwhite/30 p-12 rounded-r-[3rem] italic font-bold text-2xl my-16 border-2 border-neutral-offwhite;
   }
 
   :deep(.prose-sauti img) {

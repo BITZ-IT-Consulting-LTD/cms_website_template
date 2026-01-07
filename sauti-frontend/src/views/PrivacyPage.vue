@@ -25,17 +25,17 @@
             <ul class="space-y-4">
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>Your number is hidden</strong>: Calls to 116 will not show
+                <p class="text-black font-bold"><strong>Your number is hidden</strong>: Calls to 116 will not show
                   on your phone bill.</p>
               </li>
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>You can stay anonymous</strong>: We respect your right to
+                <p class="text-black font-bold"><strong>You can stay anonymous</strong>: We respect your right to
                   share only what you want.</p>
               </li>
               <li class="flex items-start gap-4">
                 <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                <p class="text-secondary font-bold"><strong>We are government experts</strong>: Your story is locked and
+                <p class="text-black font-bold"><strong>We are government experts</strong>: Your story is locked and
                   read only by protection teams.</p>
               </li>
             </ul>
@@ -47,17 +47,17 @@
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               1. Information We Use to Help You
             </h2>
-            <p class="text-secondary/80 font-bold text-lg leading-relaxed mb-8">
+            <p class="text-black/80 font-bold text-lg leading-relaxed mb-8">
               We collect information you provide directly to us, such as when you:
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div v-for="item in collectionMethods" :key="item"
-                class="flex items-center gap-4 p-5 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-primary transition-all">
+                class="flex items-center gap-4 p-6 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-primary transition-all">
                 <div class="w-2.5 h-2.5 bg-primary rounded-full"></div>
                 <span class="text-secondary font-bold text-sm uppercase tracking-wide">{{ item }}</span>
               </div>
             </div>
-            <p class="text-secondary/60 font-bold italic text-base">
+            <p class="text-black/60 font-bold italic text-base">
               This may include your name, contact information, location, and details about the situation you're
               reporting.
             </p>
@@ -66,7 +66,7 @@
           <!-- Section 2 -->
           <section aria-labelledby="usage-heading">
             <h2 id="usage-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
-              <span class="w-1.5 h-8 bg-accent-orange rounded-full"></span>
+              <span class="w-1.5 h-8 bg-hotline rounded-full"></span>
               2. How We Protect Your Story
             </h2>
             <div class="space-y-6">
@@ -87,7 +87,7 @@
               3. When We Share Your Information
             </h2>
             <div class="bg-neutral-offwhite/30 p-10 rounded-[2.5rem] border-2 border-neutral-offwhite">
-              <p class="text-secondary font-bold text-lg leading-relaxed mb-8">
+              <p class="text-black font-bold text-lg leading-relaxed mb-8">
                 We do not share your personal information except in the following circumstances:
               </p>
               <ul class="space-y-4">
@@ -106,7 +106,7 @@
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               4. Our Security Commitment
             </h2>
-            <p class="text-secondary/80 font-bold text-lg leading-relaxed mb-10">
+            <p class="text-black/80 font-bold text-lg leading-relaxed mb-10">
               We implement appropriate security measures to protect your information against unauthorized access,
               alteration, disclosure, or destruction.
             </p>
@@ -114,7 +114,7 @@
               <div v-for="sec in security" :key="sec.title"
                 class="p-8 bg-neutral-white border-2 border-neutral-offwhite rounded-3xl shadow-sm hover:border-primary transition-colors">
                 <h4 class="campaign-header text-primary text-xs mb-3">{{ sec.title }}</h4>
-                <p class="text-secondary font-bold">{{ sec.desc }}</p>
+                <p class="text-black font-bold">{{ sec.desc }}</p>
               </div>
             </div>
           </section>
@@ -134,7 +134,7 @@
           <!-- Section 6 -->
           <section aria-labelledby="contact-heading">
             <h2 id="contact-heading" class="campaign-header text-3xl text-secondary mb-8">6. Contact Us</h2>
-            <p class="text-secondary/80 font-bold mb-10 text-lg leading-relaxed">
+            <p class="text-black/80 font-bold mb-10 text-lg leading-relaxed">
               If you have questions about this Privacy Policy or our data practices, please contact us:
             </p>
             <div
@@ -146,8 +146,8 @@
                     <EnvelopeIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="campaign-header text-[10px] text-secondary/50 mb-1">Privacy Admin</p>
-                    <p class="text-secondary font-bold break-all">privacy@sauti.gov.ug</p>
+                    <p class="campaign-header text-[10px] text-black/50 mb-1">Privacy Admin</p>
+                    <p class="text-black font-bold break-all">privacy@sauti.gov.ug</p>
                   </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -156,8 +156,8 @@
                     <PhoneIcon class="w-7 h-7" />
                   </div>
                   <div>
-                    <p class="campaign-header text-[10px] text-secondary/50 mb-1">Helpline</p>
-                    <p class="text-secondary font-bold text-2xl">116</p>
+                    <p class="campaign-header text-[10px] text-black/50 mb-1">Helpline</p>
+                    <p class="text-black font-bold text-2xl">116</p>
                   </div>
                 </div>
               </div>
@@ -167,8 +167,8 @@
                   <MapPinIcon class="w-7 h-7" />
                 </div>
                 <div>
-                  <p class="campaign-header text-[10px] text-secondary/50 mb-1">Location</p>
-                  <p class="text-secondary font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
+                  <p class="campaign-header text-[10px] text-black/50 mb-1">Location</p>
+                  <p class="text-black font-bold leading-tight">MGLSD Headquarters,<br />Kampala, Uganda</p>
                 </div>
               </div>
             </div>
@@ -177,7 +177,7 @@
           <!-- Section 7 -->
           <section>
             <h2 class="campaign-header text-2xl text-secondary mb-6">7. Changes to This Policy</h2>
-            <p class="text-secondary/60 font-bold leading-relaxed">
+            <p class="text-black/60 font-bold leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of any changes by posting
               the new Privacy Policy on this page and updating the "Last updated" date.
             </p>

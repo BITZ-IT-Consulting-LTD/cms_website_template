@@ -22,7 +22,7 @@
             </svg>
           </div>
           <div
-            class="message-bubble bot bg-neutral-white text-secondary p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-primary">
+            class="message-bubble bot bg-neutral-white text-secondary p-6 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-primary">
             <p class="font-bold text-primary mb-1 uppercase tracking-wider text-xs">Always Safe & Confidential</p>
             <p class="text-base leading-relaxed font-normal">We are here to listen and help. Everything you share here
               is protected by secure encryption and kept strictly private. You can stop at any time.</p>
@@ -41,7 +41,7 @@
             </svg>
           </div>
           <div
-            class="message-bubble bot bg-neutral-white text-secondary p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-primary">
+            class="message-bubble bot bg-neutral-white text-secondary p-6 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] border-2 border-primary">
             <p v-html="message.text" class="text-base leading-relaxed font-semibold"></p>
           </div>
         </div>
@@ -49,7 +49,7 @@
         <!-- User Message -->
         <div v-if="message.type === 'user'" class="user-message flex justify-end mb-4 animate-fade-in-up">
           <div
-            class="message-bubble user bg-primary text-neutral-white p-5 rounded-2xl rounded-tr-none shadow-md max-w-[85%]">
+            class="message-bubble user bg-primary text-neutral-white p-6 rounded-2xl rounded-tr-none shadow-md max-w-[85%]">
             <p class="text-base leading-relaxed font-bold">{{ message.text }}</p>
           </div>
         </div>
@@ -64,19 +64,19 @@
             </svg>
           </div>
           <div class="message-bubble bot w-full max-w-[90%]">
-            <p class="mb-6 font-bold text-secondary text-lg ml-1" v-html="message.question"></p>
+            <p class="mb-6 font-bold text-black text-lg ml-1" v-html="message.question"></p>
             <div class="grid gap-3">
               <button v-for="option in message.options" :key="option.value"
                 @click="selectOption(option.value, option.label)"
-                class="option-button group relative overflow-hidden bg-neutral-white hover:bg-primary/5 border-2 border-neutral-offwhite hover:border-primary p-5 rounded-xl transition-all duration-300 text-left flex items-center shadow-sm">
+                class="option-button group relative overflow-hidden bg-neutral-white hover:bg-primary/5 border-2 border-neutral-offwhite hover:border-primary p-6 rounded-xl transition-all duration-300 text-left flex items-center shadow-sm">
                 <span
                   class="w-12 h-12 flex items-center justify-center mr-5 rounded-lg bg-neutral-white border-2 border-primary group-hover:bg-primary group-hover:text-neutral-white text-primary text-xl transition-all duration-300">
                   {{ option.icon || '•' }}
                 </span>
                 <div class="flex-1">
-                  <span class="font-bold text-secondary text-base group-hover:text-primary block transition-colors">{{
+                  <span class="font-bold text-black text-base group-hover:text-primary block transition-colors">{{
                     option.label }}</span>
-                  <span v-if="option.description" class="text-xs text-secondary/80 mt-1 block font-bold">{{
+                  <span v-if="option.description" class="text-xs text-black/80 mt-1 block font-bold">{{
                     option.description }}</span>
                 </div>
                 <svg
@@ -120,10 +120,10 @@
             class="message-bubble bot bg-neutral-white border-4 border-secondary w-full p-6 rounded-2xl rounded-tl-none shadow-sm">
             <h3 class="font-bold text-secondary text-xl mb-2">Report Securely Filed</h3>
             <div class="my-6 p-6 bg-neutral-white rounded-xl border-2 border-secondary shadow-inner text-center">
-              <p class="text-[10px] text-secondary uppercase tracking-widest font-bold mb-2">Reference Number</p>
-              <p class="text-3xl font-mono font-bold text-secondary tracking-widest">{{ referenceNumber }}</p>
+              <p class="text-[10px] text-black uppercase tracking-widest font-bold mb-2">Reference Number</p>
+              <p class="text-3xl font-mono font-bold text-black tracking-widest">{{ referenceNumber }}</p>
             </div>
-            <p class="text-secondary font-bold">Please save this number. Our protection team will review this case
+            <p class="text-black font-bold">Please save this number. Our protection team will review this case
               shortly.</p>
 
             <!-- What Happens Next Roadmap (Trauma-Informed Closure) -->
@@ -136,11 +136,11 @@
                   { title: 'Safety Referral', desc: 'Direct support or intervention is launched.' }
                 ]" :key="idx" class="flex gap-4 items-start text-left">
                   <div class="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                    <span class="text-[10px] font-bold text-secondary">{{ idx + 1 }}</span>
+                    <span class="text-[10px] font-bold text-black">{{ idx + 1 }}</span>
                   </div>
                   <div>
-                    <p class="text-[11px] font-bold text-secondary uppercase leading-none mb-1">{{ step.title }}</p>
-                    <p class="text-[10px] text-secondary/60 leading-relaxed font-bold">{{ step.desc }}</p>
+                    <p class="text-[11px] font-bold text-black uppercase leading-none mb-1">{{ step.title }}</p>
+                    <p class="text-[10px] text-black/60 leading-relaxed font-bold">{{ step.desc }}</p>
                   </div>
                 </div>
               </div>
@@ -160,11 +160,11 @@
       <form @submit.prevent="handleInputSubmit">
         <div class="flex gap-4">
           <input v-model="inputValue" :type="currentInputType" :placeholder="inputPlaceholder" :disabled="isTyping"
-            class="flex-1 px-6 py-5 border-2 border-primary rounded-2xl focus:border-secondary outline-none transition text-secondary font-bold placeholder:text-primary text-lg"
+            class="flex-1 px-6 py-6 border-2 border-primary rounded-2xl focus:border-secondary outline-none transition text-black font-bold placeholder:text-primary text-lg"
             ref="inputRef" autofocus :aria-label="inputPlaceholder" aria-describedby="validation-msg"
             id="chat-input-field" />
           <button type="submit"
-            class="px-10 py-5 bg-primary text-neutral-white rounded-2xl font-bold text-lg hover:brightness-95 disabled:bg-neutral-offwhite disabled:text-secondary/30 transition shadow-xl"
+            class="px-8 py-6 bg-primary text-neutral-white rounded-2xl font-bold text-lg hover:brightness-95 disabled:bg-neutral-offwhite disabled:text-black/30 transition shadow-xl"
             :aria-label="inputValue.trim() ? 'Send message' : 'Skip this part'">
             {{ inputValue.trim() ? 'SEND' : 'SKIP' }}
           </button>
@@ -184,13 +184,13 @@
     <div v-if="!submitted && currentStepType === 'textarea'"
       class="chat-input bg-neutral-white rounded-3xl shadow-2xl p-8 border-4 border-primary transition-all duration-300">
       <form @submit.prevent="handleInputSubmit">
-        <label class="block text-lg font-bold text-secondary mb-4">{{ inputPlaceholder }}</label>
+        <label class="block text-lg font-bold text-black mb-4">{{ inputPlaceholder }}</label>
         <textarea v-model="inputValue" placeholder="Start typing here..." :disabled="isTyping"
-          class="w-full px-6 py-5 border-2 border-primary rounded-2xl focus:border-secondary outline-none transition mb-6 resize-none h-48 text-secondary font-bold placeholder:text-primary text-lg"
+          class="w-full px-6 py-6 border-2 border-primary rounded-2xl focus:border-secondary outline-none transition mb-6 resize-none h-48 text-black font-bold placeholder:text-primary text-lg"
           ref="inputRef"></textarea>
         <div class="flex justify-end">
           <button type="submit"
-            class="px-12 py-5 bg-primary text-neutral-white rounded-2xl font-bold text-lg hover:bg-secondary shadow-xl transition-all">
+            class="px-12 py-6 bg-primary text-neutral-white rounded-2xl font-bold text-lg hover:bg-secondary shadow-xl transition-all">
             {{ inputValue.trim() ? 'Next Step' : 'Skip this part' }}
           </button>
         </div>
@@ -281,11 +281,30 @@
 
         case STEPS.INTAKE_CATEGORY:
           askOptions('To help us get you the right kind of support, which of these best describes your situation?', [
-            { value: 'CHILD_PROTECTION', label: 'Help for a child', icon: '🚸' },
-            { value: 'GBV', label: 'Safety for an adult', icon: '🛡️' },
-            { value: 'PSEA', label: 'Report harm or exploitation', icon: '⚠️' },
-            { value: 'MIGRANT', label: 'Help for a traveler', icon: '🚶' },
-            { value: 'OTHER', label: 'Something else', icon: '❓' }
+            {
+              value: 'CHILD_PROTECTION',
+              label: 'Violence Against Children',
+              icon: '🚸',
+              description: 'Report abuse, neglect, or violence against anyone under 18.'
+            },
+            {
+              value: 'GBV',
+              label: 'Gender Based Violence',
+              icon: '🛡️',
+              description: 'Report domestic violence, sexual assault, or gender-based harm.'
+            },
+            {
+              value: 'PSEA',
+              label: 'Prevention of Sexual Exploitation',
+              icon: '⚠️',
+              description: 'Report sexual exploitation or abuse by aid workers or officials.'
+            },
+            {
+              value: 'MIGRANT',
+              label: 'Migrant Workers',
+              icon: '🚶',
+              description: 'Report labor issues, trafficking, or safety concerns abroad.'
+            }
           ])
           break
 
@@ -322,7 +341,7 @@
           askInput('What is your age? This helps us choose the best counselor for you.', 'Your age', 'input')
           break
         case STEPS.AFFECTED_SELF_GENDER:
-          askOptions('What is your gender?', [
+          askOptions('What is your sex?', [
             { value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }
           ])
           break
@@ -335,7 +354,7 @@
           askInput('What is their age?', 'Their age', 'input')
           break
         case STEPS.AFFECTED_OTHER_GENDER:
-          askOptions('What is their gender?', [
+          askOptions('What is their sex?', [
             { value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }
           ])
           break
@@ -355,7 +374,7 @@
           askInput('What is their age?', 'Age', 'input')
           break
         case STEPS.MULTIPLE_GENDER:
-          askOptions('What is their gender?', [{ value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }])
+          askOptions('What is their sex?', [{ value: 'MALE', label: 'Male' }, { value: 'FEMALE', label: 'Female' }])
           break
         case STEPS.MULTIPLE_IS_CHILD:
           askOptions('Is this person under 18?', [{ value: 'yes', label: 'Yes (Child)' }, { value: 'no', label: 'No (Adult)' }])
@@ -556,7 +575,7 @@
         <p class="text-sm"><strong>Reporter:</strong> ${formData.value.reporter.name || 'Anonymous'}</p>
         <p class="text-sm"><strong>People Concerned:</strong> ${personCount > 0 ? personCount + ' person(s) listed' : 'As described'}</p>
         <p class="text-sm"><strong>Location:</strong> ${formData.value.location || 'General'}</p>
-        <p class="text-sm text-secondary/60 italic mt-2">Your information is sent through a secure server.</p>
+        <p class="text-sm text-black/60 italic mt-2">Your information is sent through a secure server.</p>
       </div>
     `
     addBotMessage(html)
@@ -598,10 +617,10 @@
           <span class="w-2 h-2 bg-emergency rounded-full animate-pulse"></span>
           System Connection Note
         </p>
-        <p class="text-secondary font-bold text-base leading-relaxed mb-4">
+        <p class="text-black font-bold text-base leading-relaxed mb-4">
           Our server is taking a deep breath. Your story is important and your data is safe.
         </p>
-        <p class="text-sm text-secondary/70 font-bold">
+        <p class="text-sm text-black/70 font-bold">
           Please wait a moment and try again, or call <span class="text-emergency">116</span> directly for immediate support.
         </p>
       </div>

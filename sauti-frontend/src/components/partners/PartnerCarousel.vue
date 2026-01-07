@@ -3,8 +3,8 @@
   <div class="space-y-6">
     <!-- Section Header -->
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-gray-900 mb-3">Our Partners</h2>
-      <p class="text-gray-600 max-w-2xl mx-auto">
+      <h2 class="text-3xl font-bold text-secondary mb-3">Our Partners</h2>
+      <p class="text-black/60 max-w-2xl mx-auto">
         Working together with these amazing organizations to protect and support vulnerable communities.
       </p>
     </div>
@@ -20,12 +20,12 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="partners.length === 0" class="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
-      <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div v-else-if="partners.length === 0" class="bg-primary/5 border border-primary/15 rounded-lg p-12 text-center">
+      <svg class="w-16 h-16 mx-auto text-black/40 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
       </svg>
-      <h3 class="text-lg font-semibold text-gray-700 mb-2">No Partners Yet</h3>
-      <p class="text-gray-500">Check back soon for partner organizations.</p>
+      <h3 class="text-lg font-semibold text-black/70 mb-2">No Partners Yet</h3>
+      <p class="text-black/50">Check back soon for partner organizations.</p>
     </div>
 
     <!-- Partners Carousel -->
@@ -48,10 +48,10 @@
         <button
           v-if="partners.length > 1"
           @click="previousSlide"
-          class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors z-10"
+          class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary/5 transition-colors z-10"
           aria-label="Previous partner"
         >
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -59,10 +59,10 @@
         <button
           v-if="partners.length > 1"
           @click="nextSlide"
-          class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors z-10"
+          class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary/5 transition-colors z-10"
           aria-label="Next partner"
         >
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -110,7 +110,7 @@
               class="max-h-20 w-auto mx-auto grayscale group-hover:grayscale-0 transition-all"
               @error="handleImageError"
             />
-            <p v-else class="text-sm font-semibold text-gray-700 text-center">
+            <p v-else class="text-sm font-semibold text-black/70 text-center">
               {{ partner.name }}
             </p>
           </a>
@@ -122,7 +122,7 @@
               class="max-h-20 w-auto mx-auto"
               @error="handleImageError"
             />
-            <p v-else class="text-sm font-semibold text-gray-700 text-center">
+            <p v-else class="text-sm font-semibold text-black/70 text-center">
               {{ partner.name }}
             </p>
           </div>
@@ -138,7 +138,7 @@
               'px-4 py-2 text-sm font-normal rounded-l-lg border',
               displayMode === 'carousel'
                 ? 'bg-primary text-white border-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                : 'bg-white text-black/70 border-primary/20 hover:bg-primary/5'
             ]"
           >
             <svg class="w-5 h-5 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -152,7 +152,7 @@
               'px-4 py-2 text-sm font-normal rounded-r-lg border-t border-r border-b',
               displayMode === 'grid'
                 ? 'bg-primary text-white border-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                : 'bg-white text-black/70 border-primary/20 hover:bg-primary/5'
             ]"
           >
             <svg class="w-5 h-5 inline mr-1" fill="currentColor" viewBox="0 0 20 20">

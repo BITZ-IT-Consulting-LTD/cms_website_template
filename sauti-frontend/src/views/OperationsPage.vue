@@ -23,18 +23,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Real-Time Response</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Our call center in Kampala is <strong>active
+              <p class="text-black font-bold text-lg">Real-Time Response</p>
+              <p class="text-muted text-sm leading-relaxed">Our call center in Kampala is <strong>active
                   24/7</strong> with certified counselors.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Multi-Channel Intake</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">We process reports from <strong>Phone, WhatsApp, SMS,
+              <p class="text-black font-bold text-lg">Multi-Channel Intake</p>
+              <p class="text-muted text-sm leading-relaxed">We process reports from <strong>Phone, WhatsApp, SMS,
                   and Walk-ins</strong>.</p>
             </div>
             <div class="space-y-4">
-              <p class="text-secondary font-bold text-lg">Expert Oversight</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Every case is reviewed and verified by <strong>MGLSD
+              <p class="text-black font-bold text-lg">Expert Oversight</p>
+              <p class="text-muted text-sm leading-relaxed">Every case is reviewed and verified by <strong>MGLSD
                   protection leads</strong>.</p>
             </div>
           </div>
@@ -64,7 +64,7 @@
             <div class="text-center mb-20">
               <h2 id="path-heading" class="campaign-header text-4xl text-secondary mb-6">{{ operationsPathTitle ||
                 'Your Path to Resolution' }}</h2>
-              <p class="text-xl text-secondary max-w-2xl mx-auto font-bold opacity-70">{{ operationsPathSubtitle ||
+              <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{ operationsPathSubtitle ||
                 `Our streamlined process from report to resolution, ensuring every case receives the attention and
                 action
                 it
@@ -78,13 +78,13 @@
                 style="width: 75%; margin-left: 12.5%;"></div>
 
               <div
-                class="absolute top-10 left-0 h-1.5 bg-gradient-to-r from-primary via-accent-orange via-secondary-light to-primary rounded-full progress-bar transition-all"
+                class="absolute top-10 left-0 h-1.5 bg-gradient-to-r from-primary via-hotline via-secondary-light to-primary rounded-full progress-bar transition-all"
                 style="width: 75%; margin-left: 12.5%;"></div>
 
               <div class="grid grid-cols-4 gap-4 relative">
                 <div v-for="(step, idx) in [
                   { title: operationsStep1Title, text: operationsStep1Text, tag: operationsStep1Tag, colorToken: 'primary', icon: PhoneIcon },
-                  { title: operationsStep2Title, text: operationsStep2Text, tag: operationsStep2Tag, colorToken: 'accent-orange', icon: UserGroupIcon },
+                  { title: operationsStep2Title, text: operationsStep2Text, tag: operationsStep2Tag, colorToken: 'hotline', icon: UserGroupIcon },
                   { title: operationsStep3Title, text: operationsStep3Text, tag: operationsStep3Tag, colorToken: 'secondary-light', icon: DocumentTextIcon },
                   { title: operationsStep4Title, text: operationsStep4Text, tag: operationsStep4Tag, colorToken: 'primary', icon: CheckBadgeIcon }
                 ]" :key="idx" class="flex flex-col items-center group">
@@ -98,7 +98,7 @@
                       <component :is="step.icon" class="w-7 h-7" />
                     </div>
                     <h4 class="campaign-header text-xl text-secondary mb-4">{{ step.title }}</h4>
-                    <p class="text-secondary/70 font-bold text-sm leading-relaxed mb-6">{{ step.text }}</p>
+                    <p class="text-black/70 font-bold text-sm leading-relaxed mb-6">{{ step.text }}</p>
                     <div
                       :class="['pill text-[10px] font-bold uppercase tracking-widest', `bg-${step.colorToken}/10 text-${step.colorToken}`]">
                       {{ step.tag }}
@@ -112,7 +112,7 @@
             <div class="lg:hidden space-y-6">
               <div v-for="(step, idx) in [
                 { title: operationsStep1Title, text: operationsStep1Text, tag: operationsStep1Tag, colorToken: 'primary', icon: PhoneIcon },
-                { title: operationsStep2Title, text: operationsStep2Text, tag: operationsStep2Tag, colorToken: 'accent-orange', icon: UserGroupIcon },
+                { title: operationsStep2Title, text: operationsStep2Text, tag: operationsStep2Tag, colorToken: 'hotline', icon: UserGroupIcon },
                 { title: operationsStep3Title, text: operationsStep3Text, tag: operationsStep3Tag, colorToken: 'secondary-light', icon: DocumentTextIcon },
                 { title: operationsStep4Title, text: operationsStep4Text, tag: operationsStep4Tag, colorToken: 'primary', icon: CheckBadgeIcon }
               ]" :key="idx" class="relative pl-12">
@@ -129,7 +129,7 @@
                     </div>
                     <h4 class="campaign-header text-xl text-secondary leading-none">{{ step.title }}</h4>
                   </div>
-                  <p class="text-secondary/70 font-bold text-sm leading-relaxed mb-6">{{ step.text }}</p>
+                  <p class="text-black/70 font-bold text-sm leading-relaxed mb-6">{{ step.text }}</p>
                   <div
                     :class="['pill inline-flex text-[10px] font-bold uppercase tracking-widest', `bg-${step.colorToken}/10 text-${step.colorToken}`]">
                     {{ step.tag }}
@@ -153,7 +153,7 @@
                 </div>
                 <div class="space-y-4 relative">
                   <div class="hidden md:block absolute -left-6 top-1/2 -translate-y-1/2 w-px h-16 bg-white/10"></div>
-                  <div class="text-6xl md:text-8xl font-bold text-accent-orange">{{ operationsMetrics2Title }}</div>
+                  <div class="text-6xl md:text-8xl font-bold text-hotline">{{ operationsMetrics2Title }}</div>
                   <div class="campaign-header text-lg text-neutral-white/60">{{ operationsMetrics2Text }}</div>
                   <div class="hidden md:block absolute -right-6 top-1/2 -translate-y-1/2 w-px h-16 bg-white/10"></div>
                 </div>
@@ -174,18 +174,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div v-for="(h, idx) in [
                 { title: operationsHighlight1Title, text: operationsHighlight1Text, colorToken: 'primary' },
-                { title: operationsHighlight2Title, text: operationsHighlight2Text, colorToken: 'accent-orange' },
+                { title: operationsHighlight2Title, text: operationsHighlight2Text, colorToken: 'hotline' },
                 { title: operationsHighlight3Title, text: operationsHighlight3Text, colorToken: 'secondary-light' },
-                { title: operationsHighlight4Title, text: operationsHighlight4Text, colorToken: 'accent-orange' },
+                { title: operationsHighlight4Title, text: operationsHighlight4Text, colorToken: 'hotline' },
                 { title: operationsHighlight5Title, text: operationsHighlight5Text, colorToken: 'primary' },
-                { title: operationsHighlight6Title, text: operationsHighlight6Text, colorToken: 'accent-orange' }
+                { title: operationsHighlight6Title, text: operationsHighlight6Text, colorToken: 'hotline' }
               ]" :key="idx" class="card-base group hover:border-secondary">
                 <div
                   :class="['w-12 h-12 rounded-2xl mb-6 flex items-center justify-center text-neutral-white shadow-xl group-hover:scale-110 transition-transform', `bg-${h.colorToken}`]">
                   <CheckIcon class="w-6 h-6" stroke-width="3" />
                 </div>
                 <h4 class="campaign-header text-2xl text-secondary mb-4 leading-tight">{{ h.title }}</h4>
-                <p class="text-secondary/60 font-bold text-lg leading-relaxed">{{ h.text }}</p>
+                <p class="text-muted font-bold text-lg leading-relaxed">{{ h.text }}</p>
               </div>
             </div>
           </div>

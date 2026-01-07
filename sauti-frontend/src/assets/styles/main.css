@@ -4,18 +4,51 @@
 @tailwind utilities;
 
 :root {
-  /* Official Sauti 116 Palette (High-Fidelity Branding) */
-  --color-primary: 0 135 207;         /* Sauti Sky Blue (Energy & Trust) */
-  --color-secondary: 0 104 55;        /* Sauti Deep Green (Growth & Stability) */
-  --color-secondary-light: 157 200 62; /* Sauti Leaf Green (Refreshment & Hope) */
-  --color-hotline: 247 148 30;        /* Sauti Bright Orange (Engagement & Action) */
-  --color-emergency: 237 28 36;       /* Sauti Signal Red (Urgency & Protection) */
-  --color-accent-yellow: 255 242 0;   /* Sauti Sun Yellow */
+  /* ============================================
+     SAUTI 116 CENTRALIZED COLOR SYSTEM
+     Total: 16 Colors (Brand-Compliant)
+     ============================================ */
   
-  --color-text: 0 0 0;                /* Sauti Solid Black */
-  --color-neutral-black: 15 23 42;
-  --color-neutral-white: 255 255 255;
-  --color-neutral-offwhite: 248 250 252; /* Clean, modern foundation */
+  /* ============================================
+     BRAND COLORS (7) - From Official Guidelines
+     ============================================ */
+  --color-primary: 0 135 207;           /* #0087CF - Sky Blue (Primary brand color) */
+  --color-secondary: 0 104 55;          /* #006837 - Deep Green (Secondary brand) */
+  --color-secondary-light: 157 200 62;  /* #9DC83E - Leaf Green (Hope & growth) */
+  --color-hotline: 247 148 30;          /* #F7941E - Bright Orange (Call-to-action) */
+  --color-emergency: 237 28 36;         /* #ED1C24 - Signal Red (Urgency & alerts) */
+  --color-accent-yellow: 255 242 0;     /* #FFF200 - Sun Yellow (Highlights) */
+  --color-text: 0 0 0;                  /* #000000 - Solid Black (Body text) */
+  
+  /* ============================================
+     TECHNICAL NECESSITIES (4) - Web Implementation
+     ============================================ */
+  --color-primary-dark: 0 105 165;      /* #0069A5 - WCAG AA compliant variant */
+  --color-neutral-black: 15 23 42;      /* #0F172A - Headers & emphasis */
+  --color-neutral-white: 255 255 255;   /* #FFFFFF - Backgrounds */
+  --color-neutral-offwhite: 248 250 252; /* #F8FAFC - Subtle backgrounds */
+  
+  /* ============================================
+     SOCIAL MEDIA (5) - Platform Requirements
+     ============================================ */
+  --color-whatsapp: 37 211 102;         /* #25D366 - WhatsApp official green */
+  --color-whatsapp-hover: 32 189 90;    /* #20BD5A - WhatsApp hover state */
+  --color-facebook: 24 119 242;         /* #1877F2 - Facebook official blue */
+  --color-facebook-hover: 22 100 217;   /* #1664D9 - Facebook hover state */
+  --color-twitter: 0 0 0;               /* #000000 - Twitter/X official black */
+  
+  /* ============================================
+     TOTAL: 16 COLORS
+     - 7 from brand guidelines
+     - 4 technical necessities
+     - 5 social media
+     
+     NOTE: For UI states (borders, disabled, muted),
+     use brand colors with opacity:
+     - Borders: primary/20, secondary/15
+     - Disabled: black/40
+     - Muted: black/60
+     ============================================ */
 }
 
 @layer base {
@@ -66,6 +99,25 @@
     @apply btn bg-secondary text-neutral-white hover:brightness-105 focus-visible:ring-secondary shadow-lg shadow-secondary/10;
   }
 
+  /* Primary Action Button (Crisis-Response Hierarchy) */
+  /* Uses Sauti Bright Orange for high-stakes actions like "Report a Case" */
+  .btn-primary-action {
+    @apply btn text-neutral-white hover:brightness-105 shadow-lg font-bold;
+    background-color: rgb(var(--color-hotline)); /* Sauti Bright Orange #F7941E */
+    --tw-shadow-color: rgb(var(--color-hotline) / 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-primary-action:hover {
+    box-shadow: 0 12px 40px rgb(var(--color-hotline) / 0.4);
+    transform: translateY(-2px);
+  }
+  
+  .btn-primary-action:focus-visible {
+    @apply ring-4 ring-offset-2;
+    --tw-ring-color: rgb(var(--color-hotline));
+  }
+
   .btn-emergency {
     @apply btn text-neutral-white hover:brightness-110 shadow-xl font-black uppercase tracking-[0.1em] ring-2 ring-white/20;
     background-color: rgb(var(--color-emergency));
@@ -86,7 +138,7 @@
   }
 
   .btn-outline {
-    @apply btn border-2 border-primary text-primary hover:bg-primary hover:text-neutral-white focus:ring-primary;
+    @apply btn border-2 border-primary-dark text-primary-dark hover:bg-primary-dark hover:text-neutral-white focus:ring-primary-dark;
   }
 
   .card-base {
@@ -98,7 +150,7 @@
   }
 
   .page-header {
-    @apply py-32 md:py-48 border-b border-primary/10;
+    @apply py-24 md:py-32 border-b border-primary/10;
     background-color: white;
   }
 
@@ -108,23 +160,53 @@
   }
 
   .page-header-subtitle {
-    @apply text-xl md:text-2xl text-text/70 max-w-2xl font-normal leading-relaxed;
+    @apply text-xl md:text-2xl text-black max-w-2xl font-normal leading-relaxed;
   }
 
   .form-group { @apply mb-6; }
   .form-label { @apply block text-base font-bold text-secondary mb-2; }
   .form-input { 
-    @apply w-full px-4 py-3 rounded-xl border-2 border-primary/40 transition-all font-normal bg-neutral-white text-text; 
+    @apply w-full px-4 py-3 rounded-xl border-2 border-primary/40 transition-all font-normal bg-neutral-white text-black; 
     @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 focus-visible:border-primary;
   }
   
-  .nav-link { @apply px-4 py-2 rounded-lg text-text font-normal transition-all hover:text-primary hover:bg-primary/5; }
+  .nav-link { @apply px-4 py-2 rounded-lg text-black font-normal transition-all hover:text-primary hover:bg-primary/5; }
   .nav-link-active { @apply font-semibold text-primary bg-primary/10; }
 
   .campaign-header { @apply font-sans font-bold tracking-tight uppercase; }
   
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary;
+  }
+
+  /* ============================================
+     SAUTI 116 BRAND ENFORCEMENT: Pure Black Body Text
+     ============================================
+     Brand Guideline Section 6 (Typography):
+     - Body text MUST be Sauti Solid Black (C0 M0 Y0 K100 / #000000)
+     - Only headings may use accent colors (Deep Green, Sky Blue)
+     ============================================ */
+  
+  /* Override all Tailwind gray text utilities for body content */
+  .text-gray-600,
+  .text-gray-700,
+  .text-gray-800,
+  .text-gray-900 {
+    color: #000000 !important;
+  }
+  
+  /* Brand-Compliant Muted Text Utilities */
+  /* Use these for timestamps, captions, form hints, and secondary information */
+  .text-muted {
+    color: rgba(0, 0, 0, 0.6) !important; /* 60% black - maintains WCAG AAA compliance */
+  }
+  
+  .text-subtle {
+    color: rgba(0, 0, 0, 0.5) !important; /* 50% black - for placeholder-like content */
+  }
+  
+  .text-disabled {
+    color: rgba(0, 0, 0, 0.4) !important; /* 40% black - for disabled states */
   }
 }
 

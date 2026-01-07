@@ -29,18 +29,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="space-y-2">
-              <p class="text-secondary font-bold text-lg">Your Rights</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Watch short guides on **legal protection and child
+              <p class="text-black font-bold text-lg">Your Rights</p>
+              <p class="text-black/60 text-sm leading-relaxed">Watch short guides on **legal protection and child
                 rights**.</p>
             </div>
             <div class="space-y-2">
-              <p class="text-secondary font-bold text-lg">Safe Reporting</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">See how our **confidential reporting system** works
+              <p class="text-black font-bold text-lg">Safe Reporting</p>
+              <p class="text-black/60 text-sm leading-relaxed">See how our **confidential reporting system** works
                 for you.</p>
             </div>
             <div class="space-y-2">
-              <p class="text-secondary font-bold text-lg">Survivor Stories</p>
-              <p class="text-secondary/60 text-sm leading-relaxed">Hear from those who found **safety through Sauti
+              <p class="text-black font-bold text-lg">Survivor Stories</p>
+              <p class="text-black/60 text-sm leading-relaxed">Hear from those who found **safety through Sauti
                 116**.</p>
             </div>
           </div>
@@ -75,7 +75,7 @@
               v-for="chip in [videosChipAll, videosChipEducation, videosChipSafety, videosChipSupport, videosChipRecency, videosChipPopular]"
               :key="chip" @click="chip === activeChip ? (activeChip = 'All') : (activeChip = chip)" :class="[
                 'px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border-2',
-                activeChip === chip ? 'bg-secondary border-secondary text-neutral-white shadow-xl scale-105' : 'bg-neutral-white border-neutral-offwhite text-secondary/50 hover:border-primary hover:text-primary'
+                activeChip === chip ? 'bg-secondary border-secondary text-neutral-white shadow-xl scale-105' : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
               ]">
               {{ chip }}
             </button>
@@ -101,7 +101,7 @@
               <div
                 class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/40 transition-colors duration-500 flex items-center justify-center">
                 <div class="transform scale-0 group-hover:scale-100 transition-transform duration-500">
-                  <div class="bg-neutral-white rounded-full p-5 shadow-2xl">
+                  <div class="bg-neutral-white rounded-full p-6 shadow-2xl">
                     <PlayIcon class="w-10 h-10 text-primary" />
                   </div>
                 </div>
@@ -124,11 +124,11 @@
                   {{ video.title }}
                 </h3>
                 <div class="flex items-center gap-2 mt-2">
-                  <p class="campaign-header text-[10px] text-secondary/40 truncate">
+                  <p class="campaign-header text-[10px] text-black/40 truncate">
                     {{ video.author_name }}
                   </p>
                   <span class="w-1 h-1 bg-neutral-offwhite rounded-full shrink-0"></span>
-                  <p class="campaign-header text-[10px] text-secondary/40 shrink-0">
+                  <p class="campaign-header text-[10px] text-black/40 shrink-0">
                     {{ formatDate(video.published_at) }}
                   </p>
                 </div>

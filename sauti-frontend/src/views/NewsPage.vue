@@ -66,7 +66,7 @@
             <div class="flex gap-3">
               <button v-for="n in pageNumbers" :key="n + '-pg'" @click="setPage(n)" :class="[
                 'w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
-                filters.page === n ? 'bg-primary text-neutral-white shadow-xl scale-110' : 'bg-neutral-white border-2 border-neutral-offwhite text-secondary/60 hover:text-primary'
+                filters.page === n ? 'bg-primary text-neutral-white shadow-xl scale-110' : 'bg-neutral-white border-2 border-neutral-offwhite text-muted hover:text-primary'
               ]">
                 {{ n }}
               </button>
@@ -86,7 +86,7 @@
             <DocumentTextIcon class="w-12 h-12 opacity-30" />
           </div>
           <h3 class="campaign-header text-3xl text-secondary mb-4">No archives found</h3>
-          <p class="text-xl font-bold text-secondary/40 max-w-md mx-auto">Adjust your filters or search keywords
+          <p class="text-xl font-bold text-black/40 max-w-md mx-auto">Adjust your filters or search keywords
             to find specific official news items.</p>
         </div>
       </section>

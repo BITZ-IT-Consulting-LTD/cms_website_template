@@ -17,18 +17,18 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
             <div class="space-y-2">
-              <p class="text-secondary font-bold">Is it free?</p>
-              <p class="text-secondary/60 text-sm"><strong>Yes</strong>. Calls to 116 are 100% toll-free across all
+              <p class="text-black font-bold">Is it free?</p>
+              <p class="text-black/60 text-sm"><strong>Yes</strong>. Calls to 116 are 100% toll-free across all
                 networks.</p>
             </div>
             <div class="space-y-2">
-              <p class="text-secondary font-bold">Is it private?</p>
-              <p class="text-secondary/60 text-sm"><strong>Yes</strong>. We protect your story and you can report
+              <p class="text-black font-bold">Is it private?</p>
+              <p class="text-black/60 text-sm"><strong>Yes</strong>. We protect your story and you can report
                 anonymously.</p>
             </div>
             <div class="space-y-2">
-              <p class="text-secondary font-bold">When can I call?</p>
-              <p class="text-secondary/60 text-sm"><strong>Anytime</strong>. Our counselors are here 24 hours a day,
+              <p class="text-black font-bold">When can I call?</p>
+              <p class="text-black/60 text-sm"><strong>Anytime</strong>. Our counselors are here 24 hours a day,
                 every day.</p>
             </div>
           </div>
@@ -61,7 +61,7 @@
           <!-- Emergency Contact Card -->
           <div class="rounded-[3rem] bg-emergency/5 p-10 shadow-2xl space-y-6">
             <h4 class="campaign-header text-2xl text-emergency">{{ faqsImmediateHelpTitle }}</h4>
-            <p class="text-secondary font-bold leading-relaxed">{{ faqsImmediateHelpSubtitle }}</p>
+            <p class="text-black font-bold leading-relaxed">{{ faqsImmediateHelpSubtitle }}</p>
             <BaseCTA :href="`tel:116`" variant="emergency" class="w-full justify-center !py-4 font-bold" external>
               {{ faqsCallButton }}
             </BaseCTA>
@@ -91,12 +91,12 @@
               <div class="flex flex-nowrap gap-4">
                 <button @click="selectedCategory = ''"
                   :class="selectedCategory === '' ? 'bg-secondary text-neutral-white shadow-xl' : 'bg-neutral-white text-secondary shadow-md hover:shadow-lg'"
-                  class="px-10 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300">
+                  class="px-8 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300">
                   {{ faqsAllCategoriesButton }}
                 </button>
                 <button v-for="category in categories" :key="category.id" @click="selectedCategory = category.id"
                   :class="selectedCategory === category.id ? 'bg-secondary text-neutral-white shadow-xl' : 'bg-neutral-white text-secondary shadow-md hover:shadow-lg'"
-                  class="px-10 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300">
+                  class="px-8 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300">
                   {{ category.name }}
                 </button>
               </div>
@@ -108,7 +108,7 @@
                 class="group bg-neutral-white rounded-[3rem] shadow-lg transition-all duration-500 overflow-hidden"
                 :class="{ 'shadow-2xl': openFaq === index }">
                 <button @click="toggleFaq(index)"
-                  class="w-full text-left px-10 py-10 flex items-start gap-8 hover:bg-neutral-offwhite/30 transition-colors focus:outline-none"
+                  class="w-full text-left px-8 py-10 flex items-start gap-8 hover:bg-neutral-offwhite/30 transition-colors focus:outline-none"
                   :aria-expanded="openFaq === index">
                   <div class="mt-2 flex-shrink-0">
                     <div class="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500"
@@ -132,7 +132,7 @@
                 </button>
 
                 <div v-show="openFaq === index"
-                  class="px-10 pb-12 pl-[6.5rem] text-secondary font-bold text-lg leading-relaxed pt-2 animate-fade-in bg-neutral-white">
+                  class="px-8 pb-12 pl-[6.5rem] text-secondary font-bold text-lg leading-relaxed pt-2 animate-fade-in bg-neutral-white">
                   <p class="max-w-3xl">{{ faq.answer }}</p>
                 </div>
               </div>
@@ -148,7 +148,7 @@
                 </svg>
               </div>
               <h3 class="text-3xl font-bold text-secondary mb-4">{{ faqsNoResults }}</h3>
-              <p class="text-xl text-secondary/50 font-bold mb-10">{{ faqsNoResultsSubtitle }}</p>
+              <p class="text-xl text-black/50 font-bold mb-10">{{ faqsNoResultsSubtitle }}</p>
               <button @click="query = ''; selectedCategory = ''"
                 class="px-12 py-4 bg-primary text-neutral-white rounded-2xl font-bold uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-105 transition-all">
                 Clear all filters
