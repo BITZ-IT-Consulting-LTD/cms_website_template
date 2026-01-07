@@ -5,70 +5,85 @@
       <div class="container-custom relative">
         <div class="max-w-5xl mx-auto text-center space-y-10">
           <div class="space-y-6">
-            <h1 class="page-header-title">
-              {{ settingsStore.settings.hero_title || `Report Any Form of Violence. Call 116.` }}
+            <h1 class="mb-8 font-black text-secondary leading-[1.1] tracking-tight">
+              Someone is listening. <span
+                class="text-primary border-b-8 border-accent-yellow/40 transition-all hover:border-accent-yellow">A safe
+                space</span> for you, anytime.
             </h1>
-            <p class="page-header-subtitle mx-auto">
-              {{ settingsStore.settings.hero_value_prop || `Uganda’s National Helpline providing confidential, 24/7
-              protection and immediate response.` }}
+            <p class="page-header-subtitle mx-auto max-w-2xl">
+              Sauti 116 is Uganda’s 24/7 helpline for children and adults. Whatever you’re going through, we’re here
+              to listen, support, and help you stay safe.
             </p>
           </div>
 
-          <div class="cta-group justify-center">
+          <div class="flex flex-col items-center gap-8">
+            <!-- The One Primary Action: Call 116 (Signal Red for life-saving focus) -->
             <BaseCTA variant="emergency" size="hero" :href="`tel:${settingsStore.settings.hotline_number || '116'}`"
-              class="!px-12 !py-6 shadow-2xl" external>
-              <PhoneIcon class="w-8 h-8" />
-              <span class="text-3xl font-bold uppercase tracking-tight">CALL {{ settingsStore.settings.hotline_number
-                || '116' }}</span>
+              class="w-full max-w-md !py-8 shadow-2xl ring-8 ring-white/10 group" external>
+              <div class="flex items-center justify-center gap-4">
+                <div class="bg-white/20 p-4 rounded-2xl group-hover:scale-110 transition-transform">
+                  <PhoneIcon class="w-12 h-12 text-white" stroke-width="2.5" />
+                </div>
+                <div class="text-left">
+                  <span class="text-xs font-black tracking-[0.3em] opacity-80 block mb-1">Emergency 24/7</span>
+                  <span class="text-4xl font-black tracking-tighter">CALL {{
+                    settingsStore.settings.hotline_number || '116' }}</span>
+                </div>
+              </div>
             </BaseCTA>
 
-            <BaseCTA to="/report" variant="emergency" size="hero"
-              class="!px-12 !py-6 shadow-2xl opacity-90 transition-opacity hover:opacity-100">
-              <ShieldCheckIcon class="w-8 h-8" />
-              <span class="text-3xl font-bold uppercase tracking-tight">{{ settingsStore.settings.primary_cta_text ||
-                `REPORT VIOLENCE`
-                }}</span>
-            </BaseCTA>
+            <!-- Secondary Path: Clearly differentiated by Color & Style -->
+            <div class="flex flex-wrap justify-center gap-6 pt-6">
+              <BaseCTA @click="toggleService('child-abuse')" variant="secondary" size="lg"
+                class="!px-8 shadow-lg ring-1 ring-secondary/20">
+                <InformationCircleIcon class="w-6 h-6 mr-2 opacity-80" />
+                <span>How we help</span>
+              </BaseCTA>
+
+              <BaseCTA to="/report" variant="primary" size="lg" class="!px-8 shadow-lg ring-1 ring-primary/20">
+                <ShieldCheckIcon class="w-6 h-6 mr-2 opacity-80" />
+                <span>Report Violence Online</span>
+              </BaseCTA>
+            </div>
           </div>
 
-          <div class="pt-8">
-            <p class="text-sm font-bold uppercase tracking-[0.3em] text-sauti-darkGreen/40">
-              <span class="border-t-2 border-sauti-orange pt-4 inline-block">A Government of Uganda Initiative</span>
-            </p>
-          </div>
         </div>
       </div>
     </section>
 
     <!-- 2. Intro Section -->
-    <section class="section-padding bg-sauti-blue/5 overflow-hidden">
+    <section class="section-padding bg-primary/5 overflow-hidden">
       <div class="container-custom">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div class="space-y-8">
-            <h2
-              class="campaign-header text-3xl md:text-4xl text-sauti-darkGreen border-b-4 border-sauti-blue inline-block pb-2">
-              {{ settingsStore.settings.intro_title || `National Mandate` }}
+          <div class="space-y-10">
+            <div
+              class="inline-flex items-center gap-2 px-4 py-2 bg-secondary-light/10 text-secondary-light rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-secondary-light/20">
+              <HeartIcon class="w-4 h-4" />
+              <span>Our Impact</span>
+            </div>
+            <h2 class="text-secondary">Uganda’s Institutional <span class="text-secondary-light">Action Center</span>.
             </h2>
-            <p class="text-xl md:text-2xl text-sauti-darkGreen leading-relaxed font-bold">
-              {{ settingsStore.settings.intro_description || `Under the Ministry of Gender, Labour and Social
-              Development,
-              Sauti 116 serves as Uganda’s primary response mechanism for child protection and social safety.` }}
+            <p class="text-xl font-bold leading-relaxed text-black/60">
+              Managed by the Ministry of Gender, Labour and Social Development, we coordinate a nationwide network of
+              protection experts, legal advocates, and health providers to ensure immediate safety for every child and
+              survivor.
             </p>
             <div class="pt-4">
-              <BaseCTA to="/about" variant="outline" class="group">
-                Discover Our Story
-                <ArrowRightIcon class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <BaseCTA to="/about" variant="secondary" class="shadow-md">
+                Learn About Sauti 116
+                <ArrowRightIcon class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </BaseCTA>
             </div>
           </div>
           <div class="relative group">
             <div
-              class="absolute -inset-4 bg-sauti-blue/10 rounded-[4rem] group-hover:bg-sauti-blue/20 transition-all duration-700 -rotate-2">
+              class="absolute -inset-4 bg-primary/10 rounded-[4rem] group-hover:bg-primary/20 transition-all duration-700 -rotate-2">
             </div>
-            <div class="relative rounded-[3.5rem] overflow-hidden border-4 border-sauti-blue shadow-2xl">
-              <img src="@/assets/helpline-center.png" alt="Sauti 116 Helpline Operations Center"
-                class="w-full h-[500px] object-cover transition-transform duration-1000 group-hover:scale-110" />
-              <div class="absolute inset-0 bg-gradient-to-t from-sauti-darkGreen/60 via-transparent to-transparent">
+            <div class="relative rounded-[4rem] overflow-hidden shadow-2xl group">
+              <img src="@/assets/diverse_helpline_operations.png"
+                alt="Sauti 116 helpline counselors responding to calls in a modern operations center"
+                class="w-full h-[600px] object-cover transition-transform duration-1000 group-hover:scale-110" />
+              <div class="absolute inset-0 bg-gradient-to-t from-secondary/60 via-transparent to-transparent">
               </div>
               <div class="absolute bottom-8 left-8 right-8">
                 <p class="campaign-header text-white text-xs tracking-widest opacity-80 uppercase">Real-time Response
@@ -82,18 +97,19 @@
     </section>
 
     <!-- 3. Services Section -->
-    <section id="services" class="section-padding bg-sauti-white">
+    <section id="services" class="section-padding bg-neutral-white">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="campaign-header text-4xl mb-4 text-sauti-darkGreen">{{ settingsStore.settings.services_title ||
-            `Core Protection Services` }}</h2>
-          <p class="text-xl text-sauti-darkGreen max-w-2xl mx-auto">{{ settingsStore.settings.services_description ||
-            `Immediate response and support across national priority protection areas.` }}</p>
+          <h2 class="campaign-header text-4xl mb-4 text-secondary">{{ settingsStore.settings.services_title ||
+            `Ways We Protect You` }}</h2>
+          <p class="text-xl text-black max-w-2xl mx-auto font-bold opacity-70">{{
+            settingsStore.settings.services_description ||
+            `We offer support for different types of safety needs. Select an option below to learn more.` }}</p>
         </div>
 
         <div class="space-y-6 max-w-5xl mx-auto">
           <div v-if="helpServicesStore.loading" class="text-center py-12">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-sauti-blue mx-auto"></div>
+            <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-primary mx-auto"></div>
           </div>
 
           <template v-else>
@@ -106,35 +122,34 @@
     </section>
 
     <!-- 4. Latest News / Blogs -->
-    <section v-if="latestVideos.length > 0" class="section-padding bg-sauti-neutral">
+    <section v-if="latestVideos.length > 0" class="section-padding bg-neutral-offwhite">
       <div class="container-custom">
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div class="text-left">
-            <h2 class="campaign-header text-4xl text-sauti-darkGreen mb-4">{{ settingsStore.settings.news_title ||
-              `Helpline
-              Updates` }}</h2>
-            <p class="text-xl text-sauti-darkGreen max-w-2xl">{{ settingsStore.settings.news_description || `Official
-              news
-              and impact reports from the National Helpline.` }}</p>
+            <h2 class="campaign-header text-4xl text-secondary mb-4">{{ settingsStore.settings.news_title ||
+              `Impact Stories & News` }}</h2>
+            <p class="text-xl text-black max-w-2xl font-bold opacity-70">{{ settingsStore.settings.news_description
+              ||
+              `Stories and news from our team on how we are making Uganda safer.` }}</p>
           </div>
-          <router-link to="/blogs" class="btn-outline flex items-center gap-2 mb-2">
-            {{ settingsStore.settings.news_link_text || `View All News` }}
-            <ArrowRightIcon class="w-5 h-5" />
-          </router-link>
+          <BaseCTA to="/blogs" variant="outline" size="sm" class="!rounded-full border-primary/20 text-primary">
+            {{ settingsStore.settings.news_link_text || `See Latest Stories` }}
+            <ArrowRightIcon class="w-4 h-4 ml-2" />
+          </BaseCTA>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           <div v-for="post in latestVideos" :key="post.id" class="group cursor-pointer">
             <div
               class="relative rounded-3xl overflow-hidden aspect-[16/10] shadow-xl group-hover:shadow-2xl transition-all duration-500">
               <img :src="post.thumbnail" :alt="post.title"
                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
-              <div class="absolute inset-0 bg-sauti-blue/40 group-hover:bg-sauti-darkGreen/60 transition-colors">
+              <div class="absolute inset-0 bg-primary/40 group-hover:bg-secondary/60 transition-colors">
               </div>
 
               <div class="absolute bottom-6 left-6 right-6">
                 <span
-                  class="inline-block px-3 py-1 bg-sauti-orange text-sauti-white text-xs font-bold rounded-lg mb-3 shadow-lg">
+                  class="inline-block px-3 py-1 bg-hotline text-neutral-white text-xs font-bold rounded-lg mb-3 shadow-lg">
                   {{ post.category }}
                 </span>
                 <h3 class="text-xl font-bold text-white leading-tight line-clamp-2">
@@ -148,18 +163,19 @@
     </section>
 
     <!-- 5. Partner Logos -->
-    <section class="section-padding bg-sauti-white">
+    <section class="section-padding bg-neutral-offwhite">
       <div class="container-custom">
-        <div class="text-center mb-16">
-          <h2 class="campaign-header text-4xl text-sauti-darkGreen mb-4">
-            {{ settingsStore.settings.partners_title || `Development Partners` }}
+        <div class="text-center mb-12 md:mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">
+            {{ settingsStore.settings.partners_title || `Official Protection Partners` }}
           </h2>
-          <p class="text-xl text-sauti-darkGreen font-bold opacity-70">
-            {{ settingsStore.settings.partners_description || `Partnering for a safer Uganda.` }}
+          <p class="text-lg md:text-xl text-black max-w-2xl mx-auto">
+            {{ settingsStore.settings.partners_description || `Working together to protect every child and survivor in
+            Uganda.` }}
           </p>
         </div>
 
-        <PartnerGrid :partners="partners" class="opacity-60" />
+        <PartnerGrid :partners="partners" />
       </div>
     </section>
   </div>
@@ -177,7 +193,8 @@
   import {
     PhoneIcon,
     ShieldCheckIcon,
-    ArrowRightIcon
+    ArrowRightIcon,
+    InformationCircleIcon
   } from '@heroicons/vue/24/outline'
 
   defineOptions({
@@ -291,51 +308,29 @@
   }
 
   .section-padding {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    @apply py-20;
   }
 
   @media (min-width: 768px) {
     .section-padding {
-      padding-top: 8rem;
-      padding-bottom: 8rem;
+      @apply py-32;
     }
   }
 
+  /* Support for any legacy AVM classes if they surface from dynamic content */
   .avm-card {
-    padding: 2rem;
-    border-radius: 1.5rem;
-    border-width: 1px;
-    border-style: solid;
-    border-color: theme('colors.sauti.white');
-    background-color: theme('colors.sauti.white');
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .avm-card:hover {
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    @apply p-8 rounded-[1.5rem] border border-neutral-offwhite bg-neutral-white transition-all duration-300 ease-in-out hover:shadow-xl;
   }
 
   .avm-icon {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
+    @apply w-16 h-16 rounded-2xl flex items-center justify-center mb-6;
   }
 
   .avm-title {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: theme('colors.sauti.darkGreen');
+    @apply text-xl font-bold mb-4 text-secondary;
   }
 
   .avm-text {
-    line-height: 1.625;
-    color: theme('colors.sauti.darkGreen');
+    @apply leading-relaxed text-secondary;
   }
 </style>

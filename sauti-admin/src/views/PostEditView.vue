@@ -140,7 +140,7 @@ Each paragraph will be properly formatted when displayed."
         </div>
 
         <!-- Audit History -->
-        <AuditHistory v-if="isEditing" :history="history" :loading="loadingHistory" />
+        <!-- <AuditHistory v-if="isEditing" :history="history" :loading="loadingHistory" /> -->
       </div>
 
         <!-- Enhanced Metadata Sidebar (Right Column) -->
@@ -617,11 +617,13 @@ const savePost = async () => {
     }
 
     // Only include featured_image if it's a File object (new upload)
-    // If it's a string (existing URL), omit it - backend will keep existing image
     if (form.value.featuredImage instanceof File) {
       postData.featured_image = form.value.featuredImage
+    } else if (isEditing.value && form.value.featuredImage === null) {
+      // If image is removed during edit, send null to backend to delete it
+      postData.featured_image = null
     }
-    // For editing: if featuredImage is a string (existing URL), don't include it
+    // If it's an existing URL (string), we don't send anything, backend keeps the old image.
     
     // Debug: Log the data being sent
     console.log('Post data being sent:', {
@@ -708,9 +710,9 @@ onMounted(async () => {
       }
       
       // Fetch history using the post ID
-      if (post.id) {
-        fetchHistory(post.id)
-      }
+      // if (post.id) {
+      //   fetchHistory(post.id)
+      // }
       
       tagsInput.value = post.tags?.map(t => t.name).join(', ') || ''
       

@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-6">
     <!-- Filters Section -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-lg font-bold text-gray-900 mb-4">Filter Resources</h2>
+    <div class="bg-neutral-white rounded-lg shadow-md p-6 border border-neutral-offwhite">
+      <h2 class="text-lg font-bold text-secondary mb-4">Filter Resources</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Category Filter -->
@@ -53,12 +53,12 @@
 
       <!-- Active Filters -->
       <div v-if="hasActiveFilters" class="mt-4 flex items-center space-x-2">
-        <span class="text-sm text-gray-600">Active filters:</span>
+        <span class="text-sm text-muted">Active filters:</span>
         
         <button
           v-if="filters.category"
           @click="clearFilter('category')"
-          class="inline-flex items-center space-x-1 px-2 py-1 bg-teal-100 text-teal-700 text-sm rounded-full hover:bg-teal-200"
+          class="inline-flex items-center space-x-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full hover:bg-primary/20 transition-colors"
         >
           <span>Category: {{ getCategoryName(filters.category) }}</span>
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -69,7 +69,7 @@
         <button
           v-if="filters.language"
           @click="clearFilter('language')"
-          class="inline-flex items-center space-x-1 px-2 py-1 bg-teal-100 text-teal-700 text-sm rounded-full hover:bg-teal-200"
+          class="inline-flex items-center space-x-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full hover:bg-primary/20 transition-colors"
         >
           <span>Language: {{ getLanguageName(filters.language) }}</span>
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -79,7 +79,7 @@
 
         <button
           @click="clearAllFilters"
-          class="text-sm text-gray-600 hover:text-gray-900 underline"
+          class="text-sm text-muted hover:text-secondary underline"
         >
           Clear all
         </button>
@@ -92,20 +92,20 @@
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-      <p class="text-red-700">{{ error }}</p>
+    <div v-else-if="error" class="bg-emergency/5 border border-emergency/20 rounded-lg p-6 text-center">
+      <p class="text-emergency font-bold">{{ error }}</p>
       <button @click="$emit('retry')" class="mt-4 btn-primary">
         Try Again
       </button>
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="resources.length === 0" class="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
-      <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div v-else-if="resources.length === 0" class="bg-neutral-offwhite border border-neutral-offwhite rounded-lg p-12 text-center">
+      <svg class="w-16 h-16 mx-auto text-secondary/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
-      <h3 class="text-lg font-semibold text-gray-700 mb-2">No Resources Found</h3>
-      <p class="text-gray-500">Try adjusting your filters or check back later for new resources.</p>
+      <h3 class="text-lg font-bold text-secondary mb-2">No Resources Found</h3>
+      <p class="text-black/60">Try adjusting your filters or check back later for new resources.</p>
     </div>
 
     <!-- Resources Grid -->
@@ -125,10 +125,10 @@
           @click="$emit('previous')"
           :disabled="!hasPrevious"
           :class="[
-            'px-4 py-2 rounded-md transition-colors',
+            'px-4 py-2 rounded-md transition-all font-bold',
             hasPrevious
-              ? 'bg-teal-500 text-white hover:bg-teal-600'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-primary text-neutral-white hover:bg-secondary shadow-lg active:scale-95'
+              : 'bg-neutral-offwhite text-secondary/30 cursor-not-allowed'
           ]"
           aria-label="Previous page"
         >
@@ -137,7 +137,7 @@
           </svg>
         </button>
 
-        <span class="px-4 py-2 text-gray-700">
+        <span class="px-4 py-2 text-black font-bold">
           Page {{ currentPage }} of {{ totalPages }}
         </span>
 
@@ -145,10 +145,10 @@
           @click="$emit('next')"
           :disabled="!hasNext"
           :class="[
-            'px-4 py-2 rounded-md transition-colors',
+            'px-4 py-2 rounded-md transition-all font-bold',
             hasNext
-              ? 'bg-teal-500 text-white hover:bg-teal-600'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-primary text-neutral-white hover:bg-secondary shadow-lg active:scale-95'
+              : 'bg-neutral-offwhite text-secondary/30 cursor-not-allowed'
           ]"
           aria-label="Next page"
         >

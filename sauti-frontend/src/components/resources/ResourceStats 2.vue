@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-    <h2 class="text-xl font-bold text-gray-900 mb-6">Key Statistics</h2>
+  <div class="bg-white rounded-2xl shadow-sm border border-primary/10 p-6 mb-8">
+    <h2 class="text-xl font-bold text-secondary mb-6">Key Statistics</h2>
     
     <div v-if="loading" class="flex justify-center py-12">
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
@@ -13,7 +13,7 @@
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Cases by Category -->
       <div>
-        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 text-center">Cases by Category</h3>
+        <h3 class="text-sm font-semibold text-black/50 uppercase tracking-wider mb-4 text-center">Cases by Category</h3>
         <div class="h-64 relative">
           <Doughnut :data="categoryData" :options="chartOptions" />
         </div>
@@ -21,7 +21,7 @@
       
       <!-- Reports Over Time -->
       <div>
-        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 text-center">Reports Over Time (Last 6 Months)</h3>
+        <h3 class="text-sm font-semibold text-black/50 uppercase tracking-wider mb-4 text-center">Reports Over Time (Last 6 Months)</h3>
         <div class="h-64 relative">
           <Bar :data="timeData" :options="barOptions" />
         </div>

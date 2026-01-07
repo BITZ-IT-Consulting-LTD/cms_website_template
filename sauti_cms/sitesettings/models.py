@@ -201,10 +201,31 @@ class OrganizationProfile(models.Model):
     favicon = models.ImageField(upload_to='org/identity/', blank=True, null=True)
     
     # Branding / Colors (Hex codes)
-    primary_color = models.CharField(max_length=7, default="#C8102E", help_text="Primary brand color (Hex code, e.g., #C8102E)")
-    secondary_color = models.CharField(max_length=7, default="#003366", help_text="Secondary brand color (Hex code, e.g., #003366)")
-    accent_color = models.CharField(max_length=7, default="#FFB81C", help_text="Accent color (Hex code, e.g., #FFB81C)")
+    primary_color = models.CharField(max_length=7, default="#007BBF", help_text="Primary brand color (Hex code, e.g., #007BBF)")
+    secondary_color = models.CharField(max_length=7, default="#006633", help_text="Secondary brand color (Hex code, e.g., #006633)")
+    accent_color = models.CharField(max_length=7, default="#FF9933", help_text="Accent color (Hex code, e.g., #FF9933)")
     
+    def default_brand_colors():
+        return [
+            # Primary Colours
+            {"id": "primary_blue", "name": "Primary Blue", "value": "#007BBF", "default": "#007BBF", "group": "Primary", "is_required": True},
+            {"id": "primary_red", "name": "Emergency / CTA Red", "value": "#ED1C24", "default": "#ED1C24", "group": "Primary", "is_required": True},
+            
+            # Secondary Colours
+            {"id": "secondary_dark_green", "name": "Dark Green", "value": "#006633", "default": "#006633", "group": "Secondary", "is_required": True},
+            {"id": "secondary_light_green", "name": "Light Green", "value": "#8CC63F", "default": "#8CC63F", "group": "Secondary", "is_required": True},
+            
+            # Accent Colours
+            {"id": "accent_orange", "name": "Accent Orange", "value": "#FF9933", "default": "#FF9933", "group": "Accent", "is_required": True},
+            {"id": "accent_yellow", "name": "Accent Yellow", "value": "#FFF200", "default": "#FFF200", "group": "Accent", "is_required": True},
+            
+            # Neutral Colours
+            {"id": "neutral_black", "name": "Black", "value": "#000000", "default": "#000000", "group": "Neutral", "is_required": True},
+            {"id": "neutral_white", "name": "White", "value": "#FFFFFF", "default": "#FFFFFF", "group": "Neutral", "is_required": True},
+        ]
+
+    brand_colors = models.JSONField(default=default_brand_colors, blank=True, help_text="Configurable brand colors with defaults.")
+
     # Master Contact Data
     address = models.TextField(blank=True)
     primary_phone = models.CharField(max_length=20, blank=True)

@@ -46,7 +46,7 @@
             <!-- Fallback Message -->
             <div v-else class="flex items-center justify-center h-full text-white">
               <div class="text-center">
-                <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-16 h-16 mx-auto mb-4 text-secondary/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 <p class="text-lg">Video not available</p>
@@ -56,13 +56,13 @@
 
           <!-- Video Info -->
           <div class="p-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ video.title }}</h2>
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+            <h2 class="text-2xl font-bold text-secondary mb-2">{{ video.title }}</h2>
+            <div class="flex items-center gap-4 text-sm text-secondary/60 mb-4">
               <span v-if="video.views_count">{{ formatViews(video.views_count) }}</span>
               <span v-if="video.published_at">{{ formatDate(video.published_at) }}</span>
               <span v-if="video.author_name">by {{ video.author_name }}</span>
             </div>
-            <p v-if="video.description" class="text-gray-700 leading-relaxed">{{ video.description }}</p>
+            <p v-if="video.description" class="text-secondary/70 leading-relaxed">{{ video.description }}</p>
           </div>
         </div>
       </div>

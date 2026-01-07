@@ -21,12 +21,12 @@
       </div>
 
       <!-- Title -->
-      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-4 leading-tight">
         {{ post.title }}
       </h1>
 
       <!-- Meta Information -->
-      <div class="flex flex-wrap items-center text-sm text-gray-600 mb-6 space-x-4">
+      <div class="flex flex-wrap items-center text-sm text-black/60 mb-6 space-x-4">
         <!-- Author -->
         <div v-if="post.author" class="flex items-center space-x-2">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -62,7 +62,7 @@
       </div>
 
       <!-- Excerpt -->
-      <div v-if="post.excerpt" class="text-xl text-gray-700 mb-6 italic border-l-4 border-primary pl-4">
+      <div v-if="post.excerpt" class="text-xl text-black/70 mb-6 italic border-l-4 border-primary pl-4">
         {{ post.excerpt }}
       </div>
 
@@ -73,13 +73,13 @@
       ></div>
 
       <!-- Tags -->
-      <div v-if="post.tags && post.tags.length > 0" class="mt-8 pt-6 border-t border-gray-200">
-        <h3 class="text-sm font-semibold text-gray-700 mb-3">Tags:</h3>
+      <div v-if="post.tags && post.tags.length > 0" class="mt-8 pt-6 border-t border-primary/15">
+        <h3 class="text-sm font-semibold text-black/70 mb-3">Tags:</h3>
         <div class="flex flex-wrap gap-2">
           <span
             v-for="tag in post.tags"
             :key="tag.slug"
-            class="inline-block px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+            class="inline-block px-3 py-1 text-sm bg-primary/10 text-black/70 rounded-full hover:bg-secondary/10 transition-colors"
           >
             #{{ tag.name }}
           </span>
@@ -87,8 +87,8 @@
       </div>
 
       <!-- Share Buttons -->
-      <div class="mt-8 pt-6 border-t border-gray-200">
-        <h3 class="text-sm font-semibold text-gray-700 mb-3">Share this post:</h3>
+      <div class="mt-8 pt-6 border-t border-primary/15">
+        <h3 class="text-sm font-semibold text-black/70 mb-3">Share this post:</h3>
         <div class="flex space-x-3">
           <button
             @click="shareOnFacebook"
@@ -103,7 +103,7 @@
 
           <button
             @click="shareOnTwitter"
-            class="flex items-center space-x-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-gray-800 transition-colors"
+            class="flex items-center space-x-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-neutral-black transition-colors"
             aria-label="Share on X"
           >
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -203,15 +203,15 @@ const shareOnWhatsApp = () => {
 <style scoped>
 /* Prose styles for blog content */
 :deep(.prose) {
-  @apply text-gray-700;
+  @apply text-black/70;
 }
 
 :deep(.prose h2) {
-  @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+  @apply text-2xl font-bold text-secondary mt-8 mb-4;
 }
 
 :deep(.prose h3) {
-  @apply text-xl font-bold text-gray-900 mt-6 mb-3;
+  @apply text-xl font-bold text-secondary mt-6 mb-3;
 }
 
 :deep(.prose p) {
@@ -232,7 +232,7 @@ const shareOnWhatsApp = () => {
 }
 
 :deep(.prose blockquote) {
-  @apply border-l-4 border-primary pl-4 italic my-4 text-gray-600;
+  @apply border-l-4 border-primary pl-4 italic my-4 text-black/60;
 }
 
 :deep(.prose img) {
@@ -240,7 +240,7 @@ const shareOnWhatsApp = () => {
 }
 
 :deep(.prose strong) {
-  @apply font-bold text-gray-900;
+  @apply font-bold text-secondary;
 }
 
 :deep(.prose em) {

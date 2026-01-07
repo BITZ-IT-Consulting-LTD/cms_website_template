@@ -113,7 +113,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-12 w-12">
                     <div v-if="post.featured_image" class="h-12 w-12 rounded-lg overflow-hidden">
-                      <img :src="post.featured_image" :alt="post.title" class="h-full w-full object-cover">
+                      <img :src="getFeaturedImageUrl(post.featured_image)" :alt="post.title" class="h-full w-full object-cover">
                     </div>
                     <div v-else class="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center">
                       <DocumentTextIcon class="h-6 w-6 text-gray-400" />
@@ -372,6 +372,19 @@
       toast.error('Failed to load posts')
     }
   }
+
+  const getFeaturedImageUrl = (imageUrl) => {
+    if (!imageUrl) {
+      return null;
+    }
+    try {
+      // Attempt to decode the URL. This will fix cases where an absolute URL is URL-encoded.
+      return decodeURIComponent(imageUrl);
+    } catch (e) {
+      // If decoding fails, it's likely not encoded, so return the original URL.
+      return imageUrl;
+    }
+  };
 
   // Watch for route changes to refresh data
   watch(() => route.path, (newPath) => {

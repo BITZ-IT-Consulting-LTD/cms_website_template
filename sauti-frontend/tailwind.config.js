@@ -1,38 +1,80 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx,css}',
+  ],
   theme: {
     extend: {
       colors: {
-        sauti: {
-          blue: 'rgba(var(--sauti-primary-rgb, 0, 123, 191), <alpha-value>)',
-          yellow: '#FFF200',
-          orange: '#FF9933',
-          red: '#ED1C24',
-          darkGreen: 'rgba(var(--sauti-secondary-rgb, 0, 102, 51), <alpha-value>)',
-          lightGreen: '#8CC63F',
-          black: '#000000',
-          white: '#FFFFFF',
-          neutral: '#F4F4F5',
-          accent: 'rgba(var(--sauti-accent-rgb, 255, 242, 0), <alpha-value>)',
-        },
+        /* ============================================
+           SAUTI 116 CENTRALIZED COLOR SYSTEM
+           Total: 16 Colors (Brand-Compliant)
+           ============================================ */
+
+        // BRAND COLORS (7) - From Official Guidelines
+        'primary': 'rgb(var(--color-primary) / <alpha-value>)',
+        'secondary': 'rgb(var(--color-secondary) / <alpha-value>)',
+        'secondary-light': 'rgb(var(--color-secondary-light) / <alpha-value>)',
+        'hotline': 'rgb(var(--color-hotline) / <alpha-value>)',
+        'emergency': 'rgb(var(--color-emergency) / <alpha-value>)',
+        'accent-yellow': 'rgb(var(--color-accent-yellow) / <alpha-value>)',
+        'text': 'rgb(var(--color-text) / <alpha-value>)',
+
+        // TECHNICAL NECESSITIES (4) - Web Implementation
+        'primary-dark': 'rgb(var(--color-primary-dark) / <alpha-value>)',
+        'neutral-black': 'rgb(var(--color-neutral-black) / <alpha-value>)',
+        'neutral-white': 'rgb(var(--color-neutral-white) / <alpha-value>)',
+        'neutral-offwhite': 'rgb(var(--color-neutral-offwhite) / <alpha-value>)',
+
+        // SOCIAL MEDIA (5) - Platform Requirements
+        'whatsapp': 'rgb(var(--color-whatsapp) / <alpha-value>)',
+        'whatsapp-hover': 'rgb(var(--color-whatsapp-hover) / <alpha-value>)',
+        'facebook': 'rgb(var(--color-facebook) / <alpha-value>)',
+        'facebook-hover': 'rgb(var(--color-facebook-hover) / <alpha-value>)',
+        'twitter': 'rgb(var(--color-twitter) / <alpha-value>)',
+
+        /* ============================================
+           NOTE: For UI states, use opacity variants:
+           - Borders: primary/20, secondary/15
+           - Disabled: black/40
+           - Muted: black/60
+           - Subtle backgrounds: primary/5, secondary/5
+           ============================================ */
       },
       fontFamily: {
-        sans: ['"Cronos Pro"', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif'],
+        // Sauti 116 Institutional Voice: Cronos Pro is the primary brand typeface.
+        // Roboto and system-fonts are used as secondary digital fallbacks.
+        sans: ['"Cronos Pro"', 'Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'sauti-red': '0 0 12px rgba(237, 28, 36, 0.4)',
+        'glow-hotline': '0 0 12px rgb(var(--color-hotline) / 0.4)',
+        'glow-emergency': '0 0 12px rgb(var(--color-emergency) / 0.4)',
       },
       animation: {
+        'hotline-glow': 'hotlineGlow 2s ease-in-out infinite',
         'emergency-glow': 'emergencyGlow 2s ease-in-out infinite',
       },
       keyframes: {
+        hotlineGlow: {
+          '0%, 100%': { boxShadow: '0 0 0 rgb(var(--color-hotline) / 0)' },
+          '50%': { boxShadow: '0 0 12px rgb(var(--color-hotline) / 0.4)' },
+        },
         emergencyGlow: {
-          '0%, 100%': { boxShadow: '0 0 0 rgba(237, 28, 36, 0)' },
-          '50%': { boxShadow: '0 0 12px rgba(237, 28, 36, 0.4)' },
+          '0%, 100%': { boxShadow: '0 0 0 rgb(var(--color-emergency) / 0)' },
+          '50%': { boxShadow: '0 0 12px rgb(var(--color-emergency) / 0.4)' },
         },
       },
     },
   },
+  safelist: [
+    'animate-emergency-glow',
+    'animate-hotline-glow',
+    'shadow-glow-emergency',
+    'shadow-glow-hotline',
+    'bg-emergency/90',
+    'bg-hotline/90',
+    'border-neutral-white/20',
+  ],
   plugins: [],
 }

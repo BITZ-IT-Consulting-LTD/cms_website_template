@@ -18,42 +18,41 @@ const createFormData = (data) => {
   Object.keys(data).forEach(key => {
     const value = data[key]
 
-    // Skip null, undefined, or empty strings for optional fields
+    // Handle file fields first
+    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo', 'favicon']
+    if (fileFields.includes(key)) {
+      if (value instanceof File) {
+        formData.append(key, value)
+      } else if (value === null) {
+        // To delete a file, send an empty string for the field
+        formData.append(key, '')
+      }
+      // If it's a string (existing URL), or any other case for a file field, do nothing.
+      // The backend will keep the existing file if the key is not present or not a file.
+      return
+    }
+
+    // Skip null/undefined for non-file fields
     if (value === null || value === undefined) {
       return
     }
 
-    // Handle tags array - only append if array has items
+    // Handle tags array
     if (key === 'tags') {
       if (Array.isArray(value) && value.length > 0) {
         value.forEach(tag => {
-          // Only append if tag is a valid ID (number or string number)
           const tagId = typeof tag === 'number' ? tag : parseInt(tag, 10)
           if (!isNaN(tagId) && tagId > 0) {
             formData.append('tags', tagId)
           }
         })
       }
-      // If tags is empty array or null/undefined, skip it completely
       return
     }
 
-    // Handle file fields - only append if it's a File object
-    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo', 'favicon']
-    if (fileFields.includes(key)) {
-      if (value instanceof File) {
-        formData.append(key, value)
-      }
-      // If it's a string (existing URL), skip it - backend will keep existing file
-      return
-    }
-
-    // Handle category and category_id - ensure it's a number and skip if invalid
+    // Handle category and category_id
     if (key === 'category' || key === 'category_id') {
-      if (value === null || value === '' || value === undefined) {
-        return
-      }
-      // Ensure category is sent as a number (FormData will convert to string)
+      if (value === '') return // Don't append if it's an empty string
       const categoryId = typeof value === 'number' ? value : parseInt(value, 10)
       if (!isNaN(categoryId) && categoryId > 0) {
         formData.append(key, categoryId.toString())
@@ -61,19 +60,7 @@ const createFormData = (data) => {
       return
     }
 
-    // Handle empty strings for optional fields - convert to empty string or skip
-    if (value === '' && ['excerpt', 'slug'].includes(key)) {
-      // Allow empty strings for these optional fields
-      formData.append(key, '')
-      return
-    }
-
-    // Skip empty strings for other optional fields
-    if (value === '') {
-      return
-    }
-
-    // Handle boolean values - Django expects 'true'/'false' or '1'/'0'
+    // Handle boolean values
     if (typeof value === 'boolean') {
       formData.append(key, value ? 'true' : 'false')
       return
@@ -84,15 +71,15 @@ const createFormData = (data) => {
       formData.append(key, value.toString())
       return
     }
-
-    // Handle empty strings for optional text fields
-    if (value === '' && ['description', 'youtube_url'].includes(key)) {
-      // Allow empty strings for these optional fields
-      formData.append(key, '')
+    
+    // Handle objects (e.g., for JSON fields)
+    if (typeof value === 'object' && value !== null) {
+      formData.append(key, JSON.stringify(value))
       return
     }
 
-    // For all other fields, append the value as-is (FormData handles strings)
+    // For all other fields (strings), append them.
+    // This will also handle empty strings for fields that allow them.
     formData.append(key, value)
   })
   return formData

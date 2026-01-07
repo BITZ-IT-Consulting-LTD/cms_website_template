@@ -262,37 +262,57 @@
           </div>
         </div>
 
-        <!-- Branding / Colors -->
-        <div class="card p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <SwatchIcon class="h-5 w-5 mr-2 text-primary-500" />
-            Branding Colors
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
-              <div class="flex items-center space-x-2">
-                <input v-model="orgProfile.primary_color" type="color"
-                  class="h-10 w-10 border-0 rounded p-0 cursor-pointer" />
-                <input v-model="orgProfile.primary_color" type="text" class="input-primary flex-1" />
+        <!-- Branding Colors -->
+        <div class="card p-6 overflow-hidden">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+              <SwatchIcon class="h-5 w-5 mr-2 text-primary-500" />
+              Branding Colors
+            </h3>
+            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">SAUTI 116 Standard Palette</span>
+          </div>
+
+          <div class="space-y-8">
+            <!-- Grouping Colors by Category -->
+            <div v-for="group in ['Primary', 'Secondary', 'Accent', 'Neutral']" :key="group" class="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+              <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{{ group }} Colours</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div v-for="color in getColorsByGroup(group)" :key="color.id" class="flex flex-col space-y-2">
+                  <div class="flex items-center justify-between">
+                    <label class="block text-xs font-semibold text-gray-700 uppercase tracking-tighter">{{ color.name }}</label>
+                    <button @click="resetColorToDefault(color)" :disabled="color.value === color.default"
+                      class="text-[10px] text-primary-600 hover:text-primary-800 disabled:text-gray-300 transition-colors uppercase font-bold">
+                      Reset
+                    </button>
+                  </div>
+                  <div class="relative flex items-center">
+                    <div class="flex-shrink-0 mr-2">
+                      <input v-model="color.value" type="color"
+                        class="h-10 w-10 border-0 rounded-lg p-0 cursor-pointer shadow-sm hover:ring-2 hover:ring-primary-300 transition-all" />
+                    </div>
+                    <div class="flex-1">
+                      <input v-model="color.value" type="text" 
+                        class="input-primary w-full text-sm font-mono focus:ring-1" 
+                        placeholder="#000000" />
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between px-1">
+                    <span class="text-[10px] text-gray-400">Default: <span class="font-mono">{{ color.default }}</span></span>
+                    <div v-if="color.id === 'primary_red'" class="flex items-center">
+                      <span class="h-2 w-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
+                      <span class="text-[9px] text-red-500 font-bold uppercase">Emergency CTA</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
-              <div class="flex items-center space-x-2">
-                <input v-model="orgProfile.secondary_color" type="color"
-                  class="h-10 w-10 border-0 rounded p-0 cursor-pointer" />
-                <input v-model="orgProfile.secondary_color" type="text" class="input-primary flex-1" />
-              </div>
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
-              <div class="flex items-center space-x-2">
-                <input v-model="orgProfile.accent_color" type="color"
-                  class="h-10 w-10 border-0 rounded p-0 cursor-pointer" />
-                <input v-model="orgProfile.accent_color" type="text" class="input-primary flex-1" />
-              </div>
-            </div>
+          </div>
+          
+          <div class="mt-8 p-4 bg-orange-50 border border-orange-100 rounded-lg flex items-start">
+            <InformationCircleIcon class="h-5 w-5 text-orange-500 mr-3 mt-0.5 flex-shrink-0" />
+            <p class="text-sm text-orange-800">
+              <strong>Brand Guardrail:</strong> These colours form the core identity of SAUTI 116. While customisation is permitted, we recommend maintaining high contrast ratios (especially for Neutral colours) to ensure accessibility across all devices.
+            </p>
           </div>
         </div>
 
@@ -776,7 +796,8 @@
     ScaleIcon,
     HomeIcon,
     BuildingOfficeIcon,
-    SwatchIcon
+    SwatchIcon,
+    InformationCircleIcon
   } from '@heroicons/vue/24/outline'
   import { api } from '@/utils/api'
   import AuditHistory from '@/components/common/AuditHistory.vue'
@@ -865,12 +886,40 @@
       loadingOrg.value = true
       const response = await api.organizationProfile.get()
       orgProfile.value = response.data
+      
+      // Initialize brand_colors if it doesn't exist or is empty
+      if (!orgProfile.value.brand_colors || orgProfile.value.brand_colors.length === 0) {
+        orgProfile.value.brand_colors = getDefaultBrandColors()
+      }
     } catch (error) {
       console.error('Failed to fetch organization profile:', error)
       toast.error('Failed to load organization profile')
     } finally {
       loadingOrg.value = false
     }
+  }
+
+  function getDefaultBrandColors() {
+    return [
+      { id: 'primary_blue', name: 'Primary Blue', value: '#007BBF', default: '#007BBF', group: 'Primary', is_required: true },
+      { id: 'primary_red', name: 'Emergency / CTA Red', value: '#ED1C24', default: '#ED1C24', group: 'Primary', is_required: true },
+      { id: 'secondary_dark_green', name: 'Dark Green', value: '#006633', default: '#006633', group: 'Secondary', is_required: true },
+      { id: 'secondary_light_green', name: 'Light Green', value: '#8CC63F', default: '#8CC63F', group: 'Secondary', is_required: true },
+      { id: 'accent_orange', name: 'Accent Orange', value: '#FF9933', default: '#FF9933', group: 'Accent', is_required: true },
+      { id: 'accent_yellow', name: 'Accent Yellow', value: '#FFF200', default: '#FFF200', group: 'Accent', is_required: true },
+      { id: 'neutral_black', name: 'Black', value: '#000000', default: '#000000', group: 'Neutral', is_required: true },
+      { id: 'neutral_white', name: 'White', value: '#FFFFFF', default: '#FFFFFF', group: 'Neutral', is_required: true },
+    ]
+  }
+
+  function getColorsByGroup(group) {
+    if (!orgProfile.value || !orgProfile.value.brand_colors) return []
+    return orgProfile.value.brand_colors.filter(c => c.group === group)
+  }
+
+  function resetColorToDefault(color) {
+    color.value = color.default
+    toast.info(`${color.name} reset to brand default`)
   }
 
   async function fetchOrgHistory() {
@@ -979,6 +1028,16 @@
       // Save Organization Profile if on organization tab
       if (activeTab.value === 'organization' && orgProfile.value) {
         console.log('Saving Organization Profile:', orgProfile.value)
+        
+        // Update legacy color fields for backward compatibility
+        const primaryBlue = orgProfile.value.brand_colors.find(c => c.id === 'primary_blue')
+        const secondaryGreen = orgProfile.value.brand_colors.find(c => c.id === 'secondary_dark_green')
+        const accentOrange = orgProfile.value.brand_colors.find(c => c.id === 'accent_orange')
+        
+        if (primaryBlue) orgProfile.value.primary_color = primaryBlue.value
+        if (secondaryGreen) orgProfile.value.secondary_color = secondaryGreen.value
+        if (accentOrange) orgProfile.value.accent_color = accentOrange.value
+
         const response = await api.organizationProfile.update(orgProfile.value)
         orgProfile.value = response.data
         toast.success('Organization profile saved successfully')

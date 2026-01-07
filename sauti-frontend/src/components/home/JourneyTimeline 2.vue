@@ -13,7 +13,7 @@
       <div class="section-header text-center mb-20">
         <span class="text-blue-600 font-bold tracking-wider uppercase text-sm bg-blue-50 px-4 py-1 rounded-full">Our History</span>
         <h2 class="section-title mt-4 text-4xl md:text-5xl">The Sauti Journey</h2>
-        <p class="section-subtitle max-w-2xl mx-auto mt-4 text-lg text-gray-600">Growing from a pilot project to a national lifeline for every child in Uganda.</p>
+        <p class="section-subtitle max-w-2xl mx-auto mt-4 text-lg text-black/60">Growing from a pilot project to a national lifeline for every child in Uganda.</p>
       </div>
       
       <div class="relative max-w-5xl mx-auto">
@@ -26,8 +26,8 @@
           <div class="relative flex items-center justify-between group">
             <div class="w-5/12 text-right pr-12">
               <div class="card bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">Lobbying & Designation</h3>
-                <p class="text-gray-600 mt-2 text-sm leading-relaxed">MGLSD, with UCRNN and UNICEF, lobbied for 116 to be designated as the national child helpline number.</p>
+                <h3 class="text-xl font-bold text-secondary group-hover:text-blue-600 transition-colors">Lobbying & Designation</h3>
+                <p class="text-black/60 mt-2 text-sm leading-relaxed">MGLSD, with UCRNN and UNICEF, lobbied for 116 to be designated as the national child helpline number.</p>
               </div>
             </div>
             <!-- Branch Connector Left -->
@@ -47,8 +47,8 @@
           <div class="relative flex items-center justify-between group flex-row-reverse">
             <div class="w-5/12 text-left pl-12">
               <div class="card bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">Official Toll-Free Number</h3>
-                <p class="text-gray-600 mt-2 text-sm leading-relaxed">UCC officially designated 116 as an emergency and toll-free number.</p>
+                <h3 class="text-xl font-bold text-secondary group-hover:text-green-600 transition-colors">Official Toll-Free Number</h3>
+                <p class="text-black/60 mt-2 text-sm leading-relaxed">UCC officially designated 116 as an emergency and toll-free number.</p>
               </div>
             </div>
             <!-- Branch Connector Right -->
@@ -67,8 +67,8 @@
           <div class="relative flex items-center justify-between group">
             <div class="w-5/12 text-right pr-12">
               <div class="card bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">First Call Received</h3>
-                <p class="text-gray-600 mt-2 text-sm leading-relaxed">UCHL received the first call on code 116 on 4th November 2013.</p>
+                <h3 class="text-xl font-bold text-secondary group-hover:text-purple-600 transition-colors">First Call Received</h3>
+                <p class="text-black/60 mt-2 text-sm leading-relaxed">UCHL received the first call on code 116 on 4th November 2013.</p>
               </div>
             </div>
             <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-full w-12 h-0.5 bg-purple-300 origin-right transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
@@ -86,8 +86,8 @@
           <div class="relative flex items-center justify-between group flex-row-reverse">
             <div class="w-5/12 text-left pl-12">
               <div class="card bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">Government Takes Over</h3>
-                <p class="text-gray-600 mt-2 text-sm leading-relaxed">MGLSD took over the management of UCHL from UCRNN.</p>
+                <h3 class="text-xl font-bold text-secondary group-hover:text-orange-600 transition-colors">Government Takes Over</h3>
+                <p class="text-black/60 mt-2 text-sm leading-relaxed">MGLSD took over the management of UCHL from UCRNN.</p>
               </div>
             </div>
             <div class="absolute left-1/2 top-1/2 -translate-y-1/2 w-12 h-0.5 bg-orange-300 origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
@@ -105,8 +105,8 @@
           <div class="relative flex items-center justify-between group">
             <div class="w-5/12 text-right pr-12">
               <div class="card bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">Legal Framework</h3>
-                <p class="text-gray-600 mt-2 text-sm leading-relaxed">UCHL instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.</p>
+                <h3 class="text-xl font-bold text-secondary group-hover:text-red-600 transition-colors">Legal Framework</h3>
+                <p class="text-black/60 mt-2 text-sm leading-relaxed">UCHL instituted by law (Children’s Act cap 59 2016, as amended) section 42 C.</p>
               </div>
             </div>
             <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-full w-12 h-0.5 bg-red-300 origin-right transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
@@ -124,8 +124,8 @@
           <div class="relative flex items-center justify-between group flex-row-reverse">
             <div class="w-5/12 text-left pl-12">
               <div class="card bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">GBV Integration</h3>
-                <p class="text-gray-600 mt-2 text-sm leading-relaxed">Gender-based violence response integrated into Sauti’s work nationwide.</p>
+                <h3 class="text-xl font-bold text-secondary group-hover:text-teal-600 transition-colors">GBV Integration</h3>
+                <p class="text-black/60 mt-2 text-sm leading-relaxed">Gender-based violence response integrated into Sauti’s work nationwide.</p>
               </div>
             </div>
             <div class="absolute left-1/2 top-1/2 -translate-y-1/2 w-12 h-0.5 bg-teal-300 origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
@@ -142,7 +142,7 @@
       </div>
       
       <div class="text-center mt-24">
-        <p class="text-gray-500 text-lg leading-relaxed max-w-4xl mx-auto italic">
+        <p class="text-black/50 text-lg leading-relaxed max-w-4xl mx-auto italic">
           "Aligned with ITU recommendation for 116 child helplines; operated under MGLSD in collaboration with NGOs and UN partners."
         </p>
       </div>

@@ -7,7 +7,7 @@
       </div>
 
       <!-- Optional message -->
-      <p v-if="message" class="mt-4 text-sauti-darkGreen font-normal" :class="textSizeClass">
+      <p v-if="message" class="mt-4 text-black font-bold" :class="textSizeClass">
         {{ message }}
       </p>
     </div>
@@ -43,7 +43,7 @@
 
   const containerClass = computed(() => {
     return props.fullScreen
-      ? 'fixed inset-0 bg-sauti-white bg-opacity-90 z-50'
+      ? 'fixed inset-0 bg-neutral-white bg-opacity-90 z-50'
       : 'py-12'
   })
 

@@ -2,22 +2,22 @@
   <div class="space-y-12">
     <!-- 1. Category Filter -->
     <div v-if="categories && categories.length > 0"
-      class="bg-sauti-white rounded-[2.5rem] border-2 border-sauti-neutral p-8 shadow-sm">
-      <h2 class="campaign-header text-sm text-sauti-darkGreen mb-6 opacity-40">Knowledge Base Categories</h2>
+      class="bg-neutral-white rounded-[2.5rem] border-2 border-neutral-offwhite p-8 shadow-sm">
+      <h2 class="campaign-header text-sm text-secondary mb-6 opacity-40">Knowledge Base Categories</h2>
       <div class="flex flex-wrap gap-3">
         <button @click="selectCategory(null)" :class="[
           'px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border-2',
           selectedCategory === null
-            ? 'bg-sauti-blue border-sauti-blue text-sauti-white shadow-lg scale-105'
-            : 'bg-sauti-white border-sauti-neutral text-sauti-darkGreen/50 hover:border-sauti-blue hover:text-sauti-blue'
+            ? 'bg-primary border-primary text-neutral-white shadow-lg scale-105'
+            : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
         ]">
           All Topics
         </button>
         <button v-for="cat in categories" :key="cat.slug" @click="selectCategory(cat.slug)" :class="[
           'px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border-2',
           selectedCategory === cat.slug
-            ? 'bg-sauti-blue border-sauti-blue text-sauti-white shadow-xl scale-105'
-            : 'bg-sauti-white border-sauti-neutral text-sauti-darkGreen/50 hover:border-sauti-blue hover:text-sauti-blue'
+            ? 'bg-primary border-primary text-neutral-white shadow-xl scale-105'
+            : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
         ]">
           {{ cat.name }}
         </button>
@@ -30,9 +30,9 @@
     </div>
 
     <!-- 3. Error State -->
-    <div v-else-if="error" class="bg-sauti-red/5 border-2 border-sauti-red/20 rounded-[2.5rem] p-12 text-center">
-      <ExclamationTriangleIcon class="w-12 h-12 text-sauti-red mx-auto mb-6" />
-      <p class="text-sauti-darkGreen/70 font-bold mb-8">{{ error }}</p>
+    <div v-else-if="error" class="bg-emergency/5 border-2 border-emergency/20 rounded-[2.5rem] p-12 text-center">
+      <ExclamationTriangleIcon class="w-12 h-12 text-emergency mx-auto mb-6" />
+      <p class="text-black/70 font-bold mb-8">{{ error }}</p>
       <BaseCTA @click="$emit('retry')" variant="primary">
         Try Reconnecting
       </BaseCTA>
@@ -40,12 +40,11 @@
 
     <!-- 4. Empty State -->
     <div v-else-if="filteredFaqs.length === 0"
-      class="bg-sauti-neutral/10 border-2 border-dashed border-sauti-neutral rounded-[3rem] p-16 text-center">
-      <QuestionMarkCircleIcon class="w-16 h-16 mx-auto text-sauti-darkGreen/20 mb-6" />
-      <h3 class="campaign-header text-xl text-sauti-darkGreen mb-4">No insights found</h3>
-      <p class="text-lg font-bold text-sauti-darkGreen/40">
-        {{ selectedCategory ? 'There are currently no listed questions in this category.' : 'Check back later as we
-        update our knowledge base.' }}
+      class="bg-neutral-offwhite border-2 border-dashed border-neutral-offwhite rounded-[3rem] p-16 text-center">
+      <QuestionMarkCircleIcon class="w-16 h-16 mx-auto text-secondary/20 mb-6" />
+      <h3 class="campaign-header text-xl text-secondary mb-4">No insights found</h3>
+      <p class="text-lg font-bold text-black/40">
+        {{ selectedCategory ? 'There are currently no listed questions in this category.' : 'Check back later as we update our knowledge base.' }}
       </p>
     </div>
 
@@ -53,7 +52,7 @@
     <div v-else class="space-y-4">
       <div v-for="(faq, index) in filteredFaqs" :key="faq.id"
         class="rounded-[2rem] transition-all duration-500 overflow-hidden"
-        :class="openIndex === index ? 'bg-white shadow-xl' : 'bg-white shadow-sm hover:shadow-md'">
+        :class="openIndex === index ? 'bg-neutral-white shadow-xl' : 'bg-neutral-white shadow-sm hover:shadow-md'">
         <!-- Question Toggle -->
         <button @click="toggleFaq(index)"
           class="w-full px-8 py-6 text-left flex items-start justify-between gap-6 group"
@@ -61,24 +60,24 @@
           <div class="flex-1">
             <!-- Badges -->
             <div class="flex items-center gap-3 mb-4">
-              <span v-if="faq.category" class="pill bg-sauti-blue/10 text-sauti-blue text-[8px]">
+              <span v-if="faq.category" class="pill bg-primary/10 text-primary text-[8px]">
                 {{ faq.category.name }}
               </span>
-              <span v-if="faq.language" class="pill bg-sauti-neutral/50 text-sauti-darkGreen/60 text-[8px]">
+              <span v-if="faq.language" class="pill bg-neutral-offwhite text-muted text-[8px]">
                 {{ getLanguageName(faq.language) }}
               </span>
             </div>
 
             <!-- Question Text -->
             <h3
-              class="text-xl md:text-2xl font-bold text-sauti-darkGreen leading-tight group-hover:text-sauti-blue transition-colors">
+              class="text-xl md:text-2xl font-bold text-secondary leading-tight group-hover:text-primary transition-colors">
               {{ faq.question }}
             </h3>
           </div>
 
           <!-- Icon -->
           <div
-            :class="['w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 shrink-0', openIndex === index ? 'bg-sauti-blue text-white rotate-180' : 'bg-sauti-neutral text-sauti-blue group-hover:bg-sauti-blue/10']">
+            :class="['w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 shrink-0', openIndex === index ? 'bg-primary text-neutral-white rotate-180' : 'bg-neutral-offwhite text-primary group-hover:bg-primary/10']">
             <ChevronDownIcon class="w-6 h-6" stroke-width="3" />
           </div>
         </button>
@@ -86,17 +85,17 @@
         <!-- Answer Content -->
         <transition name="accordion" @enter="enter" @leave="leave">
           <div v-show="openIndex === index" class="px-8 pb-8">
-            <div class="pt-8 border-t-2 border-sauti-neutral/30">
+            <div class="pt-8 border-t-2 border-neutral-offwhite">
               <div
-                class="text-lg md:text-xl font-bold text-sauti-darkGreen/70 leading-relaxed whitespace-pre-line prose-faq"
+                class="text-lg md:text-xl font-bold text-black/70 leading-relaxed whitespace-pre-line prose-faq"
                 v-html="faq.answer"></div>
 
               <!-- Metadata footer -->
               <div v-if="faq.views_count" class="mt-8 flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-sauti-neutral/50 flex items-center justify-center text-sauti-blue">
+                <div class="w-8 h-8 rounded-lg bg-neutral-offwhite flex items-center justify-center text-primary">
                   <EyeIcon class="w-4 h-4" />
                 </div>
-                <span class="campaign-header text-[10px] text-sauti-darkGreen/30">Verified and viewed {{ faq.views_count
+                <span class="campaign-header text-[10px] text-secondary/30">Verified and viewed {{ faq.views_count
                   }} times</span>
               </div>
             </div>
@@ -106,24 +105,24 @@
     </div>
 
     <!-- 6. Help Banner Overlay -->
-    <div class="bg-sauti-darkGreen p-10 md:p-16 rounded-[4rem] text-sauti-white shadow-2xl relative overflow-hidden">
-      <div class="absolute -right-20 -top-20 w-80 h-80 bg-sauti-blue/10 rounded-full blur-3xl"></div>
+    <div class="bg-secondary p-10 md:p-16 rounded-[4rem] text-neutral-white shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
       <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-12 text-center md:text-left">
         <div
-          class="w-16 h-16 bg-white/10 rounded-[1.5rem] flex items-center justify-center shrink-0 border border-white/20">
-          <InformationCircleIcon class="w-8 h-8 text-sauti-blue" />
+          class="w-16 h-16 bg-neutral-white/10 rounded-[1.5rem] flex items-center justify-center shrink-0 border border-neutral-white/20">
+          <InformationCircleIcon class="w-8 h-8 text-primary" />
         </div>
         <div class="flex-1">
-          <h3 class="campaign-header text-2xl text-white mb-4">Didn't find your answer?</h3>
-          <p class="text-lg font-bold text-white/50 mb-10 leading-relaxed">
+          <h3 class="campaign-header text-2xl text-neutral-white mb-4">Didn't find your answer?</h3>
+          <p class="text-lg font-bold text-neutral-white/50 mb-10 leading-relaxed">
             Our professional support team is available 24/7 to provide personalized assistance for your specific
             situation.
           </p>
           <div class="cta-group justify-center md:justify-start">
             <BaseCTA href="tel:116" variant="primary"
-              class="!bg-sauti-white !text-sauti-darkGreen hover:!bg-sauti-blue hover:!text-white">Call 116</BaseCTA>
-            <BaseCTA href="/contact" variant="outline" class="text-white border-white/20">Message Support</BaseCTA>
-            <BaseCTA href="/report" variant="outline" class="text-white border-white/20">Log Statement</BaseCTA>
+              class="!bg-neutral-white !text-secondary hover:!bg-primary hover:!text-neutral-white">Call 116</BaseCTA>
+            <BaseCTA href="/contact" variant="outline" class="text-neutral-white border-neutral-white/20">Message Support</BaseCTA>
+            <BaseCTA href="/report" variant="outline" class="text-neutral-white border-neutral-white/20">Log Statement</BaseCTA>
           </div>
         </div>
       </div>
