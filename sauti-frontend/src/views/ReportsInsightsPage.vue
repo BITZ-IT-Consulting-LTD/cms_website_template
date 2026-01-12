@@ -330,7 +330,7 @@
             position: 'bottom',
             labels: {
               boxWidth: 12,
-              font: { size: 10, family: 'Cronos Pro', weight: '900' },
+              font: { size: 10, family: 'Inter', weight: '900' },
               padding: 20
             }
           }

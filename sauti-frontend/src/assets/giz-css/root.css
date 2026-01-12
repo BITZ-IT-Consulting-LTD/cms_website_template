@@ -1,26 +1,35 @@
 /* Root CSS Variables - Scoped to Giz Chat Wrapper */
 .giz-chat-wrapper {
     /* SAUTI Brand Colors */
-    --primary: #007BBF;         /* blue */
-    --secondary: #FF9933;        /* orange */
-    --accent: #ED1C24;           /* red */
-    --highlight: #FFF200;        /* yellow */
-    --neutral-light: #FFFFFF;    /* white */
-    --neutral-dark: #006633;     /* darkGreen */
-    --text-dark: #000000;         /* black */
-    --text-light: #FFFFFF;        /* white */
+    --primary: #007BBF;
+    /* blue */
+    --secondary: #FF9933;
+    /* orange */
+    --accent: #ED1C24;
+    /* red */
+    --highlight: #FFF200;
+    /* yellow */
+    --neutral-light: #FFFFFF;
+    /* white */
+    --neutral-dark: #006633;
+    /* darkGreen */
+    --text-dark: #000000;
+    /* black */
+    --text-light: #FFFFFF;
+    /* white */
 
     /* Backgrounds */
     --bg-primary: var(--neutral-light);
-    --bg-secondary: #f0f0f0; /* A light gray for secondary backgrounds, not in brand guide but needed for differentiation */
+    --bg-secondary: #f0f0f0;
+    /* A light gray for secondary backgrounds, not in brand guide but needed for differentiation */
 
     /* Buttons */
     --btn-primary: var(--primary);
     --btn-secondary: var(--secondary);
 
     /* Typography */
-    --font-family: 'Cronos Pro';
-    --heading-font-weight: 600;
+    --font-family: 'Roboto', sans-serif;
+    --heading-font-weight: 700;
 
     /* Spacing */
     --base-spacing: 16px;

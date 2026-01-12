@@ -1,48 +1,20 @@
 <template>
   <div class="bg-neutral-white min-h-screen">
     <!-- 1. Page Header -->
-    <header class="page-header">
+    <header class="page-header !pb-0">
       <div class="container-custom">
         <h1 class="page-header-title">
-          HELPLINE NEWS
+          Updates <span class="text-primary">and blogs</span>
         </h1>
-        <p class="page-header-subtitle">
-          {{ blogSubtitle || 'Official updates, impact reports, and protection news from the Sauti 116 Helpline.' }}
-        </p>
-
-        <!-- News in a Flash (Flash Pattern) -->
-        <div
-          class="mt-16 bg-neutral-white p-8 md:p-12 rounded-[3rem] border-2 border-primary/10 shadow-sm max-w-5xl mx-auto text-left">
-          <h2 class="campaign-header text-xl text-primary mb-8 flex items-center gap-3">
-            <ShieldCheckIcon class="w-6 h-6 text-primary" />
-            Impact at a Glance
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="space-y-2">
-              <p class="text-black font-bold">Community Reach</p>
-              <p class="text-black/60 text-sm">Active protection programs in **all districts** across Uganda.</p>
-            </div>
-            <div class="space-y-2">
-              <p class="text-black font-bold">Verified Reports</p>
-              <p class="text-black/60 text-sm">Over **1,000 cases** resolved through official channels this month.
-              </p>
-            </div>
-            <div class="space-y-2">
-              <p class="text-black font-bold">Emergency 116</p>
-              <p class="text-black/60 text-sm">Response times for critical reports maintained at **under 5
-                minutes**.</p>
-            </div>
-          </div>
-        </div>
       </div>
     </header>
 
-    <div class="container-custom section-padding">
+    <div class="container-custom section-padding !pt-12">
       <!-- 2. Search & Filters -->
       <div class="bg-neutral-offwhite rounded-[2.5rem] p-8 mb-16 shadow-none max-w-5xl mx-auto">
         <div class="flex flex-col md:flex-row gap-8 items-center">
           <div class="relative flex-1 w-full group">
-            <MagnifyingGlassIcon
+            <Search
               class="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-primary group-focus-within:text-secondary transition-colors" />
             <input v-model="filters.search" @input="debouncedSearch" type="search" :placeholder="blogSearchPlaceholder"
               class="w-full pl-16 pr-6 py-4 bg-neutral-white rounded-2xl border-none shadow-sm focus:shadow-md outline-none transition-all font-bold text-secondary placeholder:text-primary/40" />
@@ -54,7 +26,7 @@
               <option value="">{{ blogCategoriesDropdown }}</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.slug">{{ cat.name }}</option>
             </select>
-            <ChevronDownIcon
+            <ChevronDown
               class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary pointer-events-none" />
           </div>
         </div>
@@ -82,7 +54,7 @@
         <!-- Pagination -->
         <div class="flex items-center justify-center gap-4">
           <button @click="setPage('<')" class="btn btn-outline border-none shadow-sm hover:shadow-md !p-3">
-            <ChevronLeftIcon class="w-5 h-5" />
+            <ChevronLeft class="w-5 h-5" />
           </button>
 
           <div class="flex items-center gap-2">
@@ -97,16 +69,16 @@
           </div>
 
           <button @click="setPage('>')" class="btn btn-outline border-none shadow-sm hover:shadow-md !p-3">
-            <ChevronRightIcon class="w-5 h-5" />
+            <ChevronRight class="w-5 h-5" />
           </button>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-24 bg-neutral-white rounded-[4rem] shadow-lg max-w-4xl mx-auto">
+      <div v-else class="text-center py-24 max-w-4xl mx-auto">
         <div
           class="w-24 h-24 bg-neutral-offwhite/10 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm">
-          <ExclamationCircleIcon class="w-12 h-12 text-primary" />
+          <AlertCircle class="w-12 h-12 text-primary" />
         </div>
         <h3 class="text-3xl font-bold text-secondary mb-4">{{ blogNoResults }}</h3>
         <p class="text-xl text-black/50 font-bold max-w-2xl mx-auto">{{ blogNoResultsSubtitle }}</p>
@@ -125,13 +97,12 @@
   import { useBlogStore } from '@/store/blog'
   import { useSettingsStore } from '@/store/settings'
   import {
-    MagnifyingGlassIcon,
-    ChevronDownIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    ExclamationCircleIcon,
-    ShieldCheckIcon
-  } from '@heroicons/vue/24/outline'
+    Search,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    AlertCircle
+  } from 'lucide-vue-next'
 
   defineOptions({
     name: 'BlogPage'
@@ -146,7 +117,6 @@
   const totalPages = ref(1)
 
   // Computed properties for content
-  const blogSubtitle = computed(() => settingsStore.settings.blog_subtitle || 'Insights, stories, and news from the front lines of child protection in Uganda.')
   const blogSearchPlaceholder = computed(() => settingsStore.settings.blog_search_placeholder || 'Search stories...')
   const blogAllButton = computed(() => settingsStore.settings.blog_all_button || 'All Posts')
   const blogArticlesButton = computed(() => settingsStore.settings.blog_articles_button || 'News Articles')
