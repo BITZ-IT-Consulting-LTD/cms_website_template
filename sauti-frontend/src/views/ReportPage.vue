@@ -33,10 +33,15 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
         <!-- Left Column (Primary - 8 cols) -->
-        <main class="lg:col-span-8 space-y-8">
+        <main class="lg:col-span-8 space-y-8 flex flex-col">
           
-          <!-- Contextual Steps (1-2-3 Guide) -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <!-- Report Form Component (Prioritized on Mobile) -->
+          <section aria-label="Reporting Interface" class="order-1">
+            <ReportForm />
+          </section>
+
+          <!-- Contextual Steps (1-2-3 Guide) - Moved below form on mobile/desktop flow -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 order-2 mt-8">
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative group hover:border-primary/20 transition-all">
               <span class="absolute -top-4 -left-4 w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg rotate-3 group-hover:rotate-6 transition-transform">1</span>
               <h3 class="font-bold text-secondary text-lg mb-2 mt-2">Provide Details</h3>
@@ -57,10 +62,6 @@
           <!-- Confidentiality Notice -->
 
 
-          <!-- Report Form Component -->
-          <section aria-label="Reporting Interface">
-            <ReportForm />
-          </section>
         </main>
 
         <!-- Right Column (Sidebar - 4 cols) -->

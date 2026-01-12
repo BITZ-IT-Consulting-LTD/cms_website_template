@@ -475,77 +475,105 @@
     object-position: center;
   }
 
-  /* Responsive */
   @media (max-width: 1024px) {
     .hero-container {
       grid-template-columns: 1fr;
       text-align: center;
+      display: flex;
+      flex-direction: column;
     }
 
     .hero-content {
-      padding-left: 0;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 1rem;
+      padding-bottom: 2rem;
       align-items: center;
       order: 2;
+      /* Massive Overlap: Pull content way up to sit "inside" the photo area */
+      margin-top: -450px; 
+      position: relative;
+      /* Removed gradient for cleaner 'cutout' look if desired, or keep transparent */
+      background: transparent;
+      width: 100%;
+      border-radius: 0;
+      z-index: 10;
     }
 
+    /* HIDE LOGOS ON MOBILE TO REMOVE WHITE BOX CLUTTER */
     .hero-logos {
-      justify-content: center;
+      display: none;
     }
 
-    .hero-message {
-      align-items: center;
+    .logo-divider {
+      display: none;
     }
 
-    .hero-headline,
+    .hero-headline {
+       color: #1a1a1a;
+       font-size: 2.8rem; /* Slightly larger */
+       text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,255,255,1);
+    }
+    
     .hero-subheadline {
-      text-align: center;
+        text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,1);
     }
 
-    .hero-actions {
-      justify-content: center;
-    }
-
-    .hero-image-container {
-      justify-content: center;
-      order: 1;
-    }
-
-    .hero-image {
-      max-height: 50vh;
+    .hotline-number {
+        text-shadow: 0 0 15px rgba(255,255,255,0.9);
     }
   }
 
   @media (max-width: 640px) {
-    .hero-section {
-      padding: 1rem;
-      min-height: auto;
-      padding-top: 4rem;
+    .hero-content {
+       margin-top: -95vh; /* Move it extremely high to start */
+       padding-top: 60px; /* Reduced top padding */
+       text-shadow: none;
+       display: flex;
+       flex-direction: column;
+       align-items: center; 
+       text-align: center;
+       height: 90vh; 
+       justify-content: flex-start; 
     }
 
-    .logo-sauti {
-      height: 60px;
+    .hero-message {
+       margin-bottom: 2rem; /* Reduced space between text and buttons */
+       display: flex;
+       flex-direction: column;
+       gap: 0.25rem; /* Tighter text gap */
+       width: 100%;
     }
 
-    .logo-uganda {
-      height: 50px;
-    }
-
-    .logo-divider {
-      height: 40px;
+    .hero-actions {
+      justify-content: center; 
+      width: 100%;
+      margin-top: auto; /* Push buttons down but keep them in container */
+      margin-bottom: 4rem; /* Lift them up from the very bottom edge */
     }
 
     .hero-headline {
-      font-size: 2.5rem;
+       font-size: 2rem; /* Slightly smaller to fit better */
+       text-shadow: 0 0 20px rgba(255,255,255,0.95);
+       text-align: center;
+       width: 100%;
+       line-height: 1;
     }
-
+    
     .hero-subheadline {
-      font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 
-    .btn-call-now,
-    .btn-report-online {
-      padding: 0.875rem 1.5rem;
-      font-size: 1rem;
+    .hero-image-container {
+       height: 100vh;
+    }
+    
+    /* Pull the next section (Sauti Updates) up */
+    .hero-section {
+       margin-bottom: -60px; /* Reduced from -100px/-150px to stop cutting off content */
+       padding-bottom: 0;
+       height: auto; 
+       min-height: auto;
     }
   }
 

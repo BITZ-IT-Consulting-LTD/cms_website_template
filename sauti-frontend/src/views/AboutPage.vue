@@ -88,19 +88,46 @@
        </div>
     </section>
 
-    <!-- Path to Resolution Section (SVG Infographic) -->
-    <section class="py-24 bg-white overflow-hidden relative">
+    <!-- Path to Resolution Section -->
+    <section class="py-16 md:py-24 bg-white overflow-hidden relative">
        <!-- Decorative Background Blob -->
        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
        <div class="container-custom relative z-10">
-          <div class="text-center max-w-3xl mx-auto mb-20">
-             <h2 class="text-4xl md:text-5xl font-black text-secondary mb-6">Path to Resolution</h2>
-             <p class="text-xl text-gray-500 font-medium">How we ensure every case leads to safety.</p>
+          <div class="text-center max-w-3xl mx-auto mb-12 md:mb-20">
+             <h2 class="text-4xl md:text-5xl font-black text-secondary mb-4 md:mb-6">Path to Resolution</h2>
+             <p class="text-lg md:text-xl text-gray-500 font-medium px-4">How we ensure every case leads to safety.</p>
           </div>
 
-          <!-- Infographic Container -->
-          <div class="flex justify-center items-center h-[700px] bg-transparent rounded-[3rem] shadow-none border-none">
+          <!-- Mobile Layout: Vertical Steps -->
+          <div class="md:hidden flex flex-col gap-8 px-4">
+             <div v-for="(step, i) in resolutionSteps" :key="'m-step-'+i" class="flex flex-col items-center text-center bg-white p-8 rounded-3xl shadow-lg border border-gray-100 relative">
+                <!-- Icon -->
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl mb-4 shadow-md" :style="{ backgroundColor: step.color }">
+                   <component :is="step.icon" class="w-8 h-8" />
+                </div>
+                <!-- Content -->
+                <h3 class="text-xl font-black text-gray-800 mb-1">{{ step.title }}</h3>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">{{ step.subtitle }}</span>
+                <p class="text-gray-600 leading-relaxed">{{ step.description }}</p>
+                
+                <!-- Arrow pointing down (except last item) -->
+                <div v-if="i < resolutionSteps.length - 1" class="absolute -bottom-10 left-1/2 -translate-x-1/2 text-gray-300">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                   </svg>
+                </div>
+             </div>
+             
+             <!-- Final Goal Card Mobile -->
+             <div class="mt-4 flex flex-col items-center text-center bg-green-50 p-8 rounded-3xl border-2 border-green-100">
+                 <strong class="text-2xl font-black text-[#00ac46] mb-2">Safe Child</strong>
+                 <p class="text-gray-600">The ultimate goal of our journey.</p>
+             </div>
+          </div>
+
+          <!-- Desktop Layout: Circular Infographic -->
+          <div class="hidden md:flex justify-center items-center h-[700px] bg-transparent rounded-[3rem] shadow-none border-none">
              <div class="relative w-[600px] h-[600px]">
                 
                 <!-- Central Node -->
@@ -323,6 +350,17 @@ onMounted(async () => {
   ])
   
   timelineEvents.value = timelineRes.data.results || timelineRes.data || []
+  
+  // Ensure timelineEvents has data (Mockup fallback)
+  if (!timelineEvents.value || timelineEvents.value.length === 0) {
+    timelineEvents.value = [
+      { id: 1, year: 2014, title: 'Inception', description: 'Sauti 116 was established as a toll-free helpline to bridge the gap between children in need and child protection services in Uganda.' },
+      { id: 2, year: 2016, title: 'National Expansion', description: 'Partnered with the government to expand coverage nationwide, ensuring children from all districts could access safety.' },
+      { id: 3, year: 2018, title: 'Digital Integration', description: 'Launched the integrated Case Management System to track cases in real-time and improve response coordination.' },
+      { id: 4, year: 2021, title: 'Community Outreach', description: 'Initiated community-based child protection committees to strengthen safety networks at the village level.' },
+      { id: 5, year: 2024, title: 'A Decade of Impact', description: 'Celebrating 10 years of service, having supported over 1 million children through counseling and rescue missions.' }
+    ]
+  }
 })
 
 </script>

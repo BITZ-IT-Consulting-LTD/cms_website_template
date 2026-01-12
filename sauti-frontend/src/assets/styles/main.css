@@ -171,6 +171,16 @@
     @apply btn border-2 border-primary-dark text-primary-dark hover:bg-primary-dark hover:text-neutral-white focus:ring-primary-dark;
   }
 
+  /* Transparent Ghost Variant for Mobile Header */
+  .btn-ghost-mobile {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    /* Override default btn min-height */
+  }
+
   .card-base {
     @apply bg-neutral-white rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-xl transition-all duration-500;
   }
