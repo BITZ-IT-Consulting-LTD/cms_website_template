@@ -1,134 +1,137 @@
 <template>
-  <div class="bg-neutral-white min-h-screen">
-    <!-- 1. Page Header -->
-    <header class="page-header">
-      <div class="container-custom">
-        <h1 class="page-header-title">
-          Report <span class="text-primary">a Case</span>
+  <div class="min-h-screen bg-gradient-to-b from-white via-white to-gray-50 font-sans">
+    <!-- 1. Hero Section -->
+    <header class="py-16 md:py-20 text-center relative overflow-hidden">
+      <!-- Background Gradient Decoration -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-3xl -z-10 opacity-60"></div>
+
+      <div class="container-custom relative z-10 px-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-secondary mb-4 tracking-tight">
+          Report a <span class="text-primary">Case</span>
         </h1>
-        <p class="page-header-subtitle">
-          Professional, Secure, and Immediate Response to Any Form of Violence.
+        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed mb-8">
+          A safe, confidential, and professional space to seek help. We are available 24/7 to support you.
         </p>
-        <div class="mt-8 flex justify-center">
-          <div class="pill bg-primary/10 text-primary">Support Available in: EN • LG • SW • LS</div>
+        
+        <!-- Trust Badges -->
+        <!-- Trust Badges -->
+        <div class="flex flex-wrap justify-center gap-4 text-sm font-bold text-gray-500 uppercase tracking-wider">
+          <div class="flex items-center gap-2 px-6 py-2 bg-white rounded-full shadow-sm border border-gray-100">
+            <Lock class="w-5 h-5 text-emerald-500" />
+            <span>Secure</span>
+          </div>
+          <div class="flex items-center gap-2 px-6 py-2 bg-white rounded-full shadow-sm border border-gray-100">
+            <Clock class="w-5 h-5 text-blue-500" />
+            <span>24/7 Support</span>
+          </div>
         </div>
       </div>
     </header>
 
     <!-- 2. Main Content Grid -->
-    <div class="container-custom section-padding">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+    <div class="container-custom pb-24 px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-        <!-- Left Column: Form & Instructions -->
-        <div class="lg:col-span-8 section-rhythm">
-
-          <!-- Stepper / Process -->
-          <section aria-labelledby="process-heading">
-            <div class="bg-neutral-offwhite rounded-[3rem] p-10 md:p-12 shadow-sm">
-              <h2 id="process-heading" class="campaign-header text-sm text-secondary mb-10 opacity-50">How the
-                reporting process works</h2>
-              <ol class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <li v-for="(step, idx) in [
-                  { title: 'Share Your Story', text: 'Tell us as much as you can. You can remain completely anonymous.', color: 'primary' },
-                  { title: 'Encrypted Protection', text: 'Your data is locked and handled with extreme care by the MGLSD.', color: 'hotline' },
-                  { title: 'Path to Safety', text: 'Our experts review and coordinate support for you immediately.', color: 'secondary-light' }
-                ]" :key="idx" class="flex flex-col gap-6">
-                  <span
-                    :class="['inline-flex h-12 w-12 items-center justify-center rounded-2xl text-neutral-white font-bold text-xl shadow-lg', `bg-${step.color}`]">
-                    {{ idx + 1 }}
-                  </span>
-                  <div>
-                    <h3 class="campaign-header text-lg text-secondary mb-2">{{ step.title }}</h3>
-                    <p class="text-muted text-sm font-bold leading-relaxed">{{ step.text }}</p>
-                  </div>
-                </li>
-              </ol>
-            </div>
+        <!-- Left Column (Primary - 8 cols) -->
+        <main class="lg:col-span-8 space-y-8 flex flex-col">
+          
+          <!-- Report Form Component (Prioritized on Mobile) -->
+          <section aria-label="Reporting Interface" class="order-1">
+            <ReportForm />
           </section>
 
-          <!-- Confidentiality Notice -->
-          <div class="bg-secondary-light/10 p-8 rounded-[2.5rem] flex items-start gap-6">
-            <div
-              class="w-12 h-12 bg-neutral-white rounded-2xl flex items-center justify-center text-secondary-light shrink-0 shadow-sm border border-secondary-light/20">
-              <ShieldCheckIcon class="w-7 h-7" />
+          <!-- Contextual Steps (1-2-3 Guide) - Moved below form on mobile/desktop flow -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 order-2 mt-8">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative group hover:border-primary/20 transition-all">
+              <span class="absolute -top-4 -left-4 w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg rotate-3 group-hover:rotate-6 transition-transform">1</span>
+              <h3 class="font-bold text-secondary text-lg mb-2 mt-2">Provide Details</h3>
+              <p class="text-sm text-gray-500 leading-relaxed">Chat with our secure assistant to share what happened at your own pace.</p>
             </div>
-            <p class="text-black font-bold text-lg leading-relaxed pt-1">
-              Your voice is safe with us. All information is kept <span
-                class="text-primary underline decoration-2 decoration-primary/20">strictly private</span>.
-              We are government experts dedicated to your protection, and you have the right to remain <span
-                class="font-bold">anonymous</span> at every step.
-            </p>
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative group hover:border-primary/20 transition-all">
+              <span class="absolute -top-4 -left-4 w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg -rotate-3 group-hover:-rotate-6 transition-transform">2</span>
+              <h3 class="font-bold text-secondary text-lg mb-2 mt-2">Submit Securely</h3>
+              <p class="text-sm text-gray-500 leading-relaxed">Your report is encrypted and sent directly to our protection team.</p>
+            </div>
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative group hover:border-primary/20 transition-all">
+              <span class="absolute -top-4 -left-4 w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg rotate-3 group-hover:rotate-6 transition-transform">3</span>
+              <h3 class="font-bold text-secondary text-lg mb-2 mt-2">We Follow Up</h3>
+              <p class="text-sm text-gray-500 leading-relaxed">A professional caseworker reviews your case and contacts you for support.</p>
+            </div>
           </div>
 
-          <!-- Report Form Component -->
-          <section aria-labelledby="form-heading">
-            <div class="bg-primary/5 rounded-[3rem] overflow-hidden shadow-sm">
-              <div class="bg-primary/5 p-8 border-b-2 border-primary/10">
-                <h2 id="form-heading" class="campaign-header text-xl text-secondary">Formal Incident Report</h2>
-              </div>
-              <div class="p-8 md:p-12">
-                <ReportForm />
-              </div>
-            </div>
-          </section>
-        </div>
+          <!-- Confidentiality Notice -->
 
-        <!-- Right Column: Sidebar -->
-        <aside class="lg:col-span-4 space-y-8">
+
+        </main>
+
+        <!-- Right Column (Sidebar - 4 cols) -->
+        <aside class="lg:col-span-4 space-y-6">
 
           <!-- Immediate Help Card -->
-          <div class="bg-emergency/5 rounded-[3rem] p-10 shadow-sm">
-            <h3 class="campaign-header text-xl text-secondary mb-4">Urgent Help?</h3>
-            <p class="text-black font-bold leading-relaxed opacity-70 mb-8">
-              If someone is in immediate danger, do not wait. Use our priority channels for instant response.
+          <div class="bg-red-50 rounded-[2.5rem] p-8 shadow-sm border border-red-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+                <TriangleAlert class="w-5 h-5" />
+              </div>
+              <h3 class="font-bold text-red-900 text-lg">Immediate Danger?</h3>
+            </div>
+            <p class="text-red-800/70 text-sm font-medium leading-relaxed mb-8">
+              If you or someone else is in immediate physical danger, do not use this form. Get instant help now.
             </p>
             <div class="space-y-4">
-              <BaseCTA href="tel:116" variant="emergency" class="w-full justify-center gap-3">
-                <PhoneIcon class="w-5 h-5" />
-                Call 116 Now
-              </BaseCTA>
-              <BaseCTA href="https://wa.me/256743889999" variant="outline"
-                class="w-full justify-center gap-3 !border-hotline !text-hotline hover:!bg-hotline hover:!text-neutral-white">
-                <ChatBubbleLeftRightIcon class="w-5 h-5" />
-                WhatsApp Chat
-              </BaseCTA>
+              <a href="tel:116" class="flex items-center justify-center gap-3 w-full py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-lg shadow-red-200 transition-all active:scale-95">
+                <Phone class="w-5 h-5" />
+                <span>Call 116 Free</span>
+              </a>
+              <a href="https://wa.me/256743889999" class="flex items-center justify-center gap-3 w-full py-4 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 font-bold rounded-2xl transition-all">
+                <MessageCircle class="w-5 h-5" />
+                <span>WhatsApp Chat</span>
+              </a>
             </div>
           </div>
 
           <!-- Other Channels -->
-          <div class="bg-neutral-offwhite rounded-[3rem] p-10 shadow-sm">
-            <h3 class="campaign-header text-xl text-secondary mb-6">Secondary Channels</h3>
-            <div class="space-y-6">
-              <div v-for="channel in [
-                { label: 'U-Report SMS', val: '8500', icon: ChatBubbleBottomCenterTextIcon, color: 'text-primary' },
-                { label: 'Official Email', val: 'info@sauti.mglsd.go.ug', icon: EnvelopeIcon, color: 'text-primary' }
-              ]" :key="channel.label"
-                class="flex items-start gap-4 p-4 hover:bg-neutral-offwhite/30 rounded-2xl transition-colors">
-                <div
-                  :class="['w-10 h-10 rounded-xl bg-neutral-white border border-neutral-offwhite flex items-center justify-center shrink-0 shadow-sm', channel.color]">
-                  <component :is="channel.icon" class="w-5 h-5" />
+          <div class="bg-gray-50 rounded-[2.5rem] p-8 border border-gray-100">
+            <h3 class="font-bold text-secondary text-lg mb-6">Other Ways to Report</h3>
+            <div class="space-y-4">
+              <div class="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <MessageSquareText class="w-5 h-5" />
                 </div>
                 <div>
-                  <p class="campaign-header text-[10px] text-black/40 mb-1">{{ channel.label }}</p>
-                  <p class="text-black font-bold break-all">{{ channel.val }}</p>
+                  <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">SMS Shortcode</p>
+                  <p class="font-bold text-secondary">Text to 8500</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                  <Smartphone class="w-5 h-5" />
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Mobile App</p>
+                  <p class="font-bold text-secondary">SafePal App</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
+                  <Mail class="w-5 h-5" />
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Email</p>
+                  <p class="font-bold text-secondary break-all text-sm">info@sauti.mglsd.go.ug</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Privacy & Safety Footer -->
-          <div class="bg-secondary rounded-[3rem] p-10 shadow-xl text-neutral-white relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-neutral-white/5 rounded-full blur-2xl"></div>
-            <h3 class="campaign-header text-lg text-neutral-white mb-4">Safety First</h3>
-            <p class="text-sm opacity-70 leading-relaxed font-bold mb-6">
-              Your safety is our priority. We never share your data without legal necessity or absolute prevention of
-              harm.
-            </p>
-            <router-link to="/privacy"
-              class="text-primary font-bold uppercase text-[10px] tracking-widest hover:text-neutral-white transition-colors">
-              Read Safety Protocol →
+          <!-- Privacy Footer Link -->
+          <div class="text-center py-4">
+            <router-link to="/privacy" class="inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-primary transition-colors uppercase tracking-widest">
+              <Lock class="w-3 h-3" />
+              View Full Privacy Policy
             </router-link>
           </div>
+
         </aside>
       </div>
     </div>
@@ -137,14 +140,19 @@
 
 <script setup>
   import ReportForm from '@/components/reports/ReportForm.vue'
-  import BaseCTA from '@/components/common/BaseCTA.vue'
+
   import {
-    ShieldCheckIcon,
-    PhoneIcon,
-    ChatBubbleLeftRightIcon,
-    ChatBubbleBottomCenterTextIcon,
-    EnvelopeIcon
-  } from '@heroicons/vue/24/outline'
+    ShieldCheck,
+    Phone,
+    MessageCircle,
+    MessageSquareText,
+    Mail,
+    Globe,
+    TriangleAlert,
+    Smartphone,
+    Lock,
+    Clock
+  } from 'lucide-vue-next'
 
   defineOptions({
     name: 'ReportPage'

@@ -43,9 +43,8 @@ export default {
            ============================================ */
       },
       fontFamily: {
-        // Sauti 116 Institutional Voice: Cronos Pro is the primary brand typeface.
-        // Roboto and system-fonts are used as secondary digital fallbacks.
-        sans: ['"Cronos Pro"', 'Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Sauti 116 Institutional Voice: Roboto is now the primary brand typeface to match Admin console.
+        sans: ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'glow-hotline': '0 0 12px rgb(var(--color-hotline) / 0.4)',

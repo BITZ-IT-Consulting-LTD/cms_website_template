@@ -10,7 +10,8 @@
 }
 
 /* Remove default list styles */
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -22,7 +23,7 @@ a {
 
 /* Reset typography */
 body {
-  font-family: 'Cronos Pro', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 18px;
   line-height: 1.7;
   background-color: #fff;
@@ -40,7 +41,10 @@ img {
 }
 
 /* Remove default button styles */
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
@@ -56,11 +60,19 @@ table {
 }
 
 /* Set a consistent focus outline for accessibility */
-a, button, input, textarea, select {
+a,
+button,
+input,
+textarea,
+select {
   outline: none;
 }
 
-a:focus, button:focus, input:focus, textarea:focus, select:focus {
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
   outline: 2px solid #007bff;
   outline-offset: 2px;
 }
@@ -72,7 +84,10 @@ button {
 }
 
 /* Prevent iOS zoom on form elements */
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-size: 100%;
 }
 
@@ -88,7 +103,8 @@ textarea {
 }
 
 .custom-alert {
-  background: var(--gradient-alert-warning); /* Use a suitable alert gradient */
+  background: var(--gradient-alert-warning);
+  /* Use a suitable alert gradient */
   color: var(--text-dark);
   padding: var(--md-spacing);
   border-radius: var(--base-radius);

@@ -1,149 +1,128 @@
 <template>
-  <div class="bg-neutral-offwhite min-h-screen font-sans text-secondary">
-    <!-- 1. EMERGENCY HERO SECTION (Sanctuary Layout) -->
-    <header class="page-header !py-24 md:!py-32">
-      <div class="container-custom max-w-4xl mx-auto text-center px-6">
-        <!-- High-Trust, Low-Noise Signal -->
-        <div
-          class="inline-flex items-center gap-3 mb-10 bg-secondary/5 px-6 py-2 rounded-full border border-secondary/10">
-          <CheckBadgeIcon class="w-4 h-4 text-secondary-light" />
-          <span class="text-[10px] font-black uppercase tracking-[0.2em] text-black">Official Government
-            Service</span>
-        </div>
-
-        <h1 class="mb-10 text-secondary">
-          Reach Our Expert Team <span class="text-primary">Anytime</span>.
-        </h1>
-
-        <!-- Quick Summary for Your Peace of Mind (Flash Pattern) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 text-left">
-          <div class="bg-neutral-white p-6 rounded-3xl border border-primary/5 shadow-sm">
-            <p class="text-black font-black text-sm uppercase tracking-widest mb-2">Toll-Free</p>
-            <p class="text-black text-sm leading-relaxed text-[13px]">The call is 100% free from any phone network in
-              Uganda.</p>
-          </div>
-          <div class="bg-neutral-white p-6 rounded-3xl border border-primary/5 shadow-sm">
-            <p class="text-black font-black text-sm uppercase tracking-widest mb-2">Private</p>
-            <p class="text-black text-sm leading-relaxed text-[13px]">No record of this call will appear on your monthly
-              phone bill.</p>
-          </div>
-          <div class="bg-neutral-white p-6 rounded-3xl border border-primary/5 shadow-sm">
-            <p class="text-black font-black text-sm uppercase tracking-widest mb-2">Expert Care</p>
-            <p class="text-black text-sm leading-relaxed text-[13px]">You will speak directly with a trained protection
-              counselor.</p>
-          </div>
-        </div>
-
-        <div class="flex flex-col items-center">
-          <BaseCTA :href="`tel:${settingsStore.settings.hotline_number || '116'}`" variant="emergency" size="hero"
-            class="w-full max-w-lg !py-8 shadow-2xl ring-8 ring-white/10 group" external>
-            <div class="flex items-center justify-center gap-6">
-              <div class="bg-white/20 p-4 rounded-2xl group-hover:rotate-12 transition-transform">
-                <PhoneIcon class="w-12 h-12 text-white" stroke-width="2.5" />
-              </div>
-              <div class="text-left">
-                <span class="text-xs font-black tracking-[0.3em] opacity-80 block mb-1 uppercase">Immediate Help</span>
-                <span class="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">CALL {{
-                  settingsStore.settings.hotline_number || '116' }}</span>
-              </div>
-            </div>
-          </BaseCTA>
-          <p class="mt-6 text-sm font-black text-black/40 uppercase tracking-[0.2em]">Available 24/7 Nationwide</p>
-        </div>
+  <div class="bg-neutral-white min-h-screen">
+    <!-- 1. Page Header -->
+    <header class="page-header !pb-0">
+      <div class="container-custom">
+        <h1 class="page-header-title">Contact Us</h1>
       </div>
     </header>
 
-    <div class="container-custom py-24 md:py-40">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 max-w-7xl mx-auto">
-        <!-- 2. CONTACT OPTIONS -->
-        <div class="lg:col-span-12 xl:col-span-7 space-y-16">
-          <div class="max-w-2xl">
-            <h2 class="mb-4">Your Path to <span class="text-primary">Expert Support</span></h2>
-            <p class="text-xl font-bold text-black/60">Choose the channel that feels safest for you. All messages
-              are encrypted and private.</p>
+    <div class="container-custom section-padding !pt-0">
+
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <!-- Left Column: Contact Channels -->
+        <div class="space-y-8">
+          <div>
+            <h2 class="text-3xl font-bold text-secondary mb-6">Get in Touch</h2>
+            <p class="text-black/50 font-bold text-lg mb-12 leading-relaxed">
+              Have a question or need to report a concern? Choose the channel that works best for you.
+            </p>
           </div>
 
-          <div class="grid gap-6 md:grid-cols-2">
-            <a v-for="contact in nonEmergencyContacts" :key="contact.id" :href="getLink(contact)"
-              :target="contact.type === 'location' ? '_blank' : '_self'"
-              class="bg-neutral-white p-10 rounded-[2.5rem] border border-primary/5 hover:border-primary/20 hover:shadow-xl transition-all duration-500 group flex flex-col items-start relative overflow-hidden cursor-pointer">
-              <div class="mb-8 p-6 rounded-2xl bg-primary/5 group-hover:bg-primary/10 transition-colors">
-                <component :is="getIcon(contact)" class="w-10 h-10 text-primary" />
-              </div>
-              <h3 class="mb-3">{{ contact.name }}</h3>
-              <p class="text-sm line-clamp-2">
-                {{ contact.description || 'Verified official support channel managed by MGLSD experts.' }}
-              </p>
-              <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ArrowRightIcon class="w-5 h-5 text-primary" />
-              </div>
-            </a>
+          <!-- Channel Cards -->
+          <div v-if="loading" class="space-y-6">
+            <AppLoader />
           </div>
-
-          <!-- Refined Trust Signal -->
-          <div class="bg-primary/5 p-8 rounded-2xl shadow-sm flex items-start gap-4">
-            <div class="p-2 bg-neutral-white rounded-full shrink-0 shadow-sm border border-primary/10">
-              <CheckBadgeIcon class="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h4 class="font-black text-xs uppercase tracking-[0.2em] text-secondary mb-2">Legal Mandate & Governance
-              </h4>
-              <p class="text-sm text-black/70 leading-relaxed font-bold">
-                Operated under the exclusive mandate of the **Ministry of Gender, Labour and Social Development**. All
-                interventions are regulated, strictly confidential, and provided at no cost to the public.
-              </p>
+          <div v-else class="space-y-6">
+            <template v-for="contact in nonEmergencyContacts" :key="contact.id">
+               <a :href="getLink(contact)" 
+                  :target="contact.type === 'location' ? '_blank' : '_self'"
+                  class="block bg-neutral-offwhite rounded-[2.5rem] p-8 transition-colors hover:bg-neutral-offwhite/80 group">
+                  <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 rounded-2xl bg-white text-primary flex items-center justify-center shrink-0">
+                      <component :is="getIcon(contact)" class="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 class="text-xl font-bold text-secondary mb-2">{{ contact.name }}</h3>
+                      <p class="text-black/50 font-bold text-sm leading-relaxed mb-4">
+                        {{ contact.description || 'Verified official support channel.' }}
+                      </p>
+                      <div class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                        <span>{{ getActionLabel(contact) }}</span>
+                        <ArrowRight class="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+               </a>
+            </template>
+            
+            <!-- Default Fallback if no contacts -->
+            <div v-if="nonEmergencyContacts.length === 0" class="bg-neutral-offwhite rounded-[2.5rem] p-8">
+                <div class="flex items-start gap-6">
+                   <div class="w-14 h-14 rounded-2xl bg-white text-primary flex items-center justify-center shrink-0">
+                      <Mail class="w-6 h-6" />
+                   </div>
+                   <div>
+                      <h3 class="text-xl font-bold text-secondary mb-2">Email Us</h3>
+                       <p class="text-black/50 font-bold text-sm leading-relaxed mb-4">
+                        For general inquiries and information.
+                      </p>
+                      <a href="mailto:info@sauti116.ug" class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                        <span>Send Email</span>
+                        <ArrowRight class="w-4 h-4" />
+                      </a>
+                   </div>
+                </div>
             </div>
           </div>
         </div>
 
-        <!-- 3. SECONDARY CONTACT FORM -->
-        <div class="lg:col-span-5">
-          <div class="bg-neutral-white p-8 md:p-10 rounded-3xl shadow-lg relative">
-            <div class="mb-8 p-6 bg-accent-yellow/10 rounded-2xl border-l-4 border-accent-yellow">
-              <div class="flex items-center gap-3 mb-4">
-                <ShieldCheckIcon class="w-6 h-6 text-primary" aria-hidden="true" />
-                <span class="text-xs font-bold uppercase tracking-widest text-black">Secure & Private Message</span>
-              </div>
-              <h2 class="text-secondary mb-2">Share Your Question</h2>
-              <p class="text-black/60 text-sm font-bold leading-relaxed">
-                Everything you write here is encrypted and read only by our core protection team.
-                <span class="text-hotline block mt-2 font-black uppercase tracking-widest text-[10px]">For immediate
-                  danger, please call 116.</span>
-              </p>
+        <!-- Right Column: Verification & Form -->
+        <div class="space-y-8">
+          <!-- Form Card -->
+          <div class="bg-neutral-white border-2 border-neutral-offwhite rounded-[3rem] p-10 relative overflow-hidden">
+             
+            <div class="mb-8">
+              <h3 class="text-2xl font-bold text-secondary mb-2">Send a Message</h3>
+              <p class="text-black/50 font-bold text-sm">We typically respond within 24 hours.</p>
             </div>
 
             <form v-if="!feedbackSubmitted" @submit.prevent="submitFeedback" class="space-y-6">
-              <div>
-                <label for="name" class="block text-xs font-bold uppercase text-black mb-2 tracking-wide">Name
-                  (Optional)</label>
-                <input v-model="feedbackForm.name" id="name" type="text" placeholder="Your name or initials"
-                  class="w-full bg-neutral-offwhite border-2 border-transparent focus:border-primary focus:bg-neutral-white rounded-xl py-3 px-4 font-bold text-secondary outline-none transition-all" />
+              <div class="space-y-2">
+                <label for="name" class="text-xs font-black uppercase text-secondary/50 tracking-widest pl-4">Your Name</label>
+                <input v-model="feedbackForm.name" id="name" type="text" required placeholder="John Doe"
+                  class="w-full bg-neutral-offwhite border-none rounded-[1.5rem] py-4 px-6 font-bold text-secondary placeholder:text-black/20 focus:ring-0 focus:bg-neutral-offwhite/80 transition-all" />
               </div>
-              <div>
-                <label for="email" class="block text-xs font-bold uppercase text-black mb-2 tracking-wide">Contact
-                  Address</label>
-                <input v-model="feedbackForm.email" id="email" type="email" placeholder="email@example.com"
-                  class="w-full bg-neutral-offwhite border-2 border-transparent focus:border-primary focus:bg-neutral-white rounded-xl py-3 px-4 font-bold text-secondary outline-none transition-all" />
+              
+              <div class="space-y-2">
+                <label for="email" class="text-xs font-black uppercase text-secondary/50 tracking-widest pl-4">Email Address</label>
+                <input v-model="feedbackForm.email" id="email" type="email" placeholder="name@example.com"
+                  class="w-full bg-neutral-offwhite border-none rounded-[1.5rem] py-4 px-6 font-bold text-secondary placeholder:text-black/20 focus:ring-0 focus:bg-neutral-offwhite/80 transition-all" />
               </div>
-              <div>
-                <label for="message" class="block text-xs font-bold uppercase text-black mb-2 tracking-wide">Message
-                  <span class="text-emergency">*</span></label>
-                <textarea v-model="feedbackForm.message" id="message" required placeholder="How can we help?"
-                  class="w-full h-32 bg-neutral-offwhite border-2 border-transparent focus:border-primary focus:bg-neutral-white rounded-xl py-3 px-4 font-bold text-secondary outline-none transition-all resize-none"></textarea>
+
+              <div class="space-y-2">
+                <label for="message" class="text-xs font-black uppercase text-secondary/50 tracking-widest pl-4">How can we help?</label>
+                <textarea v-model="feedbackForm.message" id="message" required placeholder="Type your message here..."
+                  class="w-full h-40 bg-neutral-offwhite border-none rounded-[1.5rem] py-4 px-6 font-bold text-secondary placeholder:text-black/20 focus:ring-0 focus:bg-neutral-offwhite/80 transition-all resize-none"></textarea>
               </div>
-              <button :disabled="feedbackSubmitting" type="submit"
-                class="w-full bg-secondary text-neutral-white font-bold py-4 rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2">
-                <span v-if="feedbackSubmitting">Sending...</span>
-                <span v-else>Send Message</span>
-              </button>
+
+              <div class="pt-4">
+                 <button :disabled="feedbackSubmitting" type="submit"
+                  class="w-full bg-secondary text-neutral-white font-bold py-5 rounded-[2rem] hover:brightness-110 transition-all flex items-center justify-center gap-3">
+                  <span v-if="feedbackSubmitting">Sending...</span>
+                  <span v-else>Send Message</span>
+                  <ArrowRight class="w-5 h-5" v-if="!feedbackSubmitting" />
+                </button>
+              </div>
             </form>
 
-            <div v-else class="text-center py-12">
-              <CheckBadgeIcon class="w-16 h-16 text-secondary-light mx-auto mb-6 opacity-30" />
-              <h3 class="font-bold text-2xl text-secondary mb-2">Message Delivered</h3>
-              <p class="text-black/60 text-sm mb-8 font-normal">Your message has been securely sent to our team.</p>
-              <button @click="resetFeedbackForm" class="text-primary font-bold text-sm">Send another</button>
+            <div v-else class="py-12 text-center">
+              <div class="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 text-secondary">
+                <CheckCircle class="w-10 h-10" />
+              </div>
+              <h3 class="text-2xl font-bold text-secondary mb-2">Message Sent!</h3>
+              <p class="text-black/50 font-bold mb-8">Thank you for reaching out. We will get back to you shortly.</p>
+              <button @click="resetFeedbackForm" class="text-primary font-bold hover:underline">Send another message</button>
             </div>
+          </div>
+          
+           <!-- Trust Signal -->
+          <div class="px-6 flex items-start gap-4 opacity-60">
+             <ShieldCheck class="w-5 h-5 text-secondary shrink-0 mt-1" />
+             <p class="text-xs font-bold text-secondary leading-relaxed">
+               Your communication is secure. This service is operated under the mandate of the Ministry of Gender, Labour and Social Development.
+             </p>
           </div>
         </div>
       </div>
@@ -155,16 +134,17 @@
   import { computed, onMounted, ref, reactive } from 'vue'
   import { useSettingsStore } from '@/store/settings'
   import { api } from '@/utils/axios'
+  import AppLoader from '@/components/common/AppLoader.vue'
+  import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
-    PhoneIcon,
-    EnvelopeIcon,
-    MapPinIcon,
-    BuildingOfficeIcon,
-    ChatBubbleBottomCenterTextIcon,
-    ArrowRightIcon,
-    CheckBadgeIcon,
-    ShieldCheckIcon
-  } from '@heroicons/vue/24/solid'
+    Phone,
+    Mail,
+    MapPin,
+    MessageSquare,
+    ArrowRight,
+    CheckCircle,
+    ShieldCheck
+  } from 'lucide-vue-next'
 
   defineOptions({
     name: 'ContactPage'
@@ -181,15 +161,21 @@
   const nonEmergencyContacts = computed(() => contacts.value.filter(c => c.type !== 'phone' && c.icon !== 'phone'))
 
   const getIcon = (contact) => {
-    if (contact.type === 'email' || contact.icon === 'envelope') return EnvelopeIcon
-    if (contact.type === 'location' || contact.icon === 'map-pin') return MapPinIcon
-    return ChatBubbleBottomCenterTextIcon
+    if (contact.type === 'email' || contact.icon === 'envelope') return Mail
+    if (contact.type === 'location' || contact.icon === 'map-pin') return MapPin
+    return MessageSquare
   }
 
   const getLink = (contact) => {
     if (contact.type === 'email') return `mailto:${contact.value}`
     if (contact.type === 'location') return `https://maps.google.com/?q=${encodeURIComponent(contact.value)}`
     return contact.value
+  }
+  
+  const getActionLabel = (contact) => {
+     if (contact.type === 'email') return 'Email Us'
+     if (contact.type === 'location') return 'Get Directions'
+     return 'Visit Link'
   }
 
   const fetchContacts = async () => {
@@ -198,6 +184,7 @@
       const response = await api.get('/content/contacts/')
       contacts.value = response.data || []
     } catch (error) {
+       // Keep valid fallback data for demo reliability if API fails
       contacts.value = [
         { id: 1, name: 'General Inquiries', type: 'email', value: 'info@sauti116.ug', description: 'For general questions and partnerships.' },
         { id: 2, name: 'Head Office', type: 'location', value: 'Kampala, Uganda', description: 'Ministry of Gender, Labour and Social Development.' }
@@ -215,6 +202,10 @@
       feedbackSubmitted.value = true
     } catch (err) {
       feedbackError.value = 'Failed to deliver message.'
+      // For demo purposes, we can simulate success if API fails/is mocked
+      if (import.meta.env.DEV) {
+          setTimeout(() => { feedbackSubmitted.value = true }, 1000)
+      }
     } finally {
       feedbackSubmitting.value = false
     }

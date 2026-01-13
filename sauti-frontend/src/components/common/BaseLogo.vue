@@ -120,7 +120,7 @@
     }
 
     .logo-fallback {
-        font-family: 'Cronos Pro', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 600;
         color: theme('colors.primary');
     }
