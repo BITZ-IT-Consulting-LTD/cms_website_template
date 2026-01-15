@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- Story Detail Modal -->
+    <StoryDetailModal :isOpen="showStoryModal" :story="selectedStory" @close="showStoryModal = false" />
+
     <!-- 1. Hero Section - Take No Chances -->
     <section class="hero-section">
       <div class="hero-container">
@@ -99,36 +102,63 @@
 
         <div v-if="latestVideos.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <!-- Featured Post (Left) -->
-          <div v-if="latestVideos[0]" class="group cursor-pointer">
+          <router-link
+            v-if="latestVideos[0]"
+            :to="`/blogs/${latestVideos[0].slug}`"
+            class="group cursor-pointer block"
+          >
             <div class="rounded-3xl overflow-hidden aspect-[16/10] shadow-xl mb-6">
-              <img :src="latestVideos[0].thumbnail" :alt="latestVideos[0].title"
-                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+              <img
+                :src="latestVideos[0].thumbnail"
+                :alt="latestVideos[0].title"
+                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+              />
             </div>
             <div class="space-y-3">
-              <span class="text-primary font-bold text-sm tracking-widest uppercase">{{ latestVideos[0].category }}</span>
+              <span class="text-primary font-bold text-sm tracking-widest uppercase">
+                {{ latestVideos[0].category }}
+              </span>
               <h3 class="text-3xl font-bold text-secondary leading-tight group-hover:text-primary transition-colors">
                 {{ latestVideos[0].title }}
               </h3>
-              <p class="text-gray-600 line-clamp-3" v-if="latestVideos[0].excerpt">{{ latestVideos[0].excerpt }}</p>
-              <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">{{ latestVideos[0].date }}</p>
+              <p class="text-gray-600 line-clamp-3" v-if="latestVideos[0].excerpt">
+                {{ latestVideos[0].excerpt }}
+              </p>
+              <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">
+                {{ latestVideos[0].date }}
+              </p>
             </div>
-          </div>
+          </router-link>
 
           <!-- Side List (Right) -->
           <div class="flex flex-col gap-8">
-            <div v-for="post in latestVideos.slice(1)" :key="post.id" class="group cursor-pointer flex gap-6 items-start">
+            <router-link
+              v-for="post in latestVideos.slice(1)"
+              :key="post.id"
+              :to="`/blogs/${post.slug}`"
+              class="group cursor-pointer flex gap-6 items-start"
+            >
               <div class="shrink-0 w-32 h-32 rounded-2xl overflow-hidden shadow-md">
-                <img :src="post.thumbnail" :alt="post.title"
-                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                <img
+                  :src="post.thumbnail"
+                  :alt="post.title"
+                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
               </div>
               <div class="space-y-2">
-                <span class="text-primary font-bold text-xs tracking-widest uppercase">{{ post.category }}</span>
-                <h3 class="text-xl font-bold text-secondary leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                <span class="text-primary font-bold text-xs tracking-widest uppercase">
+                  {{ post.category }}
+                </span>
+                <h3
+                  class="text-xl font-bold text-secondary leading-snug group-hover:text-primary transition-colors line-clamp-2"
+                >
                   {{ post.title }}
                 </h3>
-                <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">{{ post.date }}</p>
+                <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">
+                  {{ post.date }}
+                </p>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
         
@@ -277,6 +307,7 @@
         .filter(post => post.featured_image)
         .map(post => ({
           id: post.id,
+          slug: post.slug,
           title: post.title,
           category: post.category?.name || 'Story',
           thumbnail: post.featured_image,

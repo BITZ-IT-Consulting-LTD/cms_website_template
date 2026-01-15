@@ -342,7 +342,7 @@ const editItem = (item) => {
   if (item.type === 'blog') {
     router.push(`/posts/${item.slug}/edit`)
   } else if (item.type === 'video') {
-    router.push(`/videos/${item.id}/edit`)
+    router.push(`/videos/${item.slug || item.id}/edit`)
   }
 }
 

@@ -38,9 +38,18 @@ class GlobalSettingsView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
-        settings, created = GlobalSettings.objects.get_or_create()
-        serializer = GlobalSettingsSerializer(settings)
-        return Response(serializer.data)
+        try:
+            settings, created = GlobalSettings.objects.get_or_create()
+            serializer = GlobalSettingsSerializer(settings)
+            return Response(serializer.data)
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error in GlobalSettingsView.get: {e}", exc_info=True)
+            return Response(
+                {"detail": "An error occurred while fetching settings."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def put(self, request, *args, **kwargs):
         settings, created = GlobalSettings.objects.get_or_create()

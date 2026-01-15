@@ -25,6 +25,7 @@ class PostListSerializer(serializers.ModelSerializer):
     author_name = serializers.CharField(source='author.get_full_name', read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    featured_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -32,8 +33,36 @@ class PostListSerializer(serializers.ModelSerializer):
             'id', 'title', 'slug', 'post_type', 'excerpt', 'author_name',
             'category_name', 'tags', 'featured_image', 'status',
             'language', 'views_count', 'is_featured', 'published_at',
-            'scheduled_publish_at', 'created_at'
+            'scheduled_publish_at', 'created_at', 'updated_at'
         ]
+    
+    def get_featured_image(self, obj):
+        """Return absolute URL for featured image"""
+        if obj.featured_image:
+            # Check if it's already a full URL (external URL stored as string)
+            image_value = str(obj.featured_image)
+            if image_value.startswith('http://') or image_value.startswith('https://'):
+                return image_value
+            
+            # It's a file field, get the relative URL
+            try:
+                image_url = obj.featured_image.url
+            except (ValueError, AttributeError):
+                return None
+            
+            request = self.context.get('request')
+            if request:
+                # Use X-Forwarded-Host if available (from nginx proxy), otherwise use request host
+                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
+                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
+                # If host is 'backend' (internal Docker), use localhost for browser access
+                if host == 'backend':
+                    host = 'localhost:8080'  # nginx proxy port
+                    scheme = 'http'
+                return f"{scheme}://{host}{image_url}"
+            # Fallback if no request context
+            return f"http://localhost:8080{image_url}" if image_url else None
+        return None
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
@@ -41,6 +70,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    featured_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -50,6 +80,34 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'views_count', 'is_featured', 'published_at', 'scheduled_publish_at',
             'created_at', 'updated_at'
         ]
+    
+    def get_featured_image(self, obj):
+        """Return absolute URL for featured image"""
+        if obj.featured_image:
+            # Check if it's already a full URL (external URL stored as string)
+            image_value = str(obj.featured_image)
+            if image_value.startswith('http://') or image_value.startswith('https://'):
+                return image_value
+            
+            # It's a file field, get the relative URL
+            try:
+                image_url = obj.featured_image.url
+            except (ValueError, AttributeError):
+                return None
+            
+            request = self.context.get('request')
+            if request:
+                # Use X-Forwarded-Host if available (from nginx proxy), otherwise use request host
+                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
+                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
+                # If host is 'backend' (internal Docker), use localhost for browser access
+                if host == 'backend':
+                    host = 'localhost:8080'  # nginx proxy port
+                    scheme = 'http'
+                return f"{scheme}://{host}{image_url}"
+            # Fallback if no request context
+            return f"http://localhost:8080{image_url}" if image_url else None
+        return None
 
 
 class PostCreateUpdateSerializer(serializers.ModelSerializer):

@@ -96,6 +96,17 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
               <p class="mt-1 text-xs text-gray-500">Enter YouTube video URL</p>
+
+              <!-- Lightweight preview (thumbnail + play) so editors can confirm the link is correct -->
+              <div v-if="youtubePreviewEmbedUrl" class="mt-3 rounded-lg overflow-hidden border border-gray-200 bg-black/5">
+                <iframe
+                  :src="youtubePreviewEmbedUrl"
+                  class="w-full h-40 bg-black"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
             </div>
 
             <!-- Video File Upload (shown when UPLOAD is selected) -->
@@ -293,7 +304,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useVideosStore } from '@/stores/videos'
@@ -316,6 +327,7 @@ const thumbnailInput = ref(null)
 const loading = ref(false)
 const thumbnailPreview = ref(null)
 const videoPreview = ref(null)
+const videoPreviewObjectUrl = ref(null)
 
 const videoForm = ref({
   title: '',
@@ -336,9 +348,30 @@ const videoCategories = computed(() => {
   return cats.filter(c => c && c.id && c.name)
 })
 
-const isEditing = computed(() => !!route.params.slug)
+const videoKey = computed(() => route.params.slug || route.params.id)
+const isEditing = computed(() => !!videoKey.value)
 
 // Methods
+
+const youtubePreviewEmbedUrl = computed(() => {
+  const url = (videoForm.value.youtube_url || '').trim()
+  if (!url) return ''
+
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+    /youtube\.com\/v\/([^&\n?#]+)/
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) {
+      // No autoplay in admin preview
+      return `https://www.youtube.com/embed/${match[1]}?rel=0`
+    }
+  }
+
+  return ''
+})
 
 const removeThumbnail = () => {
   thumbnailPreview.value = null
@@ -389,17 +422,17 @@ const handleVideoUpload = (event) => {
       return
     }
     
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      videoPreview.value = e.target.result
-      videoForm.value.video_file = file
-      videoForm.value.video_type = 'UPLOAD'
-      // Clear YouTube URL if video file is uploaded
-      if (videoForm.value.video_file) {
-        videoForm.value.youtube_url = ''
-      }
+    // Use object URLs for preview to avoid huge base64 strings (large videos can freeze/fail with FileReader).
+    if (videoPreviewObjectUrl.value) {
+      URL.revokeObjectURL(videoPreviewObjectUrl.value)
+      videoPreviewObjectUrl.value = null
     }
-    reader.readAsDataURL(file)
+    videoPreviewObjectUrl.value = URL.createObjectURL(file)
+    videoPreview.value = videoPreviewObjectUrl.value
+    videoForm.value.video_file = file
+    videoForm.value.video_type = 'UPLOAD'
+    // Clear YouTube URL if video file is uploaded
+    videoForm.value.youtube_url = ''
     toast.success('Video file ready')
   }
 }
@@ -407,6 +440,13 @@ const handleVideoUpload = (event) => {
 const previewVideo = () => {
   toast.info('Video preview functionality coming soon')
 }
+
+onBeforeUnmount(() => {
+  if (videoPreviewObjectUrl.value) {
+    URL.revokeObjectURL(videoPreviewObjectUrl.value)
+    videoPreviewObjectUrl.value = null
+  }
+})
 
 const publishVideo = () => {
   saveChanges('PUBLISHED')
@@ -493,7 +533,13 @@ const saveChanges = async (status = 'DRAFT') => {
     console.log('Video data being sent:', debugData)
 
     if (isEditing.value) {
-      await videosStore.updateVideo(route.params.slug, videoData)
+      const updatedVideo = await videosStore.updateVideo(videoKey.value, videoData)
+      // Update form with new thumbnail URL from response
+      if (updatedVideo.thumbnail) {
+        videoForm.value.thumbnail = updatedVideo.thumbnail
+      }
+      // Clear thumbnailPreview so the actual image URL is displayed
+      thumbnailPreview.value = null
       toast.success('Video updated successfully')
     } else {
       await videosStore.createVideo(videoData)
@@ -551,7 +597,7 @@ onMounted(async () => {
   
   if (isEditing.value) {
     try {
-      const video = await videosStore.fetchVideo(route.params.slug)
+      const video = await videosStore.fetchVideo(videoKey.value)
       videoForm.value = {
         title: video.title || '',
         description: video.description || '',

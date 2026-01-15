@@ -90,7 +90,7 @@
                   </p>
                   <span class="w-1 h-1 bg-neutral-offwhite rounded-full shrink-0"></span>
                   <p class="campaign-header text-[10px] text-black/40 shrink-0">
-                    {{ formatDate(video.published_at) }}
+                    {{ formatDate(video.updated_at || video.published_at || video.created_at) }}
                   </p>
                 </div>
               </div>
@@ -165,7 +165,9 @@
         author_name: video.author_name || 'Sauti Uganda',
         category: video.category,
         published_at: video.published_at,
-        duration: video.duration || '5:00'
+        updated_at: video.updated_at,
+        created_at: video.created_at,
+        duration: video.duration || null
       }))
     } catch (error) {
       console.error('Failed to fetch videos:', error)

@@ -100,7 +100,7 @@ const routes = [
         }
       },
       {
-        path: 'videos/:id/edit',
+        path: 'videos/:slug/edit',
         name: 'video-edit',
         component: VideoEditView,
         meta: {

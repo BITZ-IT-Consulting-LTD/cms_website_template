@@ -257,6 +257,7 @@ const settings = computed(() => settingsStore.settings)
 import { markRaw } from 'vue'
 
 const activeStep = ref(null)
+const timelineEvents = ref([])
 
 const resolutionSteps = [
   { 

@@ -74,10 +74,15 @@
                 </div>
 
                 <div class="flex items-center justify-between pt-8 border-t-2 border-neutral-offwhite">
-                  <BaseCTA v-if="resource.file" :href="resource.file" variant="primary" class="!py-3 !px-6 text-[10px]"
-                    external download>
-                    Download
-                  </BaseCTA>
+                  <button
+                    v-if="resource.file"
+                    type="button"
+                    class="btn btn-primary !py-3 !px-6 text-[10px]"
+                    :disabled="downloadingSlug === resource.slug"
+                    @click="downloadResource(resource)"
+                  >
+                    {{ downloadingSlug === resource.slug ? 'Downloading...' : 'Download' }}
+                  </button>
                   <div class="text-[10px] font-bold text-black/40 uppercase tracking-widest">
                     <span class="text-secondary">{{ resource.download_count || 0 }}</span> Downloads
                   </div>
@@ -165,6 +170,7 @@
 
   const resourcesStore = useResourcesStore()
   const settingsStore = useSettingsStore()
+  const downloadingSlug = ref(null)
 
   const brand_colors = computed(() => ({
     primary: settingsStore.settings.primary_color || '#2B4C7E',
@@ -520,6 +526,25 @@
       resources.value = []
     } finally {
       loading.value = false
+    }
+  }
+
+  async function downloadResource(resource) {
+    if (!resource?.slug || !resource?.file) return
+    downloadingSlug.value = resource.slug
+    try {
+      // Increment download_count on backend (ResourceDetailView.retrieve)
+      await api.resources.get(resource.slug)
+      // Open the actual file URL
+      window.open(resource.file, '_blank', 'noopener,noreferrer')
+      // Refresh list so counts update in UI
+      await fetchList()
+    } catch (error) {
+      console.error('Failed to download resource:', error)
+      // Fall back to opening file anyway
+      window.open(resource.file, '_blank', 'noopener,noreferrer')
+    } finally {
+      downloadingSlug.value = null
     }
   }
 

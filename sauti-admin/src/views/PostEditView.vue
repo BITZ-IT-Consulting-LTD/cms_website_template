@@ -632,7 +632,13 @@ const savePost = async () => {
     })
 
     if (isEditing.value) {
-      await postsStore.updatePost(route.params.slug, postData)
+      const updatedPost = await postsStore.updatePost(route.params.slug, postData)
+      // Update form with new image URL from response
+      if (updatedPost.featured_image) {
+        form.value.featuredImage = updatedPost.featured_image
+      }
+      // Clear imagePreview so the actual image URL is displayed
+      imagePreview.value = null
       toast.success('Post updated successfully')
     } else {
       const createdPost = await postsStore.createPost(postData)

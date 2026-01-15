@@ -51,7 +51,7 @@
             </span>
             <span class="w-1 h-1 bg-secondary/20 rounded-full"></span>
             <span class="text-[10px] text-black/40 font-bold uppercase tracking-widest whitespace-nowrap">
-              {{ formatViews(post.views_count) }} • {{ formatTimeAgo(post.published_at) }}
+              {{ formatViews(post.views_count) }} • {{ formatPostTime(post) }}
             </span>
           </div>
         </div>
@@ -98,6 +98,23 @@
     if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`
     if (diffDays < 365) return `${Math.ceil(diffDays / 30)} months ago`
     return `${Math.ceil(diffDays / 365)} years ago`
+  }
+
+  function formatPostTime(post) {
+    // Prefer updated_at when a post is edited, so the UI reflects changes.
+    const updatedAt = post?.updated_at
+    const publishedAt = post?.published_at
+    const createdAt = post?.created_at
+
+    const base = updatedAt || publishedAt || createdAt
+    if (!base) return 'Recently'
+
+    // If we have updated_at and it differs meaningfully, show it as an update.
+    if (updatedAt && updatedAt !== publishedAt) {
+      return `Updated ${formatTimeAgo(updatedAt)}`
+    }
+
+    return formatTimeAgo(base)
   }
 
   function setPlaceholder(event) {

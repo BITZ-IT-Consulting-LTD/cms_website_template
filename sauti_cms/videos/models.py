@@ -19,7 +19,13 @@ class VideoCategory(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            base = slugify(self.name) or 'category'
+            slug = base
+            i = 2
+            while VideoCategory.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{i}"
+                i += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
 
@@ -149,7 +155,13 @@ class Video(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base = slugify(self.title) or 'video'
+            slug = base
+            i = 2
+            while Video.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{i}"
+                i += 1
+            self.slug = slug
         
         # Auto-set published_at when status changes to PUBLISHED
         if self.status == self.Status.PUBLISHED and not self.published_at:
@@ -194,5 +206,7 @@ class Video(models.Model):
         """Get YouTube thumbnail URL"""
         video_id = self.youtube_id
         if video_id:
-            return f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+            # maxresdefault.jpg is not available for many videos and commonly returns 404.
+            # hqdefault.jpg is far more consistently present.
+            return f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
         return None

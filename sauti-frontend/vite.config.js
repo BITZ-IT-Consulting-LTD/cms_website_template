@@ -4,6 +4,8 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  // Also read from process.env for Docker environment variables
+  const proxyTarget = process.env.VITE_API_PROXY_TARGET || env.VITE_API_PROXY_TARGET
 
   // Only enforce VITE_BASE_PATH in production
   if (mode === 'production' && !env.VITE_BASE_PATH) {
@@ -33,9 +35,12 @@ export default defineConfig(({ mode }) => {
         allowedHosts: ['sauti.local', 'localhost', '127.0.0.1'],
         proxy: {
           '/api': {
-            target: 'http://127.0.0.1:8000',
+            target: proxyTarget || 'http://127.0.0.1:8000',
             changeOrigin: true,
             secure: false,
+            // No rewrite needed when proxying through nginx - nginx handles the /api/ prefix removal
+            // When proxying directly to backend, uncomment the rewrite below:
+            // rewrite: (path) => path.replace(/^\/api/, ''),
           },
         },
       }

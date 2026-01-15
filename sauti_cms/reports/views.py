@@ -248,6 +248,25 @@ class NormalizedCallStatsView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     
     def get(self, request):
-        from .services import fetch_normalized_call_stats
-        data = fetch_normalized_call_stats()
-        return Response(data)
+        try:
+            from .services import fetch_normalized_call_stats
+            data = fetch_normalized_call_stats()
+            return Response(data)
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error in NormalizedCallStatsView.get: {e}", exc_info=True)
+            return Response(
+                {
+                    "stats": {
+                        "calls_today": 0,
+                        "calls_total": 0,
+                        "cases_today": 0,
+                        "cases_total": 0,
+                        "cases_ongoing": 0
+                    },
+                    "calls": {},
+                    "error": "Failed to fetch call statistics"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

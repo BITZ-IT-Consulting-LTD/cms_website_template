@@ -28,6 +28,13 @@ services:
       - ../sauti_cms:/app
     env_file:
       - ../sauti_cms/.env
+    environment:
+      - DB_HOST=db
+      - DB_ENGINE=postgres
+      - DB_NAME=sauti_cms
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,backend,nginx,sauti_backend_dev,sauti.local,sauti.mglsd.go.ug
     ports:
       - "8000:8000"
     depends_on:
@@ -50,6 +57,8 @@ services:
       - "5173:5173" # Vite default port
     env_file:
       - ../sauti-frontend/.env.development
+    environment:
+      - VITE_API_PROXY_TARGET=http://nginx:80
     networks:
       - sauti_network_dev
 
@@ -66,6 +75,8 @@ services:
       - "5174:5174" # Map to a different host port
     env_file:
       - ../sauti-admin/.env.development
+    environment:
+      - VITE_API_PROXY_TARGET=http://nginx:80
     networks:
       - sauti_network_dev
 

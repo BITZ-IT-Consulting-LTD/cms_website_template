@@ -113,12 +113,10 @@ class Resource(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         
-        # Auto-detect file type from filename
-        if self.file and not self.file_type:
+        # Auto-detect file type and size from the current file on every save
+        # so that changing the uploaded file (e.g. JPG → DOCX) updates metadata.
+        if self.file:
             self.file_type = self.file.name.split('.')[-1].upper()
-        
-        # Get file size
-        if self.file and not self.file_size:
             self.file_size = self.file.size
         
         super().save(*args, **kwargs)
