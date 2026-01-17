@@ -1,9 +1,16 @@
 <template>
   <div class="bg-neutral-white min-h-screen">
     <!-- 1. Page Header -->
-    <div class="container-custom section-padding">
-      <div class="container-custom section-rhythm">
+    <header class="page-header !pb-0">
+      <div class="container-custom">
+        <h1 class="page-header-title">
+          Resources <span class="text-primary">and Statistics</span>
+        </h1>
+      </div>
+    </header>
 
+    <div class="container-custom section-padding !pt-12">
+      <div class="container-custom section-rhythm">
 
         <!-- Downloadable Resources Section -->
         <section aria-labelledby="downloads-heading">
@@ -318,7 +325,7 @@
         position: 'top',
         labels: {
           usePointStyle: true,
-          font: { family: 'Inter', weight: 'bold' },
+          font: { family: 'cronos-pro', weight: 'bold' },
           color: brand_colors.value['secondary']
         }
       },
@@ -326,8 +333,8 @@
         mode: 'index',
         intersect: false,
         backgroundColor: brand_colors.value['secondary'],
-        titleFont: { family: 'Inter', size: 14, weight: 'bold' },
-        bodyFont: { family: 'Inter', size: 12 }
+        titleFont: { family: 'cronos-pro', size: 14, weight: 'bold' },
+        bodyFont: { family: 'cronos-pro', size: 12 }
       }
     },
     scales: {
@@ -335,14 +342,14 @@
         beginAtZero: true,
         grid: { color: brand_colors.value['neutral-offwhite'] },
         ticks: {
-          font: { family: 'Inter', weight: 'bold' },
+          font: { family: 'cronos-pro', weight: 'bold' },
           color: brand_colors.value['secondary'] + '80'
         }
       },
       x: {
         grid: { display: false },
         ticks: {
-          font: { family: 'Inter', weight: 'bold' },
+          font: { family: 'cronos-pro', weight: 'bold' },
           color: brand_colors.value['secondary'] + '80'
         }
       }
@@ -404,7 +411,7 @@
           font: {
             size: 11,
             weight: '900',
-            family: 'Inter'
+            family: 'cronos-pro'
           },
           usePointStyle: true,
           pointStyle: 'rectRounded',
@@ -458,7 +465,7 @@
           font: {
             size: 11,
             weight: '900',
-            family: 'Inter'
+            family: 'cronos-pro'
           },
           color: brand_colors.value['primary'] + '80'
         },
@@ -472,7 +479,7 @@
           font: {
             size: 11,
             weight: '900',
-            family: 'Inter'
+            family: 'cronos-pro'
           },
           color: brand_colors.value['primary'] + '80'
         },

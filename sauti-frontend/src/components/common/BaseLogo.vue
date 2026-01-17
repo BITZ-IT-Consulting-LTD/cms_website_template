@@ -120,7 +120,7 @@
     }
 
     .logo-fallback {
-        font-family: 'Inter', sans-serif;
+        font-family: var(--font-cronos);
         font-weight: 600;
         color: theme('colors.primary');
     }

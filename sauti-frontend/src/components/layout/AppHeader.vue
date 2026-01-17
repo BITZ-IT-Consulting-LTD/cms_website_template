@@ -6,8 +6,8 @@
       <div class="flex items-center justify-between h-[80px]">
         <!-- Logo - Text Only at Extreme Left -->
         <router-link to="/" class="flex items-center group no-underline shrink-0">
-          <h1 class="text-2xl tracking-tight text-neutral-black group-hover:text-primary transition-colors duration-300 m-0 font-bold">
-            SAUTI 116
+          <h1 class="text-2xl tracking-tight text-neutral-black group-hover:text-primary transition-colors duration-300 m-0 font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+            SAUTI 116 HELPLINE
           </h1>
         </router-link>
 
@@ -19,6 +19,7 @@
               { to: '/about', label: 'Who We Are' },
               { to: '/videos', label: 'Videos' },
               { to: '/blogs', label: 'Updates' },
+              { to: '/news', label: 'Blogs' },
               { to: '/resources', label: 'Resources' },
               { to: '/faqs', label: 'FAQs' },
               { to: '/contact', label: 'Contact Us' }
@@ -98,6 +99,7 @@
               { to: '/about', label: 'Who We Are' },
               { to: '/videos', label: 'Videos' },
               { to: '/blogs', label: 'Updates' },
+              { to: '/news', label: 'Blogs' },
               { to: '/resources', label: 'Resources' },
               { to: '/faqs', label: 'FAQs' },
               { to: '/contact', label: 'Contact Us' }

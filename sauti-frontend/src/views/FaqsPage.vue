@@ -3,16 +3,13 @@
     <!-- 1. Page Header -->
     <header class="page-header !pb-0">
       <div class="container-custom">
-        <p class="text-sm uppercase tracking-[0.4em] text-primary font-bold mb-4">{{ faqsPageTitle }}</p>
         <h1 class="page-header-title">
-          {{ faqsPageSubtitle }}
+          Questions <span class="text-primary">& Answers</span>
         </h1>
-
-
       </div>
     </header>
 
-    <div class="container-custom section-padding !pt-0">
+    <div class="container-custom section-padding !pt-12">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
         <!-- Left Sidebar (Support Info) -->

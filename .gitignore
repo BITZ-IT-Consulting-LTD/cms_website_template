@@ -31,3 +31,4 @@ dist-ssr/
 
 # Docker
 .docker-compose.dev.yml.swp
+sauti-frontend/node_modules_old/

@@ -28,7 +28,7 @@
     --btn-secondary: var(--secondary);
 
     /* Typography */
-    --font-family: 'Roboto', sans-serif;
+    --font-family: var(--font-cronos);
     --heading-font-weight: 700;
 
     /* Spacing */

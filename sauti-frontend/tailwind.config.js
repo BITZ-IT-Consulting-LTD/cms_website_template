@@ -43,8 +43,10 @@ export default {
            ============================================ */
       },
       fontFamily: {
-        // Sauti 116 Institutional Voice: Roboto is now the primary brand typeface to match Admin console.
-        sans: ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Cronos Pro - Official Brand Typography (11pt base)
+        sans: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],
+        body: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],
+        heading: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],
       },
       boxShadow: {
         'glow-hotline': '0 0 12px rgb(var(--color-hotline) / 0.4)',

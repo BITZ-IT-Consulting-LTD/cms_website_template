@@ -23,8 +23,9 @@ a {
 
 /* Reset typography */
 body {
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
+  font-family: var(--font-cronos);
+  font-size: 14.67px;
+  /* 11pt base size */
   line-height: 1.7;
   background-color: #fff;
   color: #006633;

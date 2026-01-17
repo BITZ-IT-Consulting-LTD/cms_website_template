@@ -1,70 +1,85 @@
 <template>
-  <div class="timeline-section relative font-sans">
-    <div class="relative wrap overflow-hidden p-4 md:p-10 h-full max-w-6xl mx-auto">
-      
-      <!-- Vertical Line -->
-      <!-- Desktop: Center -->
-      <div class="hidden md:block absolute border-opacity-20 border-gray-400 h-full border-l-4"
-        style="left: 50%; transform: translateX(-50%);"></div>
-      <!-- Mobile: Left -->
-      <div class="md:hidden absolute border-opacity-20 border-gray-400 h-full border-l-4" 
-        style="left: 2rem;"></div>
+  <div class="timeline-section relative font-sans p-4 md:p-8">
+    <div class="relative max-w-5xl mx-auto">
+      <!-- Central Dotted Line -->
+      <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 border-l-4 border-dotted border-gray-300 md:-translate-x-1/2 z-0"></div>
 
-      <!-- Timeline Events -->
       <div 
         v-for="(event, index) in sortedEvents" 
         :key="event.id" 
-        class="mb-12 flex justify-between items-center w-full relative z-10"
-        :class="{ 'md:flex-row-reverse': index % 2 !== 0 }"
+        class="relative mb-24 flex flex-col md:flex-row items-start md:items-center w-full group"
       >
-
-        <!-- Empty Space for Desktop layout balance -->
-        <div class="hidden md:block w-5/12"></div>
-
-        <!-- Dot / Year Indicator -->
-        <div class="z-20 flex items-center justify-center order-1 bg-gray-800 shadow-xl w-12 h-12 rounded-full border-4 border-white transition-transform duration-300 hover:scale-125 shrink-0 relative">
-          <span class="font-black text-xs text-white">{{ getYear(event) }}</span>
+        
+        <!-- Center Node (Year Indicator) -->
+        <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center z-10">
+           <div class="w-16 h-16 rounded-full bg-white border-4 shadow-md flex items-center justify-center font-bold text-gray-600 text-sm transition-transform group-hover:scale-110"
+                :style="{ borderColor: getEventColor(index) }">
+              {{ getYear(event) }}
+           </div>
         </div>
 
-        <!-- Content Card -->
-        <!-- 
-             Odd (Left on desktop usually, but order depends on flex-row-reverse):
-             If index % 2 === 0 (Even index, 1st item): Standard order. Card is on Right (or Left if we want standard timeline flow).
-             Wait, standard vertical timeline usually alternates Left/Right.
-             
-             Let's stick to the visual provided:
-             Odd Items (Index 0, 2... wait, 1st item is Index 0): 
-             Let's say Index 0 is "1st Item" (Odd in human counting).
-             
-             Current Code Logic:
-             :class="{ 'md:flex-row-reverse': index % 2 !== 0 }"
-             Index 0: No reverse. Order: Space - Dot - Card. (Card on Right).
-             Index 1: Reverse. Order: Card - Dot - Space. (Card on Left).
-             
-             User Request:
-             Odd Items (1st, 3rd... Index 0, 2): Blue Gradient.
-             Even Items (2nd, 4th... Index 1, 3): Orange Gradient.
-        -->
-        <div
-          class="order-1 rounded-2xl shadow-lg w-[calc(100%-4rem)] ml-6 md:ml-0 md:w-5/12 px-6 py-8 transition-all duration-300 hover:-translate-y-1 group relative bg-gradient-to-br"
-          :class="[
-            index % 2 === 0 
-              ? 'from-[#1e40af] to-[#3b82f6]' // Blue for Odd (1st) item
-              : 'from-[#c2410c] to-[#f97316]' // Orange for Even (2nd) item
-          ]"
-        >
-          <h3 class="mb-3 font-black text-white text-xl md:text-2xl tracking-tight leading-none">{{ event.title }}</h3>
-          <p class="text-base md:text-lg leading-relaxed text-white/90 font-medium">
+        <!-- Mobile: Left Node -->
+         <div class="md:hidden absolute left-4 -translate-x-1/2 flex items-center justify-center z-10 top-0">
+           <div class="w-12 h-12 rounded-full bg-white border-4 shadow-md flex items-center justify-center font-bold text-gray-600 text-[10px]"
+                :style="{ borderColor: getEventColor(index) }">
+              {{ getYear(event) }}
+           </div>
+        </div>
+
+        <!-- LEFT SIDE CONTENT (For Even Index on Desktop) -->
+        <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-16 text-left md:text-right flex flex-col items-start md:items-end order-2 md:order-1" 
+             v-if="index % 2 === 0 || isMobile">
+          
+          <!-- Leaf Container (Left Side) -->
+          <div class="leaf relative flex items-center justify-center" 
+               :style="{ backgroundColor: getEventColor(index), borderRadius: '0% 100% 0% 100%' }">
+            <!-- Content Wrapper: Centered with padding -->
+            <div class="p-8 md:p-10 text-white text-center flex flex-col justify-center h-full relative z-10 w-full">
+              <p class="font-black text-lg md:text-xl leading-tight mb-2 shadow-sm">{{ event.title }}</p>
+              <p class="text-xs font-bold opacity-90 uppercase tracking-widest">{{ getYear(event) }}</p>
+            </div>
+          </div>
+
+          <!-- Description Text (Outside Leaf) -->
+          <div class="mt-4 max-w-xs text-sm md:text-base font-medium text-gray-500 leading-relaxed md:text-right">
             {{ event.description }}
-          </p>
+          </div>
         </div>
         
+        <!-- EMPTY FILLER FOR DESKTOP GRID -->
+        <div class="hidden md:block w-1/2 order-2" v-if="index % 2 === 0"></div>
+
+
+        <!-- RIGHT SIDE CONTENT (For Odd Index on Desktop) -->
+        <div class="hidden md:block w-1/2 order-1" v-if="index % 2 !== 0"></div>
+
+        <div class="w-full md:w-1/2 pl-12 md:pl-16 flex flex-col items-start order-2" 
+             v-if="index % 2 !== 0">
+           
+           <!-- Leaf Container (Right Side) -->
+          <div class="leaf relative flex items-center justify-center" 
+               :style="{ backgroundColor: getEventColor(index), borderRadius: '100% 0% 100% 0%' }">
+            <!-- Content Wrapper: Centered with padding -->
+            <div class="p-8 md:p-10 text-white text-center flex flex-col justify-center h-full relative z-10 w-full">
+              <p class="font-black text-lg md:text-xl leading-tight mb-2 shadow-sm">{{ event.title }}</p>
+              <p class="text-xs font-bold opacity-90 uppercase tracking-widest">{{ getYear(event) }}</p>
+            </div>
+          </div>
+
+          <!-- Description Text (Outside Leaf) -->
+          <div class="mt-4 max-w-xs text-sm md:text-base font-medium text-gray-500 leading-relaxed text-left">
+            {{ event.description }}
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { computed } from 'vue'
+
   export default {
     name: 'AppTimeline',
     props: {
@@ -74,37 +89,86 @@
         default: () => []
       }
     },
-    computed: {
-      sortedEvents() {
-        if (!Array.isArray(this.timelineEvents)) return [];
-        return [...this.timelineEvents].sort((a, b) => {
-          const yearA = this.getYear(a);
-          const yearB = this.getYear(b);
-          // Sort ascending (Oldest first)
-          return yearA - yearB;
-        });
-      }
-    },
-    methods: {
-      getYear(event) {
-        if (!event) return '';
-        // If year is explicitly provided
-        if (event.year) return event.year.toString();
-        
-        // Try to parse date
-        if (event.date) {
-          const d = new Date(event.date);
-          if (!isNaN(d.getTime())) return d.getFullYear();
-          // Fallback if date is just a year string e.g. "2014"
-          if (/^\d{4}$/.test(event.date)) return event.date;
+    setup(props) {
+        // Updated Color Palette from the requested design + extras for variety
+        const colors = [
+            '#8db724', // Lime
+            '#0091ff', // Blue
+            '#fdd808', // Yellow
+            '#ff8a00', // Orange
+            '#ff4b12', // Red-Orange
+            '#9b248d', // Purple
+            '#10b981', // Emerald
+            '#6366f1'  // Indigo
+        ]
+
+        const getEventColor = (index) => {
+            return colors[index % colors.length]
         }
-        
-        return 'Year';
-      }
+
+        const isMobile = computed(() => {
+            if (typeof window !== 'undefined') {
+                return window.innerWidth < 768
+            }
+            return false
+        })
+
+        const sortedEvents = computed(() => {
+            if (!Array.isArray(props.timelineEvents)) return [];
+            // Sort ascending
+            return [...props.timelineEvents].sort((a, b) => {
+                const yearA = getYear(a);
+                const yearB = getYear(b);
+                return yearA - yearB;
+            });
+        });
+
+        const getYear = (event) => {
+            if (!event) return '';
+            if (event.year) return event.year.toString();
+            if (event.date) {
+                const d = new Date(event.date);
+                if (!isNaN(d.getTime())) return d.getFullYear();
+                if (/^\d{4}$/.test(event.date)) return event.date;
+            }
+            return '';
+        }
+
+        return {
+            sortedEvents,
+            getEventColor,
+            getYear,
+            isMobile
+        }
     }
   };
 </script>
 
 <style scoped>
-/* No specific styles needed as Tailwind covers it */
+.leaf {
+  width: 100%;
+  max-width: 300px; /* Increased max-width */
+  min-height: 160px; /* Increased min-height for better fit */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content exactly */
+  box-shadow: 15px 15px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.leaf:hover {
+  transform: scale(1.05);
+}
+
+/* Creating the diagonal stem line for each leaf */
+.leaf::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0.2) 51%, transparent 52%);
+  pointer-events: none;
+}
 </style>

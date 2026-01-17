@@ -1,14 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@300;400;500;700;900&display=swap');
+/* Import Cronos Pro from Adobe Fonts */
+@import url('https://use.typekit.net/wgm0sgo.css');
 
 :root {
-  --font-roboto: "Roboto", sans-serif;
-  /* Rewire Cronos Pro usage to Inter per user request */
-  --font-cronos: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Cronos Pro - Brand Typography System (11pt base) */
+  --font-cronos: "cronos-pro", "Cronos Pro", Georgia, serif;
+  --font-primary: var(--font-cronos);
+  --font-body: var(--font-cronos);
+  --font-heading: var(--font-cronos);
 }
 
 /* 
-  Legacy Cronos Pro definitions removed. 
-  All usages redirected to Inter via CSS variable above.
+  Cronos Pro Font Weights:
+  - Light: 300
+  - Regular: 400
+  - Semi-Bold: 600
+  - Bold: 700
 */
-
-/* REMOVED: Inter, Outfit, Helvetica Neue, and all other non-compliant fonts */

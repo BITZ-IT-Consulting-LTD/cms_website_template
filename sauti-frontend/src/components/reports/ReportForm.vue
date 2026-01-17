@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col h-[600px] w-full bg-gradient-to-b from-white to-gray-50 rounded-[2rem] shadow-sm border border-gray-200 overflow-hidden font-sans relative">
+  <div class="flex flex-col h-[600px] w-full bg-gradient-to-b from-white to-gray-50 rounded-[2rem] shadow-sm border border-gray-200 overflow-hidden relative" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
     
     <!-- Header -->
     <div class="p-4 flex items-center justify-between sticky top-0 z-10">
       <div class="flex items-center gap-3">
         <div>
-           <h2 class="font-bold text-secondary text-2xl leading-tight">Sauti Assistant</h2>
+           <h2 class="font-bold text-secondary text-2xl leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Sauti Assistant</h2>
         </div>
       </div>
       <button @click="resetChat" class="text-gray-400 hover:text-secondary transition-colors" title="Restart">
@@ -22,15 +22,15 @@
           
           <!-- Bot Message -->
           <div v-if="msg.sender === 'bot'" class="flex gap-3 items-end animate-fade-in-up">
-             <div class="w-8 h-8 rounded-full bg-secondary flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">S</div>
+             <div class="w-8 h-8 rounded-full bg-secondary flex-shrink-0 flex items-center justify-center text-white text-xs font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">S</div>
              <div class="flex flex-col gap-2 max-w-[85%]">
-               <div class="bg-white p-4 rounded-2xl rounded-bl-none shadow-sm border border-gray-100 text-gray-700 text-sm leading-relaxed whitespace-pre-line" v-html="msg.text"></div>
+               <div class="bg-white p-4 rounded-2xl rounded-bl-none shadow-sm border border-gray-100 text-gray-700 text-sm leading-relaxed whitespace-pre-line" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;" v-html="msg.text"></div>
                
                <!-- Options -->
                <div v-if="msg.options && !msg.responded" class="flex flex-wrap gap-2 mt-1">
                  <button v-for="opt in msg.options" :key="opt.val" 
                    @click="handleOption(opt)"
-                   class="px-4 py-2 bg-white border border-gray-200 text-secondary text-sm font-bold rounded-xl hover:bg-secondary hover:text-white transition-all shadow-sm hover:shadow-md text-left">
+                   class="px-4 py-2 bg-white border border-gray-200 text-secondary text-sm font-bold rounded-xl hover:bg-secondary hover:text-white transition-all shadow-sm hover:shadow-md text-left" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
                    {{ opt.label }}
                  </button>
                </div>
@@ -39,7 +39,7 @@
 
           <!-- User Message -->
           <div v-else class="flex justify-end animate-fade-in-up">
-             <div class="bg-[#006633] text-white p-4 rounded-2xl rounded-br-none shadow-md max-w-[85%] text-sm leading-relaxed">
+             <div class="bg-[#006633] text-white p-4 rounded-2xl rounded-br-none shadow-md max-w-[85%] text-sm leading-relaxed" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
                {{ msg.text }}
              </div>
           </div>
@@ -47,7 +47,7 @@
 
         <!-- Typing Indicator -->
         <div v-if="isTyping" class="flex gap-3 items-end animate-fade-in-up">
-           <div class="w-8 h-8 rounded-full bg-secondary flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">S</div>
+           <div class="w-8 h-8 rounded-full bg-secondary flex-shrink-0 flex items-center justify-center text-white text-xs font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">S</div>
            <div class="bg-white p-4 rounded-2xl rounded-bl-none shadow-sm border border-gray-100 w-16">
              <div class="flex gap-1 justify-center">
                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
@@ -69,6 +69,7 @@
           :disabled="isTyping || isFinished || waitingForOption"
           placeholder="Please describe what happened..."
           class="w-full pl-5 pr-14 py-4 bg-gray-50 rounded-[1.5rem] border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm resize-none h-32"
+          style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;"
           ref="inputRef"
         ></textarea>
         
@@ -79,6 +80,7 @@
           :disabled="isTyping || isFinished || waitingForOption"
           :placeholder="inputPlaceholder"
           class="w-full pl-5 pr-14 py-4 bg-gray-50 rounded-full border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm"
+          style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;"
           ref="inputRef"
          autofocus
         />
@@ -91,7 +93,7 @@
           <Send class="w-5 h-5" />
         </button>
       </form>
-      <div v-if="validationError" class="text-red-500 text-xs font-bold mt-2 ml-2 flex items-center gap-1">
+      <div v-if="validationError" class="text-red-500 text-xs font-bold mt-2 ml-2 flex items-center gap-1" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
         <AlertCircle class="w-4 h-4" />
         {{ validationError }}
       </div>
@@ -102,12 +104,12 @@
       <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-6 shadow-lg shadow-green-100">
         <CheckCircle class="w-12 h-12" />
       </div>
-      <h3 class="text-2xl font-bold text-secondary mb-2">Report Submitted</h3>
-      <p class="text-gray-600 mb-6 text-sm">Your secure reference number is:</p>
-      <div class="bg-gray-100 px-6 py-3 rounded-xl font-mono font-bold text-xl text-black mb-8 select-all border border-gray-200 tracking-wider">
+      <h3 class="text-2xl font-bold text-secondary mb-2" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Report Submitted</h3>
+      <p class="text-gray-600 mb-6 text-sm" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Your secure reference number is:</p>
+      <div class="bg-gray-100 px-6 py-3 rounded-xl font-mono font-bold text-xl text-black mb-8 select-all border border-gray-200 tracking-wider" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
         {{ referenceNumber }}
       </div>
-      <button @click="resetChat" class="px-8 py-3 bg-secondary text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all active:scale-95">
+      <button @click="resetChat" class="px-8 py-3 bg-secondary text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all active:scale-95" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
         Start New Report
       </button>
     </div>
@@ -191,7 +193,7 @@ const FLOW = [
     ]
   },
   {
-    key: 'reporter_contact', // Logic to skip if Self
+    key: 'reporter_contact',
     condition: (data) => data.identity !== 'SELF',
     question: "As the reporter, may we have your name? \n(You can type 'Skip' to remain anonymous)",
     type: 'input',
@@ -252,7 +254,7 @@ const FLOW = [
 
 // Logic
 const init = () => {
-  currentStep.value = -1 // Will increment to 0
+  currentStep.value = -1
   processNextStep()
 }
 
@@ -262,7 +264,6 @@ const processNextStep = async () => {
   
   if (!step) return
 
-  // Check condition
   if (step.condition && !step.condition(formData.value)) {
     processNextStep()
     return
@@ -274,10 +275,8 @@ const processNextStep = async () => {
   setTimeout(async () => {
     isTyping.value = false
     
-    // Construct question text
     let qText = typeof step.question === 'function' ? step.question(formData.value) : step.question
     
-    // Add message
     messages.value.push({
       sender: 'bot',
       text: qText,
@@ -285,7 +284,6 @@ const processNextStep = async () => {
       responded: false
     })
 
-    // Setup input state
     if (step.type === 'options') {
       waitingForOption.value = true
       currentInputType.value = 'text'
@@ -302,7 +300,6 @@ const processNextStep = async () => {
     await scrollToBottom()
   }, 800)
 }
-
 
 const handleSubmit = () => {
   const step = FLOW[currentStep.value]
@@ -323,7 +320,6 @@ const handleSubmit = () => {
     }
   }
 
-  // Handle Skip
   if (step.allowSkip && val.toLowerCase() === 'skip') {
     messages.value.push({ sender: 'user', text: 'Skipped' })
     handleDataCapture(step.key, null)
@@ -340,7 +336,6 @@ const handleSubmit = () => {
 
 const handleOption = (opt) => {
   const step = FLOW[currentStep.value]
-  // Mark collected
   const lastMsg = messages.value[messages.value.length - 1]
   if (lastMsg) lastMsg.responded = true
 
@@ -358,7 +353,6 @@ const handleOption = (opt) => {
   waitingForOption.value = false
   handleDataCapture(step.key, opt.val)
   
-  // Special handling for labels if needed (e.g. sex)
   if (step.key === 'victim_demographics_sex') formData.value.victim_sex = opt.label
 
   processNextStep()
@@ -373,7 +367,6 @@ const handleDataCapture = (key, val) => {
 const submitForm = async () => {
     isTyping.value = true
     try {
-        // Map to Backend Payload
         const payload = {
             reporter: {
                 name: formData.value.reporter_name,

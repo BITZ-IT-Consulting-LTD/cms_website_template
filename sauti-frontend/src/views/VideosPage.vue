@@ -4,7 +4,7 @@
     <header class="page-header !pb-0">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Sauti <span class="text-primary">Videos</span>
+          Sauti <span class="text-primary">Audiovisuals</span>
         </h1>
       </div>
     </header>
@@ -30,15 +30,21 @@
             </button>
           </div>
 
-          <!-- Tag Cloud -->
+          <!-- Media Type Filters -->
           <div class="mt-12 flex flex-wrap gap-3">
             <button
-              v-for="chip in [videosChipAll, videosChipEducation, videosChipSafety, videosChipSupport, videosChipRecency, videosChipPopular]"
-              :key="chip" @click="chip === activeChip ? (activeChip = 'All') : (activeChip = chip)" :class="[
+              @click="activeFilter = 'videos'" :class="[
                 'px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border-2',
-                activeChip === chip ? 'bg-secondary border-secondary text-neutral-white shadow-xl scale-105' : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
+                activeFilter === 'videos' ? 'bg-secondary border-secondary text-neutral-white shadow-xl scale-105' : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
               ]">
-              {{ chip }}
+              Videos
+            </button>
+            <button
+              @click="activeFilter = 'audios'" :class="[
+                'px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border-2',
+                activeFilter === 'audios' ? 'bg-secondary border-secondary text-neutral-white shadow-xl scale-105' : 'bg-neutral-white border-neutral-offwhite text-black/50 hover:border-primary hover:text-primary'
+              ]">
+              Audios
             </button>
           </div>
         </div>
@@ -123,19 +129,13 @@
   const videosStore = useVideosStore()
   const settingsStore = useSettingsStore()
   const query = ref('')
-  const activeChip = ref('All')
+  const activeFilter = ref('videos')
   const loading = ref(false)
   const isModalOpen = ref(false)
   const selectedVideo = ref(null)
 
   const videosSearchPlaceholder = computed(() => settingsStore.settings.videos_search_placeholder || 'Search video archive...')
   const videosSearchButton = computed(() => settingsStore.settings.videos_search_button || 'Search')
-  const videosChipAll = computed(() => settingsStore.settings.videos_chip_all || 'All')
-  const videosChipEducation = computed(() => settingsStore.settings.videos_chip_education || 'Education')
-  const videosChipSafety = computed(() => settingsStore.settings.videos_chip_safety || 'Safety')
-  const videosChipSupport = computed(() => settingsStore.settings.videos_chip_support || 'Support')
-  const videosChipRecency = computed(() => settingsStore.settings.videos_chip_recency || 'Recency')
-  const videosChipPopular = computed(() => settingsStore.settings.videos_chip_popular || 'Popular')
 
   const videos = ref([])
 
@@ -143,10 +143,12 @@
     const q = query.value.trim().toLowerCase()
     return videos.value.filter(v => {
       const matchQuery = !q || v.title.toLowerCase().includes(q) || (v.author_name && v.author_name.toLowerCase().includes(q))
-      const matchChip = activeChip.value === 'All' ||
-        (v.category && v.category.name === activeChip.value) ||
-        (activeChip.value === 'Popular' && v.views_count > 1000)
-      return matchQuery && matchChip
+      
+      // Filter by media type
+      const isAudio = v.video_type === 'AUDIO' || (v.video_file && (v.video_file.toLowerCase().endsWith('.mp3') || v.video_file.toLowerCase().endsWith('.m4a') || v.video_file.toLowerCase().endsWith('.wav')))
+      const matchFilter = (activeFilter.value === 'audios' && isAudio) || (activeFilter.value === 'videos' && !isAudio)
+      
+      return matchQuery && matchFilter
     })
   })
 

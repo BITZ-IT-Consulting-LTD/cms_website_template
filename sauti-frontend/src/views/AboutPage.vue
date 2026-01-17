@@ -199,8 +199,124 @@
        </div>
     </section>
 
+    <!-- F. Meet Our Team Section -->
+    <section class="py-24 bg-transparent relative z-10" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+      <div class="container-custom">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-black text-secondary mb-4">Meet Our Team</h2>
+          <p class="text-secondary/70 font-bold max-w-2xl mx-auto">Dedicated professionals committed to the safety and well-being of every child.</p>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Team Member 1 -->
+          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
+            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
+              <img src="https://ui-avatars.com/api/?name=Jane+Doe&background=random" alt="Dr. Jane Doe" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-xl font-bold text-secondary mb-1">Dr. Jane Doe</h3>
+            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Executive Director</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Leading our strategic vision with over 15 years of experience in child protection.</p>
+          </div>
 
+          <!-- Team Member 2 -->
+          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
+            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
+              <img src="https://ui-avatars.com/api/?name=John+Smith&background=random" alt="John Smith" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-xl font-bold text-secondary mb-1">John Smith</h3>
+            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Head of Operations</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Ensuring our helpline and response systems run smoothly 24/7.</p>
+          </div>
+
+          <!-- Team Member 3 -->
+          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
+             <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
+              <img src="https://ui-avatars.com/api/?name=Sarah+Connor&background=random" alt="Sarah Connor" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-xl font-bold text-secondary mb-1">Sarah Connor</h3>
+            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Lead Counselor</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Coordinating our counseling team to provide trauma-informed care.</p>
+          </div>
+
+          <!-- Team Member 4 -->
+          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
+             <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
+              <img src="https://ui-avatars.com/api/?name=Michael+Ross&background=random" alt="Michael Ross" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-xl font-bold text-secondary mb-1">Michael Ross</h3>
+            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Legal Advisor</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Advocating for justice and navigating legal frameworks for survivors.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- G. Core Values Section -->
+    <section class="py-24 bg-white relative overflow-hidden" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+      <!-- Decorative background -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      
+      <div class="container-custom relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span class="inline-block px-4 py-1 bg-secondary/10 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-secondary/20 text-secondary">Our Principles</span>
+            <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight text-secondary">Driven by Values,<br/>United by Purpose.</h2>
+            <p class="text-lg text-gray-600 leading-relaxed mb-8">
+              Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.
+            </p>
+            <!-- Call to Action (Optional) -->
+            <div class="flex gap-4">
+              <div class="flex items-center gap-2">
+                 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">10+</div>
+                 <span class="font-bold text-sm text-secondary">Years of Service</span>
+              </div>
+               <div class="flex items-center gap-2">
+                 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">1M+</div>
+                 <span class="font-bold text-sm text-secondary">Lives Impacted</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Value 1 -->
+            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <ShieldCheck class="w-6 h-6" />
+              </div>
+              <h3 class="text-xl font-bold mb-2 text-secondary">Integrity</h3>
+              <p class="text-sm text-gray-500">Acting with honesty, transparency and accountability in all we do.</p>
+            </div>
+
+            <!-- Value 2 -->
+            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Heart class="w-6 h-6" />
+              </div>
+              <h3 class="text-xl font-bold mb-2 text-secondary">Compassion</h3>
+              <p class="text-sm text-gray-500">Serving every child and survivor with deep empathy, kindness, and care.</p>
+            </div>
+
+            <!-- Value 3 -->
+            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                 <Users class="w-6 h-6" />
+              </div>
+              <h3 class="text-xl font-bold mb-2 text-secondary">Collaboration</h3>
+              <p class="text-sm text-gray-500">Working together with partners and communities for holistic protection.</p>
+            </div>
+
+            <!-- Value 4 -->
+            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Check class="w-6 h-6" />
+              </div>
+              <h3 class="text-xl font-bold mb-2 text-secondary">Excellence</h3>
+              <p class="text-sm text-gray-500">Striving for the highest standards of quality in our service delivery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
 
 
@@ -340,17 +456,22 @@ const getArrowPath = (i) => {
 
 
 // --- Fetching ---
+// --- Fetching ---
 onMounted(async () => {
-  await Promise.all([
-    settingsStore.fetchGlobalSettings(),
-  ])
+  try {
+    await settingsStore.fetchGlobalSettings()
+  } catch (error) {
+    console.warn('Failed to fetch settings:', error)
+  }
   
-  // Custom fetches
-  const [timelineRes] = await Promise.all([
-    api.get('/content/timeline-events/'),
-  ])
-  
-  timelineEvents.value = timelineRes.data.results || timelineRes.data || []
+  // Custom fetches with fallback
+  try {
+    const timelineRes = await api.get('/content/timeline-events/')
+    timelineEvents.value = timelineRes.data.results || timelineRes.data || []
+  } catch (error) {
+    console.warn('Failed to fetch timeline events, using mock data:', error)
+    timelineEvents.value = [] // Reset to empty to trigger fallback below
+  }
   
   // Ensure timelineEvents has data (Mockup fallback)
   if (!timelineEvents.value || timelineEvents.value.length === 0) {
