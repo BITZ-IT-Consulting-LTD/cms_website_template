@@ -49,8 +49,8 @@
             <li><router-link to="/" class="hover:text-secondary-light transition-colors">Home</router-link></li>
             <li><router-link to="/about" class="hover:text-secondary-light transition-colors">Who We Are</router-link></li>
             <li><router-link to="/videos" class="hover:text-secondary-light transition-colors">Videos</router-link></li>
-            <li><router-link to="/blogs" class="hover:text-secondary-light transition-colors">Updates</router-link></li>
-            <li><router-link to="/news" class="hover:text-secondary-light transition-colors">Blogs</router-link></li>
+            <li><router-link to="/blogs" class="hover:text-secondary-light transition-colors">Blogs</router-link></li>
+            <li><router-link to="/news" class="hover:text-secondary-light transition-colors">Updates</router-link></li>
             <li><router-link to="/resources" class="hover:text-secondary-light transition-colors">Resources</router-link></li>
           </ul>
         </div>

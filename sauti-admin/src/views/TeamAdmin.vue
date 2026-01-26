@@ -71,9 +71,9 @@
         <form @submit.prevent="handleSubmit" class="p-6 overflow-y-auto max-h-[80vh] space-y-4">
           <!-- Image Upload Area -->
           <div class="flex flex-col items-center">
-            <div @click="$refs.fileInput.click()"
+            <div @click="fileInput?.click()"
               class="w-40 h-40 rounded-3xl border-2 border-dashed border-gray-200 hover:border-emerald-400 transition-colors cursor-pointer relative overflow-hidden flex items-center justify-center bg-gray-50">
-              <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover" />
+              <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover" alt="Preview" />
               <div v-else class="text-center p-4">
                 <CloudArrowUpIcon class="h-10 w-10 mx-auto text-gray-400 mb-2" />
                 <p class="text-xs font-bold text-gray-400 uppercase">Upload Photo</p>
@@ -81,6 +81,7 @@
               <input type="file" ref="fileInput" class="hidden" accept="image/*" @change="handleImageChange" />
             </div>
             <p v-if="imageFile" class="text-xs text-emerald-600 mt-2 font-bold">{{ imageFile.name }}</p>
+            <p v-else-if="editingMember && editingMember.image" class="text-xs text-gray-500 mt-2 font-bold">Current image uploaded</p>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
@@ -160,6 +161,7 @@
   const saving = ref(false)
   const imageFile = ref(null)
   const imagePreview = ref(null)
+  const fileInput = ref(null)
 
   const stats = computed(() => {
     const members = teamMembers.value || []
@@ -187,8 +189,16 @@
     try {
       const res = await api.teamMembers.list()
       teamMembers.value = Array.isArray(res.data) ? res.data : (res.data.results || [])
+      console.log('Fetched team members:', teamMembers.value.length)
+      if (teamMembers.value.length > 0) {
+        console.log('Sample member:', teamMembers.value[0])
+      }
     } catch (err) {
       console.error('Error fetching team:', err)
+      if (err.response) {
+        console.error('Response status:', err.response.status)
+        console.error('Response data:', err.response.data)
+      }
       toast.error('Failed to load team members')
     } finally {
       loading.value = false
@@ -220,12 +230,22 @@
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
+      // Clean up old preview URL to prevent memory leaks
+      if (imagePreview.value && imagePreview.value.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreview.value)
+      }
+
       imageFile.value = file
       imagePreview.value = URL.createObjectURL(file)
     }
   }
 
   const closeModal = () => {
+    // Clean up object URL to prevent memory leaks
+    if (imagePreview.value && imagePreview.value.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreview.value)
+    }
+
     showModal.value = false
     editingMember.value = null
     imageFile.value = null
@@ -236,25 +256,46 @@
     saving.value = true
     try {
       const payload = { ...form.value }
+
+      // Handle image field
       if (imageFile.value) {
+        console.log('Adding new image file:', imageFile.value.name, imageFile.value.type, imageFile.value.size)
         payload.image = imageFile.value
-      } else {
-        // If we're updating and didn't pick a new image, don't send the string URL back
+      } else if (editingMember.value?.image) {
+        // If editing and no new file selected, keep existing image
+        // Don't send the URL back, let backend keep existing
         delete payload.image
+        console.log('Keeping existing image')
+      } else {
+        // No image at all
+        delete payload.image
+        console.log('No image provided')
       }
 
+      console.log('Submitting payload:', {
+        ...payload,
+        image: payload.image ? `File: ${payload.image.name}` : 'No image'
+      })
+
       if (editingMember.value) {
-        await api.teamMembers.update(editingMember.value.id, payload)
+        const response = await api.teamMembers.update(editingMember.value.id, payload)
+        console.log('Update response:', response.data)
         toast.success('Team member updated')
       } else {
-        await api.teamMembers.create(payload)
+        const response = await api.teamMembers.create(payload)
+        console.log('Create response:', response.data)
         toast.success('Team member added')
       }
+
       await fetchTeamMembers()
       closeModal()
     } catch (err) {
       console.error('Error saving team member:', err)
-      toast.error('Failed to save team member')
+      if (err.response) {
+        console.error('Response data:', err.response.data)
+        console.error('Response status:', err.response.status)
+      }
+      toast.error(err.response?.data?.detail || 'Failed to save team member')
     } finally {
       saving.value = false
     }

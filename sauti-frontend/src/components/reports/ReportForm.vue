@@ -76,13 +76,13 @@
         <input 
           v-else
           v-model="userInput"
-          :type="currentInputType === 'number' ? 'tel' : 'text'"
+          :type="currentInputType"
           :disabled="isTyping || isFinished || waitingForOption"
           :placeholder="inputPlaceholder"
           class="w-full pl-5 pr-14 py-4 bg-gray-50 rounded-full border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm"
           style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;"
           ref="inputRef"
-         autofocus
+          autofocus
         />
 
         <button 
@@ -145,9 +145,12 @@ const formData = ref({
   incident_type: '',
   reporter_name: '',
   reporter_phone: '',
+  has_alternative_contact: '', // Yes/No for alternative contact
+  alternative_contact: '', // Alternative contact information
   victim_sex: '',
   victim_age: '',
-  location: '',
+  victim_location: '', // Where the victim/person is located
+  incident_location: '', // Where the incident happened
   description: ''
 })
 
@@ -162,56 +165,36 @@ const FLOW = [
       { label: 'For Someone Else', val: 'OTHERS' }
     ]
   },
-  {
-    key: 'victim_name',
-    question: (data) => data.identity === 'SELF' ? "What is your full name? <span class='text-red-500'>[Required]</span>" : "What is the name of the person you are reporting for? <span class='text-red-500'>[Required]</span>",
-    type: 'input',
-    placeholder: "Type full name...",
-    required: true
-  },
-  {
-    key: 'category',
-    question: "What type of case is this? Please select the best match.",
-    type: 'options',
-    options: [
-      { label: 'Child Protection', val: 'CHILD_PROTECTION' },
-      { label: 'Gender Based Violence', val: 'GBV' },
-      { label: 'Trafficking / Migrant', val: 'MIGRANT' },
-      { label: 'Other', val: 'OTHER' }
-    ]
-  },
-  {
-    key: 'incident_type',
-    question: "Could you specify the nature of the incident?",
-    type: 'options',
-    options: [
-      { label: 'Physical Abuse', val: 'PHYSICAL' },
-      { label: 'Sexual Violence', val: 'SEXUAL' },
-      { label: 'Emotional Abuse', val: 'EMOTIONAL' },
-      { label: 'Neglect', val: 'NEGLECT' },
-      { label: 'Economic', val: 'ECONOMIC' }
-    ]
-  },
+  // FOR SOMEONE ELSE FLOW
   {
     key: 'reporter_contact',
-    condition: (data) => data.identity !== 'SELF',
-    question: "As the reporter, may we have your name? \n(You can type 'Skip' to remain anonymous)",
+    condition: (data) => data.identity === 'OTHERS',
+    question: "As the reporter, may we have your name? (You can type 'Skip' to remain anonymous)",
     type: 'input',
     placeholder: "Your Name",
     allowSkip: true
   },
   {
-    key: 'reporter_phone',
-    question: "Please provide a phone number where we can reach you for follow-up. <span class='text-red-500'>[Required]</span>",
+    key: 'victim_name',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "What is the name of the victim you are reporting for? <span class='text-red-500'>[Required]</span>",
+    type: 'input',
+    placeholder: "Type full name...",
+    required: true
+  },
+  {
+    key: 'victim_age',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "Age of the victim (in years)?",
     type: 'input',
     inputType: 'number',
-    placeholder: "e.g., 077...",
-    required: true,
-    validator: (val) => /\d{9,}/.test(val) ? true : "Please enter a valid phone number (at least 9 digits)"
+    placeholder: "e.g. 24",
+    required: true
   },
   {
     key: 'victim_demographics_sex',
-    question: (data) => data.identity === 'SELF' ? "What is your sex?" : "What is the victim's sex?",
+    condition: (data) => data.identity === 'OTHERS',
+    question: "What is the victim's sex?",
     type: 'options',
     options: [
       { label: 'Male', val: 'MALE' },
@@ -219,22 +202,133 @@ const FLOW = [
     ]
   },
   {
-    key: 'victim_age',
-    question: "Age (in years)?",
+    key: 'victim_location',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "What is the location of the victim?",
     type: 'input',
-    inputType: 'number',
-    placeholder: "e.g. 24",
+    placeholder: "e.g. Kampala, Nakawa, or place...",
     required: true
   },
   {
-    key: 'location',
-    question: "Where did this happen? (District, Village, or Landmark)",
+    key: 'reporter_phone',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "Please provide a phone number where we can reach you for follow-up. <span class='text-red-500'>[Required]</span>",
     type: 'input',
-    placeholder: "e.g. Kampala, Nakawa...",
-    required: true
+    inputType: 'tel',
+    placeholder: "+256 7XX XXX XXX (or +[country code] [number])",
+    required: true,
+    validator: (val) => {
+      if (!val || !val.trim()) {
+        return "Phone number is required"
+      }
+      // Remove spaces, dashes, and parentheses for validation
+      const cleaned = val.replace(/[\s\-\(\)]/g, '')
+      
+      // International phone number pattern (E.164 format)
+      // Must start with + followed by country code (1-3 digits) and number (4-14 digits)
+      // Total length: 7-15 digits after the +
+      const internationalPattern = /^\+[1-9]\d{6,14}$/
+      
+      // Uganda-specific patterns (for backward compatibility and default)
+      const ugandaPattern = /^(\+?256|0)?(7[0-9]|20|3[1-9])[0-9]{7}$/
+      
+      // Check if it's a valid international format
+      if (internationalPattern.test(cleaned)) {
+        return true
+      }
+      
+      // Check if it's a valid Uganda format (will be formatted to +256)
+      if (ugandaPattern.test(cleaned)) {
+        return true
+      }
+      
+      // Check if it's a local format that can be converted (9-10 digits starting with 0 or 7-9)
+      const localPattern = /^(0[1-9]|[7-9])[0-9]{8,9}$/
+      if (localPattern.test(cleaned) && cleaned.length >= 9 && cleaned.length <= 10) {
+        return true
+      }
+      
+      return "Please enter a valid phone number with country code (e.g., +256 7XX XXX XXX, +1 555 123 4567, or 077XXXXXXX for Uganda)"
+    },
+    formatValue: (val) => {
+      if (!val || !val.trim()) return val
+      // Remove spaces, dashes, and parentheses for formatting
+      const cleaned = val.replace(/[\s\-\(\)]/g, '')
+      
+      // Already has international format with +
+      if (cleaned.startsWith('+') && /^\+[1-9]\d{6,14}$/.test(cleaned)) {
+        return cleaned
+      }
+      
+      // Uganda-specific formatting (default)
+      // Already has +256
+      if (cleaned.startsWith('+256') && cleaned.length === 13) {
+        return cleaned
+      }
+      // Has 256 without +
+      if (cleaned.startsWith('256') && cleaned.length === 12) {
+        return '+' + cleaned
+      }
+      // Starts with 0 (local Uganda format)
+      if (cleaned.startsWith('0') && cleaned.length === 10) {
+        return '+256' + cleaned.substring(1)
+      }
+      // Just 9 digits (Uganda mobile number)
+      if (/^[7-9]/.test(cleaned) && cleaned.length === 9) {
+        return '+256' + cleaned
+      }
+      
+      // Other country codes (if user enters country code without +)
+      // Pattern: 1-3 digit country code followed by 4-14 digits
+      const countryCodePattern = /^([1-9]\d{0,2})(\d{4,14})$/
+      const match = cleaned.match(countryCodePattern)
+      if (match && cleaned.length >= 7 && cleaned.length <= 15) {
+        const countryCode = match[1]
+        const number = match[2]
+        // Don't auto-format if it looks like it might be a local number
+        // Only format if country code is clearly identifiable (1-3 digits, number is 4+ digits)
+        if (countryCode.length <= 3 && number.length >= 4) {
+          return '+' + cleaned
+        }
+      }
+      
+      return val
+    }
+  },
+  {
+    key: 'category',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "What type of case is this? Please select the best match.",
+    type: 'options',
+    options: [
+      { label: 'Abuse and Violence', val: 'CHILD_PROTECTION' },
+      { label: 'Gender Based Violence', val: 'GBV' },
+      { label: 'Migrant Worker Issues', val: 'MIGRANT' },
+      { label: 'PSEA (Sexual Exploitation and Abuse)', val: 'OTHER' }
+    ]
+  },
+  {
+    key: 'incident_type',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "Could you specify the nature of the incident?",
+    type: 'options',
+    options: [
+      { label: 'Exploitation', val: 'EXPLOITATION' },
+      { label: 'Neglect', val: 'NEGLECT' },
+      { label: 'Economic Violence', val: 'ECONOMIC_VIOLENCE' },
+      { label: 'Emotional & Psychological Abuse', val: 'EMOTIONAL_PSYCHOLOGICAL' },
+      { label: 'Harmful Traditional Practices', val: 'HARMFUL_TRADITIONAL' },
+      { label: 'Murder', val: 'MURDER' },
+      { label: 'Online Sexual Abuse & Violence', val: 'ONLINE_SEXUAL' },
+      { label: 'Physical Violence', val: 'PHYSICAL_VIOLENCE' },
+      { label: 'Sexual Violence', val: 'SEXUAL_VIOLENCE' },
+      { label: 'Threatening Violence', val: 'THREATENING_VIOLENCE' },
+      { label: 'Trafficking in Persons', val: 'TRAFFICKING' }
+    ]
   },
   {
     key: 'description',
+    condition: (data) => data.identity === 'OTHERS',
     question: "Please describe what happened in detail.",
     type: 'input',
     inputType: 'textarea',
@@ -242,8 +336,268 @@ const FLOW = [
     required: true
   },
   {
+    key: 'incident_location',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "Where did this happen? (District, Village, or Place)",
+    type: 'input',
+    placeholder: "e.g. Kampala, Nakawa, or place...",
+    required: true
+  },
+  {
+    key: 'has_alternative_contact',
+    condition: (data) => data.identity === 'OTHERS',
+    question: "Do you have an alternative contact that we can reach you or the victim on?",
+    type: 'options',
+    options: [
+      { label: 'Yes', val: 'YES' },
+      { label: 'No', val: 'NO' }
+    ]
+  },
+  {
+    key: 'alternative_contact',
+    condition: (data) => data.identity === 'OTHERS' && data.has_alternative_contact === 'YES',
+    question: "Please provide the alternative contact details (e.g., phone, email, address).",
+    type: 'input',
+    placeholder: "e.g., phone, email, address...",
+    required: true
+  },
+  // FOR MYSELF FLOW
+  {
+    key: 'victim_name',
+    condition: (data) => data.identity === 'SELF',
+    question: "What is your full name? <span class='text-red-500'>[Required]</span>",
+    type: 'input',
+    placeholder: "Type full name...",
+    required: true
+  },
+  {
+    key: 'victim_age',
+    condition: (data) => data.identity === 'SELF',
+    question: "Age (in years)?",
+    type: 'input',
+    inputType: 'number',
+    placeholder: "e.g. 24",
+    required: true
+  },
+  {
+    key: 'victim_demographics_sex',
+    condition: (data) => data.identity === 'SELF',
+    question: "What is your sex?",
+    type: 'options',
+    options: [
+      { label: 'Male', val: 'MALE' },
+      { label: 'Female', val: 'FEMALE' }
+    ]
+  },
+  {
+    key: 'victim_location',
+    condition: (data) => data.identity === 'SELF',
+    question: "Where are you located? (District, Village, or Place)",
+    type: 'input',
+    placeholder: "e.g. Kampala, Nakawa, or place...",
+    required: true
+  },
+  {
+    key: 'reporter_phone',
+    condition: (data) => data.identity === 'SELF',
+    question: "Please provide a phone number where we can reach you for follow-up. <span class='text-red-500'>[Required]</span>",
+    type: 'input',
+    inputType: 'tel',
+    placeholder: "+256 7XX XXX XXX (or +[country code] [number])",
+    required: true,
+    validator: (val) => {
+      if (!val || !val.trim()) {
+        return "Phone number is required"
+      }
+      // Remove spaces, dashes, and parentheses for validation
+      const cleaned = val.replace(/[\s\-\(\)]/g, '')
+      
+      // International phone number pattern (E.164 format)
+      // Must start with + followed by country code (1-3 digits) and number (4-14 digits)
+      // Total length: 7-15 digits after the +
+      const internationalPattern = /^\+[1-9]\d{6,14}$/
+      
+      // Uganda-specific patterns (for backward compatibility and default)
+      const ugandaPattern = /^(\+?256|0)?(7[0-9]|20|3[1-9])[0-9]{7}$/
+      
+      // Check if it's a valid international format
+      if (internationalPattern.test(cleaned)) {
+        return true
+      }
+      
+      // Check if it's a valid Uganda format (will be formatted to +256)
+      if (ugandaPattern.test(cleaned)) {
+        return true
+      }
+      
+      // Check if it's a local format that can be converted (9-10 digits starting with 0 or 7-9)
+      const localPattern = /^(0[1-9]|[7-9])[0-9]{8,9}$/
+      if (localPattern.test(cleaned) && cleaned.length >= 9 && cleaned.length <= 10) {
+        return true
+      }
+      
+      return "Please enter a valid phone number with country code (e.g., +256 7XX XXX XXX, +1 555 123 4567, or 077XXXXXXX for Uganda)"
+    },
+    formatValue: (val) => {
+      if (!val || !val.trim()) return val
+      // Remove spaces, dashes, and parentheses for formatting
+      const cleaned = val.replace(/[\s\-\(\)]/g, '')
+      
+      // Already has international format with +
+      if (cleaned.startsWith('+') && /^\+[1-9]\d{6,14}$/.test(cleaned)) {
+        return cleaned
+      }
+      
+      // Uganda-specific formatting (default)
+      // Already has +256
+      if (cleaned.startsWith('+256') && cleaned.length === 13) {
+        return cleaned
+      }
+      // Has 256 without +
+      if (cleaned.startsWith('256') && cleaned.length === 12) {
+        return '+' + cleaned
+      }
+      // Starts with 0 (local Uganda format)
+      if (cleaned.startsWith('0') && cleaned.length === 10) {
+        return '+256' + cleaned.substring(1)
+      }
+      // Just 9 digits (Uganda mobile number)
+      if (/^[7-9]/.test(cleaned) && cleaned.length === 9) {
+        return '+256' + cleaned
+      }
+      
+      // Other country codes (if user enters country code without +)
+      // Pattern: 1-3 digit country code followed by 4-14 digits
+      const countryCodePattern = /^([1-9]\d{0,2})(\d{4,14})$/
+      const match = cleaned.match(countryCodePattern)
+      if (match && cleaned.length >= 7 && cleaned.length <= 15) {
+        const countryCode = match[1]
+        const number = match[2]
+        // Don't auto-format if it looks like it might be a local number
+        // Only format if country code is clearly identifiable (1-3 digits, number is 4+ digits)
+        if (countryCode.length <= 3 && number.length >= 4) {
+          return '+' + cleaned
+        }
+      }
+      
+      return val
+    }
+  },
+  {
+    key: 'category',
+    condition: (data) => data.identity === 'SELF',
+    question: "What type of case is this? Please select the best match.",
+    type: 'options',
+    options: [
+      { label: 'Abuse and Violence', val: 'CHILD_PROTECTION' },
+      { label: 'Gender Based Violence', val: 'GBV' },
+      { label: 'Migrant Worker Issues', val: 'MIGRANT' },
+      { label: 'PSEA (Sexual Exploitation and Abuse)', val: 'OTHER' }
+    ]
+  },
+  {
+    key: 'incident_type',
+    condition: (data) => data.identity === 'SELF',
+    question: "Could you specify the nature of the incident?",
+    type: 'options',
+    options: [
+      { label: 'Exploitation', val: 'EXPLOITATION' },
+      { label: 'Neglect', val: 'NEGLECT' },
+      { label: 'Economic Violence', val: 'ECONOMIC_VIOLENCE' },
+      { label: 'Emotional & Psychological Abuse', val: 'EMOTIONAL_PSYCHOLOGICAL' },
+      { label: 'Harmful Traditional Practices', val: 'HARMFUL_TRADITIONAL' },
+      { label: 'Murder', val: 'MURDER' },
+      { label: 'Online Sexual Abuse & Violence', val: 'ONLINE_SEXUAL' },
+      { label: 'Physical Violence', val: 'PHYSICAL_VIOLENCE' },
+      { label: 'Sexual Violence', val: 'SEXUAL_VIOLENCE' },
+      { label: 'Threatening Violence', val: 'THREATENING_VIOLENCE' },
+      { label: 'Trafficking in Persons', val: 'TRAFFICKING' }
+    ]
+  },
+  {
+    key: 'description',
+    condition: (data) => data.identity === 'SELF',
+    question: "Please describe what happened in detail.",
+    type: 'input',
+    inputType: 'textarea',
+    placeholder: "Type your story here...",
+    required: true
+  },
+  {
+    key: 'incident_location',
+    condition: (data) => data.identity === 'SELF',
+    question: "Where did this happen? (District, Village, or Place)",
+    type: 'input',
+    placeholder: "e.g. Kampala, Nakawa, or place...",
+    required: true
+  },
+  {
+    key: 'has_alternative_contact',
+    condition: (data) => data.identity === 'SELF',
+    question: "Do you have an alternative contact that we can reach you on?",
+    type: 'options',
+    options: [
+      { label: 'Yes', val: 'YES' },
+      { label: 'No', val: 'NO' }
+    ]
+  },
+  {
+    key: 'alternative_contact',
+    condition: (data) => data.identity === 'SELF' && data.has_alternative_contact === 'YES',
+    question: "Please provide the alternative contact details (e.g., phone, email, address).",
+    type: 'input',
+    placeholder: "e.g., phone, email, address...",
+    required: true
+  },
+  // SUMMARY (appears for both flows)
+  {
     key: 'review',
-    question: (data) => `<strong>Summary:</strong>\nType: ${data.category} - ${data.incident_type}\nVictim: ${data.victim_name} (${data.victim_age}, ${data.victim_sex})\nLocation: ${data.location}\n\nAre you ready to submit this secure report?`,
+    question: (data) => {
+      // Helper function to get case type label
+      const getCaseTypeLabel = (val) => {
+        const caseTypeMap = {
+          'CHILD_PROTECTION': 'Abuse and Violence',
+          'GBV': 'Gender Based Violence',
+          'MIGRANT': 'Migrant Worker Issues',
+          'OTHER': 'PSEA (Sexual Exploitation and Abuse)'
+        }
+        return caseTypeMap[val] || val
+      }
+      
+      // Helper function to get incident type label
+      const getIncidentTypeLabel = (val) => {
+        const incidentTypeMap = {
+          'EXPLOITATION': 'Exploitation',
+          'NEGLECT': 'Neglect',
+          'ECONOMIC_VIOLENCE': 'Economic Violence',
+          'EMOTIONAL_PSYCHOLOGICAL': 'Emotional & Psychological Abuse',
+          'HARMFUL_TRADITIONAL': 'Harmful Traditional Practices',
+          'MURDER': 'Murder',
+          'ONLINE_SEXUAL': 'Online Sexual Abuse & Violence',
+          'PHYSICAL_VIOLENCE': 'Physical Violence',
+          'SEXUAL_VIOLENCE': 'Sexual Violence',
+          'THREATENING_VIOLENCE': 'Threatening Violence',
+          'TRAFFICKING': 'Trafficking in Persons'
+        }
+        return incidentTypeMap[val] || val
+      }
+      
+      const identityText = data.identity === 'SELF' ? 'Yourself' : 'Someone Else'
+      const victimInfo = data.identity === 'SELF' 
+        ? `You: ${data.victim_name} (${data.victim_age} years, ${data.victim_sex})`
+        : `Victim: ${data.victim_name} (${data.victim_age} years, ${data.victim_sex})`
+      const reporterInfo = data.identity === 'SELF' 
+        ? `Phone: ${data.reporter_phone}`
+        : `Reporter: ${data.reporter_name || 'Anonymous'}, Phone: ${data.reporter_phone}`
+      
+      const caseTypeLabel = getCaseTypeLabel(data.category)
+      const incidentTypeLabel = getIncidentTypeLabel(data.incident_type)
+      const alternativeContactInfo = data.has_alternative_contact === 'YES' && data.alternative_contact
+        ? `\nAlternative Contact: ${data.alternative_contact}`
+        : ''
+      
+      return `<strong>Summary:</strong>\n\nReporting for: ${identityText}\n${victimInfo}\nLocation: ${data.victim_location}\nCase Type: ${caseTypeLabel}\nIncident: ${incidentTypeLabel}\n${reporterInfo}${alternativeContactInfo}\nIncident Location: ${data.incident_location}\n\nDescription: ${data.description}\n\nAre you ready to submit this secure report?`
+    },
     type: 'options',
     options: [
       { label: 'Yes, Submit Securely', val: 'CONFIRM' },
@@ -292,7 +646,12 @@ const processNextStep = async () => {
       waitingForOption.value = false
       currentInputType.value = step.inputType || 'text'
       inputPlaceholder.value = step.placeholder || 'Type here...'
-      userInput.value = ''
+      // Set default value for phone if formatValue exists
+      if (step.key === 'reporter_phone' && step.formatValue) {
+        userInput.value = '+256 ' // Default to Uganda, but user can change country code
+      } else {
+        userInput.value = ''
+      }
       await nextTick()
       inputRef.value?.focus()
     }
@@ -303,13 +662,18 @@ const processNextStep = async () => {
 
 const handleSubmit = () => {
   const step = FLOW[currentStep.value]
-  const val = userInput.value.trim()
+  let val = userInput.value.trim()
 
   validationError.value = ''
 
   if (step.required && !val) {
     validationError.value = "This field is required."
     return
+  }
+
+  // Format phone number if formatValue function exists
+  if (step.formatValue && val) {
+    val = step.formatValue(val)
   }
 
   if (step.validator) {
@@ -361,7 +725,13 @@ const handleOption = (opt) => {
 const handleDataCapture = (key, val) => {
   if (key === 'reporter_contact') formData.value.reporter_name = val
   else if (key === 'victim_demographics_sex') formData.value.victim_sex = val
-  else formData.value[key] = val
+  else if (key === 'has_alternative_contact' && val === 'NO') {
+    // If No, clear alternative contact and set flag
+    formData.value.has_alternative_contact = val
+    formData.value.alternative_contact = ''
+  } else {
+    formData.value[key] = val
+  }
 }
 
 const submitForm = async () => {
@@ -371,6 +741,7 @@ const submitForm = async () => {
             reporter: {
                 name: formData.value.reporter_name,
                 phone: formData.value.reporter_phone,
+                alternative_contact: formData.value.alternative_contact || null,
                 safe_to_contact: true
             },
             reporting_for: formData.value.identity,
@@ -381,7 +752,8 @@ const submitForm = async () => {
             }],
             intake_category: formData.value.category,
             description: `[Incident Type: ${formData.value.incident_type}] \n\n${formData.value.description}`,
-            location: formData.value.location
+            location: formData.value.incident_location || formData.value.victim_location,
+            victim_location: formData.value.victim_location
         }
 
         const response = await api.reports.submit(payload)
@@ -407,9 +779,12 @@ const resetChat = () => {
     incident_type: '',
     reporter_name: '',
     reporter_phone: '',
+    has_alternative_contact: '',
+    alternative_contact: '',
     victim_sex: '',
     victim_age: '',
-    location: '',
+    victim_location: '',
+    incident_location: '',
     description: ''
   }
   isSuccess.value = false

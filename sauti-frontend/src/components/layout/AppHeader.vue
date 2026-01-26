@@ -18,8 +18,8 @@
               { to: '/', label: 'Home' },
               { to: '/about', label: 'Who We Are' },
               { to: '/videos', label: 'Videos' },
-              { to: '/blogs', label: 'Updates' },
-              { to: '/news', label: 'Blogs' },
+              { to: '/blogs', label: 'Blogs' },
+              { to: '/news', label: 'News' },
               { to: '/resources', label: 'Resources' },
               { to: '/faqs', label: 'FAQs' },
               { to: '/contact', label: 'Contact Us' }
@@ -98,8 +98,8 @@
               { to: '/', label: 'Home' },
               { to: '/about', label: 'Who We Are' },
               { to: '/videos', label: 'Videos' },
-              { to: '/blogs', label: 'Updates' },
-              { to: '/news', label: 'Blogs' },
+              { to: '/blogs', label: 'Blogs' },
+              { to: '/news', label: 'News' },
               { to: '/resources', label: 'Resources' },
               { to: '/faqs', label: 'FAQs' },
               { to: '/contact', label: 'Contact Us' }

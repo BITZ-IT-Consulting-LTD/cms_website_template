@@ -22,29 +22,60 @@
               <p class="text-black/60 font-bold text-lg">Public awareness materials and official guidance.</p>
             </div>
             <div class="pill bg-primary/10 text-primary">
-              {{ resources.length }} {{ resourcesAvailable }}
+              {{ filteredResources.length }} {{ resourcesAvailable }}
             </div>
           </div>
 
           <!-- Search & Filters -->
           <div class="bg-neutral-offwhite rounded-[2.5rem] p-8 mb-16 shadow-none">
-            <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex flex-col gap-4">
+              <!-- Search Bar -->
               <div class="flex-1 relative group">
                 <Search
                   class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-primary group-focus-within:text-secondary transition-colors" />
                 <input v-model="search" type="text" :placeholder="resourcesSearchPlaceholder"
                   class="w-full pl-16 pr-6 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary outline-none transition-all" />
               </div>
-              <div class="relative min-w-[240px]">
-                <select v-model="category"
-                  class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                  <option value="">{{ resourcesAllCategories }}</option>
-                  <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
-                    {{ cat.name }}
-                  </option>
-                </select>
-                <ChevronDown
-                  class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary pointer-events-none" />
+
+              <!-- Filter Dropdowns -->
+              <div class="flex flex-col md:flex-row gap-4">
+                <!-- Category Filter -->
+                <div class="relative flex-1">
+                  <select v-model="category"
+                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                    <option value="">{{ resourcesAllCategories }}</option>
+                    <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
+                      {{ cat.name }}
+                    </option>
+                  </select>
+                  <ChevronDown
+                    class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary pointer-events-none" />
+                </div>
+
+                <!-- Format Filter -->
+                <div class="relative flex-1">
+                  <select v-model="format"
+                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                    <option value="">All Formats</option>
+                    <option value="audio">Audio</option>
+                    <option value="document">Document</option>
+                  </select>
+                  <ChevronDown
+                    class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary pointer-events-none" />
+                </div>
+
+                <!-- Language Filter -->
+                <div class="relative flex-1">
+                  <select v-model="language"
+                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                    <option value="">All Languages</option>
+                    <option value="en">English</option>
+                    <option value="lg">Luganda</option>
+                    <option value="sw">Swahili</option>
+                  </select>
+                  <ChevronDown
+                    class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary pointer-events-none" />
+                </div>
               </div>
             </div>
           </div>
@@ -53,8 +84,8 @@
           <AppLoader v-if="loading" :message="settingsStore.settings.resources_loading" />
 
           <!-- Resources Grid -->
-          <div v-else-if="resources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <article v-for="resource in resources" :key="resource.id"
+          <div v-else-if="filteredResources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <article v-for="resource in filteredResources" :key="resource.id"
               class="group bg-neutral-white rounded-[3.5rem] border-2 border-neutral-offwhite transition-all duration-500 hover:shadow-2xl hover:border-primary/30 transform hover:-translate-y-2 overflow-hidden flex flex-col">
 
               <div class="p-10 flex-1 flex flex-col">
@@ -65,22 +96,27 @@
                   </div>
                   <h3 class="text-2xl font-bold text-secondary mb-4 leading-tight line-clamp-2">{{ resource.title
                   }}</h3>
-                  <p class="text-lg text-black/50 font-bold leading-relaxed line-clamp-3">{{
-                    resource.description }}</p>
+
+                  <!-- Expandable Description -->
+                  <div class="text-lg text-black/50 font-bold leading-relaxed">
+                    <p :class="expandedDescriptions[resource.id] ? '' : 'line-clamp-3'">
+                      {{ resource.description }}
+                    </p>
+                    <button
+                      v-if="resource.description && resource.description.length > 150"
+                      @click="toggleDescription(resource.id)"
+                      class="text-primary hover:text-secondary text-sm font-bold mt-2 transition-colors underline"
+                    >
+                      {{ expandedDescriptions[resource.id] ? 'Show less' : 'Read more' }}
+                    </button>
+                  </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3 mb-10 mt-auto">
-                  <span v-if="resource.category_name" class="pill bg-primary text-neutral-white">{{
-                    resource.category_name }}</span>
-                  <span v-if="resource.language" class="pill bg-secondary-light text-neutral-white">{{
-                    getLanguageName(resource.language) }}</span>
-                </div>
-
-                <div v-if="isAudio(resource) && resource.file" class="mb-8 p-4 bg-neutral-offwhite rounded-2xl">
+                <div v-if="isAudio(resource) && resource.file" class="mb-8 p-4 bg-neutral-offwhite rounded-2xl mt-auto">
                   <audio :src="resource.file" controls class="w-full"></audio>
                 </div>
 
-                <div class="flex items-center justify-between pt-8 border-t-2 border-neutral-offwhite">
+                <div class="flex items-center justify-between pt-8 border-t-2 border-neutral-offwhite" :class="{ 'mt-auto': !isAudio(resource) }">
                   <button
                     v-if="resource.file"
                     type="button"
@@ -109,7 +145,7 @@
               'No Resources Found' }}</h3>
             <p class="text-black/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
               'Try adjusting your search criteria.' }}</p>
-            <button @click="search = ''; category = ''" class="btn btn-outline">Clear all filters</button>
+            <button @click="search = ''; category = ''; language = ''; format = ''" class="btn btn-outline">Clear all filters</button>
           </div>
 
           <!-- Pagination -->
@@ -195,8 +231,10 @@
   const search = ref('')
   const category = ref('')
   const language = ref('')
+  const format = ref('')
   const categories = ref([])
   const pagination = ref({ count: 0, next: null, previous: null })
+  const expandedDescriptions = ref({})
 
   const resourcesStatsTitle = computed(() => settingsStore.settings?.resources_stats_title || 'Live Help Performance')
   const resourcesStatsUpdated = computed(() => settingsStore.settings?.resources_stats_updated || 'Real-time Statistics')
@@ -510,6 +548,25 @@
     if (!stats.value?.by_status) return 0
     const found = stats.value.by_status.find(item => item.status === status)
     return found ? found.count : 0
+  }
+
+  // Filtered resources based on format (client-side filtering)
+  const filteredResources = computed(() => {
+    if (!format.value) return resources.value
+
+    return resources.value.filter(resource => {
+      if (format.value === 'audio') {
+        return isAudio(resource)
+      } else if (format.value === 'document') {
+        return !isAudio(resource)
+      }
+      return true
+    })
+  })
+
+  // Toggle description expansion
+  function toggleDescription(resourceId) {
+    expandedDescriptions.value[resourceId] = !expandedDescriptions.value[resourceId]
   }
 
   watch([search, category, language], () => {

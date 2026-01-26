@@ -55,12 +55,19 @@ export const useFaqsStore = defineStore('faqs', () => {
     
     try {
       const response = await api.faqs.create(faqData)
-      const newFaq = response.data
-      faqs.value.unshift(newFaq)
+      let newFaq = response.data
+      if (newFaq?.id) {
+        faqs.value.unshift(newFaq)
+      } else {
+        // Fallback if API doesn't return the created id
+        await fetchFaqs()
+        newFaq = faqs.value[0] || newFaq
+      }
       return newFaq
     } catch (err) {
       error.value = err.message || 'Failed to create FAQ'
-      console.error('Failed to create FAQ:', err)
+      const responseDetails = err?.response?.data ? JSON.stringify(err.response.data) : null
+      console.error('Failed to create FAQ:', err?.response?.status, responseDetails || err)
       throw err
     } finally {
       loading.value = false
@@ -84,7 +91,8 @@ export const useFaqsStore = defineStore('faqs', () => {
       return updatedFaq
     } catch (err) {
       error.value = err.message || 'Failed to update FAQ'
-      console.error('Failed to update FAQ:', err)
+      const responseDetails = err?.response?.data ? JSON.stringify(err.response.data) : null
+      console.error('Failed to update FAQ:', err?.response?.status, responseDetails || err)
       throw err
     } finally {
       loading.value = false
@@ -103,7 +111,8 @@ export const useFaqsStore = defineStore('faqs', () => {
       }
     } catch (err) {
       error.value = err.message || 'Failed to delete FAQ'
-      console.error('Failed to delete FAQ:', err)
+      const responseDetails = err?.response?.data ? JSON.stringify(err.response.data) : null
+      console.error('Failed to delete FAQ:', err?.response?.status, responseDetails || err)
       throw err
     } finally {
       loading.value = false

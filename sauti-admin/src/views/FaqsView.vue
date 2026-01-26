@@ -27,10 +27,10 @@
             <div class="flex items-center space-x-3 mb-2">
               <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">{{ faq.question }}</h3>
               <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" :class="{
-                'bg-green-100 text-green-800': faq.status === 'published',
-                'bg-yellow-100 text-yellow-800': faq.status === 'draft'
+                'bg-green-100 text-green-800': faq.status === 'PUBLISHED',
+                'bg-yellow-100 text-yellow-800': faq.status === 'DRAFT'
               }">
-                {{ faq.status }}
+                {{ faq.status === 'PUBLISHED' ? 'Published' : 'Draft' }}
               </span>
             </div>
 
@@ -111,10 +111,17 @@
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select v-model="form.status" class="form-select">
-                  <option value="draft">Draft</option>
-                  <option value="published">Published</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="PUBLISHED">Published</option>
                 </select>
               </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
+              <input v-model.number="form.order" type="number" min="0" class="form-input"
+                placeholder="0" />
+              <p class="mt-1 text-xs text-gray-500">Lower numbers appear first.</p>
             </div>
 
             <div class="flex justify-end space-x-3 pt-4">
@@ -201,14 +208,15 @@
     question: '',
     answer: '',
     category: '',
-    status: 'draft'
+    status: 'DRAFT',
+    order: 0
   })
 
   // Computed properties
   const stats = computed(() => {
     const faqsList = Array.isArray(faqs.value) ? faqs.value : []
     const total = faqsList.length
-    const published = faqsList.filter(f => f.status === 'published').length
+    const published = faqsList.filter(f => f.status === 'PUBLISHED').length
     const views = faqsList.reduce((sum, f) => sum + (f.views_count || 0), 0)
     const helpful = faqsList.reduce((sum, f) => sum + (f.helpful_count || 0), 0)
 
@@ -265,7 +273,7 @@
   }
 
   const previewFaq = (faq) => {
-    if (faq.status === 'draft') {
+    if (faq.status === 'DRAFT') {
       toast.warning('Cannot preview draft content')
       return
     }
@@ -276,11 +284,13 @@
 
   const editFaq = (faq) => {
     editForm.value = { ...faq }
+    const normalizedStatus = String(faq.status || 'DRAFT').replace(/"/g, '').trim().toUpperCase()
     form.value = {
       question: faq.question,
       answer: faq.answer,
       category: faq.category?.id || '',
-      status: faq.status
+      status: normalizedStatus,
+      order: faq.order ?? 0
     }
     showEditModal.value = true
   }
@@ -291,7 +301,7 @@
         question: `${faq.question} (Copy)`,
         answer: faq.answer,
         category: faq.category?.id,
-        status: 'draft'
+        status: 'DRAFT'
       }
 
       await faqsStore.createFaq(duplicateData)
@@ -303,6 +313,10 @@
   }
 
   const deleteFaq = async (faq) => {
+    if (!faq?.id) {
+      toast.error('Cannot delete FAQ: missing ID')
+      return
+    }
     if (!confirm(`Are you sure you want to delete "${faq.question}"?`)) {
       return
     }
@@ -310,6 +324,7 @@
     try {
       await faqsStore.deleteFaq(faq.id)
       toast.success('FAQ deleted successfully')
+      await fetchFaqs()
     } catch (err) {
       console.error('Delete error:', err)
       toast.error('Failed to delete FAQ')
@@ -318,14 +333,32 @@
 
   const submitFaq = async () => {
     try {
+      const normalizedStatus = String(form.value.status || 'DRAFT')
+        .replace(/"/g, '')
+        .trim()
+        .toUpperCase()
+      const payload = {
+        ...form.value,
+        category: form.value.category || null,
+        status: normalizedStatus,
+        language: form.value.language || 'en',
+        is_active: form.value.is_active ?? true,
+        order: Number.isFinite(Number(form.value.order)) ? Number(form.value.order) : 0
+      }
+
       if (showEditModal.value) {
-        await faqsStore.updateFaq(editForm.value.id, form.value)
+        if (!editForm.value?.id) {
+          toast.error('Cannot update FAQ: missing ID')
+          return
+        }
+        await faqsStore.updateFaq(editForm.value.id, payload)
         toast.success('FAQ updated successfully')
       } else {
-        await faqsStore.createFaq(form.value)
+        await faqsStore.createFaq(payload)
         toast.success('FAQ created successfully')
       }
 
+      await fetchFaqs()
       closeModal()
     } catch (err) {
       console.error('Submit error:', err)
@@ -340,7 +373,8 @@
       question: '',
       answer: '',
       category: '',
-      status: 'draft'
+      status: 'DRAFT',
+      order: 0
     }
     editForm.value = {}
   }

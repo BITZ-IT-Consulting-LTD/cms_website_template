@@ -147,7 +147,13 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title) or 'post'
+            slug = base_slug
+            counter = 2
+            while Post.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         
         # Auto-set published_at when status changes to PUBLISHED
         if self.status == self.Status.PUBLISHED and not self.published_at:

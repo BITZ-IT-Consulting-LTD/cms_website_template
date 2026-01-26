@@ -16,12 +16,13 @@ class FAQCategorySerializer(serializers.ModelSerializer):
 
 class FAQSerializer(serializers.ModelSerializer):
     """Serializer for FAQ"""
+    category = FAQCategorySerializer(read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
 
     class Meta:
         model = FAQ
         fields = [
-            'id', 'question', 'answer', 'category_name', 'language',
+            'id', 'question', 'answer', 'category', 'category_name', 'language',
             'is_active', 'status', 'order', 'views_count', 'created_at', 'updated_at'
         ]
         read_only_fields = ['views_count', 'created_at', 'updated_at']
@@ -33,6 +34,7 @@ class FAQCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FAQ
         fields = [
-            'question', 'answer', 'category', 'language',
+            'id', 'question', 'answer', 'category', 'language',
             'order', 'is_active', 'status'
         ]
+        read_only_fields = ['id']

@@ -156,18 +156,39 @@
                 <!-- Arrows Layer -->
                 <svg class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none" viewBox="0 0 600 600">
                    <defs>
-                      <marker id="arrowhead-loop" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                      <!-- Forward arrowhead -->
+                      <marker id="arrowhead-forward" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                          <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e1" />
                       </marker>
+                      <!-- Reverse arrowhead - same color as forward for consistency -->
+                      <marker id="arrowhead-reverse" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto">
+                         <polygon points="10 0, 0 3.5, 10 7" fill="#cbd5e1" />
+                      </marker>
                    </defs>
-                   <path 
-                      v-for="(step, i) in resolutionSteps" 
-                      :key="'arrow-'+i"
-                      :d="getArrowPath(i)" 
-                      :stroke="step.color" 
-                      stroke-width="3" 
-                      fill="none" 
-                      marker-end="url(#arrowhead-loop)"
+
+                   <!-- Forward arrows (outer arc) -->
+                   <path
+                      v-for="(step, i) in resolutionSteps"
+                      :key="'arrow-forward-'+i"
+                      :d="getArrowPath(i, 0)"
+                      :stroke="step.color"
+                      stroke-width="3"
+                      fill="none"
+                      marker-end="url(#arrowhead-forward)"
+                      stroke-linecap="round"
+                      stroke-dasharray="8 4"
+                      class="opacity-60"
+                   />
+
+                   <!-- Return arrows (inner arc) - positioned slightly offset -->
+                   <path
+                      v-for="(step, i) in resolutionSteps"
+                      :key="'arrow-return-'+i"
+                      :d="getArrowPath(i, -15)"
+                      :stroke="step.color"
+                      stroke-width="3"
+                      fill="none"
+                      marker-start="url(#arrowhead-reverse)"
                       stroke-linecap="round"
                       stroke-dasharray="8 4"
                       class="opacity-60"
@@ -207,45 +228,34 @@
           <p class="text-secondary/70 font-bold max-w-2xl mx-auto">Dedicated professionals committed to the safety and well-being of every child.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <!-- Team Member 1 -->
-          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
-              <img src="https://ui-avatars.com/api/?name=Jane+Doe&background=random" alt="Dr. Jane Doe" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-xl font-bold text-secondary mb-1">Dr. Jane Doe</h3>
-            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Executive Director</p>
-            <p class="text-gray-600 text-sm leading-relaxed">Leading our strategic vision with over 15 years of experience in child protection.</p>
-          </div>
+        <!-- Loading State -->
+        <div v-if="teamLoading" class="text-center py-12">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p class="text-gray-500 mt-4 font-bold">Loading team members...</p>
+        </div>
 
-          <!-- Team Member 2 -->
-          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
-              <img src="https://ui-avatars.com/api/?name=John+Smith&background=random" alt="John Smith" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-xl font-bold text-secondary mb-1">John Smith</h3>
-            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Head of Operations</p>
-            <p class="text-gray-600 text-sm leading-relaxed">Ensuring our helpline and response systems run smoothly 24/7.</p>
-          </div>
+        <!-- Empty State -->
+        <div v-else-if="teamMembers.length === 0" class="text-center py-12">
+          <p class="text-gray-500 font-bold">No team members available at the moment.</p>
+        </div>
 
-          <!-- Team Member 3 -->
-          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-             <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
-              <img src="https://ui-avatars.com/api/?name=Sarah+Connor&background=random" alt="Sarah Connor" class="w-full h-full object-cover" />
+        <!-- Team Members Grid -->
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div v-for="member in teamMembers" :key="member.id" class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
+            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors bg-gray-100 flex items-center justify-center">
+              <img
+                v-if="member.image"
+                :src="member.image"
+                :alt="member.name"
+                class="w-full h-full object-cover"
+                @error="handleImageError($event, member)"
+                loading="lazy"
+              />
+              <User v-else class="w-16 h-16 text-gray-400" />
             </div>
-            <h3 class="text-xl font-bold text-secondary mb-1">Sarah Connor</h3>
-            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Lead Counselor</p>
-            <p class="text-gray-600 text-sm leading-relaxed">Coordinating our counseling team to provide trauma-informed care.</p>
-          </div>
-
-          <!-- Team Member 4 -->
-          <div class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-             <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors">
-              <img src="https://ui-avatars.com/api/?name=Michael+Ross&background=random" alt="Michael Ross" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-xl font-bold text-secondary mb-1">Michael Ross</h3>
-            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">Legal Advisor</p>
-            <p class="text-gray-600 text-sm leading-relaxed">Advocating for justice and navigating legal frameworks for survivors.</p>
+            <h3 class="text-xl font-bold text-secondary mb-1">{{ member.name }}</h3>
+            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">{{ member.role }}</p>
+            <p class="text-gray-600 text-sm leading-relaxed">{{ member.bio || 'Dedicated to the mission of Sauti 116.' }}</p>
           </div>
         </div>
       </div>
@@ -277,41 +287,27 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Value 1 -->
-            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <ShieldCheck class="w-6 h-6" />
-              </div>
-              <h3 class="text-xl font-bold mb-2 text-secondary">Integrity</h3>
-              <p class="text-sm text-gray-500">Acting with honesty, transparency and accountability in all we do.</p>
-            </div>
+          <!-- Loading State -->
+          <div v-if="coreValuesLoading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <p class="text-gray-500 mt-4 font-bold">Loading core values...</p>
+          </div>
 
-            <!-- Value 2 -->
-            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Heart class="w-6 h-6" />
+          <!-- Core Values Grid -->
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+              v-for="value in coreValues"
+              :key="value.id"
+              class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group"
+            >
+              <div
+                class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                :class="[getColorClasses(value.color || 'blue').bg, getColorClasses(value.color || 'blue').text]"
+              >
+                <component :is="getIconComponent(value.icon || 'ShieldCheck')" class="w-6 h-6" />
               </div>
-              <h3 class="text-xl font-bold mb-2 text-secondary">Compassion</h3>
-              <p class="text-sm text-gray-500">Serving every child and survivor with deep empathy, kindness, and care.</p>
-            </div>
-
-            <!-- Value 3 -->
-            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                 <Users class="w-6 h-6" />
-              </div>
-              <h3 class="text-xl font-bold mb-2 text-secondary">Collaboration</h3>
-              <p class="text-sm text-gray-500">Working together with partners and communities for holistic protection.</p>
-            </div>
-
-            <!-- Value 4 -->
-            <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Check class="w-6 h-6" />
-              </div>
-              <h3 class="text-xl font-bold mb-2 text-secondary">Excellence</h3>
-              <p class="text-sm text-gray-500">Striving for the highest standards of quality in our service delivery.</p>
+              <h3 class="text-xl font-bold mb-2 text-secondary">{{ value.title }}</h3>
+              <p class="text-sm text-gray-500">{{ value.description }}</p>
             </div>
           </div>
         </div>
@@ -347,16 +343,19 @@ import {
   Check,
   Shield,
   Zap,
-  RotateCcw
+  RotateCcw,
+  User
 } from 'lucide-vue-next'
 
 // --- Stores ---
 const settingsStore = useSettingsStore()
 
-
-
 // --- Data ---
 const settings = computed(() => settingsStore.settings)
+const teamMembers = ref([])
+const teamLoading = ref(false)
+const coreValues = ref([])
+const coreValuesLoading = ref(false)
 
 
 
@@ -431,29 +430,147 @@ const getCircleStyle = (i, color) => {
   }
 }
 
-const getArrowPath = (i) => {
+const getArrowPath = (i, radiusOffset = 0) => {
   const startAngle = getCoords(i).angle
   const stepRad = (Math.PI / 180) * 90
-  
+
   // Clearance to ensure arrow starts/ends outside the step circles
-  // Circle radius is 70px. Track radius 210px. 
+  // Circle radius is 70px. Track radius 210px.
   // Angle of circle edge = asin(70/210) ~= 0.34 rads.
   // We use 0.55 rads to give space (shortening the lines).
   const clearance = 0.55
-  
+
   const actualStartAngle = startAngle + clearance
   const actualEndAngle = startAngle + stepRad - clearance
-  
-  const x1 = centerX + radius * Math.cos(actualStartAngle)
-  const y1 = centerY + radius * Math.sin(actualStartAngle)
-  
-  const x2 = centerX + radius * Math.cos(actualEndAngle)
-  const y2 = centerY + radius * Math.sin(actualEndAngle)
-  
+
+  // Adjust radius for bidirectional arrows (offset creates inner/outer arcs)
+  const adjustedRadius = radius + radiusOffset
+
+  const x1 = centerX + adjustedRadius * Math.cos(actualStartAngle)
+  const y1 = centerY + adjustedRadius * Math.sin(actualStartAngle)
+
+  const x2 = centerX + adjustedRadius * Math.cos(actualEndAngle)
+  const y2 = centerY + adjustedRadius * Math.sin(actualEndAngle)
+
   // SVG Arc command: A rx ry x-axis-rotation large-arc-flag sweep-flag x y
-  return `M ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2}`
+  return `M ${x1} ${y1} A ${adjustedRadius} ${adjustedRadius} 0 0 1 ${x2} ${y2}`
 }
 
+
+// --- Fetch Team Members ---
+const fetchTeamMembers = async () => {
+  teamLoading.value = true
+  try {
+    const response = await api.teamMembers.list({ is_active: true })
+    teamMembers.value = Array.isArray(response.data)
+      ? response.data
+      : (response.data.results || [])
+
+    // Sort by order field
+    teamMembers.value.sort((a, b) => (a.order || 0) - (b.order || 0))
+
+    // Log for debugging
+    console.log('Team members fetched:', teamMembers.value.length)
+    if (teamMembers.value.length > 0) {
+      console.log('Sample member:', teamMembers.value[0])
+    }
+  } catch (error) {
+    console.error('Failed to fetch team members:', error)
+    teamMembers.value = []
+  } finally {
+    teamLoading.value = false
+  }
+}
+
+// Handle image loading errors
+const handleImageError = (event, member) => {
+  console.error(`Failed to load image for ${member.name}:`, member.image)
+  // Hide the broken image
+  event.target.style.display = 'none'
+  // Show User icon fallback instead
+  const parent = event.target.parentElement
+  if (parent) {
+    parent.innerHTML = '<svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>'
+  }
+}
+
+// --- Fetch Core Values ---
+const fetchCoreValues = async () => {
+  coreValuesLoading.value = true
+  try {
+    const response = await api.coreValues.list({ is_active: true })
+    coreValues.value = Array.isArray(response.data)
+      ? response.data
+      : (response.data.results || [])
+
+    // Sort by order field
+    coreValues.value.sort((a, b) => (a.order || 0) - (b.order || 0))
+
+    console.log('Core values fetched:', coreValues.value.length)
+  } catch (error) {
+    console.error('Failed to fetch core values:', error)
+    // Fallback to hardcoded values if API fails
+    coreValues.value = [
+      {
+        id: 1,
+        title: 'Integrity',
+        description: 'Acting with honesty, transparency and accountability in all we do.',
+        icon: 'ShieldCheck',
+        color: 'orange'
+      },
+      {
+        id: 2,
+        title: 'Compassion',
+        description: 'Serving every child and survivor with deep empathy, kindness, and care.',
+        icon: 'Heart',
+        color: 'blue'
+      },
+      {
+        id: 3,
+        title: 'Collaboration',
+        description: 'Working together with partners and communities for holistic protection.',
+        icon: 'Users',
+        color: 'green'
+      },
+      {
+        id: 4,
+        title: 'Excellence',
+        description: 'Striving for the highest standards of quality in our service delivery.',
+        icon: 'Check',
+        color: 'purple'
+      }
+    ]
+  } finally {
+    coreValuesLoading.value = false
+  }
+}
+
+// Helper to get icon component by name
+const getIconComponent = (iconName) => {
+  const iconMap = {
+    ShieldCheck,
+    Heart,
+    Users,
+    Check,
+    Shield,
+    Globe,
+    Zap
+  }
+  return iconMap[iconName] || ShieldCheck
+}
+
+// Helper to get color classes by color name
+const getColorClasses = (color) => {
+  const colorMap = {
+    orange: { bg: 'bg-orange-100', text: 'text-orange-600' },
+    blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
+    green: { bg: 'bg-green-100', text: 'text-green-600' },
+    purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
+    gray: { bg: 'bg-gray-100', text: 'text-gray-600' },
+    red: { bg: 'bg-red-100', text: 'text-red-600' }
+  }
+  return colorMap[color] || colorMap.blue
+}
 
 // --- Fetching ---
 // --- Fetching ---
@@ -463,7 +580,11 @@ onMounted(async () => {
   } catch (error) {
     console.warn('Failed to fetch settings:', error)
   }
-  
+
+  // Fetch team members and core values
+  await fetchTeamMembers()
+  await fetchCoreValues()
+
   // Custom fetches with fallback
   try {
     const timelineRes = await api.get('/content/timeline-events/')
@@ -472,7 +593,7 @@ onMounted(async () => {
     console.warn('Failed to fetch timeline events, using mock data:', error)
     timelineEvents.value = [] // Reset to empty to trigger fallback below
   }
-  
+
   // Ensure timelineEvents has data (Mockup fallback)
   if (!timelineEvents.value || timelineEvents.value.length === 0) {
     timelineEvents.value = [

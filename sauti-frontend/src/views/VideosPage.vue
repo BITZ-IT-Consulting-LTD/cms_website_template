@@ -4,7 +4,7 @@
     <header class="page-header !pb-0">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Sauti <span class="text-primary">Audiovisuals</span>
+          Sauti <span class="text-primary">Audio-Visuals</span>
         </h1>
       </div>
     </header>

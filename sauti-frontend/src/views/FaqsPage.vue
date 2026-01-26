@@ -223,7 +223,10 @@
 
     // Filter by category
     if (selectedCategory.value) {
-      filtered = filtered.filter(f => f.category == selectedCategory.value)
+      filtered = filtered.filter(f => {
+        const categoryId = typeof f.category === 'object' ? f.category?.id : f.category
+        return categoryId == selectedCategory.value
+      })
     }
 
     // Filter by search query

@@ -169,6 +169,18 @@ export const api = {
     list: (params) => apiClient.get('/social/posts/', { params }),
     get: (id) => apiClient.get(`/social/posts/${id}/`),
   },
+
+  // Team Members endpoints
+  teamMembers: {
+    list: (params) => apiClient.get('/content/team-members/', { params }),
+    get: (id) => apiClient.get(`/content/team-members/${id}/`),
+  },
+
+  // Core Values endpoints
+  coreValues: {
+    list: (params) => apiClient.get('/content/core-values/', { params }),
+    get: (id) => apiClient.get(`/content/core-values/${id}/`),
+  },
 }
 
 export default apiClient

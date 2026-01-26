@@ -115,7 +115,7 @@
                 </label>
                 <p class="text-xs text-gray-500">Write your blog post content with paragraph formatting</p>
                 <textarea
-            ref="editor"
+                  ref="editor"
                   v-model="form.content"
                   required
                   rows="8"
@@ -126,10 +126,8 @@ You can create paragraphs by pressing Enter twice.
 
 Each paragraph will be properly formatted when displayed."
                   style="font-family: 'Roboto', sans-serif; line-height: 1.6; min-height: 200px;"
-            @input="handleContentChange"
                   @focus="handleEditorFocus"
                   @blur="handleEditorBlur"
-                  @keydown="handleKeydown"
                 ></textarea>
                 <div class="flex items-center justify-between text-xs text-gray-500">
                   <span>{{ getWordCount() }} words • {{ getReadingTime() }} min read</span>
@@ -234,6 +232,20 @@ Each paragraph will be properly formatted when displayed."
             <p class="mt-2 text-xs text-gray-500">Published posts are visible on the frontend</p>
           </div>
 
+          <!-- Post Type -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-900 mb-2">Post Type</label>
+            <select
+              v-model="form.postType"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8B4000] focus:border-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
+            >
+              <option value="NEWS">News</option>
+              <option value="BLOG">Blog</option>
+            </select>
+            <p class="mt-2 text-xs text-gray-500">Choose where this post appears on the frontend</p>
+          </div>
+
           <!-- Scheduled Publishing -->
           <div class="mb-6">
             <label class="block text-sm font-semibold text-gray-900 mb-2">
@@ -271,11 +283,11 @@ Each paragraph will be properly formatted when displayed."
               <h3 class="text-lg font-semibold text-gray-900" style="font-family: 'Roboto', sans-serif;">Featured Image</h3>
             </div>
           
-            <div v-if="form.featuredImage || imagePreview" class="relative mb-6">
+          <div v-if="form.featuredImage || imagePreview" class="relative mb-6">
             <img
               :src="imagePreview || form.featuredImage"
               alt="Featured image"
-                class="w-full h-48 object-cover rounded-xl shadow-sm"
+              class="w-full h-64 object-contain rounded-xl shadow-sm bg-gray-50"
             />
             <button
               @click="removeImage"
@@ -374,7 +386,6 @@ const toast = useToast()
 // Refs
 const editor = ref(null)
 const imageInput = ref(null)
-const autoSaveTimeout = ref(null)
 
 // Reactive data
 const loading = ref(false)
@@ -393,6 +404,7 @@ const form = ref({
   tags: [],
   featuredImage: null,
   status: 'DRAFT',
+  postType: 'NEWS',
   scheduledPublishAt: null
 })
 
@@ -409,37 +421,6 @@ const tags = computed(() => {
 })
 
 // Editor methods (simplified - would use TipTap in real implementation)
-// eslint-disable-next-line no-unused-vars
-const handleContentChange = (event) => {
-  // For textarea, the content is already in form.value.content via v-model
-  // Auto-save draft every 30 seconds
-  if (autoSaveTimeout.value) {
-    clearTimeout(autoSaveTimeout.value)
-  }
-  autoSaveTimeout.value = setTimeout(() => {
-    if (form.value.title && form.value.content) {
-      saveDraft()
-    }
-  }, 30000)
-}
-
-const handleKeydown = (event) => {
-  // Handle keyboard shortcuts for textarea
-  if (event.ctrlKey || event.metaKey) {
-    switch (event.key) {
-      case 's':
-        event.preventDefault()
-        saveDraft()
-        break
-    }
-  }
-  
-  // Handle Enter key for paragraph formatting
-  if (event.key === 'Enter') {
-    // Allow normal Enter behavior for line breaks
-    // Double Enter will create paragraph separation
-  }
-}
 
 // Helper methods for content analysis
 const getWordCount = () => {
@@ -571,6 +552,7 @@ const savePost = async () => {
       title: form.value.title.trim(),
       content: form.value.content.trim(),
       status: form.value.status || 'DRAFT',
+      post_type: form.value.postType || 'NEWS',
       language: 'en'
     }
     
@@ -712,6 +694,7 @@ onMounted(async () => {
         tags: post.tags?.map(t => t.id) || [],
         featuredImage: post.featured_image || null,
         status: post.status || 'DRAFT',
+        postType: post.post_type || 'NEWS',
         scheduledPublishAt: post.scheduled_publish_at ? new Date(post.scheduled_publish_at).toISOString().slice(0, 16) : null
       }
       

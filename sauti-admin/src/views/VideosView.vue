@@ -76,10 +76,10 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" :class="{
-                  'bg-green-100 text-green-800': video.status === 'published',
-                  'bg-yellow-100 text-yellow-800': video.status === 'draft'
+                  'bg-green-100 text-green-800': video.status?.toUpperCase() === 'PUBLISHED',
+                  'bg-yellow-100 text-yellow-800': video.status?.toUpperCase() === 'DRAFT'
                 }">
-                  {{ video.status }}
+                  {{ video.status?.toUpperCase() || 'UNKNOWN' }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -183,8 +183,8 @@
   // Computed properties
   const stats = computed(() => {
     const total = videos.value.length
-    const published = videos.value.filter(v => v.status === 'published').length
-    const draft = videos.value.filter(v => v.status === 'draft').length
+    const published = videos.value.filter(v => v.status?.toUpperCase() === 'PUBLISHED').length
+    const draft = videos.value.filter(v => v.status?.toUpperCase() === 'DRAFT').length
     const totalViews = videos.value.reduce((sum, v) => sum + (v.views_count || 0), 0)
 
     return {
@@ -209,7 +209,7 @@
 
     // Filter by status
     if (statusFilter.value) {
-      filtered = filtered.filter(video => video.status === statusFilter.value)
+      filtered = filtered.filter(video => video.status?.toUpperCase() === statusFilter.value.toUpperCase())
     }
 
     // Filter by category
