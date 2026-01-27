@@ -82,15 +82,13 @@
         <section class="mt-20">
           <div
             class="bg-primary/5 p-12 md:p-16 rounded-[4rem] border-2 border-primary/20 text-center max-w-4xl mx-auto">
-            <h3 class="campaign-header text-3xl text-secondary mb-6">How We Work Together</h3>
+            <h3 class="campaign-header text-3xl text-secondary mb-6">{{ siteContent.getContent('partners_cta_title', 'How We Work Together') }}</h3>
             <p class="text-xl font-bold text-muted mb-10 leading-relaxed">
-              Interested in joining our mission to protect the children of Uganda? We are always looking for
-              organizations
-              that share our commitment.
+              {{ siteContent.getContent('partners_cta_text', 'Interested in joining our mission to protect the children of Uganda? We are always looking for organizations that share our commitment.') }}
             </p>
             <div class="cta-group justify-center">
-              <BaseCTA href="/contact" variant="primary">Express Interest</BaseCTA>
-              <BaseCTA href="/about" variant="outline">Learn About Our Impact</BaseCTA>
+              <BaseCTA href="/contact" variant="primary">{{ siteContent.getContent('partners_cta_interest_button', 'Express Interest') }}</BaseCTA>
+              <BaseCTA href="/about" variant="outline">{{ siteContent.getContent('partners_cta_learn_button', 'Learn About Our Impact') }}</BaseCTA>
             </div>
           </div>
         </section>
@@ -102,6 +100,7 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import { usePartnersStore } from '@/store/partners'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import { UserGroupIcon, ShieldCheckIcon } from '@heroicons/vue/24/outline'
@@ -111,10 +110,14 @@
   })
 
   const partnersStore = usePartnersStore()
+  const siteContent = useSiteContent('partners')
   const partners = ref([])
   const loading = ref(true)
 
   onMounted(async () => {
+    // Fetch site content from CMS
+    await siteContent.fetchContent()
+
     try {
       await partnersStore.fetchPartners()
       partners.value = partnersStore.partners
