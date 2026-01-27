@@ -20,6 +20,56 @@
       </nav>
     </div>
 
+    <!-- Filters Section -->
+    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Search by Key/Label -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+          <input v-model="searchQuery" type="text" placeholder="Search key or label..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" />
+        </div>
+
+        <!-- Filter by Type -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
+          <select v-model="filterType" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <option value="">All Types</option>
+            <option value="text">Text</option>
+            <option value="heading">Heading</option>
+            <option value="button">Button</option>
+            <option value="photo">Photo</option>
+            <option value="video">Video</option>
+            <option value="icon">Icon</option>
+          </select>
+        </div>
+
+        <!-- Filter by Status -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Publication Status</label>
+          <select v-model="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <option value="">All Status</option>
+            <option value="published">Published</option>
+            <option value="unpublished">Unpublished</option>
+          </select>
+        </div>
+
+        <!-- Clear Filters -->
+        <div class="flex items-end">
+          <button @click="clearFilters" class="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Results Info -->
+      <div v-if="searchQuery || filterType || filterStatus !== ''" class="mt-3 text-sm text-gray-600">
+        <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded">
+          Showing {{ filteredContent.length }} of {{ allContent.length }} items
+        </span>
+      </div>
+    </div>
+
     <!-- Loading/Error -->
     <div v-if="contentStore.loading" class="text-center py-12">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
@@ -44,13 +94,21 @@
       <div v-for="item in filteredContent" :key="item.key"
         class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col hover:shadow-md transition-shadow">
         <div class="flex justify-between items-start mb-4">
-          <div>
+          <div class="flex-1">
             <h3 class="font-bold text-gray-900 text-lg">{{ item.label || item.key }}</h3>
             <p class="text-xs text-mono text-gray-500 mt-1">{{ item.key }}</p>
           </div>
-          <span :class="getTypeBadgeClass(item.type)" class="px-2 py-1 text-xs font-semibold rounded-full capitalize">
-            {{ item.type }}
-          </span>
+          <div class="flex gap-2 items-start">
+            <span :class="getTypeBadgeClass(item.type)" class="px-2 py-1 text-xs font-semibold rounded-full capitalize">
+              {{ item.type }}
+            </span>
+            <span v-if="item.is_published" class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+              Published
+            </span>
+            <span v-else class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+              Draft
+            </span>
+          </div>
         </div>
 
         <p v-if="item.description" class="text-sm text-gray-600 mb-4 italic">{{ item.description }}</p>
@@ -67,10 +125,21 @@
           <div class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-gray-50 to-transparent"></div>
         </div>
 
-        <button @click="openEditModal(item)"
-          class="w-full mt-auto py-2 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded border border-gray-200 font-medium transition-colors date-edit-btn">
-          Edit Content
-        </button>
+        <div class="mt-auto flex gap-2">
+          <button @click="openEditModal(item)"
+            class="flex-1 py-2 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded border border-gray-200 font-medium transition-colors text-sm">
+            Edit Content
+          </button>
+          <button @click="togglePublish(item)"
+            :class="[
+              'flex-1 py-2 px-4 rounded border font-medium transition-colors text-sm',
+              item.is_published
+                ? 'bg-green-50 hover:bg-green-100 text-green-700 border-green-200'
+                : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
+            ]">
+            {{ item.is_published ? 'Unpublish' : 'Publish' }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -193,6 +262,9 @@
   const activePage = ref('home')
   const showModal = ref(false)
   const isEditing = ref(false)
+  const searchQuery = ref('')
+  const filterType = ref('')
+  const filterStatus = ref('')
 
   const form = reactive({
     key: '',
@@ -222,7 +294,31 @@
 
   // Computed
   const filteredContent = computed(() => {
-    return allContent.value.filter(item => item.page === activePage.value || (!item.page && activePage.value === 'home'))
+    let result = allContent.value.filter(item => item.page === activePage.value || (!item.page && activePage.value === 'home'))
+
+    // Filter by search query (key or label)
+    if (searchQuery.value) {
+      const query = searchQuery.value.toLowerCase()
+      result = result.filter(item =>
+        (item.key && item.key.toLowerCase().includes(query)) ||
+        (item.label && item.label.toLowerCase().includes(query)) ||
+        (item.description && item.description.toLowerCase().includes(query))
+      )
+    }
+
+    // Filter by content type
+    if (filterType.value) {
+      result = result.filter(item => item.type === filterType.value)
+    }
+
+    // Filter by publication status
+    if (filterStatus.value === 'published') {
+      result = result.filter(item => item.is_published === true)
+    } else if (filterStatus.value === 'unpublished') {
+      result = result.filter(item => item.is_published === false)
+    }
+
+    return result
   })
 
   // Methods
@@ -291,6 +387,29 @@
 
   function closeModal() {
     showModal.value = false
+  }
+
+  function clearFilters() {
+    searchQuery.value = ''
+    filterType.value = ''
+    filterStatus.value = ''
+  }
+
+  async function togglePublish(item) {
+    contentStore.setLoading(true)
+    try {
+      const updatedItem = { ...item, is_published: !item.is_published }
+      await api.put(`/content/site-content/${item.key}/`, updatedItem)
+      toast.success(`Content ${updatedItem.is_published ? 'published' : 'unpublished'} successfully`)
+      await fetchAllContent()
+    } catch (err) {
+      console.error('Toggle publish error:', err)
+      const msg = err.response?.data?.detail || err.message || 'Failed to update'
+      toast.error(msg)
+      contentStore.setError(msg)
+    } finally {
+      contentStore.setLoading(false)
+    }
   }
 
   async function saveContent() {
