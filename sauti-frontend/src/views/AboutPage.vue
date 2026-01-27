@@ -115,45 +115,65 @@
              </p>
           </div>
 
-          <!-- Statistics Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-             <!-- Stat Card 1: Children Supported -->
-             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
-                   12,000+
+         <!-- Statistics Grid -->
+         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5 md:gap-6 w-full lg:ml-auto lg:justify-items-stretch">
+            <!-- Stat Card 1: Established -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
+                  Nov 2013
                 </div>
-                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
-                   Children Supported
-                </div>
-             </div>
-
-             <!-- Stat Card 2: Districts Covered -->
-             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
-                   135
-                </div>
-                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
-                   Districts Covered
+               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  Established
                 </div>
              </div>
 
-             <!-- Stat Card 3: Calls Answered -->
-             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
-                   500K+
+            <!-- Stat Card 2: Calls Received -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
+                  2.7M+
                 </div>
-                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
-                   Calls Answered
+               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  Calls Received Countrywide Since Nov 2021
                 </div>
              </div>
 
-             <!-- Stat Card 4: Partners -->
-             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
-                   50+
+            <!-- Stat Card 3: Cases Handled -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
+                  40,000
                 </div>
-                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
-                   Partners
+               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  Cases Handled Since Nov 2021
+                </div>
+             </div>
+
+            <!-- Stat Card 4: District Action Centres -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
+                  120/143
+                </div>
+               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  District Action Centres Established in Uganda
+               </div>
+            </div>
+
+            <!-- Stat Card 5: Calls Received Daily -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
+                  1500-2000
+               </div>
+               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  Calls Received Daily on Average
+               </div>
+            </div>
+
+            <!-- Stat Card 6: New Cases Daily -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
+                  50+
+               </div>
+               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  New Cases Handled Daily on Average
                 </div>
              </div>
           </div>

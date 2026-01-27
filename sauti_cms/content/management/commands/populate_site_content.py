@@ -43,19 +43,22 @@ class Command(BaseCommand):
         ]
 
         for i, service_data in enumerate(services_data):
-            service_obj, created = Service.objects.get_or_create(
-                title=service_data['title'],
-                defaults={
-                    'description': service_data['description'],
-                    'icon': service_data['icon'],
-                    'order': service_data['order'],
-                    'is_visible': True, # Default to visible
-                }
-            )
-            if created:
-                self.stdout.write(self.style.SUCCESS(f"Created Service: {service_data['title']}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Service already exists: {service_data['title']}"))
+            try:
+                service_obj, created = Service.objects.get_or_create(
+                    title=service_data['title'],
+                    defaults={
+                        'description': service_data['description'],
+                        'icon': service_data['icon'],
+                        'order': service_data['order'],
+                        'is_visible': True, # Default to visible
+                    }
+                )
+                if created:
+                    self.stdout.write(self.style.SUCCESS(f"Created Service: {service_data['title']}"))
+                else:
+                    self.stdout.write(self.style.WARNING(f"Service already exists: {service_data['title']}"))
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f"Could not create service '{service_data['title']}': {str(e)}"))
 
         # Data for Contacts
         contacts_data = [
@@ -84,6 +87,47 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING(f"Contact already exists: {contact_data['name']}"))
 
         default_content = {
+            # Home Page - Hero Section
+            'home_hero_headline': { 'key': 'home_hero_headline', 'value': 'TAKE NO CHANCES!', 'label': 'Home Hero Headline', 'page': 'home', 'type': 'heading', 'description': 'Main headline in hero section' },
+            'home_hero_subheadline': { 'key': 'home_hero_subheadline', 'value': 'Report a case now', 'label': 'Home Hero Subheadline', 'page': 'home', 'type': 'heading', 'description': 'Secondary headline in hero section' },
+            'home_hero_cta_text': { 'key': 'home_hero_cta_text', 'value': 'Call {hotline} Toll Free', 'label': 'Home Hero CTA Text', 'page': 'home', 'type': 'text', 'description': 'Text above buttons - {hotline} will be replaced with hotline number' },
+            'home_hero_call_button': { 'key': 'home_hero_call_button', 'value': 'Call Now', 'label': 'Home Hero Call Button', 'page': 'home', 'type': 'button', 'description': 'Primary call button text' },
+            'home_hero_report_button': { 'key': 'home_hero_report_button', 'value': 'Report a case here', 'label': 'Home Hero Report Button', 'page': 'home', 'type': 'button', 'description': 'Secondary report button text' },
+            'home_logo_sauti_alt': { 'key': 'home_logo_sauti_alt', 'value': 'Sauti 116 - Speak Up Against Violence', 'label': 'Home Sauti Logo Alt Text', 'page': 'home', 'type': 'text', 'description': 'Alt text for Sauti logo' },
+            'home_logo_uganda_alt': { 'key': 'home_logo_uganda_alt', 'value': 'Republic of Uganda', 'label': 'Home Uganda Logo Alt Text', 'page': 'home', 'type': 'text', 'description': 'Alt text for Uganda coat of arms' },
+            'home_hero_image_alt': { 'key': 'home_hero_image_alt', 'value': 'Ugandan mother protecting her children', 'label': 'Home Hero Image Alt Text', 'page': 'home', 'type': 'text', 'description': 'Alt text for hero section image' },
+            
+            # Home Page - News/Updates Section
+            'home_news_badge_text': { 'key': 'home_news_badge_text', 'value': 'Our Impact', 'label': 'Home News Badge Text', 'page': 'home', 'type': 'text', 'description': 'Badge text above news section title' },
+            
+            # Home Page - Partners Section (managed via settings but can have overrides)
+            
+            # Home Page - Social Media Links
+            'home_social_twitter_url': { 'key': 'home_social_twitter_url', 'value': 'https://x.com/sauti116', 'label': 'Home Twitter/X URL', 'page': 'home', 'type': 'text', 'description': 'Twitter/X profile URL' },
+            'home_social_twitter_label': { 'key': 'home_social_twitter_label', 'value': 'X (formerly Twitter)', 'label': 'Home Twitter/X Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Twitter/X link' },
+            'home_social_instagram_url': { 'key': 'home_social_instagram_url', 'value': 'https://instagram.com/sauti116', 'label': 'Home Instagram URL', 'page': 'home', 'type': 'text', 'description': 'Instagram profile URL' },
+            'home_social_instagram_label': { 'key': 'home_social_instagram_label', 'value': 'Instagram', 'label': 'Home Instagram Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Instagram link' },
+            'home_social_facebook_url': { 'key': 'home_social_facebook_url', 'value': 'https://facebook.com/Sauti116Helpline', 'label': 'Home Facebook URL', 'page': 'home', 'type': 'text', 'description': 'Facebook page URL' },
+            'home_social_facebook_label': { 'key': 'home_social_facebook_label', 'value': 'Facebook', 'label': 'Home Facebook Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Facebook link' },
+            'home_social_tiktok_url': { 'key': 'home_social_tiktok_url', 'value': 'https://tiktok.com/@sauti116', 'label': 'Home TikTok URL', 'page': 'home', 'type': 'text', 'description': 'TikTok profile URL' },
+            'home_social_tiktok_label': { 'key': 'home_social_tiktok_label', 'value': 'TikTok', 'label': 'Home TikTok Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for TikTok link' },
+            
+            # Home Page - Mock News Content (for empty state)
+            'home_news_mock_featured_category': { 'key': 'home_news_mock_featured_category', 'value': 'Community', 'label': 'Home Mock Featured Category', 'page': 'home', 'type': 'text', 'description': 'Category for mock featured news' },
+            'home_news_mock_featured_title': { 'key': 'home_news_mock_featured_title', 'value': 'Sauti 116 Expands Reach to Rural Areas', 'label': 'Home Mock Featured Title', 'page': 'home', 'type': 'heading', 'description': 'Title for mock featured news' },
+            'home_news_mock_featured_text': { 'key': 'home_news_mock_featured_text', 'value': 'We are dedicated to ensuring every voice is heard. Our latest initiative focuses on reaching remote villages to provide immediate support.', 'label': 'Home Mock Featured Text', 'page': 'home', 'type': 'text', 'description': 'Description for mock featured news' },
+            'home_news_mock_featured_date': { 'key': 'home_news_mock_featured_date', 'value': 'Jan 12, 2026', 'label': 'Home Mock Featured Date', 'page': 'home', 'type': 'text', 'description': 'Date for mock featured news' },
+            'home_news_mock_side1_category': { 'key': 'home_news_mock_side1_category', 'value': 'Education', 'label': 'Home Mock Side 1 Category', 'page': 'home', 'type': 'text', 'description': 'Category for first side news item' },
+            'home_news_mock_side1_title': { 'key': 'home_news_mock_side1_title', 'value': 'School Outreach Programs Launching Soon', 'label': 'Home Mock Side 1 Title', 'page': 'home', 'type': 'heading', 'description': 'Title for first side news item' },
+            'home_news_mock_side1_date': { 'key': 'home_news_mock_side1_date', 'value': 'Jan 10, 2026', 'label': 'Home Mock Side 1 Date', 'page': 'home', 'type': 'text', 'description': 'Date for first side news item' },
+            'home_news_mock_side2_category': { 'key': 'home_news_mock_side2_category', 'value': 'Health', 'label': 'Home Mock Side 2 Category', 'page': 'home', 'type': 'text', 'description': 'Category for second side news item' },
+            'home_news_mock_side2_title': { 'key': 'home_news_mock_side2_title', 'value': 'Partnership with Ministry of Health', 'label': 'Home Mock Side 2 Title', 'page': 'home', 'type': 'heading', 'description': 'Title for second side news item' },
+            'home_news_mock_side2_date': { 'key': 'home_news_mock_side2_date', 'value': 'Jan 08, 2026', 'label': 'Home Mock Side 2 Date', 'page': 'home', 'type': 'text', 'description': 'Date for second side news item' },
+            'home_news_mock_side3_category': { 'key': 'home_news_mock_side3_category', 'value': 'Training', 'label': 'Home Mock Side 3 Category', 'page': 'home', 'type': 'text', 'description': 'Category for third side news item' },
+            'home_news_mock_side3_title': { 'key': 'home_news_mock_side3_title', 'value': 'Counselor Training Certification Complete', 'label': 'Home Mock Side 3 Title', 'page': 'home', 'type': 'heading', 'description': 'Title for third side news item' },
+            'home_news_mock_side3_date': { 'key': 'home_news_mock_side3_date', 'value': 'Jan 05, 2026', 'label': 'Home Mock Side 3 Date', 'page': 'home', 'type': 'text', 'description': 'Date for third side news item' },
+            
+            # Legacy content keys (kept for backwards compatibility)
             'hero_title': { 'key': 'hero_title', 'value': 'Every One Deserves to Be Heard.', 'label': 'Hero Title', 'page': 'home', 'type': 'heading' },
             'hero_subtitle': { 'key': 'hero_subtitle', 'value': 'Sauti 116 is free, confidential and available 24/7 across all telecoms. Report abuse, seek guidance, or get urgent help in your language.', 'label': 'Hero Subtitle', 'page': 'home', 'type': 'text' },
             'hero_cta_call': { 'key': 'hero_cta_call', 'value': 'Call 116 Now', 'label': 'Hero CTA Call', 'page': 'home', 'type': 'button' },
@@ -318,6 +362,7 @@ class Command(BaseCommand):
                     'value': data['value'],
                     'type': data['type'],
                     'page': data['page'],
+                    'description': data.get('description', ''),
                 }
             )
             if created:
