@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-white min-h-screen">
+  <div class="min-h-screen">
     <!-- 1. Hero / Header Section -->
     <header class="relative overflow-hidden pt-24 pb-32 bg-secondary">
       <img src="@/assets/community-protection.png" alt="Sauti 116 Child Protection in Community"

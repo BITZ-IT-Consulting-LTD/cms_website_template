@@ -70,7 +70,11 @@
 @layer base {
   html {
     color: #000000;
-    background-color: rgb(var(--color-neutral-offwhite));
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('../background-texture.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     @apply antialiased transition-colors duration-200;
     font-family: var(--font-cronos);
     font-size: 14.67px;
@@ -81,6 +85,9 @@
 
 
   body {
+    margin: 0;
+    min-height: 100vh;
+    background: transparent;
     @apply leading-relaxed;
   }
 
@@ -193,7 +200,7 @@
 
   .page-header {
     @apply py-24 md:py-32;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.5);
     border: none;
   }
 
@@ -297,4 +304,44 @@
 img {
   @apply bg-neutral-offwhite;
   content-visibility: auto;
+}
+
+/* Social Media Icon Buttons */
+.social-icon-btn {
+  @apply p-3 rounded-full transition-all duration-300;
+}
+
+.social-icon-btn:hover {
+  @apply scale-110;
+}
+
+/* Font Configuration: Cronos Pro for text, Roboto Sans for numbers */
+/* Apply Roboto Sans specifically to numerical content */
+.use-roboto-numbers {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+/* Numbers in headings and statistics */
+h1 .number,
+h2 .number,
+h3 .number,
+h4 .number,
+h5 .number,
+h6 .number,
+.stat-number,
+.metric-value,
+[class*="count"],
+[class*="number"] {
+  font-family: 'Roboto', sans-serif !important;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+/* Ensure text content uses Cronos Pro */
+p,
+span:not(.number):not(.stat-number):not(.metric-value),
+div:not([class*="count"]):not([class*="number"]) {
+  font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;
 }

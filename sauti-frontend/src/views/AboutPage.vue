@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-white min-h-screen font-sans">
+  <div class="min-h-screen font-sans">
     
     <!-- A. Hero Section -->
     <!-- A. Hero Section (Centralized Floating Grid) -->
@@ -88,8 +88,90 @@
        </div>
     </section>
 
+    <!-- Reach Across The Nation Statistics Section -->
+    <section class="py-20 md:py-28 bg-[#006633] relative overflow-hidden">
+       <!-- Ripped Paper Effect - Top -->
+       <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0]" style="transform: translateY(-1px);">
+          <svg class="relative block w-full h-[60px]" viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+             <path d="M0,0 L50,15 L100,5 L150,20 L200,8 L250,18 L300,12 L350,22 L400,10 L450,25 L500,15 L550,8 L600,20 L650,12 L700,18 L750,25 L800,10 L850,20 L900,15 L950,8 L1000,22 L1050,12 L1100,18 L1150,25 L1200,15 L1200,120 L0,120 Z" 
+                   fill="currentColor" 
+                   class="text-[#006633]">
+             </path>
+          </svg>
+       </div>
+
+       <!-- Decorative background elements -->
+       <div class="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+       <div class="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+       
+       <div class="container-custom relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+             <h2 class="text-4xl md:text-5xl font-black text-white mb-4 md:mb-6" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                REACH ACROSS THE NATION
+             </h2>
+             <p class="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                How we are helping people across Uganda every day.
+             </p>
+          </div>
+
+          <!-- Statistics Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+             <!-- Stat Card 1: Children Supported -->
+             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
+                   12,000+
+                </div>
+                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
+                   Children Supported
+                </div>
+             </div>
+
+             <!-- Stat Card 2: Districts Covered -->
+             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
+                   135
+                </div>
+                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
+                   Districts Covered
+                </div>
+             </div>
+
+             <!-- Stat Card 3: Calls Answered -->
+             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
+                   500K+
+                </div>
+                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
+                   Calls Answered
+                </div>
+             </div>
+
+             <!-- Stat Card 4: Partners -->
+             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
+                <div class="stat-number text-5xl md:text-6xl font-black text-white mb-3" style="font-family: 'Roboto', sans-serif;">
+                   50+
+                </div>
+                <div class="text-white/80 text-sm md:text-base font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif; letter-spacing: 0.15em;">
+                   Partners
+                </div>
+             </div>
+          </div>
+       </div>
+
+       <!-- Ripped Paper Effect - Bottom -->
+       <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]" style="transform: translateY(1px);">
+          <svg class="relative block w-full h-[60px]" viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+             <path d="M0,0 L50,12 L100,20 L150,8 L200,18 L250,10 L300,22 L350,15 L400,25 L450,12 L500,20 L550,15 L600,8 L650,25 L700,18 L750,10 L800,20 L850,12 L900,22 L950,15 L1000,8 L1050,20 L1100,12 L1150,18 L1200,10 L1200,0 L0,0 Z" 
+                   fill="currentColor" 
+                   class="text-[#006633]">
+             </path>
+          </svg>
+       </div>
+    </section>
+
     <!-- Path to Resolution Section -->
-    <section class="py-16 md:py-24 bg-white overflow-hidden relative">
+    <section class="py-16 md:py-24 bg-transparent overflow-hidden relative">
        <!-- Decorative Background Blob -->
        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
@@ -262,7 +344,7 @@
     </section>
 
     <!-- G. Core Values Section -->
-    <section class="py-24 bg-white relative overflow-hidden" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+    <section class="py-24 bg-transparent relative overflow-hidden" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
       <!-- Decorative background -->
       <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       
