@@ -42,11 +42,11 @@
             <!-- The Circle (Overlay) -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div class="w-64 h-64 md:w-80 md:h-80 bg-white rounded-full shadow-2xl flex flex-col items-center justify-center text-center p-8 z-10 border-[8px] border-[#F9FAFB]">
-                  <span class="inline-block px-3 py-1 bg-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-[#005f99] mb-4">Who we are</span>
+                  <span class="inline-block px-3 py-1 bg-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-[#005f99] mb-4">{{ siteContent.getContent('about_hero_badge', 'Who we are') }}</span>
                   <h1 class="text-3xl md:text-4xl font-black text-[#0f172a] leading-tight mb-2">
-                    About<br/><span class="text-[#005f99]">Sauti 116</span>
+                    {{ siteContent.getContent('about_hero_title', 'About\nSauti 116') }}
                   </h1>
-                  <p class="text-sm font-bold text-gray-400">From Uganda, For Children.</p>
+                  <p class="text-sm font-bold text-gray-400">{{ siteContent.getContent('about_hero_tagline', 'From Uganda, For Children.') }}</p>
               </div>
             </div>
         </div>
@@ -81,8 +81,8 @@
     <section class="py-24 bg-primary/5">
        <div class="container-custom">
           <div class="text-center mb-16">
-             <h2 class="text-4xl font-black text-secondary mb-4">Our Journey</h2>
-             <p class="text-black/60 font-bold">Milestones that define our commitment.</p>
+             <h2 class="text-4xl font-black text-secondary mb-4">{{ siteContent.getContent('about_journey_title', 'Our Journey') }}</h2>
+             <p class="text-black/60 font-bold">{{ siteContent.getContent('about_journey_subtitle', 'Milestones that define our commitment.') }}</p>
           </div>
           <AppTimeline :timeline-events="timelineEvents" />
        </div>
@@ -108,10 +108,10 @@
           <!-- Section Header -->
           <div class="text-center mb-16">
              <h2 class="text-4xl md:text-5xl font-black text-white mb-4 md:mb-6" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                REACH ACROSS THE NATION
+                {{ siteContent.getContent('about_stats_title', 'REACH ACROSS THE NATION') }}
              </h2>
              <p class="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                How we are helping people across Uganda every day.
+                {{ siteContent.getContent('about_stats_subtitle', 'How we are helping people across Uganda every day.') }}
              </p>
           </div>
 
@@ -197,7 +197,7 @@
 
        <div class="container-custom relative z-10">
           <div class="text-center max-w-3xl mx-auto mb-12 md:mb-20">
-             <h2 class="text-4xl md:text-5xl font-black text-secondary mb-4 md:mb-6">Path to Resolution</h2>
+             <h2 class="text-4xl md:text-5xl font-black text-secondary mb-4 md:mb-6">{{ siteContent.getContent('about_resolution_title', 'Path to Resolution') }}</h2>
              <p class="text-lg md:text-xl text-gray-500 font-medium px-4">How we ensure every case leads to safety.</p>
           </div>
 
@@ -326,8 +326,8 @@
     <section class="py-24 bg-transparent relative z-10" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
       <div class="container-custom">
         <div class="text-center mb-16">
-          <h2 class="text-4xl font-black text-secondary mb-4">Meet Our Team</h2>
-          <p class="text-secondary/70 font-bold max-w-2xl mx-auto">Dedicated professionals committed to the safety and well-being of every child.</p>
+          <h2 class="text-4xl font-black text-secondary mb-4">{{ siteContent.getContent('about_team_title', 'Meet Our Team') }}</h2>
+          <p class="text-secondary/70 font-bold max-w-2xl mx-auto">{{ siteContent.getContent('about_team_subtitle', 'Dedicated professionals committed to the safety and well-being of every child.') }}</p>
         </div>
 
         <!-- Loading State -->
@@ -371,10 +371,10 @@
       <div class="container-custom relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <span class="inline-block px-4 py-1 bg-secondary/10 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-secondary/20 text-secondary">Our Principles</span>
-            <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight text-secondary">Driven by Values,<br/>United by Purpose.</h2>
+            <span class="inline-block px-4 py-1 bg-secondary/10 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-secondary/20 text-secondary">{{ siteContent.getContent('about_values_badge', 'Our Principles') }}</span>
+            <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight text-secondary">{{ siteContent.getContent('about_values_title', 'Driven by Values, United by Purpose.') }}</h2>
             <p class="text-lg text-gray-600 leading-relaxed mb-8">
-              Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.
+              {{ siteContent.getContent('about_values_description', 'Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.') }}
             </p>
             <!-- Call to Action (Optional) -->
             <div class="flex gap-4">
@@ -427,8 +427,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useSettingsStore } from '@/store/settings'
+import { useSiteContent } from '@/composables/useSiteContent'
 
- 
+
 import { api } from '@/utils/axios'
 import BaseCTA from '@/components/common/BaseCTA.vue'
 import AppTimeline from '@/components/AppTimeline.vue'
@@ -451,6 +452,7 @@ import {
 
 // --- Stores ---
 const settingsStore = useSettingsStore()
+const siteContent = useSiteContent('about')
 
 // --- Data ---
 const settings = computed(() => settingsStore.settings)
@@ -677,6 +679,9 @@ const getColorClasses = (color) => {
 // --- Fetching ---
 // --- Fetching ---
 onMounted(async () => {
+  // Fetch site content from CMS
+  await siteContent.fetchContent()
+
   try {
     await settingsStore.fetchGlobalSettings()
   } catch (error) {
