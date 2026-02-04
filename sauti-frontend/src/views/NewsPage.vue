@@ -4,7 +4,7 @@
     <header class="page-header">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Official <span class="text-primary">News</span>
+          {{ siteContent.getContent('news_page_title', 'Latest') }} <span class="text-primary">{{ siteContent.getContent('news_page_title_highlight', 'News & Updates') }}</span>
         </h1>
         <p class="page-header-subtitle">
           Latest official updates, press releases and announcements from the Sauti 116 Helpline.
@@ -100,6 +100,7 @@
   import AppLoader from '@/components/common/AppLoader.vue'
   import { useBlogStore } from '@/store/blog'
   import { useSettingsStore } from '@/store/settings'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import {
     MagnifyingGlassIcon,
     ChevronDownIcon,
@@ -114,6 +115,7 @@
 
   const blogStore = useBlogStore()
   const settingsStore = useSettingsStore()
+  const siteContent = useSiteContent('news')
 
   const posts = ref([])
   const categories = ref([])
@@ -130,6 +132,7 @@
   let debounceTimer = null
 
   onMounted(async () => {
+    await siteContent.fetchContent()
     await settingsStore.fetchGlobalSettings()
     await Promise.all([
       fetchCategories(),

@@ -1486,7 +1486,24 @@
   };
 
   // Helper to map specific categories to backend Report.Category choices
-  const mapCategoryToBackend = (categories) => {
+  const mapCategoryToBackend = (categories, primaryCategory) => {
+    // If we have the primary category from issue_primary_category, use it first
+    if (primaryCategory) {
+      if (primaryCategory.includes('Child') || primaryCategory.includes('Abuse')) {
+        return 'CHILD_PROTECTION';
+      }
+      if (primaryCategory.includes('GBV') || primaryCategory.includes('Gender')) {
+        return 'GBV';
+      }
+      if (primaryCategory.includes('Migrant') || primaryCategory.includes('Labour')) {
+        return 'MIGRANT';
+      }
+      if (primaryCategory.includes('PSEA')) {
+        return 'PSEA';
+      }
+    }
+
+    // Fallback to categories array
     if (!categories || categories.length === 0) return 'MIGRANT'; // Default
 
     const primary = categories[0];
@@ -1495,8 +1512,12 @@
       return 'GBV'; // Gender-Based Violence
     }
 
-    if (primary.includes('Child')) {
+    if (primary.includes('Child') || primary.includes('Abuse')) {
       return 'CHILD_PROTECTION';
+    }
+
+    if (primary.includes('GBV') || primary.includes('Gender')) {
+      return 'GBV';
     }
 
     // Default for labor issues
@@ -1547,7 +1568,7 @@
 
     // Construct the payload matching ReportCreateSerializer
     const payload = {
-      category: mapCategoryToBackend(cleanedData.complaint_categories),
+      category: mapCategoryToBackend(cleanedData.complaint_categories, cleanedData.issue_primary_category),
       description: fullDescription,
       is_anonymous: isAnonymous,
       contact_name: contactName,

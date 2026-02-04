@@ -4,8 +4,11 @@
     <header class="page-header !pb-0">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Questions <span class="text-primary">& Answers</span>
+          {{ siteContent.getContent('faqs_page_title', 'Frequently Asked') }} <span class="text-primary">{{ siteContent.getContent('faqs_page_title_highlight', 'Questions') }}</span>
         </h1>
+        <p class="page-header-subtitle max-w-2xl">
+          {{ siteContent.getContent('faqs_page_subtitle', 'Find answers to common questions about our services, child protection, and how we can support you.') }}
+        </p>
       </div>
     </header>
 
@@ -128,6 +131,7 @@
   import { ref, computed, onMounted } from 'vue'
   import { useFaqsStore } from '@/store/faqs'
   import { useSettingsStore } from '@/store/settings'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
@@ -144,6 +148,7 @@
 
   const faqsStore = useFaqsStore()
   const settingsStore = useSettingsStore()
+  const siteContent = useSiteContent('faqs')
   const faqs = ref([])
   const categories = ref([])
   const loading = ref(true)
@@ -172,6 +177,7 @@
   const faqsFooterText = computed(() => settingsStore.settings.faqs_footer_text || '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.')
 
   onMounted(async () => {
+    await siteContent.fetchContent()
     await settingsStore.fetchGlobalSettings()
     try {
       await faqsStore.fetchFaqs({ status: 'PUBLISHED' })

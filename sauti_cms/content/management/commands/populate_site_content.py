@@ -198,6 +198,54 @@ class Command(BaseCommand):
             'about_cta_title': { 'key': 'about_cta_title', 'value': 'Need help or ready to partner?', 'label': 'About CTA Title', 'page': 'about', 'type': 'heading' },
             'about_cta_text': { 'key': 'about_cta_text', 'value': 'Reach out any time. Your call or message could change a life.', 'label': 'About CTA Text', 'page': 'about', 'type': 'text' },
 
+            # About Page - Additional Content
+            # Hero Section Right Column
+            'about_hero_right_column': { 'key': 'about_hero_right_column', 'value': 'Every Child Matters', 'label': 'About Hero Right Column', 'page': 'about', 'type': 'heading' },
+
+            # Statistics Cards (Reach Across the Nation)
+            'about_stats_title': { 'key': 'about_stats_title', 'value': 'Reach Across the Nation', 'label': 'About Statistics Title', 'page': 'about', 'type': 'heading' },
+            'about_stats_stat_1_label': { 'key': 'about_stats_stat_1_label', 'value': 'Since', 'label': 'About Statistics Stat 1 Label', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_1_value': { 'key': 'about_stats_stat_1_value', 'value': 'Nov 2013', 'label': 'About Statistics Stat 1 Value', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_2_label': { 'key': 'about_stats_stat_2_label', 'value': 'Children Reached', 'label': 'About Statistics Stat 2 Label', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_2_value': { 'key': 'about_stats_stat_2_value', 'value': '2.7M+', 'label': 'About Statistics Stat 2 Value', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_3_label': { 'key': 'about_stats_stat_3_label', 'value': 'Cases Documented', 'label': 'About Statistics Stat 3 Label', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_3_value': { 'key': 'about_stats_stat_3_value', 'value': '40,000', 'label': 'About Statistics Stat 3 Value', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_4_label': { 'key': 'about_stats_stat_4_label', 'value': 'Compliance Rating', 'label': 'About Statistics Stat 4 Label', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_4_value': { 'key': 'about_stats_stat_4_value', 'value': '120/143', 'label': 'About Statistics Stat 4 Value', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_5_label': { 'key': 'about_stats_stat_5_label', 'value': 'Monthly Calls', 'label': 'About Statistics Stat 5 Label', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_5_value': { 'key': 'about_stats_stat_5_value', 'value': '1500-2000', 'label': 'About Statistics Stat 5 Value', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_6_label': { 'key': 'about_stats_stat_6_label', 'value': 'Partner Organizations', 'label': 'About Statistics Stat 6 Label', 'page': 'about', 'type': 'text' },
+            'about_stats_stat_6_value': { 'key': 'about_stats_stat_6_value', 'value': '50+', 'label': 'About Statistics Stat 6 Value', 'page': 'about', 'type': 'text' },
+
+            # Resolution Section
+            'about_resolution_subtitle': { 'key': 'about_resolution_subtitle', 'value': 'How we ensure every case leads to safety', 'label': 'About Resolution Subtitle', 'page': 'about', 'type': 'text' },
+            'about_resolution_central_goal': { 'key': 'about_resolution_central_goal', 'value': 'Safe Child', 'label': 'About Resolution Central Goal', 'page': 'about', 'type': 'heading' },
+            'about_resolution_central_text': { 'key': 'about_resolution_central_text', 'value': 'Our Goal', 'label': 'About Resolution Central Text', 'page': 'about', 'type': 'text' },
+            'about_resolution_mobile_goal_text': { 'key': 'about_resolution_mobile_goal_text', 'value': 'The ultimate goal of our journey.', 'label': 'About Resolution Mobile Goal Text', 'page': 'about', 'type': 'text' },
+
+            # Resolution Steps (Full Details)
+            'about_resolution_step_1_title': { 'key': 'about_resolution_step_1_title', 'value': 'Caller', 'label': 'About Resolution Step 1 Title', 'page': 'about', 'type': 'heading' },
+            'about_resolution_step_1_subtitle': { 'key': 'about_resolution_step_1_subtitle', 'value': 'Child or concerned individual', 'label': 'About Resolution Step 1 Subtitle', 'page': 'about', 'type': 'text' },
+            'about_resolution_step_1_description': { 'key': 'about_resolution_step_1_description', 'value': 'A child or person concerned about a child\'s welfare initiates contact through any available channel.', 'label': 'About Resolution Step 1 Description', 'page': 'about', 'type': 'text' },
+
+            'about_resolution_step_2_title': { 'key': 'about_resolution_step_2_title', 'value': 'Call Center', 'label': 'About Resolution Step 2 Title', 'page': 'about', 'type': 'heading' },
+            'about_resolution_step_2_subtitle': { 'key': 'about_resolution_step_2_subtitle', 'value': 'Initial assessment and counseling', 'label': 'About Resolution Step 2 Subtitle', 'page': 'about', 'type': 'text' },
+            'about_resolution_step_2_description': { 'key': 'about_resolution_step_2_description', 'value': 'Trained counselors provide immediate support, document details, and assess the urgency level of each case.', 'label': 'About Resolution Step 2 Description', 'page': 'about', 'type': 'text' },
+
+            'about_resolution_step_3_title': { 'key': 'about_resolution_step_3_title', 'value': 'Case Management Department', 'label': 'About Resolution Step 3 Title', 'page': 'about', 'type': 'heading' },
+            'about_resolution_step_3_subtitle': { 'key': 'about_resolution_step_3_subtitle', 'value': 'Case review and referral', 'label': 'About Resolution Step 3 Subtitle', 'page': 'about', 'type': 'text' },
+            'about_resolution_step_3_description': { 'key': 'about_resolution_step_3_description', 'value': 'Cases are reviewed by specialists, classified by protection need, and referred to appropriate agencies or services.', 'label': 'About Resolution Step 3 Description', 'page': 'about', 'type': 'text' },
+
+            'about_resolution_step_4_title': { 'key': 'about_resolution_step_4_title', 'value': 'Probation Offices (DACs)', 'label': 'About Resolution Step 4 Title', 'page': 'about', 'type': 'heading' },
+            'about_resolution_step_4_subtitle': { 'key': 'about_resolution_step_4_subtitle', 'value': 'Implementation and follow-up', 'label': 'About Resolution Step 4 Subtitle', 'page': 'about', 'type': 'text' },
+            'about_resolution_step_4_description': { 'key': 'about_resolution_step_4_description', 'value': 'Local probation officers and community partners work to implement solutions and provide ongoing support until the case is resolved.', 'label': 'About Resolution Step 4 Description', 'page': 'about', 'type': 'text' },
+
+            # Core Values Stats
+            'about_values_stat_1_value': { 'key': 'about_values_stat_1_value', 'value': '10+', 'label': 'About Values Stat 1 Value', 'page': 'about', 'type': 'text' },
+            'about_values_stat_1_label': { 'key': 'about_values_stat_1_label', 'value': 'Years of Service', 'label': 'About Values Stat 1 Label', 'page': 'about', 'type': 'text' },
+            'about_values_stat_2_value': { 'key': 'about_values_stat_2_value', 'value': '1M+', 'label': 'About Values Stat 2 Value', 'page': 'about', 'type': 'text' },
+            'about_values_stat_2_label': { 'key': 'about_values_stat_2_label', 'value': 'Lives Touched', 'label': 'About Values Stat 2 Label', 'page': 'about', 'type': 'text' },
+
             # Operations Page Content
             'operations_title': { 'key': 'operations_title', 'value': 'Our Operations and Case Flow', 'label': 'Operations Title', 'page': 'operations', 'type': 'heading' },
             'operations_subtitle': { 'key': 'operations_subtitle', 'value': 'A transparent look into how we handle every call to ensure every child\'s voice is heard and acted upon with care and urgency.', 'label': 'Operations Subtitle', 'page': 'operations', 'type': 'text' },
