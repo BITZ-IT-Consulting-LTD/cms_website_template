@@ -96,17 +96,6 @@
             </div>
           </div>
 
-          <!-- Chart 4: Top 15 Abuse Subcategories -->
-          <div class="card-base group lg:col-span-2">
-            <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4">
-               <div class="w-1.5 h-6 bg-secondary-light rounded-full"></div>
-               Top 15 Abuse Subcategories (Detailed)
-            </h3>
-            <div class="h-[500px]">
-               <BarChart :chartData="charts.subcategoryByDistrict" :horizontal="true" />
-            </div>
-          </div>
-
         </div>
 
       </div>
@@ -145,8 +134,7 @@ const stats = ref({
 const charts = ref({
   subcategoryBySex: { labels: [], datasets: [] },
   subcategoryByAge: { labels: [], datasets: [] },
-  subcategoryByRegion: { labels: [], datasets: [] },
-  subcategoryByDistrict: { labels: [], datasets: [] }
+  subcategoryByRegion: { labels: [], datasets: [] }
 })
 
 // --- Helper Functions ---
@@ -181,8 +169,7 @@ const fetchDashboardData = async () => {
       charts.value = {
         subcategoryBySex: formatChartData(chartsResponse.data.subcategoryBySex),
         subcategoryByAge: formatChartData(chartsResponse.data.subcategoryByAge),
-        subcategoryByRegion: formatChartData(chartsResponse.data.subcategoryByRegion),
-        subcategoryByDistrict: formatChartData(chartsResponse.data.subcategoryByDistrict)
+        subcategoryByRegion: formatChartData(chartsResponse.data.subcategoryByRegion)
       }
       console.log('📈 Charts updated:', Object.keys(charts.value))
     }

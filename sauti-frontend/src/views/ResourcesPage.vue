@@ -258,11 +258,11 @@
 
            <!-- Charts Grid -->
            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-             <!-- Chart 1: Abuse Subcategory vs Client Sex -->
+             <!-- Chart 1: Case Categories by Source -->
              <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
                <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
                  <div class="w-1.5 h-6 bg-primary rounded-full"></div>
-                 Abuse Subcategory vs Client Sex
+                 Cases by Source
                </h3>
                <div class="h-[400px]">
                   <Bar :data="dashboardCharts.subcategoryBySex" :options="getDashboardOptions(false)" />
@@ -280,25 +280,14 @@
                 </div>
              </div>
 
-             <!-- Chart 3: Abuse Subcategory vs Region -->
+             <!-- Chart 3: Regional Case Distribution -->
               <div class="card-base group lg:col-span-2 bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
                <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
                   <div class="w-1.5 h-6 bg-hotline rounded-full"></div>
-                  Abuse Subcategory vs Region
+                  Regional Case Distribution
                </h3>
                 <div class="h-[450px]">
                   <Bar :data="dashboardCharts.subcategoryByRegion" :options="getDashboardOptions(false)" />
-                </div>
-             </div>
-
-             <!-- Chart 4: Abuse Subcategory vs District -->
-             <div class="card-base group lg:col-span-2 bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
-               <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
-                  <div class="w-1.5 h-6 bg-secondary-light rounded-full"></div>
-                  Abuse Subcategory vs District (Top 15)
-               </h3>
-                <div class="h-[500px]">
-                   <Bar :data="dashboardCharts.subcategoryByDistrict" :options="getDashboardOptions(true)" />
                 </div>
              </div>
            </div>
