@@ -238,6 +238,25 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 # Encryption for sensitive report data
 ENCRYPTION_KEY = config('ENCRYPTION_KEY', default='')
 
+# Caching Configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache' if DEBUG else 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cms_cache_table',
+        'TIMEOUT': 300,  # 5 minutes default timeout
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
+
+# Database Connection Pooling for Production
+if not DEBUG:
+    DATABASES['default']['CONN_MAX_AGE'] = 600  # 10 minutes
+    DATABASES['default']['OPTIONS'] = {
+        'connect_timeout': 10,
+    }
+
 # Security Settings for Production
 SECURE_SSL_REDIRECT = False # Ensure this is False for development
 if not DEBUG:

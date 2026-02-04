@@ -44,8 +44,8 @@ const routes = [
     name: 'operations',
     component: () => import('@/views/OperationsPage.vue'),
     meta: {
-      title: 'Our Operations & Case Flow',
-      description: 'How we handle every call with care and urgency',
+      title: 'Operations & Services',
+      description: 'How we operate 24/7 and the services we offer to every citizen',
     },
   },
   {

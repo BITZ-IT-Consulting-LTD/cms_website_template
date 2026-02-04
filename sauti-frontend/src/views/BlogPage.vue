@@ -4,8 +4,11 @@
     <header class="page-header !pb-0">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Updates <span class="text-primary">and blogs</span>
+          {{ siteContent.getContent('blog_page_title', 'Updates') }} <span class="text-primary">{{ siteContent.getContent('blog_page_title_highlight', 'and blogs') }}</span>
         </h1>
+        <p class="page-header-subtitle max-w-2xl">
+          {{ siteContent.getContent('blog_page_subtitle', 'Stay informed with the latest stories, news, and insights from the Sauti 116 Helpline and the Ministry of Gender, Labour and Social Development.') }}
+        </p>
       </div>
     </header>
 
@@ -16,14 +19,14 @@
           <div class="relative flex-1 w-full group">
             <Search
               class="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-primary group-focus-within:text-secondary transition-colors" />
-            <input v-model="filters.search" @input="debouncedSearch" type="search" :placeholder="blogSearchPlaceholder"
+            <input v-model="filters.search" @input="debouncedSearch" type="search" :placeholder="siteContent.getContent('blog_search_placeholder', blogSearchPlaceholder)"
               class="w-full pl-16 pr-6 py-4 bg-neutral-white rounded-2xl border-none shadow-sm focus:shadow-md outline-none transition-all font-bold text-secondary placeholder:text-primary/40" />
           </div>
 
           <div class="relative w-full md:w-64">
             <select v-model="filters.category" @change="fetchFilteredPosts"
               class="w-full appearance-none pl-6 pr-12 py-4 bg-neutral-white rounded-2xl border-none shadow-sm focus:shadow-md outline-none transition-all font-bold text-secondary uppercase tracking-widest text-xs cursor-pointer">
-              <option value="">{{ blogCategoriesDropdown }}</option>
+              <option value="">{{ siteContent.getContent('blog_categories_dropdown', blogCategoriesDropdown) }}</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.slug">{{ cat.name }}</option>
             </select>
             <ChevronDown
@@ -96,6 +99,7 @@
   import AppLoader from '@/components/common/AppLoader.vue'
   import { useBlogStore } from '@/store/blog'
   import { useSettingsStore } from '@/store/settings'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import {
     Search,
     ChevronDown,
@@ -110,6 +114,7 @@
 
   const blogStore = useBlogStore()
   const settingsStore = useSettingsStore()
+  const siteContent = useSiteContent('blog')
 
   const posts = ref([])
   const categories = ref([])
@@ -135,6 +140,7 @@
   let debounceTimer = null
 
   onMounted(async () => {
+    await siteContent.fetchContent()
     await settingsStore.fetchGlobalSettings()
     await Promise.all([
       fetchCategories(),

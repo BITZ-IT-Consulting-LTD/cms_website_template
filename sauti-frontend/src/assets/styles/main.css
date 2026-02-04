@@ -93,31 +93,31 @@
 
   /* Softer Typography Hierarchy - Brand Balanced */
   h1 {
-    @apply text-4xl md:text-6xl font-bold leading-tight tracking-tight text-secondary;
+    @apply text-3xl md:text-6xl font-bold leading-tight tracking-tight text-secondary;
   }
 
   h2 {
-    @apply text-3xl md:text-5xl font-bold leading-tight text-secondary;
+    @apply text-2xl md:text-5xl font-bold leading-tight text-secondary;
   }
 
   h3 {
-    @apply text-2xl md:text-3xl font-semibold leading-snug text-secondary;
+    @apply text-xl md:text-3xl font-semibold leading-snug text-secondary;
   }
 
   h4,
   h5,
   h6 {
-    @apply text-xl font-semibold leading-snug text-secondary;
+    @apply text-lg font-semibold leading-snug text-secondary;
   }
 
   p {
-    @apply text-base md:text-lg leading-relaxed mb-6 font-normal text-black;
+    @apply text-sm md:text-lg leading-relaxed mb-4 font-normal text-black;
   }
 }
 
 @layer components {
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-3 sm:px-6 lg:px-8;
   }
 
   .btn {
@@ -191,15 +191,15 @@
   }
 
   .card-base {
-    @apply bg-neutral-white rounded-[2rem] p-8 md:p-12 shadow-sm hover:shadow-xl transition-all duration-500;
+    @apply bg-neutral-white rounded-[2rem] p-6 md:p-12 shadow-sm hover:shadow-xl transition-all duration-500;
   }
 
   .section-padding {
-    @apply py-24 md:py-40;
+    @apply py-12 md:py-40;
   }
 
   .page-header {
-    @apply py-24 md:py-32;
+    @apply py-12 md:py-32;
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
   }
@@ -324,7 +324,8 @@ img {
 }
 
 /* Numbers in headings and statistics */
-h1 .number,
+/* Numbers in headings and statistics are now handled by global font rules */
+/* h1 .number,
 h2 .number,
 h3 .number,
 h4 .number,
@@ -334,10 +335,7 @@ h6 .number,
 .metric-value,
 [class*="count"],
 [class*="number"] {
-  font-family: 'Roboto', sans-serif !important;
-  font-variant-numeric: lining-nums tabular-nums;
-  font-feature-settings: 'tnum' 1, 'lnum' 1;
-}
+} */
 
 /* Ensure text content uses Cronos Pro */
 p,

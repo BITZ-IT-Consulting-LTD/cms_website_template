@@ -243,49 +243,172 @@ coverage report
 
 ```
 sauti_cms/
-├── cms/                    # Main project settings
-│   ├── settings.py
+├── cms/                    # Main project configuration
+│   ├── settings.py         # Django settings
+│   ├── urls.py             # Main URL routing
+│   ├── wsgi.py             # WSGI application
+│   └── asgi.py             # ASGI application
+│
+├── users/                  # User authentication & management
+│   ├── models.py           # Custom User model with roles
+│   ├── serializers.py      # User serializers
+│   ├── views.py            # Auth endpoints
+│   ├── admin.py            # Django admin configuration
+│   └── urls.py             # User-related URLs
+│
+├── posts/                  # Blog/News content system
+│   ├── models.py           # Post, Category, Tag models
+│   ├── serializers.py      # Post serializers
+│   ├── views.py            # Post viewsets
+│   ├── admin.py            # Admin interface
+│   ├── urls.py             # Post URLs
+│   ├── management/
+│   │   └── commands/       # Django management commands
+│   └── migrations/         # Database migrations
+│
+├── resources/              # Downloadable resources library
+│   ├── models.py           # Resource, ResourceCategory models
+│   ├── serializers.py      # Resource serializers
+│   ├── views.py            # Resource viewsets
+│   ├── admin.py
 │   ├── urls.py
-│   └── wsgi.py
-├── users/                  # User management
-│   ├── models.py          # Custom User model
-│   ├── serializers.py
-│   ├── views.py
-│   ├── admin.py
-│   └── urls.py
-├── posts/                  # Blog/News system
-│   ├── models.py          # Post, Category, Tag
-│   ├── serializers.py
-│   ├── views.py
-│   ├── admin.py
-│   └── urls.py
-├── resources/              # Resource library
-│   ├── models.py
-│   ├── serializers.py
-│   ├── views.py
-│   └── urls.py
+│   └── migrations/
+│
 ├── faqs/                   # FAQ system
+│   ├── models.py           # FAQ model
+│   ├── serializers.py      # FAQ serializers
+│   ├── views.py            # FAQ viewsets
+│   ├── admin.py
+│   ├── urls.py
+│   ├── management/
+│   │   └── commands/
+│   └── migrations/
+│
+├── videos/                 # Video content management
+│   ├── models.py           # Video, VideoCategory models
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── partners/               # Partner organization management
+│   ├── models.py           # Partner model
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── reports/                # Incident/case reporting system
+│   ├── models.py           # Report, ReportFollowUp models
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py            # Custom admin interface
+│   ├── urls.py
+│   └── migrations/
+│
+├── contact/                # Contact form submissions
+│   ├── models.py           # FeedbackMessage model
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── content/                # Editable page content
+│   ├── models.py           # SiteContent model
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   ├── management/
+│   │   └── commands/       # Content seeding
+│   └── migrations/
+│
+├── social_media/           # Social media posts management
+│   ├── models.py           # SocialPost model (Facebook, Twitter, TikTok, etc.)
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── dashboard/              # Admin dashboard statistics
+│   ├── models.py           # Dashboard models
+│   ├── serializers.py
+│   ├── views.py            # Dashboard API endpoints
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── sitesettings/           # Site-wide configuration
+│   ├── models.py           # SiteSetting model (key-value pairs)
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   ├── management/
+│   │   └── commands/       # Settings initialization
+│   └── migrations/
+│
+├── services/               # Service directory management
+│   ├── models.py           # Service model
+│   ├── serializers.py
+│   ├── views.py
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── timeline/               # Timeline/history features
 │   ├── models.py
 │   ├── serializers.py
 │   ├── views.py
-│   └── urls.py
-├── partners/               # Partner organizations
+│   ├── admin.py
+│   ├── urls.py
+│   └── migrations/
+│
+├── media/                  # User-uploaded files
+│   ├── partners/           # Partner logos
+│   ├── posts/              # Blog post images
+│   ├── resources/          # Resource files
+│   ├── team_members/       # Team member photos
+│   └── videos/             # Video files
+│
+├── staticfiles/            # Collected static assets
+│   ├── admin/              # Django admin static files
+│   └── rest_framework/     # DRF static files
+│
+├── todos/                  # Task management
 │   ├── models.py
-│   ├── serializers.py
-│   ├── views.py
-│   └── urls.py
-├── reports/                # Case reporting
-│   ├── models.py          # Report, ReportFollowUp
-│   ├── serializers.py
-│   ├── views.py
-│   └── urls.py
-├── media/                  # Uploaded files
-├── staticfiles/            # Static files
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-└── README.md
+│   ├── admin.py
+│   └── migrations/
+│
+├── Dockerfile              # Docker container definition
+├── entrypoint.sh           # Container startup script
+├── requirements.txt        # Python dependencies
+├── .env.example            # Environment variable template
+├── .env                    # Environment variables (local)
+├── manage.py               # Django management tool
+│
+├── API_DOCUMENTATION.md    # Complete API reference
+├── DEPLOYMENT.md           # Deployment instructions
+├── QUICKSTART.md           # Quick start guide
+└── README.md               # This file
 ```
+
+## 📁 Subdirectories Explained
+
+Each Django app directory contains:
+- **models.py** - Database schema and business logic
+- **serializers.py** - Convert models to/from JSON
+- **views.py** - API endpoints (ViewSets)
+- **admin.py** - Django admin interface customization
+- **urls.py** - URL routing for the app
+- **migrations/** - Database migration files
+- **management/commands/** - Custom Django commands (if applicable)
+
+See individual README.md files in each app directory for detailed documentation.
 
 ## 🔧 Configuration
 

@@ -4,15 +4,18 @@
     <header class="page-header !pb-0">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Sauti <span class="text-primary">Audio-Visuals</span>
+          {{ siteContent.getContent('videos_page_title', 'Sauti') }} <span class="text-primary">{{ siteContent.getContent('videos_page_title_highlight', 'Audio-Visuals') }}</span>
         </h1>
+        <p class="page-header-subtitle max-w-2xl">
+          {{ siteContent.getContent('videos_page_subtitle', 'Explore our archive of official media content, awareness videos, and community stories.') }}
+        </p>
       </div>
     </header>
 
     <div class="container-custom section-padding section-rhythm !pt-12">
       <!-- 2. Search & Filter System -->
       <section aria-labelledby="filters-heading">
-        <h2 class="campaign-header text-3xl text-secondary mb-12">Search Official Media</h2>
+        <h2 class="campaign-header text-3xl text-secondary mb-12">{{ siteContent.getContent('videos_search_heading', 'Search Official Media') }}</h2>
         <div class="bg-neutral-offwhite rounded-[3rem] p-8 md:p-12 shadow-none max-w-6xl mx-auto">
           <div class="flex flex-col md:flex-row items-center gap-8">
             <div
@@ -23,10 +26,10 @@
               </div>
               <input
                 class="flex-1 bg-transparent border-none focus:ring-0 font-bold text-secondary placeholder-primary/40"
-                :placeholder="videosSearchPlaceholder" v-model="query" @input="applySearch" />
+                :placeholder="siteContent.getContent('videos_search_placeholder', videosSearchPlaceholder)" v-model="query" @input="applySearch" />
             </div>
             <button class="btn btn-primary !px-12 w-full md:w-auto" @click="applySearch">
-              {{ videosSearchButton }}
+              {{ siteContent.getContent('videos_search_button', videosSearchButton) }}
             </button>
           </div>
 
@@ -115,6 +118,7 @@
   import { ref, computed, onMounted } from 'vue'
   import { useVideosStore } from '@/store/videos'
   import { useSettingsStore } from '@/store/settings'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import VideoPlayerModal from '@/components/videos/VideoPlayerModal.vue'
   import {
     Search,
@@ -128,6 +132,7 @@
 
   const videosStore = useVideosStore()
   const settingsStore = useSettingsStore()
+  const siteContent = useSiteContent('videos')
   const query = ref('')
   const activeFilter = ref('videos')
   const loading = ref(false)
@@ -205,6 +210,7 @@
   }
 
   onMounted(async () => {
+    await siteContent.fetchContent()
     await settingsStore.fetchGlobalSettings()
     fetchVideos()
   })

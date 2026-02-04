@@ -20,13 +20,82 @@
       </nav>
     </div>
 
+    <!-- About Page: Impact Stats -->
+    <div
+      v-if="activePage === 'about'"
+      class="mb-8 bg-white border border-gray-200 rounded-lg shadow-sm p-6"
+    >
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-gray-900">Impact Stats (About Page)</h2>
+          <p class="text-sm text-gray-500">Update the six stat cards displayed in the green “Reach Across the Nation” section.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            @click="addImpactStat"
+            class="px-3 py-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+          >
+            Add Card
+          </button>
+          <button
+            @click="saveImpactStats"
+            :disabled="impactStatsSaving"
+            class="btn-primary"
+          >
+            <span v-if="impactStatsSaving">Saving...</span>
+            <span v-else>Save Impact Stats</span>
+          </button>
+        </div>
+      </div>
+
+      <div v-if="impactStatsLoading" class="py-6 text-center text-gray-500">
+        Loading impact stats...
+      </div>
+
+      <div v-else class="space-y-4">
+        <div
+          v-for="(stat, index) in impactStats"
+          :key="stat.valueKey"
+          class="grid grid-cols-1 md:grid-cols-12 gap-3 items-start border border-gray-100 rounded-md p-4"
+        >
+          <div class="md:col-span-3">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Value</label>
+            <input
+              v-model="stat.value"
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+              placeholder="e.g. 2.7M+"
+            />
+          </div>
+          <div class="md:col-span-7">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Label</label>
+            <input
+              v-model="stat.label"
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+              placeholder="e.g. Calls Received Countrywide Since Nov 2021"
+            />
+          </div>
+          <div class="md:col-span-2 flex items-center justify-between gap-2">
+            <span class="text-xs font-semibold text-gray-500">Card {{ index + 1 }}</span>
+            <button
+              @click="removeImpactStat(stat)"
+              class="text-xs font-semibold text-red-600 hover:text-red-700"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Filters Section -->
     <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Search by Key/Label -->
+        <!-- Search by Key/Label/Value -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-          <input v-model="searchQuery" type="text" placeholder="Search key or label..."
+          <input v-model="searchQuery" type="text" placeholder="Search key, label, or content value..."
             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" />
         </div>
 
@@ -265,6 +334,9 @@
   const searchQuery = ref('')
   const filterType = ref('')
   const filterStatus = ref('')
+  const impactStats = ref([])
+  const impactStatsLoading = ref(false)
+  const impactStatsSaving = ref(false)
 
   const form = reactive({
     key: '',
@@ -292,17 +364,27 @@
     { value: 'global', label: 'Global Settings' },
   ]
 
+  const defaultImpactStats = [
+    { value: 'Nov 2013', label: 'Established' },
+    { value: '2.7M+', label: 'Calls Received Countrywide Since Nov 2021' },
+    { value: '40,000', label: 'Cases Handled Since Nov 2021' },
+    { value: '120/143', label: 'District Action Centres Established in Uganda' },
+    { value: '1500-2000', label: 'Calls Received Daily on Average' },
+    { value: '50+', label: 'New Cases Handled Daily on Average' },
+  ]
+
   // Computed
   const filteredContent = computed(() => {
     let result = allContent.value.filter(item => item.page === activePage.value || (!item.page && activePage.value === 'home'))
 
-    // Filter by search query (key or label)
+    // Filter by search query (key, label, description, or value)
     if (searchQuery.value) {
       const query = searchQuery.value.toLowerCase()
       result = result.filter(item =>
         (item.key && item.key.toLowerCase().includes(query)) ||
         (item.label && item.label.toLowerCase().includes(query)) ||
-        (item.description && item.description.toLowerCase().includes(query))
+        (item.description && item.description.toLowerCase().includes(query)) ||
+        (item.value && item.value.toLowerCase().includes(query))
       )
     }
 
@@ -337,6 +419,7 @@
   async function fetchAllContent() {
     contentStore.setLoading(true)
     contentStore.setError(null)
+    impactStatsLoading.value = true
     try {
       const response = await api.get('/content/site-content/')
       if (Array.isArray(response.data)) {
@@ -350,12 +433,61 @@
           return { key, value: val, page: 'home', type: 'text', label: key }
         })
       }
+      buildImpactStatsFromContent()
     } catch (err) {
       console.error('Fetch error:', err)
       contentStore.setError('Failed to load content.')
     } finally {
+      if (impactStats.value.length === 0) {
+        buildImpactStatsFromContent()
+      }
       contentStore.setLoading(false)
+      impactStatsLoading.value = false
     }
+  }
+
+  function buildImpactStatsFromContent() {
+    const contentMap = new Map(allContent.value.map(item => [item.key, item]))
+    const statsByIndex = {}
+    const regex = /^about_stats_stat_(\d+)_(value|label)$/
+
+    allContent.value.forEach(item => {
+      const match = item.key?.match(regex)
+      if (!match) return
+      const index = parseInt(match[1], 10)
+      const field = match[2]
+      if (!statsByIndex[index]) {
+        statsByIndex[index] = { index, value: '', label: '' }
+      }
+      statsByIndex[index][field] = item.value ?? ''
+    })
+
+    const indices = Object.keys(statsByIndex)
+      .map(Number)
+      .filter(Number.isFinite)
+      .sort((a, b) => a - b)
+
+    const finalIndices = indices.length > 0
+      ? indices
+      : defaultImpactStats.map((_, idx) => idx + 1)
+
+    impactStats.value = finalIndices.map(index => {
+      const valueKey = `about_stats_stat_${index}_value`
+      const labelKey = `about_stats_stat_${index}_label`
+      const valueItem = contentMap.get(valueKey)
+      const labelItem = contentMap.get(labelKey)
+      const fallback = defaultImpactStats[index - 1] || { value: '', label: '' }
+
+      return {
+        index,
+        valueKey,
+        labelKey,
+        value: valueItem?.value ?? fallback.value,
+        label: labelItem?.value ?? fallback.label,
+        valueItem,
+        labelItem,
+      }
+    })
   }
 
   function openCreateModal() {
@@ -436,6 +568,98 @@
       contentStore.setError(msg)
     } finally {
       contentStore.setLoading(false)
+    }
+  }
+
+  async function saveImpactStats() {
+    if (impactStatsSaving.value) return
+    impactStatsSaving.value = true
+    try {
+      for (const stat of impactStats.value) {
+        const valueLabel = `About Stats - Stat ${stat.index} Value`
+        const labelLabel = `About Stats - Stat ${stat.index} Label`
+        await upsertSiteContent({
+          key: stat.valueKey,
+          value: stat.value,
+          label: stat.valueItem?.label || valueLabel,
+          description: stat.valueItem?.description || 'About page impact stats value.',
+          page: stat.valueItem?.page || 'about',
+          type: stat.valueItem?.type || 'text',
+          is_published: stat.valueItem?.is_published ?? true,
+        })
+        await upsertSiteContent({
+          key: stat.labelKey,
+          value: stat.label,
+          label: stat.labelItem?.label || labelLabel,
+          description: stat.labelItem?.description || 'About page impact stats label.',
+          page: stat.labelItem?.page || 'about',
+          type: stat.labelItem?.type || 'text',
+          is_published: stat.labelItem?.is_published ?? true,
+        })
+      }
+      toast.success('Impact stats updated successfully')
+      await fetchAllContent()
+    } catch (err) {
+      console.error('Impact stats save error:', err)
+      const msg = err.response?.data?.detail || err.message || 'Failed to save impact stats'
+      toast.error(msg)
+    } finally {
+      impactStatsSaving.value = false
+    }
+  }
+
+  function addImpactStat() {
+    const maxIndex = impactStats.value.reduce((max, stat) => Math.max(max, stat.index || 0), 0)
+    const nextIndex = maxIndex + 1
+    impactStats.value.push({
+      index: nextIndex,
+      valueKey: `about_stats_stat_${nextIndex}_value`,
+      labelKey: `about_stats_stat_${nextIndex}_label`,
+      value: '',
+      label: '',
+      valueItem: null,
+      labelItem: null,
+    })
+  }
+
+  async function removeImpactStat(stat) {
+    const remainingCount = impactStats.value.length
+    if (remainingCount <= 1) {
+      toast.error('At least one card is required.')
+      return
+    }
+    try {
+      if (stat.valueItem) {
+        await api.delete(`/content/site-content/${stat.valueKey}/`)
+      }
+      if (stat.labelItem) {
+        await api.delete(`/content/site-content/${stat.labelKey}/`)
+      }
+      impactStats.value = impactStats.value.filter(item => item.valueKey !== stat.valueKey)
+      toast.success('Card removed')
+      await fetchAllContent()
+    } catch (err) {
+      console.error('Remove impact stat error:', err)
+      const msg = err.response?.data?.detail || err.message || 'Failed to remove card'
+      toast.error(msg)
+    }
+  }
+
+  async function upsertSiteContent(payload) {
+    const existingItem = allContent.value.find(item => item.key === payload.key)
+    const body = {
+      key: payload.key,
+      label: payload.label,
+      value: payload.value ?? '',
+      type: payload.type || 'text',
+      page: payload.page || 'about',
+      description: payload.description || '',
+      is_published: payload.is_published ?? true,
+    }
+    if (existingItem) {
+      await api.put(`/content/site-content/${payload.key}/`, body)
+    } else {
+      await api.post('/content/site-content/', body)
     }
   }
 

@@ -7,7 +7,7 @@
           <div>
             <h2 class="text-3xl font-black uppercase tracking-tight mb-4" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Sauti 116</h2>
             <p class="text-neutral-white/70 font-bold leading-relaxed max-w-sm" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-              Uganda's verified National Child Helpline. Providing 24/7 confidential support, guidance, and emergency intervention for all citizens.
+              {{ siteContent.getContent('footer_brand_description', 'Uganda\'s verified National Child Helpline. Providing 24/7 confidential support, guidance, and emergency intervention for all citizens.') }}
             </p>
           </div>
           <div class="flex gap-4">
@@ -44,7 +44,7 @@
 
         <!-- Quick Links -->
         <div class="lg:col-span-2 lg:col-start-6 space-y-8">
-          <h3 class="text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Menu</h3>
+          <h3 class="text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_menu_heading', 'Menu') }}</h3>
           <ul class="space-y-4 font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
             <li><router-link to="/" class="hover:text-secondary-light transition-colors">Home</router-link></li>
             <li><router-link to="/about" class="hover:text-secondary-light transition-colors">Who We Are</router-link></li>
@@ -57,7 +57,7 @@
 
         <!-- Support -->
         <div class="lg:col-span-2 space-y-8">
-          <h3 class="text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Support</h3>
+          <h3 class="text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_support_heading', 'Support') }}</h3>
           <ul class="space-y-4 font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
             <li><router-link to="/report" class="hover:text-secondary-light transition-colors">Report a Case</router-link></li>
             <li><router-link to="/faqs" class="hover:text-secondary-light transition-colors">FAQs</router-link></li>
@@ -69,25 +69,25 @@
 
         <!-- Contact Column -->
         <div class="lg:col-span-3 space-y-8">
-           <h3 class="text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Contact</h3>
+           <h3 class="text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_contact_heading', 'Contact') }}</h3>
            <div class="space-y-6">
               <a href="tel:116" class="flex items-center gap-4 group">
                  <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-primary transition-all">
                     <Phone class="w-6 h-6" />
                  </div>
                  <div>
-                    <span class="block text-xs font-bold opacity-60 uppercase tracking-wider" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Toll Free</span>
-                    <span class="text-2xl font-black" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Call 116</span>
+                    <span class="block text-xs font-bold opacity-60 uppercase tracking-wider" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_hotline_label', 'Toll Free') }}</span>
+                    <span class="text-2xl font-black" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_hotline_number', 'Call 116') }}</span>
                  </div>
               </a>
-              
-              <a href="mailto:info@sauti116.ug" class="flex items-center gap-4 group">
+
+              <a :href="`mailto:${siteContent.getContent('footer_email_address', 'info@sauti116.ug')}`" class="flex items-center gap-4 group">
                  <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-primary transition-all">
                     <Mail class="w-6 h-6" />
                  </div>
                  <div>
-                    <span class="block text-xs font-bold opacity-60 uppercase tracking-wider" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Email Us</span>
-                    <span class="text-lg font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">info@sauti116.ug</span>
+                    <span class="block text-xs font-bold opacity-60 uppercase tracking-wider" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_email_label', 'Email Us') }}</span>
+                    <span class="text-lg font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_email_address', 'info@sauti116.ug') }}</span>
                  </div>
               </a>
            </div>
@@ -97,11 +97,11 @@
       <!-- Bottom Bar -->
       <div class="mt-20 pt-8 border-t border-neutral-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
         <p class="text-xs font-bold text-neutral-white/40 uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-           © 2026 Sauti 116. Ministry of Gender, Labour and Social Development.
+           {{ siteContent.getContent('footer_copyright', '© 2026 Sauti 116. Ministry of Gender, Labour and Social Development.') }}
         </p>
         <div class="flex items-center gap-2 text-neutral-white/40">
            <Globe class="w-4 h-4" />
-           <span class="text-xs font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Uganda</span>
+           <span class="text-xs font-bold uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_country_label', 'Uganda') }}</span>
         </div>
       </div>
     </div>
@@ -109,14 +109,22 @@
 </template>
 
 <script setup>
-import { 
-  Phone, 
-  Mail, 
-  Facebook, 
-  Twitter, 
-  MessageCircle, 
-  Globe 
+import { onMounted } from 'vue'
+import {
+  Phone,
+  Mail,
+  Facebook,
+  Twitter,
+  MessageCircle,
+  Globe
 } from 'lucide-vue-next'
+import { useSiteContent } from '@/composables/useSiteContent'
+
+const siteContent = useSiteContent('footer')
+
+onMounted(async () => {
+  await siteContent.fetchContent()
+})
 </script>
 
 <style scoped>

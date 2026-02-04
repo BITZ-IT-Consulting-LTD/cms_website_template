@@ -42,12 +42,17 @@ services:
       - ALLOWED_HOSTS=sauti.mglsd.go.ug,backend,127.0.0.1,localhost
       - CSRF_TRUSTED_ORIGINS=https://sauti.mglsd.go.ug
       - CORS_ALLOWED_ORIGINS=https://sauti.mglsd.go.ug,http://localhost:8080,http://localhost:8085
-    command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn cms.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 2 --timeout 60 --keep-alive 5 --max-requests 1000 --max-requests-jitter 50
     depends_on:
       db:
         condition: service_healthy
     networks:
       - sauti_network_prod
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
 
   # Public Frontend (Nginx)
   frontend:
