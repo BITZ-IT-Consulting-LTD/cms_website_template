@@ -18,12 +18,18 @@ python manage.py makemigrations
 python manage.py migrate --noinput --verbosity 2
 
 echo "Populating site content..."
-# Note: populate_all_content is a standalone script in the root
-if [ -f "/app/populate_all_content.py" ]; then
+# Use comprehensive populate script (clears old content for fresh start)
+if [ -f "/app/populate_comprehensive_content.py" ]; then
+    echo "Running populate_comprehensive_content.py..."
+    python /app/populate_comprehensive_content.py
+elif [ -f "/app/populate_initial_content.py" ]; then
+    echo "Running populate_initial_content.py..."
+    python /app/populate_initial_content.py
+elif [ -f "/app/populate_all_content.py" ]; then
     echo "Running populate_all_content.py..."
     python /app/populate_all_content.py
 else
-    echo "WARNING: /app/populate_all_content.py not found"
+    echo "WARNING: No populate scripts found"
 fi
 
 # Note: These are Django management commands found in app/management/commands/

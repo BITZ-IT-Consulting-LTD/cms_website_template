@@ -17,6 +17,7 @@
             <router-link v-for="link in [
               { to: '/', label: 'Home' },
               { to: '/about', label: 'Who We Are' },
+              { to: '/operations', label: 'Operations' },
               { to: '/videos', label: 'Videos' },
               { to: '/blogs', label: 'Blogs' },
               { to: '/news', label: 'News' },
@@ -97,6 +98,7 @@
             <router-link v-for="link in [
               { to: '/', label: 'Home' },
               { to: '/about', label: 'Who We Are' },
+              { to: '/operations', label: 'Operations' },
               { to: '/videos', label: 'Videos' },
               { to: '/blogs', label: 'Blogs' },
               { to: '/news', label: 'News' },
