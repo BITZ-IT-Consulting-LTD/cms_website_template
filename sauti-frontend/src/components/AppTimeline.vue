@@ -32,8 +32,8 @@
           <div class="message-bubble message-bubble-left relative flex items-center justify-center">
             <!-- Content Wrapper: Centered with padding -->
             <div class="p-8 md:p-10 text-center flex flex-col justify-center h-full relative z-10 w-full">
-              <p class="font-black text-lg md:text-xl leading-tight mb-2 text-[#006837]">{{ event.title }}</p>
-              <p class="text-xs font-bold opacity-70 uppercase tracking-widest text-[#006837]">{{ getYear(event) }}</p>
+              <p class="font-black text-lg md:text-xl leading-tight mb-2 text-white">{{ event.title }}</p>
+              <p class="text-xs font-bold opacity-70 tracking-widest text-white">{{ getYear(event) }}</p>
             </div>
           </div>
 
@@ -58,7 +58,7 @@
             <!-- Content Wrapper: Centered with padding -->
             <div class="p-8 md:p-10 text-center flex flex-col justify-center h-full relative z-10 w-full">
               <p class="font-black text-lg md:text-xl leading-tight mb-2 text-white">{{ event.title }}</p>
-              <p class="text-xs font-bold opacity-90 uppercase tracking-widest text-white">{{ getYear(event) }}</p>
+              <p class="text-xs font-bold opacity-90 tracking-widest text-white">{{ getYear(event) }}</p>
             </div>
           </div>
 
@@ -214,10 +214,10 @@
   box-shadow: 0 4px 12px rgba(0, 104, 55, 0.2);
 }
 
-/* Left Side Bubbles - White Background with Dark Green Text and Border */
+/* Left Side Bubbles - Blue Background with White Text */
 .message-bubble-left {
-  background-color: #FFFFFF;
-  border: 2px solid #006837; /* Dark green border */
+  background-color: #007BBF; /* Sauti Blue */
+  border: 2px solid #007BBF;
 }
 
 /* Left bubble tail pointing RIGHT (toward center date circle) */
@@ -230,7 +230,7 @@
   width: 0;
   height: 0;
   border: 12px solid transparent;
-  border-left-color: #FFFFFF; /* White tail matching bubble background */
+  border-left-color: #007BBF; /* Blue tail matching bubble background */
   border-right-width: 0;
   border-top-width: 12px;
   border-bottom-width: 12px;
@@ -247,7 +247,7 @@
   width: 0;
   height: 0;
   border: 12px solid transparent;
-  border-left-color: #006837; /* Dark green border for tail */
+  border-left-color: #007BBF; /* Blue border for tail */
   border-right-width: 0;
   border-top-width: 12px;
   border-bottom-width: 12px;

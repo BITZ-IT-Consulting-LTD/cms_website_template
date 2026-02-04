@@ -3,7 +3,8 @@
     <!-- 1. Page Header -->
     <header class="page-header !pb-0">
       <div class="container-custom">
-        <h1 class="page-header-title">Contact Us</h1>
+        <h1 class="page-header-title">{{ siteContent.getContent('contact_page_title', 'Get in') }} <span class="text-primary">{{ siteContent.getContent('contact_page_title_highlight', 'Touch') }}</span></h1>
+        <p v-if="siteContent.hasContent('contact_page_description')" class="page-header-subtitle">{{ siteContent.getContent('contact_page_description') }}</p>
       </div>
     </header>
 
@@ -133,6 +134,7 @@
 <script setup>
   import { computed, onMounted, ref, reactive } from 'vue'
   import { useSettingsStore } from '@/store/settings'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import { api } from '@/utils/axios'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
@@ -151,6 +153,7 @@
   })
 
   const settingsStore = useSettingsStore()
+  const siteContent = useSiteContent('contact')
   const contacts = ref([])
   const loading = ref(true)
   const feedbackForm = reactive({ name: '', email: '', message: '' })
@@ -218,8 +221,9 @@
     feedbackForm.message = ''
   }
 
-  onMounted(() => {
-    settingsStore.fetchGlobalSettings()
+  onMounted(async () => {
+    await siteContent.fetchContent()
+    await settingsStore.fetchGlobalSettings()
     fetchContacts()
   })
 </script>

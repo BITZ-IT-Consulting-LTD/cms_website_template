@@ -42,7 +42,7 @@
             <!-- The Circle (Overlay) -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div class="w-64 h-64 md:w-80 md:h-80 bg-white rounded-full shadow-2xl flex flex-col items-center justify-center text-center p-8 z-10 border-[8px] border-[#F9FAFB]">
-                  <span class="inline-block px-3 py-1 bg-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-[#005f99] mb-4">{{ siteContent.getContent('about_hero_badge', 'Who we are') }}</span>
+                  <span class="inline-block px-3 py-1 bg-gray-100 rounded-full text-[10px] font-black tracking-widest text-[#005f99] mb-4">{{ siteContent.getContent('about_hero_badge', 'Who we are') }}</span>
                   <h1 class="text-3xl md:text-4xl font-black text-[#0f172a] leading-tight mb-2">
                     {{ siteContent.getContent('about_hero_title', 'About\nSauti 116') }}
                   </h1>
@@ -61,7 +61,7 @@
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
               <div class="w-full h-full bg-blue-50 flex items-center justify-center p-4">
-                 <p class="text-center text-[#005f99] font-black text-sm">Every Child Matters</p>
+                 <p class="text-center text-[#005f99] font-black text-sm">{{ siteContent.getContent('about_hero_right_column', 'Every Child Matters') }}</p>
               </div>
            </div>
         </div>
@@ -108,7 +108,7 @@
           <!-- Section Header -->
           <div class="text-center mb-16">
              <h2 class="text-4xl md:text-5xl font-black text-white mb-4 md:mb-6" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                {{ siteContent.getContent('about_stats_title', 'REACH ACROSS THE NATION') }}
+                {{ siteContent.getContent('about_stats_title', 'Reach Across The Nation') }}
              </h2>
              <p class="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
                 {{ siteContent.getContent('about_stats_subtitle', 'How we are helping people across Uganda every day.') }}
@@ -117,66 +117,19 @@
 
          <!-- Statistics Grid -->
          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5 md:gap-6 w-full lg:ml-auto lg:justify-items-stretch">
-            <!-- Stat Card 1: Established -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
-                  Nov 2013
-                </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  Established
-                </div>
-             </div>
-
-            <!-- Stat Card 2: Calls Received -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
-                  2.7M+
-                </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  Calls Received Countrywide Since Nov 2021
-                </div>
-             </div>
-
-            <!-- Stat Card 3: Cases Handled -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
-                  40,000
-                </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  Cases Handled Since Nov 2021
-                </div>
-             </div>
-
-            <!-- Stat Card 4: District Action Centres -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
-                  120/143
-                </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  District Action Centres Established in Uganda
+            <div
+              v-for="(stat, index) in impactStats"
+              :key="`${stat.value}-${stat.label}-${index}`"
+              class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20"
+            >
+               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight">
+                  {{ stat.value }}
+               </div>
+               <div class="text-white/80 text-[10px] md:text-xs font-bold tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                  {{ stat.label }}
                </div>
             </div>
-
-            <!-- Stat Card 5: Calls Received Daily -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
-                  1500-2000
-               </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  Calls Received Daily on Average
-               </div>
-            </div>
-
-            <!-- Stat Card 6: New Cases Daily -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20">
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight" style="font-family: 'Roboto', sans-serif;">
-                  50+
-               </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold uppercase tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  New Cases Handled Daily on Average
-                </div>
-             </div>
-          </div>
+         </div>
        </div>
 
        <!-- Ripped Paper Effect - Bottom -->
@@ -198,7 +151,7 @@
        <div class="container-custom relative z-10">
           <div class="text-center max-w-3xl mx-auto mb-12 md:mb-20">
              <h2 class="text-4xl md:text-5xl font-black text-secondary mb-4 md:mb-6">{{ siteContent.getContent('about_resolution_title', 'Path to Resolution') }}</h2>
-             <p class="text-lg md:text-xl text-gray-500 font-medium px-4">How we ensure every case leads to safety.</p>
+             <p class="text-lg md:text-xl text-gray-500 font-medium px-4">{{ siteContent.getContent('about_resolution_subtitle', 'How we ensure every case leads to safety.') }}</p>
           </div>
 
           <!-- Mobile Layout: Vertical Steps -->
@@ -210,7 +163,7 @@
                 </div>
                 <!-- Content -->
                 <h3 class="text-xl font-black text-gray-800 mb-1">{{ step.title }}</h3>
-                <span class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">{{ step.subtitle }}</span>
+                <span class="text-xs font-bold tracking-widest text-gray-400 mb-4">{{ step.subtitle }}</span>
                 <p class="text-gray-600 leading-relaxed">{{ step.description }}</p>
                 
                 <!-- Arrow pointing down (except last item) -->
@@ -223,8 +176,8 @@
              
              <!-- Final Goal Card Mobile -->
              <div class="mt-4 flex flex-col items-center text-center bg-green-50 p-8 rounded-3xl border-2 border-green-100">
-                 <strong class="text-2xl font-black text-[#00ac46] mb-2">Safe Child</strong>
-                 <p class="text-gray-600">The ultimate goal of our journey.</p>
+                 <strong class="text-2xl font-black text-[#00ac46] mb-2">{{ siteContent.getContent('about_resolution_central_goal', 'Safe Child') }}</strong>
+                 <p class="text-gray-600">{{ siteContent.getContent('about_resolution_mobile_goal_text', 'The ultimate goal of our journey.') }}</p>
              </div>
           </div>
 
@@ -249,8 +202,8 @@
                                <path d="M32 30a8 8 0 1 0-8-8 8 8 0 0 0 8 8zm16 4h-4.2a16 16 0 0 1-23.6 0H16a16 16 0 0 0-16 16v4h64v-4a16 16 0 0 0-16-16z"/>
                             </svg>
                          </div>
-                         <strong class="text-lg block text-slate-800 mb-1">Safe Child</strong>
-                         <span class="text-xs uppercase tracking-widest text-[#005f99]">Our Goal</span>
+                         <strong class="text-lg block text-slate-800 mb-1">{{ siteContent.getContent('about_resolution_central_goal', 'Safe Child') }}</strong>
+                         <span class="text-xs tracking-widest text-[#005f99]">{{ siteContent.getContent('about_resolution_central_text', 'Our Goal') }}</span>
                       </div>
                    </transition>
                 </div>
@@ -312,7 +265,7 @@
                       </div>
                       <div class="leading-tight">
                          <h4 class="m-0 text-sm font-black text-slate-700" :style="{ color: step.color }">{{ step.title }}</h4>
-                         <p class="m-0 text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-wide">{{ step.subtitle }}</p>
+                         <p class="m-0 text-[10px] text-gray-400 font-bold mt-1 tracking-wide">{{ step.subtitle }}</p>
                       </div>
                    </div>
                 </div>
@@ -356,7 +309,7 @@
               <User v-else class="w-16 h-16 text-gray-400" />
             </div>
             <h3 class="text-xl font-bold text-secondary mb-1">{{ member.name }}</h3>
-            <p class="text-primary font-bold text-xs uppercase tracking-widest mb-4">{{ member.role }}</p>
+            <p class="text-primary font-bold text-xs tracking-widest mb-4">{{ member.role }}</p>
             <p class="text-gray-600 text-sm leading-relaxed">{{ member.bio || 'Dedicated to the mission of Sauti 116.' }}</p>
           </div>
         </div>
@@ -371,7 +324,7 @@
       <div class="container-custom relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <span class="inline-block px-4 py-1 bg-secondary/10 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-secondary/20 text-secondary">{{ siteContent.getContent('about_values_badge', 'Our Principles') }}</span>
+            <span class="inline-block px-4 py-1 bg-secondary/10 rounded-full text-xs font-bold tracking-widest mb-6 border border-secondary/20 text-secondary">{{ siteContent.getContent('about_values_badge', 'Our Principles') }}</span>
             <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight text-secondary">{{ siteContent.getContent('about_values_title', 'Driven by Values, United by Purpose.') }}</h2>
             <p class="text-lg text-gray-600 leading-relaxed mb-8">
               {{ siteContent.getContent('about_values_description', 'Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.') }}
@@ -379,12 +332,12 @@
             <!-- Call to Action (Optional) -->
             <div class="flex gap-4">
               <div class="flex items-center gap-2">
-                 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">10+</div>
-                 <span class="font-bold text-sm text-secondary">Years of Service</span>
+                 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">{{ siteContent.getContent('about_values_stat_1_value', '10+') }}</div>
+                 <span class="font-bold text-sm text-secondary">{{ siteContent.getContent('about_values_stat_1_label', 'Years of Service') }}</span>
               </div>
                <div class="flex items-center gap-2">
-                 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">1M+</div>
-                 <span class="font-bold text-sm text-secondary">Lives Impacted</span>
+                 <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">{{ siteContent.getContent('about_values_stat_2_value', '1M+') }}</div>
+                 <span class="font-bold text-sm text-secondary">{{ siteContent.getContent('about_values_stat_2_label', 'Lives Impacted') }}</span>
               </div>
             </div>
           </div>
@@ -461,6 +414,52 @@ const teamLoading = ref(false)
 const coreValues = ref([])
 const coreValuesLoading = ref(false)
 
+const defaultImpactStats = [
+  { value: 'Nov 2013', label: 'Established' },
+  { value: '2.7M+', label: 'Calls Received Countrywide Since Nov 2021' },
+  { value: '40,000', label: 'Cases Handled Since Nov 2021' },
+  { value: '120/143', label: 'District Action Centres Established in Uganda' },
+  { value: '1500-2000', label: 'Calls Received Daily on Average' },
+  { value: '50+', label: 'New Cases Handled Daily on Average' },
+]
+
+const impactStats = computed(() => {
+  const contentMap = siteContent.allContent.value || {}
+  const statsByIndex = {}
+  const regex = /^about_stats_stat_(\d+)_(value|label)$/
+
+  Object.entries(contentMap).forEach(([key, item]) => {
+    const match = key.match(regex)
+    if (!match) return
+    const index = parseInt(match[1], 10)
+    const field = match[2]
+    if (!statsByIndex[index]) {
+      statsByIndex[index] = { index, value: '', label: '' }
+    }
+    statsByIndex[index][field] = item?.value ?? ''
+  })
+
+  const indices = Object.keys(statsByIndex)
+    .map(Number)
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b)
+
+  if (indices.length === 0) {
+    return defaultImpactStats
+  }
+
+  return indices
+    .map((index) => {
+      const fallback = defaultImpactStats[index - 1] || { value: '', label: '' }
+      const stat = statsByIndex[index]
+      return {
+        value: stat.value || fallback.value,
+        label: stat.label || fallback.label,
+      }
+    })
+    .filter(stat => stat.value || stat.label)
+})
+
 
 
 // --- Mock Data for Layout ---
@@ -478,36 +477,36 @@ import { markRaw } from 'vue'
 const activeStep = ref(null)
 const timelineEvents = ref([])
 
-const resolutionSteps = [
-  { 
-    title: 'Caller', 
-    subtitle: 'Case reported', 
+const resolutionSteps = ref([
+  {
+    title: 'Caller',
+    subtitle: 'Case reported',
     description: 'A concerned community member, child, or parent calls the 116 helpline to report a case of abuse or concern.',
-    color: '#005f99', 
-    icon: markRaw(Phone) 
+    color: '#005f99',
+    icon: markRaw(Phone)
   },
-  { 
-    title: 'Call Center', 
-    subtitle: 'Assessment', 
+  {
+    title: 'Call Center',
+    subtitle: 'Assessment',
     description: 'Our professional counselors receive the call, provide immediate counseling, and assess the severity of the case.',
-    color: '#00ac46', 
-    icon: markRaw(Clock) 
-  }, 
-  { 
-    title: 'Case Mgmt.', 
-    subtitle: 'Coordination', 
-    description: 'The Case Management team coordinates with local authorities ensuring the child receives medical, legal, and psychosocial support.',
-    color: '#7c3aed', 
-    icon: markRaw(ShieldCheck) 
+    color: '#00ac46',
+    icon: markRaw(Clock)
   },
-  { 
-    title: 'Probation', 
-    subtitle: 'Support', 
+  {
+    title: 'Case Mgmt.',
+    subtitle: 'Coordination',
+    description: 'The Case Management team coordinates with local authorities ensuring the child receives medical, legal, and psychosocial support.',
+    color: '#7c3aed',
+    icon: markRaw(ShieldCheck)
+  },
+  {
+    title: 'Probation',
+    subtitle: 'Support',
     description: 'Probation works with police and partners to ensure long-term safety, justice, and family reintegration where possible.',
-    color: '#ea580c', 
-    icon: markRaw(Users) 
+    color: '#ea580c',
+    icon: markRaw(Users)
   }
-]
+])
 
 const centerX = 300
 const centerY = 300
@@ -681,6 +680,17 @@ const getColorClasses = (color) => {
 onMounted(async () => {
   // Fetch site content from CMS
   await siteContent.fetchContent()
+
+  // Update resolution steps with CMS content
+  resolutionSteps.value = resolutionSteps.value.map((step, index) => {
+    const stepNum = index + 1
+    return {
+      ...step,
+      title: siteContent.getContent(`about_resolution_step_${stepNum}_title`, step.title),
+      subtitle: siteContent.getContent(`about_resolution_step_${stepNum}_subtitle`, step.subtitle),
+      description: siteContent.getContent(`about_resolution_step_${stepNum}_description`, step.description)
+    }
+  })
 
   try {
     await settingsStore.fetchGlobalSettings()

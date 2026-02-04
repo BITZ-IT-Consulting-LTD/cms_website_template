@@ -10,6 +10,7 @@ from resources.models import Resource
 from faqs.models import FAQ
 from partners.models import Partner
 from reports.models import Report
+from .sauti_helpline_client import get_helpline_client
 
 
 class DashboardStatsView(APIView):
@@ -167,3 +168,73 @@ class TopContentView(APIView):
         }
         
         return Response(content)
+
+
+class HelplineStatsView(APIView):
+    """
+    Fetch real-time statistics from the external Sauti helpline system
+    This endpoint proxies data from https://sauti.mglsd.go.ug/helpline/
+    """
+    permission_classes = [permissions.AllowAny]  # Public endpoint for frontend
+    
+    def get(self, request):
+        """
+        GET /api/dashboard/helpline-stats/
+        
+        Returns:
+            - total_calls: Total number of calls received
+            - total_cases: Total number of cases handled
+            - total_gbv_cases: Gender-based violence cases
+            - total_sea_cases: Sexual exploitation and abuse cases
+            - total_migrant_workers: Migrant worker cases
+            - by_status: Case counts grouped by status
+            - by_priority: Case counts grouped by priority
+        """
+        client = get_helpline_client()
+        stats = client.fetch_case_statistics()
+        
+        if stats is None:
+            # Return fallback data if external API is unavailable
+            return Response({
+                'total_calls': 0,
+                'total_cases': 0,
+                'total_gbv_cases': 0,
+                'total_sea_cases': 0,
+                'total_migrant_workers': 0,
+                'by_status': {},
+                'by_priority': {},
+                'error': 'Unable to fetch helpline statistics at this time'
+            }, status=503)
+        
+        return Response(stats)
+
+
+class HelplineChartsView(APIView):
+    """
+    Fetch chart data from the external Sauti helpline system
+    """
+    permission_classes = [permissions.AllowAny]  # Public endpoint for frontend
+    
+    def get(self, request):
+        """
+        GET /api/dashboard/helpline-charts/
+        
+        Returns chart data for:
+            - Abuse subcategory by sex
+            - Abuse subcategory by age group
+            - Abuse subcategory by region
+            - Abuse subcategory by district
+        """
+        client = get_helpline_client()
+        charts = client.fetch_chart_data()
+        
+        if charts is None:
+            return Response({
+                'subcategoryBySex': {'labels': [], 'datasets': []},
+                'subcategoryByAge': {'labels': [], 'datasets': []},
+                'subcategoryByRegion': {'labels': [], 'datasets': []},
+                'subcategoryByDistrict': {'labels': [], 'datasets': []},
+                'error': 'Unable to fetch chart data at this time'
+            }, status=503)
+        
+        return Response(charts)

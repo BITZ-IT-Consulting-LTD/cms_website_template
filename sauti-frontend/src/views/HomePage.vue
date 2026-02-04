@@ -258,10 +258,10 @@
 
 
 
-  const newsTitle = computed(() => settingsStore.settings?.news_title || 'Sauti Updates')
+  const newsTitle = computed(() => siteContent.getContent('home_news_title', settingsStore.settings?.news_title || 'Latest Stories & Updates'))
   const newsDescription = computed(() => settingsStore.settings?.news_description || 'Stories and news from our team on how we are making Uganda safer.')
-  const partnersTitle = computed(() => settingsStore.settings?.partners_title || 'Official Protection Partners')
-  const partnersDescription = computed(() => settingsStore.settings?.partners_description || 'Working together to protect every child and survivor in Uganda.')
+  const partnersTitle = computed(() => siteContent.getContent('home_partners_title', settingsStore.settings?.partners_title || 'Our Trusted Partners'))
+  const partnersDescription = computed(() => siteContent.getContent('home_partners_description', settingsStore.settings?.partners_description || 'Working together with national and international organizations to protect every voice.'))
 
 
 

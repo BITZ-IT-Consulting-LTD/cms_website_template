@@ -3,23 +3,65 @@
     <!-- 1. Page Header -->
     <header class="page-header !pb-0">
       <div class="container-custom">
+        <!-- Customizable Intro Area (Requested: before main heading) -->
+        <div v-if="siteContent.getContent('resources_pre_heading_text')" class="mb-6 animate-fade-in-up">
+           <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-primary/5 border border-primary/10 text-primary font-bold text-sm">
+             <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+             {{ siteContent.getContent('resources_pre_heading_text') }}
+           </div>
+        </div>
+
+        <!-- Customizable Hero Badge -->
+        <div v-if="siteContent.getContent('resources_hero_badge')" class="mb-4">
+          <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black tracking-widest border border-primary/20">
+            {{ siteContent.getContent('resources_hero_badge', '') }}
+          </span>
+        </div>
+        
         <h1 class="page-header-title">
-          Resources <span class="text-primary">and Statistics</span>
+          {{ siteContent.getContent('resources_page_title', 'Resources') }} 
+          <span class="text-primary">{{ siteContent.getContent('resources_page_title_highlight', 'and Statistics') }}</span>
         </h1>
+
+        <p class="page-header-subtitle max-w-2xl">
+          {{ siteContent.getContent('resources_page_subtitle', 'Access our library of official reports, awareness materials, and real-time helpline statistics.') }}
+        </p>
       </div>
     </header>
 
     <div class="container-custom section-padding !pt-12">
       <div class="container-custom section-rhythm">
+        
+        <!-- Tab Navigation -->
+        <div class="flex justify-center mb-16">
+          <div class="inline-flex bg-neutral-offwhite p-2 rounded-full border border-gray-200 shadow-sm relative z-10">
+            <button 
+              @click="activeTab = 'resources'"
+              class="px-8 py-4 rounded-full text-sm font-black tracking-widest transition-all duration-300 min-w-[160px]"
+              :class="activeTab === 'resources' ? 'bg-primary text-white shadow-lg transform scale-105' : 'text-gray-400 hover:text-primary'"
+            >
+              {{ siteContent.getContent('resources_tab_label', 'Resources') }}
+            </button>
+            <button 
+              @click="activeTab = 'statistics'"
+              class="px-8 py-4 rounded-full text-sm font-black tracking-widest transition-all duration-300 min-w-[160px]"
+              :class="activeTab === 'statistics' ? 'bg-secondary text-white shadow-lg transform scale-105' : 'text-gray-400 hover:text-secondary'"
+            >
+              {{ siteContent.getContent('statistics_tab_label', 'Statistics') }}
+            </button>
+          </div>
+        </div>
 
         <!-- Downloadable Resources Section -->
-        <section aria-labelledby="downloads-heading">
+        <section v-if="activeTab === 'resources'" aria-labelledby="downloads-heading" class="animate-fade-in-up">
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <h2 id="downloads-heading" class="campaign-header text-3xl text-secondary mb-4">
-                {{ resourcesDownloadsTitle }}
+                {{ siteContent.getContent('resources_section_title', resourcesDownloadsTitle) }}
               </h2>
-              <p class="text-black/60 font-bold text-lg">Public awareness materials and official guidance.</p>
+              <p class="text-black/60 font-bold text-lg">
+                {{ siteContent.getContent('resources_section_subtitle', 'Public awareness materials and official guidance.') }}
+              </p>
             </div>
             <div class="pill bg-primary/10 text-primary">
               {{ filteredResources.length }} {{ resourcesAvailable }}
@@ -33,7 +75,7 @@
               <div class="flex-1 relative group">
                 <Search
                   class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-primary group-focus-within:text-secondary transition-colors" />
-                <input v-model="search" type="text" :placeholder="resourcesSearchPlaceholder"
+                <input v-model="search" type="text" :placeholder="siteContent.getContent('resources_search_placeholder', resourcesSearchPlaceholder)"
                   class="w-full pl-16 pr-6 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary outline-none transition-all" />
               </div>
 
@@ -42,8 +84,8 @@
                 <!-- Category Filter -->
                 <div class="relative flex-1">
                   <select v-model="category"
-                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                    <option value="">{{ resourcesAllCategories }}</option>
+                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                    <option value="">{{ siteContent.getContent('resources_filter_all_categories', resourcesAllCategories) }}</option>
                     <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
                       {{ cat.name }}
                     </option>
@@ -55,8 +97,8 @@
                 <!-- Format Filter -->
                 <div class="relative flex-1">
                   <select v-model="format"
-                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                    <option value="">All Formats</option>
+                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                    <option value="">{{ siteContent.getContent('resources_filter_all_formats', 'All Formats') }}</option>
                     <option value="audio">Audio</option>
                     <option value="document">Document</option>
                   </select>
@@ -67,8 +109,8 @@
                 <!-- Language Filter -->
                 <div class="relative flex-1">
                   <select v-model="language"
-                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary uppercase tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                    <option value="">All Languages</option>
+                    class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary tracking-widest text-[10px] outline-none transition-all cursor-pointer">
+                    <option value="">{{ siteContent.getContent('resources_filter_all_languages', 'All Languages') }}</option>
                     <option value="en">English</option>
                     <option value="lg">Luganda</option>
                     <option value="sw">Swahili</option>
@@ -126,9 +168,7 @@
                   >
                     {{ downloadingSlug === resource.slug ? 'Downloading...' : 'Download' }}
                   </button>
-                  <div class="text-[10px] font-bold text-black/40 uppercase tracking-widest">
-                    <span class="text-secondary">{{ resource.download_count || 0 }}</span> Downloads
-                  </div>
+                  <div></div>
                 </div>
               </div>
             </article>
@@ -156,6 +196,114 @@
           </div>
         </section>
 
+        <!-- Statistics Dashboard Section -->
+        <section v-if="activeTab === 'statistics'" aria-label="Statistics Dashboard" class="mt-8 animate-fade-in-up">
+           <div class="text-center mb-12">
+              <h2 class="text-3xl font-black text-secondary mb-4">
+                {{ siteContent.getContent('statistics_dashboard_title', 'Live Statistics') }}
+              </h2>
+              <p class="text-black/60 font-bold text-lg">
+                {{ siteContent.getContent('statistics_dashboard_subtitle', 'Real-time data from the Sauti 116 Helpline') }}
+              </p>
+           </div>
+           
+           <!-- Quick Stats Cards -->
+           <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-16">
+             <!-- Total Calls -->
+             <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+               <p class="text-secondary/60 text-xs font-bold tracking-widest mb-2">
+                 {{ siteContent.getContent('stats_kpi_calls', 'Total Calls') }}
+               </p>
+               <div class="text-3xl font-black text-primary">
+                  {{ formatNumber(dashboardStats.total_calls) }}
+               </div>
+             </div>
+             <!-- Total Cases -->
+             <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+               <p class="text-secondary/60 text-xs font-bold tracking-widest mb-2">
+                 {{ siteContent.getContent('stats_kpi_cases', 'Total Cases') }}
+               </p>
+               <div class="text-3xl font-black text-secondary">
+                  {{ formatNumber(dashboardStats.total_cases) }}
+               </div>
+             </div>
+             <!-- Total GBV Cases -->
+             <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <p class="text-secondary/60 text-xs font-bold tracking-widest mb-2">
+                  {{ siteContent.getContent('stats_kpi_gbv', 'Total GBV Cases') }}
+                </p>
+                <div class="text-3xl font-black text-hotline">
+                   {{ formatNumber(dashboardStats.total_gbv_cases) }}
+                </div>
+             </div>
+             <!-- Total SEA Cases -->
+             <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <p class="text-secondary/60 text-xs font-bold tracking-widest mb-2">
+                  {{ siteContent.getContent('stats_kpi_sea', 'Total SEA Cases') }}
+                </p>
+                <div class="text-3xl font-black text-emergency">
+                   {{ formatNumber(dashboardStats.total_sea_cases) }}
+                </div>
+             </div>
+              <!-- Total Migrant Workers -->
+             <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <p class="text-secondary/60 text-xs font-bold tracking-widest mb-2">
+                  {{ siteContent.getContent('stats_kpi_migrant', 'Migrant Workers') }}
+                </p>
+                <div class="text-3xl font-black text-secondary-light">
+                   {{ formatNumber(dashboardStats.total_migrant_workers) }}
+                </div>
+             </div>
+           </div>
+
+           <!-- Charts Grid -->
+           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+             <!-- Chart 1: Abuse Subcategory vs Client Sex -->
+             <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
+               <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
+                 <div class="w-1.5 h-6 bg-primary rounded-full"></div>
+                 Abuse Subcategory vs Client Sex
+               </h3>
+               <div class="h-[400px]">
+                  <Bar :data="dashboardCharts.subcategoryBySex" :options="getDashboardOptions(false)" />
+                </div>
+             </div>
+
+             <!-- Chart 2: Abuse Subcategories -->
+             <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
+               <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
+                  <div class="w-1.5 h-6 bg-secondary rounded-full"></div>
+                  Abuse Subcategories
+               </h3>
+                <div class="h-[400px]">
+                  <Bar :data="dashboardCharts.subcategoryByAge" :options="getDashboardOptions(true)" />
+                </div>
+             </div>
+
+             <!-- Chart 3: Abuse Subcategory vs Region -->
+              <div class="card-base group lg:col-span-2 bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
+               <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
+                  <div class="w-1.5 h-6 bg-hotline rounded-full"></div>
+                  Abuse Subcategory vs Region
+               </h3>
+                <div class="h-[450px]">
+                  <Bar :data="dashboardCharts.subcategoryByRegion" :options="getDashboardOptions(false)" />
+                </div>
+             </div>
+
+             <!-- Chart 4: Abuse Subcategory vs District -->
+             <div class="card-base group lg:col-span-2 bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
+               <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
+                  <div class="w-1.5 h-6 bg-secondary-light rounded-full"></div>
+                  Abuse Subcategory vs District (Top 15)
+               </h3>
+                <div class="h-[500px]">
+                   <Bar :data="dashboardCharts.subcategoryByDistrict" :options="getDashboardOptions(true)" />
+                </div>
+             </div>
+           </div>
+        </section>
+
 
       </div>
     </div>
@@ -166,6 +314,7 @@
   import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
   import { useResourcesStore } from '@/store/resources'
   import { useSettingsStore } from '@/store/settings'
+  import { useSiteContent } from '@/composables/useSiteContent'
   import { api } from '@/utils/axios'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
@@ -210,9 +359,12 @@
   defineOptions({
     name: 'ResourcesPage'
   })
+  
+  const activeTab = ref('resources')
 
   const resourcesStore = useResourcesStore()
   const settingsStore = useSettingsStore()
+  const siteContent = useSiteContent('resources')
   const downloadingSlug = ref(null)
 
   const brand_colors = computed(() => ({
@@ -266,7 +418,8 @@
         resourcesStore.fetchCategories(),
         fetchList(),
         fetchStats(),
-        fetchCallStats()
+        fetchCallStats(),
+        siteContent.fetchContent()
       ])
       categories.value = Array.isArray(cats) ? cats : []
 
@@ -637,6 +790,133 @@
     const exts = ['mp3', 'm4a', 'wav', 'ogg']
     return exts.some(ext => type.includes(ext) || url.endsWith(`.${ext}`))
   }
+  // --- Dashboard Statistics Logic ---
+  const dashboardStats = ref({
+    total_calls: 0,
+    total_cases: 0,
+    total_gbv_cases: 0,
+    total_sea_cases: 0,
+    total_migrant_workers: 0
+  })
+
+  const dashboardCharts = ref({
+    subcategoryBySex: { labels: [], datasets: [] },
+    subcategoryByAge: { labels: [], datasets: [] },
+    subcategoryByRegion: { labels: [], datasets: [] },
+    subcategoryByDistrict: { labels: [], datasets: [] }
+  })
+
+  // Helper Functions
+  const formatNumber = (num) => {
+    return num !== null && num !== undefined ? num.toLocaleString() : '0'
+  }
+
+  const getBrandColor = (index) => {
+    const palette = ['#0087CF', '#006837', '#F7941E', '#9DC83E', '#ED1C24', '#0F172A']
+    return palette[index % palette.length]
+  }
+
+  // API Fetch Logic for Dashboard - Now connected to real Sauti helpline data
+  const fetchDashboardData = async () => {
+    try {
+      // Fetch real statistics from the external Sauti helpline system
+      const statsResponse = await api.get('/dashboard/helpline-stats/')
+      
+      if (statsResponse.data) {
+        dashboardStats.value = {
+          total_calls: statsResponse.data.total_calls || 0,
+          total_cases: statsResponse.data.total_cases || 0,
+          total_gbv_cases: statsResponse.data.total_gbv_cases || 0,
+          total_sea_cases: statsResponse.data.total_sea_cases || 0,
+          total_migrant_workers: statsResponse.data.total_migrant_workers || 0
+        }
+        
+        console.log('✅ Successfully loaded helpline statistics:', dashboardStats.value)
+      }
+
+      const mapChartData = (apiData) => {
+          if (!apiData) return { labels: [], datasets: [] }
+          return {
+              labels: apiData.labels || [],
+              datasets: (apiData.datasets || []).map((ds, index) => ({
+                  label: ds.label,
+                  data: ds.data,
+                  backgroundColor: getBrandColor(index),
+                  borderRadius: 4
+              }))
+          }
+      }
+
+      // Fetch chart data from the helpline system
+      const chartsResponse = await api.get('/dashboard/helpline-charts/')
+      if (chartsResponse.data) {
+        dashboardCharts.value = {
+          subcategoryBySex: mapChartData(chartsResponse.data.subcategoryBySex),
+          subcategoryByAge: mapChartData(chartsResponse.data.subcategoryByAge),
+          subcategoryByRegion: mapChartData(chartsResponse.data.subcategoryByRegion),
+          subcategoryByDistrict: mapChartData(chartsResponse.data.subcategoryByDistrict)
+        }
+        
+        console.log('✅ Successfully loaded helpline charts')
+      }
+    } catch (err) {
+      console.warn('Statistics dashboard data unavailable:', err)
+    }
+  }
+
+  // Load dashboard data on mount
+  onMounted(() => {
+    fetchDashboardData()
+  })
+
+  // Dashboard Chart Options Helper
+  const getDashboardOptions = (horizontal) => {
+    return {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { 
+          display: true,
+          position: 'bottom', 
+          labels: { 
+            usePointStyle: true, 
+            boxWidth: 8,
+            font: { family: 'cronos-pro', weight: 'bold', size: 10 },
+            color: '#023047'
+          } 
+        },
+        tooltip: {
+          backgroundColor: '#023047',
+          titleFont: { family: 'cronos-pro', size: 14 },
+          bodyFont: { family: 'cronos-pro', size: 12 }
+        }
+      },
+      scales: {
+        x: { 
+          stacked: true, 
+          grid: { display: false },
+          ticks: { font: { family: 'cronos-pro', weight: 'bold' } }
+        },
+        y: { 
+          stacked: true, 
+          beginAtZero: true,
+          grid: { color: '#F8F9FA' },
+          ticks: { font: { family: 'cronos-pro', weight: 'bold' } }
+        }
+      }
+    }
+  }
+
+  // Load dashboard data on mount (Moved to initialize with others)
+  const fetchDashboardDataOnMount = () => {
+    fetchDashboardData()
+  }
+  
+  onMounted(() => {
+    fetchDashboardDataOnMount()
+  })
+
 </script>
 
 <style scoped></style>
