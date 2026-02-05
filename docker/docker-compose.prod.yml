@@ -9,6 +9,7 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     environment:
+      - DB_ENGINE=postgres
       - POSTGRES_DB=${DB_NAME:-sauti_cms}
       - POSTGRES_USER=${DB_USER:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
@@ -32,6 +33,7 @@ services:
     # env_file:
     #   - ../sauti_cms/.env
     environment:
+      - DB_ENGINE=postgres
       - DEBUG=False
       - DB_HOST=db
       - DB_PORT=5432
