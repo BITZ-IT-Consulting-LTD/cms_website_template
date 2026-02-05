@@ -335,18 +335,25 @@
       const duplicateData = {
         title: `${post.title} (Copy)`,
         slug: `${post.slug}-copy-${Date.now()}`,
+        post_type: post.post_type, // Required: NEWS or BLOG
         status: 'DRAFT',
         content: post.content,
         excerpt: post.excerpt,
         featured_image: post.featured_image,
-        category: post.category,
-        tags: post.tags,
+        // Category needs to be ID not object
+        category: post.category?.id || post.category,
+        // Tags need to be array of IDs not objects
+        tags: Array.isArray(post.tags) ? post.tags.map(t => t.id || t) : [],
         is_featured: false, // Don't duplicate featured status
-        allow_comments: post.allow_comments,
-        meta_title: post.meta_title,
-        meta_description: post.meta_description,
-        meta_keywords: post.meta_keywords
+        language: post.language || 'en'
       }
+
+      // Remove undefined/null values
+      Object.keys(duplicateData).forEach(key => {
+        if (duplicateData[key] === undefined || duplicateData[key] === null) {
+          delete duplicateData[key]
+        }
+      })
 
       await postsStore.createPost(duplicateData)
       toast.success(`"${post.title}" duplicated successfully`)
