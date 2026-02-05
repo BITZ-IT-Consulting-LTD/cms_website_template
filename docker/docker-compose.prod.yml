@@ -56,6 +56,34 @@ services:
           cpus: '2'
           memory: 2G
 
+  # Scheduler for auto-publishing scheduled content (Production)
+  scheduler:
+    build:
+      context: ../sauti_cms
+      dockerfile: Dockerfile
+    container_name: sauti_scheduler_prod
+    volumes:
+      - ../sauti_cms:/app
+    environment:
+      - DEBUG=False
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=sauti_cms
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - SECRET_KEY=django-insecure-prod-key-please-change
+    command: sh /app/run_scheduler.sh
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sauti_network_prod
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
   # Public Frontend (Nginx)
   frontend:
     build:

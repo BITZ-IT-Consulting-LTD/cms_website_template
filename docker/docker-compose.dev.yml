@@ -36,11 +36,34 @@ services:
       - DB_PASSWORD=postgres
       - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,backend,nginx,sauti_backend_dev,sauti.local,sauti.mglsd.go.ug
     ports:
-      - "8000:8000"
+      - "8001:8000"
     depends_on:
       db:
         condition: service_healthy
     command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - sauti_network_dev
+
+  # Scheduler for auto-publishing scheduled content
+  scheduler:
+    build:
+      context: ../sauti_cms
+      dockerfile: Dockerfile
+    container_name: sauti_scheduler_dev
+    volumes:
+      - ../sauti_cms:/app
+    env_file:
+      - ../sauti_cms/.env
+    environment:
+      - DB_HOST=db
+      - DB_ENGINE=postgres
+      - DB_NAME=sauti_cms
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh /app/run_scheduler.sh
     networks:
       - sauti_network_dev
 

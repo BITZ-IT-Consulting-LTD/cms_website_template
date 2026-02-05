@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global box-sizing fix for all elements */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal overflow globally */
+* {
+  max-width: 100%;
+}
+
 :root {
   /* ============================================
      SAUTI 116 CENTRALIZED COLOR SYSTEM
@@ -79,6 +89,8 @@
     font-family: var(--font-cronos);
     font-size: 14.67px;
     /* 11pt base size */
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   /* Accessibility: High-Contrast Focus Ring (WCAG 2.1 AAA) */
@@ -89,6 +101,8 @@
     min-height: 100vh;
     background: transparent;
     @apply leading-relaxed;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   /* Softer Typography Hierarchy - Brand Balanced */
@@ -116,8 +130,17 @@
 }
 
 @layer components {
+  /* Global mobile width fix */
+  #app {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   .container-custom {
-    @apply max-w-7xl mx-auto px-3 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 
   .btn {
@@ -191,15 +214,17 @@
   }
 
   .card-base {
-    @apply bg-neutral-white rounded-[2rem] p-6 md:p-12 shadow-sm hover:shadow-xl transition-all duration-500;
+    @apply bg-neutral-white rounded-[2rem] p-4 md:p-12 shadow-sm hover:shadow-xl transition-all duration-500;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .section-padding {
-    @apply py-12 md:py-40;
+    @apply py-8 md:py-40;
   }
 
   .page-header {
-    @apply py-12 md:py-32;
+    @apply py-8 md:py-32;
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
   }
@@ -342,4 +367,43 @@ p,
 span:not(.number):not(.stat-number):not(.metric-value),
 div:not([class*="count"]):not([class*="number"]) {
   font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 640px) {
+  /* Ensure all grid containers respect viewport */
+  .grid {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Reduce gap spacing on mobile */
+  .gap-6 {
+    gap: 1rem;
+  }
+
+  .gap-8 {
+    gap: 1.25rem;
+  }
+
+  .gap-10 {
+    gap: 1.5rem;
+  }
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Fix button padding on mobile */
+  .btn {
+    @apply px-4 py-3 text-base;
+  }
+
+  /* Ensure sections don't overflow */
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
 }

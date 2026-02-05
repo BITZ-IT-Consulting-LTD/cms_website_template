@@ -330,11 +330,22 @@
 
   const duplicatePost = async (post) => {
     try {
+      // Extract only the fields needed for creating a new post
+      // Exclude read-only fields like id, created_at, updated_at, etc.
       const duplicateData = {
-        ...post,
         title: `${post.title} (Copy)`,
         slug: `${post.slug}-copy-${Date.now()}`,
-        status: 'DRAFT'
+        status: 'DRAFT',
+        content: post.content,
+        excerpt: post.excerpt,
+        featured_image: post.featured_image,
+        category: post.category,
+        tags: post.tags,
+        is_featured: false, // Don't duplicate featured status
+        allow_comments: post.allow_comments,
+        meta_title: post.meta_title,
+        meta_description: post.meta_description,
+        meta_keywords: post.meta_keywords
       }
 
       await postsStore.createPost(duplicateData)
