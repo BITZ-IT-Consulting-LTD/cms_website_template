@@ -24,14 +24,31 @@ class ReportCreateSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         reporter_data = validated_data.pop('reporter', {})
-        
+
         # Map nested reporter data to flat model fields
         validated_data['contact_name'] = reporter_data.get('name')
         validated_data['contact_phone'] = reporter_data.get('phone')
         validated_data['safe_to_contact'] = reporter_data.get('safe_to_contact', True)
         # Determine anonymity based on whether name is provided
         validated_data['is_anonymous'] = not bool(reporter_data.get('name'))
-        
+
+        # Extract first affected person's data to flat fields for admin display
+        affected_persons = validated_data.get('affected_persons', [])
+        if affected_persons and len(affected_persons) > 0:
+            first_person = affected_persons[0]
+            # Map gender field - handle both uppercase (MALE/FEMALE) and title case (Male/Female)
+            gender_value = first_person.get('gender', '').upper() if first_person.get('gender') else None
+            if gender_value in ['MALE', 'FEMALE', 'OTHER']:
+                validated_data['reported_person_gender'] = gender_value
+
+            # Map age field
+            age_value = first_person.get('age')
+            if age_value:
+                try:
+                    validated_data['reported_person_age'] = int(age_value)
+                except (ValueError, TypeError):
+                    pass  # Skip if age is not a valid integer
+
         return super().create(validated_data)
 
 
