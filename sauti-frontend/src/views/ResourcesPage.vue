@@ -256,38 +256,66 @@
              </div>
            </div>
 
-           <!-- Charts Grid -->
+           <!-- Filter Bar -->
+           <div class="flex items-center gap-4 mb-8">
+             <label for="caseTypeFilter" class="text-sm font-semibold text-secondary/70 uppercase tracking-wider">
+               Filter by Case Type
+             </label>
+             <select
+               id="caseTypeFilter"
+               v-model="caseTypeFilter"
+               class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-secondary shadow-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+             >
+               <option value="All">All Case Types</option>
+               <option value="Abuse">Abuse</option>
+               <option value="Counseling">Counseling</option>
+               <option value="Information Inquiry">Information Inquiry</option>
+             </select>
+           </div>
+
+           <!-- Charts Grid (2x2) -->
            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-             <!-- Chart 1: Case Categories by Source -->
+             <!-- Chart 1: Category vs Client Sex -->
              <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
                <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
                  <div class="w-1.5 h-6 bg-primary rounded-full"></div>
-                 Cases by Source
+                 Abuse Category vs Client Sex
                </h3>
                <div class="h-[400px]">
-                  <Bar :data="dashboardCharts.subcategoryBySex" :options="getDashboardOptions(false)" />
+                  <Bar :data="filteredCategoryBySex" :options="getDashboardOptions(false)" />
                 </div>
              </div>
 
-             <!-- Chart 2: Abuse Subcategories -->
+             <!-- Chart 2: Category vs Client Region -->
              <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
                <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
                   <div class="w-1.5 h-6 bg-secondary rounded-full"></div>
-                  Abuse Subcategories
+                  Abuse Category vs Client Region
                </h3>
                 <div class="h-[400px]">
-                  <Bar :data="dashboardCharts.subcategoryByAge" :options="getDashboardOptions(true)" />
+                  <Bar :data="filteredCategoryByRegion" :options="getDashboardOptions(false)" />
                 </div>
              </div>
 
-             <!-- Chart 3: Regional Case Distribution -->
-              <div class="card-base group lg:col-span-2 bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
+             <!-- Chart 3: Category vs Client Age Group -->
+             <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
                <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
                   <div class="w-1.5 h-6 bg-hotline rounded-full"></div>
-                  Regional Case Distribution
+                  Abuse Category vs Client Age Group
                </h3>
-                <div class="h-[450px]">
-                  <Bar :data="dashboardCharts.subcategoryByRegion" :options="getDashboardOptions(false)" />
+                <div class="h-[400px]">
+                  <Bar :data="filteredCategoryByAgeGroup" :options="getDashboardOptions(false)" />
+                </div>
+             </div>
+
+             <!-- Chart 4: Category vs Client District -->
+             <div class="card-base group bg-white rounded-[3.5rem] p-8 border-2 border-neutral-offwhite">
+               <h3 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-4 font-bold">
+                  <div class="w-1.5 h-6 bg-emergency rounded-full"></div>
+                  Abuse Category vs Client District
+               </h3>
+                <div class="h-[400px]">
+                  <Bar :data="filteredCategoryByDistrict" :options="getDashboardOptions(false)" />
                 </div>
              </div>
            </div>
@@ -789,11 +817,73 @@
   })
 
   const dashboardCharts = ref({
-    subcategoryBySex: { labels: [], datasets: [] },
-    subcategoryByAge: { labels: [], datasets: [] },
-    subcategoryByRegion: { labels: [], datasets: [] },
-    subcategoryByDistrict: { labels: [], datasets: [] }
+    categoryBySex: { labels: [], datasets: [] },
+    categoryByRegion: { labels: [], datasets: [] },
+    categoryByAgeGroup: { labels: [], datasets: [] },
+    categoryByDistrict: { labels: [], datasets: [] }
   })
+
+  const caseTypeFilter = ref('All')
+
+  // --- Category-to-CaseType Mapping ---
+  const ABUSE_CATEGORIES = [
+    'Child Neglect', 'Sexual Violence', 'Physical Violence', 'Child Exploitation',
+    'Economic Violence', 'Emotional & Psychological Abuse', 'Harmful Tranditional Practices',
+    'Murder', 'Online Sexual Abuse & Violence', 'Others', 'Threatening Violence',
+    'Trafficking in Persons'
+  ]
+
+  const COUNSELING_CATEGORIES = [
+    'Addiction', 'Boy/Girl Relationship', 'Career Guidance', 'Child Custody',
+    'Child In Conflict with the Law', 'Child to Child Sex', 'Denial of conjugal rights',
+    'Differently Abled Persons', 'Discrimination', 'Family Issues', 'HIV Counselling',
+    'Juvenile Deliquence', 'Legal Issues', 'Life Skills', 'Loss and Grief', 'Lost Child',
+    'Medical_Care', 'Mental Issues', 'Orphans', 'Parent or Child Relationship',
+    'Parental Guidance', 'Peer Influence', 'Property_Rights', 'Reproductive Health Issues',
+    'Run Away Child', 'Self Esteem', 'Street Child', 'Stress/Depression',
+    'Student or Teacher Relationship', 'Bestiality'
+  ]
+
+  const INFO_CATEGORIES = [
+    'Appreciation', 'Birth Registration', 'Case Update', 'Employment/Job',
+    'Financial Aid', 'In Need of School Fees', 'Information on Helpline Services',
+    'Inquiry on Other Services', 'Medical Aid', 'Outbreaks', 'Pre-trial Briefing',
+    'Topical Issues (Child rights, Biology etc)'
+  ]
+
+  // --- Filter Logic ---
+  const getAllowedCategories = () => {
+    switch (caseTypeFilter.value) {
+      case 'Abuse': return ABUSE_CATEGORIES
+      case 'Counseling': return COUNSELING_CATEGORIES
+      case 'Information Inquiry': return INFO_CATEGORIES
+      default: return null
+    }
+  }
+
+  const filterChartData = (chartData) => {
+    const allowed = getAllowedCategories()
+    if (!allowed) return chartData
+    if (!chartData || !chartData.labels || !chartData.labels.length) return chartData
+
+    const indices = []
+    chartData.labels.forEach((label, i) => {
+      if (allowed.includes(label)) indices.push(i)
+    })
+
+    return {
+      labels: indices.map(i => chartData.labels[i]),
+      datasets: chartData.datasets.map(ds => ({
+        ...ds,
+        data: indices.map(i => ds.data[i])
+      }))
+    }
+  }
+
+  const filteredCategoryBySex = computed(() => filterChartData(dashboardCharts.value.categoryBySex))
+  const filteredCategoryByRegion = computed(() => filterChartData(dashboardCharts.value.categoryByRegion))
+  const filteredCategoryByAgeGroup = computed(() => filterChartData(dashboardCharts.value.categoryByAgeGroup))
+  const filteredCategoryByDistrict = computed(() => filterChartData(dashboardCharts.value.categoryByDistrict))
 
   // Helper Functions
   const formatNumber = (num) => {
@@ -801,7 +891,8 @@
   }
 
   const getBrandColor = (index) => {
-    const palette = ['#0087CF', '#006837', '#F7941E', '#9DC83E', '#ED1C24', '#0F172A']
+    const palette = ['#0087CF', '#006837', '#F7941E', '#9DC83E', '#ED1C24', '#0F172A',
+                     '#6366F1', '#EC4899', '#14B8A6', '#F59E0B', '#8B5CF6', '#EF4444']
     return palette[index % palette.length]
   }
 
@@ -840,10 +931,10 @@
       const chartsResponse = await api.get('/dashboard/helpline-charts/')
       if (chartsResponse.data) {
         dashboardCharts.value = {
-          subcategoryBySex: mapChartData(chartsResponse.data.subcategoryBySex),
-          subcategoryByAge: mapChartData(chartsResponse.data.subcategoryByAge),
-          subcategoryByRegion: mapChartData(chartsResponse.data.subcategoryByRegion),
-          subcategoryByDistrict: mapChartData(chartsResponse.data.subcategoryByDistrict)
+          categoryBySex: mapChartData(chartsResponse.data.categoryBySex),
+          categoryByRegion: mapChartData(chartsResponse.data.categoryByRegion),
+          categoryByAgeGroup: mapChartData(chartsResponse.data.categoryByAgeGroup),
+          categoryByDistrict: mapChartData(chartsResponse.data.categoryByDistrict)
         }
         
         console.log('✅ Successfully loaded helpline charts')

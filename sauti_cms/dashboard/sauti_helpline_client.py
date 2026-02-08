@@ -161,34 +161,20 @@ class SautiHelplineClient:
         
         return self.authenticate()
 
-    def fetch_case_statistics(self) -> Optional[Dict[str, Any]]:
-        """Fetch case statistics"""
-        cache_key = 'sauti_helpline_stats'
-        cached_data = cache.get(cache_key)
-        if cached_data:
-            logger.info("✓ Returning cached statistics")
-            return cached_data
-
-        # Ensure we're authenticated
-        if not self._ensure_authenticated():
-            logger.error("✗ Failed to authenticate, cannot fetch statistics")
-            return None
-
+    def _fetch_report(self, xaxis: str, title: str = 'all_cases') -> Optional[Dict]:
+        """Shared helper to query /api/cases/ report endpoint"""
+        params = {
+            '_title': title,
+            'metrics': 'case_count',
+            'type': 'bar',
+            'stacked': 'stacked',
+            'xaxis': xaxis,
+            'yaxis': '-',
+            'rpt': 'case_count',
+        }
         try:
-            dash_url = f"{self.BASE_URL}/api/dash/"
-            params = {
-                'dash_period': 'all',
-                'dash_gbv': 'both',
-                'dash_src': 'all'
-            }
-
-            logger.info("=" * 60)
-            logger.info("FETCHING CASE STATISTICS")
-            logger.info("=" * 60)
-            logger.info(f"→ URL: {dash_url}")
-            
             response = self.session.get(
-                dash_url,
+                f"{self.BASE_URL}/api/cases/",
                 params=params,
                 timeout=20,
                 headers={
@@ -196,66 +182,181 @@ class SautiHelplineClient:
                     'X-Requested-With': 'XMLHttpRequest',
                 }
             )
-            
-            logger.info(f"→ Response Status: {response.status_code}")
-
-            if response.status_code == 401:
-                # Session expired mid-request, re-authenticate
-                logger.warning("Session expired during request, re-authenticating...")
+            if response.status_code == 200:
+                return response.json()
+            elif response.status_code == 401:
+                logger.warning("Session expired during report fetch, re-authenticating...")
                 cache.delete(self.SESSION_CACHE_KEY)
                 self.authenticated = False
-                
                 if self.authenticate():
-                    # Retry the request
-                    response = self.session.get(dash_url, params=params, timeout=20)
-                    logger.info(f"→ Retry Response: {response.status_code}")
-                else:
-                    return None
+                    response = self.session.get(
+                        f"{self.BASE_URL}/api/cases/",
+                        params=params,
+                        timeout=20,
+                        headers={
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    )
+                    if response.status_code == 200:
+                        return response.json()
+            logger.error(f"Report fetch failed for xaxis={xaxis}: status {response.status_code}")
+        except Exception as e:
+            logger.error(f"Error fetching report xaxis={xaxis}: {e}")
+        return None
 
-            if response.status_code == 200:
-                data = response.json()
-                case_source = data.get('case_source', {})
+    def _transform_crosstab(self, raw_cases: list, top_n: int = 15) -> Dict[str, Any]:
+        """Transform [[category, ^dimension, count], ...] into Chart.js stacked bar format"""
+        from collections import OrderedDict
 
-                if not case_source:
-                    logger.warning("⚠ No case_source in response")
-                    return None
+        # 1. Group by category, collecting {dimension: count}
+        cat_data = {}  # {category: {dimension: count}}
+        cat_totals = {}  # {category: total}
+        all_dimensions = set()
 
-                total_entry = case_source.get('total', [])
-                call_entry = case_source.get('call', [])
-                walkin_entry = case_source.get('walkin', [])
+        for row in raw_cases:
+            if not isinstance(row, list) or len(row) < 3:
+                continue
+            cat = str(row[0]).strip()
+            dim = str(row[1]).strip()
+            try:
+                count = int(float(row[2]))
+            except (ValueError, TypeError):
+                continue
 
-                total_cases = self._parse_case_count(total_entry)
-                total_calls = self._parse_case_count(call_entry)
-                total_walkin = self._parse_case_count(walkin_entry)
+            if not cat:
+                continue
 
-                logger.info("=" * 60)
-                logger.info("✓ SUCCESS!")
-                logger.info("=" * 60)
-                logger.info(f"✓ Total Cases: {total_cases}")
-                logger.info(f"✓ Total Calls: {total_calls}")
-                logger.info(f"✓ Total Walk-ins: {total_walkin}")
-                logger.info("=" * 60)
+            # Strip ^ prefix from dimension labels
+            dim = dim.lstrip('^') if dim else 'Unknown'
+            if not dim:
+                dim = 'Unknown'
 
-                if total_cases > 0:
-                    stats = {
-                        'total_calls': total_calls,
-                        'total_cases': total_cases,
-                        'total_walkins': total_walkin,
-                        'total_gbv_cases': int(total_cases * 0.31),
-                        'total_sea_cases': int(total_cases * 0.14),
-                        'total_migrant_workers': int(total_cases * 0.06),
-                        'data_source': 'live_dash_api',
-                        'api_endpoint': f'{self.BASE_URL}/api/dash/'
-                    }
+            all_dimensions.add(dim)
+            if cat not in cat_data:
+                cat_data[cat] = {}
+                cat_totals[cat] = 0
+            cat_data[cat][dim] = cat_data[cat].get(dim, 0) + count
+            cat_totals[cat] += count
 
-                    cache.set(cache_key, stats, self.CACHE_TIMEOUT)
-                    return stats
+        # 2. Sort categories by total descending, take top_n
+        sorted_cats = sorted(cat_totals.items(), key=lambda x: x[1], reverse=True)[:top_n]
+        labels = [cat for cat, _ in sorted_cats]
 
-            logger.error(f"✗ Unexpected response: {response.status_code}")
+        # 3. Sort dimensions by overall total descending
+        dim_totals = {}
+        for cat in labels:
+            for dim, count in cat_data[cat].items():
+                dim_totals[dim] = dim_totals.get(dim, 0) + count
+        sorted_dims = sorted(dim_totals.items(), key=lambda x: x[1], reverse=True)
+        dimensions = [d for d, _ in sorted_dims]
+
+        # 4. Build datasets (one per dimension)
+        datasets = []
+        for dim in dimensions:
+            data = [cat_data[cat].get(dim, 0) for cat in labels]
+            datasets.append({'label': dim, 'data': data})
+
+        return {'labels': labels, 'datasets': datasets}
+
+    def fetch_case_statistics(self) -> Optional[Dict[str, Any]]:
+        """Fetch real case statistics from report endpoints"""
+        cache_key = 'sauti_helpline_stats'
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            logger.info("Returning cached statistics")
+            return cached_data
+
+        if not self._ensure_authenticated():
+            logger.error("Failed to authenticate, cannot fetch statistics")
             return None
 
+        try:
+            logger.info("FETCHING CASE STATISTICS (real data)")
+
+            # 1. Total calls from /api/calls/ (calls_ctx lives here, NOT /api/dash/)
+            total_calls = 0
+            calls_url = f"{self.BASE_URL}/api/calls/"
+            calls_response = self.session.get(
+                calls_url, timeout=20,
+                headers={'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
+            )
+            if calls_response.status_code == 200:
+                calls_data = calls_response.json()
+                calls_ctx = calls_data.get('calls_ctx', [])
+                if calls_ctx and len(calls_ctx[0]) > 4:
+                    try:
+                        total_calls = int(calls_ctx[0][4])
+                    except (ValueError, TypeError, IndexError):
+                        total_calls = 0
+
+            # 2. Total cases from /api/cases/?xaxis=status
+            total_cases = 0
+            status_data = self._fetch_report('status')
+            if status_data:
+                cases_ctx = status_data.get('cases_ctx', [])
+                if cases_ctx and len(cases_ctx[0]) > 4:
+                    try:
+                        total_cases = int(cases_ctx[0][4])
+                    except (ValueError, TypeError, IndexError):
+                        total_cases = 0
+
+            # 3. GBV cases from /api/cases/?xaxis=gbv_related (key="1")
+            total_gbv = 0
+            gbv_data = self._fetch_report('gbv_related')
+            if gbv_data:
+                for row in gbv_data.get('cases', []):
+                    if isinstance(row, list) and len(row) >= 2 and str(row[0]).strip() == '1':
+                        try:
+                            total_gbv = int(float(row[1]))
+                        except (ValueError, TypeError):
+                            pass
+                        break
+
+            # 4. SEA/PSEA cases from /api/cases/?xaxis=is_psea (key="1")
+            total_sea = 0
+            sea_data = self._fetch_report('is_psea')
+            if sea_data:
+                for row in sea_data.get('cases', []):
+                    if isinstance(row, list) and len(row) >= 2 and str(row[0]).strip() == '1':
+                        try:
+                            total_sea = int(float(row[1]))
+                        except (ValueError, TypeError):
+                            pass
+                        break
+
+            # 5. Migrant workers from /api/cases/?xaxis=reporter_nationality (non-Ugandan)
+            total_migrant = 0
+            nat_data = self._fetch_report('reporter_nationality')
+            if nat_data:
+                for row in nat_data.get('cases', []):
+                    if isinstance(row, list) and len(row) >= 2:
+                        label = str(row[0]).strip()
+                        # Skip empty labels and Ugandan
+                        if not label or label == '^Ugandan':
+                            continue
+                        try:
+                            total_migrant += int(float(row[1]))
+                        except (ValueError, TypeError):
+                            continue
+
+            logger.info(f"Stats: calls={total_calls}, cases={total_cases}, "
+                        f"gbv={total_gbv}, sea={total_sea}, migrant={total_migrant}")
+
+            stats = {
+                'total_calls': total_calls,
+                'total_cases': total_cases,
+                'total_gbv_cases': total_gbv,
+                'total_sea_cases': total_sea,
+                'total_migrant_workers': total_migrant,
+                'data_source': 'live_report_api',
+            }
+
+            cache.set(cache_key, stats, self.CACHE_TIMEOUT)
+            return stats
+
         except Exception as e:
-            logger.error(f"✗ Error: {e}", exc_info=True)
+            logger.error(f"Error fetching statistics: {e}", exc_info=True)
             return None
 
     def _parse_case_count(self, entry: list) -> int:
@@ -268,111 +369,45 @@ class SautiHelplineClient:
             return 0
 
     def fetch_chart_data(self) -> Optional[Dict[str, Any]]:
-        """Fetch chart data"""
+        """Fetch cross-tabulated chart data for 4 stacked bar charts"""
+        cache_key = 'sauti_helpline_charts'
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            logger.info("Returning cached chart data")
+            return cached_data
+
         if not self._ensure_authenticated():
-            logger.error("✗ Failed to authenticate, cannot fetch charts")
+            logger.error("Failed to authenticate, cannot fetch charts")
             return None
-        
-        logger.info("=" * 60)
-        logger.info("FETCHING CHART DATA")
-        logger.info("=" * 60)
-        
+
+        logger.info("FETCHING CHART DATA (cross-tabulated)")
+
         try:
-            base_params = {
-                'dash_period': 'all',
-                'dash_gbv': 'both',
-                'dash_src': 'all',
-                'type': 'bar',
-                'stacked': 'stacked',
-                'sortrpt': '1',
-                'rpt': 'case_count',
-                'metrics': 'case_count'
+            chart_configs = {
+                'categoryBySex': 'cat_1,clients^contact_sex',
+                'categoryByRegion': 'cat_1,clients^contact_location_0',
+                'categoryByAgeGroup': 'cat_1,clients^contact_age_group',
+                'categoryByDistrict': 'cat_1,clients^contact_location_1',
             }
 
-            cases_url = f"{self.BASE_URL}/api/cases/"
-            subcategory_params = {**base_params, 'xaxis': 'cat_2', 'yaxis': '-'}
-            
-            response = self.session.get(
-                cases_url,
-                params=subcategory_params,
-                timeout=20,
-                headers={
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            )
+            charts = {}
+            for key, xaxis in chart_configs.items():
+                report = self._fetch_report(xaxis)
+                if report and 'cases' in report:
+                    charts[key] = self._transform_crosstab(report['cases'])
+                    logger.info(f"Chart {key}: {len(charts[key]['labels'])} categories, "
+                                f"{len(charts[key]['datasets'])} dimensions")
+                else:
+                    logger.warning(f"No data for chart {key}")
+                    charts[key] = {'labels': [], 'datasets': []}
 
-            if response.status_code == 200:
-                subcategories = self._parse_cases_array(response.json().get('cases', []))
-                logger.info(f"✓ Found {len(subcategories)} subcategories")
-
-                if subcategories:
-                    charts = {
-                        'subcategoryBySex': self._build_chart_from_dash_data("Cases by Source"),
-                        'subcategoryByAge': self._build_top_n_chart(subcategories, 15, "Top 15 Subcategories"),
-                        'subcategoryByRegion': self._build_chart_from_static_data("Cases by Region"),
-                        'subcategoryByDistrict': self._build_top_n_chart(subcategories, 15, "Top 15 Subcategories")
-                    }
-                    logger.info("✓ Charts generated successfully")
-                    logger.info("=" * 60)
-                    return charts
+            cache.set(cache_key, charts, self.CACHE_TIMEOUT)
+            logger.info("Charts generated successfully")
+            return charts
 
         except Exception as e:
-            logger.error(f"✗ Error fetching charts: {e}")
-            logger.error("=" * 60)
-
-        return None
-
-    def _build_chart_from_dash_data(self, label: str) -> Dict[str, Any]:
-        """Build chart from dash data"""
-        try:
-            response = self.session.get(
-                f"{self.BASE_URL}/api/dash/",
-                params={'dash_period': 'all', 'dash_gbv': 'both', 'dash_src': 'all'},
-                timeout=20,
-                headers={'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
-            )
-            
-            if response.status_code == 200:
-                case_source = response.json().get('case_source', {})
-                labels = []
-                values = []
-
-                for key, entry in case_source.items():
-                    if key != 'total' and isinstance(entry, list) and len(entry) >= 2:
-                        labels.append(key.title())
-                        values.append(self._parse_case_count(entry))
-
-                return {'labels': labels, 'datasets': [{'label': label, 'data': values}]}
-        except:
-            pass
-
-        return {'labels': [], 'datasets': [{'label': label, 'data': []}]}
-
-    def _build_chart_from_static_data(self, label: str) -> Dict[str, Any]:
-        return {
-            'labels': ['Central', 'Eastern', 'Western', 'Northern'],
-            'datasets': [{'label': label, 'data': [19447, 9425, 6603, 3788]}]
-        }
-
-    def _parse_cases_array(self, cases: list) -> Dict[str, int]:
-        result = {}
-        for row in cases:
-            try:
-                if isinstance(row, list) and len(row) >= 2:
-                    label = str(row[0]).strip()
-                    if label:
-                        result[label] = int(float(row[1]))
-            except:
-                continue
-        return result
-
-    def _build_top_n_chart(self, data: Dict[str, int], top_n: int, label: str) -> Dict[str, Any]:
-        sorted_items = sorted(data.items(), key=lambda x: x[1], reverse=True)[:top_n]
-        return {
-            'labels': [item[0] for item in sorted_items],
-            'datasets': [{'label': label, 'data': [item[1] for item in sorted_items]}]
-        }
+            logger.error(f"Error fetching charts: {e}", exc_info=True)
+            return None
 
 _client_instance = None
 
