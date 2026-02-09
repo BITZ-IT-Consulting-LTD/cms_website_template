@@ -785,40 +785,7 @@ const getColorClasses = (color) => {
 // --- Fetching ---
 // --- Fetching ---
 onMounted(async () => {
-  // Fetch site content from CMS
-  await siteContent.fetchContent()
-
-  // Update resolution steps with CMS content
-  resolutionSteps.value = resolutionSteps.value.map((step, index) => {
-    const stepNum = index + 1
-    return {
-      ...step,
-      title: siteContent.getContent(`about_resolution_step_${stepNum}_title`, step.title),
-      subtitle: siteContent.getContent(`about_resolution_step_${stepNum}_subtitle`, step.subtitle),
-      description: siteContent.getContent(`about_resolution_step_${stepNum}_description`, step.description)
-    }
-  })
-
-  try {
-    await settingsStore.fetchGlobalSettings()
-  } catch (error) {
-    console.warn('Failed to fetch settings:', error)
-  }
-
-  // Fetch team members and core values
-  await fetchTeamMembers()
-  await fetchCoreValues()
-
-  // Custom fetches with fallback
-  try {
-    const timelineRes = await api.get('/content/timeline-events/')
-    timelineEvents.value = timelineRes.data.results || timelineRes.data || []
-  } catch (error) {
-    console.warn('Failed to fetch timeline events, using mock data:', error)
-    timelineEvents.value = [] // Reset to empty to trigger fallback below
-  }
-
-  // Start stats auto-scroll
+  // Start stats auto-scroll immediately (defaults render instantly)
   startAutoScroll()
 
   // Track scroll position for active dot
@@ -826,8 +793,32 @@ onMounted(async () => {
     statsSlider.value.addEventListener('scroll', updateActiveIndex, { passive: true })
   }
 
-  // Ensure timelineEvents has data (Mockup fallback)
-  if (!timelineEvents.value || timelineEvents.value.length === 0) {
+  // Fire ALL fetches in parallel instead of sequential waterfall
+  const [contentResult, , , , timelineResult] = await Promise.allSettled([
+    siteContent.fetchContent(),
+    settingsStore.fetchGlobalSettings(),
+    fetchTeamMembers(),
+    fetchCoreValues(),
+    api.get('/content/timeline-events/').then(res => res.data.results || res.data || [])
+  ])
+
+  // Update resolution steps with CMS content (only after content fetch resolves)
+  if (contentResult.status === 'fulfilled') {
+    resolutionSteps.value = resolutionSteps.value.map((step, index) => {
+      const stepNum = index + 1
+      return {
+        ...step,
+        title: siteContent.getContent(`about_resolution_step_${stepNum}_title`, step.title),
+        subtitle: siteContent.getContent(`about_resolution_step_${stepNum}_subtitle`, step.subtitle),
+        description: siteContent.getContent(`about_resolution_step_${stepNum}_description`, step.description)
+      }
+    })
+  }
+
+  // Handle timeline data with fallback
+  if (timelineResult.status === 'fulfilled' && timelineResult.value?.length) {
+    timelineEvents.value = timelineResult.value
+  } else {
     timelineEvents.value = [
       { id: 1, year: 2014, title: 'Inception', description: 'Sauti 116 was established as a toll-free helpline to bridge the gap between children in need and child protection services in Uganda.' },
       { id: 2, year: 2016, title: 'National Expansion', description: 'Partnered with the government to expand coverage nationwide, ensuring children from all districts could access safety.' },
