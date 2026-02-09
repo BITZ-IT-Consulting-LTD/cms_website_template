@@ -100,7 +100,7 @@
           </div>
         </div>
 
-        <div v-if="latestVideos.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div v-if="latestVideos.length > 0" class="grid gap-12" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));">
           <!-- Featured Post (Left) -->
           <router-link
             v-if="latestVideos[0]"
@@ -130,10 +130,10 @@
             </div>
           </router-link>
 
-          <!-- Side List (Right) -->
+          <!-- Side List (Right) - Maximum 3 items -->
           <div class="flex flex-col gap-8">
             <router-link
-              v-for="post in latestVideos.slice(1)"
+              v-for="post in latestVideos.slice(1, 4)"
               :key="post.id"
               :to="`/blogs/${post.slug}`"
               class="group cursor-pointer flex gap-6 items-start"
@@ -163,7 +163,7 @@
         </div>
         
         <!-- Empty State / Loading - Mock Data for Design Review -->
-        <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div v-else class="grid gap-12" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));">
            <!-- Featured Mock -->
            <div class="group cursor-pointer">
             <div class="rounded-3xl overflow-hidden aspect-[16/10] shadow-xl mb-6 bg-gray-200">
@@ -176,7 +176,7 @@
               <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">{{ siteContent.getContent('home_news_mock_featured_date', 'Jan 12, 2026') }}</p>
             </div>
           </div>
-           <!-- Side Mock -->
+           <!-- Side Mock - Maximum 3 items -->
            <div class="flex flex-col gap-8">
              <div class="flex gap-6 items-start group cursor-pointer">
                 <div class="shrink-0 w-32 h-32 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
@@ -350,7 +350,7 @@
     max-width: 100%;
     margin: 0;
     display: grid;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
     gap: 0;
     align-items: center;
     width: 100%;
@@ -362,8 +362,8 @@
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
-    padding-left: 12%;
-    padding-right: 3rem;
+    padding-left: clamp(1rem, 8vw, 12%);
+    padding-right: clamp(1rem, 3vw, 3rem);
     padding-top: 100px;
     padding-bottom: 6rem;
     z-index: 2;
@@ -378,19 +378,19 @@
   }
 
   .logo-sauti {
-    height: 180px;
+    height: clamp(100px, 15vw, 180px);
     width: auto;
     object-fit: contain;
   }
 
   .logo-divider {
     width: 3px;
-    height: 140px;
+    height: clamp(80px, 12vw, 140px);
     background: #1a1a1a;
   }
 
   .logo-uganda {
-    height: 160px;
+    height: clamp(80px, 13vw, 160px);
     width: auto;
     object-fit: contain;
   }

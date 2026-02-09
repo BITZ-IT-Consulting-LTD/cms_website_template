@@ -30,7 +30,29 @@ class ProtectionApproachSerializer(serializers.ModelSerializer):
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False, allow_null=True)
+    image_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = TeamMember
         fields = '__all__'
-        read_only_fields = ('created_at', 'updated_at')
+        read_only_fields = ('created_at', 'updated_at', 'image_url')
+    
+    def get_image_url(self, obj):
+        """Return full URL for image field, Docker-proxy-aware"""
+        if obj.image:
+            try:
+                image_url = obj.image.url
+            except (ValueError, AttributeError):
+                return None
+
+            request = self.context.get('request')
+            if request:
+                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
+                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
+                if host == 'backend':
+                    host = 'localhost:8080'
+                    scheme = 'http'
+                return f"{scheme}://{host}{image_url}"
+            return f"http://localhost:8080{image_url}" if image_url else None
+        return None

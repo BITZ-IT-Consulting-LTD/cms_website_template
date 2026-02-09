@@ -38,9 +38,16 @@ export default defineConfig(({ mode }) => {
             target: proxyTarget || 'http://127.0.0.1:8000',
             changeOrigin: true,
             secure: false,
-            // No rewrite needed when proxying through nginx - nginx handles the /api/ prefix removal
-            // When proxying directly to backend, uncomment the rewrite below:
-            // rewrite: (path) => path.replace(/^\/api/, ''),
+          },
+          '/sauti/media': {
+            target: proxyTarget || 'http://127.0.0.1:8000',
+            changeOrigin: true,
+            secure: false,
+          },
+          '/sauti/static': {
+            target: proxyTarget || 'http://127.0.0.1:8000',
+            changeOrigin: true,
+            secure: false,
           },
         },
       }

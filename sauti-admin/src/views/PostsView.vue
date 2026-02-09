@@ -330,28 +330,42 @@
 
   const duplicatePost = async (post) => {
     try {
+      // Need to fetch full post details first since list view may not include full content
+      const fullPost = await postsStore.fetchPost(post.slug || post.id)
+
       // Extract only the fields needed for creating a new post
       // Exclude read-only fields like id, created_at, updated_at, etc.
       const duplicateData = {
-        title: `${post.title} (Copy)`,
-        slug: `${post.slug}-copy-${Date.now()}`,
+        title: `${fullPost.title} (Copy)`,
+        slug: `${fullPost.slug}-copy-${Date.now()}`,
+        post_type: fullPost.post_type, // Required: NEWS or BLOG
         status: 'DRAFT',
-        content: post.content,
-        excerpt: post.excerpt,
-        featured_image: post.featured_image,
-        category: post.category,
-        tags: post.tags,
+        content: fullPost.content || '', // Ensure content is never null
+        excerpt: fullPost.excerpt || '', // Ensure excerpt is never null
+        // Category needs to be ID not object
+        category: fullPost.category?.id || fullPost.category,
+        // Tags need to be array of IDs not objects
+        tags: Array.isArray(fullPost.tags) ? fullPost.tags.map(t => t.id || t) : [],
         is_featured: false, // Don't duplicate featured status
-        allow_comments: post.allow_comments,
-        meta_title: post.meta_title,
-        meta_description: post.meta_description,
-        meta_keywords: post.meta_keywords
+        language: fullPost.language || 'en'
       }
 
+      // Remove undefined/null values
+      Object.keys(duplicateData).forEach(key => {
+        if (duplicateData[key] === undefined || duplicateData[key] === null) {
+          delete duplicateData[key]
+        }
+      })
+
+      // Don't include featured_image field at all (will use default or blank)
+      delete duplicateData.featured_image
+
+      console.log('Duplicate data being sent:', duplicateData)
       await postsStore.createPost(duplicateData)
-      toast.success(`"${post.title}" duplicated successfully`)
+      toast.success(`"${fullPost.title}" duplicated successfully`)
     } catch (err) {
       console.error('Duplicate error:', err)
+      console.error('Duplicate error response:', err.response?.data)
       toast.error('Failed to duplicate post')
     }
   }

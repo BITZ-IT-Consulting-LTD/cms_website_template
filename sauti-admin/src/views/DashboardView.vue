@@ -25,7 +25,7 @@
     </div>
 
     <!-- Enhanced Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), min(280px, 1fr)));">
       <div class="stats-card group">
         <div class="flex items-center justify-between mb-4">
           <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(220, 38, 38, 0.15);">
@@ -88,34 +88,34 @@
         
       <div class="card-body">
         <!-- Enhanced Quick Actions -->
-        <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+        <div class="grid gap-3 mb-6" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), min(200px, 1fr)));">
           <router-link
             to="/posts/create"
-            class="btn-primary flex items-center gap-2 flex-1 min-w-[140px]"
+            class="btn-primary flex items-center justify-center gap-2"
           >
             <DocumentTextIcon class="h-5 w-5" />
             New Blog Post
           </router-link>
-          
+
           <router-link
             to="/videos/create"
-            class="btn-secondary flex items-center gap-2 flex-1 min-w-[140px]"
+            class="btn-secondary flex items-center justify-center gap-2"
           >
             <VideoCameraIcon class="h-5 w-5" />
             New Video
           </router-link>
-          
+
           <router-link
             to="/resources?create=true"
-            class="btn-outline flex items-center gap-2 flex-1 min-w-[140px]"
+            class="btn-outline flex items-center justify-center gap-2"
           >
             <FolderOpenIcon class="h-5 w-5" />
             New Resource
           </router-link>
-          
+
           <router-link
             to="/faqs?create=true"
-            class="btn-outline flex items-center gap-2 flex-1 min-w-[140px]"
+            class="btn-outline flex items-center justify-center gap-2"
           >
             <QuestionMarkCircleIcon class="h-5 w-5" />
             New FAQ
@@ -129,7 +129,7 @@
               <label class="form-label">Content Type</label>
               <select
                 v-model="filters.contentType"
-                class="form-select w-48"
+                class="form-select w-full max-w-[12rem]"
               >
                 <option value="">All Content</option>
                 <option value="blog">Blogs</option>
@@ -143,7 +143,7 @@
               <label class="form-label">Status</label>
               <select
                 v-model="filters.status"
-                class="form-select w-48"
+                class="form-select w-full max-w-[12rem]"
               >
                 <option value="">All Statuses</option>
                 <option value="published">Published</option>
@@ -159,7 +159,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search content..."
-                class="form-input w-full lg:w-80 pl-10"
+                class="form-input w-full max-w-[20rem] pl-10"
               />
               <MagnifyingGlassIcon class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             </div>

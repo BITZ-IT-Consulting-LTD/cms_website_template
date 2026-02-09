@@ -3,7 +3,7 @@
     class="absolute top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300">
     <!-- Skip link handled in App.vue for better first-element accessibility -->
     <nav class="w-full px-8 lg:px-12" aria-label="Main Navigation">
-      <div class="flex items-center justify-between h-[80px]">
+      <div class="flex items-center justify-between" style="height: clamp(60px, 5vw + 40px, 80px);">
         <!-- Logo - Text Only at Extreme Left -->
         <router-link to="/" class="flex items-center group no-underline shrink-0">
           <h1 class="text-2xl tracking-tight text-neutral-black group-hover:text-primary transition-colors duration-300 m-0 font-bold" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
@@ -72,7 +72,7 @@
       enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-200 ease-in"
       leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-4">
       <div v-if="mobileMenuOpen"
-        class="lg:hidden absolute inset-x-0 top-full h-[calc(100vh-80px)] bg-white/98 backdrop-blur-3xl border-t border-gray-100 shadow-2xl overflow-y-auto">
+        class="lg:hidden absolute inset-x-0 top-full bg-white/98 backdrop-blur-3xl border-t border-gray-100 shadow-2xl overflow-y-auto" style="height: calc(100vh - clamp(60px, 5vw + 40px, 80px));">
           <div class="grid gap-2 mb-2 border-b border-gray-100 pb-2">
             <!-- Call Link -->
             <a :href="`tel:${settings.hotline_number || '116'}`" 

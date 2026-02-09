@@ -91,6 +91,10 @@
               <PencilIcon class="h-4 w-4 mr-1" />
               Edit
             </button>
+            <button @click="duplicateResource(resource)" class="btn-outline text-sm flex items-center justify-center px-3"
+              title="Duplicate resource">
+              <DocumentDuplicateIcon class="h-4 w-4" />
+            </button>
             <button @click="deleteResource(resource)" class="btn-danger text-sm flex items-center justify-center px-3"
               title="Delete resource">
               <TrashIcon class="h-4 w-4" />
@@ -259,6 +263,7 @@
     EyeIcon,
     PencilIcon,
     TrashIcon,
+    DocumentDuplicateIcon,
     FolderIcon,
     DocumentTextIcon,
     PhotoIcon,
@@ -485,6 +490,25 @@
         console.error('Delete error:', error)
         toast.error('Failed to delete resource')
       }
+    }
+  }
+
+  const duplicateResource = async (resource) => {
+    try {
+      const duplicateData = {
+        title: `${resource.title} (Copy)`,
+        description: resource.description || '',
+        category: resource.category?.id || '',
+        language: resource.language || 'en',
+        status: 'DRAFT'
+      }
+
+      await resourcesStore.createResource(duplicateData)
+      toast.success(`"${resource.title}" duplicated successfully`)
+      await fetchResources()
+    } catch (err) {
+      console.error('Duplicate error:', err)
+      toast.error('Failed to duplicate resource')
     }
   }
 

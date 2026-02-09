@@ -89,7 +89,7 @@ class AboutPageSettingsAdmin(BaseSettingsAdmin):
 class OrganizationProfileAdmin(BaseSettingsAdmin):
     fieldsets = (
         ('Basic Identity', {
-            'fields': ('name', 'tagline', 'logo', 'favicon')
+            'fields': ('name', 'tagline', 'logo', 'favicon', 'team_photo')
         }),
         ('Branding / Colors', {
             'fields': ('primary_color', 'secondary_color', 'accent_color')

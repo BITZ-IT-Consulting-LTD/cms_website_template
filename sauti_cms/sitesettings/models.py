@@ -199,6 +199,7 @@ class OrganizationProfile(models.Model):
     tagline = models.CharField(max_length=255, blank=True)
     logo = models.ImageField(upload_to='org/identity/', blank=True, null=True)
     favicon = models.ImageField(upload_to='org/identity/', blank=True, null=True)
+    team_photo = models.ImageField(upload_to='org/identity/', blank=True, null=True, help_text="A group photo of the organization team.")
     
     # Branding / Colors (Hex codes)
     primary_color = models.CharField(max_length=7, default="#007BBF", help_text="Primary brand color (Hex code, e.g., #007BBF)")

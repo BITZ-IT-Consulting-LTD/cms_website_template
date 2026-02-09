@@ -2,7 +2,8 @@
   <div class="flex h-screen bg-white">
     <!-- Enhanced Sidebar -->
     <div
-      class="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200"
+      class="fixed inset-y-0 left-0 z-50 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200"
+      style="width: min(288px, 80vw);"
       :class="{ '-translate-x-full': !sidebarOpen }">
       <div class="flex flex-col h-full">
         <!-- Enhanced Logo -->

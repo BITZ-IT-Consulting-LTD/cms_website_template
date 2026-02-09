@@ -13,6 +13,15 @@
   max-width: 100%;
 }
 
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 :root {
   /* ============================================
      SAUTI 116 CENTRALIZED COLOR SYSTEM
@@ -87,8 +96,8 @@
     background-repeat: no-repeat;
     @apply antialiased transition-colors duration-200;
     font-family: var(--font-cronos);
-    font-size: 14.67px;
-    /* 11pt base size */
+    font-size: clamp(0.875rem, 0.8125rem + 0.3125vw, 1rem);
+    /* Fluid base: 14px at 320px viewport, 16px at 1920px */
     overflow-x: hidden;
     max-width: 100vw;
   }
@@ -105,27 +114,32 @@
     max-width: 100vw;
   }
 
-  /* Softer Typography Hierarchy - Brand Balanced */
+  /* Fluid Typography Hierarchy - scales smoothly with viewport */
   h1 {
-    @apply text-3xl md:text-6xl font-bold leading-tight tracking-tight text-secondary;
+    font-size: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+    @apply font-bold leading-tight tracking-tight text-secondary;
   }
 
   h2 {
-    @apply text-2xl md:text-5xl font-bold leading-tight text-secondary;
+    font-size: clamp(1.75rem, 1.375rem + 1.875vw, 3rem);
+    @apply font-bold leading-tight text-secondary;
   }
 
   h3 {
-    @apply text-xl md:text-3xl font-semibold leading-snug text-secondary;
+    font-size: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+    @apply font-semibold leading-snug text-secondary;
   }
 
   h4,
   h5,
   h6 {
-    @apply text-lg font-semibold leading-snug text-secondary;
+    font-size: clamp(1.125rem, 1rem + 0.625vw, 1.5rem);
+    @apply font-semibold leading-snug text-secondary;
   }
 
   p {
-    @apply text-sm md:text-lg leading-relaxed mb-4 font-normal text-black;
+    font-size: clamp(0.875rem, 0.8125rem + 0.3125vw, 1.125rem);
+    @apply leading-relaxed mb-4 font-normal text-black;
   }
 }
 
@@ -214,17 +228,20 @@
   }
 
   .card-base {
-    @apply bg-neutral-white rounded-[2rem] p-4 md:p-12 shadow-sm hover:shadow-xl transition-all duration-500;
+    @apply bg-neutral-white rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500;
+    padding: clamp(1rem, 2vw, 3rem);
     max-width: 100%;
     box-sizing: border-box;
   }
 
   .section-padding {
-    @apply py-8 md:py-40;
+    padding-top: clamp(2rem, 5vw, 10rem);
+    padding-bottom: clamp(2rem, 5vw, 10rem);
   }
 
   .page-header {
-    @apply py-8 md:py-32;
+    padding-top: clamp(2rem, 4vw, 8rem);
+    padding-bottom: clamp(2rem, 4vw, 8rem);
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
   }
@@ -235,7 +252,8 @@
   }
 
   .page-header-subtitle {
-    @apply text-xl md:text-2xl text-black max-w-2xl font-normal leading-relaxed;
+    font-size: clamp(1.25rem, 1.125rem + 0.625vw, 1.5rem);
+    @apply text-black max-w-2xl font-normal leading-relaxed;
   }
 
   .form-group {

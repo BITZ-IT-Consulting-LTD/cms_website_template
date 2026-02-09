@@ -23,7 +23,7 @@
       <div v-for="member in teamMembers" :key="member.id"
         class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-xl transition-all">
         <div class="aspect-[4/5] relative overflow-hidden bg-gray-100">
-          <img v-if="member.image" :src="member.image" :alt="member.name"
+          <img v-if="member.image_url || member.image" :src="member.image_url || member.image" :alt="member.name"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
           <div v-else class="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
             <UserIcon class="w-20 h-20" />
@@ -222,7 +222,7 @@
   const editMember = (member) => {
     editingMember.value = member
     imageFile.value = null
-    imagePreview.value = member.image
+    imagePreview.value = member.image_url || member.image
     form.value = { ...member }
     showModal.value = true
   }

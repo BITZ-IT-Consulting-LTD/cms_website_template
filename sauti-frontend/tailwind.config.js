@@ -42,6 +42,16 @@ export default {
            - Subtle backgrounds: primary/5, secondary/5
            ============================================ */
       },
+      fontSize: {
+        'fluid-xs': 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',
+        'fluid-sm': 'clamp(0.875rem, 0.8125rem + 0.3125vw, 1rem)',
+        'fluid-base': 'clamp(1rem, 0.9375rem + 0.3125vw, 1.125rem)',
+        'fluid-lg': 'clamp(1.125rem, 1rem + 0.625vw, 1.5rem)',
+        'fluid-xl': 'clamp(1.25rem, 1.125rem + 0.625vw, 1.75rem)',
+        'fluid-2xl': 'clamp(1.5rem, 1.25rem + 1.25vw, 2rem)',
+        'fluid-3xl': 'clamp(1.75rem, 1.375rem + 1.875vw, 3rem)',
+        'fluid-4xl': 'clamp(2rem, 1.5rem + 2.5vw, 4rem)',
+      },
       fontFamily: {
         // Cronos Pro - Official Brand Typography (11pt base)
         sans: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],

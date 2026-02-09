@@ -230,10 +230,10 @@ class HelplineChartsView(APIView):
         
         if charts is None:
             return Response({
-                'subcategoryBySex': {'labels': [], 'datasets': []},
-                'subcategoryByAge': {'labels': [], 'datasets': []},
-                'subcategoryByRegion': {'labels': [], 'datasets': []},
-                'subcategoryByDistrict': {'labels': [], 'datasets': []},
+                'categoryBySex': {'labels': [], 'datasets': []},
+                'categoryByRegion': {'labels': [], 'datasets': []},
+                'categoryByAgeGroup': {'labels': [], 'datasets': []},
+                'categoryByDistrict': {'labels': [], 'datasets': []},
                 'error': 'Unable to fetch chart data at this time'
             }, status=503)
         
