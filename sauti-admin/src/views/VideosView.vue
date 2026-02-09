@@ -100,6 +100,9 @@
                     class="text-primary-600 hover:text-primary-900" title="Edit">
                     <PencilIcon class="h-4 w-4" />
                   </router-link>
+                  <button @click="duplicateVideo(video)" class="text-green-600 hover:text-green-900" title="Duplicate">
+                    <DocumentDuplicateIcon class="h-4 w-4" />
+                  </button>
                   <button @click="deleteVideo(video)" class="text-red-600 hover:text-red-900" title="Delete">
                     <TrashIcon class="h-4 w-4" />
                   </button>
@@ -133,7 +136,8 @@
     EyeIcon,
     MagnifyingGlassIcon,
     PencilIcon,
-    TrashIcon
+    TrashIcon,
+    DocumentDuplicateIcon
   } from '@heroicons/vue/24/outline'
 
   const toast = useToast()
@@ -240,15 +244,41 @@
   }
 
   const previewVideo = (video) => {
-    if (video.status === 'draft') {
+    if (video.status?.toUpperCase() === 'DRAFT') {
       toast.warning('Cannot preview draft content')
       return
     }
 
     if (video.youtube_url) {
       window.open(video.youtube_url, '_blank')
+    } else if (video.video_file) {
+      window.open(video.video_file, '_blank')
     } else {
       toast.info('No video URL available')
+    }
+  }
+
+  const duplicateVideo = async (video) => {
+    try {
+      // Fetch full video details first
+      const fullVideo = await videosStore.fetchVideo(video.slug || video.id)
+
+      const duplicateData = {
+        title: `${fullVideo.title} (Copy)`,
+        description: fullVideo.description || '',
+        video_type: fullVideo.video_type || 'YOUTUBE',
+        youtube_url: fullVideo.youtube_url || '',
+        category: fullVideo.category?.id || null,
+        status: 'DRAFT',
+        is_featured: false,
+      }
+
+      await videosStore.createVideo(duplicateData)
+      toast.success(`"${video.title}" duplicated successfully`)
+      await fetchVideos()
+    } catch (err) {
+      console.error('Duplicate error:', err)
+      toast.error('Failed to duplicate video')
     }
   }
 

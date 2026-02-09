@@ -126,7 +126,7 @@
           <AppLoader v-if="loading" :message="settingsStore.settings.resources_loading" />
 
           <!-- Resources Grid -->
-          <div v-else-if="filteredResources.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div v-else-if="filteredResources.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
             <article v-for="resource in filteredResources" :key="resource.id"
               class="group bg-neutral-white rounded-[3.5rem] border-2 border-neutral-offwhite transition-all duration-500 hover:shadow-2xl hover:border-primary/30 transform hover:-translate-y-2 overflow-hidden flex flex-col">
 
@@ -208,7 +208,7 @@
            </div>
            
            <!-- Quick Stats Cards -->
-           <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-16">
+           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-16">
              <!-- Total Calls -->
              <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                <p class="text-secondary/60 text-xs font-bold tracking-widest mb-2">

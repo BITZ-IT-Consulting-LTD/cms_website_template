@@ -26,7 +26,7 @@
             <!-- Center Grid (Background for Circle) -->
             <div class="grid grid-cols-2 grid-rows-2 gap-4 w-full h-full">
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img src="@/assets/sauti-aboutpage.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Team" />
+                 <img :src="settings.org_team_photo || '/assets/sauti-aboutpage.webp'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Team" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
                  <img src="@/assets/sauti_happy_students.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Happy Students" />
@@ -115,19 +115,46 @@
              </p>
           </div>
 
-         <!-- Statistics Grid -->
-         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5 md:gap-6 w-full lg:ml-auto lg:justify-items-stretch">
+         <!-- Statistics Slider -->
+         <div class="relative">
+            <!-- Fade edges -->
+            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#006633] to-transparent z-10 pointer-events-none rounded-l-2xl"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#006633] to-transparent z-10 pointer-events-none rounded-r-2xl"></div>
+
+            <!-- Scrollable track -->
             <div
-              v-for="(stat, index) in impactStats"
-              :key="`${stat.value}-${stat.label}-${index}`"
-              class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 text-center hover:bg-white/15 transition-all duration-300 border border-white/20"
+              ref="statsSlider"
+              class="flex gap-4 overflow-x-auto scroll-smooth pb-2 px-8 snap-x snap-mandatory hide-scrollbar cursor-grab active:cursor-grabbing justify-start md:justify-center"
+              @mousedown="startDrag"
+              @mousemove="onDrag"
+              @mouseup="stopDrag"
+              @mouseleave="stopDrag"
+              @touchstart.passive="onTouchStart"
+              @touchend.passive="onTouchEnd"
             >
-               <div class="stat-number text-3xl md:text-4xl font-black text-white mb-2 leading-tight">
-                  {{ stat.value }}
+               <div
+                 v-for="(stat, index) in impactStats"
+                 :key="`${stat.value}-${stat.label}-${index}`"
+                 class="flex-shrink-0 w-44 md:w-52 snap-center bg-white/10 backdrop-blur-sm rounded-2xl p-5 md:p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40 hover:scale-[1.03]"
+               >
+                  <div class="stat-number text-2xl md:text-3xl font-black text-white mb-1.5 leading-tight">
+                     {{ stat.value }}
+                  </div>
+                  <div class="text-white/70 text-[10px] md:text-xs font-bold tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+                     {{ stat.label }}
+                  </div>
                </div>
-               <div class="text-white/80 text-[10px] md:text-xs font-bold tracking-wider leading-tight" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-                  {{ stat.label }}
-               </div>
+            </div>
+
+            <!-- Dot indicators -->
+            <div class="flex justify-center gap-1.5 mt-5">
+               <button
+                 v-for="(stat, index) in impactStats"
+                 :key="'dot-'+index"
+                 @click="scrollToStat(index)"
+                 class="w-2 h-2 rounded-full transition-all duration-300"
+                 :class="activeStatIndex === index ? 'bg-white w-6' : 'bg-white/30 hover:bg-white/50'"
+               />
             </div>
          </div>
        </div>
@@ -295,12 +322,12 @@
         </div>
 
         <!-- Team Members Grid -->
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div v-for="member in teamMembers" :key="member.id" class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors bg-gray-100 flex items-center justify-center">
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          <div v-for="member in teamMembers" :key="member.id" class="group bg-white rounded-[2rem] p-6 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
+            <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-4 border-primary/10 group-hover:border-primary transition-colors bg-gray-100 flex items-center justify-center flex-shrink-0">
               <img
-                v-if="member.image"
-                :src="member.image"
+                v-if="member.image_url || member.image"
+                :src="member.image_url || member.image"
                 :alt="member.name"
                 class="w-full h-full object-cover"
                 @error="handleImageError($event, member)"
@@ -310,7 +337,7 @@
             </div>
             <h3 class="text-xl font-bold text-secondary mb-1">{{ member.name }}</h3>
             <p class="text-primary font-bold text-xs tracking-widest mb-4">{{ member.role }}</p>
-            <p class="text-gray-600 text-sm leading-relaxed">{{ member.bio || 'Dedicated to the mission of Sauti 116.' }}</p>
+            <p class="text-gray-600 text-sm leading-relaxed line-clamp-4">{{ member.bio || 'Dedicated to the mission of Sauti 116.' }}</p>
           </div>
         </div>
       </div>
@@ -349,7 +376,7 @@
           </div>
 
           <!-- Core Values Grid -->
-          <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div v-else class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), min(300px, 1fr)));">
             <div
               v-for="value in coreValues"
               :key="value.id"
@@ -378,7 +405,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import { useSiteContent } from '@/composables/useSiteContent'
 
@@ -461,6 +488,86 @@ const impactStats = computed(() => {
 })
 
 
+// --- Stats Slider ---
+const statsSlider = ref(null)
+const activeStatIndex = ref(0)
+let isDragging = false
+let dragStartX = 0
+let scrollStartX = 0
+let autoScrollTimer = null
+
+const startDrag = (e) => {
+  isDragging = true
+  dragStartX = e.pageX
+  scrollStartX = statsSlider.value.scrollLeft
+  stopAutoScroll()
+}
+
+const onDrag = (e) => {
+  if (!isDragging) return
+  e.preventDefault()
+  const dx = e.pageX - dragStartX
+  statsSlider.value.scrollLeft = scrollStartX - dx
+}
+
+const stopDrag = () => {
+  isDragging = false
+  updateActiveIndex()
+  startAutoScroll()
+}
+
+const onTouchStart = () => {
+  stopAutoScroll()
+}
+
+const onTouchEnd = () => {
+  updateActiveIndex()
+  startAutoScroll()
+}
+
+const scrollToStat = (index) => {
+  if (!statsSlider.value) return
+  const cards = statsSlider.value.children
+  if (cards[index]) {
+    cards[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    activeStatIndex.value = index
+  }
+  stopAutoScroll()
+  startAutoScroll()
+}
+
+const updateActiveIndex = () => {
+  if (!statsSlider.value) return
+  const container = statsSlider.value
+  const center = container.scrollLeft + container.clientWidth / 2
+  const cards = container.children
+  let closest = 0
+  let minDist = Infinity
+  for (let i = 0; i < cards.length; i++) {
+    const cardCenter = cards[i].offsetLeft + cards[i].offsetWidth / 2
+    const dist = Math.abs(cardCenter - center)
+    if (dist < minDist) {
+      minDist = dist
+      closest = i
+    }
+  }
+  activeStatIndex.value = closest
+}
+
+const startAutoScroll = () => {
+  stopAutoScroll()
+  autoScrollTimer = setInterval(() => {
+    const next = (activeStatIndex.value + 1) % impactStats.value.length
+    scrollToStat(next)
+  }, 3000)
+}
+
+const stopAutoScroll = () => {
+  if (autoScrollTimer) {
+    clearInterval(autoScrollTimer)
+    autoScrollTimer = null
+  }
+}
 
 // --- Mock Data for Layout ---
 
@@ -711,6 +818,14 @@ onMounted(async () => {
     timelineEvents.value = [] // Reset to empty to trigger fallback below
   }
 
+  // Start stats auto-scroll
+  startAutoScroll()
+
+  // Track scroll position for active dot
+  if (statsSlider.value) {
+    statsSlider.value.addEventListener('scroll', updateActiveIndex, { passive: true })
+  }
+
   // Ensure timelineEvents has data (Mockup fallback)
   if (!timelineEvents.value || timelineEvents.value.length === 0) {
     timelineEvents.value = [
@@ -720,6 +835,13 @@ onMounted(async () => {
       { id: 4, year: 2021, title: 'Community Outreach', description: 'Initiated community-based child protection committees to strengthen safety networks at the village level.' },
       { id: 5, year: 2024, title: 'A Decade of Impact', description: 'Celebrating 10 years of service, having supported over 1 million children through counseling and rescue missions.' }
     ]
+  }
+})
+
+onUnmounted(() => {
+  stopAutoScroll()
+  if (statsSlider.value) {
+    statsSlider.value.removeEventListener('scroll', updateActiveIndex)
   }
 })
 

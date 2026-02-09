@@ -27,7 +27,7 @@
           <div class="flex items-center space-x-3">
             <div
               class="h-12 w-12 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden border border-gray-100">
-              <img v-if="partner.logo" :src="partner.logo" class="h-full w-full object-contain" :alt="partner.name" />
+              <img v-if="partner.logo_url || partner.logo" :src="partner.logo_url || partner.logo" class="h-full w-full object-contain" :alt="partner.name" />
               <UserGroupIcon v-else class="h-6 w-6 text-gray-400" />
             </div>
             <div>
@@ -45,6 +45,9 @@
             </button>
             <button @click="editPartner(partner)" class="text-primary-600 hover:text-primary-900 p-2" title="Edit">
               <PencilIcon class="h-4 w-4" />
+            </button>
+            <button @click="duplicatePartner(partner)" class="text-green-600 hover:text-green-900 p-2" title="Duplicate">
+              <DocumentDuplicateIcon class="h-4 w-4" />
             </button>
             <button @click="deletePartner(partner)" class="text-red-600 hover:text-red-900 p-2" title="Delete">
               <TrashIcon class="h-4 w-4" />
@@ -223,6 +226,70 @@
         </div>
       </div>
     </div>
+
+    <!-- View Partner Modal -->
+    <div v-if="showViewModal" class="fixed inset-0 z-50 overflow-y-auto">
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" @click="showViewModal = false">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-medium text-gray-900" style="font-family: 'Roboto', sans-serif;">Partner Details</h3>
+              <button @click="showViewModal = false" class="text-gray-400 hover:text-gray-600">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div v-if="viewedPartner" class="space-y-4">
+              <div class="flex items-center space-x-4">
+                <div class="h-16 w-16 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden border border-gray-100">
+                  <img v-if="viewedPartner.logo_url || viewedPartner.logo" :src="viewedPartner.logo_url || viewedPartner.logo" class="h-full w-full object-contain" :alt="viewedPartner.name" />
+                  <UserGroupIcon v-else class="h-8 w-8 text-gray-400" />
+                </div>
+                <div>
+                  <h4 class="text-xl font-semibold text-gray-900">{{ viewedPartner.name }}</h4>
+                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                    :class="viewedPartner.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'">
+                    {{ viewedPartner.is_active ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+              </div>
+
+              <div v-if="viewedPartner.description" class="text-sm text-gray-600">{{ viewedPartner.description }}</div>
+
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span class="font-medium text-gray-700">Type:</span>
+                  <span class="ml-1 text-gray-600">{{ viewedPartner.partner_type }}</span>
+                </div>
+                <div v-if="viewedPartner.website_url">
+                  <span class="font-medium text-gray-700">Website:</span>
+                  <a :href="viewedPartner.website_url" target="_blank" class="ml-1 text-blue-600 hover:text-blue-800">{{ viewedPartner.website_url }}</a>
+                </div>
+                <div v-if="viewedPartner.email">
+                  <span class="font-medium text-gray-700">Email:</span>
+                  <span class="ml-1 text-gray-600">{{ viewedPartner.email }}</span>
+                </div>
+                <div v-if="viewedPartner.phone">
+                  <span class="font-medium text-gray-700">Phone:</span>
+                  <span class="ml-1 text-gray-600">{{ viewedPartner.phone }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+              <button @click="showViewModal = false" class="btn-outline">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -243,7 +310,8 @@
     TrashIcon,
     GlobeAltIcon,
     EnvelopeIcon,
-    PhoneIcon
+    PhoneIcon,
+    DocumentDuplicateIcon
   } from '@heroicons/vue/24/outline'
 
   const toast = useToast()
@@ -286,6 +354,8 @@
 
   const showCreateModal = ref(false)
   const showEditModal = ref(false)
+  const showViewModal = ref(false)
+  const viewedPartner = ref(null)
   const editForm = ref({})
   const createLogoInput = ref(null)
   const editLogoInput = ref(null)
@@ -349,12 +419,34 @@
   }
 
   const viewPartner = (partner) => {
-    console.log('View partner:', partner)
-    toast.info('Partner details view coming soon')
+    viewedPartner.value = partner
+    showViewModal.value = true
+  }
+
+  const duplicatePartner = async (partner) => {
+    try {
+      const duplicateData = {
+        name: `${partner.name} (Copy)`,
+        description: partner.description || '',
+        partner_type: partner.partner_type || 'NGO',
+        website_url: partner.website_url || '',
+        email: partner.email || '',
+        phone: partner.phone || '',
+        is_active: false,
+        is_featured: false,
+      }
+
+      await partnersStore.createPartner(duplicateData)
+      toast.success(`"${partner.name}" duplicated successfully`)
+      await fetchPartners()
+    } catch (err) {
+      console.error('Duplicate error:', err)
+      toast.error('Failed to duplicate partner')
+    }
   }
 
   const editPartner = (partner) => {
-    editForm.value = { ...partner, logoFile: null, logoPreview: partner.logo || null } // Reset logoFile and set logoPreview
+    editForm.value = { ...partner, logoFile: null, logoPreview: partner.logo_url || partner.logo || null }
     showEditModal.value = true
   }
 
@@ -374,11 +466,12 @@
 
   const createPartner = async () => {
     try {
+      const excludeKeys = ['logoFile', 'logoPreview']
       const formData = new FormData()
       for (const key in createForm.value) {
         if (key === 'logoFile' && createForm.value[key]) {
           formData.append('logo', createForm.value[key])
-        } else if (key !== 'logoFile') {
+        } else if (!excludeKeys.includes(key) && createForm.value[key] != null) {
           formData.append(key, createForm.value[key])
         }
       }
@@ -405,11 +498,12 @@
 
   const updatePartner = async () => {
     try {
+      const excludeKeys = ['logoFile', 'logoPreview', 'logo', 'logo_url', 'created_at', 'updated_at', 'created_by', 'last_updated_by', 'history']
       const formData = new FormData()
       for (const key in editForm.value) {
         if (key === 'logoFile' && editForm.value[key]) {
           formData.append('logo', editForm.value[key])
-        } else if (key !== 'logoFile' && key !== 'logo') { // Exclude existing logo URL
+        } else if (!excludeKeys.includes(key) && editForm.value[key] != null && typeof editForm.value[key] !== 'object') {
           formData.append(key, editForm.value[key])
         }
       }

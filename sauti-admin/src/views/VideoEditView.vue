@@ -438,7 +438,18 @@ const handleVideoUpload = (event) => {
 }
 
 const previewVideo = () => {
-  toast.info('Video preview functionality coming soon')
+  if (!videoKey.value) {
+    toast.warning('Please save the video first to preview it')
+    return
+  }
+
+  if (videoForm.value.video_type === 'YOUTUBE' && videoForm.value.youtube_url) {
+    window.open(videoForm.value.youtube_url, '_blank')
+  } else if (videoPreview.value) {
+    window.open(videoPreview.value, '_blank')
+  } else {
+    toast.info('No video URL available for preview')
+  }
 }
 
 onBeforeUnmount(() => {

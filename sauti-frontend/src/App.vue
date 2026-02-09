@@ -84,10 +84,12 @@
     return styles
   })
 
-  onMounted(async () => {
-    // Add any global initialization logic here
+  onMounted(() => {
     console.log('Sauti Frontend Loaded')
-    await settingsStore.fetchGlobalSettings()
+    // Fire-and-forget: renders immediately with cached data, fetches fresh in background
+    settingsStore.fetchGlobalSettings().catch(err => {
+      console.error('Background settings fetch failed:', err)
+    })
   })
 </script>
 

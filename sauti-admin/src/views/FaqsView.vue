@@ -74,6 +74,65 @@
         :action-icon="PlusIcon" @action="showCreateModal = true" />
     </div>
 
+    <!-- FAQ Preview Modal -->
+    <div v-if="showPreviewModal && previewedFaq"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-900">FAQ Preview</h3>
+          <button @click="showPreviewModal = false" class="text-gray-400 hover:text-gray-600">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Status Badge -->
+          <div class="flex items-center space-x-2">
+            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" :class="{
+              'bg-green-100 text-green-800': previewedFaq.status === 'PUBLISHED',
+              'bg-yellow-100 text-yellow-800': previewedFaq.status === 'DRAFT'
+            }">
+              {{ previewedFaq.status === 'PUBLISHED' ? 'Published' : 'Draft' }}
+            </span>
+            <span v-if="previewedFaq.category?.name" class="text-sm text-gray-500">
+              {{ previewedFaq.category.name }}
+            </span>
+          </div>
+
+          <!-- Question -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p class="text-sm font-medium text-blue-600 mb-1">Question</p>
+            <p class="text-gray-900 font-semibold text-lg">{{ previewedFaq.question }}</p>
+          </div>
+
+          <!-- Answer -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <p class="text-sm font-medium text-gray-500 mb-1">Answer</p>
+            <p class="text-gray-800 whitespace-pre-wrap">{{ previewedFaq.answer }}</p>
+          </div>
+
+          <!-- Meta -->
+          <div class="flex items-center space-x-6 text-sm text-gray-500 pt-2 border-t">
+            <span class="flex items-center">
+              <EyeIcon class="h-4 w-4 mr-1" />
+              {{ formatNumber(previewedFaq.views_count || 0) }} views
+            </span>
+            <span class="flex items-center">
+              <HandThumbUpIcon class="h-4 w-4 mr-1" />
+              {{ formatNumber(previewedFaq.helpful_count || 0) }} helpful
+            </span>
+            <span>Updated: {{ formatDate(previewedFaq.updated_at || previewedFaq.created_at) }}</span>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button @click="showPreviewModal = false" class="btn-outline">Close</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Create/Edit FAQ Modal -->
     <div v-if="showCreateModal || showEditModal"
       class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -184,6 +243,8 @@
 
   const showCreateModal = ref(false)
   const showEditModal = ref(false)
+  const showPreviewModal = ref(false)
+  const previewedFaq = ref(null)
   const editForm = ref({})
 
   // Use store data
@@ -273,13 +334,8 @@
   }
 
   const previewFaq = (faq) => {
-    if (faq.status === 'DRAFT') {
-      toast.warning('Cannot preview draft content')
-      return
-    }
-
-    // For now, just show a message
-    toast.info('Preview functionality coming soon')
+    previewedFaq.value = faq
+    showPreviewModal.value = true
   }
 
   const editFaq = (faq) => {
