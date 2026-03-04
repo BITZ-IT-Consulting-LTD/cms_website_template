@@ -93,15 +93,23 @@
               <div class="pt-2 pb-1 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Editorial &
                 Media</div>
 
-              <router-link to="/posts" class="sidebar-link group" :class="{ active: $route.path.startsWith('/posts') }">
+              <router-link to="/posts" class="sidebar-link group" :class="{ active: $route.path === '/posts' || $route.path.startsWith('/posts/') }">
                 <DocumentTextIcon :class="[
                   'h-5 w-5 mr-3 transition-colors duration-300',
-                  $route.path.startsWith('/posts') ? 'text-white' : 'text-orange-500 group-hover:text-orange-600'
+                  ($route.path === '/posts' || $route.path.startsWith('/posts/')) ? 'text-white' : 'text-orange-500 group-hover:text-orange-600'
                 ]" />
                 <span class="flex-1">Blog Posts</span>
+              </router-link>
+
+              <router-link to="/drafts" class="sidebar-link group" :class="{ active: $route.path === '/drafts' }">
+                <PencilSquareIcon :class="[
+                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  $route.path === '/drafts' ? 'text-white' : 'text-amber-500 group-hover:text-amber-600'
+                ]" />
+                <span class="flex-1">Drafts</span>
                 <span v-if="draftCount > 0"
-                  class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700">
-                  {{ draftCount }} DRAFTS
+                  class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                  {{ draftCount }}
                 </span>
               </router-link>
 

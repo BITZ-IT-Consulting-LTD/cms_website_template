@@ -108,6 +108,40 @@ services:
     networks:
       - sauti_network
 
+  # Scheduler - Runs scheduled publishing every minute
+  scheduler:
+    build:
+      context: ./sauti_cms
+      dockerfile: Dockerfile
+    container_name: sauti_scheduler
+    volumes:
+      - ./sauti_cms:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=${DEBUG:-False}
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-this-in-production-use-env-file}
+      - DB_ENGINE=postgres
+      - DB_NAME=${DB_NAME:-sauti_cms}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    command: >
+      sh -c "while true; do
+        echo '[Scheduler] Running publish_scheduled at $$(date)';
+        python manage.py publish_scheduled;
+        sleep 60;
+      done"
+    restart: unless-stopped
+    networks:
+      - sauti_network
+
 volumes:
   postgres_data:
   static_volume:

@@ -28,6 +28,7 @@ const TeamAdmin = () => import('@/views/TeamAdmin.vue')
 const ProtectionApproachAdmin = () => import('@/views/ProtectionApproachAdmin.vue')
 const ContentHubView = () => import('@/views/ContentHubView.vue')
 const LegalFooterView = () => import('@/views/LegalFooterView.vue')
+const DraftsView = () => import('@/views/DraftsView.vue')
 
 
 const routes = [
@@ -81,6 +82,14 @@ const routes = [
         component: PostEditView,
         meta: {
           title: 'Edit Post - Sauti Admin'
+        }
+      },
+      {
+        path: 'drafts',
+        name: 'drafts',
+        component: DraftsView,
+        meta: {
+          title: 'Drafts - Sauti Admin'
         }
       },
       {
