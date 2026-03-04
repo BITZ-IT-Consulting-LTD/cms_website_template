@@ -1,0 +1,34 @@
+# /sauti-frontend/Dockerfile.prod
+
+# --- Build Stage ---
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+COPY sauti-frontend/package*.json ./
+RUN npm install --production=false
+
+ARG VITE_BASE_PATH
+COPY sauti-frontend/. .
+
+ENV VITE_BASE_PATH=${VITE_BASE_PATH}
+ENV NODE_ENV=production
+
+RUN npm run build
+
+# --- Production Stage ---
+FROM nginx:1.25-alpine
+
+# Copy the static assets from the build stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy the reusable Nginx template
+# The Docker Compose file will mount the specific config
+COPY docker/nginx/template.conf /etc/nginx/templates/default.conf.template
+
+# Expose Nginx port
+EXPOSE 80
+
+# When the container starts, substitute environment variables in the template
+# and start Nginx. This makes the config dynamic.
+CMD ["/bin/sh", "-c", "envsubst '$VITE_BASE_PATH' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]

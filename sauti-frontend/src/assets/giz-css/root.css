@@ -1,0 +1,143 @@
+/* Root CSS Variables - Scoped to Giz Chat Wrapper */
+.giz-chat-wrapper {
+    /* SAUTI Brand Colors */
+    --primary: #007BBF;
+    /* blue */
+    --secondary: #FF9933;
+    /* orange */
+    --accent: #ED1C24;
+    /* red */
+    --highlight: #FFF200;
+    /* yellow */
+    --neutral-light: #FFFFFF;
+    /* white */
+    --neutral-dark: #006633;
+    /* darkGreen */
+    --text-dark: #000000;
+    /* black */
+    --text-light: #FFFFFF;
+    /* white */
+
+    /* Backgrounds */
+    --bg-primary: var(--neutral-light);
+    --bg-secondary: #f0f0f0;
+    /* A light gray for secondary backgrounds, not in brand guide but needed for differentiation */
+
+    /* Buttons */
+    --btn-primary: var(--primary);
+    --btn-secondary: var(--secondary);
+
+    /* Typography */
+    --font-family: var(--font-cronos);
+    --heading-font-weight: 700;
+
+    /* Spacing */
+    --base-spacing: 16px;
+    --sm-spacing: 8px;
+    --md-spacing: 24px;
+    --lg-spacing: 32px;
+
+    /* Border Radius */
+    --base-radius: 8px;
+
+    /* Shadows */
+    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Universal Heading Styles - Scoped */
+.giz-chat-wrapper h1,
+.giz-chat-wrapper h2,
+.giz-chat-wrapper h3,
+.giz-chat-wrapper h4,
+.giz-chat-wrapper h5,
+.giz-chat-wrapper h6 {
+    font-weight: var(--heading-font-weight);
+    color: var(--primary);
+}
+
+/* Text Styling - Scoped */
+.giz-chat-wrapper p {
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.giz-chat-wrapper a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+.giz-chat-wrapper a:hover {
+    text-decoration: underline;
+}
+
+/* Button Styling - Scoped */
+.giz-chat-wrapper button {
+    background: var(--btn-primary);
+    color: var(--text-light);
+    padding: var(--sm-spacing) var(--md-spacing);
+    border: none;
+    cursor: pointer;
+    border-radius: var(--base-radius);
+    box-shadow: var(--shadow-light);
+    transition: background 0.3s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.giz-chat-wrapper button:hover {
+    background: var(--btn-secondary);
+    transform: scale(1.05);
+}
+
+.giz-chat-wrapper button:disabled {
+    background-color: var(--neutral-light);
+    cursor: not-allowed;
+}
+
+/* Form Elements - Scoped */
+.giz-chat-wrapper input,
+.giz-chat-wrapper textarea,
+.giz-chat-wrapper select {
+    background-color: var(--neutral-light);
+    color: var(--text-dark);
+    border: 1px solid var(--primary);
+    padding: var(--sm-spacing);
+    border-radius: var(--base-radius);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.giz-chat-wrapper input:focus,
+.giz-chat-wrapper textarea:focus,
+.giz-chat-wrapper select:focus {
+    border-color: var(--secondary);
+    outline: none;
+}
+
+/* Utility Classes - Scoped */
+.giz-chat-wrapper .hide {
+    display: none;
+}
+
+.giz-chat-wrapper .flex {
+    display: flex;
+    gap: var(--sm-spacing);
+}
+
+.giz-chat-wrapper .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.giz-chat-wrapper .grid {
+    display: grid;
+    gap: var(--sm-spacing);
+}
+
+.giz-chat-wrapper .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.giz-chat-wrapper .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}

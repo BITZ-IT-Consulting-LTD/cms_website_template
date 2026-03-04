@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__click",
+      "mcp__chrome-devtools__fill",
+      "mcp__chrome-devtools__handle_dialog",
+      "mcp__chrome-devtools__wait_for",
+      "mcp__chrome-devtools__new_page",
+      "mcp__chrome-devtools__select_page",
+      "mcp__chrome-devtools__list_console_messages",
+      "mcp__chrome-devtools__list_pages",
+      "Bash(docker exec:*)",
+      "Bash(curl:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(cat:*)",
+      "Bash(npm run dev)",
+      "Bash(docker compose -f docker-compose.dev.yml up -d backend scheduler)",
+      "Bash(timeout /t 5)",
+      "mcp__chrome-devtools__take_screenshot",
+      "Bash(docker restart:*)",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__emulate"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "chrome-devtools"
+  ]
+}

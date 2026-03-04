@@ -1,0 +1,13 @@
+
+> sauti-frontend@1.0.0 dev
+> vite
+
+Vite build mode: development
+Using base path: /
+Re-optimizing dependencies because lockfile has changed
+
+  VITE v5.4.21  ready in 20334 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://172.20.10.2:3000/
+  ➜  press h + enter to show help

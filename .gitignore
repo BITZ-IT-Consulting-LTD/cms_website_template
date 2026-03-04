@@ -1,0 +1,34 @@
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+bin/
+include/
+lib/
+lib64/
+share/
+pyvenv.cfg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Node
+node_modules/
+.npm
+dist/
+dist-ssr/
+*.local
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Docker
+.docker-compose.dev.yml.swp
+sauti-frontend/node_modules_old/

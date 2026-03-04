@@ -1,0 +1,59 @@
+/* Scoped Base Styles for Giz Chatbot */
+.giz-chat-wrapper {
+    /* Reset and Base Styles */
+    font-family: var(--font-family, sans-serif);
+    color: var(--text-dark, #000);
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Box Sizing Scope */
+.giz-chat-wrapper *,
+.giz-chat-wrapper *::before,
+.giz-chat-wrapper *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Button Resets */
+.giz-chat-wrapper button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Input Resets */
+.giz-chat-wrapper input,
+.giz-chat-wrapper textarea,
+.giz-chat-wrapper select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+/* Link Resets */
+.giz-chat-wrapper a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* Image Resets */
+.giz-chat-wrapper img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}

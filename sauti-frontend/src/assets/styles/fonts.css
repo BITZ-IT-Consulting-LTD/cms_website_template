@@ -1,0 +1,18 @@
+/* Import Cronos Pro from Adobe Fonts */
+@import url('https://use.typekit.net/wgm0sgo.css');
+
+:root {
+  /* Cronos Pro - Brand Typography System (11pt base) */
+  --font-cronos: "cronos-pro", "Cronos Pro", Georgia, serif;
+  --font-primary: var(--font-cronos);
+  --font-body: var(--font-cronos);
+  --font-heading: var(--font-cronos);
+}
+
+/* 
+  Cronos Pro Font Weights:
+  - Light: 300
+  - Regular: 400
+  - Semi-Bold: 600
+  - Bold: 700
+*/
