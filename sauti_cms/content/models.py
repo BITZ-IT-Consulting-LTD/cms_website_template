@@ -155,6 +155,7 @@ class Contact(models.Model):
     icon = models.CharField(max_length=50, blank=True, null=True, help_text="Name of the icon for the contact (e.g., 'phone', 'envelope', 'location-marker')")
     order = models.IntegerField(default=0, help_text="Order in which the contact item appears")
     is_visible = models.BooleanField(default=True, help_text="Whether this contact item should be visible on the site")
+    description = models.CharField(max_length=255, blank=True, null=True, help_text="Short description of the contact channel")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
