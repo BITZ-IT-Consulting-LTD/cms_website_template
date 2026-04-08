@@ -262,6 +262,168 @@
           </div>
         </div>
 
+        <!-- About Page Hero Images -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+            <PhotoIcon class="h-5 w-5 mr-2 text-primary-500" />
+            About Page Hero Images
+          </h3>
+          <p class="text-sm text-gray-500 mb-6">Manage the images displayed in the About page hero grid. The grid consists of left column (3 images), center grid (4 images including Team Photo), and right column (2 images).</p>
+
+          <!-- Visual Layout Guide -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <p class="text-xs text-gray-500 mb-3 font-semibold uppercase tracking-wider">Grid Layout Preview</p>
+            <div class="grid grid-cols-[1fr_2fr_1fr] gap-2 text-xs text-center max-w-lg mx-auto">
+              <div class="space-y-1">
+                <div class="bg-blue-100 rounded p-2 text-blue-700">1. Community</div>
+                <div class="bg-blue-100 rounded p-2 text-blue-700">2. Helpline</div>
+                <div class="bg-blue-100 rounded p-2 text-blue-700">3. Family</div>
+              </div>
+              <div class="grid grid-cols-2 gap-1">
+                <div class="bg-green-100 rounded p-2 text-green-700">Team Photo</div>
+                <div class="bg-orange-100 rounded p-2 text-orange-700">4. Students</div>
+                <div class="bg-orange-100 rounded p-2 text-orange-700">5. Action</div>
+                <div class="bg-orange-100 rounded p-2 text-orange-700">6. Protection</div>
+              </div>
+              <div class="space-y-1">
+                <div class="bg-purple-100 rounded p-2 text-purple-700">7. Operations</div>
+                <div class="bg-purple-100 rounded p-2 text-purple-700">8. Inclusive</div>
+                <div class="bg-gray-200 rounded p-2 text-gray-500">Text</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Image 1 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">1. Community (Left Top)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_1_url"
+                    :src="orgProfile.about_hero_image_1_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 1)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 2 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">2. Helpline (Left Middle)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_2_url"
+                    :src="orgProfile.about_hero_image_2_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 2)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 3 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">3. Family (Left Bottom)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_3_url"
+                    :src="orgProfile.about_hero_image_3_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 3)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 4 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">4. Happy Students (Center)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_4_url"
+                    :src="orgProfile.about_hero_image_4_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 4)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 5 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">5. Action (Center)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_5_url"
+                    :src="orgProfile.about_hero_image_5_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 5)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 6 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">6. Protection (Center)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_6_url"
+                    :src="orgProfile.about_hero_image_6_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 6)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 7 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">7. Operations (Right Top)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_7_url"
+                    :src="orgProfile.about_hero_image_7_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 7)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+            <!-- Image 8 -->
+            <div class="flex flex-col">
+              <label class="block text-sm font-medium text-gray-700 mb-2">8. Inclusive (Right Middle)</label>
+              <div class="flex flex-col space-y-2">
+                <div class="h-24 w-full bg-gray-100 rounded overflow-hidden">
+                  <img v-if="orgProfile.about_hero_image_8_url"
+                    :src="orgProfile.about_hero_image_8_url" class="h-full w-full object-cover" />
+                  <div v-else class="h-full w-full flex items-center justify-center text-gray-400">
+                    <PhotoIcon class="h-8 w-8" />
+                  </div>
+                </div>
+                <input type="file" @change="handleHeroImageUpload($event, 8)" accept="image/*"
+                  class="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary-50 file:text-primary-700" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+            <p class="text-sm text-blue-700">
+              <strong>Note:</strong> The Team Photo (center top-left) is managed in the Basic Identity section above.
+              If no custom images are uploaded, default images will be used.
+            </p>
+          </div>
+        </div>
+
         <!-- Branding Colors -->
         <div class="card p-6 overflow-hidden">
           <div class="flex items-center justify-between mb-6">
@@ -797,7 +959,8 @@
     HomeIcon,
     BuildingOfficeIcon,
     SwatchIcon,
-    InformationCircleIcon
+    InformationCircleIcon,
+    PhotoIcon
   } from '@heroicons/vue/24/outline'
   import { api } from '@/utils/api'
   import AuditHistory from '@/components/common/AuditHistory.vue'
@@ -944,6 +1107,14 @@
     const file = event.target.files[0]
     if (file && orgProfile.value) {
       orgProfile.value.favicon = file
+    }
+  }
+
+  // Handle About Hero Image Upload
+  function handleHeroImageUpload(event, imageNumber) {
+    const file = event.target.files[0]
+    if (file && orgProfile.value) {
+      orgProfile.value[`about_hero_image_${imageNumber}`] = file
     }
   }
 

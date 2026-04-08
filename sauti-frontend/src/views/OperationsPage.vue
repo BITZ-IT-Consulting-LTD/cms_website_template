@@ -1,130 +1,254 @@
 <template>
-  <div class="min-h-screen">
-    <!-- 1. Page Header (Standard Alignment) -->
-    <header class="page-header !pb-0">
-      <div class="container-custom">
-        <div class="mb-4">
-          <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black tracking-widest border border-primary/20 uppercase">
-            {{ siteContent.getContent('operations_hero_badge', 'Operations') }}
-          </span>
+  <div class="min-h-screen bg-white overflow-x-hidden">
+    <!-- Hero Banner -->
+    <header class="hero-banner" style="padding-top: clamp(70px, 15vw, 90px);">
+      <div class="hero-overlay"></div>
+      <div class="container-custom hero-content-wrapper">
+        <div class="hero-text">
+          <h1 class="hero-title">
+            {{ siteContent.getContent('operations_page_title', 'How We') }} <span class="text-accent-yellow">{{ siteContent.getContent('operations_page_title_highlight', 'Operate') }}</span>
+          </h1>
+          <p class="hero-subtitle">
+            {{ siteContent.getContent('operations_page_subtitle', 'Sauti is a Swahili word that means voice. Discover how we serve every citizen across Uganda 24/7.') }}
+          </p>
         </div>
-        <h1 class="page-header-title">
-          {{ siteContent.getContent('operations_page_title', 'How We') }}
-          <span class="text-primary">{{ siteContent.getContent('operations_page_title_highlight', 'Operate') }}</span>
-        </h1>
-        <p class="page-header-subtitle max-w-2xl">
-          {{ siteContent.getContent('operations_page_subtitle', 'Sauti is a Swahili word that means voice. Discover how we serve every citizen across Uganda 24/7.') }}
-        </p>
       </div>
     </header>
 
-    <div class="container-custom section-padding !pt-12">
-      <!-- 2. The Process Flow (Beautified & Aligned) -->
-      <section class="mb-24">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl font-black text-secondary tracking-tight">
-            The Journey of a <span class="text-primary">Voice</span>
+    <div class="container-custom section-padding !pt-6 md:!pt-8">
+      <!-- 2. Enhanced Journey Flow with Images -->
+      <section class="mb-8 md:mb-16">
+        <div class="text-center mb-6 md:mb-12 px-4">
+          <h2 class="text-lg md:text-2xl lg:text-3xl font-bold text-secondary tracking-tight break-words">
+            {{ siteContent.getContent('operations_journey_title', 'The Journey of a') }} <span class="text-primary">{{ siteContent.getContent('operations_journey_title_highlight', 'Voice') }}</span>
           </h2>
-          <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <!-- Item 1 -->
-          <div class="card-base bg-white border border-gray-100 hover:border-primary/20 transition-all text-center group">
-            <div class="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <Phone class="w-7 h-7 text-primary" />
-            </div>
-            <h4 class="text-lg font-black text-secondary mb-2">1. Access</h4>
-            <p class="text-sm font-bold text-black/40">Toll-free 116 available 24/7 from any network.</p>
-          </div>
-
-          <!-- Item 2 -->
-          <div class="card-base bg-white border border-gray-100 hover:border-secondary-light/20 transition-all text-center group">
-            <div class="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <Headphones class="w-7 h-7 text-secondary-light" />
-            </div>
-            <h4 class="text-lg font-black text-secondary mb-2">2. Response</h4>
-            <p class="text-sm font-bold text-black/40">Counselors responding in 26 local languages.</p>
-          </div>
-
-          <!-- Item 3 -->
-          <div class="card-base bg-white border border-gray-100 hover:border-hotline/20 transition-all text-center group">
-            <div class="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <Building2 class="w-7 h-7 text-hotline" />
-            </div>
-            <h4 class="text-lg font-black text-secondary mb-2">3. Management</h4>
-            <p class="text-sm font-bold text-black/40">Case follow-up and specialized support.</p>
-          </div>
-
-          <!-- Item 4 -->
-          <div class="card-base bg-white border border-gray-100 hover:border-secondary/20 transition-all text-center group">
-            <div class="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-              <ShieldCheck class="w-7 h-7 text-secondary" />
-            </div>
-            <h4 class="text-lg font-black text-secondary mb-2">4. Protection</h4>
-            <p class="text-sm font-bold text-black/40">Resolution and community reintegration.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3. Infrastructure Section -->
-      <section class="mb-24">
-        <div class="bg-neutral-offwhite rounded-[3.5rem] p-10 md:p-16 border border-gray-100">
-          <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-4xl font-black text-secondary mb-6 leading-tight">
-              A Robust Infrastructure for <br/><span class="text-primary">Nationwide Impact</span>
-            </h2>
-            <p class="text-lg font-bold text-black/50 mb-12 max-w-2xl mx-auto">
-              Our operations are built on sustainable pillars that ensure every caller receives expert attention.
-            </p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div v-for="(pillar, pi) in pillars" :key="pi" 
-                   class="flex flex-col items-center p-8 bg-white rounded-[2.5rem] shadow-sm border border-gray-50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-transparent mb-6 group-hover:scale-110 transition-transform">
-                  <component :is="pillar.icon" class="w-10 h-10" :style="{ color: pillar.bgColor }" />
-                </div>
-                <h5 class="text-xl font-black text-secondary leading-tight mb-3">{{ pillar.title }}</h5>
-                <p class="text-sm font-bold text-black/40 leading-relaxed">{{ pillar.desc }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 4. Services Grid (Styled as Modern Cards) -->
-      <section class="mb-16">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl font-black text-secondary mb-4">
-            {{ siteContent.getContent('services_section_title', 'Services We Offer') }}
-          </h2>
-          <p class="text-black/50 font-bold max-w-2xl mx-auto">
-            Comprehensive support systems protecting and empowering every voice in Uganda.
+          <div class="w-16 h-1 bg-primary mx-auto mt-2 md:mt-4 rounded-full"></div>
+          <p class="text-xs md:text-sm lg:text-base text-black/60 font-semibold mt-2 md:mt-4 max-w-2xl mx-auto break-words">
+            {{ siteContent.getContent('operations_journey_subtitle', 'Every call goes through a carefully designed process to ensure the best possible outcome') }}
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <!-- Featured Service: Takes more space for its longer content -->
-           <div v-for="(service, idx) in services" :key="idx" 
-                class="card-base bg-white border border-gray-100 p-8 hover:shadow-2xl transition-all group flex flex-col h-full"
-                :class="{
-                  'md:col-span-2 md:row-span-2': idx === 0,
-                  'md:col-span-1 md:row-span-1': idx === 1 || idx === 3 || idx === 4,
-                  'md:col-span-1 md:row-span-2': idx === 2,
-                  'md:col-span-2 md:row-span-1': idx === 5
-                }">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-transparent group-hover:scale-110 transition-transform">
-                <component :is="service.icon" class="w-8 h-8" :style="{ color: service.color }" />
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+          <!-- Item 1: Access -->
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+            <!-- Background Image -->
+            <img
+              :src="getJourneyImage(0)"
+              :alt="siteContent.getContent('operations_journey_step1_title', 'Access')"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <!-- Gradient Overlay - Stronger for text visibility -->
+            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/85 to-primary/30"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step1_label', 'Step 1') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step1_title', 'Access') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step1_description', 'Toll-free 116 available 24/7 from any network across Uganda.') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 2: Response -->
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+            <img
+              :src="getJourneyImage(1)"
+              :alt="siteContent.getContent('operations_journey_step2_title', 'Response')"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-secondary-light via-secondary-light/85 to-secondary-light/30"></div>
+
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step2_label', 'Step 2') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step2_title', 'Response') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step2_description', 'Professional counselors responding in 26 local languages.') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 3: Management -->
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+            <img
+              :src="getJourneyImage(2)"
+              :alt="siteContent.getContent('operations_journey_step3_title', 'Management')"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-hotline via-hotline/85 to-hotline/30"></div>
+
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step3_label', 'Step 3') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step3_title', 'Management') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step3_description', 'Case follow-up and specialized support coordination.') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 4: Protection -->
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+            <img
+              :src="getJourneyImage(3)"
+              :alt="siteContent.getContent('operations_journey_step4_title', 'Protection')"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/85 to-secondary/30"></div>
+
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step4_label', 'Step 4') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step4_title', 'Protection') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step4_description', 'Resolution and community reintegration support.') }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Enhanced Infrastructure Section with Split Layout -->
+      <section class="mb-8 md:mb-16">
+        <div class="bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-lg border border-gray-100">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+            <!-- Left: Image Side -->
+            <div class="relative min-h-[250px] md:min-h-[280px] lg:min-h-[320px]">
+              <img
+                :src="getInfrastructureImage()"
+                alt="Infrastructure"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40"></div>
+
+              <!-- Floating Stats Card -->
+              <div class="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 bg-white/95 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl">
+                <div class="grid grid-cols-3 gap-2 md:gap-3">
+                  <div class="text-center">
+                    <div class="text-lg md:text-xl font-black text-primary">{{ siteContent.getContent('operations_infra_stat1_value', '26') }}</div>
+                    <div class="text-[10px] md:text-xs text-black/60 font-bold">{{ siteContent.getContent('operations_infra_stat1_label', 'Languages') }}</div>
+                  </div>
+                  <div class="text-center border-x border-gray-200">
+                    <div class="text-lg md:text-xl font-black text-secondary">{{ siteContent.getContent('operations_infra_stat2_value', '24/7') }}</div>
+                    <div class="text-[10px] md:text-xs text-black/60 font-bold">{{ siteContent.getContent('operations_infra_stat2_label', 'Available') }}</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-lg md:text-xl font-black text-hotline">{{ siteContent.getContent('operations_infra_stat3_value', '100%') }}</div>
+                    <div class="text-[10px] md:text-xs text-black/60 font-bold">{{ siteContent.getContent('operations_infra_stat3_label', 'Coverage') }}</div>
+                  </div>
+                </div>
               </div>
-              <h3 class="font-black text-secondary mb-3 group-hover:text-primary transition-colors"
-                  :class="idx === 0 || idx === 2 ? 'text-2xl' : 'text-lg'">
+            </div>
+
+            <!-- Right: Content Side -->
+            <div class="p-5 md:p-6 lg:p-8 flex flex-col justify-center bg-neutral-offwhite">
+              <div class="mb-2">
+                <span class="inline-block px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-primary/10 text-primary text-[10px] md:text-xs font-black tracking-widest border border-primary/20 uppercase">
+                  {{ siteContent.getContent('operations_infra_badge', 'Our Foundation') }}
+                </span>
+              </div>
+
+              <h2 class="text-base md:text-xl lg:text-2xl font-bold text-secondary mb-2 leading-tight break-words">
+                {{ siteContent.getContent('operations_infra_title', 'A Robust Infrastructure for') }} <span class="text-primary">{{ siteContent.getContent('operations_infra_title_highlight', 'Nationwide Impact') }}</span>
+              </h2>
+
+              <p class="text-xs md:text-sm text-black/60 font-semibold mb-3 md:mb-4 leading-relaxed break-words">
+                {{ siteContent.getContent('operations_infra_description', 'Our operations are built on sustainable pillars that ensure every caller receives expert attention, no matter where they are in Uganda.') }}
+              </p>
+
+              <!-- Pillars List -->
+              <div class="space-y-2 md:space-y-3">
+                <div v-for="(pillar, pi) in computedPillars" :key="pi"
+                     class="flex gap-3 md:gap-4 items-start group">
+                  <div class="flex-1 min-w-0">
+                    <h5 class="text-sm md:text-base font-bold text-secondary mb-0.5 break-words">{{ pillar.title }}</h5>
+                    <p class="text-xs md:text-sm text-black/60 font-medium leading-relaxed break-words">{{ pillar.desc }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Services Slideshow -->
+      <section class="mb-6 md:mb-12">
+        <div class="text-center mb-6 md:mb-10 px-4">
+          <h2 class="text-xl md:text-3xl lg:text-4xl font-bold text-secondary mb-2 md:mb-3 lg:mb-4 break-words">
+            {{ siteContent.getContent('services_section_title', 'Services We Offer') }}
+          </h2>
+          <p class="text-sm md:text-base lg:text-lg text-black/60 font-semibold max-w-2xl mx-auto leading-relaxed break-words">
+            {{ siteContent.getContent('services_section_subtitle', 'Comprehensive support systems protecting and empowering every voice in Uganda.') }}
+          </p>
+        </div>
+
+        <!-- Large Slideshow Container -->
+        <div
+          class="services-slideshow relative overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl mx-auto max-w-5xl h-[350px] md:h-[450px] lg:h-[550px]"
+          @mouseenter="pauseServiceSlideshow"
+          @mouseleave="resumeServiceSlideshow"
+        >
+          <!-- Slides -->
+          <div v-for="(service, idx) in services" :key="idx"
+               :class="[
+                 'absolute inset-0 transition-all duration-700 ease-in-out',
+                 currentServiceIndex === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+               ]">
+            <img
+              :src="getServiceImage(idx)"
+              :alt="siteContent.getContent(service.cid_title, service.title)"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <!-- Stronger gradient for text visibility -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
+
+            <!-- Content - Larger text -->
+            <div class="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-14 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-2 md:mb-3 text-white/80">
+                Service {{ idx + 1 }} of {{ services.length }}
+              </span>
+              <h3 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 drop-shadow-lg break-words">
                 {{ siteContent.getContent(service.cid_title, service.title) }}
               </h3>
-              <p class="font-bold text-black/40 leading-relaxed"
-                 :class="idx === 0 || idx === 2 ? 'text-base' : 'text-sm'">
+              <p class="text-base md:text-xl lg:text-2xl text-white font-medium leading-relaxed max-w-3xl drop-shadow-md break-words">
                 {{ siteContent.getContent(service.cid_text, service.text) }}
               </p>
-           </div>
+            </div>
+          </div>
+
+          <!-- Navigation Arrows -->
+          <button
+            @click="prevService"
+            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all shadow-lg"
+            aria-label="Previous service"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button
+            @click="nextService"
+            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all shadow-lg"
+            aria-label="Next service"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- Dots Navigation -->
+          <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:gap-3">
+            <button
+              v-for="(service, idx) in services"
+              :key="'dot-' + idx"
+              @click="goToService(idx)"
+              :class="[
+                'w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300',
+                currentServiceIndex === idx
+                  ? 'bg-white scale-125'
+                  : 'bg-white/40 hover:bg-white/70'
+              ]"
+              :aria-label="'Go to service ' + (idx + 1)"
+            ></button>
+          </div>
         </div>
       </section>
     </div>
@@ -132,54 +256,212 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import { useSiteContent } from '@/composables/useSiteContent'
-import { 
-  Phone, 
-  Clock, 
-  Globe, 
-  Building2, 
-  Wallet, 
-  Headphones, 
-  UserCircle, 
-  Radio, 
-  BookOpen, 
-  ArrowRightCircle, 
-  Users,
-  ShieldCheck,
-  MessageCircle
-} from 'lucide-vue-next'
 
 defineOptions({
   name: 'OperationsPage'
 })
 
 const services = [
-  { title: 'Telephone Counseling', icon: Headphones, color: '#2B4C7E', cid_title: 'service_counseling_title', cid_text: 'service_counseling_text', text: 'Professional counseling services available 24/7 through our toll-free helpline 116.' },
-  { title: 'Walk-In Support', icon: UserCircle, color: '#8ECAE6', cid_title: 'service_walkin_title', cid_text: 'service_walkin_text', text: 'Handle walk-in clients at our offices for face-to-face consultation and support.' },
-  { title: 'Media Response', icon: Radio, color: '#FB8500', cid_title: 'service_media_title', cid_text: 'service_media_text', text: 'Respond to cases of violence against children and gender-based violence reported through media and U-report.' },
-  { title: 'Information & Guidance', icon: BookOpen, color: '#023047', cid_title: 'service_guidance_title', cid_text: 'service_guidance_text', text: 'Provision of information and guidance on child care and protection matters.' },
-  { title: 'Essential Service Referrals', icon: ArrowRightCircle, color: '#2B4C7E', cid_title: 'service_referral_title', cid_text: 'service_referral_text', text: 'Referral to essential services including healthcare, legal aid, and social support.' },
-  { title: 'Community Sensitization', icon: Users, color: '#8ECAE6', cid_title: 'service_community_title', cid_text: 'service_community_text', text: 'Community sensitization activities to raise awareness about child protection and GBV prevention.' }
-]
-
-const pillars = [
-  { title: '26 Local Languages', desc: 'Bridging the communication gap for every community in Uganda.', icon: Globe, bgColor: '#2B4C7E' },
-  { title: '24/7 Availability', desc: 'Support is always just a phone call away, day or night.', icon: Clock, bgColor: '#8ECAE6' },
-  { title: 'Sustainable Funding', desc: 'Partnering with MGLSD and UNICEF for long-term service stability.', icon: Wallet, bgColor: '#FB8500' }
+  { title: 'Telephone Counseling', cid_title: 'service_counseling_title', cid_text: 'service_counseling_text', text: 'Professional counseling services available 24/7 through our toll-free helpline 116.' },
+  { title: 'Walk-In Support', cid_title: 'service_walkin_title', cid_text: 'service_walkin_text', text: 'Handle walk-in clients at our offices for face-to-face consultation and support.' },
+  { title: 'Media Response', cid_title: 'service_media_title', cid_text: 'service_media_text', text: 'Respond to cases of violence against children and gender-based violence reported through media and U-report.' },
+  { title: 'Information & Guidance', cid_title: 'service_guidance_title', cid_text: 'service_guidance_text', text: 'Provision of information and guidance on child care and protection matters.' },
+  { title: 'Essential Service Referrals', cid_title: 'service_referral_title', cid_text: 'service_referral_text', text: 'Referral to essential services including healthcare, legal aid, and social support.' },
+  { title: 'Community Sensitization', cid_title: 'service_community_title', cid_text: 'service_community_text', text: 'Community sensitization activities to raise awareness about child protection and GBV prevention.' }
 ]
 
 const settingsStore = useSettingsStore()
 const siteContent = useSiteContent('operations')
 
+// Services Slideshow
+const currentServiceIndex = ref(0)
+let serviceSlideshowInterval = null
+const isSlideshowPaused = ref(false)
+
+// Operations page images from API
+const operationsImages = ref([])
+
+// Computed pillars using CMS content
+const computedPillars = computed(() => [
+  {
+    title: siteContent.getContent('operations_pillar1_title', '26 Local Languages'),
+    desc: siteContent.getContent('operations_pillar1_description', 'Bridging the communication gap for every community in Uganda.')
+  },
+  {
+    title: siteContent.getContent('operations_pillar2_title', '24/7 Availability'),
+    desc: siteContent.getContent('operations_pillar2_description', 'Support is always just a phone call away, day or night.')
+  },
+  {
+    title: siteContent.getContent('operations_pillar3_title', 'Sustainable Funding'),
+    desc: siteContent.getContent('operations_pillar3_description', 'Partnering with MGLSD and UNICEF for long-term service stability.')
+  }
+])
+
+// Default fallback images for Journey section
+const defaultJourneyImages = [
+  'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=400&h=500&fit=crop', // Step 1: Access
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop', // Step 2: Response
+  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=500&fit=crop', // Step 3: Management
+  'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&h=500&fit=crop'  // Step 4: Protection
+]
+
+// Default fallback images for Services section
+const defaultServiceImages = [
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop', // Service 1: Telephone Counseling
+  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop', // Service 2: Walk-In Support
+  'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=600&fit=crop', // Service 3: Media Response
+  'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop', // Service 4: Information & Guidance
+  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop', // Service 5: Essential Service Referrals
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=300&fit=crop'  // Service 6: Community Sensitization
+]
+
+// Default infrastructure image
+const defaultInfraImage = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop'
+
+// Helper function to get Journey images (from API or fallback)
+const getJourneyImage = (index) => {
+  // Look for uploaded journey images first
+  const journeyImage = operationsImages.value.find(img => img.position === `journey_step_${index + 1}`)
+  if (journeyImage?.image_url) {
+    return journeyImage.image_url
+  }
+  return defaultJourneyImages[index] || defaultJourneyImages[0]
+}
+
+// Helper function to get Service images (from API or fallback)
+const getServiceImage = (index) => {
+  // Look for uploaded service images first
+  const serviceKeys = ['counseling', 'walkin', 'media', 'guidance', 'referral', 'community']
+  const serviceImage = operationsImages.value.find(img => img.position === `service_${serviceKeys[index]}`)
+  if (serviceImage?.image_url) {
+    return serviceImage.image_url
+  }
+  return defaultServiceImages[index] || defaultServiceImages[0]
+}
+
+// Helper function to get Infrastructure image (from API or fallback)
+const getInfrastructureImage = () => {
+  const infraImage = operationsImages.value.find(img => img.position === 'infrastructure')
+  if (infraImage?.image_url) {
+    return infraImage.image_url
+  }
+  return defaultInfraImage
+}
+
+// Fetch operations images from API
+const fetchOperationsImages = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/content/operations-images/`)
+    if (response.ok) {
+      operationsImages.value = await response.json()
+    }
+  } catch (error) {
+    console.warn('Failed to fetch operations images, using defaults:', error)
+  }
+}
+
+// Services Slideshow Functions
+const startServiceSlideshow = () => {
+  serviceSlideshowInterval = setInterval(() => {
+    if (isSlideshowPaused.value) return
+    currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
+  }, 5000) // Change slide every 5 seconds
+}
+
+const pauseServiceSlideshow = () => {
+  isSlideshowPaused.value = true
+}
+
+const resumeServiceSlideshow = () => {
+  isSlideshowPaused.value = false
+}
+
+const nextService = () => {
+  currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
+}
+
+const prevService = () => {
+  currentServiceIndex.value = (currentServiceIndex.value - 1 + services.length) % services.length
+}
+
+const goToService = (index) => {
+  currentServiceIndex.value = index
+}
+
 onMounted(async () => {
   await siteContent.fetchContent()
   await settingsStore.fetchGlobalSettings()
+  await fetchOperationsImages()
+
+  // Start services slideshow after a short delay
+  setTimeout(() => {
+    startServiceSlideshow()
+  }, 500)
+})
+
+onBeforeUnmount(() => {
+  if (serviceSlideshowInterval) {
+    clearInterval(serviceSlideshowInterval)
+  }
 })
 </script>
 
 <style scoped>
+/* Hero Banner */
+.hero-banner {
+  position: relative;
+  background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
+  min-height: clamp(200px, 25vh, 300px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
+  opacity: 0.5;
+}
+
+.hero-content-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.25rem, 3vh, 2.5rem) 0;
+}
+
+.hero-text {
+  text-align: center;
+  margin-bottom: clamp(0.75rem, 2vw, 1rem);
+}
+
+.hero-title {
+  font-size: clamp(1rem, 2vw, 1.75rem);
+  font-weight: 900;
+  color: white;
+  margin-bottom: 0.375rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-accent-yellow {
+  color: rgb(var(--color-accent-yellow));
+}
+
+.hero-subtitle {
+  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.4;
+  padding: 0 1rem;
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -194,4 +476,10 @@ onMounted(async () => {
     transform: translateY(0);
   }
 }
+
+/* Services Slideshow */
+.services-slideshow {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
 </style>

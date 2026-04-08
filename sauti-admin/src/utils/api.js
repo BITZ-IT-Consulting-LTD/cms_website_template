@@ -274,6 +274,30 @@ export const api = {
     delete: (id) => apiClient.delete(`/content/team-members/${id}/`),
   },
 
+  whoWeAreImages: {
+    list: (params) => apiClient.get('/content/who-we-are-images/', { params }),
+    get: (position) => apiClient.get(`/content/who-we-are-images/${position}/`),
+    create: (data) => apiClient.post('/content/who-we-are-images/', createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (position, data) => apiClient.put(`/content/who-we-are-images/${position}/`, createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (position) => apiClient.delete(`/content/who-we-are-images/${position}/`),
+  },
+
+  operationsImages: {
+    list: (params) => apiClient.get('/content/operations-images/', { params }),
+    get: (position) => apiClient.get(`/content/operations-images/${position}/`),
+    create: (data) => apiClient.post('/content/operations-images/', createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (position, data) => apiClient.put(`/content/operations-images/${position}/`, createFormData(data), {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (position) => apiClient.delete(`/content/operations-images/${position}/`),
+  },
+
   protectionApproaches: {
     list: (params) => apiClient.get('/content/protection-approach/', { params }),
     get: (id) => apiClient.get(`/content/protection-approach/${id}/`),

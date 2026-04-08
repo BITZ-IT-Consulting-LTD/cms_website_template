@@ -35,11 +35,13 @@
           <div class="w-1 h-8 bg-indigo-600 rounded-full mr-3"></div>
           <h2 class="text-xl font-bold text-gray-800">Site Configuration & Pages</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <HubCard title="Homepage Sections" description="Edit hero, CTA, and main page labels." icon="HomeIcon"
             to="/content?tab=home" color="bg-blue-50 text-blue-600" />
           <HubCard title="About Page Text" description="Edit identity, mission and page content."
             icon="InformationCircleIcon" to="/content?tab=about" color="bg-indigo-50 text-indigo-600" />
+          <HubCard title="Operations Page" description="Edit journey steps, infrastructure, and services sections."
+            icon="CogIcon" to="/content?tab=operations" color="bg-emerald-50 text-emerald-600" />
           <HubCard title="Help Services" description="Manage 'Get Help' service categories and info." icon="CubeIcon"
             to="/services" color="bg-cyan-50 text-cyan-600" />
         </div>
@@ -106,6 +108,7 @@
     HomeIcon,
     InformationCircleIcon,
     CubeIcon,
+    CogIcon,
     UserGroupIcon,
     ClockIcon,
     HeartIcon,

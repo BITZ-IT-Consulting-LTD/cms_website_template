@@ -20,10 +20,10 @@
 
           <!-- Video Player -->
           <div class="relative bg-black aspect-video">
-            <!-- YouTube Video -->
-            <div v-if="video.youtube_url && video.video_type === 'YOUTUBE'" class="w-full h-full">
+            <!-- YouTube Video - check youtube_id OR youtube_url with YOUTUBE type -->
+            <div v-if="youtubeEmbedUrl" class="w-full h-full">
               <iframe
-                :src="getYouTubeEmbedUrl(video.youtube_url)"
+                :src="youtubeEmbedUrl"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 
 const props = defineProps({
   isOpen: {
@@ -90,23 +90,41 @@ const close = () => {
   emit('close')
 }
 
+// Computed property for YouTube embed URL - uses youtube_id if available, falls back to parsing URL
+const youtubeEmbedUrl = computed(() => {
+  const video = props.video
+  if (!video) return ''
+
+  // First, try using youtube_id directly from API (most reliable)
+  if (video.youtube_id) {
+    return `https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&rel=0`
+  }
+
+  // Fall back to parsing youtube_url if video_type is YOUTUBE
+  if (video.youtube_url && (video.video_type === 'YOUTUBE' || !video.video_type)) {
+    return getYouTubeEmbedUrl(video.youtube_url)
+  }
+
+  return ''
+})
+
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return ''
-  
+
   // Extract YouTube video ID from various URL formats
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
     /youtube\.com\/v\/([^&\n?#]+)/
   ]
-  
+
   for (const pattern of patterns) {
     const match = url.match(pattern)
     if (match) {
       return `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0`
     }
   }
-  
-  return url
+
+  return ''
 }
 
 const getVideoFileUrl = (video) => {

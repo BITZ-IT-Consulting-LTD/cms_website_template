@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- Story Detail Modal -->
-    <StoryDetailModal :isOpen="showStoryModal" :story="selectedStory" @close="showStoryModal = false" />
-
     <!-- 1. Hero Section - Take No Chances -->
     <section class="hero-section">
       <div class="hero-container">
@@ -320,14 +317,6 @@
         }))
     } else {
       console.error('Failed to load recent publications:', results[2].reason)
-    }
-
-    // Help Services handled by store state directly
-
-    // Auto-expand from hash if valid service key
-    const hash = window.location.hash.replace('#', '')
-    if (hash && helpServicesStore.services.some(s => s.key === hash)) {
-      expandedServiceKey.value = hash
     }
 
     loadingVideos.value = false

@@ -6,11 +6,20 @@
 /* Global box-sizing fix for all elements */
 * {
   box-sizing: border-box;
+  max-width: 100%;
 }
 
-/* Prevent horizontal overflow globally */
-* {
+/* Enforce overflow prevention on html and body */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+/* Prevent specific elements from breaking out */
+img, video, iframe, embed, object {
   max-width: 100%;
+  height: auto;
 }
 
 /* Hide scrollbar utility */
@@ -57,6 +66,8 @@
   /* #FFFFFF - Backgrounds */
   --color-neutral-offwhite: 248 250 252;
   /* #F8FAFC - Subtle backgrounds */
+  --color-warm-offwhite: 250 248 245;
+  /* #FAF8F5 - Warm off-white for section breaks */
 
   /* ============================================
      SOCIAL MEDIA (5) - Platform Requirements
@@ -87,59 +98,105 @@
 }
 
 @layer base {
+  /* ============================================
+     APPLE-INSPIRED TYPOGRAPHY SYSTEM
+     - Conservative scaling for better readability
+     - Consistent hierarchy at all zoom levels
+     - Optimized for 100% zoom (standard viewing)
+     ============================================ */
+
   html {
     color: #000000;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('../background-texture.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    background-color: #ffffff;
     @apply antialiased transition-colors duration-200;
-    font-family: var(--font-cronos);
-    font-size: clamp(0.875rem, 0.8125rem + 0.3125vw, 1rem);
-    /* Fluid base: 14px at 320px viewport, 16px at 1920px */
-    overflow-x: hidden;
-    max-width: 100vw;
+    font-family: var(--font-brand);
+    /* Base font: 16px (industry standard for readability) */
+    font-size: 16px;
+    /* Smooth font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-
-  /* Accessibility: High-Contrast Focus Ring (WCAG 2.1 AAA) */
-
 
   body {
     margin: 0;
     min-height: 100vh;
     background: transparent;
     @apply leading-relaxed;
-    overflow-x: hidden;
-    max-width: 100vw;
   }
 
-  /* Fluid Typography Hierarchy - scales smoothly with viewport */
+  /* ============================================
+     TYPOGRAPHY SCALE (Apple-Inspired)
+     Smooth, consistent scaling across viewports
+
+     Viewport ranges:
+     - Mobile: 375px (min)
+     - Tablet: 768px
+     - Desktop: 1440px (max reference)
+     ============================================ */
+
+  /* Display Heading (H1) - Page titles, hero headings */
   h1 {
-    font-size: clamp(2rem, 1.5rem + 2.5vw, 4rem);
-    @apply font-bold leading-tight tracking-tight text-secondary;
+    font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
+    /* Mobile: 20px → Tablet: 26px → Desktop: 32px */
+    @apply font-bold text-secondary;
+    line-height: 1.1;
+    /* Tighter for large text */
+    letter-spacing: -0.02em;
+    /* Slight negative for display */
+    margin-bottom: 0.5rem;
   }
 
+  /* Section Heading (H2) - Major sections */
   h2 {
-    font-size: clamp(1.75rem, 1.375rem + 1.875vw, 3rem);
-    @apply font-bold leading-tight text-secondary;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+    /* Mobile: 18px → Tablet: 20px → Desktop: 24px */
+    @apply font-bold text-secondary;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
   }
 
+  /* Subsection Heading (H3) - Subsections, card titles */
   h3 {
-    font-size: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
-    @apply font-semibold leading-snug text-secondary;
+    font-size: clamp(0.9375rem, 0.875rem + 0.25vw, 1.125rem);
+    /* Mobile: 15px → Tablet: 16px → Desktop: 18px */
+    @apply font-bold text-secondary;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    margin-bottom: 0.5rem;
   }
 
+  /* Minor Heading (H4, H5, H6) - Small headings, labels */
   h4,
   h5,
   h6 {
-    font-size: clamp(1.125rem, 1rem + 0.625vw, 1.5rem);
-    @apply font-semibold leading-snug text-secondary;
+    font-size: clamp(0.875rem, 0.8125rem + 0.125vw, 1rem);
+    /* Mobile: 14px → Tablet: 15px → Desktop: 16px */
+    @apply font-semibold text-secondary;
+    line-height: 1.4;
+    letter-spacing: 0;
+    margin-bottom: 0.375rem;
   }
 
+  /* Body Text - Primary content */
   p {
-    font-size: clamp(0.875rem, 0.8125rem + 0.3125vw, 1.125rem);
-    @apply leading-relaxed mb-4 font-normal text-black;
+    font-size: clamp(0.875rem, 0.8125rem + 0.125vw, 0.9375rem);
+    /* Mobile: 14px → Desktop: 15px (minimal scaling) */
+    @apply leading-relaxed mb-3 font-normal text-black;
+    line-height: 1.5;
+    /* Optimal for body text */
+    letter-spacing: 0;
+    max-width: 75ch;
+    /* Optimal line length for readability */
+  }
+
+  /* Small Text - Captions, metadata, helper text */
+  small,
+  .text-small {
+    font-size: clamp(0.875rem, 0.8125rem + 0.25vw, 0.9375rem);
+    /* Mobile: 14px → Desktop: 15px */
+    line-height: 1.5;
   }
 }
 
@@ -151,7 +208,9 @@
   }
 
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto;
+    padding-left: clamp(1rem, 5vw, 2rem);   /* 16px → 32px fluid scaling */
+    padding-right: clamp(1rem, 5vw, 2rem);
     width: 100%;
     max-width: 100vw;
     box-sizing: border-box;
@@ -159,11 +218,16 @@
 
   .btn {
     /* Enhanced Tap Targets and Focus Visibility - Optimized for Thumb-centric input */
-    @apply inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-full transition-all duration-300 select-none;
+    @apply inline-flex items-center justify-center px-8 py-4 border border-transparent font-bold transition-all duration-300 select-none;
     @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-offset-2;
+    border-radius: 9999px; /* Standardized full rounded */
+    /* Consistent button text size */
+    font-size: clamp(1rem, 0.9375rem + 0.25vw, 1.0625rem);
+    /* 16px → 17px */
     min-height: 52px;
     /* Increased for mobile confidence */
     touch-action: manipulation;
+    line-height: 1.2;
   }
 
   .btn-primary {
@@ -227,33 +291,62 @@
     /* Override default btn min-height */
   }
 
+  /* ===== DESIGN SYSTEM STANDARDS ===== */
+
+  /* Standardized Border Radius Scale */
+  .radius-sm { border-radius: 0.75rem; } /* 12px - Small elements, chips */
+  .radius-md { border-radius: 1.25rem; } /* 20px - Buttons, inputs */
+  .radius-lg { border-radius: 1.5rem; } /* 24px - Cards */
+  .radius-xl { border-radius: 2rem; } /* 32px - Large cards, sections */
+  .radius-full { border-radius: 9999px; } /* Full rounded - Pills, avatars */
+
+  /* Warm Background for Section Breaks */
+  .bg-warm {
+    background-color: rgb(var(--color-warm-offwhite));
+  }
+
   .card-base {
-    @apply bg-neutral-white rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500;
+    @apply bg-neutral-white shadow-sm hover:shadow-xl transition-all duration-500;
+    border-radius: 1.5rem; /* Standardized to radius-lg */
     padding: clamp(1rem, 2vw, 3rem);
     max-width: 100%;
     box-sizing: border-box;
   }
 
   .section-padding {
-    padding-top: clamp(2rem, 5vw, 10rem);
-    padding-bottom: clamp(2rem, 5vw, 10rem);
+    padding-top: clamp(1.5rem, 3vw, 6rem);
+    padding-bottom: clamp(1.5rem, 3vw, 6rem);
   }
 
   .page-header {
-    padding-top: clamp(2rem, 4vw, 8rem);
-    padding-bottom: clamp(2rem, 4vw, 8rem);
+    padding-top: clamp(5rem, 12vw, 8rem);
+    padding-bottom: clamp(2rem, 4vw, 6rem);
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
   }
 
+  /* Adjust for mobile to account for header height */
+  @media (max-width: 767px) {
+    .page-header {
+      padding-top: clamp(5.5rem, 15vh, 7rem);
+    }
+  }
+
   .page-header-title {
-    /* Uses base H1 styling */
-    @apply text-secondary mb-8 font-bold tracking-tight;
+    /* Enhanced H1 for hero sections */
+    font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
+    /* Mobile: 20px → Desktop: 32px */
+    @apply text-secondary mb-4 font-bold;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
   }
 
   .page-header-subtitle {
-    font-size: clamp(1.25rem, 1.125rem + 0.625vw, 1.5rem);
-    @apply text-black max-w-2xl font-normal leading-relaxed;
+    font-size: clamp(0.8125rem, 0.75rem + 0.125vw, 0.875rem);
+    /* Mobile: 13px → Desktop: 14px */
+    @apply text-black max-w-2xl font-normal;
+    line-height: 1.5;
+    opacity: 0.8;
   }
 
   .form-group {
@@ -261,16 +354,27 @@
   }
 
   .form-label {
-    @apply block text-base font-bold text-secondary mb-2;
+    font-size: clamp(0.9375rem, 0.875rem + 0.25vw, 1rem);
+    /* 15px → 16px */
+    @apply block font-semibold text-secondary mb-2;
+    line-height: 1.4;
   }
 
   .form-input {
-    @apply w-full px-5 py-3.5 rounded-full border-2 border-primary/20 transition-all font-normal bg-neutral-white text-black;
+    @apply w-full px-5 py-3.5 border-2 border-primary/20 transition-all font-normal bg-neutral-white text-black;
     @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 focus-visible:border-primary;
+    border-radius: 9999px; /* Standardized full rounded for inputs */
+    font-size: clamp(1rem, 0.9375rem + 0.25vw, 1.0625rem);
+    /* 16px → 17px */
+    line-height: 1.5;
   }
 
   .nav-link {
-    @apply px-4 py-2 rounded-lg text-black font-normal transition-all hover:text-primary hover:bg-primary/5;
+    @apply px-4 py-2 text-black font-normal transition-all hover:text-primary hover:bg-primary/5;
+    border-radius: 0.75rem; /* Standardized to radius-sm */
+    font-size: clamp(0.9375rem, 0.875rem + 0.25vw, 1rem);
+    /* 15px → 16px */
+    line-height: 1.5;
   }
 
   .nav-link-active {
@@ -319,13 +423,67 @@
   }
 }
 
+/* ===== SCROLL ANIMATIONS ===== */
+
+/* Fade-up animation for sections */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animation classes for scroll-triggered effects */
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Staggered animation delays for multiple items */
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+
+/* Initial state for animated elements */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+[data-animate].in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Performance & Mobile Efficiency */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  [data-animate],
+  [data-animate].in-view {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
 
@@ -338,7 +496,7 @@
 }
 
 #giz-chat-wrapper {
-  --font-family: var(--font-cronos) !important;
+  --font-family: var(--font-brand) !important;
   --heading-font-weight: 700 !important;
   --primary-color: rgb(var(--color-primary)) !important;
 }
@@ -380,32 +538,51 @@ h6 .number,
 [class*="number"] {
 } */
 
-/* Ensure text content uses Cronos Pro */
+/* Ensure text content uses brand font */
 p,
 span:not(.number):not(.stat-number):not(.metric-value),
 div:not([class*="count"]):not([class*="number"]) {
-  font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;
+  font-family: var(--font-brand);
 }
 
-/* Mobile-specific fixes */
-@media (max-width: 640px) {
+/* Mobile-first fixes for all viewports under 768px (tablets and below) */
+@media (max-width: 767px) {
+  /* Ensure all sections and containers respect viewport */
+  section, main, article, aside, div[class*="container"] {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   /* Ensure all grid containers respect viewport */
   .grid {
     max-width: 100vw;
     overflow-x: hidden;
   }
 
-  /* Reduce gap spacing on mobile */
+  /* Reduce gap spacing proportionally on mobile */
+  .gap-4 {
+    gap: 0.75rem;
+    /* 12px - reduced from 16px */
+  }
+
   .gap-6 {
     gap: 1rem;
+    /* 16px - reduced from 24px */
   }
 
   .gap-8 {
     gap: 1.25rem;
+    /* 20px - reduced from 32px */
   }
 
   .gap-10 {
     gap: 1.5rem;
+    /* 24px - reduced from 40px */
+  }
+
+  .gap-12 {
+    gap: 1.75rem;
+    /* 28px - reduced from 48px */
   }
 
   /* Ensure images don't overflow */
@@ -414,14 +591,76 @@ div:not([class*="count"]):not([class*="number"]) {
     height: auto;
   }
 
-  /* Fix button padding on mobile */
+  /* Mobile button optimization */
   .btn {
-    @apply px-4 py-3 text-base;
+    @apply px-6 py-3.5;
+    font-size: 1rem;
+    /* Fixed 16px for better readability on Android */
+    min-height: 48px;
+    /* Optimized for mobile tap targets */
+    touch-action: manipulation;
   }
 
-  /* Ensure sections don't overflow */
-  section {
-    max-width: 100vw;
-    overflow-x: hidden;
+  /* Ensure cards don't overflow */
+  .card-base, [class*="card"] {
+    max-width: 100%;
+    padding: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  /* Prevent text overflow */
+  h1, h2, h3, h4, h5, h6, p {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Ensure minimum body text size for readability on Android */
+  p, li, span, div {
+    font-size: 14px;
+    /* Fixed at 14px minimum for better Android readability */
+  }
+
+  /* Footer link tap targets for mobile accessibility */
+  footer a {
+    min-height: 48px;
+    /* Enhanced mobile tap target */
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 0;
+    line-height: 1.6;
+    touch-action: manipulation;
+  }
+
+  /* Ensure all interactive elements have adequate touch targets */
+  a, button, input, select, textarea, [role="button"], [onclick] {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Override for icon-only buttons */
+  .icon-button, [aria-label]:not([aria-label=""]) {
+    min-height: 48px;
+    min-width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Ultra-small phones (375px and below) - Additional constraints */
+@media (max-width: 375px) {
+  .container-custom {
+    padding-left: 0.875rem;
+    /* 14px on very small phones */
+    padding-right: 0.875rem;
+  }
+
+  .btn {
+    @apply px-4 py-2.5;
+    font-size: 0.9375rem;
+    /* Fixed 15px */
+    min-height: 44px;
+    /* WCAG minimum tap target */
   }
 }

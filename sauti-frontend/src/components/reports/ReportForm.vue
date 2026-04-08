@@ -85,9 +85,27 @@
           autofocus
         />
 
-        <button 
+        <!-- Voice Recording Button (for accessibility) -->
+        <button
+          v-if="!isFinished && !waitingForOption && speechSupported"
+          type="button"
+          @click="toggleSpeechRecognition"
+          :class="[
+            'absolute bottom-2 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all',
+            isListening
+              ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse right-14'
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-600 right-14'
+          ]"
+          :title="isListening ? 'Stop recording' : 'Start voice recording'"
+          :aria-label="isListening ? 'Stop voice recording' : 'Start voice recording for accessibility'"
+        >
+          <MicOff v-if="isListening" class="w-5 h-5" />
+          <Mic v-else class="w-5 h-5" />
+        </button>
+
+        <button
           v-if="!isFinished && !waitingForOption"
-          type="submit" 
+          type="submit"
           :disabled="!userInput.trim()"
           class="absolute right-2 bottom-2 w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white shadow-lg hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
           <Send class="w-5 h-5" />
@@ -118,9 +136,9 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 import { api } from '@/utils/axios'
-import { RotateCcw, Send, CheckCircle, AlertCircle } from 'lucide-vue-next'
+import { RotateCcw, Send, CheckCircle, AlertCircle, Mic, MicOff } from 'lucide-vue-next'
 
 const messages = ref([])
 const isTyping = ref(false)
@@ -136,6 +154,62 @@ const inputPlaceholder = ref('Type your answer...')
 const inputRef = ref(null)
 
 const chatContainer = ref(null)
+
+// Speech Recognition
+const isListening = ref(false)
+const speechSupported = ref(false)
+let recognition = null
+
+// Initialize Speech Recognition
+const initSpeechRecognition = () => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  if (SpeechRecognition) {
+    speechSupported.value = true
+    recognition = new SpeechRecognition()
+    recognition.continuous = true
+    recognition.interimResults = true
+    recognition.lang = 'en-US'
+
+    recognition.onresult = (event) => {
+      let transcript = ''
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      // Append to existing text
+      if (event.results[event.results.length - 1].isFinal) {
+        userInput.value = (userInput.value + ' ' + transcript).trim()
+      }
+    }
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error)
+      isListening.value = false
+      if (event.error === 'not-allowed') {
+        validationError.value = 'Microphone access denied. Please allow microphone access.'
+      }
+    }
+
+    recognition.onend = () => {
+      isListening.value = false
+    }
+  }
+}
+
+const toggleSpeechRecognition = () => {
+  if (!speechSupported.value) {
+    validationError.value = 'Speech recognition not supported in your browser.'
+    return
+  }
+
+  if (isListening.value) {
+    recognition.stop()
+    isListening.value = false
+  } else {
+    validationError.value = ''
+    recognition.start()
+    isListening.value = true
+  }
+}
 
 // Data Store
 const formData = ref({
@@ -800,7 +874,14 @@ const scrollToBottom = async () => {
 }
 
 onMounted(() => {
+  initSpeechRecognition()
   init()
+})
+
+onUnmounted(() => {
+  if (recognition) {
+    recognition.stop()
+  }
 })
 </script>
 

@@ -200,7 +200,20 @@ class OrganizationProfile(models.Model):
     logo = models.ImageField(upload_to='org/identity/', blank=True, null=True)
     favicon = models.ImageField(upload_to='org/identity/', blank=True, null=True)
     team_photo = models.ImageField(upload_to='org/identity/', blank=True, null=True, help_text="A group photo of the organization team.")
-    
+
+    # About Page Hero Grid Images (9 slots total)
+    # Left column images (3)
+    about_hero_image_1 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Left column, top image (Community)")
+    about_hero_image_2 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Left column, middle image (Helpline)")
+    about_hero_image_3 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Left column, bottom image (Family)")
+    # Center grid images (4) - slot 1 uses team_photo
+    about_hero_image_4 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Center, top-right (Happy Students)")
+    about_hero_image_5 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Center, bottom-left (Action)")
+    about_hero_image_6 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Center, bottom-right (Protection)")
+    # Right column images (2)
+    about_hero_image_7 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Right column, top image (Operations)")
+    about_hero_image_8 = models.ImageField(upload_to='org/about/', blank=True, null=True, help_text="About hero grid: Right column, middle image (Inclusive)")
+
     # Branding / Colors (Hex codes)
     primary_color = models.CharField(max_length=7, default="#007BBF", help_text="Primary brand color (Hex code, e.g., #007BBF)")
     secondary_color = models.CharField(max_length=7, default="#006633", help_text="Secondary brand color (Hex code, e.g., #006633)")
