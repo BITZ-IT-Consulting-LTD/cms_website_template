@@ -927,12 +927,12 @@
   const dashboardInitialized = ref(!!cachedData)
 
   // Time period filter for dashboard charts
-  const selectedPeriod = ref('all')
+  const selectedPeriod = ref('year')
   const periodOptions = [
-    { value: 'all', label: 'All Time' },
     { value: 'year', label: 'This Year' },
-    { value: 'month', label: 'This Month' },
-    { value: 'week', label: 'This Week' }
+    // { value: 'all', label: 'All Time' },
+    // { value: 'month', label: 'This Month' },
+    // { value: 'week', label: 'This Week' }
   ]
 
   // --- Category-to-CaseType Mapping ---

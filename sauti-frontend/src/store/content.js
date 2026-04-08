@@ -136,9 +136,10 @@ export const useContentStore = defineStore('content', () => {
       // Social Media & External Links
       social_facebook: { key: 'social_facebook', value: 'https://www.facebook.com/Sauti116Helpline', currentValue: 'https://www.facebook.com/Sauti116Helpline', page: 'footer', type: 'text' },
       social_twitter: { key: 'social_twitter', value: 'https://x.com/sauti116', currentValue: 'https://x.com/sauti116', page: 'footer', type: 'text' },
+      social_tiktok: { key: 'social_tiktok', value: 'https://www.tiktok.com/@sauti116helplineuganda', currentValue: 'https://www.tiktok.com/@sauti116helplineuganda', page: 'footer', type: 'text' },
       social_whatsapp: { key: 'social_whatsapp', value: 'https://wa.me/256743889999', currentValue: 'https://wa.me/256743889999', page: 'footer', type: 'text' },
-      social_ureport: { key: 'social_ureport', value: 'https://ureport.in', currentValue: 'https://ureport.in', page: 'footer', type: 'text' },
-      social_safepal: { key: 'social_safepal', value: 'https://www.unicef.org/uganda/safepal-app', currentValue: 'https://www.unicef.org/uganda/safepal-app', page: 'footer', type: 'text' },
+      social_sautichl_email: { key: 'social_sautichl_email', value: 'sautichl@mglsd.go.ug', currentValue: 'sautichl@mglsd.go.ug', page: 'footer', type: 'text' },
+      social_online_reporting: { key: 'social_online_reporting', value: 'https://sauti.mglsd.go.ug', currentValue: 'https://sauti.mglsd.go.ug', page: 'footer', type: 'text' },
 
       // Contact Info
       contact_email_info: { key: 'contact_email_info', value: 'info@sauti.mglsd.go.ug', currentValue: 'info@sauti.mglsd.go.ug', page: 'contact', type: 'text' },

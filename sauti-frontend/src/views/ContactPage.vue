@@ -152,7 +152,10 @@
     MessageSquare,
     ArrowRight,
     CheckCircle,
-    ShieldCheck
+    ShieldCheck,
+    Globe,
+    Video,
+    Send
   } from 'lucide-vue-next'
 
   defineOptions({
@@ -172,19 +175,38 @@
 
   const getIcon = (contact) => {
     if (contact.type === 'email' || contact.icon === 'envelope') return Mail
-    if (contact.type === 'location' || contact.icon === 'map-pin') return MapPin
-    return MessageSquare
+    if (contact.type === 'location' || contact.icon === 'map-pin' || contact.icon === 'location-marker') return MapPin
+    if (contact.icon === 'globe') return Globe
+    if (contact.icon === 'video') return Video
+    if (contact.icon === 'message-square') return MessageSquare
+    if (contact.icon === 'send' || contact.icon === 'sms') return Send
+    if (contact.icon === 'whatsapp') return MessageSquare
+    if (contact.icon === 'phone') return Phone
+    return Phone
   }
 
   const getLink = (contact) => {
     if (contact.type === 'email') return `mailto:${contact.value}`
     if (contact.type === 'location') return `https://maps.google.com/?q=${encodeURIComponent(contact.value)}`
+    if (contact.type === 'phone') {
+      if (contact.icon === 'whatsapp') return `https://wa.me/${contact.value.replace(/\s/g, '')}`
+      return `tel:${contact.value}`
+    }
     return contact.value
   }
   
   const getActionLabel = (contact) => {
      if (contact.type === 'email') return 'Email Us'
      if (contact.type === 'location') return 'Get Directions'
+     if (contact.type === 'phone') {
+       if (contact.icon === 'whatsapp') return 'Chat on WhatsApp'
+       return 'Call Now'
+     }
+     if (contact.icon === 'globe') return 'Open Portal'
+     if (contact.icon === 'message-square' || contact.icon === 'sms') return 'Send SMS'
+     if (contact.icon === 'video') return 'Visit TikTok'
+     if (contact.icon === 'facebook') return 'Visit Facebook'
+     if (contact.icon === 'twitter') return 'Visit X (Twitter)'
      return 'Visit Link'
   }
 
@@ -196,8 +218,15 @@
     } catch (error) {
        // Keep valid fallback data for demo reliability if API fails
       contacts.value = [
-        { id: 1, name: 'General Inquiries', type: 'email', value: 'info@sauti116.ug', description: 'For general questions and partnerships.' },
-        { id: 2, name: 'Head Office', type: 'location', value: 'Kampala, Uganda', description: 'Ministry of Gender, Labour and Social Development.' }
+        { id: 1, name: 'Call', type: 'phone', icon: 'phone', value: '116', description: 'Free, confidential hotline available 24/7' },
+        { id: 2, name: 'WhatsApp', type: 'phone', icon: 'whatsapp', value: '0743889999', description: 'Chat with us on WhatsApp' },
+        { id: 3, name: 'Email', type: 'email', icon: 'envelope', value: 'sautichl@mglsd.go.ug', description: 'Send us an email for inquiries' },
+        { id: 4, name: 'Online Reporting', type: 'social', icon: 'globe', value: 'https://sauti.mglsd.go.ug', description: 'Report cases online through our portal' },
+        { id: 5, name: 'SMS', type: 'other', icon: 'message-square', value: 'Hello to 116', description: 'Send SMS to 116 and follow chatbot prompts' },
+        { id: 6, name: 'Facebook', type: 'social', icon: 'facebook', value: 'https://www.facebook.com/Sauti116Helpline', description: 'Follow us on Facebook' },
+        { id: 7, name: 'Twitter', type: 'social', icon: 'twitter', value: 'https://x.com/sauti116', description: 'Follow us on X (Twitter)' },
+        { id: 8, name: 'TikTok', type: 'social', icon: 'video', value: 'https://www.tiktok.com/@sauti116helplineuganda', description: 'Follow us on TikTok' },
+        { id: 9, name: 'Office Location', type: 'location', icon: 'location-marker', value: 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', description: 'Visit our head office' },
       ]
     } finally {
       loading.value = false

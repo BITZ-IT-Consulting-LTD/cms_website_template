@@ -20,12 +20,15 @@ def populate_contacts():
     print("Populating contact items...")
     
     contacts_data = [
-        {'name': 'Emergency Hotline', 'value': '116', 'type': 'phone', 'icon': 'phone', 'order': 1},
-        {'name': 'WhatsApp', 'value': '+256 743 889 999', 'type': 'phone', 'icon': 'whatsapp', 'order': 2},
-        {'name': 'Email', 'value': 'info@sauti.mglsd.go.ug', 'type': 'email', 'icon': 'envelope', 'order': 3},
-        {'name': 'Office Location', 'value': 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', 'type': 'location', 'icon': 'location-marker', 'order': 4},
-        {'name': 'Facebook', 'value': 'https://www.facebook.com/sauti116uganda', 'type': 'social', 'icon': 'facebook', 'order': 5},
-        {'name': 'Twitter', 'value': 'https://twitter.com/sauti116', 'type': 'social', 'icon': 'twitter', 'order': 6},
+        {'name': 'Call', 'value': '116', 'type': 'phone', 'icon': 'phone', 'order': 1, 'description': 'Free, confidential hotline available 24/7'},
+        {'name': 'WhatsApp', 'value': '0743889999', 'type': 'phone', 'icon': 'whatsapp', 'order': 2, 'description': 'Chat with us on WhatsApp'},
+        {'name': 'Email', 'value': 'sautichl@mglsd.go.ug', 'type': 'email', 'icon': 'envelope', 'order': 3, 'description': 'Send us an email for inquiries'},
+        {'name': 'Online Reporting', 'value': 'https://sauti.mglsd.go.ug', 'type': 'social', 'icon': 'globe', 'order': 4, 'description': 'Report cases online through our portal'},
+        {'name': 'SMS', 'value': 'Hello to 116', 'type': 'other', 'icon': 'message-square', 'order': 5, 'description': 'Send SMS to 116 and follow chatbot prompts'},
+        {'name': 'Facebook', 'value': 'https://www.facebook.com/Sauti116Helpline', 'type': 'social', 'icon': 'facebook', 'order': 6, 'description': 'Follow us on Facebook'},
+        {'name': 'Twitter', 'value': 'https://x.com/sauti116', 'type': 'social', 'icon': 'twitter', 'order': 7, 'description': 'Follow us on X (Twitter)'},
+        {'name': 'TikTok', 'value': 'https://www.tiktok.com/@sauti116helplineuganda', 'type': 'social', 'icon': 'video', 'order': 8, 'description': 'Follow us on TikTok'},
+        {'name': 'Office Location', 'value': 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', 'type': 'location', 'icon': 'location-marker', 'order': 9, 'description': 'Visit our head office'},
     ]
 
     created_count = 0
@@ -40,6 +43,7 @@ def populate_contacts():
                 'icon': contact_data['icon'],
                 'order': contact_data['order'],
                 'is_visible': True,
+                'description': contact_data.get('description', ''),
             }
         )
         if created:
