@@ -4,10 +4,10 @@
     <header class="page-header">
       <div class="container-custom">
         <h1 class="page-header-title">
-          Our <span class="text-primary">Partners</span>
+          {{ siteContent.getContent('partners_page_title_prefix', 'Our') }} <span class="text-primary">{{ siteContent.getContent('partners_page_title_highlight', 'Partners') }}</span>
         </h1>
         <p class="page-header-subtitle">
-          Working together with organizations committed to protecting children and vulnerable communities across Uganda.
+          {{ siteContent.getContent('partners_page_subtitle', 'Working together with organizations committed to protecting children and vulnerable communities across Uganda.') }}
         </p>
       </div>
     </header>
@@ -18,23 +18,20 @@
         <section class="bg-secondary/5 p-8 md:p-12 rounded-[3.5rem] border-2 border-secondary/10 mb-16 shadow-sm">
           <h2 class="campaign-header text-xl text-secondary mb-8 flex items-center gap-3">
             <ShieldCheckIcon class="w-6 h-6 text-secondary" />
-            Partnership at a Glance
+            {{ siteContent.getContent('partners_glance_title', 'Partnership at a Glance') }}
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="space-y-4">
-              <p class="text-black font-bold text-lg">Official Network</p>
-              <p class="text-muted text-sm leading-relaxed">Backed by the **Ministry of Gender, Labour and Social
-                Development**.</p>
+              <p class="text-black font-bold text-lg">{{ siteContent.getContent('partners_feature1_title', 'Official Network') }}</p>
+              <p class="text-muted text-sm leading-relaxed">{{ siteContent.getContent('partners_feature1_description', 'Backed by the **Ministry of Gender, Labour and Social Development**.') }}</p>
             </div>
             <div class="space-y-4">
-              <p class="text-black font-bold text-lg">National Reach</p>
-              <p class="text-muted text-sm leading-relaxed">Connected to **over 50 NGOs** and international
-                agencies.</p>
+              <p class="text-black font-bold text-lg">{{ siteContent.getContent('partners_feature2_title', 'National Reach') }}</p>
+              <p class="text-muted text-sm leading-relaxed">{{ siteContent.getContent('partners_feature2_description', 'Connected to **over 50 NGOs** and international agencies.') }}</p>
             </div>
             <div class="space-y-4">
-              <p class="text-black font-bold text-lg">Expert Support</p>
-              <p class="text-muted text-sm leading-relaxed">Collaborations with **UNICEF and local district
-                leaders**.</p>
+              <p class="text-black font-bold text-lg">{{ siteContent.getContent('partners_feature3_title', 'Expert Support') }}</p>
+              <p class="text-muted text-sm leading-relaxed">{{ siteContent.getContent('partners_feature3_description', 'Collaborations with **UNICEF and local district leaders**.') }}</p>
             </div>
           </div>
         </section>
@@ -43,8 +40,8 @@
       <div class="container-custom section-rhythm">
         <!-- 2. Content Area -->
         <section aria-label="Partner Directory">
-          <h2 class="campaign-header text-3xl text-secondary mb-12">Who We Work With</h2>
-          <AppLoader v-if="loading" message="Loading partner organizations..." />
+          <h2 class="campaign-header text-3xl text-secondary mb-12">{{ siteContent.getContent('partners_directory_title', 'Who We Work With') }}</h2>
+          <AppLoader v-if="loading" :message="siteContent.getContent('partners_loading', 'Loading partner organizations...')" />
 
           <div v-else-if="partners.length"
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 md:gap-10">
@@ -57,7 +54,7 @@
                 <div
                   class="absolute inset-x-0 bottom-4 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
                   <span class="block text-[10px] text-center font-bold uppercase tracking-widest text-primary">
-                    Visit official site →
+                    {{ siteContent.getContent('partners_visit_site', 'Visit official site →') }}
                   </span>
                 </div>
               </a>
@@ -74,7 +71,7 @@
               class="w-20 h-20 bg-neutral-white border-2 border-neutral-offwhite rounded-2xl flex items-center justify-center mx-auto mb-6 text-neutral-offwhite opacity-50">
               <UserGroupIcon class="w-10 h-10" />
             </div>
-            <p class="campaign-header text-black/40 text-xl font-bold">No partners listed yet.</p>
+            <p class="campaign-header text-black/40 text-xl font-bold">{{ siteContent.getContent('partners_empty_state', 'No partners listed yet.') }}</p>
           </div>
         </section>
 

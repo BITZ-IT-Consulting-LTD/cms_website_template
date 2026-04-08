@@ -20,11 +20,11 @@
       <section class="mb-8 md:mb-16">
         <div class="text-center mb-6 md:mb-12 px-4">
           <h2 class="text-lg md:text-2xl lg:text-3xl font-bold text-secondary tracking-tight break-words">
-            The Journey of a <span class="text-primary">Voice</span>
+            {{ siteContent.getContent('operations_journey_title', 'The Journey of a') }} <span class="text-primary">{{ siteContent.getContent('operations_journey_title_highlight', 'Voice') }}</span>
           </h2>
           <div class="w-16 h-1 bg-primary mx-auto mt-2 md:mt-4 rounded-full"></div>
           <p class="text-xs md:text-sm lg:text-base text-black/60 font-semibold mt-2 md:mt-4 max-w-2xl mx-auto break-words">
-            Every call goes through a carefully designed process to ensure the best possible outcome
+            {{ siteContent.getContent('operations_journey_subtitle', 'Every call goes through a carefully designed process to ensure the best possible outcome') }}
           </p>
         </div>
 
@@ -33,19 +33,19 @@
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
             <!-- Background Image -->
             <img
-              src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=400&h=500&fit=crop"
-              alt="Access"
+              :src="getJourneyImage(0)"
+              :alt="siteContent.getContent('operations_journey_step1_title', 'Access')"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent opacity-90"></div>
+            <!-- Gradient Overlay - Stronger for text visibility -->
+            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/85 to-primary/30"></div>
 
             <!-- Content -->
-            <div class="relative z-10 h-full flex flex-col justify-end p-3 md:p-6 text-white">
-              <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/80 break-words">Step 1</span>
-              <h4 class="text-sm md:text-lg lg:text-xl font-bold mb-1 md:mb-2 break-words">Access</h4>
-              <p class="text-[10px] md:text-xs lg:text-sm font-medium text-white/90 leading-relaxed break-words">
-                Toll-free 116 available 24/7 from any network across Uganda.
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step1_label', 'Step 1') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step1_title', 'Access') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step1_description', 'Toll-free 116 available 24/7 from any network across Uganda.') }}
               </p>
             </div>
           </div>
@@ -53,17 +53,17 @@
           <!-- Item 2: Response -->
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
             <img
-              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop"
-              alt="Response"
+              :src="getJourneyImage(1)"
+              :alt="siteContent.getContent('operations_journey_step2_title', 'Response')"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-secondary-light via-secondary-light/80 to-transparent opacity-90"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-secondary-light via-secondary-light/85 to-secondary-light/30"></div>
 
-            <div class="relative z-10 h-full flex flex-col justify-end p-3 md:p-6 text-white">
-              <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/80 break-words">Step 2</span>
-              <h4 class="text-sm md:text-lg lg:text-xl font-bold mb-1 md:mb-2 break-words">Response</h4>
-              <p class="text-[10px] md:text-xs lg:text-sm font-medium text-white/90 leading-relaxed break-words">
-                Professional counselors responding in 26 local languages.
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step2_label', 'Step 2') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step2_title', 'Response') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step2_description', 'Professional counselors responding in 26 local languages.') }}
               </p>
             </div>
           </div>
@@ -71,17 +71,17 @@
           <!-- Item 3: Management -->
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
             <img
-              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=500&fit=crop"
-              alt="Management"
+              :src="getJourneyImage(2)"
+              :alt="siteContent.getContent('operations_journey_step3_title', 'Management')"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-hotline via-hotline/80 to-transparent opacity-90"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-hotline via-hotline/85 to-hotline/30"></div>
 
-            <div class="relative z-10 h-full flex flex-col justify-end p-3 md:p-6 text-white">
-              <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/80 break-words">Step 3</span>
-              <h4 class="text-sm md:text-lg lg:text-xl font-bold mb-1 md:mb-2 break-words">Management</h4>
-              <p class="text-[10px] md:text-xs lg:text-sm font-medium text-white/90 leading-relaxed break-words">
-                Case follow-up and specialized support coordination.
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step3_label', 'Step 3') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step3_title', 'Management') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step3_description', 'Case follow-up and specialized support coordination.') }}
               </p>
             </div>
           </div>
@@ -89,17 +89,17 @@
           <!-- Item 4: Protection -->
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
             <img
-              src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&h=500&fit=crop"
-              alt="Protection"
+              :src="getJourneyImage(3)"
+              :alt="siteContent.getContent('operations_journey_step4_title', 'Protection')"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/80 to-transparent opacity-90"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/85 to-secondary/30"></div>
 
-            <div class="relative z-10 h-full flex flex-col justify-end p-3 md:p-6 text-white">
-              <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/80 break-words">Step 4</span>
-              <h4 class="text-sm md:text-lg lg:text-xl font-bold mb-1 md:mb-2 break-words">Protection</h4>
-              <p class="text-[10px] md:text-xs lg:text-sm font-medium text-white/90 leading-relaxed break-words">
-                Resolution and community reintegration support.
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step4_label', 'Step 4') }}</span>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step4_title', 'Protection') }}</h4>
+              <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
+                {{ siteContent.getContent('operations_journey_step4_description', 'Resolution and community reintegration support.') }}
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@
             <!-- Left: Image Side -->
             <div class="relative min-h-[250px] md:min-h-[280px] lg:min-h-[320px]">
               <img
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop"
+                :src="getInfrastructureImage()"
                 alt="Infrastructure"
                 class="w-full h-full object-cover"
               />
@@ -123,16 +123,16 @@
               <div class="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 bg-white/95 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl">
                 <div class="grid grid-cols-3 gap-2 md:gap-3">
                   <div class="text-center">
-                    <div class="text-lg md:text-xl font-black text-primary">26</div>
-                    <div class="text-[10px] md:text-xs text-black/60 font-bold">Languages</div>
+                    <div class="text-lg md:text-xl font-black text-primary">{{ siteContent.getContent('operations_infra_stat1_value', '26') }}</div>
+                    <div class="text-[10px] md:text-xs text-black/60 font-bold">{{ siteContent.getContent('operations_infra_stat1_label', 'Languages') }}</div>
                   </div>
                   <div class="text-center border-x border-gray-200">
-                    <div class="text-lg md:text-xl font-black text-secondary">24/7</div>
-                    <div class="text-[10px] md:text-xs text-black/60 font-bold">Available</div>
+                    <div class="text-lg md:text-xl font-black text-secondary">{{ siteContent.getContent('operations_infra_stat2_value', '24/7') }}</div>
+                    <div class="text-[10px] md:text-xs text-black/60 font-bold">{{ siteContent.getContent('operations_infra_stat2_label', 'Available') }}</div>
                   </div>
                   <div class="text-center">
-                    <div class="text-lg md:text-xl font-black text-hotline">100%</div>
-                    <div class="text-[10px] md:text-xs text-black/60 font-bold">Coverage</div>
+                    <div class="text-lg md:text-xl font-black text-hotline">{{ siteContent.getContent('operations_infra_stat3_value', '100%') }}</div>
+                    <div class="text-[10px] md:text-xs text-black/60 font-bold">{{ siteContent.getContent('operations_infra_stat3_label', 'Coverage') }}</div>
                   </div>
                 </div>
               </div>
@@ -142,21 +142,21 @@
             <div class="p-5 md:p-6 lg:p-8 flex flex-col justify-center bg-neutral-offwhite">
               <div class="mb-2">
                 <span class="inline-block px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-primary/10 text-primary text-[10px] md:text-xs font-black tracking-widest border border-primary/20 uppercase">
-                  Our Foundation
+                  {{ siteContent.getContent('operations_infra_badge', 'Our Foundation') }}
                 </span>
               </div>
 
               <h2 class="text-base md:text-xl lg:text-2xl font-bold text-secondary mb-2 leading-tight break-words">
-                A Robust Infrastructure for <span class="text-primary">Nationwide Impact</span>
+                {{ siteContent.getContent('operations_infra_title', 'A Robust Infrastructure for') }} <span class="text-primary">{{ siteContent.getContent('operations_infra_title_highlight', 'Nationwide Impact') }}</span>
               </h2>
 
               <p class="text-xs md:text-sm text-black/60 font-semibold mb-3 md:mb-4 leading-relaxed break-words">
-                Our operations are built on sustainable pillars that ensure every caller receives expert attention, no matter where they are in Uganda.
+                {{ siteContent.getContent('operations_infra_description', 'Our operations are built on sustainable pillars that ensure every caller receives expert attention, no matter where they are in Uganda.') }}
               </p>
 
               <!-- Pillars List -->
               <div class="space-y-2 md:space-y-3">
-                <div v-for="(pillar, pi) in pillars" :key="pi"
+                <div v-for="(pillar, pi) in computedPillars" :key="pi"
                      class="flex gap-3 md:gap-4 items-start group">
                   <div class="flex-1 min-w-0">
                     <h5 class="text-sm md:text-base font-bold text-secondary mb-0.5 break-words">{{ pillar.title }}</h5>
@@ -169,55 +169,85 @@
         </div>
       </section>
 
-      <!-- 4. Services Auto-Scroll Carousel -->
+      <!-- 4. Services Slideshow -->
       <section class="mb-6 md:mb-12">
         <div class="text-center mb-6 md:mb-10 px-4">
-          <h2 class="text-lg md:text-2xl lg:text-3xl font-bold text-secondary mb-2 md:mb-3 lg:mb-4 break-words">
+          <h2 class="text-xl md:text-3xl lg:text-4xl font-bold text-secondary mb-2 md:mb-3 lg:mb-4 break-words">
             {{ siteContent.getContent('services_section_title', 'Services We Offer') }}
           </h2>
-          <p class="text-xs md:text-sm lg:text-base text-black/60 font-semibold max-w-2xl mx-auto leading-relaxed break-words">
-            Comprehensive support systems protecting and empowering every voice in Uganda.
+          <p class="text-sm md:text-base lg:text-lg text-black/60 font-semibold max-w-2xl mx-auto leading-relaxed break-words">
+            {{ siteContent.getContent('services_section_subtitle', 'Comprehensive support systems protecting and empowering every voice in Uganda.') }}
           </p>
         </div>
 
-        <!-- Auto-Scrolling Container -->
-        <div class="services-carousel-container overflow-hidden relative">
-          <!-- Back Navigation Button -->
+        <!-- Large Slideshow Container -->
+        <div
+          class="services-slideshow relative overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl mx-auto max-w-5xl h-[350px] md:h-[450px] lg:h-[550px]"
+          @mouseenter="pauseServiceSlideshow"
+          @mouseleave="resumeServiceSlideshow"
+        >
+          <!-- Slides -->
+          <div v-for="(service, idx) in services" :key="idx"
+               :class="[
+                 'absolute inset-0 transition-all duration-700 ease-in-out',
+                 currentServiceIndex === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+               ]">
+            <img
+              :src="getServiceImage(idx)"
+              :alt="siteContent.getContent(service.cid_title, service.title)"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <!-- Stronger gradient for text visibility -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
+
+            <!-- Content - Larger text -->
+            <div class="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-14 text-white">
+              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-2 md:mb-3 text-white/80">
+                Service {{ idx + 1 }} of {{ services.length }}
+              </span>
+              <h3 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 drop-shadow-lg break-words">
+                {{ siteContent.getContent(service.cid_title, service.title) }}
+              </h3>
+              <p class="text-base md:text-xl lg:text-2xl text-white font-medium leading-relaxed max-w-3xl drop-shadow-md break-words">
+                {{ siteContent.getContent(service.cid_text, service.text) }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Navigation Arrows -->
           <button
-            @click="scrollPrevious"
-            class="carousel-nav-btn carousel-nav-prev"
-            aria-label="Go back to previous service"
+            @click="prevService"
+            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all shadow-lg"
+            aria-label="Previous service"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </button>
-
-          <div
-            ref="servicesCarousel"
-            class="services-carousel flex gap-4 md:gap-6"
-            @mouseenter="pauseAutoScroll"
-            @mouseleave="resumeAutoScroll"
+          <button
+            @click="nextService"
+            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all shadow-lg"
+            aria-label="Next service"
           >
-            <!-- Service Cards (duplicated for infinite loop) -->
-            <div v-for="(service, idx) in [...services, ...services]" :key="idx"
-                 class="flex-shrink-0 w-[280px] md:w-[320px] lg:w-[380px] relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[280px]">
-              <img
-                :src="getServiceImage(idx % services.length)"
-                :alt="siteContent.getContent(service.cid_title, service.title)"
-                class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
 
-              <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white overflow-hidden">
-                <h3 class="text-sm md:text-lg lg:text-xl font-bold mb-1 md:mb-2 break-words">
-                  {{ siteContent.getContent(service.cid_title, service.title) }}
-                </h3>
-                <p class="text-xs md:text-sm text-white/90 font-medium leading-relaxed line-clamp-3 break-words">
-                  {{ siteContent.getContent(service.cid_text, service.text) }}
-                </p>
-              </div>
-            </div>
+          <!-- Dots Navigation -->
+          <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:gap-3">
+            <button
+              v-for="(service, idx) in services"
+              :key="'dot-' + idx"
+              @click="goToService(idx)"
+              :class="[
+                'w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300',
+                currentServiceIndex === idx
+                  ? 'bg-white scale-125'
+                  : 'bg-white/40 hover:bg-white/70'
+              ]"
+              :aria-label="'Go to service ' + (idx + 1)"
+            ></button>
           </div>
         </div>
       </section>
@@ -226,7 +256,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import { useSiteContent } from '@/composables/useSiteContent'
 
@@ -243,76 +273,138 @@ const services = [
   { title: 'Community Sensitization', cid_title: 'service_community_title', cid_text: 'service_community_text', text: 'Community sensitization activities to raise awareness about child protection and GBV prevention.' }
 ]
 
-const pillars = [
-  { title: '26 Local Languages', desc: 'Bridging the communication gap for every community in Uganda.' },
-  { title: '24/7 Availability', desc: 'Support is always just a phone call away, day or night.' },
-  { title: 'Sustainable Funding', desc: 'Partnering with MGLSD and UNICEF for long-term service stability.' }
-]
-
 const settingsStore = useSettingsStore()
 const siteContent = useSiteContent('operations')
-const servicesCarousel = ref(null)
-let autoScrollInterval = null
-const isPaused = ref(false)
 
+// Services Slideshow
+const currentServiceIndex = ref(0)
+let serviceSlideshowInterval = null
+const isSlideshowPaused = ref(false)
+
+// Operations page images from API
+const operationsImages = ref([])
+
+// Computed pillars using CMS content
+const computedPillars = computed(() => [
+  {
+    title: siteContent.getContent('operations_pillar1_title', '26 Local Languages'),
+    desc: siteContent.getContent('operations_pillar1_description', 'Bridging the communication gap for every community in Uganda.')
+  },
+  {
+    title: siteContent.getContent('operations_pillar2_title', '24/7 Availability'),
+    desc: siteContent.getContent('operations_pillar2_description', 'Support is always just a phone call away, day or night.')
+  },
+  {
+    title: siteContent.getContent('operations_pillar3_title', 'Sustainable Funding'),
+    desc: siteContent.getContent('operations_pillar3_description', 'Partnering with MGLSD and UNICEF for long-term service stability.')
+  }
+])
+
+// Default fallback images for Journey section
+const defaultJourneyImages = [
+  'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=400&h=500&fit=crop', // Step 1: Access
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop', // Step 2: Response
+  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=500&fit=crop', // Step 3: Management
+  'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&h=500&fit=crop'  // Step 4: Protection
+]
+
+// Default fallback images for Services section
+const defaultServiceImages = [
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop', // Service 1: Telephone Counseling
+  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop', // Service 2: Walk-In Support
+  'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=600&fit=crop', // Service 3: Media Response
+  'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop', // Service 4: Information & Guidance
+  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop', // Service 5: Essential Service Referrals
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=300&fit=crop'  // Service 6: Community Sensitization
+]
+
+// Default infrastructure image
+const defaultInfraImage = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop'
+
+// Helper function to get Journey images (from API or fallback)
+const getJourneyImage = (index) => {
+  // Look for uploaded journey images first
+  const journeyImage = operationsImages.value.find(img => img.position === `journey_step_${index + 1}`)
+  if (journeyImage?.image_url) {
+    return journeyImage.image_url
+  }
+  return defaultJourneyImages[index] || defaultJourneyImages[0]
+}
+
+// Helper function to get Service images (from API or fallback)
 const getServiceImage = (index) => {
-  const images = [
-    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop', // Service 1: Telephone Counseling
-    'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop', // Service 2: Walk-In Support
-    'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=600&fit=crop', // Service 3: Media Response
-    'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop', // Service 4: Information & Guidance
-    'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop', // Service 5: Essential Service Referrals
-    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=300&fit=crop'  // Service 6: Community Sensitization
-  ]
-  return images[index]
+  // Look for uploaded service images first
+  const serviceKeys = ['counseling', 'walkin', 'media', 'guidance', 'referral', 'community']
+  const serviceImage = operationsImages.value.find(img => img.position === `service_${serviceKeys[index]}`)
+  if (serviceImage?.image_url) {
+    return serviceImage.image_url
+  }
+  return defaultServiceImages[index] || defaultServiceImages[0]
 }
 
-const startAutoScroll = () => {
-  if (!servicesCarousel.value) return
+// Helper function to get Infrastructure image (from API or fallback)
+const getInfrastructureImage = () => {
+  const infraImage = operationsImages.value.find(img => img.position === 'infrastructure')
+  if (infraImage?.image_url) {
+    return infraImage.image_url
+  }
+  return defaultInfraImage
+}
 
-  autoScrollInterval = setInterval(() => {
-    if (isPaused.value) return // Don't scroll if paused
-
-    const carousel = servicesCarousel.value
-    const scrollAmount = 1 // Scroll 1px at a time for smooth movement
-    carousel.scrollLeft += scrollAmount
-
-    // Reset scroll when reaching halfway (where duplicates start)
-    const maxScroll = carousel.scrollWidth / 2
-    if (carousel.scrollLeft >= maxScroll) {
-      carousel.scrollLeft = 0
+// Fetch operations images from API
+const fetchOperationsImages = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/content/operations-images/`)
+    if (response.ok) {
+      operationsImages.value = await response.json()
     }
-  }, 20) // Update every 20ms for smooth animation
+  } catch (error) {
+    console.warn('Failed to fetch operations images, using defaults:', error)
+  }
 }
 
-const pauseAutoScroll = () => {
-  isPaused.value = true
+// Services Slideshow Functions
+const startServiceSlideshow = () => {
+  serviceSlideshowInterval = setInterval(() => {
+    if (isSlideshowPaused.value) return
+    currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
+  }, 5000) // Change slide every 5 seconds
 }
 
-const resumeAutoScroll = () => {
-  isPaused.value = false
+const pauseServiceSlideshow = () => {
+  isSlideshowPaused.value = true
 }
 
-const scrollPrevious = () => {
-  if (!servicesCarousel.value) return
-  const carousel = servicesCarousel.value
-  const cardWidth = 280 + 16 // card width + gap (adjust for md/lg if needed)
-  carousel.scrollLeft -= cardWidth
+const resumeServiceSlideshow = () => {
+  isSlideshowPaused.value = false
+}
+
+const nextService = () => {
+  currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
+}
+
+const prevService = () => {
+  currentServiceIndex.value = (currentServiceIndex.value - 1 + services.length) % services.length
+}
+
+const goToService = (index) => {
+  currentServiceIndex.value = index
 }
 
 onMounted(async () => {
   await siteContent.fetchContent()
   await settingsStore.fetchGlobalSettings()
+  await fetchOperationsImages()
 
-  // Start auto-scroll after a short delay
+  // Start services slideshow after a short delay
   setTimeout(() => {
-    startAutoScroll()
+    startServiceSlideshow()
   }, 500)
 })
 
 onBeforeUnmount(() => {
-  if (autoScrollInterval) {
-    clearInterval(autoScrollInterval)
+  if (serviceSlideshowInterval) {
+    clearInterval(serviceSlideshowInterval)
   }
 })
 </script>
@@ -385,63 +477,9 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Auto-Scrolling Services Carousel */
-.services-carousel-container {
-  width: 100%;
-  position: relative;
-}
-
-.services-carousel {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  padding: 0.5rem 0;
-}
-
-/* Back Navigation Button */
-.carousel-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background: rgba(0, 104, 55, 0.9);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.carousel-nav-btn:hover {
-  background: rgba(0, 104, 55, 1);
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-nav-btn:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
-.carousel-nav-prev {
-  left: 1rem;
-}
-
-/* Responsive sizing on mobile */
-@media (max-width: 768px) {
-  .carousel-nav-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .carousel-nav-prev {
-    left: 0.5rem;
-  }
+/* Services Slideshow */
+.services-slideshow {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
 </style>

@@ -283,6 +283,76 @@ class Command(BaseCommand):
             'operations_highlight_6_title': { 'key': 'operations_highlight_6_title', 'value': 'Multiple Channels', 'label': 'Operations Highlight 6 Title', 'page': 'operations', 'type': 'text' },
             'operations_highlight_6_text': { 'key': 'operations_highlight_6_text', 'value': 'WhatsApp, U-Report, SafePal App, email, and walk-ins.', 'label': 'Operations Highlight 6 Text', 'page': 'operations', 'type': 'text' },
 
+            # Operations Page - Hero Section
+            'operations_page_title': { 'key': 'operations_page_title', 'value': 'How We', 'label': 'Operations Page Title', 'page': 'operations', 'type': 'heading', 'description': 'Hero section main title' },
+            'operations_page_title_highlight': { 'key': 'operations_page_title_highlight', 'value': 'Operate', 'label': 'Operations Page Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Hero section highlighted word' },
+            'operations_page_subtitle': { 'key': 'operations_page_subtitle', 'value': 'Sauti is a Swahili word that means voice. Discover how we serve every citizen across Uganda 24/7.', 'label': 'Operations Page Subtitle', 'page': 'operations', 'type': 'text', 'description': 'Hero section subtitle text' },
+
+            # Operations Page - Journey of a Voice Section
+            'operations_journey_title': { 'key': 'operations_journey_title', 'value': 'The Journey of a', 'label': 'Operations Journey Title', 'page': 'operations', 'type': 'heading', 'description': 'Journey section title' },
+            'operations_journey_title_highlight': { 'key': 'operations_journey_title_highlight', 'value': 'Voice', 'label': 'Operations Journey Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Journey section highlighted word' },
+            'operations_journey_subtitle': { 'key': 'operations_journey_subtitle', 'value': 'Every call goes through a carefully designed process to ensure the best possible outcome', 'label': 'Operations Journey Subtitle', 'page': 'operations', 'type': 'text', 'description': 'Journey section subtitle' },
+
+            # Journey Step 1 - Access
+            'operations_journey_step1_label': { 'key': 'operations_journey_step1_label', 'value': 'Step 1', 'label': 'Journey Step 1 Label', 'page': 'operations', 'type': 'text', 'description': 'Step 1 label' },
+            'operations_journey_step1_title': { 'key': 'operations_journey_step1_title', 'value': 'Access', 'label': 'Journey Step 1 Title', 'page': 'operations', 'type': 'heading', 'description': 'Step 1 title' },
+            'operations_journey_step1_description': { 'key': 'operations_journey_step1_description', 'value': 'Toll-free 116 available 24/7 from any network across Uganda.', 'label': 'Journey Step 1 Description', 'page': 'operations', 'type': 'text', 'description': 'Step 1 description' },
+
+            # Journey Step 2 - Response
+            'operations_journey_step2_label': { 'key': 'operations_journey_step2_label', 'value': 'Step 2', 'label': 'Journey Step 2 Label', 'page': 'operations', 'type': 'text', 'description': 'Step 2 label' },
+            'operations_journey_step2_title': { 'key': 'operations_journey_step2_title', 'value': 'Response', 'label': 'Journey Step 2 Title', 'page': 'operations', 'type': 'heading', 'description': 'Step 2 title' },
+            'operations_journey_step2_description': { 'key': 'operations_journey_step2_description', 'value': 'Professional counselors responding in 26 local languages.', 'label': 'Journey Step 2 Description', 'page': 'operations', 'type': 'text', 'description': 'Step 2 description' },
+
+            # Journey Step 3 - Management
+            'operations_journey_step3_label': { 'key': 'operations_journey_step3_label', 'value': 'Step 3', 'label': 'Journey Step 3 Label', 'page': 'operations', 'type': 'text', 'description': 'Step 3 label' },
+            'operations_journey_step3_title': { 'key': 'operations_journey_step3_title', 'value': 'Management', 'label': 'Journey Step 3 Title', 'page': 'operations', 'type': 'heading', 'description': 'Step 3 title' },
+            'operations_journey_step3_description': { 'key': 'operations_journey_step3_description', 'value': 'Case follow-up and specialized support coordination.', 'label': 'Journey Step 3 Description', 'page': 'operations', 'type': 'text', 'description': 'Step 3 description' },
+
+            # Journey Step 4 - Protection
+            'operations_journey_step4_label': { 'key': 'operations_journey_step4_label', 'value': 'Step 4', 'label': 'Journey Step 4 Label', 'page': 'operations', 'type': 'text', 'description': 'Step 4 label' },
+            'operations_journey_step4_title': { 'key': 'operations_journey_step4_title', 'value': 'Protection', 'label': 'Journey Step 4 Title', 'page': 'operations', 'type': 'heading', 'description': 'Step 4 title' },
+            'operations_journey_step4_description': { 'key': 'operations_journey_step4_description', 'value': 'Resolution and community reintegration support.', 'label': 'Journey Step 4 Description', 'page': 'operations', 'type': 'text', 'description': 'Step 4 description' },
+
+            # Operations Page - Infrastructure Section
+            'operations_infra_badge': { 'key': 'operations_infra_badge', 'value': 'Our Foundation', 'label': 'Infrastructure Badge', 'page': 'operations', 'type': 'text', 'description': 'Infrastructure section badge text' },
+            'operations_infra_title': { 'key': 'operations_infra_title', 'value': 'A Robust Infrastructure for', 'label': 'Infrastructure Title', 'page': 'operations', 'type': 'heading', 'description': 'Infrastructure section title' },
+            'operations_infra_title_highlight': { 'key': 'operations_infra_title_highlight', 'value': 'Nationwide Impact', 'label': 'Infrastructure Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Infrastructure section highlighted text' },
+            'operations_infra_description': { 'key': 'operations_infra_description', 'value': 'Our operations are built on sustainable pillars that ensure every caller receives expert attention, no matter where they are in Uganda.', 'label': 'Infrastructure Description', 'page': 'operations', 'type': 'text', 'description': 'Infrastructure section description' },
+
+            # Infrastructure Stats
+            'operations_infra_stat1_value': { 'key': 'operations_infra_stat1_value', 'value': '26', 'label': 'Infrastructure Stat 1 Value', 'page': 'operations', 'type': 'text', 'description': 'First stat value (Languages)' },
+            'operations_infra_stat1_label': { 'key': 'operations_infra_stat1_label', 'value': 'Languages', 'label': 'Infrastructure Stat 1 Label', 'page': 'operations', 'type': 'text', 'description': 'First stat label' },
+            'operations_infra_stat2_value': { 'key': 'operations_infra_stat2_value', 'value': '24/7', 'label': 'Infrastructure Stat 2 Value', 'page': 'operations', 'type': 'text', 'description': 'Second stat value (Availability)' },
+            'operations_infra_stat2_label': { 'key': 'operations_infra_stat2_label', 'value': 'Available', 'label': 'Infrastructure Stat 2 Label', 'page': 'operations', 'type': 'text', 'description': 'Second stat label' },
+            'operations_infra_stat3_value': { 'key': 'operations_infra_stat3_value', 'value': '100%', 'label': 'Infrastructure Stat 3 Value', 'page': 'operations', 'type': 'text', 'description': 'Third stat value (Coverage)' },
+            'operations_infra_stat3_label': { 'key': 'operations_infra_stat3_label', 'value': 'Coverage', 'label': 'Infrastructure Stat 3 Label', 'page': 'operations', 'type': 'text', 'description': 'Third stat label' },
+
+            # Infrastructure Pillars
+            'operations_pillar1_title': { 'key': 'operations_pillar1_title', 'value': '26 Local Languages', 'label': 'Pillar 1 Title', 'page': 'operations', 'type': 'heading', 'description': 'First pillar title' },
+            'operations_pillar1_description': { 'key': 'operations_pillar1_description', 'value': 'Bridging the communication gap for every community in Uganda.', 'label': 'Pillar 1 Description', 'page': 'operations', 'type': 'text', 'description': 'First pillar description' },
+            'operations_pillar2_title': { 'key': 'operations_pillar2_title', 'value': '24/7 Availability', 'label': 'Pillar 2 Title', 'page': 'operations', 'type': 'heading', 'description': 'Second pillar title' },
+            'operations_pillar2_description': { 'key': 'operations_pillar2_description', 'value': 'Support is always just a phone call away, day or night.', 'label': 'Pillar 2 Description', 'page': 'operations', 'type': 'text', 'description': 'Second pillar description' },
+            'operations_pillar3_title': { 'key': 'operations_pillar3_title', 'value': 'Sustainable Funding', 'label': 'Pillar 3 Title', 'page': 'operations', 'type': 'heading', 'description': 'Third pillar title' },
+            'operations_pillar3_description': { 'key': 'operations_pillar3_description', 'value': 'Partnering with MGLSD and UNICEF for long-term service stability.', 'label': 'Pillar 3 Description', 'page': 'operations', 'type': 'text', 'description': 'Third pillar description' },
+
+            # Operations Page - Services Section
+            'services_section_title': { 'key': 'services_section_title', 'value': 'Services We Offer', 'label': 'Services Section Title', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title' },
+            'services_section_subtitle': { 'key': 'services_section_subtitle', 'value': 'Comprehensive support systems protecting and empowering every voice in Uganda.', 'label': 'Services Section Subtitle', 'page': 'operations', 'type': 'text', 'description': 'Services carousel subtitle' },
+
+            # Service Items (titles and descriptions)
+            'service_counseling_title': { 'key': 'service_counseling_title', 'value': 'Telephone Counseling', 'label': 'Service Counseling Title', 'page': 'operations', 'type': 'heading', 'description': 'Telephone counseling service title' },
+            'service_counseling_text': { 'key': 'service_counseling_text', 'value': 'Professional counseling services available 24/7 through our toll-free helpline 116.', 'label': 'Service Counseling Text', 'page': 'operations', 'type': 'text', 'description': 'Telephone counseling service description' },
+            'service_walkin_title': { 'key': 'service_walkin_title', 'value': 'Walk-In Support', 'label': 'Service Walk-In Title', 'page': 'operations', 'type': 'heading', 'description': 'Walk-in support service title' },
+            'service_walkin_text': { 'key': 'service_walkin_text', 'value': 'Handle walk-in clients at our offices for face-to-face consultation and support.', 'label': 'Service Walk-In Text', 'page': 'operations', 'type': 'text', 'description': 'Walk-in support service description' },
+            'service_media_title': { 'key': 'service_media_title', 'value': 'Media Response', 'label': 'Service Media Title', 'page': 'operations', 'type': 'heading', 'description': 'Media response service title' },
+            'service_media_text': { 'key': 'service_media_text', 'value': 'Respond to cases of violence against children and gender-based violence reported through media and U-report.', 'label': 'Service Media Text', 'page': 'operations', 'type': 'text', 'description': 'Media response service description' },
+            'service_guidance_title': { 'key': 'service_guidance_title', 'value': 'Information & Guidance', 'label': 'Service Guidance Title', 'page': 'operations', 'type': 'heading', 'description': 'Guidance service title' },
+            'service_guidance_text': { 'key': 'service_guidance_text', 'value': 'Provision of information and guidance on child care and protection matters.', 'label': 'Service Guidance Text', 'page': 'operations', 'type': 'text', 'description': 'Guidance service description' },
+            'service_referral_title': { 'key': 'service_referral_title', 'value': 'Essential Service Referrals', 'label': 'Service Referral Title', 'page': 'operations', 'type': 'heading', 'description': 'Referral service title' },
+            'service_referral_text': { 'key': 'service_referral_text', 'value': 'Referral to essential services including healthcare, legal aid, and social support.', 'label': 'Service Referral Text', 'page': 'operations', 'type': 'text', 'description': 'Referral service description' },
+            'service_community_title': { 'key': 'service_community_title', 'value': 'Community Sensitization', 'label': 'Service Community Title', 'page': 'operations', 'type': 'heading', 'description': 'Community service title' },
+            'service_community_text': { 'key': 'service_community_text', 'value': 'Community sensitization activities to raise awareness about child protection and GBV prevention.', 'label': 'Service Community Text', 'page': 'operations', 'type': 'text', 'description': 'Community service description' },
+
             # Resources Page Content
             'resources_title': { 'key': 'resources_title', 'value': 'Resources & Statistics', 'label': 'Resources Title', 'page': 'resources', 'type': 'heading' },
             'resources_subtitle': { 'key': 'resources_subtitle', 'value': 'Real-time insights from case reports and downloadable resources to support communities', 'label': 'Resources Subtitle', 'page': 'resources', 'type': 'text' },
@@ -400,6 +470,119 @@ class Command(BaseCommand):
             'faqs_terms_of_service': { 'key': 'faqs_terms_of_service', 'value': 'Terms of Service', 'label': 'FAQs Terms of Service', 'page': 'faqs', 'type': 'button' },
             'faqs_contact_us': { 'key': 'faqs_contact_us', 'value': 'Contact Us', 'label': 'FAQs Contact Us', 'page': 'faqs', 'type': 'button' },
             'faqs_footer_text': { 'key': 'faqs_footer_text', 'value': '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.', 'label': 'FAQs Footer Text', 'page': 'faqs', 'type': 'text' },
+
+            # Header Navigation and CTAs
+            'header_brand_name': { 'key': 'header_brand_name', 'value': 'Sauti 116', 'label': 'Header Brand Name', 'page': 'header', 'type': 'text', 'description': 'Brand name displayed in the header' },
+            'header_nav_home': { 'key': 'header_nav_home', 'value': 'Home', 'label': 'Header Nav Home', 'page': 'header', 'type': 'button', 'description': 'Home navigation link text' },
+            'header_nav_about': { 'key': 'header_nav_about', 'value': 'Who We Are', 'label': 'Header Nav About', 'page': 'header', 'type': 'button', 'description': 'About navigation link text' },
+            'header_nav_operations': { 'key': 'header_nav_operations', 'value': 'Our Operations', 'label': 'Header Nav Operations', 'page': 'header', 'type': 'button', 'description': 'Operations navigation link text' },
+            'header_nav_resources': { 'key': 'header_nav_resources', 'value': 'Resources', 'label': 'Header Nav Resources', 'page': 'header', 'type': 'button', 'description': 'Resources navigation link text' },
+            'header_nav_blog': { 'key': 'header_nav_blog', 'value': 'Blog', 'label': 'Header Nav Blog', 'page': 'header', 'type': 'button', 'description': 'Blog navigation link text' },
+            'header_nav_news': { 'key': 'header_nav_news', 'value': 'News', 'label': 'Header Nav News', 'page': 'header', 'type': 'button', 'description': 'News navigation link text' },
+            'header_nav_videos': { 'key': 'header_nav_videos', 'value': 'Videos', 'label': 'Header Nav Videos', 'page': 'header', 'type': 'button', 'description': 'Videos navigation link text' },
+            'header_nav_partners': { 'key': 'header_nav_partners', 'value': 'Partners', 'label': 'Header Nav Partners', 'page': 'header', 'type': 'button', 'description': 'Partners navigation link text' },
+            'header_nav_contact': { 'key': 'header_nav_contact', 'value': 'Contact', 'label': 'Header Nav Contact', 'page': 'header', 'type': 'button', 'description': 'Contact navigation link text' },
+            'header_call_button': { 'key': 'header_call_button', 'value': 'Call 116', 'label': 'Header Call Button', 'page': 'header', 'type': 'button', 'description': 'Call CTA button text' },
+            'header_report_button': { 'key': 'header_report_button', 'value': 'Report a case', 'label': 'Header Report Button', 'page': 'header', 'type': 'button', 'description': 'Report CTA button text' },
+
+            # Footer Navigation and Social Links
+            'footer_brand_name': { 'key': 'footer_brand_name', 'value': 'Sauti 116', 'label': 'Footer Brand Name', 'page': 'footer', 'type': 'text', 'description': 'Brand name displayed in the footer' },
+            'footer_nav_home': { 'key': 'footer_nav_home', 'value': 'Home', 'label': 'Footer Nav Home', 'page': 'footer', 'type': 'button', 'description': 'Home footer link text' },
+            'footer_nav_about': { 'key': 'footer_nav_about', 'value': 'About Us', 'label': 'Footer Nav About', 'page': 'footer', 'type': 'button', 'description': 'About footer link text' },
+            'footer_nav_operations': { 'key': 'footer_nav_operations', 'value': 'Operations', 'label': 'Footer Nav Operations', 'page': 'footer', 'type': 'button', 'description': 'Operations footer link text' },
+            'footer_nav_resources': { 'key': 'footer_nav_resources', 'value': 'Resources', 'label': 'Footer Nav Resources', 'page': 'footer', 'type': 'button', 'description': 'Resources footer link text' },
+            'footer_nav_blog': { 'key': 'footer_nav_blog', 'value': 'Blog', 'label': 'Footer Nav Blog', 'page': 'footer', 'type': 'button', 'description': 'Blog footer link text' },
+            'footer_nav_news': { 'key': 'footer_nav_news', 'value': 'News', 'label': 'Footer Nav News', 'page': 'footer', 'type': 'button', 'description': 'News footer link text' },
+            'footer_nav_partners': { 'key': 'footer_nav_partners', 'value': 'Partners', 'label': 'Footer Nav Partners', 'page': 'footer', 'type': 'button', 'description': 'Partners footer link text' },
+            'footer_nav_contact': { 'key': 'footer_nav_contact', 'value': 'Contact', 'label': 'Footer Nav Contact', 'page': 'footer', 'type': 'button', 'description': 'Contact footer link text' },
+            'footer_social_x_url': { 'key': 'footer_social_x_url', 'value': 'https://x.com/sauti116', 'label': 'Footer X URL', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter social media URL' },
+            'footer_social_x_label': { 'key': 'footer_social_x_label', 'value': 'X', 'label': 'Footer X Label', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter display name' },
+            'footer_social_facebook_url': { 'key': 'footer_social_facebook_url', 'value': 'https://facebook.com/sauti116', 'label': 'Footer Facebook URL', 'page': 'footer', 'type': 'text', 'description': 'Facebook social media URL' },
+            'footer_social_facebook_label': { 'key': 'footer_social_facebook_label', 'value': 'Facebook', 'label': 'Footer Facebook Label', 'page': 'footer', 'type': 'text', 'description': 'Facebook display name' },
+            'footer_social_instagram_url': { 'key': 'footer_social_instagram_url', 'value': 'https://instagram.com/sauti116', 'label': 'Footer Instagram URL', 'page': 'footer', 'type': 'text', 'description': 'Instagram social media URL' },
+            'footer_social_instagram_label': { 'key': 'footer_social_instagram_label', 'value': 'Instagram', 'label': 'Footer Instagram Label', 'page': 'footer', 'type': 'text', 'description': 'Instagram display name' },
+            'footer_social_youtube_url': { 'key': 'footer_social_youtube_url', 'value': 'https://youtube.com/@sauti116', 'label': 'Footer YouTube URL', 'page': 'footer', 'type': 'text', 'description': 'YouTube social media URL' },
+            'footer_social_youtube_label': { 'key': 'footer_social_youtube_label', 'value': 'YouTube', 'label': 'Footer YouTube Label', 'page': 'footer', 'type': 'text', 'description': 'YouTube display name' },
+            'footer_social_tiktok_url': { 'key': 'footer_social_tiktok_url', 'value': 'https://tiktok.com/@sauti116', 'label': 'Footer TikTok URL', 'page': 'footer', 'type': 'text', 'description': 'TikTok social media URL' },
+            'footer_social_tiktok_label': { 'key': 'footer_social_tiktok_label', 'value': 'TikTok', 'label': 'Footer TikTok Label', 'page': 'footer', 'type': 'text', 'description': 'TikTok display name' },
+
+            # Contact Page Form Text
+            'contact_page_title': { 'key': 'contact_page_title', 'value': 'Get in', 'label': 'Contact Page Title', 'page': 'contact', 'type': 'heading', 'description': 'Contact page title prefix' },
+            'contact_page_title_highlight': { 'key': 'contact_page_title_highlight', 'value': 'Touch', 'label': 'Contact Page Title Highlight', 'page': 'contact', 'type': 'heading', 'description': 'Contact page title highlight text' },
+            'contact_page_description': { 'key': 'contact_page_description', 'value': 'Have a question or need to report a concern? Choose the channel that works best for you.', 'label': 'Contact Page Description', 'page': 'contact', 'type': 'text', 'description': 'Contact page subtitle' },
+            'contact_channels_title': { 'key': 'contact_channels_title', 'value': 'Contact Channels', 'label': 'Contact Channels Title', 'page': 'contact', 'type': 'heading', 'description': 'Contact channels section title' },
+            'contact_channels_description': { 'key': 'contact_channels_description', 'value': 'Choose the best way to reach us for your needs.', 'label': 'Contact Channels Description', 'page': 'contact', 'type': 'text', 'description': 'Contact channels section description' },
+            'contact_fallback_email_title': { 'key': 'contact_fallback_email_title', 'value': 'Email Us', 'label': 'Contact Fallback Email Title', 'page': 'contact', 'type': 'heading', 'description': 'Fallback email card title' },
+            'contact_fallback_email_description': { 'key': 'contact_fallback_email_description', 'value': 'For general inquiries and information.', 'label': 'Contact Fallback Email Description', 'page': 'contact', 'type': 'text', 'description': 'Fallback email card description' },
+            'contact_fallback_email_address': { 'key': 'contact_fallback_email_address', 'value': 'info@sauti116.ug', 'label': 'Contact Fallback Email Address', 'page': 'contact', 'type': 'text', 'description': 'Fallback email address' },
+            'contact_action_send_email': { 'key': 'contact_action_send_email', 'value': 'Send Email', 'label': 'Contact Send Email Action', 'page': 'contact', 'type': 'button', 'description': 'Send email action button text' },
+            'contact_form_title': { 'key': 'contact_form_title', 'value': 'Send a Message', 'label': 'Contact Form Title', 'page': 'contact', 'type': 'heading', 'description': 'Contact form card title' },
+            'contact_form_subtitle': { 'key': 'contact_form_subtitle', 'value': 'We typically respond within 24 hours.', 'label': 'Contact Form Subtitle', 'page': 'contact', 'type': 'text', 'description': 'Contact form card subtitle' },
+            'contact_form_name_label': { 'key': 'contact_form_name_label', 'value': 'Your Name', 'label': 'Contact Form Name Label', 'page': 'contact', 'type': 'text', 'description': 'Name field label' },
+            'contact_form_name_placeholder': { 'key': 'contact_form_name_placeholder', 'value': 'John Doe', 'label': 'Contact Form Name Placeholder', 'page': 'contact', 'type': 'text', 'description': 'Name field placeholder' },
+            'contact_form_email_label': { 'key': 'contact_form_email_label', 'value': 'Email Address', 'label': 'Contact Form Email Label', 'page': 'contact', 'type': 'text', 'description': 'Email field label' },
+            'contact_form_email_placeholder': { 'key': 'contact_form_email_placeholder', 'value': 'name@example.com', 'label': 'Contact Form Email Placeholder', 'page': 'contact', 'type': 'text', 'description': 'Email field placeholder' },
+            'contact_form_message_label': { 'key': 'contact_form_message_label', 'value': 'How can we help?', 'label': 'Contact Form Message Label', 'page': 'contact', 'type': 'text', 'description': 'Message field label' },
+            'contact_form_message_placeholder': { 'key': 'contact_form_message_placeholder', 'value': 'Type your message here...', 'label': 'Contact Form Message Placeholder', 'page': 'contact', 'type': 'text', 'description': 'Message field placeholder' },
+            'contact_form_sending': { 'key': 'contact_form_sending', 'value': 'Sending...', 'label': 'Contact Form Sending', 'page': 'contact', 'type': 'text', 'description': 'Form submit button loading state' },
+            'contact_form_submit': { 'key': 'contact_form_submit', 'value': 'Send Message', 'label': 'Contact Form Submit', 'page': 'contact', 'type': 'button', 'description': 'Form submit button text' },
+            'contact_success_title': { 'key': 'contact_success_title', 'value': 'Message Sent!', 'label': 'Contact Success Title', 'page': 'contact', 'type': 'heading', 'description': 'Success message title' },
+            'contact_success_message': { 'key': 'contact_success_message', 'value': 'Thank you for reaching out. We will get back to you shortly.', 'label': 'Contact Success Message', 'page': 'contact', 'type': 'text', 'description': 'Success message body' },
+            'contact_send_another': { 'key': 'contact_send_another', 'value': 'Send another message', 'label': 'Contact Send Another', 'page': 'contact', 'type': 'button', 'description': 'Send another message link text' },
+            'contact_trust_signal': { 'key': 'contact_trust_signal', 'value': 'Your communication is secure. This service is operated under the mandate of the Ministry of Gender, Labour and Social Development.', 'label': 'Contact Trust Signal', 'page': 'contact', 'type': 'text', 'description': 'Trust signal message' },
+
+            # Partners Page Text
+            'partners_page_title_prefix': { 'key': 'partners_page_title_prefix', 'value': 'Our', 'label': 'Partners Page Title Prefix', 'page': 'partners', 'type': 'heading', 'description': 'Partners page title prefix' },
+            'partners_page_title_highlight': { 'key': 'partners_page_title_highlight', 'value': 'Partners', 'label': 'Partners Page Title Highlight', 'page': 'partners', 'type': 'heading', 'description': 'Partners page title highlight' },
+            'partners_page_subtitle': { 'key': 'partners_page_subtitle', 'value': 'Working together with organizations committed to protecting children and vulnerable communities across Uganda.', 'label': 'Partners Page Subtitle', 'page': 'partners', 'type': 'text', 'description': 'Partners page subtitle' },
+            'partners_glance_title': { 'key': 'partners_glance_title', 'value': 'Partnership at a Glance', 'label': 'Partners Glance Title', 'page': 'partners', 'type': 'heading', 'description': 'Partnership glance section title' },
+            'partners_feature1_title': { 'key': 'partners_feature1_title', 'value': 'Official Network', 'label': 'Partners Feature 1 Title', 'page': 'partners', 'type': 'heading', 'description': 'First feature title' },
+            'partners_feature1_description': { 'key': 'partners_feature1_description', 'value': 'Backed by the **Ministry of Gender, Labour and Social Development**.', 'label': 'Partners Feature 1 Description', 'page': 'partners', 'type': 'text', 'description': 'First feature description' },
+            'partners_feature2_title': { 'key': 'partners_feature2_title', 'value': 'National Reach', 'label': 'Partners Feature 2 Title', 'page': 'partners', 'type': 'heading', 'description': 'Second feature title' },
+            'partners_feature2_description': { 'key': 'partners_feature2_description', 'value': 'Connected to **over 50 NGOs** and international agencies.', 'label': 'Partners Feature 2 Description', 'page': 'partners', 'type': 'text', 'description': 'Second feature description' },
+            'partners_feature3_title': { 'key': 'partners_feature3_title', 'value': 'Expert Support', 'label': 'Partners Feature 3 Title', 'page': 'partners', 'type': 'heading', 'description': 'Third feature title' },
+            'partners_feature3_description': { 'key': 'partners_feature3_description', 'value': 'Collaborations with **UNICEF and local district leaders**.', 'label': 'Partners Feature 3 Description', 'page': 'partners', 'type': 'text', 'description': 'Third feature description' },
+            'partners_directory_title': { 'key': 'partners_directory_title', 'value': 'Who We Work With', 'label': 'Partners Directory Title', 'page': 'partners', 'type': 'heading', 'description': 'Partner directory section title' },
+            'partners_loading': { 'key': 'partners_loading', 'value': 'Loading partner organizations...', 'label': 'Partners Loading', 'page': 'partners', 'type': 'text', 'description': 'Loading message' },
+            'partners_visit_site': { 'key': 'partners_visit_site', 'value': 'Visit official site →', 'label': 'Partners Visit Site', 'page': 'partners', 'type': 'button', 'description': 'Visit partner site link text' },
+            'partners_empty_state': { 'key': 'partners_empty_state', 'value': 'No partners listed yet.', 'label': 'Partners Empty State', 'page': 'partners', 'type': 'text', 'description': 'Empty state message' },
+            'partners_cta_title': { 'key': 'partners_cta_title', 'value': 'How We Work Together', 'label': 'Partners CTA Title', 'page': 'partners', 'type': 'heading', 'description': 'CTA section title' },
+            'partners_cta_text': { 'key': 'partners_cta_text', 'value': 'Interested in joining our mission to protect the children of Uganda? We are always looking for organizations that share our commitment.', 'label': 'Partners CTA Text', 'page': 'partners', 'type': 'text', 'description': 'CTA section description' },
+            'partners_cta_interest_button': { 'key': 'partners_cta_interest_button', 'value': 'Express Interest', 'label': 'Partners CTA Interest Button', 'page': 'partners', 'type': 'button', 'description': 'Express interest button text' },
+            'partners_cta_learn_button': { 'key': 'partners_cta_learn_button', 'value': 'Learn About Our Impact', 'label': 'Partners CTA Learn Button', 'page': 'partners', 'type': 'button', 'description': 'Learn more button text' },
+
+            # Resources Page - Additional Keys
+            'resources_live_data_badge': { 'key': 'resources_live_data_badge', 'value': 'Live Data', 'label': 'Resources Live Data Badge', 'page': 'resources', 'type': 'text', 'description': 'Live data indicator badge' },
+            'resources_filter_time_period': { 'key': 'resources_filter_time_period', 'value': 'Time Period', 'label': 'Resources Filter Time Period', 'page': 'resources', 'type': 'text', 'description': 'Time period filter label' },
+            'resources_filter_region': { 'key': 'resources_filter_region', 'value': 'Region', 'label': 'Resources Filter Region', 'page': 'resources', 'type': 'text', 'description': 'Region filter label' },
+            'resources_filter_case_type': { 'key': 'resources_filter_case_type', 'value': 'Case Type', 'label': 'Resources Filter Case Type', 'page': 'resources', 'type': 'text', 'description': 'Case type filter label' },
+            'resources_filter_all': { 'key': 'resources_filter_all', 'value': 'All', 'label': 'Resources Filter All', 'page': 'resources', 'type': 'text', 'description': 'All filter option' },
+            'resources_chart_gender_title': { 'key': 'resources_chart_gender_title', 'value': 'Cases by Gender', 'label': 'Resources Chart Gender Title', 'page': 'resources', 'type': 'heading', 'description': 'Gender chart title' },
+            'resources_chart_gender_subtitle': { 'key': 'resources_chart_gender_subtitle', 'value': 'Distribution of reported cases by gender', 'label': 'Resources Chart Gender Subtitle', 'page': 'resources', 'type': 'text', 'description': 'Gender chart subtitle' },
+            'resources_chart_age_title': { 'key': 'resources_chart_age_title', 'value': 'Age Distribution', 'label': 'Resources Chart Age Title', 'page': 'resources', 'type': 'heading', 'description': 'Age chart title' },
+            'resources_chart_age_subtitle': { 'key': 'resources_chart_age_subtitle', 'value': 'Cases by age groups', 'label': 'Resources Chart Age Subtitle', 'page': 'resources', 'type': 'text', 'description': 'Age chart subtitle' },
+            'resources_chart_region_title': { 'key': 'resources_chart_region_title', 'value': 'Regional Breakdown', 'label': 'Resources Chart Region Title', 'page': 'resources', 'type': 'heading', 'description': 'Region chart title' },
+            'resources_chart_region_subtitle': { 'key': 'resources_chart_region_subtitle', 'value': 'Cases reported per region', 'label': 'Resources Chart Region Subtitle', 'page': 'resources', 'type': 'text', 'description': 'Region chart subtitle' },
+            'resources_download': { 'key': 'resources_download', 'value': 'Download', 'label': 'Resources Download', 'page': 'resources', 'type': 'button', 'description': 'Download button text' },
+            'resources_downloading': { 'key': 'resources_downloading', 'value': 'Downloading...', 'label': 'Resources Downloading', 'page': 'resources', 'type': 'text', 'description': 'Download button loading state' },
+
+            # Videos Page - Additional Keys
+            'videos_filter_videos': { 'key': 'videos_filter_videos', 'value': 'VIDEOS', 'label': 'Videos Filter Videos', 'page': 'videos', 'type': 'button', 'description': 'Videos filter tab' },
+            'videos_filter_audio': { 'key': 'videos_filter_audio', 'value': 'AUDIO', 'label': 'Videos Filter Audio', 'page': 'videos', 'type': 'button', 'description': 'Audio filter tab' },
+            'videos_empty_title': { 'key': 'videos_empty_title', 'value': 'No videos found', 'label': 'Videos Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title' },
+            'videos_empty_subtitle': { 'key': 'videos_empty_subtitle', 'value': 'Try adjusting your filters or check back later for new content.', 'label': 'Videos Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle' },
+
+            # Blog Page Buttons
+            'blog_search_button': { 'key': 'blog_search_button', 'value': 'Search', 'label': 'Blog Search Button', 'page': 'blog', 'type': 'button', 'description': 'Search button text' },
+            'blog_all_filter': { 'key': 'blog_all_filter', 'value': 'ALL', 'label': 'Blog All Filter', 'page': 'blog', 'type': 'button', 'description': 'All filter chip text' },
+            'blog_all_categories': { 'key': 'blog_all_categories', 'value': 'All Categories', 'label': 'Blog All Categories', 'page': 'blog', 'type': 'text', 'description': 'All categories dropdown option' },
+            'blog_clear_filters': { 'key': 'blog_clear_filters', 'value': 'Clear all filters', 'label': 'Blog Clear Filters', 'page': 'blog', 'type': 'button', 'description': 'Clear filters button text' },
+
+            # News Page Buttons
+            'news_search_button': { 'key': 'news_search_button', 'value': 'Search', 'label': 'News Search Button', 'page': 'news', 'type': 'button', 'description': 'Search button text' },
+            'news_all_filter': { 'key': 'news_all_filter', 'value': 'ALL', 'label': 'News All Filter', 'page': 'news', 'type': 'button', 'description': 'All filter chip text' },
+            'news_all_categories': { 'key': 'news_all_categories', 'value': 'All Categories', 'label': 'News All Categories', 'page': 'news', 'type': 'text', 'description': 'All categories dropdown option' },
+            'news_clear_filters': { 'key': 'news_clear_filters', 'value': 'Clear all filters', 'label': 'News Clear Filters', 'page': 'news', 'type': 'button', 'description': 'Clear filters button text' },
         }
 
         for key, data in default_content.items():

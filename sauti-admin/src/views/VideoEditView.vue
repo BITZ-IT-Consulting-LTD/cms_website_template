@@ -459,6 +459,17 @@ onBeforeUnmount(() => {
   }
 })
 
+// Convert Date to local datetime string for datetime-local input (YYYY-MM-DDTHH:MM)
+const toLocalDatetimeString = (date) => {
+  if (!date || !(date instanceof Date) || isNaN(date)) return null
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 const publishVideo = () => {
   saveChanges('PUBLISHED')
 }
@@ -620,7 +631,7 @@ onMounted(async () => {
         language: video.language || 'en',
         is_featured: video.is_featured || false,
         thumbnail: video.thumbnail || null,
-        scheduled_publish_at: video.scheduled_publish_at ? new Date(video.scheduled_publish_at).toISOString().slice(0, 16) : null
+        scheduled_publish_at: video.scheduled_publish_at ? toLocalDatetimeString(new Date(video.scheduled_publish_at)) : null
       }
     } catch (err) {
       console.error('Failed to load video:', err)

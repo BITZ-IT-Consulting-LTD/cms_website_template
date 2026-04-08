@@ -109,7 +109,7 @@ img, video, iframe, embed, object {
     color: #000000;
     background-color: #ffffff;
     @apply antialiased transition-colors duration-200;
-    font-family: var(--font-cronos);
+    font-family: var(--font-brand);
     /* Base font: 16px (industry standard for readability) */
     font-size: 16px;
     /* Smooth font rendering */
@@ -496,7 +496,7 @@ img, video, iframe, embed, object {
 }
 
 #giz-chat-wrapper {
-  --font-family: var(--font-cronos) !important;
+  --font-family: var(--font-brand) !important;
   --heading-font-weight: 700 !important;
   --primary-color: rgb(var(--color-primary)) !important;
 }
@@ -538,11 +538,11 @@ h6 .number,
 [class*="number"] {
 } */
 
-/* Ensure text content uses Cronos Pro */
+/* Ensure text content uses brand font */
 p,
 span:not(.number):not(.stat-number):not(.metric-value),
 div:not([class*="count"]):not([class*="number"]) {
-  font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;
+  font-family: var(--font-brand);
 }
 
 /* Mobile-first fixes for all viewports under 768px (tablets and below) */

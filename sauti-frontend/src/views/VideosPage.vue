@@ -39,15 +39,15 @@
       <div class="container-custom">
         <div class="filter-tabs-wrapper">
           <button
-            v-for="chip in ['VIDEOS', 'AUDIO']"
-            :key="chip"
-            @click="activeFilter = chip"
+            v-for="chip in filterChips"
+            :key="chip.value"
+            @click="activeFilter = chip.value"
             :class="[
               'filter-chip',
-              activeFilter === chip ? 'filter-chip-active' : 'filter-chip-inactive'
+              activeFilter === chip.value ? 'filter-chip-active' : 'filter-chip-inactive'
             ]"
           >
-            {{ chip }}
+            {{ chip.label }}
           </button>
         </div>
       </div>
@@ -74,8 +74,8 @@
           <!-- Empty State -->
           <div v-if="videos.filter(v => !isAudio(v)).length === 0" class="empty-state">
             <Video class="empty-icon" />
-            <h3 class="empty-title">No videos found</h3>
-            <p class="empty-subtitle">Check back later for new content</p>
+            <h3 class="empty-title">{{ siteContent.getContent('videos_empty_title', 'No videos found') }}</h3>
+            <p class="empty-subtitle">{{ siteContent.getContent('videos_empty_subtitle', 'Check back later for new content') }}</p>
           </div>
 
           <!-- Video Grid -->
@@ -125,8 +125,8 @@
           <!-- Empty State -->
           <div v-if="videos.filter(v => isAudio(v)).length === 0" class="empty-state">
             <Play class="empty-icon" />
-            <h3 class="empty-title">No audio content found</h3>
-            <p class="empty-subtitle">Check back later for new content</p>
+            <h3 class="empty-title">{{ siteContent.getContent('videos_audio_empty_title', 'No audio content found') }}</h3>
+            <p class="empty-subtitle">{{ siteContent.getContent('videos_audio_empty_subtitle', 'Check back later for new content') }}</p>
           </div>
 
           <!-- Audio List - Podcast Style -->
@@ -204,6 +204,12 @@
   const videosSearchPlaceholder = computed(() => settingsStore.settings.videos_search_placeholder || 'Search video archive...')
   const videosSearchButton = computed(() => settingsStore.settings.videos_search_button || 'Search')
 
+  // Filter chips - customizable via CMS
+  const filterChips = computed(() => [
+    { value: 'VIDEOS', label: siteContent.getContent('videos_filter_videos', 'VIDEOS') },
+    { value: 'AUDIO', label: siteContent.getContent('videos_filter_audio', 'AUDIO') }
+  ])
+
   const videos = ref([])
 
   // Helper function to separate media types for the display logic
@@ -233,6 +239,7 @@
         title: video.title,
         thumbnail: video.thumbnail || video.youtube_thumbnail_url || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
         youtube_url: video.youtube_url,
+        youtube_id: video.youtube_id, // Pass youtube_id directly from API
         video_file: video.video_file,
         video_type: video.video_type || 'YOUTUBE',
         views_count: video.views_count,
@@ -241,7 +248,8 @@
         published_at: video.published_at,
         updated_at: video.updated_at,
         created_at: video.created_at,
-        duration: video.duration || null
+        duration: video.duration || null,
+        description: video.description || ''
       }))
     } catch (error) {
       console.error('Failed to fetch videos:', error)
@@ -269,11 +277,19 @@
     const date = new Date(dateString)
     const now = new Date()
     const diffTime = Math.abs(now - date)
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    const diffMinutes = Math.floor(diffTime / (1000 * 60))
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffMinutes < 1) return 'Just now'
+    if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`
+    if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
     if (diffDays === 1) return 'Yesterday'
     if (diffDays < 7) return `${diffDays} days ago`
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`
-    return `${Math.ceil(diffDays / 30)} months ago`
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) !== 1 ? 's' : ''} ago`
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) !== 1 ? 's' : ''} ago`
+    return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) !== 1 ? 's' : ''} ago`
   }
 
   onMounted(async () => {

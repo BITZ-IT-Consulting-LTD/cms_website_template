@@ -141,6 +141,15 @@ export const useSettingsStore = defineStore('settings', () => {
           settings.value.org_team_photo = orgProfile.value.team_photo
           settings.value.primary_color = orgProfile.value.primary_color
           settings.value.secondary_color = orgProfile.value.secondary_color
+          // About hero images
+          settings.value.about_hero_image_1 = orgProfile.value.about_hero_image_1_url
+          settings.value.about_hero_image_2 = orgProfile.value.about_hero_image_2_url
+          settings.value.about_hero_image_3 = orgProfile.value.about_hero_image_3_url
+          settings.value.about_hero_image_4 = orgProfile.value.about_hero_image_4_url
+          settings.value.about_hero_image_5 = orgProfile.value.about_hero_image_5_url
+          settings.value.about_hero_image_6 = orgProfile.value.about_hero_image_6_url
+          settings.value.about_hero_image_7 = orgProfile.value.about_hero_image_7_url
+          settings.value.about_hero_image_8 = orgProfile.value.about_hero_image_8_url
 
           // Inject all brand colors for easier access
           if (orgProfile.value.brand_colors && Array.isArray(orgProfile.value.brand_colors)) {

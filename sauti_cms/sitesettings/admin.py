@@ -91,6 +91,14 @@ class OrganizationProfileAdmin(BaseSettingsAdmin):
         ('Basic Identity', {
             'fields': ('name', 'tagline', 'logo', 'favicon', 'team_photo')
         }),
+        ('About Page Hero Images', {
+            'fields': (
+                'about_hero_image_1', 'about_hero_image_2', 'about_hero_image_3',
+                'about_hero_image_4', 'about_hero_image_5', 'about_hero_image_6',
+                'about_hero_image_7', 'about_hero_image_8'
+            ),
+            'description': 'Images displayed in the About page hero grid. Left column (1-3), Center grid (4-6, team_photo is top-left), Right column (7-8).'
+        }),
         ('Branding / Colors', {
             'fields': ('primary_color', 'secondary_color', 'accent_color')
         }),

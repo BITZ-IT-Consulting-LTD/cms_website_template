@@ -30,34 +30,21 @@ class VideoSerializer(serializers.ModelSerializer):
         read_only_fields = ['slug', 'created_at', 'updated_at', 'views_count']
     
     def get_thumbnail(self, obj):
-        """Return absolute URL for thumbnail"""
+        """Return relative URL for thumbnail (frontend proxy handles it)"""
         if obj.thumbnail:
             # Check if the field contains a full URL (external URL stored as string)
             thumbnail_str = str(obj.thumbnail)
             if thumbnail_str.startswith('http://') or thumbnail_str.startswith('https://'):
                 # It's already a full URL, return as-is
                 return thumbnail_str
-            
+
             # It's a file field, get the relative URL
             try:
-                thumbnail_url = obj.thumbnail.url
+                return obj.thumbnail.url
             except (ValueError, AttributeError):
                 return None
-            
-            request = self.context.get('request')
-            if request:
-                # Use X-Forwarded-Host if available (from nginx proxy), otherwise use request host
-                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-                # If host is 'backend' (internal Docker), use localhost for browser access
-                if host == 'backend':
-                    host = 'localhost:8080'  # nginx proxy port
-                    scheme = 'http'
-                return f"{scheme}://{host}{thumbnail_url}"
-            # Fallback if no request context
-            return f"http://localhost:8080{thumbnail_url}" if thumbnail_url else None
         return None
-    
+
     def create(self, validated_data):
         category_id = validated_data.pop('category_id', None)
         video = Video.objects.create(**validated_data)
@@ -107,30 +94,17 @@ class VideoListSerializer(serializers.ModelSerializer):
         ]
     
     def get_thumbnail(self, obj):
-        """Return absolute URL for thumbnail"""
+        """Return relative URL for thumbnail (frontend proxy handles it)"""
         if obj.thumbnail:
             # Check if the field contains a full URL (external URL stored as string)
             thumbnail_str = str(obj.thumbnail)
             if thumbnail_str.startswith('http://') or thumbnail_str.startswith('https://'):
                 # It's already a full URL, return as-is
                 return thumbnail_str
-            
+
             # It's a file field, get the relative URL
             try:
-                thumbnail_url = obj.thumbnail.url
+                return obj.thumbnail.url
             except (ValueError, AttributeError):
                 return None
-            
-            request = self.context.get('request')
-            if request:
-                # Use X-Forwarded-Host if available (from nginx proxy), otherwise use request host
-                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-                # If host is 'backend' (internal Docker), use localhost for browser access
-                if host == 'backend':
-                    host = 'localhost:8080'  # nginx proxy port
-                    scheme = 'http'
-                return f"{scheme}://{host}{thumbnail_url}"
-            # Fallback if no request context
-            return f"http://localhost:8080{thumbnail_url}" if thumbnail_url else None
         return None

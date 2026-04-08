@@ -11,13 +11,13 @@
         <!-- Left Side Column -->
         <div class="hidden md:grid grid-rows-3 gap-4">
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img src="@/assets/children-uganda-1.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Community" />
+              <img :src="heroImage1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Community" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img src="@/assets/helpline-center.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Helpline" />
+              <img :src="heroImage2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Helpline" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img src="@/assets/hero-family.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Family" />
+              <img :src="heroImage3" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Family" />
            </div>
         </div>
 
@@ -26,16 +26,16 @@
             <!-- Center Grid (Background for Circle) -->
             <div class="grid grid-cols-2 grid-rows-2 gap-4 w-full h-full">
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img :src="settings.org_team_photo || '/assets/sauti-aboutpage.webp'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Team" />
+                 <img :src="heroImageTeam" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Team" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img src="@/assets/sauti_happy_students.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Happy Students" />
+                 <img :src="heroImage4" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Happy Students" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img src="@/assets/helpline-action.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Action" />
+                 <img :src="heroImage5" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Action" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img src="@/assets/community-protection.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Protection" />
+                 <img :src="heroImage6" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Protection" />
                </div>
             </div>
 
@@ -54,10 +54,10 @@
         <!-- Right Side Column -->
         <div class="hidden md:grid grid-rows-3 gap-4">
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img src="@/assets/diverse_helpline_operations.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Operations" />
+              <img :src="heroImage7" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Operations" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-               <img src="@/assets/inclusive_community_protection.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Inclusive" />
+               <img :src="heroImage8" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Inclusive" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
               <div class="w-full h-full bg-blue-50 flex items-center justify-center p-4">
@@ -314,52 +314,88 @@
     </section>
 
     <!-- G. Core Values Section -->
-    <section class="mb-8 md:mb-16 !pt-6 md:!pt-8 bg-transparent relative overflow-hidden" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
-      <!-- Decorative background -->
+    <section class="mb-8 md:mb-16 py-12 md:py-20 bg-gradient-to-br from-gray-50 via-white to-primary/5 relative overflow-hidden">
+      <!-- Decorative elements -->
       <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
       <div class="container-custom relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <span class="inline-block px-2 md:px-3 py-0.5 md:py-1 bg-secondary/10 rounded-full text-[10px] md:text-xs font-bold tracking-widest mb-3 md:mb-4 border border-secondary/20 text-secondary break-words">{{ siteContent.getContent('about_values_badge', 'Our Principles') }}</span>
-            <h2 class="text-lg md:text-2xl lg:text-3xl font-black mb-4 md:mb-6 leading-tight text-secondary break-words">{{ siteContent.getContent('about_values_title', 'Driven by Values, United by Purpose.') }}</h2>
-            <p class="text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed mb-4 md:mb-6 break-words">
-              {{ siteContent.getContent('about_values_description', 'Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.') }}
-            </p>
-            <!-- Call to Action (Optional) -->
-            <div class="flex gap-3 md:gap-4 flex-wrap">
-              <div class="flex items-center gap-2">
-                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white text-[10px] md:text-xs break-words">{{ siteContent.getContent('about_values_stat_1_value', '10+') }}</div>
-                 <span class="font-bold text-[10px] md:text-xs text-secondary break-words">{{ siteContent.getContent('about_values_stat_1_label', 'Years of Service') }}</span>
+        <!-- Two Column Layout: Left (Header + Stats) | Right (Cards) -->
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+
+          <!-- Left Column: Header + Stats -->
+          <div class="w-full lg:w-1/3 lg:sticky lg:top-8">
+            <!-- Section Header -->
+            <div class="mb-8">
+              <span class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-primary/10 rounded-full text-[10px] md:text-xs font-bold tracking-widest mb-4 border border-primary/20 text-primary">
+                <Heart class="w-3 h-3" />
+                {{ siteContent.getContent('about_values_badge', 'Our Principles') }}
+              </span>
+              <h2 class="text-xl md:text-3xl lg:text-4xl font-black mb-4 leading-tight text-secondary">
+                {{ siteContent.getContent('about_values_title', 'Our Core Values') }}
+              </h2>
+              <p class="text-sm md:text-base text-gray-600 leading-relaxed">
+                {{ siteContent.getContent('about_values_description', 'Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.') }}
+              </p>
+            </div>
+
+            <!-- Stats - Below header on left -->
+            <div class="flex flex-col gap-4 pt-6 border-t border-gray-200/60">
+              <div class="stat-item flex items-center gap-3" style="animation-delay: 400ms">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center font-black text-white text-sm md:text-base shadow-lg shadow-primary/20">
+                  {{ siteContent.getContent('about_values_stat_1_value', '1M+') }}
+                </div>
+                <span class="font-bold text-sm md:text-base text-secondary">{{ siteContent.getContent('about_values_stat_1_label', 'Lives Impacted') }}</span>
               </div>
-               <div class="flex items-center gap-2">
-                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white text-[10px] md:text-xs break-words">{{ siteContent.getContent('about_values_stat_2_value', '1M+') }}</div>
-                 <span class="font-bold text-[10px] md:text-xs text-secondary break-words">{{ siteContent.getContent('about_values_stat_2_label', 'Lives Impacted') }}</span>
+              <div class="stat-item flex items-center gap-3" style="animation-delay: 500ms">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center font-black text-white text-sm md:text-base shadow-lg shadow-secondary/20">
+                  {{ siteContent.getContent('about_values_stat_2_value', '10+') }}
+                </div>
+                <span class="font-bold text-sm md:text-base text-secondary">{{ siteContent.getContent('about_values_stat_2_label', 'Years of Service') }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Loading State -->
-          <div v-if="coreValuesLoading" class="text-center py-12">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p class="text-gray-500 mt-4 font-bold">Loading core values...</p>
-          </div>
+          <!-- Right Column: Cards -->
+          <div class="w-full lg:w-2/3">
+            <!-- Loading State -->
+            <div v-if="coreValuesLoading" class="text-center py-12">
+              <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p class="text-gray-500 mt-4 font-bold">Loading core values...</p>
+            </div>
 
-          <!-- Core Values Grid -->
-          <div v-else class="grid gap-3 md:gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), min(300px, 1fr)));">
-            <div
-              v-for="value in coreValues"
-              :key="value.id"
-              class="bg-gray-50 p-5 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-300 group"
-            >
+            <!-- Core Values Grid - 2x2 on right -->
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
               <div
-                class="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform"
-                :class="[getColorClasses(value.color || 'blue').bg, getColorClasses(value.color || 'blue').text]"
+                v-for="(value, index) in coreValues"
+                :key="value.id"
+                class="core-value-card group bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
+                :style="{ animationDelay: `${index * 100}ms` }"
               >
-                <component :is="getIconComponent(value.icon || 'ShieldCheck')" class="w-5 h-5 md:w-6 md:h-6" />
+                <!-- Subtle gradient overlay on hover -->
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+                <!-- Content -->
+                <div class="relative z-10">
+                  <!-- Icon -->
+                  <div
+                    class="w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-sm"
+                    :class="[getColorClasses(value.color || 'blue').bg, getColorClasses(value.color || 'blue').text]"
+                  >
+                    <component :is="getIconComponent(value.icon || 'ShieldCheck')" class="w-5 h-5 md:w-6 md:h-6" />
+                  </div>
+
+                  <!-- Title -->
+                  <h3 class="text-base md:text-lg font-bold mb-2 text-secondary group-hover:text-primary transition-colors duration-300">
+                    {{ value.title }}
+                  </h3>
+
+                  <!-- Description -->
+                  <p class="text-sm text-gray-500 leading-relaxed">
+                    {{ value.description }}
+                  </p>
+                </div>
               </div>
-              <h3 class="text-sm md:text-base lg:text-lg font-bold mb-1 md:mb-2 text-secondary break-words">{{ value.title }}</h3>
-              <p class="text-xs md:text-sm text-gray-500 break-words">{{ value.description }}</p>
             </div>
           </div>
         </div>
@@ -379,6 +415,16 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import { useSiteContent } from '@/composables/useSiteContent'
 
+// Fallback images for About hero grid
+import imgChildrenUganda from '@/assets/children-uganda-1.jpeg'
+import imgHelplineCenter from '@/assets/helpline-center.png'
+import imgHeroFamily from '@/assets/hero-family.png'
+import imgSautiAboutpage from '@/assets/sauti-aboutpage.webp'
+import imgHappyStudents from '@/assets/sauti_happy_students.png'
+import imgHelplineAction from '@/assets/helpline-action.png'
+import imgCommunityProtection from '@/assets/community-protection.png'
+import imgDiverseOperations from '@/assets/diverse_helpline_operations.png'
+import imgInclusiveProtection from '@/assets/inclusive_community_protection.png'
 
 import { api } from '@/utils/axios'
 import BaseCTA from '@/components/common/BaseCTA.vue'
@@ -411,6 +457,49 @@ const siteContent = useSiteContent('about')
 
 // --- Data ---
 const settings = computed(() => settingsStore.settings)
+
+// Who We Are Images from dedicated API
+const whoWeAreImages = ref([])
+
+// Hero grid images with CMS override capability (using dedicated API)
+// Each computed directly accesses whoWeAreImages.value to ensure reactivity
+const heroImage1 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 1)
+  return img?.image_url || imgChildrenUganda
+})
+const heroImage2 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 2)
+  return img?.image_url || imgHelplineCenter
+})
+const heroImage3 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 3)
+  return img?.image_url || imgHeroFamily
+})
+const heroImageTeam = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 4)
+  return img?.image_url || settings.value.org_team_photo || imgSautiAboutpage
+})
+const heroImage4 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 5)
+  return img?.image_url || imgHappyStudents
+})
+const heroImage5 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 6)
+  return img?.image_url || imgHelplineAction
+})
+const heroImage6 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 7)
+  return img?.image_url || imgCommunityProtection
+})
+const heroImage7 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 8)
+  return img?.image_url || imgDiverseOperations
+})
+const heroImage8 = computed(() => {
+  const img = whoWeAreImages.value.find(i => i.position === 9)
+  return img?.image_url || imgInclusiveProtection
+})
+
 const teamMembers = ref([])
 const teamLoading = ref(false)
 const coreValues = ref([])
@@ -567,6 +656,20 @@ const getArrowPath = (i, radiusOffset = 0) => {
 }
 
 
+// --- Fetch Who We Are Images ---
+const fetchWhoWeAreImages = async () => {
+  try {
+    const response = await api.get('/content/who-we-are-images/')
+    whoWeAreImages.value = Array.isArray(response.data)
+      ? response.data
+      : (response.data.results || [])
+    console.log('Who We Are images fetched:', whoWeAreImages.value.length)
+  } catch (error) {
+    console.error('Failed to fetch Who We Are images:', error)
+    whoWeAreImages.value = []
+  }
+}
+
 // --- Fetch Team Members ---
 const fetchTeamMembers = async () => {
   teamLoading.value = true
@@ -605,51 +708,56 @@ const handleImageError = (event, member) => {
 }
 
 // --- Fetch Core Values ---
+const defaultCoreValues = [
+  {
+    id: 1,
+    title: 'Integrity',
+    description: 'Acting with honesty, transparency and accountability in all we do.',
+    icon: 'ShieldCheck',
+    color: 'orange'
+  },
+  {
+    id: 2,
+    title: 'Compassion',
+    description: 'Serving every child and survivor with deep empathy, kindness, and care.',
+    icon: 'Heart',
+    color: 'blue'
+  },
+  {
+    id: 3,
+    title: 'Collaboration',
+    description: 'Working together with partners and communities for holistic protection.',
+    icon: 'Users',
+    color: 'green'
+  },
+  {
+    id: 4,
+    title: 'Excellence',
+    description: 'Striving for the highest standards of quality in our service delivery.',
+    icon: 'Check',
+    color: 'purple'
+  }
+]
+
 const fetchCoreValues = async () => {
   coreValuesLoading.value = true
   try {
     const response = await api.coreValues.list({ is_active: true })
-    coreValues.value = Array.isArray(response.data)
+    const data = Array.isArray(response.data)
       ? response.data
       : (response.data.results || [])
+
+    // Use fallback if API returns empty array
+    coreValues.value = data.length > 0 ? data : defaultCoreValues
 
     // Sort by order field
     coreValues.value.sort((a, b) => (a.order || 0) - (b.order || 0))
 
-    console.log('Core values fetched:', coreValues.value.length)
+    console.log('Core values loaded:', coreValues.value.length)
   } catch (error) {
     console.error('Failed to fetch core values:', error)
     // Fallback to hardcoded values if API fails
-    coreValues.value = [
-      {
-        id: 1,
-        title: 'Integrity',
-        description: 'Acting with honesty, transparency and accountability in all we do.',
-        icon: 'ShieldCheck',
-        color: 'orange'
-      },
-      {
-        id: 2,
-        title: 'Compassion',
-        description: 'Serving every child and survivor with deep empathy, kindness, and care.',
-        icon: 'Heart',
-        color: 'blue'
-      },
-      {
-        id: 3,
-        title: 'Collaboration',
-        description: 'Working together with partners and communities for holistic protection.',
-        icon: 'Users',
-        color: 'green'
-      },
-      {
-        id: 4,
-        title: 'Excellence',
-        description: 'Striving for the highest standards of quality in our service delivery.',
-        icon: 'Check',
-        color: 'purple'
-      }
-    ]
+    coreValues.value = defaultCoreValues
   } finally {
     coreValuesLoading.value = false
   }
@@ -690,7 +798,8 @@ onMounted(async () => {
     settingsStore.fetchGlobalSettings(),
     fetchTeamMembers(),
     fetchCoreValues(),
-    api.get('/content/timeline-events/').then(res => res.data.results || res.data || [])
+    api.get('/content/timeline-events/').then(res => res.data.results || res.data || []),
+    fetchWhoWeAreImages()
   ])
 
   // Update resolution steps with CMS content (only after content fetch resolves)
@@ -721,3 +830,39 @@ onMounted(async () => {
 })
 
 </script>
+
+<style scoped>
+/* Core Value Cards Animation */
+.core-value-card {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stat Items Animation */
+.stat-item {
+  animation: fadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+</style>

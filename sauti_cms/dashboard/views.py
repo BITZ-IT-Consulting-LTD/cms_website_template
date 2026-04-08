@@ -214,20 +214,30 @@ class HelplineChartsView(APIView):
     Fetch chart data from the external Sauti helpline system
     """
     permission_classes = [permissions.AllowAny]  # Public endpoint for frontend
-    
+
     def get(self, request):
         """
         GET /api/dashboard/helpline-charts/
-        
+
+        Query Parameters:
+            - period: Period filter (optional)
+                - 'all': All time (default)
+                - 'year': This year
+                - 'month': This month
+                - 'week': This week
+
         Returns chart data for:
-            - Abuse subcategory by sex
-            - Abuse subcategory by age group
-            - Abuse subcategory by region
-            - Abuse subcategory by district
+            - Cases by gender (dimension-focused)
+            - Cases by region (dimension-focused)
+            - Cases by age group (dimension-focused)
+            - Cases by district (dimension-focused)
         """
+        # Get period parameter (the Sauti API uses session-based filtering)
+        period = request.query_params.get('period', 'all')
+
         client = get_helpline_client()
-        charts = client.fetch_chart_data()
-        
+        charts = client.fetch_chart_data(period=period)
+
         if charts is None:
             return Response({
                 'categoryBySex': {'labels': [], 'datasets': []},
@@ -236,5 +246,5 @@ class HelplineChartsView(APIView):
                 'categoryByDistrict': {'labels': [], 'datasets': []},
                 'error': 'Unable to fetch chart data at this time'
             }, status=503)
-        
+
         return Response(charts)

@@ -37,31 +37,19 @@ class PostListSerializer(serializers.ModelSerializer):
         ]
     
     def get_featured_image(self, obj):
-        """Return absolute URL for featured image"""
+        """Return relative URL for featured image (frontend proxy handles it)"""
         if obj.featured_image:
             # Check if it's already a full URL (external URL stored as string)
             image_value = str(obj.featured_image)
             if image_value.startswith('http://') or image_value.startswith('https://'):
                 return image_value
-            
+
             # It's a file field, get the relative URL
             try:
-                image_url = obj.featured_image.url
+                # Return relative URL - frontend proxy will handle /sauti/media/
+                return obj.featured_image.url
             except (ValueError, AttributeError):
                 return None
-            
-            request = self.context.get('request')
-            if request:
-                # Use X-Forwarded-Host if available (from nginx proxy), otherwise use request host
-                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-                # If host is 'backend' (internal Docker), use localhost for browser access
-                if host == 'backend':
-                    host = 'localhost:8080'  # nginx proxy port
-                    scheme = 'http'
-                return f"{scheme}://{host}{image_url}"
-            # Fallback if no request context
-            return f"http://localhost:8080{image_url}" if image_url else None
         return None
 
 
@@ -82,31 +70,19 @@ class PostDetailSerializer(serializers.ModelSerializer):
         ]
     
     def get_featured_image(self, obj):
-        """Return absolute URL for featured image"""
+        """Return relative URL for featured image (frontend proxy handles it)"""
         if obj.featured_image:
             # Check if it's already a full URL (external URL stored as string)
             image_value = str(obj.featured_image)
             if image_value.startswith('http://') or image_value.startswith('https://'):
                 return image_value
-            
+
             # It's a file field, get the relative URL
             try:
-                image_url = obj.featured_image.url
+                # Return relative URL - frontend proxy will handle /sauti/media/
+                return obj.featured_image.url
             except (ValueError, AttributeError):
                 return None
-            
-            request = self.context.get('request')
-            if request:
-                # Use X-Forwarded-Host if available (from nginx proxy), otherwise use request host
-                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-                # If host is 'backend' (internal Docker), use localhost for browser access
-                if host == 'backend':
-                    host = 'localhost:8080'  # nginx proxy port
-                    scheme = 'http'
-                return f"{scheme}://{host}{image_url}"
-            # Fallback if no request context
-            return f"http://localhost:8080{image_url}" if image_url else None
         return None
 
 

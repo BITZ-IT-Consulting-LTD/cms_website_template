@@ -21,7 +21,18 @@
       "mcp__chrome-devtools__take_screenshot",
       "Bash(docker restart:*)",
       "mcp__chrome-devtools__evaluate_script",
-      "mcp__chrome-devtools__emulate"
+      "mcp__chrome-devtools__emulate",
+      "Bash(docker compose:*)",
+      "mcp__chrome-devtools__list_network_requests",
+      "mcp__chrome-devtools__get_network_request",
+      "Bash(docker logs:*)",
+      "Bash(timeout /t 15 /nobreak)",
+      "Bash(nul)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)",
+      "mcp__MCP_DOCKER__browser_navigate",
+      "mcp__MCP_DOCKER__browser_click",
+      "mcp__MCP_DOCKER__browser_wait_for"
     ],
     "deny": [],
     "ask": []

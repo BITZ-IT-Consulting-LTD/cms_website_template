@@ -26,14 +26,20 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true, // Listen on all network interfaces
       port: 5174, // Vite's default port
-      allowedHosts: ['sauti.local', 'localhost', '127.0.0.1'],
+      allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'host.docker.internal'],
       // hmr block removed for local development
       proxy: {
         '/api': {
-          target: process.env.VITE_API_PROXY_TARGET || 'http://nginx:80',
+          target: env.VITE_API_PROXY_TARGET || 'http://nginx:80',
           changeOrigin: true,
           secure: false,
           // No rewrite needed when proxying through nginx - nginx handles the /api/ prefix removal
+        },
+        '/sauti/media': {
+          target: env.VITE_API_PROXY_TARGET || 'http://nginx:80',
+          changeOrigin: true,
+          secure: false,
+          // Proxy media files through nginx to backend
         },
       },
     },

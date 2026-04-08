@@ -1,3 +1,4 @@
+<!-- ResourcesPage.vue - Updated 2026-03-06 with chart improvements -->
 <template>
   <div class="min-h-screen bg-white">
     <!-- Hero Banner -->
@@ -33,7 +34,7 @@
             </div>
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-xs font-black tracking-widest border border-secondary/20">
               <BarChart class="w-4 h-4" />
-              Live Data
+              {{ siteContent.getContent('resources_live_data_badge', 'Live Data') }}
             </div>
           </div>
 
@@ -106,90 +107,117 @@
           </div>
 
           <!-- Filter Bar -->
-          <div class="flex items-center gap-4 mb-8">
-            <label for="caseTypeFilter" class="text-sm font-semibold text-secondary/70 uppercase tracking-wider">
-              Filter by Case Type
-            </label>
-            <select
-              id="caseTypeFilter"
-              v-model="caseTypeFilter"
-              class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-secondary shadow-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-            >
-              <option value="All">All Case Types</option>
-              <option value="Abuse">Abuse</option>
-              <option value="Counseling">Counseling</option>
-              <option value="Information Inquiry">Information Inquiry</option>
-            </select>
+          <div class="bg-neutral-offwhite rounded-2xl p-4 mb-8">
+            <div class="flex flex-wrap items-center gap-4">
+              <!-- Period Filter -->
+              <div class="flex items-center gap-2">
+                <label class="text-xs font-bold text-secondary/60 uppercase tracking-wider whitespace-nowrap">
+                  {{ siteContent.getContent('resources_filter_time_period', 'Time Period') }}
+                </label>
+                <div class="flex bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                  <button
+                    v-for="option in periodOptions"
+                    :key="option.value"
+                    @click="selectedPeriod = option.value; fetchDashboardData(true)"
+                    :class="[
+                      'px-4 py-2 text-xs font-bold transition-all',
+                      selectedPeriod === option.value
+                        ? 'bg-primary text-white'
+                        : 'text-secondary/70 hover:bg-gray-50'
+                    ]"
+                  >
+                    {{ option.label }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Case Type Filter (only for All Time view) -->
+              <div v-if="selectedPeriod === 'all'" class="flex items-center gap-2">
+                <label for="caseTypeFilter" class="text-xs font-bold text-secondary/60 uppercase tracking-wider whitespace-nowrap">
+                  {{ siteContent.getContent('resources_filter_case_type', 'Case Type') }}
+                </label>
+                <select
+                  id="caseTypeFilter"
+                  v-model="caseTypeFilter"
+                  class="rounded-xl border border-gray-100 bg-white px-4 py-2 text-xs font-bold text-secondary shadow-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                >
+                  <option value="All">All Types</option>
+                  <option value="Abuse">Abuse</option>
+                  <option value="Counseling">Counseling</option>
+                  <option value="Information Inquiry">Information</option>
+                </select>
+              </div>
+
+              <!-- Loading indicator -->
+              <div v-if="chartsLoading" class="flex items-center gap-2 text-primary">
+                <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-xs font-semibold">{{ siteContent.getContent('resources_loading_charts', 'Loading...') }}</span>
+              </div>
+            </div>
           </div>
 
           <!-- Enhanced Charts Grid (2x2) -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Chart 1: Category vs Client Sex -->
-            <div class="relative bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden">
-              <!-- Decorative Background Pattern -->
-              <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700"></div>
-
+            <!-- Chart 1: Cases by Gender -->
+            <div class="chart-card group">
+              <div class="chart-card-bg bg-primary/5"></div>
               <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-6">
-                  <div class="w-3 h-3 bg-primary rounded-full"></div>
-                  <h3 class="text-xl font-black text-secondary">
-                    Case Distribution by Gender
-                  </h3>
+                <div class="chart-header">
+                  <div class="chart-indicator bg-primary"></div>
+                  <h3 class="chart-title">{{ siteContent.getContent('resources_chart_gender_title', 'Cases by Gender') }}</h3>
                 </div>
-                <div class="h-[400px]">
-                   <Bar :data="filteredCategoryBySex" :options="getDashboardOptions(false)" />
-                 </div>
+                <p class="chart-subtitle">{{ siteContent.getContent('resources_chart_gender_subtitle', 'Distribution of case types across genders') }}</p>
+                <div class="h-[350px]">
+                  <Bar :data="filteredCategoryBySex" :options="getChartOptions('Gender')" />
+                </div>
               </div>
             </div>
 
-            <!-- Chart 2: Category vs Client Region -->
-            <div class="relative bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden">
-              <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700"></div>
-
+            <!-- Chart 2: Cases by Region -->
+            <div class="chart-card group">
+              <div class="chart-card-bg bg-secondary/5"></div>
               <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-6">
-                  <div class="w-3 h-3 bg-secondary rounded-full"></div>
-                  <h3 class="text-xl font-black text-secondary">
-                     Case Distribution by Region
-                  </h3>
+                <div class="chart-header">
+                  <div class="chart-indicator bg-secondary"></div>
+                  <h3 class="chart-title">{{ siteContent.getContent('resources_chart_region_title', 'Cases by Region') }}</h3>
                 </div>
-                 <div class="h-[400px]">
-                   <Bar :data="filteredCategoryByRegion" :options="getDashboardOptions(false)" />
-                 </div>
+                <p class="chart-subtitle">{{ siteContent.getContent('resources_chart_region_subtitle', 'Geographic distribution of reported cases') }}</p>
+                <div class="h-[350px]">
+                  <Bar :data="filteredCategoryByRegion" :options="getChartOptions('Region')" />
+                </div>
               </div>
             </div>
 
-            <!-- Chart 3: Category vs Client Age Group -->
-            <div class="relative bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden">
-              <div class="absolute top-0 right-0 w-64 h-64 bg-hotline/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700"></div>
-
+            <!-- Chart 3: Cases by Age Group -->
+            <div class="chart-card group">
+              <div class="chart-card-bg bg-hotline/5"></div>
               <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-6">
-                  <div class="w-3 h-3 bg-hotline rounded-full"></div>
-                  <h3 class="text-xl font-black text-secondary">
-                     Case Distribution by Age Group
-                  </h3>
+                <div class="chart-header">
+                  <div class="chart-indicator bg-hotline"></div>
+                  <h3 class="chart-title">{{ siteContent.getContent('resources_chart_age_title', 'Cases by Age Group') }}</h3>
                 </div>
-                 <div class="h-[400px]">
-                   <Bar :data="filteredCategoryByAgeGroup" :options="getDashboardOptions(false)" />
-                 </div>
+                <p class="chart-subtitle">{{ siteContent.getContent('resources_chart_age_subtitle', 'Age demographics of reported cases') }}</p>
+                <div class="h-[350px]">
+                  <Bar :data="filteredCategoryByAgeGroup" :options="getChartOptions('Age Group')" />
+                </div>
               </div>
             </div>
 
-            <!-- Chart 4: Category vs Client District -->
-            <div class="relative bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden">
-              <div class="absolute top-0 right-0 w-64 h-64 bg-emergency/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700"></div>
-
+            <!-- Chart 4: Top Districts -->
+            <div class="chart-card group">
+              <div class="chart-card-bg bg-emergency/5"></div>
               <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-6">
-                  <div class="w-3 h-3 bg-emergency rounded-full"></div>
-                  <h3 class="text-xl font-black text-secondary">
-                     Case Distribution by District
-                  </h3>
+                <div class="chart-header">
+                  <div class="chart-indicator bg-emergency"></div>
+                  <h3 class="chart-title">{{ siteContent.getContent('resources_chart_district_title', 'Top Districts') }}</h3>
                 </div>
-                 <div class="h-[400px]">
-                   <Bar :data="filteredCategoryByDistrict" :options="getDashboardOptions(false)" />
-                 </div>
+                <p class="chart-subtitle">{{ siteContent.getContent('resources_chart_district_subtitle', 'Districts with highest case volumes') }}</p>
+                <div class="h-[350px]">
+                  <Bar :data="filteredCategoryByDistrict" :options="getChartOptions('District')" />
+                </div>
               </div>
             </div>
           </div>
@@ -202,7 +230,7 @@
           <div class="flex-1 h-px bg-gray-200"></div>
           <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-offwhite border border-gray-200">
             <FileText class="w-4 h-4 text-primary" />
-            <span class="text-xs font-black tracking-widest text-secondary/60 uppercase">Downloads</span>
+            <span class="text-xs font-black tracking-widest text-secondary/60 uppercase">{{ siteContent.getContent('resources_downloads_divider', 'Downloads') }}</span>
           </div>
           <div class="flex-1 h-px bg-gray-200"></div>
         </div>
@@ -220,7 +248,11 @@
                 {{ siteContent.getContent('resources_section_subtitle', 'Public awareness materials and official guidance.') }}
               </p>
             </div>
-            <div class="pill bg-primary/10 text-primary">
+            <div class="pill bg-primary/10 text-primary flex items-center gap-2">
+              <svg v-if="loading && filteredResources.length" class="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
               {{ filteredResources.length }} {{ resourcesAvailable }}
             </div>
           </div>
@@ -279,11 +311,11 @@
             </div>
           </div>
 
-          <!-- Resources Loading -->
-          <AppLoader v-if="loading" :message="settingsStore.settings.resources_loading" />
+          <!-- Resources Loading - Only show full loader on initial load with no data -->
+          <AppLoader v-if="loading && !filteredResources.length" :message="settingsStore.settings.resources_loading" />
 
           <!-- Enhanced Resources Grid (No Images - CMS Driven) -->
-          <div v-else-if="filteredResources.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div v-else-if="filteredResources.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" :class="{ 'opacity-60': loading }">
             <article v-for="resource in filteredResources" :key="resource.id"
               class="group bg-white rounded-3xl shadow-lg border border-gray-100 transition-all duration-500 hover:shadow-2xl hover:border-primary/30 transform hover:-translate-y-2 overflow-hidden flex flex-col">
 
@@ -313,7 +345,7 @@
                     @click="toggleDescription(resource.id)"
                     class="text-primary hover:text-secondary text-sm font-bold mt-2 transition-colors"
                   >
-                    {{ expandedDescriptions[resource.id] ? '− Show less' : '+ Read more' }}
+                    {{ expandedDescriptions[resource.id] ? siteContent.getContent('resources_show_less', '− Show less') : siteContent.getContent('resources_read_more', '+ Read more') }}
                   </button>
                 </div>
 
@@ -331,10 +363,10 @@
                     :disabled="downloadingSlug === resource.slug"
                     @click="downloadResource(resource)"
                   >
-                    {{ downloadingSlug === resource.slug ? 'Downloading...' : 'Download' }}
+                    {{ downloadingSlug === resource.slug ? siteContent.getContent('resources_downloading', 'Downloading...') : siteContent.getContent('resources_download', 'Download') }}
                   </button>
                   <span v-if="resource.download_count" class="text-sm text-black/40 font-semibold">
-                    {{ resource.download_count }} downloads
+                    {{ resource.download_count }} {{ siteContent.getContent('resources_downloads_count', 'downloads') }}
                   </span>
                 </div>
               </div>
@@ -352,14 +384,14 @@
               'No Resources Found' }}</h3>
             <p class="text-black/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
               'Try adjusting your search criteria.' }}</p>
-            <button @click="search = ''; category = ''; language = ''; format = ''" class="btn btn-outline">Clear all filters</button>
+            <button @click="search = ''; category = ''; language = ''; format = ''" class="btn btn-outline">{{ siteContent.getContent('resources_clear_filters', 'Clear all filters') }}</button>
           </div>
 
           <!-- Pagination -->
           <div v-if="pagination.next || pagination.previous" class="mt-20 flex justify-center gap-6">
             <button :disabled="!pagination.previous || loading" @click="prevPage"
-              class="btn btn-outline px-8">Previous</button>
-            <button :disabled="!pagination.next || loading" @click="nextPage" class="btn btn-outline px-8">Next</button>
+              class="btn btn-outline px-8">{{ siteContent.getContent('resources_previous', 'Previous') }}</button>
+            <button :disabled="!pagination.next || loading" @click="nextPage" class="btn btn-outline px-8">{{ siteContent.getContent('resources_next', 'Next') }}</button>
           </div>
         </section>
 
@@ -840,8 +872,42 @@
     const exts = ['mp3', 'm4a', 'wav', 'ogg']
     return exts.some(ext => type.includes(ext) || url.endsWith(`.${ext}`))
   }
-  // --- Dashboard Statistics Logic ---
-  const dashboardStats = ref({
+  // --- Dashboard Statistics Logic with Caching ---
+  const DASHBOARD_CACHE_KEY = 'sauti-dashboard-cache'
+  const DASHBOARD_TTL = 10 * 60 * 1000 // 10 minutes
+
+  // Load cached data immediately on initialization
+  const loadCachedDashboard = () => {
+    try {
+      const cached = localStorage.getItem(DASHBOARD_CACHE_KEY)
+      if (cached) {
+        const { stats, charts, timestamp } = JSON.parse(cached)
+        if (stats && charts) {
+          return { stats, charts, isFresh: Date.now() - timestamp < DASHBOARD_TTL }
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load dashboard cache:', e)
+    }
+    return null
+  }
+
+  const saveDashboardCache = (stats, charts) => {
+    try {
+      localStorage.setItem(DASHBOARD_CACHE_KEY, JSON.stringify({
+        stats,
+        charts,
+        timestamp: Date.now()
+      }))
+    } catch (e) {
+      console.warn('Failed to save dashboard cache:', e)
+    }
+  }
+
+  // Initialize with cached data if available
+  const cachedData = loadCachedDashboard()
+
+  const dashboardStats = ref(cachedData?.stats || {
     total_calls: 0,
     total_cases: 0,
     total_gbv_cases: 0,
@@ -849,7 +915,7 @@
     total_migrant_workers: 0
   })
 
-  const dashboardCharts = ref({
+  const dashboardCharts = ref(cachedData?.charts || {
     categoryBySex: { labels: [], datasets: [] },
     categoryByRegion: { labels: [], datasets: [] },
     categoryByAgeGroup: { labels: [], datasets: [] },
@@ -857,6 +923,17 @@
   })
 
   const caseTypeFilter = ref('All')
+  const chartsLoading = ref(!cachedData) // Only show loading if no cache
+  const dashboardInitialized = ref(!!cachedData)
+
+  // Time period filter for dashboard charts
+  const selectedPeriod = ref('all')
+  const periodOptions = [
+    { value: 'all', label: 'All Time' },
+    { value: 'year', label: 'This Year' },
+    { value: 'month', label: 'This Month' },
+    { value: 'week', label: 'This Week' }
+  ]
 
   // --- Category-to-CaseType Mapping ---
   const ABUSE_CATEGORIES = [
@@ -943,21 +1020,33 @@
     return palette[index % palette.length]
   }
 
-  // API Fetch Logic for Dashboard - Now connected to real Sauti helpline data
-  const fetchDashboardData = async () => {
+  // API Fetch Logic for Dashboard - Now with caching
+  const fetchDashboardData = async (forceRefresh = false) => {
+    // If we have fresh cached data and not forcing refresh, skip API call
+    const cached = loadCachedDashboard()
+    if (!forceRefresh && cached?.isFresh && dashboardInitialized.value) {
+      console.log('[Dashboard] Using fresh cache, skipping API call')
+      return
+    }
+
+    // Only show loading spinner if we don't have any data yet
+    if (!dashboardInitialized.value) {
+      chartsLoading.value = true
+    }
+
     try {
       // Fetch real statistics from the external Sauti helpline system
       const statsResponse = await api.get('/dashboard/helpline-stats/')
 
-      if (statsResponse.data) {
-        dashboardStats.value = {
-          total_calls: statsResponse.data.total_calls || 0,
-          total_cases: statsResponse.data.total_cases || 0,
-          total_gbv_cases: statsResponse.data.total_gbv_cases || 0,
-          total_sea_cases: statsResponse.data.total_sea_cases || 0,
-          total_migrant_workers: statsResponse.data.total_migrant_workers || 0
-        }
-      }
+      const newStats = statsResponse.data ? {
+        total_calls: statsResponse.data.total_calls || 0,
+        total_cases: statsResponse.data.total_cases || 0,
+        total_gbv_cases: statsResponse.data.total_gbv_cases || 0,
+        total_sea_cases: statsResponse.data.total_sea_cases || 0,
+        total_migrant_workers: statsResponse.data.total_migrant_workers || 0
+      } : dashboardStats.value
+
+      dashboardStats.value = newStats
 
       const mapChartData = (apiData) => {
           if (!apiData) return { labels: [], datasets: [] }
@@ -967,69 +1056,137 @@
                   label: ds.label,
                   data: ds.data,
                   backgroundColor: getBrandColor(index),
-                  borderRadius: 4
+                  borderRadius: 6,
+                  borderSkipped: false
               }))
           }
       }
 
-      // Fetch chart data from the helpline system
-      const chartsResponse = await api.get('/dashboard/helpline-charts/')
+      // Fetch chart data from the helpline system with period filter
+      const chartsResponse = await api.get(`/dashboard/helpline-charts/?period=${selectedPeriod.value}`)
       if (chartsResponse.data) {
-        dashboardCharts.value = {
+        const newCharts = {
           categoryBySex: mapChartData(chartsResponse.data.categoryBySex),
           categoryByRegion: mapChartData(chartsResponse.data.categoryByRegion),
           categoryByAgeGroup: mapChartData(chartsResponse.data.categoryByAgeGroup),
           categoryByDistrict: mapChartData(chartsResponse.data.categoryByDistrict)
         }
+        dashboardCharts.value = newCharts
+
+        // Save to cache
+        saveDashboardCache(newStats, newCharts)
       }
+
+      dashboardInitialized.value = true
     } catch (err) {
       console.warn('Statistics dashboard data unavailable:', err)
+    } finally {
+      chartsLoading.value = false
     }
   }
 
-  // Load dashboard data on mount
+  // Load dashboard data on mount - fetch in background if cache exists
   onMounted(() => {
-    fetchDashboardData()
+    if (cachedData?.isFresh) {
+      // Have fresh cache - fetch in background without loading state
+      console.log('[Dashboard] Using cached data, refreshing in background')
+      fetchDashboardData()
+    } else {
+      // No cache or stale - fetch with loading state
+      fetchDashboardData()
+    }
   })
 
-  // Dashboard Chart Options Helper
-  const getDashboardOptions = (horizontal) => {
+  // Improved Chart Options with cleaner design
+  const getChartOptions = (xAxisLabel = '') => {
     return {
-      indexAxis: horizontal ? 'y' : 'x',
       responsive: true,
       maintainAspectRatio: false,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
       plugins: {
         legend: {
           display: true,
           position: 'bottom',
           labels: {
             usePointStyle: true,
+            pointStyle: 'circle',
             boxWidth: 8,
-            font: { family: 'cronos-pro', weight: 'bold', size: 10 },
+            padding: 16,
+            font: { family: 'cronos-pro', weight: '600', size: 10 },
             color: '#023047'
           }
         },
         tooltip: {
-          backgroundColor: '#023047',
-          titleFont: { family: 'cronos-pro', size: 14 },
-          bodyFont: { family: 'cronos-pro', size: 12 }
+          backgroundColor: 'rgba(2, 48, 71, 0.95)',
+          titleFont: { family: 'cronos-pro', size: 13, weight: '700' },
+          bodyFont: { family: 'cronos-pro', size: 11 },
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: true,
+          boxPadding: 4,
+          callbacks: {
+            label: (context) => {
+              const value = context.parsed.y || context.parsed.x || 0
+              return ` ${context.dataset.label}: ${value.toLocaleString()}`
+            }
+          }
         }
       },
       scales: {
         x: {
           stacked: true,
           grid: { display: false },
-          ticks: { font: { family: 'cronos-pro', weight: 'bold' } }
+          border: { display: false },
+          ticks: {
+            font: { family: 'cronos-pro', weight: '700', size: 10 },
+            color: '#023047',
+            maxRotation: 45,
+            minRotation: 0
+          },
+          title: {
+            display: !!xAxisLabel,
+            text: xAxisLabel,
+            font: { family: 'cronos-pro', weight: '700', size: 11 },
+            color: '#023047',
+            padding: { top: 8 }
+          }
         },
         y: {
           stacked: true,
           beginAtZero: true,
-          grid: { color: '#F8F9FA' },
-          ticks: { font: { family: 'cronos-pro', weight: 'bold' } }
+          grid: {
+            color: 'rgba(0, 0, 0, 0.04)',
+            drawBorder: false
+          },
+          border: { display: false },
+          ticks: {
+            font: { family: 'cronos-pro', weight: '600', size: 10 },
+            color: 'rgba(2, 48, 71, 0.6)',
+            padding: 8,
+            callback: (value) => {
+              if (value >= 1000) {
+                return (value / 1000).toFixed(0) + 'k'
+              }
+              return value
+            }
+          },
+          title: {
+            display: true,
+            text: 'Number of Cases',
+            font: { family: 'cronos-pro', weight: '700', size: 11 },
+            color: '#023047',
+            padding: { bottom: 8 }
+          }
         }
       }
     }
   }
+
+  // Keep old function for backward compatibility
+  const getDashboardOptions = (horizontal) => getChartOptions('')
 
 </script>
 
@@ -1084,5 +1241,76 @@
   margin: 0 auto;
   line-height: 1.4;
   padding: 0 1rem;
+}
+
+/* Chart Card Styles */
+.chart-card {
+  position: relative;
+  background: white;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.chart-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.chart-card-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+  transition: transform 0.7s ease;
+}
+
+.chart-card:hover .chart-card-bg {
+  transform: translate(50%, -50%) scale(1.1);
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.chart-indicator {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.chart-title {
+  font-size: 1.125rem;
+  font-weight: 900;
+  color: rgb(var(--color-secondary));
+  letter-spacing: -0.01em;
+}
+
+.chart-subtitle {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding-left: 1.375rem;
+}
+
+@media (max-width: 640px) {
+  .chart-card {
+    padding: 1rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+  }
 }
 </style>
