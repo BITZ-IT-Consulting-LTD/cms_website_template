@@ -53,10 +53,10 @@ export default {
         'fluid-4xl': 'clamp(2rem, 1.5rem + 2.5vw, 4rem)',
       },
       fontFamily: {
-        // Cronos Pro - Official Brand Typography (11pt base)
-        sans: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],
-        body: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],
-        heading: ['cronos-pro', 'Cronos Pro', 'Georgia', 'serif'],
+        // Source Sans 3 - Brand Typography (closest to Cronos Pro)
+        sans: ['Source Sans 3', 'Source Sans Pro', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        body: ['Source Sans 3', 'Source Sans Pro', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        heading: ['Source Sans 3', 'Source Sans Pro', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       boxShadow: {
         'glow-hotline': '0 0 12px rgb(var(--color-hotline) / 0.4)',

@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
       ? {
         host: true,
         port: 5173,
-        allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'sauti_frontend_dev'],
+        allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'sauti_frontend_dev', 'host.docker.internal'],
         proxy: {
           '/api': {
             target: proxyTarget || 'http://127.0.0.1:8000',

@@ -1,3 +1,4 @@
+// Main entry point - updated 2026-03-06
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'

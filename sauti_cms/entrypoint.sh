@@ -33,6 +33,9 @@ else
 fi
 
 # Note: These are Django management commands found in app/management/commands/
+echo "Running site content population..."
+python manage.py populate_site_content
+
 echo "Running sitesettings population..."
 python manage.py populate_sitesettings
 

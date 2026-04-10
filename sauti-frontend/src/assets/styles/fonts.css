@@ -1,16 +1,16 @@
-/* Import Cronos Pro from Adobe Fonts */
-@import url('https://use.typekit.net/wgm0sgo.css');
+/* Import Source Sans 3 from Google Fonts - Closest to Cronos Pro */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap');
 
 :root {
-  /* Cronos Pro - Brand Typography System (11pt base) */
-  --font-cronos: "cronos-pro", "Cronos Pro", Georgia, serif;
-  --font-primary: var(--font-cronos);
-  --font-body: var(--font-cronos);
-  --font-heading: var(--font-cronos);
+  /* Source Sans 3 - Brand Typography System (similar to Cronos Pro) */
+  --font-brand: "Source Sans 3", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-primary: var(--font-brand);
+  --font-body: var(--font-brand);
+  --font-heading: var(--font-brand);
 }
 
-/* 
-  Cronos Pro Font Weights:
+/*
+  Source Sans 3 Font Weights (matching Cronos Pro):
   - Light: 300
   - Regular: 400
   - Semi-Bold: 600

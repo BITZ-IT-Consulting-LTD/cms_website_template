@@ -25,6 +25,12 @@ class SautiHelplineClient:
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.9',
         })
+        # Disable SSL verification for government server with certificate issues
+        self.session.verify = False
+        # Suppress SSL warnings
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
         self.username = 'test'
         self.password = 'p@ssw0rd'
         self.authenticated = False
@@ -161,8 +167,114 @@ class SautiHelplineClient:
         
         return self.authenticate()
 
-    def _fetch_report(self, xaxis: str, title: str = 'all_cases') -> Optional[Dict]:
-        """Shared helper to query /api/cases/ report endpoint"""
+    def _set_filter_context(self, period: str = 'all') -> bool:
+        """Set the filter context via /api/dash/ before fetching filtered data.
+
+        The Sauti API uses session-based filtering - you must call /api/dash/
+        with the desired period before calling /api/cases/ to get filtered results.
+
+        Args:
+            period: One of 'all', 'this_year', 'this_month', 'this_week'
+
+        Returns:
+            True if filter was set successfully
+        """
+        # Map our periods to Sauti's expected values
+        period_map = {
+            'all': 'all',
+            'year': 'this_year',
+            'month': 'this_month',
+            'week': 'this_week',
+        }
+
+        dash_period = period_map.get(period, 'all')
+
+        try:
+            dash_url = f"{self.BASE_URL}/api/dash/"
+            params = {
+                'dash_period': dash_period,
+                'dash_gbv': 'both',
+                'dash_src': 'all'
+            }
+
+            response = self.session.get(
+                dash_url,
+                params=params,
+                timeout=15,
+                headers={
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            )
+
+            if response.status_code == 200:
+                data = response.json()
+                if 'dash' in data:
+                    # Log the filter range to verify it's working
+                    dash_info = data['dash'][0] if data['dash'] else []
+                    date_range = dash_info[3] if len(dash_info) > 3 else 'N/A'
+                    case_source = data.get('case_source', {})
+                    total_cases = case_source.get('total', ['', '0 Cases'])[1] if case_source else 'N/A'
+                    logger.info(f"Filter context set to: {dash_period} (range: {date_range}, total: {total_cases})")
+                    return True
+
+            logger.warning(f"Failed to set filter context: {response.status_code}")
+            return False
+
+        except Exception as e:
+            logger.error(f"Error setting filter context: {e}")
+            return False
+
+    def _set_filter_context_direct(self, dash_period: str = 'all') -> bool:
+        """Set the filter context directly using the dash_period value.
+
+        Unlike _set_filter_context which maps from our period names, this
+        takes the Sauti API dash_period value directly.
+        """
+        try:
+            dash_url = f"{self.BASE_URL}/api/dash/"
+            params = {
+                'dash_period': dash_period,
+                'dash_gbv': 'both',
+                'dash_src': 'all'
+            }
+
+            response = self.session.get(
+                dash_url,
+                params=params,
+                timeout=15,
+                headers={
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            )
+
+            if response.status_code == 200:
+                logger.info(f"Filter context set to: {dash_period}")
+                return True
+
+            logger.warning(f"Failed to set filter context: {response.status_code}")
+            return False
+
+        except Exception as e:
+            logger.error(f"Error setting filter context: {e}")
+            return False
+
+    def _fetch_report(self, xaxis: str, title: str = 'all_cases', dash_period: str = 'all') -> Optional[Dict]:
+        """Shared helper to query /api/cases/ report endpoint
+
+        Args:
+            xaxis: The field(s) to group by
+            title: Report title
+            dash_period: Time period filter - 'all', 'this_year', 'this_month', 'this_week'
+
+        Note: The Sauti API uses session-based filtering that persists server-side.
+        We must call /api/dash/ to set the period before every /api/cases/ call.
+        """
+        # CRITICAL: Set the filter context FIRST - the Sauti API filter is session-based
+        # and persists server-side. Without this, we get stale data from the last filter.
+        self._set_filter_context_direct(dash_period)
+
         params = {
             '_title': title,
             'metrics': 'case_count',
@@ -172,6 +284,7 @@ class SautiHelplineClient:
             'yaxis': '-',
             'rpt': 'case_count',
         }
+
         try:
             response = self.session.get(
                 f"{self.BASE_URL}/api/cases/",
@@ -207,7 +320,6 @@ class SautiHelplineClient:
 
     def _transform_crosstab(self, raw_cases: list, top_n: int = 15) -> Dict[str, Any]:
         """Transform [[category, ^dimension, count], ...] into Chart.js stacked bar format"""
-        from collections import OrderedDict
 
         # 1. Group by category, collecting {dimension: count}
         cat_data = {}  # {category: {dimension: count}}
@@ -256,6 +368,60 @@ class SautiHelplineClient:
         for dim in dimensions:
             data = [cat_data[cat].get(dim, 0) for cat in labels]
             datasets.append({'label': dim, 'data': data})
+
+        return {'labels': labels, 'datasets': datasets}
+
+    def _transform_dimension_focused(self, raw_cases: list, top_categories: int = 8) -> Dict[str, Any]:
+        """Transform data to show dimensions on X-axis with categories as stacked datasets.
+
+        This produces cleaner charts where dimensions (Gender, Region, Age) are on X-axis
+        and categories (Child Neglect, Sexual Violence) are stacked bars.
+        """
+        # 1. Group by dimension, collecting {category: count}
+        dim_data = {}  # {dimension: {category: count}}
+        dim_totals = {}  # {dimension: total}
+        cat_totals = {}  # {category: total} for sorting
+
+        for row in raw_cases:
+            if not isinstance(row, list) or len(row) < 3:
+                continue
+            cat = str(row[0]).strip()
+            dim = str(row[1]).strip()
+            try:
+                count = int(float(row[2]))
+            except (ValueError, TypeError):
+                continue
+
+            if not cat or not dim:
+                continue
+
+            # Strip ^ prefix from dimension labels
+            dim = dim.lstrip('^') if dim else 'Unknown'
+            if not dim:
+                dim = 'Unknown'
+
+            if dim not in dim_data:
+                dim_data[dim] = {}
+                dim_totals[dim] = 0
+            dim_data[dim][cat] = dim_data[dim].get(cat, 0) + count
+            dim_totals[dim] += count
+            cat_totals[cat] = cat_totals.get(cat, 0) + count
+
+        # 2. Sort dimensions by total descending (these become X-axis labels)
+        sorted_dims = sorted(dim_totals.items(), key=lambda x: x[1], reverse=True)
+        # Filter out 'Unknown' if it's tiny
+        sorted_dims = [(d, t) for d, t in sorted_dims if d != 'Unknown' or t > 100]
+        labels = [d for d, _ in sorted_dims]
+
+        # 3. Get top categories by total (these become stacked datasets)
+        sorted_cats = sorted(cat_totals.items(), key=lambda x: x[1], reverse=True)[:top_categories]
+        categories = [c for c, _ in sorted_cats]
+
+        # 4. Build datasets (one per category)
+        datasets = []
+        for cat in categories:
+            data = [dim_data.get(dim, {}).get(cat, 0) for dim in labels]
+            datasets.append({'label': cat, 'data': data})
 
         return {'labels': labels, 'datasets': datasets}
 
@@ -368,38 +534,227 @@ class SautiHelplineClient:
         except:
             return 0
 
-    def fetch_chart_data(self) -> Optional[Dict[str, Any]]:
-        """Fetch cross-tabulated chart data for 4 stacked bar charts"""
-        cache_key = 'sauti_helpline_charts'
+    def _get_period_timestamps(self, period: str) -> tuple:
+        """Get the start and end timestamps for a given period.
+
+        Returns:
+            Tuple of (start_timestamp, end_timestamp) or (None, None) for 'all'
+        """
+        import time
+        from datetime import datetime, timedelta
+
+        if period == 'all':
+            return (None, None)
+
+        now = datetime.now()
+
+        if period == 'year':
+            start = datetime(now.year, 1, 1)
+        elif period == 'month':
+            start = datetime(now.year, now.month, 1)
+        elif period == 'week':
+            start = now - timedelta(days=now.weekday())
+            start = datetime(start.year, start.month, start.day)
+        else:
+            return (None, None)
+
+        return (int(start.timestamp()), int(now.timestamp()))
+
+    def _fetch_report_with_time(self, xaxis: str, yaxis: str = 'mn') -> Optional[Dict]:
+        """Fetch report with time-series data (yaxis=mn for monthly buckets)."""
+        params = {
+            '_title': 'all_cases',
+            'metrics': 'case_count',
+            'type': 'bar',
+            'stacked': 'stacked',
+            'xaxis': xaxis,
+            'yaxis': yaxis,
+            'rpt': 'case_count',
+        }
+
+        try:
+            response = self.session.get(
+                f"{self.BASE_URL}/api/cases/",
+                params=params,
+                timeout=30,
+                headers={
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            )
+            if response.status_code == 200:
+                return response.json()
+            elif response.status_code == 401:
+                logger.warning("Session expired, re-authenticating...")
+                cache.delete(self.SESSION_CACHE_KEY)
+                self.authenticated = False
+                if self.authenticate():
+                    response = self.session.get(
+                        f"{self.BASE_URL}/api/cases/",
+                        params=params,
+                        timeout=30,
+                        headers={
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    )
+                    if response.status_code == 200:
+                        return response.json()
+            logger.error(f"Report fetch failed for xaxis={xaxis}: status {response.status_code}")
+        except Exception as e:
+            logger.error(f"Error fetching report xaxis={xaxis}: {e}")
+        return None
+
+    def _transform_with_time_filter(self, raw_cases: list, timestamps: list,
+                                     start_ts: int = None, end_ts: int = None,
+                                     top_categories: int = 8) -> Dict[str, Any]:
+        """Transform time-series data with optional date filtering.
+
+        Args:
+            raw_cases: List of [dimension, timestamp, count] entries
+            timestamps: List of available timestamp strings from cases_y
+            start_ts: Start timestamp for filtering (inclusive)
+            end_ts: End timestamp for filtering (inclusive)
+            top_categories: Number of top categories to include
+        """
+        # Convert timestamp strings to integers for comparison
+        valid_timestamps = set()
+        if timestamps and len(timestamps) > 0:
+            for ts in timestamps[0] if isinstance(timestamps[0], list) else timestamps:
+                ts_int = int(ts)
+                if start_ts is None or end_ts is None:
+                    valid_timestamps.add(ts)
+                elif start_ts <= ts_int <= end_ts:
+                    valid_timestamps.add(ts)
+
+        # Group by dimension, aggregating counts across valid timestamps
+        dim_data = {}  # {dimension: {category: count}}
+        dim_totals = {}
+        cat_totals = {}
+
+        for row in raw_cases:
+            if not isinstance(row, list) or len(row) < 3:
+                continue
+
+            dim = str(row[0]).strip()
+            ts = str(row[1]).strip()
+            try:
+                count = int(float(row[2]))
+            except (ValueError, TypeError):
+                continue
+
+            # Skip if timestamp is outside our filter range
+            if valid_timestamps and ts not in valid_timestamps:
+                continue
+
+            # Strip ^ prefix from dimension labels
+            dim = dim.lstrip('^') if dim else 'Unknown'
+            if not dim:
+                dim = 'Unknown'
+
+            # For this data format, dimension is the category (e.g., CENTRAL, EASTERN)
+            # We want to sum across time
+            if dim not in dim_data:
+                dim_data[dim] = count
+            else:
+                dim_data[dim] += count
+
+        # Sort dimensions by total descending
+        sorted_dims = sorted(dim_data.items(), key=lambda x: x[1], reverse=True)
+
+        # Take top dimensions (excluding Unknown if small)
+        filtered_dims = [(d, t) for d, t in sorted_dims if d != 'Unknown' or t > 100]
+        labels = [d for d, _ in filtered_dims[:15]]  # Limit to 15 labels
+        data = [dim_data[d] for d in labels]
+
+        # Return as single dataset (no stacking for time-filtered data)
+        return {
+            'labels': labels,
+            'datasets': [{
+                'label': 'Cases',
+                'data': data
+            }]
+        }
+
+    def fetch_chart_data(self, period: str = 'all') -> Optional[Dict[str, Any]]:
+        """Fetch cross-tabulated chart data for 4 stacked bar charts
+
+        Args:
+            period: One of 'all', 'year', 'month', 'week'
+
+        Strategy:
+            Pass dash_period parameter directly to /api/cases/ endpoint.
+            This ensures consistent stacked bar charts with category breakdown
+            for all time periods.
+        """
+        # Create cache key with period
+        cache_key = f'sauti_helpline_charts_{period}'
         cached_data = cache.get(cache_key)
         if cached_data:
-            logger.info("Returning cached chart data")
+            logger.info(f"Returning cached chart data for period={period}")
             return cached_data
 
         if not self._ensure_authenticated():
             logger.error("Failed to authenticate, cannot fetch charts")
             return None
 
-        logger.info("FETCHING CHART DATA (cross-tabulated)")
+        # Map our period names to Sauti's expected values
+        period_map = {
+            'all': 'all',
+            'year': 'this_year',
+            'month': 'this_month',
+            'week': 'this_week',
+        }
+        dash_period = period_map.get(period, 'all')
+
+        logger.info(f"FETCHING CHART DATA (period={period}, dash_period={dash_period})")
 
         try:
-            chart_configs = {
-                'categoryBySex': 'cat_1,clients^contact_sex',
-                'categoryByRegion': 'cat_1,clients^contact_location_0',
-                'categoryByAgeGroup': 'cat_1,clients^contact_age_group',
-                'categoryByDistrict': 'cat_1,clients^contact_location_1',
-            }
+            if period == 'all':
+                # For all-time, use dimension-focused charts WITH category breakdown
+                chart_configs = {
+                    'categoryBySex': 'cat_1,clients^contact_sex',
+                    'categoryByRegion': 'cat_1,clients^contact_location_0',
+                    'categoryByAgeGroup': 'cat_1,clients^contact_age_group',
+                    'categoryByDistrict': 'cat_1,clients^contact_location_1',
+                }
 
-            charts = {}
-            for key, xaxis in chart_configs.items():
-                report = self._fetch_report(xaxis)
-                if report and 'cases' in report:
-                    charts[key] = self._transform_crosstab(report['cases'])
-                    logger.info(f"Chart {key}: {len(charts[key]['labels'])} categories, "
-                                f"{len(charts[key]['datasets'])} dimensions")
-                else:
-                    logger.warning(f"No data for chart {key}")
-                    charts[key] = {'labels': [], 'datasets': []}
+                charts = {}
+                for key, xaxis in chart_configs.items():
+                    report = self._fetch_report(xaxis, dash_period='all')
+                    if report and 'cases' in report:
+                        charts[key] = self._transform_dimension_focused(report['cases'])
+                        logger.info(f"Chart {key}: {len(charts[key]['labels'])} dimensions, "
+                                    f"{len(charts[key]['datasets'])} categories")
+                    else:
+                        logger.warning(f"No data for chart {key}")
+                        charts[key] = {'labels': [], 'datasets': []}
+            else:
+                # For filtered periods, use time-series data with client-side timestamp filtering
+                # This provides accurate filtered data but without category breakdown
+                chart_configs = {
+                    'categoryBySex': 'clients^contact_sex',
+                    'categoryByRegion': 'clients^contact_location_0',
+                    'categoryByAgeGroup': 'clients^contact_age_group',
+                    'categoryByDistrict': 'clients^contact_location_1',
+                }
+
+                # Get timestamp range for filtering
+                start_ts, end_ts = self._get_period_timestamps(period)
+                logger.info(f"Period filter: start={start_ts}, end={end_ts}")
+
+                charts = {}
+                for key, xaxis in chart_configs.items():
+                    report = self._fetch_report_with_time(xaxis, yaxis='mn')
+                    if report and 'cases' in report:
+                        timestamps = report.get('cases_y', [])
+                        charts[key] = self._transform_with_time_filter(
+                            report['cases'], timestamps, start_ts, end_ts
+                        )
+                        logger.info(f"Chart {key} (filtered): {len(charts[key]['labels'])} dimensions")
+                    else:
+                        logger.warning(f"No data for chart {key}")
+                        charts[key] = {'labels': [], 'datasets': []}
 
             cache.set(cache_key, charts, self.CACHE_TIMEOUT)
             logger.info("Charts generated successfully")

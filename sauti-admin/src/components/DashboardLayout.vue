@@ -93,15 +93,23 @@
               <div class="pt-2 pb-1 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Editorial &
                 Media</div>
 
-              <router-link to="/posts" class="sidebar-link group" :class="{ active: $route.path.startsWith('/posts') }">
+              <router-link to="/posts" class="sidebar-link group" :class="{ active: $route.path === '/posts' || $route.path.startsWith('/posts/') }">
                 <DocumentTextIcon :class="[
                   'h-5 w-5 mr-3 transition-colors duration-300',
-                  $route.path.startsWith('/posts') ? 'text-white' : 'text-orange-500 group-hover:text-orange-600'
+                  ($route.path === '/posts' || $route.path.startsWith('/posts/')) ? 'text-white' : 'text-orange-500 group-hover:text-orange-600'
                 ]" />
                 <span class="flex-1">Blog Posts</span>
+              </router-link>
+
+              <router-link to="/drafts" class="sidebar-link group" :class="{ active: $route.path === '/drafts' }">
+                <PencilSquareIcon :class="[
+                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  $route.path === '/drafts' ? 'text-white' : 'text-amber-500 group-hover:text-amber-600'
+                ]" />
+                <span class="flex-1">Drafts</span>
                 <span v-if="draftCount > 0"
-                  class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700">
-                  {{ draftCount }} DRAFTS
+                  class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                  {{ draftCount }}
                 </span>
               </router-link>
 
@@ -180,45 +188,6 @@
                   $route.path.startsWith('/partners') ? 'text-white' : 'text-yellow-500'
                 ]" />
                 <span class="flex-1">Partners</span>
-              </router-link>
-
-              <!-- About Details Group -->
-              <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">About Page
-                Details</div>
-
-              <router-link to="/team" class="sidebar-link group" :class="{ active: $route.path.startsWith('/team') }">
-                <UserGroupIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
-                  $route.path.startsWith('/team') ? 'text-white' : 'text-rose-500'
-                ]" />
-                <span class="flex-1">Organization Team</span>
-              </router-link>
-
-              <router-link to="/timeline" class="sidebar-link group"
-                :class="{ active: $route.path.startsWith('/timeline') }">
-                <ClockIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
-                  $route.path.startsWith('/timeline') ? 'text-white' : 'text-amber-500'
-                ]" />
-                <span class="flex-1">Timeline Events</span>
-              </router-link>
-
-              <router-link to="/core-values" class="sidebar-link group"
-                :class="{ active: $route.path.startsWith('/core-values') }">
-                <HeartIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
-                  $route.path.startsWith('/core-values') ? 'text-white' : 'text-pink-500'
-                ]" />
-                <span class="flex-1">Core Values</span>
-              </router-link>
-
-              <router-link to="/protection-approach" class="sidebar-link group"
-                :class="{ active: $route.path.startsWith('/protection-approach') }">
-                <ShieldCheckIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
-                  $route.path.startsWith('/protection-approach') ? 'text-white' : 'text-emerald-500'
-                ]" />
-                <span class="flex-1">Protection Approach</span>
               </router-link>
 
               <!-- Connectivity Group -->

@@ -20,14 +20,11 @@ const UsersView = () => import('@/views/UsersView.vue')
 const UploadsView = () => import('@/views/UploadsView.vue')
 const SocialMediaView = () => import('@/views/SocialMediaView.vue')
 const ContentManagerView = () => import('@/views/ContentManager.vue')
-const TimelineAdmin = () => import('@/views/TimelineAdmin.vue')
 const ServiceAdmin = () => import('@/views/ServiceAdmin.vue')
 const ContactAdmin = () => import('@/views/ContactAdmin.vue')
-const CoreValuesAdmin = () => import('@/views/CoreValuesAdmin.vue')
-const TeamAdmin = () => import('@/views/TeamAdmin.vue')
-const ProtectionApproachAdmin = () => import('@/views/ProtectionApproachAdmin.vue')
 const ContentHubView = () => import('@/views/ContentHubView.vue')
 const LegalFooterView = () => import('@/views/LegalFooterView.vue')
+const DraftsView = () => import('@/views/DraftsView.vue')
 
 
 const routes = [
@@ -81,6 +78,14 @@ const routes = [
         component: PostEditView,
         meta: {
           title: 'Edit Post - Sauti Admin'
+        }
+      },
+      {
+        path: 'drafts',
+        name: 'drafts',
+        component: DraftsView,
+        meta: {
+          title: 'Drafts - Sauti Admin'
         }
       },
       {
@@ -171,29 +176,22 @@ const routes = [
           title: 'Admin Users - Sauti Admin'
         }
       },
+      // Redirect old About page detail routes to Page Content
       {
         path: 'team',
-        name: 'team-admin',
-        component: TeamAdmin,
-        meta: {
-          title: 'Organization Team - Sauti Admin'
-        }
+        redirect: '/content?tab=about'
+      },
+      {
+        path: 'who-we-are-images',
+        redirect: '/content?tab=about'
       },
       {
         path: 'core-values',
-        name: 'core-values-admin',
-        component: CoreValuesAdmin,
-        meta: {
-          title: 'Core Values - Sauti Admin'
-        }
+        redirect: '/content?tab=about'
       },
       {
         path: 'protection-approach',
-        name: 'protection-approach-admin',
-        component: ProtectionApproachAdmin,
-        meta: {
-          title: 'Protection Approach - Sauti Admin'
-        }
+        redirect: '/content?tab=about'
       },
       {
         path: 'uploads',
@@ -228,11 +226,7 @@ const routes = [
       },
       {
         path: 'timeline',
-        name: 'timeline-admin',
-        component: TimelineAdmin,
-        meta: {
-          title: 'Timeline Events - Sauti Admin'
-        }
+        redirect: '/content?tab=about'
       },
       {
         path: 'services',

@@ -16,22 +16,12 @@ class PartnerSerializer(serializers.ModelSerializer):
         read_only_fields = ['slug', 'created_at', 'updated_at', 'logo_url']
 
     def get_logo_url(self, obj):
-        """Return full URL for logo, Docker-proxy-aware"""
+        """Return relative URL for logo (frontend proxy handles it)"""
         if obj.logo:
             try:
-                logo_url = obj.logo.url
+                return obj.logo.url
             except (ValueError, AttributeError):
                 return None
-
-            request = self.context.get('request')
-            if request:
-                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-                if host == 'backend':
-                    host = 'localhost:8080'
-                    scheme = 'http'
-                return f"{scheme}://{host}{logo_url}"
-            return f"http://localhost:8080{logo_url}" if logo_url else None
         return None
 
 
@@ -47,20 +37,10 @@ class PartnerListSerializer(serializers.ModelSerializer):
         ]
 
     def get_logo_url(self, obj):
-        """Return full URL for logo, Docker-proxy-aware"""
+        """Return relative URL for logo (frontend proxy handles it)"""
         if obj.logo:
             try:
-                logo_url = obj.logo.url
+                return obj.logo.url
             except (ValueError, AttributeError):
                 return None
-
-            request = self.context.get('request')
-            if request:
-                host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-                scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-                if host == 'backend':
-                    host = 'localhost:8080'
-                    scheme = 'http'
-                return f"{scheme}://{host}{logo_url}"
-            return f"http://localhost:8080{logo_url}" if logo_url else None
         return None

@@ -435,6 +435,17 @@ const getReadingTime = () => {
   return Math.ceil(words / wordsPerMinute)
 }
 
+// Convert Date to local datetime string for datetime-local input (YYYY-MM-DDTHH:MM)
+const toLocalDatetimeString = (date) => {
+  if (!date || !(date instanceof Date) || isNaN(date)) return null
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 const getTagIds = (tagNames) => {
   if (!tagNames || !tagNames.trim()) return []
   
@@ -695,7 +706,7 @@ onMounted(async () => {
         featuredImage: post.featured_image || null,
         status: post.status || 'DRAFT',
         postType: post.post_type || 'NEWS',
-        scheduledPublishAt: post.scheduled_publish_at ? new Date(post.scheduled_publish_at).toISOString().slice(0, 16) : null
+        scheduledPublishAt: post.scheduled_publish_at ? toLocalDatetimeString(new Date(post.scheduled_publish_at)) : null
       }
       
       // Fetch history using the post ID

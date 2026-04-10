@@ -25,42 +25,29 @@ class ResourceListSerializer(serializers.ModelSerializer):
             'status', 'download_count', 'is_featured', 'published_at'
         ]
 
-    def _build_absolute_url(self, request, maybe_relative_url: str) -> str | None:
+    def _get_url(self, maybe_relative_url: str) -> str | None:
+        """Return relative URL (frontend proxy handles it)"""
         if not maybe_relative_url:
             return None
-
         url_str = str(maybe_relative_url)
+        # If already a full URL, return as-is
         if url_str.startswith('http://') or url_str.startswith('https://'):
             return url_str
-
-        # Normal file/image fields typically come through as "/sauti/media/..."
-        if request:
-            host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-            scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-            if host == 'backend':
-                host = 'localhost:8080'
-                scheme = 'http'
-            return f"{scheme}://{host}{url_str}"
-
-        return f"http://localhost:8080{url_str}"
+        return url_str
 
     def get_file(self, obj):
         try:
-            file_url = obj.file.url
+            return obj.file.url if obj.file else None
         except Exception:
-            file_url = str(obj.file) if obj.file else None
-        request = self.context.get('request')
-        return self._build_absolute_url(request, file_url)
+            return str(obj.file) if obj.file else None
 
     def get_thumbnail(self, obj):
         if not obj.thumbnail:
             return None
         try:
-            thumb_url = obj.thumbnail.url
+            return obj.thumbnail.url
         except Exception:
-            thumb_url = str(obj.thumbnail)
-        request = self.context.get('request')
-        return self._build_absolute_url(request, thumb_url)
+            return str(obj.thumbnail)
 
 
 class ResourceDetailSerializer(serializers.ModelSerializer):
@@ -77,41 +64,21 @@ class ResourceDetailSerializer(serializers.ModelSerializer):
             'download_count', 'is_featured', 'published_at', 'updated_at'
         ]
 
-    def _build_absolute_url(self, request, maybe_relative_url: str) -> str | None:
-        if not maybe_relative_url:
-            return None
-
-        url_str = str(maybe_relative_url)
-        if url_str.startswith('http://') or url_str.startswith('https://'):
-            return url_str
-
-        if request:
-            host = request.META.get('HTTP_X_FORWARDED_HOST', request.get_host())
-            scheme = request.META.get('HTTP_X_FORWARDED_PROTO', request.scheme)
-            if host == 'backend':
-                host = 'localhost:8080'
-                scheme = 'http'
-            return f"{scheme}://{host}{url_str}"
-
-        return f"http://localhost:8080{url_str}"
-
     def get_file(self, obj):
+        """Return relative URL for file (frontend proxy handles it)"""
         try:
-            file_url = obj.file.url
+            return obj.file.url if obj.file else None
         except Exception:
-            file_url = str(obj.file) if obj.file else None
-        request = self.context.get('request')
-        return self._build_absolute_url(request, file_url)
+            return str(obj.file) if obj.file else None
 
     def get_thumbnail(self, obj):
+        """Return relative URL for thumbnail (frontend proxy handles it)"""
         if not obj.thumbnail:
             return None
         try:
-            thumb_url = obj.thumbnail.url
+            return obj.thumbnail.url
         except Exception:
-            thumb_url = str(obj.thumbnail)
-        request = self.context.get('request')
-        return self._build_absolute_url(request, thumb_url)
+            return str(obj.thumbnail)
 
 
 class ResourceCreateUpdateSerializer(serializers.ModelSerializer):

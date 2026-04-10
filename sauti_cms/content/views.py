@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
-from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember
-from .serializers import SiteContentSerializer, CoreValueSerializer, ContactSerializer, ProtectionApproachSerializer, TeamMemberSerializer
+from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember, WhoWeAreImage, OperationsImage
+from .serializers import SiteContentSerializer, CoreValueSerializer, ContactSerializer, ProtectionApproachSerializer, TeamMemberSerializer, WhoWeAreImageSerializer, OperationsImageSerializer
 
 class OwnershipViewSetMixin:
     def perform_create(self, serializer):
@@ -81,6 +81,40 @@ class TeamMemberViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
     queryset = TeamMember.objects.filter(is_active=True).order_by('order')
     serializer_class = TeamMemberSerializer
     pagination_class = None
+
+    def get_permissions(self):
+        """
+        Allow public read access, but require authentication for write access.
+        """
+        if self.action in ['list', 'retrieve', 'options']:
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+class WhoWeAreImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
+    queryset = WhoWeAreImage.objects.filter(is_active=True).order_by('position')
+    serializer_class = WhoWeAreImageSerializer
+    pagination_class = None
+    lookup_field = 'position'
+
+    def get_permissions(self):
+        """
+        Allow public read access, but require authentication for write access.
+        """
+        if self.action in ['list', 'retrieve', 'options']:
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+class OperationsImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
+    queryset = OperationsImage.objects.filter(is_active=True).order_by('position')
+    serializer_class = OperationsImageSerializer
+    pagination_class = None
+    lookup_field = 'position'
 
     def get_permissions(self):
         """

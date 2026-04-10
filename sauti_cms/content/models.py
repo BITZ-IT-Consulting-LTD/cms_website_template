@@ -155,6 +155,7 @@ class Contact(models.Model):
     icon = models.CharField(max_length=50, blank=True, null=True, help_text="Name of the icon for the contact (e.g., 'phone', 'envelope', 'location-marker')")
     order = models.IntegerField(default=0, help_text="Order in which the contact item appears")
     is_visible = models.BooleanField(default=True, help_text="Whether this contact item should be visible on the site")
+    description = models.CharField(max_length=255, blank=True, null=True, help_text="Short description of the contact channel")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -264,3 +265,132 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.role})"
+
+
+class WhoWeAreImage(models.Model):
+    """Images for the 'Who We Are' hero grid on the About page."""
+    POSITION_CHOICES = [
+        (1, '1. Left Column - Top (Community)'),
+        (2, '2. Left Column - Middle (Helpline)'),
+        (3, '3. Left Column - Bottom (Family)'),
+        (4, '4. Center Grid - Top Left (Team Photo)'),
+        (5, '5. Center Grid - Top Right (Happy Students)'),
+        (6, '6. Center Grid - Bottom Left (Action)'),
+        (7, '7. Center Grid - Bottom Right (Protection)'),
+        (8, '8. Right Column - Top (Operations)'),
+        (9, '9. Right Column - Middle (Inclusive)'),
+    ]
+
+    position = models.IntegerField(
+        choices=POSITION_CHOICES,
+        unique=True,
+        help_text="Position in the hero grid layout"
+    )
+    title = models.CharField(
+        max_length=100,
+        help_text="Short title describing this image (e.g., 'Community Support')"
+    )
+    image = models.ImageField(
+        upload_to='who_we_are/',
+        help_text="Image to display in this grid position (recommended: 800x600px)"
+    )
+    alt_text = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Alternative text for accessibility"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Whether this image is displayed on the site"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+
+    class Meta:
+        ordering = ['position']
+        verbose_name = 'Who We Are Image'
+        verbose_name_plural = 'Who We Are Images'
+
+    def __str__(self):
+        return f"{self.get_position_display()} - {self.title}"
+
+
+class OperationsImage(models.Model):
+    """Images for the Operations page sections."""
+    POSITION_CHOICES = [
+        ('journey_step_1', 'Journey Step 1 - Access'),
+        ('journey_step_2', 'Journey Step 2 - Response'),
+        ('journey_step_3', 'Journey Step 3 - Management'),
+        ('journey_step_4', 'Journey Step 4 - Protection'),
+        ('infrastructure', 'Infrastructure Section'),
+        ('service_counseling', 'Service - Telephone Counseling'),
+        ('service_walkin', 'Service - Walk-In Support'),
+        ('service_media', 'Service - Media Response'),
+        ('service_guidance', 'Service - Information & Guidance'),
+        ('service_referral', 'Service - Essential Service Referrals'),
+        ('service_community', 'Service - Community Sensitization'),
+    ]
+
+    position = models.CharField(
+        max_length=50,
+        choices=POSITION_CHOICES,
+        unique=True,
+        help_text="Position/section where this image will be displayed"
+    )
+    title = models.CharField(
+        max_length=100,
+        help_text="Short title describing this image"
+    )
+    image = models.ImageField(
+        upload_to='operations/',
+        help_text="Image to display (recommended: 800x600px for services, 400x500px for journey)"
+    )
+    alt_text = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Alternative text for accessibility"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Whether this image is displayed on the site"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created'
+    )
+    last_updated_by = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+    )
+
+    class Meta:
+        ordering = ['position']
+        verbose_name = 'Operations Page Image'
+        verbose_name_plural = 'Operations Page Images'
+
+    def __str__(self):
+        return f"{self.get_position_display()} - {self.title}"
