@@ -4,16 +4,17 @@
     <!-- Skip link handled in App.vue for better first-element accessibility -->
     <nav class="w-full px-8 lg:px-12" aria-label="Main Navigation">
       <div class="flex items-center justify-between" style="height: clamp(60px, 5vw + 40px, 80px);">
-        <!-- Text Brand Name - Hidden on Mobile -->
-        <router-link to="/" class="hidden lg:flex items-center group no-underline shrink-0">
-          <span class="text-xl lg:text-2xl font-black text-secondary tracking-tight">{{ siteContent.getContent('header_brand_name', 'Sauti 116') }}</span>
+        <!-- Logo + Brand Name - Hidden on Mobile -->
+        <router-link to="/" class="hidden lg:flex items-center gap-2 group no-underline shrink-0">
+          <img src="/assets/sauti-logo.jpeg" alt="Sauti 116" class="h-10 lg:h-12 w-auto object-contain" />
+          <span class="text-xl lg:text-2xl font-black text-secondary tracking-tight">{{ siteContent.getContent('header_brand_name', 'Sauti 116 Helpline') }}</span>
         </router-link>
 
         <!-- Desktop Navigation -->
         <div class="hidden lg:flex flex-1 items-center justify-center mx-4">
           <div class="flex items-center gap-4 xl:gap-6">
             <router-link v-for="link in navLinks" :key="link.to" :to="link.to"
-              class="text-neutral-black font-semibold transition-all duration-300 hover:text-primary relative py-2 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 whitespace-nowrap text-sm"
+              class="text-neutral-black font-semibold transition-all duration-300 hover:text-primary relative py-2 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 whitespace-nowrap text-lg"
               active-class="text-primary !after:scale-x-100">
               {{ link.label }}
             </router-link>

@@ -103,15 +103,17 @@ class Command(BaseCommand):
             # Home Page - Partners Section (managed via settings but can have overrides)
             
             # Home Page - Social Media Links
-            'home_social_twitter_url': { 'key': 'home_social_twitter_url', 'value': 'https://x.com/sauti116', 'label': 'Home Twitter/X URL', 'page': 'home', 'type': 'text', 'description': 'Twitter/X profile URL' },
+            'home_social_twitter_url': { 'key': 'home_social_twitter_url', 'value': 'https://x.com/sauti116?s=21', 'label': 'Home Twitter/X URL', 'page': 'home', 'type': 'text', 'description': 'Twitter/X profile URL' },
             'home_social_twitter_label': { 'key': 'home_social_twitter_label', 'value': 'X (formerly Twitter)', 'label': 'Home Twitter/X Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Twitter/X link' },
-            'home_social_instagram_url': { 'key': 'home_social_instagram_url', 'value': 'https://instagram.com/sauti116', 'label': 'Home Instagram URL', 'page': 'home', 'type': 'text', 'description': 'Instagram profile URL' },
+            'home_social_instagram_url': { 'key': 'home_social_instagram_url', 'value': 'https://www.instagram.com/sauti116helpline?igsh=MTdyNjgwOG42ZjB2dA%3D%3D&utm_source=qr', 'label': 'Home Instagram URL', 'page': 'home', 'type': 'text', 'description': 'Instagram profile URL' },
             'home_social_instagram_label': { 'key': 'home_social_instagram_label', 'value': 'Instagram', 'label': 'Home Instagram Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Instagram link' },
-            'home_social_facebook_url': { 'key': 'home_social_facebook_url', 'value': 'https://facebook.com/Sauti116Helpline', 'label': 'Home Facebook URL', 'page': 'home', 'type': 'text', 'description': 'Facebook page URL' },
+            'home_social_facebook_url': { 'key': 'home_social_facebook_url', 'value': 'https://www.facebook.com/share/14W6eurox1o/', 'label': 'Home Facebook URL', 'page': 'home', 'type': 'text', 'description': 'Facebook page URL' },
             'home_social_facebook_label': { 'key': 'home_social_facebook_label', 'value': 'Facebook', 'label': 'Home Facebook Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Facebook link' },
-            'home_social_tiktok_url': { 'key': 'home_social_tiktok_url', 'value': 'https://tiktok.com/@sauti116', 'label': 'Home TikTok URL', 'page': 'home', 'type': 'text', 'description': 'TikTok profile URL' },
+            'home_social_tiktok_url': { 'key': 'home_social_tiktok_url', 'value': 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', 'label': 'Home TikTok URL', 'page': 'home', 'type': 'text', 'description': 'TikTok profile URL' },
             'home_social_tiktok_label': { 'key': 'home_social_tiktok_label', 'value': 'TikTok', 'label': 'Home TikTok Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for TikTok link' },
-            
+            'home_social_youtube_url': { 'key': 'home_social_youtube_url', 'value': 'https://www.youtube.com/@Sauti116HelplineUganda', 'label': 'Home YouTube URL', 'page': 'home', 'type': 'text', 'description': 'YouTube channel URL' },
+            'home_social_youtube_label': { 'key': 'home_social_youtube_label', 'value': 'YouTube', 'label': 'Home YouTube Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for YouTube link' },
+
             # Home Page - Mock News Content (for empty state)
             'home_news_mock_featured_category': { 'key': 'home_news_mock_featured_category', 'value': 'Community', 'label': 'Home Mock Featured Category', 'page': 'home', 'type': 'text', 'description': 'Category for mock featured news' },
             'home_news_mock_featured_title': { 'key': 'home_news_mock_featured_title', 'value': 'Sauti 116 Expands Reach to Rural Areas', 'label': 'Home Mock Featured Title', 'page': 'home', 'type': 'heading', 'description': 'Title for mock featured news' },
@@ -472,7 +474,7 @@ class Command(BaseCommand):
             'faqs_footer_text': { 'key': 'faqs_footer_text', 'value': '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.', 'label': 'FAQs Footer Text', 'page': 'faqs', 'type': 'text' },
 
             # Header Navigation and CTAs
-            'header_brand_name': { 'key': 'header_brand_name', 'value': 'Sauti 116', 'label': 'Header Brand Name', 'page': 'header', 'type': 'text', 'description': 'Brand name displayed in the header' },
+            'header_brand_name': { 'key': 'header_brand_name', 'value': 'Sauti 116 Helpline', 'label': 'Header Brand Name', 'page': 'header', 'type': 'text', 'description': 'Brand name displayed in the header' },
             'header_nav_home': { 'key': 'header_nav_home', 'value': 'Home', 'label': 'Header Nav Home', 'page': 'header', 'type': 'button', 'description': 'Home navigation link text' },
             'header_nav_about': { 'key': 'header_nav_about', 'value': 'Who We Are', 'label': 'Header Nav About', 'page': 'header', 'type': 'button', 'description': 'About navigation link text' },
             'header_nav_operations': { 'key': 'header_nav_operations', 'value': 'Our Operations', 'label': 'Header Nav Operations', 'page': 'header', 'type': 'button', 'description': 'Operations navigation link text' },
@@ -495,15 +497,15 @@ class Command(BaseCommand):
             'footer_nav_news': { 'key': 'footer_nav_news', 'value': 'News', 'label': 'Footer Nav News', 'page': 'footer', 'type': 'button', 'description': 'News footer link text' },
             'footer_nav_partners': { 'key': 'footer_nav_partners', 'value': 'Partners', 'label': 'Footer Nav Partners', 'page': 'footer', 'type': 'button', 'description': 'Partners footer link text' },
             'footer_nav_contact': { 'key': 'footer_nav_contact', 'value': 'Contact', 'label': 'Footer Nav Contact', 'page': 'footer', 'type': 'button', 'description': 'Contact footer link text' },
-            'footer_social_x_url': { 'key': 'footer_social_x_url', 'value': 'https://x.com/sauti116', 'label': 'Footer X URL', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter social media URL' },
+            'footer_social_x_url': { 'key': 'footer_social_x_url', 'value': 'https://x.com/sauti116?s=21', 'label': 'Footer X URL', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter social media URL' },
             'footer_social_x_label': { 'key': 'footer_social_x_label', 'value': 'X', 'label': 'Footer X Label', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter display name' },
-            'footer_social_facebook_url': { 'key': 'footer_social_facebook_url', 'value': 'https://facebook.com/sauti116', 'label': 'Footer Facebook URL', 'page': 'footer', 'type': 'text', 'description': 'Facebook social media URL' },
+            'footer_social_facebook_url': { 'key': 'footer_social_facebook_url', 'value': 'https://www.facebook.com/share/14W6eurox1o/', 'label': 'Footer Facebook URL', 'page': 'footer', 'type': 'text', 'description': 'Facebook social media URL' },
             'footer_social_facebook_label': { 'key': 'footer_social_facebook_label', 'value': 'Facebook', 'label': 'Footer Facebook Label', 'page': 'footer', 'type': 'text', 'description': 'Facebook display name' },
-            'footer_social_instagram_url': { 'key': 'footer_social_instagram_url', 'value': 'https://instagram.com/sauti116', 'label': 'Footer Instagram URL', 'page': 'footer', 'type': 'text', 'description': 'Instagram social media URL' },
+            'footer_social_instagram_url': { 'key': 'footer_social_instagram_url', 'value': 'https://www.instagram.com/sauti116helpline?igsh=MTdyNjgwOG42ZjB2dA%3D%3D&utm_source=qr', 'label': 'Footer Instagram URL', 'page': 'footer', 'type': 'text', 'description': 'Instagram social media URL' },
             'footer_social_instagram_label': { 'key': 'footer_social_instagram_label', 'value': 'Instagram', 'label': 'Footer Instagram Label', 'page': 'footer', 'type': 'text', 'description': 'Instagram display name' },
-            'footer_social_youtube_url': { 'key': 'footer_social_youtube_url', 'value': 'https://youtube.com/@sauti116', 'label': 'Footer YouTube URL', 'page': 'footer', 'type': 'text', 'description': 'YouTube social media URL' },
+            'footer_social_youtube_url': { 'key': 'footer_social_youtube_url', 'value': 'https://www.youtube.com/@Sauti116HelplineUganda', 'label': 'Footer YouTube URL', 'page': 'footer', 'type': 'text', 'description': 'YouTube social media URL' },
             'footer_social_youtube_label': { 'key': 'footer_social_youtube_label', 'value': 'YouTube', 'label': 'Footer YouTube Label', 'page': 'footer', 'type': 'text', 'description': 'YouTube display name' },
-            'footer_social_tiktok_url': { 'key': 'footer_social_tiktok_url', 'value': 'https://tiktok.com/@sauti116', 'label': 'Footer TikTok URL', 'page': 'footer', 'type': 'text', 'description': 'TikTok social media URL' },
+            'footer_social_tiktok_url': { 'key': 'footer_social_tiktok_url', 'value': 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', 'label': 'Footer TikTok URL', 'page': 'footer', 'type': 'text', 'description': 'TikTok social media URL' },
             'footer_social_tiktok_label': { 'key': 'footer_social_tiktok_label', 'value': 'TikTok', 'label': 'Footer TikTok Label', 'page': 'footer', 'type': 'text', 'description': 'TikTok display name' },
 
             # Contact Page Form Text

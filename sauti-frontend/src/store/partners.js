@@ -9,6 +9,10 @@ function isCacheFresh(timestamp) {
   return Date.now() - timestamp < CACHE_TTL
 }
 
+function paramsMatch(params1, params2) {
+  return JSON.stringify(params1 || {}) === JSON.stringify(params2 || {})
+}
+
 export const usePartnersStore = defineStore('partners', () => {
   // State
   const partners = ref([])
@@ -17,6 +21,7 @@ export const usePartnersStore = defineStore('partners', () => {
 
   // Cache metadata
   const lastFetched = ref(null)
+  const cachedParams = ref(null)
 
   // De-duplication
   let fetchingPromise = null
@@ -28,13 +33,13 @@ export const usePartnersStore = defineStore('partners', () => {
     if (logo.startsWith('http://') || logo.startsWith('https://')) {
       try {
         const url = new URL(logo)
-        // If host is "backend" (internal), rewrite to the public origin
+        // "backend" is the internal Docker hostname and isn't reachable from the
+        // browser - fall back to just the path, resolved against the current origin
+        // (whatever host/port the user is actually browsing on).
         if (url.hostname === 'backend') {
-          url.hostname = window.location.hostname || 'localhost'
-          // Dev nginx proxy exposes media on port 8080
-          url.port = window.location.port === '5173' ? '8080' : url.port
+          return `${window.location.origin}${url.pathname}`
         }
-        return url.toString()
+        return logo
       } catch {
         return logo
       }
@@ -42,8 +47,7 @@ export const usePartnersStore = defineStore('partners', () => {
 
     // Relative path from backend (e.g. "/sauti/media/...") - prefix with current origin
     if (logo.startsWith('/')) {
-      const origin = window.location.origin || 'http://localhost:8080'
-      return `${origin}${logo}`
+      return `${window.location.origin}${logo}`
     }
 
     // Fallback: leave unchanged
@@ -51,9 +55,12 @@ export const usePartnersStore = defineStore('partners', () => {
   }
 
   // Actions
-  async function fetchPartners(forceRefresh = false) {
-    // Return cached if fresh
-    if (!forceRefresh && isCacheFresh(lastFetched.value) && partners.value.length > 0) {
+  async function fetchPartners(params = {}, forceRefresh = false) {
+    // Return cached if fresh and params match
+    if (!forceRefresh &&
+        isCacheFresh(lastFetched.value) &&
+        paramsMatch(params, cachedParams.value) &&
+        partners.value.length > 0) {
       console.log('[PartnersStore] Using cached partners')
       return partners.value
     }
@@ -69,7 +76,7 @@ export const usePartnersStore = defineStore('partners', () => {
 
     fetchingPromise = (async () => {
       try {
-        const response = await api.partners.list()
+        const response = await api.partners.list(params)
         const data = response.data.results || response.data || []
 
         partners.value = Array.isArray(data)
@@ -77,6 +84,7 @@ export const usePartnersStore = defineStore('partners', () => {
           : []
 
         lastFetched.value = Date.now()
+        cachedParams.value = params
         console.log('[PartnersStore] Partners cached:', partners.value.length, 'items')
         return partners.value
       } catch (err) {
@@ -106,6 +114,7 @@ export const usePartnersStore = defineStore('partners', () => {
     loading,
     error,
     lastFetched,
+    cachedParams,
     fetchPartners,
     clearError,
     invalidateCache,
@@ -114,6 +123,6 @@ export const usePartnersStore = defineStore('partners', () => {
   persist: {
     key: 'sauti-partners',
     storage: localStorage,
-    paths: ['partners', 'lastFetched']
+    paths: ['partners', 'lastFetched', 'cachedParams']
   }
 })

@@ -143,6 +143,16 @@
                       class="text-red-600 hover:text-red-800 text-sm mt-1">Remove</button>
                   </div>
                 </div>
+                <div class="flex items-center space-x-6">
+                  <label class="flex items-center space-x-2">
+                    <input v-model="createForm.is_featured" type="checkbox" class="form-checkbox">
+                    <span class="text-sm text-gray-700">Show on homepage</span>
+                  </label>
+                  <label class="flex items-center space-x-2">
+                    <input v-model="createForm.is_active" type="checkbox" class="form-checkbox">
+                    <span class="text-sm text-gray-700">Active</span>
+                  </label>
+                </div>
               </div>
               <div class="mt-6 flex justify-end space-x-3">
                 <button type="button" @click="showCreateModal = false" class="btn-outline">
@@ -211,6 +221,16 @@
                     <button v-if="editForm.logoPreview" @click="removeEditLogo" type="button"
                       class="text-red-600 hover:text-red-800 text-sm mt-1">Remove</button>
                   </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                  <label class="flex items-center space-x-2">
+                    <input v-model="editForm.is_featured" type="checkbox" class="form-checkbox">
+                    <span class="text-sm text-gray-700">Show on homepage</span>
+                  </label>
+                  <label class="flex items-center space-x-2">
+                    <input v-model="editForm.is_active" type="checkbox" class="form-checkbox">
+                    <span class="text-sm text-gray-700">Active</span>
+                  </label>
                 </div>
               </div>
               <div class="mt-6 flex justify-end space-x-3">
