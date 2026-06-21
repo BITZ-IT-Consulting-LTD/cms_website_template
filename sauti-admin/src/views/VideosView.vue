@@ -7,6 +7,7 @@
     <!-- Mini Dashboard -->
     <StatsGrid>
       <StatCard label="Total Videos" :value="stats.total" :icon="VideoCameraIcon" color="blue" />
+      <StatCard label="Audio" :value="stats.audio" :icon="MusicalNoteIcon" color="indigo" />
       <StatCard label="Published" :value="stats.published" :icon="CheckCircleIcon" color="green" />
       <StatCard label="Drafts" :value="stats.draft" :icon="ClockIcon" color="orange" />
       <StatCard label="Total Views" :value="formatNumber(stats.totalViews)" :icon="EyeIcon" color="purple" />
@@ -14,7 +15,25 @@
 
     <!-- Filters -->
     <FilterBar v-model="filters" search-placeholder="Search videos..." :status-options="statusOptions"
-      status-label="All Status" :custom-options="categoryOptions" custom-label="All Categories" />
+      status-label="All Status" :custom-options="categoryOptions" custom-label="All Categories">
+      <template #custom-filter>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <select :value="filters.custom" @change="filters.custom = $event.target.value"
+            class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+            <option value="">All Categories</option>
+            <option v-for="option in categoryOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+          <select :value="filters.type" @change="filters.type = $event.target.value"
+            class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+            <option value="">All Types</option>
+            <option value="VIDEO">Video</option>
+            <option value="AUDIO">Audio</option>
+          </select>
+        </div>
+      </template>
+    </FilterBar>
 
     <!-- Loading State -->
     <LoadingState v-if="loading" message="Loading videos..." />
@@ -50,8 +69,11 @@
             <tr v-for="video in filteredVideos" :key="video.id" class="table-row hover:bg-gray-50">
               <td class="px-6 py-4">
                 <div class="flex items-center">
-                  <div class="flex-shrink-0 h-12 w-12">
-                    <div v-if="video.thumbnail" class="h-12 w-12 rounded-lg overflow-hidden">
+                  <div class="flex-shrink-0 h-12 w-12 relative">
+                    <div v-if="video.video_type === 'AUDIO'" class="h-12 w-12 bg-indigo-50 rounded-lg flex items-center justify-center">
+                      <MusicalNoteIcon class="h-6 w-6 text-indigo-500" />
+                    </div>
+                    <div v-else-if="video.thumbnail" class="h-12 w-12 rounded-lg overflow-hidden">
                       <img :src="video.thumbnail" :alt="video.title" class="h-full w-full object-cover">
                     </div>
                     <div v-else-if="video.youtube_thumbnail_url" class="h-12 w-12 rounded-lg overflow-hidden">
@@ -64,6 +86,9 @@
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900 line-clamp-2">
                       {{ video.title }}
+                      <span v-if="video.video_type === 'AUDIO'" class="ml-1 inline-flex px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-indigo-100 text-indigo-700 align-middle">
+                        Audio
+                      </span>
                     </div>
                     <div class="text-sm text-gray-500 line-clamp-1">
                       {{ video.description || 'No description' }}
@@ -131,6 +156,7 @@
   import {
     PlusIcon,
     VideoCameraIcon,
+    MusicalNoteIcon,
     CheckCircleIcon,
     ClockIcon,
     EyeIcon,
@@ -148,7 +174,8 @@
   const filters = ref({
     search: '',
     status: '',
-    custom: ''
+    custom: '',
+    type: ''
   })
 
   // Backward compatibility refs
@@ -187,12 +214,14 @@
   // Computed properties
   const stats = computed(() => {
     const total = videos.value.length
+    const audio = videos.value.filter(v => v.video_type === 'AUDIO').length
     const published = videos.value.filter(v => v.status?.toUpperCase() === 'PUBLISHED').length
     const draft = videos.value.filter(v => v.status?.toUpperCase() === 'DRAFT').length
     const totalViews = videos.value.reduce((sum, v) => sum + (v.views_count || 0), 0)
 
     return {
       total,
+      audio,
       published,
       draft,
       totalViews
@@ -219,6 +248,13 @@
     // Filter by category
     if (categoryFilter.value) {
       filtered = filtered.filter(video => video.category?.name === categoryFilter.value)
+    }
+
+    // Filter by type (Video vs Audio)
+    if (filters.value.type === 'AUDIO') {
+      filtered = filtered.filter(video => video.video_type === 'AUDIO')
+    } else if (filters.value.type === 'VIDEO') {
+      filtered = filtered.filter(video => video.video_type !== 'AUDIO')
     }
 
     return filtered

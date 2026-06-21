@@ -398,16 +398,14 @@ class Command(BaseCommand):
             'reports_insights_footer_text': { 'key': 'reports_insights_footer_text', 'value': '© 2024 Sauti Uganda 116 helpline. All rights reserved.', 'label': 'Reports & Insights Footer Text', 'page': 'reports_insights', 'type': 'text' },
 
             # Videos Page Content
-            'videos_title': { 'key': 'videos_title', 'value': 'Videos', 'label': 'Videos Title', 'page': 'videos', 'type': 'heading' },
-            'videos_resources_link': { 'key': 'videos_resources_link', 'value': 'Resources →', 'label': 'Videos Resources Link', 'page': 'videos', 'type': 'button' },
+            'videos_page_title': { 'key': 'videos_page_title', 'value': 'Video Gallery', 'label': 'Videos Page Title', 'page': 'videos', 'type': 'heading', 'description': 'Hero section main title' },
+            'videos_page_title_highlight': { 'key': 'videos_page_title_highlight', 'value': 'Audio-Visuals', 'label': 'Videos Page Title Highlight', 'page': 'videos', 'type': 'heading', 'description': 'Hero section highlighted word' },
+            'videos_page_description': { 'key': 'videos_page_description', 'value': 'Explore our archive of official media content, awareness videos, and community stories.', 'label': 'Videos Page Description', 'page': 'videos', 'type': 'text', 'description': 'Hero section subtitle text' },
+            'videos_search_heading': { 'key': 'videos_search_heading', 'value': 'Search Official Media', 'label': 'Videos Search Heading', 'page': 'videos', 'type': 'heading', 'description': 'Heading above the search bar' },
             'videos_search_placeholder': { 'key': 'videos_search_placeholder', 'value': 'Search videos...', 'label': 'Videos Search Placeholder', 'page': 'videos', 'type': 'text' },
             'videos_search_button': { 'key': 'videos_search_button', 'value': 'Search', 'label': 'Videos Search Button', 'page': 'videos', 'type': 'button' },
-            'videos_chip_all': { 'key': 'videos_chip_all', 'value': 'All', 'label': 'Videos Chip All', 'page': 'videos', 'type': 'button' },
-            'videos_chip_education': { 'key': 'videos_chip_education', 'value': 'Education', 'label': 'Videos Chip Education', 'page': 'videos', 'type': 'button' },
-            'videos_chip_safety': { 'key': 'videos_chip_safety', 'value': 'Safety', 'label': 'Videos Chip Safety', 'page': 'videos', 'type': 'button' },
-            'videos_chip_support': { 'key': 'videos_chip_support', 'value': 'Support', 'label': 'Videos Chip Support', 'page': 'videos', 'type': 'button' },
-            'videos_chip_recency': { 'key': 'videos_chip_recency', 'value': 'Recency', 'label': 'Videos Chip Recency', 'page': 'videos', 'type': 'button' },
-            'videos_chip_popular': { 'key': 'videos_chip_popular', 'value': 'Popular', 'label': 'Videos Chip Popular', 'page': 'videos', 'type': 'button' },
+            'videos_section_title': { 'key': 'videos_section_title', 'value': 'Videos', 'label': 'Videos Section Title', 'page': 'videos', 'type': 'heading', 'description': 'Heading above the video grid' },
+            'videos_audio_section_title': { 'key': 'videos_audio_section_title', 'value': 'Audio', 'label': 'Videos Audio Section Title', 'page': 'videos', 'type': 'heading', 'description': 'Heading above the audio list' },
 
             # FAQs Page Content
             'faqs_support_title': { 'key': 'faqs_support_title', 'value': '24/7 Support', 'label': 'FAQs Support Title', 'page': 'faqs', 'type': 'heading' },
@@ -525,10 +523,12 @@ class Command(BaseCommand):
             'resources_downloading': { 'key': 'resources_downloading', 'value': 'Downloading...', 'label': 'Resources Downloading', 'page': 'resources', 'type': 'text', 'description': 'Download button loading state' },
 
             # Videos Page - Additional Keys
-            'videos_filter_videos': { 'key': 'videos_filter_videos', 'value': 'VIDEOS', 'label': 'Videos Filter Videos', 'page': 'videos', 'type': 'button', 'description': 'Videos filter tab' },
-            'videos_filter_audio': { 'key': 'videos_filter_audio', 'value': 'AUDIO', 'label': 'Videos Filter Audio', 'page': 'videos', 'type': 'button', 'description': 'Audio filter tab' },
-            'videos_empty_title': { 'key': 'videos_empty_title', 'value': 'No videos found', 'label': 'Videos Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title' },
-            'videos_empty_subtitle': { 'key': 'videos_empty_subtitle', 'value': 'Try adjusting your filters or check back later for new content.', 'label': 'Videos Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle' },
+            'videos_filter_videos': { 'key': 'videos_filter_videos', 'value': 'VIDEOS', 'label': 'Videos Filter Videos', 'page': 'videos', 'type': 'button', 'description': 'Jump-to-Videos-section nav pill' },
+            'videos_filter_audio': { 'key': 'videos_filter_audio', 'value': 'AUDIO', 'label': 'Videos Filter Audio', 'page': 'videos', 'type': 'button', 'description': 'Jump-to-Audio-section nav pill' },
+            'videos_empty_title': { 'key': 'videos_empty_title', 'value': 'No videos found', 'label': 'Videos Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title (Videos section)' },
+            'videos_empty_subtitle': { 'key': 'videos_empty_subtitle', 'value': 'Try adjusting your filters or check back later for new content.', 'label': 'Videos Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle (Videos section)' },
+            'videos_audio_empty_title': { 'key': 'videos_audio_empty_title', 'value': 'No audio content found', 'label': 'Videos Audio Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title (Audio section)' },
+            'videos_audio_empty_subtitle': { 'key': 'videos_audio_empty_subtitle', 'value': 'Check back later for new content', 'label': 'Videos Audio Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle (Audio section)' },
 
             # Blog Page Buttons
             'blog_search_button': { 'key': 'blog_search_button', 'value': 'Search', 'label': 'Blog Search Button', 'page': 'blog', 'type': 'button', 'description': 'Search button text' },

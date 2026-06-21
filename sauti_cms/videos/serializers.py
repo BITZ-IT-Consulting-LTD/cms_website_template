@@ -8,6 +8,20 @@ class VideoCategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug', 'description', 'created_at']
 
 
+def _relative_file_url(file_field):
+    """Return relative URL for a FileField/ImageField (frontend proxy handles it)"""
+    if not file_field:
+        return None
+    file_str = str(file_field)
+    if file_str.startswith('http://') or file_str.startswith('https://'):
+        # It's already a full URL (external URL stored as string), return as-is
+        return file_str
+    try:
+        return file_field.url
+    except (ValueError, AttributeError):
+        return None
+
+
 class VideoSerializer(serializers.ModelSerializer):
     category = VideoCategorySerializer(read_only=True)
     category_id = serializers.IntegerField(write_only=True, required=False)
@@ -15,8 +29,7 @@ class VideoSerializer(serializers.ModelSerializer):
     youtube_id = serializers.CharField(read_only=True)
     youtube_embed_url = serializers.CharField(read_only=True)
     youtube_thumbnail_url = serializers.CharField(read_only=True)
-    thumbnail = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Video
         fields = [
@@ -28,22 +41,14 @@ class VideoSerializer(serializers.ModelSerializer):
             'youtube_id', 'youtube_embed_url', 'youtube_thumbnail_url'
         ]
         read_only_fields = ['slug', 'created_at', 'updated_at', 'views_count']
-    
-    def get_thumbnail(self, obj):
-        """Return relative URL for thumbnail (frontend proxy handles it)"""
-        if obj.thumbnail:
-            # Check if the field contains a full URL (external URL stored as string)
-            thumbnail_str = str(obj.thumbnail)
-            if thumbnail_str.startswith('http://') or thumbnail_str.startswith('https://'):
-                # It's already a full URL, return as-is
-                return thumbnail_str
 
-            # It's a file field, get the relative URL
-            try:
-                return obj.thumbnail.url
-            except (ValueError, AttributeError):
-                return None
-        return None
+    def to_representation(self, instance):
+        # video_file/thumbnail must stay writable model fields (for uploads to save),
+        # so the host-mismatch URL fix is applied here instead of via SerializerMethodField.
+        data = super().to_representation(instance)
+        data['thumbnail'] = _relative_file_url(instance.thumbnail)
+        data['video_file'] = _relative_file_url(instance.video_file)
+        return data
 
     def create(self, validated_data):
         category_id = validated_data.pop('category_id', None)
@@ -81,8 +86,7 @@ class VideoListSerializer(serializers.ModelSerializer):
     author_name = serializers.CharField(source='author.get_full_name', read_only=True)
     youtube_id = serializers.CharField(read_only=True)
     youtube_thumbnail_url = serializers.CharField(read_only=True)
-    thumbnail = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Video
         fields = [
@@ -92,19 +96,9 @@ class VideoListSerializer(serializers.ModelSerializer):
             'views_count', 'published_at', 'scheduled_publish_at', 'created_at', 'updated_at',
             'youtube_id', 'youtube_thumbnail_url'
         ]
-    
-    def get_thumbnail(self, obj):
-        """Return relative URL for thumbnail (frontend proxy handles it)"""
-        if obj.thumbnail:
-            # Check if the field contains a full URL (external URL stored as string)
-            thumbnail_str = str(obj.thumbnail)
-            if thumbnail_str.startswith('http://') or thumbnail_str.startswith('https://'):
-                # It's already a full URL, return as-is
-                return thumbnail_str
 
-            # It's a file field, get the relative URL
-            try:
-                return obj.thumbnail.url
-            except (ValueError, AttributeError):
-                return None
-        return None
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['thumbnail'] = _relative_file_url(instance.thumbnail)
+        data['video_file'] = _relative_file_url(instance.video_file)
+        return data

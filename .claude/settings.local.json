@@ -32,7 +32,11 @@
       "Bash(taskkill:*)",
       "mcp__MCP_DOCKER__browser_navigate",
       "mcp__MCP_DOCKER__browser_click",
-      "mcp__MCP_DOCKER__browser_wait_for"
+      "mcp__MCP_DOCKER__browser_wait_for",
+      "Bash(npx vue-tsc *)",
+      "Bash(node -e \"require\\('@vue/compiler-sfc'\\)\")",
+      "mcp__chrome-devtools__fill_form",
+      "mcp__chrome-devtools__upload_file"
     ],
     "deny": [],
     "ask": []

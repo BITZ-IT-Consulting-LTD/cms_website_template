@@ -47,6 +47,7 @@ class Video(models.Model):
     class VideoType(models.TextChoices):
         YOUTUBE = 'YOUTUBE', 'YouTube Video'
         UPLOAD = 'UPLOAD', 'Uploaded Video'
+        AUDIO = 'AUDIO', 'Uploaded Audio'
     
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique=True, blank=True)
