@@ -344,6 +344,7 @@ class OperationsImage(models.Model):
         ('service_guidance', 'Service - Information & Guidance'),
         ('service_referral', 'Service - Essential Service Referrals'),
         ('service_community', 'Service - Community Sensitization'),
+        ('service_chatbot', 'Service - MHPSS Chatbot'),
     ]
 
     position = models.CharField(

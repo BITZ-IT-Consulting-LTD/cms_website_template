@@ -317,9 +317,9 @@
       <!-- Section 3: Services Images -->
       <CollapsibleSection
         title="Services Images"
-        subtitle="Manage the 6 images for 'Services We Offer' section"
+        subtitle="Manage the images for the 'Services We Offer' section"
         :icon="BriefcaseIcon"
-        :badge="{ text: `${opsServiceImagesStats.filled}/${opsServiceImagesStats.total}`, color: opsServiceImagesStats.filled === 6 ? 'green' : 'amber' }"
+        :badge="{ text: `${opsServiceImagesStats.filled}/${opsServiceImagesStats.total}`, color: opsServiceImagesStats.filled === opsServiceImagesStats.total ? 'green' : 'amber' }"
       >
         <div class="bg-gray-50 rounded-2xl p-4 mb-4">
           <p class="text-sm text-gray-600 mb-4">Click on any service to add or edit its image.</p>
@@ -1529,6 +1529,7 @@ const opsServicePositions = [
   { value: 'service_guidance', name: 'Information & Guidance', description: 'Information provision image' },
   { value: 'service_referral', name: 'Essential Referrals', description: 'Service referral image' },
   { value: 'service_community', name: 'Community Sensitization', description: 'Community awareness image' },
+  { value: 'service_chatbot', name: 'MHPSS Chatbot', description: 'Chatbot service image' },
 ]
 
 const opsInfraPosition = { value: 'infrastructure', name: 'Infrastructure', description: 'Main infrastructure section image' }
@@ -1573,7 +1574,7 @@ const opsJourneyImagesStats = computed(() => ({
 
 const opsServiceImagesStats = computed(() => ({
   filled: operationsImages.value.filter(img => img.position.startsWith('service_')).length,
-  total: 6
+  total: opsServicePositions.length
 }))
 
 const opsInfraImageExists = computed(() => operationsImages.value.some(img => img.position === 'infrastructure'))

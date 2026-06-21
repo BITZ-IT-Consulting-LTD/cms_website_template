@@ -223,43 +223,6 @@ class Command(BaseCommand):
             'about_values_stat_2_value': { 'key': 'about_values_stat_2_value', 'value': '1M+', 'label': 'About Values Stat 2 Value', 'page': 'about', 'type': 'text' },
             'about_values_stat_2_label': { 'key': 'about_values_stat_2_label', 'value': 'Lives Touched', 'label': 'About Values Stat 2 Label', 'page': 'about', 'type': 'text' },
 
-            # Operations Page Content
-            'operations_title': { 'key': 'operations_title', 'value': 'Our Operations and Case Flow', 'label': 'Operations Title', 'page': 'operations', 'type': 'heading' },
-            'operations_subtitle': { 'key': 'operations_subtitle', 'value': 'A transparent look into how we handle every call to ensure every child\'s voice is heard and acted upon with care and urgency.', 'label': 'Operations Subtitle', 'page': 'operations', 'type': 'text' },
-            'operations_path_title': { 'key': 'operations_path_title', 'value': 'The Path to Resolution', 'label': 'Operations Path Title', 'page': 'operations', 'type': 'heading' },
-            'operations_path_subtitle': { 'key': 'operations_path_subtitle', 'value': 'Our streamlined process from report to resolution, ensuring every case receives the attention and action it deserves.', 'label': 'Operations Path Subtitle', 'page': 'operations', 'type': 'text' },
-            'operations_step_1_title': { 'key': 'operations_step_1_title', 'value': 'Initial Contact', 'label': 'Operations Step 1 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_1_text': { 'key': 'operations_step_1_text', 'value': 'A child or concerned individual calls the toll-free 116 helpline or reaches out via WhatsApp.', 'label': 'Operations Step 1 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_1_tag': { 'key': 'operations_step_1_tag', 'value': 'Immediate Response', 'label': 'Operations Step 1 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_step_2_title': { 'key': 'operations_step_2_title', 'value': 'Counselor Support', 'label': 'Operations Step 2 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_2_text': { 'key': 'operations_step_2_text', 'value': 'Trained counselors provide immediate emotional support and gather essential information with empathy.', 'label': 'Operations Step 2 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_2_tag': { 'key': 'operations_step_2_tag', 'value': 'Professional Care', 'label': 'Operations Step 2 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_step_3_title': { 'key': 'operations_step_3_title', 'value': 'Case Assessment', 'label': 'Operations Step 3 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_3_text': { 'key': 'operations_step_3_text', 'value': 'The case is documented, assessed for urgency level, and classified according to protection needs.', 'label': 'Operations Step 3 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_3_tag': { 'key': 'operations_step_3_tag', 'value': 'Detailed Documentation', 'label': 'Operations Step 3 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_step_4_title': { 'key': 'operations_step_4_title', 'value': 'Referral & Follow-up', 'label': 'Operations Step 4 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_4_text': { 'key': 'operations_step_4_text', 'value': 'Referrals are made to relevant authorities and continuous follow-up ensures case resolution.', 'label': 'Operations Step 4 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_4_tag': { 'key': 'operations_step_4_tag', 'value': 'Action & Closure', 'label': 'Operations Step 4 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_1_title': { 'key': 'operations_metrics_1_title', 'value': '24/7', 'label': 'Operations Metrics 1 Title', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_1_text': { 'key': 'operations_metrics_1_text', 'value': 'Always Available', 'label': 'Operations Metrics 1 Text', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_2_title': { 'key': 'operations_metrics_2_title', 'value': '100%', 'label': 'Operations Metrics 2 Title', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_2_text': { 'key': 'operations_metrics_2_text', 'value': 'Confidential', 'label': 'Operations Metrics 2 Text', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_3_title': { 'key': 'operations_metrics_3_title', 'value': 'Free', 'label': 'Operations Metrics 3 Title', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_3_text': { 'key': 'operations_metrics_3_text', 'value': 'Toll-Free Service', 'label': 'Operations Metrics 3 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlights_title': { 'key': 'operations_highlights_title', 'value': 'Operational Highlights', 'label': 'Operations Highlights Title', 'page': 'operations', 'type': 'heading' },
-            'operations_highlight_1_title': { 'key': 'operations_highlight_1_title', 'value': '116 Toll-Free Helpline', 'label': 'Operations Highlight 1 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_1_text': { 'key': 'operations_highlight_1_text', 'value': 'Accessible nationwide across all telecom networks.', 'label': 'Operations Highlight 1 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_2_title': { 'key': 'operations_highlight_2_title', 'value': '24/7 Availability', 'label': 'Operations Highlight 2 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_2_text': { 'key': 'operations_highlight_2_text', 'value': 'Help any time of day, all year round.', 'label': 'Operations Highlight 2 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_3_title': { 'key': 'operations_highlight_3_title', 'value': 'Language Support', 'label': 'Operations Highlight 3 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_3_text': { 'key': 'operations_highlight_3_text', 'value': 'English, Luganda, Swahili, and additional local languages.', 'label': 'Operations Highlight 3 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_4_title': { 'key': 'operations_highlight_4_title', 'value': 'Strict Confidentiality', 'label': 'Operations Highlight 4 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_4_text': { 'key': 'operations_highlight_4_text', 'value': 'Handled with the utmost privacy.', 'label': 'Operations Highlight 4 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_5_title': { 'key': 'operations_highlight_5_title', 'value': 'Trained Professionals', 'label': 'Operations Highlight 5 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_5_text': { 'key': 'operations_highlight_5_text', 'value': 'Counselors undergo rigorous training.', 'label': 'Operations Highlight 5 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_6_title': { 'key': 'operations_highlight_6_title', 'value': 'Multiple Channels', 'label': 'Operations Highlight 6 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_6_text': { 'key': 'operations_highlight_6_text', 'value': 'WhatsApp, U-Report, SafePal App, email, and walk-ins.', 'label': 'Operations Highlight 6 Text', 'page': 'operations', 'type': 'text' },
-
             # Operations Page - Hero Section
             'operations_page_title': { 'key': 'operations_page_title', 'value': 'How We', 'label': 'Operations Page Title', 'page': 'operations', 'type': 'heading', 'description': 'Hero section main title' },
             'operations_page_title_highlight': { 'key': 'operations_page_title_highlight', 'value': 'Operate', 'label': 'Operations Page Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Hero section highlighted word' },
@@ -312,8 +275,24 @@ class Command(BaseCommand):
             'operations_pillar3_title': { 'key': 'operations_pillar3_title', 'value': 'Sustainable Funding', 'label': 'Pillar 3 Title', 'page': 'operations', 'type': 'heading', 'description': 'Third pillar title' },
             'operations_pillar3_description': { 'key': 'operations_pillar3_description', 'value': 'Partnering with MGLSD and UNICEF for long-term service stability.', 'label': 'Pillar 3 Description', 'page': 'operations', 'type': 'text', 'description': 'Third pillar description' },
 
+            # Operations Page - Key Facts Section
+            'operations_key_facts_title': { 'key': 'operations_key_facts_title', 'value': 'Operations at a', 'label': 'Key Facts Title', 'page': 'operations', 'type': 'heading', 'description': 'Key facts section title' },
+            'operations_key_facts_title_highlight': { 'key': 'operations_key_facts_title_highlight', 'value': 'Glance', 'label': 'Key Facts Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Key facts section highlighted word' },
+            'operations_page_description': { 'key': 'operations_page_description', 'value': 'Our comprehensive case management system ensures every report is handled with care and urgency.', 'label': 'Operations Page Description', 'page': 'operations', 'type': 'text', 'description': 'Key facts section description' },
+            'operations_availability_title': { 'key': 'operations_availability_title', 'value': '24/7 Nationwide Coverage', 'label': 'Operations Availability Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: availability' },
+            'operations_availability_text': { 'key': 'operations_availability_text', 'value': 'Operational 24/7 and accessible from every part of the country.', 'label': 'Operations Availability Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: availability' },
+            'operations_funding_title': { 'key': 'operations_funding_title', 'value': 'Funding & Support', 'label': 'Operations Funding Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: funding' },
+            'operations_funding_text': { 'key': 'operations_funding_text', 'value': 'Government of Uganda covers utility bills and 14% of salaries, while donors (UNICEF) support case management funds and project staff salaries.', 'label': 'Operations Funding Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: funding' },
+            'operations_languages_title': { 'key': 'operations_languages_title', 'value': 'Multilingual Counselors', 'label': 'Operations Languages Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: languages' },
+            'operations_languages_text': { 'key': 'operations_languages_text', 'value': 'Our counselors speak a total of 26 local languages to serve every community.', 'label': 'Operations Languages Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: languages' },
+            'operations_shortcode_title': { 'key': 'operations_shortcode_title', 'value': 'Toll-Free Access', 'label': 'Operations Shortcode Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: shortcode' },
+            'operations_shortcode_text': { 'key': 'operations_shortcode_text', 'value': 'Operates on the short code 116 (toll free) accessible from any telecom network.', 'label': 'Operations Shortcode Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: shortcode' },
+            'operations_structure_title': { 'key': 'operations_structure_title', 'value': 'Two-Division Structure', 'label': 'Operations Structure Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: structure' },
+            'operations_structure_text': { 'key': 'operations_structure_text', 'value': 'Divided into 2 sections: call center for immediate response and case work for follow-up support.', 'label': 'Operations Structure Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: structure' },
+
             # Operations Page - Services Section
-            'services_section_title': { 'key': 'services_section_title', 'value': 'Services We Offer', 'label': 'Services Section Title', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title' },
+            'services_section_title': { 'key': 'services_section_title', 'value': 'Services We', 'label': 'Services Section Title', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title' },
+            'services_section_title_highlight': { 'key': 'services_section_title_highlight', 'value': 'Offer', 'label': 'Services Section Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title highlighted word' },
             'services_section_subtitle': { 'key': 'services_section_subtitle', 'value': 'Comprehensive support systems protecting and empowering every voice in Uganda.', 'label': 'Services Section Subtitle', 'page': 'operations', 'type': 'text', 'description': 'Services carousel subtitle' },
 
             # Service Items (titles and descriptions)
@@ -329,6 +308,8 @@ class Command(BaseCommand):
             'service_referral_text': { 'key': 'service_referral_text', 'value': 'Referral to essential services including healthcare, legal aid, and social support.', 'label': 'Service Referral Text', 'page': 'operations', 'type': 'text', 'description': 'Referral service description' },
             'service_community_title': { 'key': 'service_community_title', 'value': 'Community Sensitization', 'label': 'Service Community Title', 'page': 'operations', 'type': 'heading', 'description': 'Community service title' },
             'service_community_text': { 'key': 'service_community_text', 'value': 'Community sensitization activities to raise awareness about child protection and GBV prevention.', 'label': 'Service Community Text', 'page': 'operations', 'type': 'text', 'description': 'Community service description' },
+            'service_chatbot_title': { 'key': 'service_chatbot_title', 'value': 'MHPSS Chatbot', 'label': 'Service Chatbot Title', 'page': 'operations', 'type': 'heading', 'description': 'Chatbot service title' },
+            'service_chatbot_text': { 'key': 'service_chatbot_text', 'value': 'Mental Health and Psychosocial Support chatbot for immediate automated assistance.', 'label': 'Service Chatbot Text', 'page': 'operations', 'type': 'text', 'description': 'Chatbot service description' },
 
             # Resources Page Content
             'resources_title': { 'key': 'resources_title', 'value': 'Resources & Statistics', 'label': 'Resources Title', 'page': 'resources', 'type': 'heading' },

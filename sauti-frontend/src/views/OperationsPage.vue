@@ -169,11 +169,32 @@
         </div>
       </section>
 
-      <!-- 4. Services Slideshow -->
+      <!-- 4. Key Facts -->
+      <section class="mb-8 md:mb-16">
+        <div class="text-center mb-6 md:mb-10 px-4">
+          <h2 class="text-lg md:text-2xl lg:text-3xl font-bold text-secondary tracking-tight break-words">
+            {{ siteContent.getContent('operations_key_facts_title', 'Operations at a') }} <span class="text-primary">{{ siteContent.getContent('operations_key_facts_title_highlight', 'Glance') }}</span>
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mt-2 md:mt-4 rounded-full"></div>
+          <p class="text-xs md:text-sm lg:text-base text-black/60 font-semibold mt-2 md:mt-4 max-w-2xl mx-auto break-words">
+            {{ siteContent.getContent('operations_page_description', 'Our comprehensive case management system ensures every report is handled with care and urgency.') }}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+          <div v-for="(fact, fi) in computedKeyFacts" :key="fi"
+               class="bg-neutral-offwhite rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+            <h5 class="text-sm md:text-base font-bold text-secondary mb-1 md:mb-2 break-words">{{ fact.title }}</h5>
+            <p class="text-xs md:text-sm text-black/60 font-medium leading-relaxed break-words">{{ fact.desc }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Services Slideshow -->
       <section class="mb-6 md:mb-12">
         <div class="text-center mb-6 md:mb-10 px-4">
           <h2 class="text-xl md:text-3xl lg:text-4xl font-bold text-secondary mb-2 md:mb-3 lg:mb-4 break-words">
-            {{ siteContent.getContent('services_section_title', 'Services We Offer') }}
+            {{ siteContent.getContent('services_section_title', 'Services We') }} <span class="text-primary">{{ siteContent.getContent('services_section_title_highlight', 'Offer') }}</span>
           </h2>
           <p class="text-sm md:text-base lg:text-lg text-black/60 font-semibold max-w-2xl mx-auto leading-relaxed break-words">
             {{ siteContent.getContent('services_section_subtitle', 'Comprehensive support systems protecting and empowering every voice in Uganda.') }}
@@ -270,7 +291,8 @@ const services = [
   { title: 'Media Response', cid_title: 'service_media_title', cid_text: 'service_media_text', text: 'Respond to cases of violence against children and gender-based violence reported through media and U-report.' },
   { title: 'Information & Guidance', cid_title: 'service_guidance_title', cid_text: 'service_guidance_text', text: 'Provision of information and guidance on child care and protection matters.' },
   { title: 'Essential Service Referrals', cid_title: 'service_referral_title', cid_text: 'service_referral_text', text: 'Referral to essential services including healthcare, legal aid, and social support.' },
-  { title: 'Community Sensitization', cid_title: 'service_community_title', cid_text: 'service_community_text', text: 'Community sensitization activities to raise awareness about child protection and GBV prevention.' }
+  { title: 'Community Sensitization', cid_title: 'service_community_title', cid_text: 'service_community_text', text: 'Community sensitization activities to raise awareness about child protection and GBV prevention.' },
+  { title: 'MHPSS Chatbot', cid_title: 'service_chatbot_title', cid_text: 'service_chatbot_text', text: 'Mental Health and Psychosocial Support chatbot for immediate automated assistance.' }
 ]
 
 const settingsStore = useSettingsStore()
@@ -300,6 +322,30 @@ const computedPillars = computed(() => [
   }
 ])
 
+// Computed key facts using CMS content
+const computedKeyFacts = computed(() => [
+  {
+    title: siteContent.getContent('operations_availability_title', '24/7 Nationwide Coverage'),
+    desc: siteContent.getContent('operations_availability_text', 'Operational 24/7 and accessible from every part of the country.')
+  },
+  {
+    title: siteContent.getContent('operations_shortcode_title', 'Toll-Free Access'),
+    desc: siteContent.getContent('operations_shortcode_text', 'Operates on the short code 116 (toll free) accessible from any telecom network.')
+  },
+  {
+    title: siteContent.getContent('operations_languages_title', 'Multilingual Counselors'),
+    desc: siteContent.getContent('operations_languages_text', 'Our counselors speak a total of 26 local languages to serve every community.')
+  },
+  {
+    title: siteContent.getContent('operations_structure_title', 'Two-Division Structure'),
+    desc: siteContent.getContent('operations_structure_text', 'Divided into 2 sections: call center for immediate response and case work for follow-up support.')
+  },
+  {
+    title: siteContent.getContent('operations_funding_title', 'Funding & Support'),
+    desc: siteContent.getContent('operations_funding_text', 'Government of Uganda covers utility bills and 14% of salaries, while donors (UNICEF) support case management funds and project staff salaries.')
+  }
+])
+
 // Default fallback images for Journey section
 const defaultJourneyImages = [
   'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=400&h=500&fit=crop', // Step 1: Access
@@ -315,7 +361,8 @@ const defaultServiceImages = [
   'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=600&fit=crop', // Service 3: Media Response
   'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop', // Service 4: Information & Guidance
   'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop', // Service 5: Essential Service Referrals
-  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=300&fit=crop'  // Service 6: Community Sensitization
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=300&fit=crop', // Service 6: Community Sensitization
+  'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&h=300&fit=crop'  // Service 7: MHPSS Chatbot
 ]
 
 // Default infrastructure image
@@ -334,7 +381,7 @@ const getJourneyImage = (index) => {
 // Helper function to get Service images (from API or fallback)
 const getServiceImage = (index) => {
   // Look for uploaded service images first
-  const serviceKeys = ['counseling', 'walkin', 'media', 'guidance', 'referral', 'community']
+  const serviceKeys = ['counseling', 'walkin', 'media', 'guidance', 'referral', 'community', 'chatbot']
   const serviceImage = operationsImages.value.find(img => img.position === `service_${serviceKeys[index]}`)
   if (serviceImage?.image_url) {
     return serviceImage.image_url
