@@ -189,10 +189,10 @@
         <div v-else>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <div v-for="value in coreValues" :key="value.id"
-              class="flex items-start gap-3 p-4 bg-gradient-to-br from-rose-50 to-white rounded-xl border border-rose-100 cursor-pointer hover:shadow-md"
+              class="flex items-start gap-3 p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 cursor-pointer hover:shadow-md"
               @click="openValueModal(value)">
-              <div class="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <HeartIcon class="h-5 w-5 text-rose-600" />
+              <div :class="['w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0', valueColorClasses(value).bg]">
+                <component :is="sharedIconComponent(value.icon)" :class="['h-5 w-5', valueColorClasses(value).text]" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="font-bold text-gray-900 text-sm">{{ value.title }}</p>
@@ -218,13 +218,13 @@
         <div v-else>
           <div class="space-y-2 mb-4">
             <div v-for="(approach, idx) in protectionApproaches" :key="approach.id"
-              class="flex items-center gap-3 p-3 bg-teal-50 rounded-lg border border-teal-100 cursor-pointer hover:bg-teal-100"
+              class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:shadow-sm"
               @click="openApproachModal(approach)">
-              <div class="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
-                {{ idx + 1 }}
+              <div :class="['w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0', approachColorClasses(approach).bg]">
+                <component :is="sharedIconComponent(approach.icon)" :class="['h-4 w-4', approachColorClasses(approach).text]" />
               </div>
               <div class="flex-1 min-w-0">
-                <p class="font-bold text-gray-900 text-sm">{{ approach.title }}</p>
+                <p class="font-bold text-gray-900 text-sm">{{ idx + 1 }}. {{ approach.title }}</p>
                 <p class="text-xs text-gray-500 truncate">{{ approach.description }}</p>
               </div>
               <button @click.stop="deleteApproach(approach)" class="p-1.5 hover:bg-white rounded-lg">
@@ -1195,12 +1195,32 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+                <select v-model="valueForm.icon" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                  <option v-for="opt in sharedIconOptions" :key="opt" :value="opt">{{ opt }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Color Theme</label>
+                <select :value="valueColorTheme" @change="setValueColorTheme($event.target.value)" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                  <option v-for="opt in Object.keys(valueColorThemes)" :key="opt" :value="opt">{{ opt }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Order</label>
                 <input v-model="valueForm.order" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg" />
               </div>
               <div class="flex items-center pt-6">
                 <input type="checkbox" v-model="valueForm.is_active" id="value_active" class="rounded mr-2" />
                 <label for="value_active" class="text-sm">Show on website</label>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+              <span class="text-xs uppercase tracking-wide">Preview</span>
+              <div :class="['w-8 h-8 rounded-lg flex items-center justify-center', valueColorClasses(valueForm).bg]">
+                <component :is="sharedIconComponent(valueForm.icon)" :class="['h-4 w-4', valueColorClasses(valueForm).text]" />
               </div>
             </div>
             <div class="flex gap-3 pt-4">
@@ -1234,12 +1254,32 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+                <select v-model="approachForm.icon" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                  <option v-for="opt in sharedIconOptions" :key="opt" :value="opt">{{ opt }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                <select v-model="approachForm.color" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                  <option v-for="opt in approachColorOptions" :key="opt" :value="opt">{{ opt }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Order</label>
                 <input v-model="approachForm.order" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg" />
               </div>
               <div class="flex items-center pt-6">
                 <input type="checkbox" v-model="approachForm.is_active" id="approach_active" class="rounded mr-2" />
                 <label for="approach_active" class="text-sm">Show on website</label>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+              <span class="text-xs uppercase tracking-wide">Preview</span>
+              <div :class="['w-8 h-8 rounded-full flex items-center justify-center', approachColorClasses(approachForm).bg]">
+                <component :is="sharedIconComponent(approachForm.icon)" :class="['h-4 w-4', approachColorClasses(approachForm).text]" />
               </div>
             </div>
             <div class="flex gap-3 pt-4">
@@ -1322,7 +1362,7 @@ import {
   SparklesIcon, NewspaperIcon, GlobeAltIcon, FilmIcon, MagnifyingGlassIcon,
   DocumentTextIcon, FunnelIcon, FolderIcon, QuestionMarkCircleIcon,
   EnvelopeIcon, HandRaisedIcon, BuildingOfficeIcon, Bars3Icon, ScaleIcon,
-  UsersIcon
+  UsersIcon, CheckIcon, BoltIcon, ShieldExclamationIcon
 } from '@heroicons/vue/24/outline'
 
 // Import collapsible components as SFCs
@@ -1399,7 +1439,47 @@ const valuesLoading = ref(false)
 const showValueModal = ref(false)
 const editingValue = ref(null)
 const valueSaving = ref(false)
-const valueForm = ref({ title: '', description: '', order: 0, is_active: true })
+const sharedIconOptions = ['ShieldCheck', 'Heart', 'Users', 'Check', 'Shield', 'Globe', 'Zap', 'Phone', 'Clock']
+const valueColorThemes = {
+  blue: { color_from: 'blue-500', color_to: 'blue-600', border_color: 'blue-100' },
+  green: { color_from: 'green-500', color_to: 'green-600', border_color: 'green-100' },
+  orange: { color_from: 'orange-500', color_to: 'orange-600', border_color: 'orange-100' },
+  purple: { color_from: 'purple-500', color_to: 'purple-600', border_color: 'purple-100' },
+  red: { color_from: 'red-500', color_to: 'red-600', border_color: 'red-100' },
+  gray: { color_from: 'gray-500', color_to: 'gray-600', border_color: 'gray-100' }
+}
+const defaultValueForm = () => ({ title: '', description: '', order: coreValues.value.length, is_active: true, icon: 'ShieldCheck', ...valueColorThemes.blue })
+const valueForm = ref(defaultValueForm())
+const valueColorTheme = computed(() => (valueForm.value.color_from || 'blue-500').split('-')[0])
+function setValueColorTheme(theme) {
+  Object.assign(valueForm.value, valueColorThemes[theme] || valueColorThemes.blue)
+}
+const sharedIconComponentMap = {
+  ShieldCheck: ShieldCheckIcon,
+  Heart: HeartIcon,
+  Users: UsersIcon,
+  Check: CheckIcon,
+  Shield: ShieldExclamationIcon,
+  Globe: GlobeAltIcon,
+  Zap: BoltIcon,
+  Phone: PhoneIcon,
+  Clock: ClockIcon
+}
+function sharedIconComponent(iconName) {
+  return sharedIconComponentMap[iconName] || ShieldCheckIcon
+}
+const valueColorClassMap = {
+  blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
+  green: { bg: 'bg-green-100', text: 'text-green-600' },
+  orange: { bg: 'bg-orange-100', text: 'text-orange-600' },
+  purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
+  red: { bg: 'bg-red-100', text: 'text-red-600' },
+  gray: { bg: 'bg-gray-100', text: 'text-gray-600' }
+}
+function valueColorClasses(value) {
+  const key = (value?.color_from || 'blue-500').split('-')[0]
+  return valueColorClassMap[key] || valueColorClassMap.blue
+}
 
 // Protection Approaches
 const protectionApproaches = ref([])
@@ -1407,7 +1487,21 @@ const approachLoading = ref(false)
 const showApproachModal = ref(false)
 const editingApproach = ref(null)
 const approachSaving = ref(false)
-const approachForm = ref({ title: '', description: '', order: 0, is_active: true })
+const approachColorOptions = ['blue', 'green', 'orange', 'purple', 'red', 'gray', 'teal']
+const defaultApproachForm = () => ({ title: '', description: '', order: protectionApproaches.value.length, is_active: true, icon: 'ShieldCheck', color: 'blue' })
+const approachForm = ref(defaultApproachForm())
+const approachColorClassMap = {
+  blue: { bg: 'bg-blue-100', text: 'text-blue-600' },
+  green: { bg: 'bg-green-100', text: 'text-green-600' },
+  orange: { bg: 'bg-orange-100', text: 'text-orange-600' },
+  purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
+  red: { bg: 'bg-red-100', text: 'text-red-600' },
+  gray: { bg: 'bg-gray-100', text: 'text-gray-600' },
+  teal: { bg: 'bg-teal-100', text: 'text-teal-600' }
+}
+function approachColorClasses(value) {
+  return approachColorClassMap[value?.color] || approachColorClassMap.blue
+}
 
 // Operations Images
 const operationsImages = ref([])
@@ -1930,7 +2024,7 @@ async function deleteTimeline(event) {
 // Core Values Modal
 function openValueModal(value) {
   editingValue.value = value
-  valueForm.value = value ? { ...value } : { title: '', description: '', order: coreValues.value.length, is_active: true }
+  valueForm.value = value ? { ...defaultValueForm(), ...value } : defaultValueForm()
   showValueModal.value = true
 }
 
@@ -1964,7 +2058,7 @@ async function deleteValue() {
 // Protection Approach Modal
 function openApproachModal(approach) {
   editingApproach.value = approach
-  approachForm.value = approach ? { ...approach } : { title: '', description: '', order: protectionApproaches.value.length, is_active: true }
+  approachForm.value = approach ? { ...defaultApproachForm(), ...approach } : defaultApproachForm()
   showApproachModal.value = true
 }
 

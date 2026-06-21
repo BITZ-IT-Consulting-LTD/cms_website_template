@@ -183,14 +183,6 @@ class Command(BaseCommand):
             'about_operations_item_3': { 'key': 'about_operations_item_3', 'value': 'Operational 24/7 and accessible from every part of the country.', 'label': 'About Operations Item 3', 'page': 'about', 'type': 'text' },
             'about_operations_item_4': { 'key': 'about_operations_item_4', 'value': 'The counselors speak a total of 26 local languages.', 'label': 'About Operations Item 4', 'page': 'about', 'type': 'text' },
             'about_resolution_title': { 'key': 'about_resolution_title', 'value': 'Path to Resolution', 'label': 'About Resolution Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_card_1_title': { 'key': 'about_resolution_card_1_title', 'value': 'Caller', 'label': 'About Resolution Card 1 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_1_text': { 'key': 'about_resolution_card_1_text', 'value': 'Case reported', 'label': 'About Resolution Card 1 Text', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_2_title': { 'key': 'about_resolution_card_2_title', 'value': 'Call Center', 'label': 'About Resolution Card 2 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_3_title': { 'key': 'about_resolution_card_3_title', 'value': 'Case Management Department', 'label': 'About Resolution Card 3 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_4_title': { 'key': 'about_resolution_card_4_title', 'value': 'Probation Offices (DACs)', 'label': 'About Resolution Card 4 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_4_text': { 'key': 'about_resolution_card_4_text', 'value': 'Supported by partners & CSOs, police, court, etc.', 'label': 'About Resolution Card 4 Text', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_5_title': { 'key': 'about_resolution_card_5_title', 'value': 'Local Leaders, CDOs, Para-Social Workers, VHTs, etc.', 'label': 'About Resolution Card 5 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_5_text': { 'key': 'about_resolution_card_5_text', 'value': 'Feedback shared back through the chain.', 'label': 'About Resolution Card 5 Text', 'page': 'about', 'type': 'text' },
             'about_partners_title': { 'key': 'about_partners_title', 'value': 'Partners & Affiliations', 'label': 'About Partners Title', 'page': 'about', 'type': 'heading' },
             'about_partner_1': { 'key': 'about_partner_1', 'value': 'MGLSD', 'label': 'About Partner 1', 'page': 'about', 'type': 'text' },
             'about_partner_2': { 'key': 'about_partner_2', 'value': 'UNICEF', 'label': 'About Partner 2', 'page': 'about', 'type': 'text' },
@@ -224,23 +216,6 @@ class Command(BaseCommand):
             'about_resolution_central_goal': { 'key': 'about_resolution_central_goal', 'value': 'Safe Child', 'label': 'About Resolution Central Goal', 'page': 'about', 'type': 'heading' },
             'about_resolution_central_text': { 'key': 'about_resolution_central_text', 'value': 'Our Goal', 'label': 'About Resolution Central Text', 'page': 'about', 'type': 'text' },
             'about_resolution_mobile_goal_text': { 'key': 'about_resolution_mobile_goal_text', 'value': 'The ultimate goal of our journey.', 'label': 'About Resolution Mobile Goal Text', 'page': 'about', 'type': 'text' },
-
-            # Resolution Steps (Full Details)
-            'about_resolution_step_1_title': { 'key': 'about_resolution_step_1_title', 'value': 'Caller', 'label': 'About Resolution Step 1 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_1_subtitle': { 'key': 'about_resolution_step_1_subtitle', 'value': 'Child or concerned individual', 'label': 'About Resolution Step 1 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_1_description': { 'key': 'about_resolution_step_1_description', 'value': 'A child or person concerned about a child\'s welfare initiates contact through any available channel.', 'label': 'About Resolution Step 1 Description', 'page': 'about', 'type': 'text' },
-
-            'about_resolution_step_2_title': { 'key': 'about_resolution_step_2_title', 'value': 'Call Center', 'label': 'About Resolution Step 2 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_2_subtitle': { 'key': 'about_resolution_step_2_subtitle', 'value': 'Initial assessment and counseling', 'label': 'About Resolution Step 2 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_2_description': { 'key': 'about_resolution_step_2_description', 'value': 'Trained counselors provide immediate support, document details, and assess the urgency level of each case.', 'label': 'About Resolution Step 2 Description', 'page': 'about', 'type': 'text' },
-
-            'about_resolution_step_3_title': { 'key': 'about_resolution_step_3_title', 'value': 'Case Management Department', 'label': 'About Resolution Step 3 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_3_subtitle': { 'key': 'about_resolution_step_3_subtitle', 'value': 'Case review and referral', 'label': 'About Resolution Step 3 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_3_description': { 'key': 'about_resolution_step_3_description', 'value': 'Cases are reviewed by specialists, classified by protection need, and referred to appropriate agencies or services.', 'label': 'About Resolution Step 3 Description', 'page': 'about', 'type': 'text' },
-
-            'about_resolution_step_4_title': { 'key': 'about_resolution_step_4_title', 'value': 'Probation Offices (DACs)', 'label': 'About Resolution Step 4 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_4_subtitle': { 'key': 'about_resolution_step_4_subtitle', 'value': 'Implementation and follow-up', 'label': 'About Resolution Step 4 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_4_description': { 'key': 'about_resolution_step_4_description', 'value': 'Local probation officers and community partners work to implement solutions and provide ongoing support until the case is resolved.', 'label': 'About Resolution Step 4 Description', 'page': 'about', 'type': 'text' },
 
             # Core Values Stats
             'about_values_stat_1_value': { 'key': 'about_values_stat_1_value', 'value': '10+', 'label': 'About Values Stat 1 Value', 'page': 'about', 'type': 'text' },
