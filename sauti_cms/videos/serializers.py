@@ -22,6 +22,13 @@ def _relative_file_url(file_field):
         return None
 
 
+def _author_name(user):
+    """Full name if set, else fall back to username (avoids blank 'Unknown' author)"""
+    if not user:
+        return ''
+    return user.get_full_name() or user.username
+
+
 class VideoSerializer(serializers.ModelSerializer):
     category = VideoCategorySerializer(read_only=True)
     category_id = serializers.IntegerField(write_only=True, required=False)
@@ -48,6 +55,7 @@ class VideoSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['thumbnail'] = _relative_file_url(instance.thumbnail)
         data['video_file'] = _relative_file_url(instance.video_file)
+        data['author_name'] = _author_name(instance.author)
         return data
 
     def create(self, validated_data):
@@ -101,4 +109,5 @@ class VideoListSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['thumbnail'] = _relative_file_url(instance.thumbnail)
         data['video_file'] = _relative_file_url(instance.video_file)
+        data['author_name'] = _author_name(instance.author)
         return data

@@ -74,7 +74,7 @@ src/
 **Available Pages**:
 - `LoginView.vue` - Admin login page
 - `DashboardView.vue` - Main dashboard
-- `BlogsView.vue` - Blog management
+- `PostsView.vue` - Blog/News post management
 - `ResourcesView.vue` - Resources management
 - `PartnersView.vue` - Partners management
 - `UsersView.vue` - User management
