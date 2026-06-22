@@ -144,7 +144,7 @@ export const api = {
 
   // Partners endpoints
   partners: {
-    list: () => apiClient.get('/partners/'),
+    list: (params) => apiClient.get('/partners/', { params }),
     get: (slug) => apiClient.get(`/partners/${slug}/`),
   },
 

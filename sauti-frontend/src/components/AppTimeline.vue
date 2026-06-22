@@ -1,278 +1,200 @@
 <template>
-  <div class="timeline-section relative font-sans p-4 md:p-8">
-    <div class="relative max-w-5xl mx-auto">
-      <!-- Central Dotted Line -->
-      <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 border-l-4 border-dotted border-gray-300 md:-translate-x-1/2 z-0"></div>
-
-      <div 
-        v-for="(event, index) in sortedEvents" 
-        :key="event.id" 
-        class="relative mb-24 flex flex-col md:flex-row items-start md:items-center w-full group"
+  <div class="timeline-wrapper">
+    <!-- Mobile & Tablet: Vertical Timeline -->
+    <div class="lg:hidden space-y-6 md:space-y-8">
+      <div
+        v-for="(event, index) in sortedEvents"
+        :key="event.id"
+        class="timeline-item group"
       >
-        
-        <!-- Center Node (Year Indicator) - Desktop -->
-        <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center z-20">
-           <div class="date-circle">
-              <span class="date-text">{{ getYear(event) }}</span>
-           </div>
+        <!-- Card -->
+        <div class="timeline-card rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 relative"
+             :style="{ backgroundColor: getEventColor(index) }">
+
+          <!-- Year Badge -->
+          <div class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-white/20 backdrop-blur-sm mb-4 md:mb-5">
+            <Calendar class="w-3 h-3 md:w-4 md:h-4 text-white" />
+            <span class="text-white font-black text-xs md:text-sm">{{ getYear(event) }}</span>
+          </div>
+
+          <!-- Content -->
+          <div class="text-center">
+            <h3 class="text-base md:text-lg lg:text-xl font-black text-white mb-3 md:mb-4 leading-tight">
+              {{ event.title }}
+            </h3>
+            <p class="text-xs md:text-sm text-white/90 leading-relaxed">
+              {{ event.description }}
+            </p>
+          </div>
+
+          <!-- Progress Indicator -->
+          <div v-if="index < sortedEvents.length - 1" class="absolute -bottom-6 md:-bottom-8 left-1/2 -translate-x-1/2">
+            <div class="w-0.5 h-6 md:h-8 bg-gradient-to-b from-gray-300 to-transparent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop: Horizontal Timeline -->
+    <div class="hidden lg:block relative">
+      <!-- Timeline Track -->
+      <div class="relative pt-8 pb-8">
+        <!-- Progress Bar -->
+        <div class="absolute top-12 left-0 right-0 h-1 bg-gray-200 rounded-full">
+          <div class="h-full bg-gradient-to-r from-primary via-secondary to-primary rounded-full"
+               :style="{ width: '100%' }"></div>
         </div>
 
-        <!-- Mobile: Left Node -->
-         <div class="md:hidden absolute left-4 -translate-x-1/2 flex items-center justify-center z-20 top-0">
-           <div class="date-circle-mobile">
-              <span class="date-text-mobile">{{ getYear(event) }}</span>
-           </div>
-        </div>
+        <!-- Timeline Items -->
+        <div class="grid gap-8" :style="{ gridTemplateColumns: `repeat(${sortedEvents.length}, 1fr)` }">
+          <div
+            v-for="(event, index) in sortedEvents"
+            :key="event.id"
+            class="timeline-item-desktop group relative"
+          >
+            <!-- Milestone Marker -->
+            <div class="absolute top-8 left-1/2 -translate-x-1/2 z-10">
+              <div class="relative w-12 h-12 rounded-full shadow-lg flex items-center justify-center border-4 border-white group-hover:scale-110 transition-transform duration-300"
+                   :style="{ backgroundColor: getEventColor(index) }">
+                <Calendar class="w-5 h-5 text-white" />
+              </div>
+            </div>
 
-        <!-- LEFT SIDE CONTENT (For Even Index on Desktop) -->
-        <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-16 text-left md:text-right flex flex-col items-start md:items-end order-2 md:order-1"
-             v-if="index % 2 === 0 || isMobile">
+            <!-- Content Card -->
+            <div class="pt-24 relative">
+              <div class="rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1"
+                   :style="{ backgroundColor: getEventColor(index) }">
 
-          <!-- Message Bubble Container (Left Side - White Background with Dark Green Text) -->
-          <div class="message-bubble message-bubble-left relative flex items-center justify-center">
-            <!-- Content Wrapper: Centered with padding -->
-            <div class="p-8 md:p-10 text-center flex flex-col justify-center h-full relative z-10 w-full">
-              <p class="font-black text-lg md:text-xl leading-tight mb-2 text-white">{{ event.title }}</p>
-              <p class="text-xs font-bold opacity-70 tracking-widest text-white">{{ getYear(event) }}</p>
+                <!-- Year Badge -->
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm mb-3">
+                  <span class="text-white font-black text-xs">{{ getYear(event) }}</span>
+                </div>
+
+                <!-- Title -->
+                <h3 class="text-sm font-black text-white mb-2 leading-tight text-center">
+                  {{ event.title }}
+                </h3>
+
+                <!-- Description -->
+                <p class="text-xs text-white/90 leading-relaxed text-center line-clamp-4">
+                  {{ event.description }}
+                </p>
+              </div>
             </div>
           </div>
-
-          <!-- Description Text (Outside Bubble) -->
-          <div class="mt-4 max-w-xs text-sm md:text-base font-medium text-gray-500 leading-relaxed md:text-right">
-            {{ event.description }}
-          </div>
         </div>
-        
-        <!-- EMPTY FILLER FOR DESKTOP GRID -->
-        <div class="hidden md:block w-1/2 order-2" v-if="index % 2 === 0"></div>
-
-
-        <!-- RIGHT SIDE CONTENT (For Odd Index on Desktop) -->
-        <div class="hidden md:block w-1/2 order-1" v-if="index % 2 !== 0"></div>
-
-        <div class="w-full md:w-1/2 pl-12 md:pl-16 flex flex-col items-start order-2"
-             v-if="index % 2 !== 0">
-
-           <!-- Message Bubble Container (Right Side - Dark Green Background with White Text) -->
-          <div class="message-bubble message-bubble-right relative flex items-center justify-center">
-            <!-- Content Wrapper: Centered with padding -->
-            <div class="p-8 md:p-10 text-center flex flex-col justify-center h-full relative z-10 w-full">
-              <p class="font-black text-lg md:text-xl leading-tight mb-2 text-white">{{ event.title }}</p>
-              <p class="text-xs font-bold opacity-90 tracking-widest text-white">{{ getYear(event) }}</p>
-            </div>
-          </div>
-
-          <!-- Description Text (Outside Bubble) -->
-          <div class="mt-4 max-w-xs text-sm md:text-base font-medium text-gray-500 leading-relaxed text-left">
-            {{ event.description }}
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { computed } from 'vue'
+import { computed } from 'vue'
+import { Calendar } from 'lucide-vue-next'
 
-  export default {
-    name: 'AppTimeline',
-    props: {
-      timelineEvents: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
-    },
-    setup(props) {
-        // Updated Color Palette from the requested design + extras for variety
-        const colors = [
-            '#8db724', // Lime
-            '#0091ff', // Blue
-            '#fdd808', // Yellow
-            '#ff8a00', // Orange
-            '#ff4b12', // Red-Orange
-            '#9b248d', // Purple
-            '#10b981', // Emerald
-            '#6366f1'  // Indigo
-        ]
-
-        const getEventColor = (index) => {
-            return colors[index % colors.length]
-        }
-
-        const isMobile = computed(() => {
-            if (typeof window !== 'undefined') {
-                return window.innerWidth < 768
-            }
-            return false
-        })
-
-        const sortedEvents = computed(() => {
-            if (!Array.isArray(props.timelineEvents)) return [];
-            // Sort ascending
-            return [...props.timelineEvents].sort((a, b) => {
-                const yearA = getYear(a);
-                const yearB = getYear(b);
-                return yearA - yearB;
-            });
-        });
-
-        const getYear = (event) => {
-            if (!event) return '';
-            if (event.year) return event.year.toString();
-            if (event.date) {
-                const d = new Date(event.date);
-                if (!isNaN(d.getTime())) return d.getFullYear();
-                if (/^\d{4}$/.test(event.date)) return event.date;
-            }
-            return '';
-        }
-
-        return {
-            sortedEvents,
-            getEventColor,
-            getYear,
-            isMobile
-        }
+export default {
+  name: 'AppTimeline',
+  components: { Calendar },
+  props: {
+    timelineEvents: {
+      type: Array,
+      required: true,
+      default: () => []
     }
-  };
+  },
+  setup(props) {
+    // Alternating brand colors (green and blue)
+    const colors = [
+      '#006633', // Brand Green
+      '#005f99', // Brand Blue
+    ]
+
+    const getEventColor = (index) => {
+      return colors[index % colors.length]
+    }
+
+    const sortedEvents = computed(() => {
+      if (!Array.isArray(props.timelineEvents)) return []
+      return [...props.timelineEvents].sort((a, b) => {
+        const yearA = getYear(a)
+        const yearB = getYear(b)
+        return yearA - yearB
+      })
+    })
+
+    const getYear = (event) => {
+      if (!event) return ''
+      if (event.year) return event.year.toString()
+      if (event.date) {
+        const d = new Date(event.date)
+        if (!isNaN(d.getTime())) return d.getFullYear()
+        if (/^\d{4}$/.test(event.date)) return event.date
+      }
+      return ''
+    }
+
+    return {
+      sortedEvents,
+      getEventColor,
+      getYear,
+      Calendar
+    }
+  }
+}
 </script>
 
 <style scoped>
-/* Date Circle Styles - Desktop */
-.date-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #FFFFFF;
-  border: 2px solid #006837; /* Dark green border */
-  box-shadow: 0 4px 12px rgba(0, 104, 55, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.timeline-wrapper {
+  @apply relative;
 }
 
-.date-circle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 104, 55, 0.25);
+/* Smooth animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.date-text {
-  font-weight: 700;
-  font-size: 0.875rem; /* 14px */
-  color: #006837; /* Dark green text */
-  text-align: center;
-  line-height: 1.3;
-  padding: 0 8px;
-  word-wrap: break-word;
-  max-width: 100%;
+.timeline-item,
+.timeline-item-desktop {
+  animation: fadeInUp 0.6s ease-out backwards;
 }
 
-/* Date Circle Styles - Mobile */
-.date-circle-mobile {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: #FFFFFF;
-  border: 2px solid #006837; /* Dark green border */
-  box-shadow: 0 3px 10px rgba(0, 104, 55, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.timeline-item:nth-child(1),
+.timeline-item-desktop:nth-child(1) {
+  animation-delay: 0.1s;
 }
 
-.date-text-mobile {
-  font-weight: 700;
-  font-size: 0.625rem; /* 10px */
-  color: #006837; /* Dark green text */
-  text-align: center;
-  line-height: 1.2;
-  padding: 0 4px;
-  word-wrap: break-word;
-  max-width: 100%;
+.timeline-item:nth-child(2),
+.timeline-item-desktop:nth-child(2) {
+  animation-delay: 0.2s;
 }
 
-/* Base Message Bubble Styles */
-.message-bubble {
-  width: 100%;
-  max-width: 300px;
-  min-height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7.5px; /* Rounded corners as specified */
-  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.1); /* Green-tinted shadow */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
+.timeline-item:nth-child(3),
+.timeline-item-desktop:nth-child(3) {
+  animation-delay: 0.3s;
 }
 
-.message-bubble:hover {
-  transform: translateY(-2px); /* Slight lift on hover */
-  box-shadow: 0 4px 12px rgba(0, 104, 55, 0.2);
+.timeline-item:nth-child(4),
+.timeline-item-desktop:nth-child(4) {
+  animation-delay: 0.4s;
 }
 
-/* Left Side Bubbles - Blue Background with White Text */
-.message-bubble-left {
-  background-color: #007BBF; /* Sauti Blue */
-  border: 2px solid #007BBF;
+.timeline-item:nth-child(5),
+.timeline-item-desktop:nth-child(5) {
+  animation-delay: 0.5s;
 }
 
-/* Left bubble tail pointing RIGHT (toward center date circle) */
-.message-bubble-left::after {
-  content: '';
-  position: absolute;
-  right: -12px; /* Position on right side of bubble */
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border: 12px solid transparent;
-  border-left-color: #007BBF; /* Blue tail matching bubble background */
-  border-right-width: 0;
-  border-top-width: 12px;
-  border-bottom-width: 12px;
-  filter: drop-shadow(1px 0px 1px rgba(0, 104, 55, 0.1));
-}
-
-/* Border for the tail */
-.message-bubble-left::before {
-  content: '';
-  position: absolute;
-  right: -14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border: 12px solid transparent;
-  border-left-color: #007BBF; /* Blue border for tail */
-  border-right-width: 0;
-  border-top-width: 12px;
-  border-bottom-width: 12px;
-  z-index: -1;
-}
-
-/* Right Side Bubbles - Dark Green Background with White Text */
-.message-bubble-right {
-  background-color: #006837; /* Dark green background */
-}
-
-/* Right bubble tail pointing LEFT (toward center date circle) */
-.message-bubble-right::after {
-  content: '';
-  position: absolute;
-  left: -12px; /* Position on left side of bubble */
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border: 12px solid transparent;
-  border-right-color: #006837; /* Dark green tail matching bubble background */
-  border-left-width: 0;
-  border-top-width: 12px;
-  border-bottom-width: 12px;
-  filter: drop-shadow(-1px 0px 1px rgba(0, 104, 55, 0.2));
+/* Line clamp utility */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

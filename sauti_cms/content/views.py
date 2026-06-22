@@ -30,7 +30,7 @@ class SiteContentViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
 
 
 class CoreValueViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
-    queryset = CoreValue.objects.filter(is_active=True)
+    queryset = CoreValue.objects.all()
     serializer_class = CoreValueSerializer
     pagination_class = None  # Disable pagination
 
@@ -44,9 +44,19 @@ class CoreValueViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        """
+        Public site should only see active values. Admin site (authenticated)
+        should see all, including hidden ones, so they can be re-activated.
+        """
+        queryset = CoreValue.objects.all()
+        if not self.request.user.is_authenticated:
+            return queryset.filter(is_active=True)
+        return queryset
+
 
 class ContactViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
-    queryset = Contact.objects.filter(is_visible=True).order_by('order')
+    queryset = Contact.objects.all().order_by('order')
     serializer_class = ContactSerializer
     pagination_class = None
 
@@ -60,9 +70,19 @@ class ContactViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        """
+        Public site should only see visible contacts. Admin site (authenticated)
+        should see all, including hidden ones, so they can be re-activated.
+        """
+        queryset = Contact.objects.all().order_by('order')
+        if not self.request.user.is_authenticated:
+            return queryset.filter(is_visible=True)
+        return queryset
+
 
 class ProtectionApproachViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
-    queryset = ProtectionApproach.objects.filter(is_active=True).order_by('order')
+    queryset = ProtectionApproach.objects.all().order_by('order')
     serializer_class = ProtectionApproachSerializer
     pagination_class = None
 
@@ -76,9 +96,19 @@ class ProtectionApproachViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        """
+        Public site should only see active approaches. Admin site (authenticated)
+        should see all, including hidden ones, so they can be re-activated.
+        """
+        queryset = ProtectionApproach.objects.all().order_by('order')
+        if not self.request.user.is_authenticated:
+            return queryset.filter(is_active=True)
+        return queryset
+
 
 class TeamMemberViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
-    queryset = TeamMember.objects.filter(is_active=True).order_by('order')
+    queryset = TeamMember.objects.all().order_by('order')
     serializer_class = TeamMemberSerializer
     pagination_class = None
 
@@ -92,9 +122,19 @@ class TeamMemberViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        """
+        Public site should only see active team members. Admin site (authenticated)
+        should see all, including hidden ones, so they can be re-activated.
+        """
+        queryset = TeamMember.objects.all().order_by('order')
+        if not self.request.user.is_authenticated:
+            return queryset.filter(is_active=True)
+        return queryset
+
 
 class WhoWeAreImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
-    queryset = WhoWeAreImage.objects.filter(is_active=True).order_by('position')
+    queryset = WhoWeAreImage.objects.all().order_by('position')
     serializer_class = WhoWeAreImageSerializer
     pagination_class = None
     lookup_field = 'position'
@@ -109,9 +149,19 @@ class WhoWeAreImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        """
+        Public site should only see active images. Admin site (authenticated)
+        should see all, including hidden ones, so they can be re-activated.
+        """
+        queryset = WhoWeAreImage.objects.all().order_by('position')
+        if not self.request.user.is_authenticated:
+            return queryset.filter(is_active=True)
+        return queryset
+
 
 class OperationsImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
-    queryset = OperationsImage.objects.filter(is_active=True).order_by('position')
+    queryset = OperationsImage.objects.all().order_by('position')
     serializer_class = OperationsImageSerializer
     pagination_class = None
     lookup_field = 'position'
@@ -125,3 +175,13 @@ class OperationsImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        """
+        Public site should only see active images. Admin site (authenticated)
+        should see all, including hidden ones, so they can be re-activated.
+        """
+        queryset = OperationsImage.objects.all().order_by('position')
+        if not self.request.user.is_authenticated:
+            return queryset.filter(is_active=True)
+        return queryset

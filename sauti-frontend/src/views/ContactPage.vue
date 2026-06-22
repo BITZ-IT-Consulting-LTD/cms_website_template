@@ -155,7 +155,11 @@
     ShieldCheck,
     Globe,
     Video,
-    Send
+    Send,
+    Facebook,
+    Twitter,
+    Instagram,
+    Youtube
   } from 'lucide-vue-next'
 
   defineOptions({
@@ -177,6 +181,10 @@
     if (contact.type === 'email' || contact.icon === 'envelope') return Mail
     if (contact.type === 'location' || contact.icon === 'map-pin' || contact.icon === 'location-marker') return MapPin
     if (contact.icon === 'globe') return Globe
+    if (contact.icon === 'facebook') return Facebook
+    if (contact.icon === 'twitter') return Twitter
+    if (contact.icon === 'instagram') return Instagram
+    if (contact.icon === 'youtube') return Youtube
     if (contact.icon === 'video') return Video
     if (contact.icon === 'message-square') return MessageSquare
     if (contact.icon === 'send' || contact.icon === 'sms') return Send
@@ -207,6 +215,8 @@
      if (contact.icon === 'video') return 'Visit TikTok'
      if (contact.icon === 'facebook') return 'Visit Facebook'
      if (contact.icon === 'twitter') return 'Visit X (Twitter)'
+     if (contact.icon === 'instagram') return 'Visit Instagram'
+     if (contact.icon === 'youtube') return 'Visit YouTube'
      return 'Visit Link'
   }
 
@@ -223,10 +233,12 @@
         { id: 3, name: 'Email', type: 'email', icon: 'envelope', value: 'sautichl@mglsd.go.ug', description: 'Send us an email for inquiries' },
         { id: 4, name: 'Online Reporting', type: 'social', icon: 'globe', value: 'https://sauti.mglsd.go.ug', description: 'Report cases online through our portal' },
         { id: 5, name: 'SMS', type: 'other', icon: 'message-square', value: 'Hello to 116', description: 'Send SMS to 116 and follow chatbot prompts' },
-        { id: 6, name: 'Facebook', type: 'social', icon: 'facebook', value: 'https://www.facebook.com/Sauti116Helpline', description: 'Follow us on Facebook' },
-        { id: 7, name: 'Twitter', type: 'social', icon: 'twitter', value: 'https://x.com/sauti116', description: 'Follow us on X (Twitter)' },
-        { id: 8, name: 'TikTok', type: 'social', icon: 'video', value: 'https://www.tiktok.com/@sauti116helplineuganda', description: 'Follow us on TikTok' },
-        { id: 9, name: 'Office Location', type: 'location', icon: 'location-marker', value: 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', description: 'Visit our head office' },
+        { id: 6, name: 'Facebook', type: 'social', icon: 'facebook', value: 'https://www.facebook.com/share/14W6eurox1o/', description: 'Follow us on Facebook' },
+        { id: 7, name: 'Twitter', type: 'social', icon: 'twitter', value: 'https://x.com/sauti116?s=21', description: 'Follow us on X (Twitter)' },
+        { id: 8, name: 'TikTok', type: 'social', icon: 'video', value: 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', description: 'Follow us on TikTok' },
+        { id: 9, name: 'Instagram', type: 'social', icon: 'instagram', value: 'https://www.instagram.com/sauti116helpline?igsh=MTdyNjgwOG42ZjB2dA%3D%3D&utm_source=qr', description: 'Follow us on Instagram' },
+        { id: 10, name: 'YouTube', type: 'social', icon: 'youtube', value: 'https://www.youtube.com/@Sauti116HelplineUganda', description: 'Follow us on YouTube' },
+        { id: 11, name: 'Office Location', type: 'location', icon: 'location-marker', value: 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', description: 'Visit our head office' },
       ]
     } finally {
       loading.value = false

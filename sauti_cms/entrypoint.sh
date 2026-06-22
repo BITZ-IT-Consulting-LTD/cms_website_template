@@ -9,7 +9,7 @@ while ! pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER}; do
 done
 echo "PostgreSQL is ready!"
 
-pip install django-simple-history==3.2.0
+pip install -r requirements.txt
 echo "Cleaning up old migrations and cache..."
 find . -path "*/migrations/*.pyc" -delete
 find . -path "*/__pycache__/*" -delete
@@ -17,19 +17,32 @@ find . -path "*/__pycache__/*" -delete
 python manage.py makemigrations
 python manage.py migrate --noinput --verbosity 2
 
-echo "Populating site content..."
-# Use comprehensive populate script (clears old content for fresh start)
-if [ -f "/app/populate_comprehensive_content.py" ]; then
-    echo "Running populate_comprehensive_content.py..."
-    python /app/populate_comprehensive_content.py
-elif [ -f "/app/populate_initial_content.py" ]; then
-    echo "Running populate_initial_content.py..."
-    python /app/populate_initial_content.py
-elif [ -f "/app/populate_all_content.py" ]; then
-    echo "Running populate_all_content.py..."
-    python /app/populate_all_content.py
+echo "Checking for existing site content..."
+# The comprehensive populate scripts delete-all and/or update_or_create, which
+# overwrites content edited through the CMS admin. They must therefore only run
+# against a FRESH (empty) database — never on a redeploy/restart of a populated
+# one, or admins would lose their edits every deploy. The idempotent
+# `populate_site_content` management command below uses get_or_create, so it
+# safely adds any new keys on every deploy without touching existing values.
+EXISTING_CONTENT=$(python manage.py shell -c "from content.models import SiteContent; print(SiteContent.objects.count())" 2>/dev/null | tail -n 1)
+echo "Existing SiteContent rows: ${EXISTING_CONTENT:-unknown}"
+
+if [ "$EXISTING_CONTENT" = "0" ]; then
+    echo "Fresh database detected - running comprehensive content seed..."
+    if [ -f "/app/populate_comprehensive_content.py" ]; then
+        echo "Running populate_comprehensive_content.py..."
+        python /app/populate_comprehensive_content.py
+    elif [ -f "/app/populate_initial_content.py" ]; then
+        echo "Running populate_initial_content.py..."
+        python /app/populate_initial_content.py
+    elif [ -f "/app/populate_all_content.py" ]; then
+        echo "Running populate_all_content.py..."
+        python /app/populate_all_content.py
+    else
+        echo "WARNING: No populate scripts found"
+    fi
 else
-    echo "WARNING: No populate scripts found"
+    echo "Existing site content found (${EXISTING_CONTENT} rows) - skipping destructive comprehensive seed to preserve CMS edits."
 fi
 
 # Note: These are Django management commands found in app/management/commands/
@@ -54,7 +67,7 @@ else
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@sauti.org', 'changeme123')
+    User.objects.create_superuser('admin', 'admin@sauti.org', 'changeme123', role='ADMIN')
     print('Fallback: Superuser created: admin/changeme123')
 END
 fi

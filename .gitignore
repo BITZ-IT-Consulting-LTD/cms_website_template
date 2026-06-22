@@ -32,3 +32,25 @@ dist-ssr/
 # Docker
 .docker-compose.dev.yml.swp
 sauti-frontend/node_modules_old/
+
+# Claude Code / local tooling (not part of the project)
+.claude/
+.mcp.json
+plan/
+
+# Dev & test artifacts (not part of the app)
+screenshots/
+cookies.txt
+partners_response.json
+/admin-posts-with-images.png
+/homepage-images-fixed.png
+~$*
+*.swp
+
+# AI scratch reports & ad-hoc root test scripts
+/BUG_REPORT_*.md
+/REALTIME_DATA_*.md
+/TEST_RESULTS.md
+/UPDATE_ALL_PAGES.md
+/test_crud_apis.py
+/test_report_status_*.py

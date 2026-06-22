@@ -36,7 +36,7 @@
         color: {
             type: String,
             default: 'blue',
-            validator: (value) => ['blue', 'green', 'orange', 'red', 'purple', 'gray', 'amber'].includes(value)
+            validator: (value) => ['blue', 'green', 'orange', 'red', 'purple', 'gray', 'amber', 'indigo'].includes(value)
         }
     })
 
@@ -70,6 +70,11 @@
             value: 'text-purple-600',
             iconBg: 'bg-purple-100',
             icon: 'text-purple-600'
+        },
+        indigo: {
+            value: 'text-indigo-600',
+            iconBg: 'bg-indigo-100',
+            icon: 'text-indigo-600'
         },
         gray: {
             value: 'text-gray-900',

@@ -103,15 +103,17 @@ class Command(BaseCommand):
             # Home Page - Partners Section (managed via settings but can have overrides)
             
             # Home Page - Social Media Links
-            'home_social_twitter_url': { 'key': 'home_social_twitter_url', 'value': 'https://x.com/sauti116', 'label': 'Home Twitter/X URL', 'page': 'home', 'type': 'text', 'description': 'Twitter/X profile URL' },
+            'home_social_twitter_url': { 'key': 'home_social_twitter_url', 'value': 'https://x.com/sauti116?s=21', 'label': 'Home Twitter/X URL', 'page': 'home', 'type': 'text', 'description': 'Twitter/X profile URL' },
             'home_social_twitter_label': { 'key': 'home_social_twitter_label', 'value': 'X (formerly Twitter)', 'label': 'Home Twitter/X Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Twitter/X link' },
-            'home_social_instagram_url': { 'key': 'home_social_instagram_url', 'value': 'https://instagram.com/sauti116', 'label': 'Home Instagram URL', 'page': 'home', 'type': 'text', 'description': 'Instagram profile URL' },
+            'home_social_instagram_url': { 'key': 'home_social_instagram_url', 'value': 'https://www.instagram.com/sauti116helpline?igsh=MTdyNjgwOG42ZjB2dA%3D%3D&utm_source=qr', 'label': 'Home Instagram URL', 'page': 'home', 'type': 'text', 'description': 'Instagram profile URL' },
             'home_social_instagram_label': { 'key': 'home_social_instagram_label', 'value': 'Instagram', 'label': 'Home Instagram Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Instagram link' },
-            'home_social_facebook_url': { 'key': 'home_social_facebook_url', 'value': 'https://facebook.com/Sauti116Helpline', 'label': 'Home Facebook URL', 'page': 'home', 'type': 'text', 'description': 'Facebook page URL' },
+            'home_social_facebook_url': { 'key': 'home_social_facebook_url', 'value': 'https://www.facebook.com/share/14W6eurox1o/', 'label': 'Home Facebook URL', 'page': 'home', 'type': 'text', 'description': 'Facebook page URL' },
             'home_social_facebook_label': { 'key': 'home_social_facebook_label', 'value': 'Facebook', 'label': 'Home Facebook Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for Facebook link' },
-            'home_social_tiktok_url': { 'key': 'home_social_tiktok_url', 'value': 'https://tiktok.com/@sauti116', 'label': 'Home TikTok URL', 'page': 'home', 'type': 'text', 'description': 'TikTok profile URL' },
+            'home_social_tiktok_url': { 'key': 'home_social_tiktok_url', 'value': 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', 'label': 'Home TikTok URL', 'page': 'home', 'type': 'text', 'description': 'TikTok profile URL' },
             'home_social_tiktok_label': { 'key': 'home_social_tiktok_label', 'value': 'TikTok', 'label': 'Home TikTok Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for TikTok link' },
-            
+            'home_social_youtube_url': { 'key': 'home_social_youtube_url', 'value': 'https://www.youtube.com/@Sauti116HelplineUganda', 'label': 'Home YouTube URL', 'page': 'home', 'type': 'text', 'description': 'YouTube channel URL' },
+            'home_social_youtube_label': { 'key': 'home_social_youtube_label', 'value': 'YouTube', 'label': 'Home YouTube Label', 'page': 'home', 'type': 'text', 'description': 'ARIA label for YouTube link' },
+
             # Home Page - Mock News Content (for empty state)
             'home_news_mock_featured_category': { 'key': 'home_news_mock_featured_category', 'value': 'Community', 'label': 'Home Mock Featured Category', 'page': 'home', 'type': 'text', 'description': 'Category for mock featured news' },
             'home_news_mock_featured_title': { 'key': 'home_news_mock_featured_title', 'value': 'Sauti 116 Expands Reach to Rural Areas', 'label': 'Home Mock Featured Title', 'page': 'home', 'type': 'heading', 'description': 'Title for mock featured news' },
@@ -181,14 +183,6 @@ class Command(BaseCommand):
             'about_operations_item_3': { 'key': 'about_operations_item_3', 'value': 'Operational 24/7 and accessible from every part of the country.', 'label': 'About Operations Item 3', 'page': 'about', 'type': 'text' },
             'about_operations_item_4': { 'key': 'about_operations_item_4', 'value': 'The counselors speak a total of 26 local languages.', 'label': 'About Operations Item 4', 'page': 'about', 'type': 'text' },
             'about_resolution_title': { 'key': 'about_resolution_title', 'value': 'Path to Resolution', 'label': 'About Resolution Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_card_1_title': { 'key': 'about_resolution_card_1_title', 'value': 'Caller', 'label': 'About Resolution Card 1 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_1_text': { 'key': 'about_resolution_card_1_text', 'value': 'Case reported', 'label': 'About Resolution Card 1 Text', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_2_title': { 'key': 'about_resolution_card_2_title', 'value': 'Call Center', 'label': 'About Resolution Card 2 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_3_title': { 'key': 'about_resolution_card_3_title', 'value': 'Case Management Department', 'label': 'About Resolution Card 3 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_4_title': { 'key': 'about_resolution_card_4_title', 'value': 'Probation Offices (DACs)', 'label': 'About Resolution Card 4 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_4_text': { 'key': 'about_resolution_card_4_text', 'value': 'Supported by partners & CSOs, police, court, etc.', 'label': 'About Resolution Card 4 Text', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_5_title': { 'key': 'about_resolution_card_5_title', 'value': 'Local Leaders, CDOs, Para-Social Workers, VHTs, etc.', 'label': 'About Resolution Card 5 Title', 'page': 'about', 'type': 'text' },
-            'about_resolution_card_5_text': { 'key': 'about_resolution_card_5_text', 'value': 'Feedback shared back through the chain.', 'label': 'About Resolution Card 5 Text', 'page': 'about', 'type': 'text' },
             'about_partners_title': { 'key': 'about_partners_title', 'value': 'Partners & Affiliations', 'label': 'About Partners Title', 'page': 'about', 'type': 'heading' },
             'about_partner_1': { 'key': 'about_partner_1', 'value': 'MGLSD', 'label': 'About Partner 1', 'page': 'about', 'type': 'text' },
             'about_partner_2': { 'key': 'about_partner_2', 'value': 'UNICEF', 'label': 'About Partner 2', 'page': 'about', 'type': 'text' },
@@ -223,65 +217,11 @@ class Command(BaseCommand):
             'about_resolution_central_text': { 'key': 'about_resolution_central_text', 'value': 'Our Goal', 'label': 'About Resolution Central Text', 'page': 'about', 'type': 'text' },
             'about_resolution_mobile_goal_text': { 'key': 'about_resolution_mobile_goal_text', 'value': 'The ultimate goal of our journey.', 'label': 'About Resolution Mobile Goal Text', 'page': 'about', 'type': 'text' },
 
-            # Resolution Steps (Full Details)
-            'about_resolution_step_1_title': { 'key': 'about_resolution_step_1_title', 'value': 'Caller', 'label': 'About Resolution Step 1 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_1_subtitle': { 'key': 'about_resolution_step_1_subtitle', 'value': 'Child or concerned individual', 'label': 'About Resolution Step 1 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_1_description': { 'key': 'about_resolution_step_1_description', 'value': 'A child or person concerned about a child\'s welfare initiates contact through any available channel.', 'label': 'About Resolution Step 1 Description', 'page': 'about', 'type': 'text' },
-
-            'about_resolution_step_2_title': { 'key': 'about_resolution_step_2_title', 'value': 'Call Center', 'label': 'About Resolution Step 2 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_2_subtitle': { 'key': 'about_resolution_step_2_subtitle', 'value': 'Initial assessment and counseling', 'label': 'About Resolution Step 2 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_2_description': { 'key': 'about_resolution_step_2_description', 'value': 'Trained counselors provide immediate support, document details, and assess the urgency level of each case.', 'label': 'About Resolution Step 2 Description', 'page': 'about', 'type': 'text' },
-
-            'about_resolution_step_3_title': { 'key': 'about_resolution_step_3_title', 'value': 'Case Management Department', 'label': 'About Resolution Step 3 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_3_subtitle': { 'key': 'about_resolution_step_3_subtitle', 'value': 'Case review and referral', 'label': 'About Resolution Step 3 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_3_description': { 'key': 'about_resolution_step_3_description', 'value': 'Cases are reviewed by specialists, classified by protection need, and referred to appropriate agencies or services.', 'label': 'About Resolution Step 3 Description', 'page': 'about', 'type': 'text' },
-
-            'about_resolution_step_4_title': { 'key': 'about_resolution_step_4_title', 'value': 'Probation Offices (DACs)', 'label': 'About Resolution Step 4 Title', 'page': 'about', 'type': 'heading' },
-            'about_resolution_step_4_subtitle': { 'key': 'about_resolution_step_4_subtitle', 'value': 'Implementation and follow-up', 'label': 'About Resolution Step 4 Subtitle', 'page': 'about', 'type': 'text' },
-            'about_resolution_step_4_description': { 'key': 'about_resolution_step_4_description', 'value': 'Local probation officers and community partners work to implement solutions and provide ongoing support until the case is resolved.', 'label': 'About Resolution Step 4 Description', 'page': 'about', 'type': 'text' },
-
             # Core Values Stats
             'about_values_stat_1_value': { 'key': 'about_values_stat_1_value', 'value': '10+', 'label': 'About Values Stat 1 Value', 'page': 'about', 'type': 'text' },
             'about_values_stat_1_label': { 'key': 'about_values_stat_1_label', 'value': 'Years of Service', 'label': 'About Values Stat 1 Label', 'page': 'about', 'type': 'text' },
             'about_values_stat_2_value': { 'key': 'about_values_stat_2_value', 'value': '1M+', 'label': 'About Values Stat 2 Value', 'page': 'about', 'type': 'text' },
             'about_values_stat_2_label': { 'key': 'about_values_stat_2_label', 'value': 'Lives Touched', 'label': 'About Values Stat 2 Label', 'page': 'about', 'type': 'text' },
-
-            # Operations Page Content
-            'operations_title': { 'key': 'operations_title', 'value': 'Our Operations and Case Flow', 'label': 'Operations Title', 'page': 'operations', 'type': 'heading' },
-            'operations_subtitle': { 'key': 'operations_subtitle', 'value': 'A transparent look into how we handle every call to ensure every child\'s voice is heard and acted upon with care and urgency.', 'label': 'Operations Subtitle', 'page': 'operations', 'type': 'text' },
-            'operations_path_title': { 'key': 'operations_path_title', 'value': 'The Path to Resolution', 'label': 'Operations Path Title', 'page': 'operations', 'type': 'heading' },
-            'operations_path_subtitle': { 'key': 'operations_path_subtitle', 'value': 'Our streamlined process from report to resolution, ensuring every case receives the attention and action it deserves.', 'label': 'Operations Path Subtitle', 'page': 'operations', 'type': 'text' },
-            'operations_step_1_title': { 'key': 'operations_step_1_title', 'value': 'Initial Contact', 'label': 'Operations Step 1 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_1_text': { 'key': 'operations_step_1_text', 'value': 'A child or concerned individual calls the toll-free 116 helpline or reaches out via WhatsApp.', 'label': 'Operations Step 1 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_1_tag': { 'key': 'operations_step_1_tag', 'value': 'Immediate Response', 'label': 'Operations Step 1 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_step_2_title': { 'key': 'operations_step_2_title', 'value': 'Counselor Support', 'label': 'Operations Step 2 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_2_text': { 'key': 'operations_step_2_text', 'value': 'Trained counselors provide immediate emotional support and gather essential information with empathy.', 'label': 'Operations Step 2 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_2_tag': { 'key': 'operations_step_2_tag', 'value': 'Professional Care', 'label': 'Operations Step 2 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_step_3_title': { 'key': 'operations_step_3_title', 'value': 'Case Assessment', 'label': 'Operations Step 3 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_3_text': { 'key': 'operations_step_3_text', 'value': 'The case is documented, assessed for urgency level, and classified according to protection needs.', 'label': 'Operations Step 3 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_3_tag': { 'key': 'operations_step_3_tag', 'value': 'Detailed Documentation', 'label': 'Operations Step 3 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_step_4_title': { 'key': 'operations_step_4_title', 'value': 'Referral & Follow-up', 'label': 'Operations Step 4 Title', 'page': 'operations', 'type': 'text' },
-            'operations_step_4_text': { 'key': 'operations_step_4_text', 'value': 'Referrals are made to relevant authorities and continuous follow-up ensures case resolution.', 'label': 'Operations Step 4 Text', 'page': 'operations', 'type': 'text' },
-            'operations_step_4_tag': { 'key': 'operations_step_4_tag', 'value': 'Action & Closure', 'label': 'Operations Step 4 Tag', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_1_title': { 'key': 'operations_metrics_1_title', 'value': '24/7', 'label': 'Operations Metrics 1 Title', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_1_text': { 'key': 'operations_metrics_1_text', 'value': 'Always Available', 'label': 'Operations Metrics 1 Text', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_2_title': { 'key': 'operations_metrics_2_title', 'value': '100%', 'label': 'Operations Metrics 2 Title', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_2_text': { 'key': 'operations_metrics_2_text', 'value': 'Confidential', 'label': 'Operations Metrics 2 Text', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_3_title': { 'key': 'operations_metrics_3_title', 'value': 'Free', 'label': 'Operations Metrics 3 Title', 'page': 'operations', 'type': 'text' },
-            'operations_metrics_3_text': { 'key': 'operations_metrics_3_text', 'value': 'Toll-Free Service', 'label': 'Operations Metrics 3 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlights_title': { 'key': 'operations_highlights_title', 'value': 'Operational Highlights', 'label': 'Operations Highlights Title', 'page': 'operations', 'type': 'heading' },
-            'operations_highlight_1_title': { 'key': 'operations_highlight_1_title', 'value': '116 Toll-Free Helpline', 'label': 'Operations Highlight 1 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_1_text': { 'key': 'operations_highlight_1_text', 'value': 'Accessible nationwide across all telecom networks.', 'label': 'Operations Highlight 1 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_2_title': { 'key': 'operations_highlight_2_title', 'value': '24/7 Availability', 'label': 'Operations Highlight 2 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_2_text': { 'key': 'operations_highlight_2_text', 'value': 'Help any time of day, all year round.', 'label': 'Operations Highlight 2 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_3_title': { 'key': 'operations_highlight_3_title', 'value': 'Language Support', 'label': 'Operations Highlight 3 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_3_text': { 'key': 'operations_highlight_3_text', 'value': 'English, Luganda, Swahili, and additional local languages.', 'label': 'Operations Highlight 3 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_4_title': { 'key': 'operations_highlight_4_title', 'value': 'Strict Confidentiality', 'label': 'Operations Highlight 4 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_4_text': { 'key': 'operations_highlight_4_text', 'value': 'Handled with the utmost privacy.', 'label': 'Operations Highlight 4 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_5_title': { 'key': 'operations_highlight_5_title', 'value': 'Trained Professionals', 'label': 'Operations Highlight 5 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_5_text': { 'key': 'operations_highlight_5_text', 'value': 'Counselors undergo rigorous training.', 'label': 'Operations Highlight 5 Text', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_6_title': { 'key': 'operations_highlight_6_title', 'value': 'Multiple Channels', 'label': 'Operations Highlight 6 Title', 'page': 'operations', 'type': 'text' },
-            'operations_highlight_6_text': { 'key': 'operations_highlight_6_text', 'value': 'WhatsApp, U-Report, SafePal App, email, and walk-ins.', 'label': 'Operations Highlight 6 Text', 'page': 'operations', 'type': 'text' },
 
             # Operations Page - Hero Section
             'operations_page_title': { 'key': 'operations_page_title', 'value': 'How We', 'label': 'Operations Page Title', 'page': 'operations', 'type': 'heading', 'description': 'Hero section main title' },
@@ -335,8 +275,24 @@ class Command(BaseCommand):
             'operations_pillar3_title': { 'key': 'operations_pillar3_title', 'value': 'Sustainable Funding', 'label': 'Pillar 3 Title', 'page': 'operations', 'type': 'heading', 'description': 'Third pillar title' },
             'operations_pillar3_description': { 'key': 'operations_pillar3_description', 'value': 'Partnering with MGLSD and UNICEF for long-term service stability.', 'label': 'Pillar 3 Description', 'page': 'operations', 'type': 'text', 'description': 'Third pillar description' },
 
+            # Operations Page - Key Facts Section
+            'operations_key_facts_title': { 'key': 'operations_key_facts_title', 'value': 'Operations at a', 'label': 'Key Facts Title', 'page': 'operations', 'type': 'heading', 'description': 'Key facts section title' },
+            'operations_key_facts_title_highlight': { 'key': 'operations_key_facts_title_highlight', 'value': 'Glance', 'label': 'Key Facts Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Key facts section highlighted word' },
+            'operations_page_description': { 'key': 'operations_page_description', 'value': 'Our comprehensive case management system ensures every report is handled with care and urgency.', 'label': 'Operations Page Description', 'page': 'operations', 'type': 'text', 'description': 'Key facts section description' },
+            'operations_availability_title': { 'key': 'operations_availability_title', 'value': '24/7 Nationwide Coverage', 'label': 'Operations Availability Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: availability' },
+            'operations_availability_text': { 'key': 'operations_availability_text', 'value': 'Operational 24/7 and accessible from every part of the country.', 'label': 'Operations Availability Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: availability' },
+            'operations_funding_title': { 'key': 'operations_funding_title', 'value': 'Funding & Support', 'label': 'Operations Funding Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: funding' },
+            'operations_funding_text': { 'key': 'operations_funding_text', 'value': 'Government of Uganda covers utility bills and 14% of salaries, while donors (UNICEF) support case management funds and project staff salaries.', 'label': 'Operations Funding Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: funding' },
+            'operations_languages_title': { 'key': 'operations_languages_title', 'value': 'Multilingual Counselors', 'label': 'Operations Languages Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: languages' },
+            'operations_languages_text': { 'key': 'operations_languages_text', 'value': 'Our counselors speak a total of 26 local languages to serve every community.', 'label': 'Operations Languages Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: languages' },
+            'operations_shortcode_title': { 'key': 'operations_shortcode_title', 'value': 'Toll-Free Access', 'label': 'Operations Shortcode Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: shortcode' },
+            'operations_shortcode_text': { 'key': 'operations_shortcode_text', 'value': 'Operates on the short code 116 (toll free) accessible from any telecom network.', 'label': 'Operations Shortcode Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: shortcode' },
+            'operations_structure_title': { 'key': 'operations_structure_title', 'value': 'Two-Division Structure', 'label': 'Operations Structure Title', 'page': 'operations', 'type': 'heading', 'description': 'Key fact: structure' },
+            'operations_structure_text': { 'key': 'operations_structure_text', 'value': 'Divided into 2 sections: call center for immediate response and case work for follow-up support.', 'label': 'Operations Structure Text', 'page': 'operations', 'type': 'text', 'description': 'Key fact: structure' },
+
             # Operations Page - Services Section
-            'services_section_title': { 'key': 'services_section_title', 'value': 'Services We Offer', 'label': 'Services Section Title', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title' },
+            'services_section_title': { 'key': 'services_section_title', 'value': 'Services We', 'label': 'Services Section Title', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title' },
+            'services_section_title_highlight': { 'key': 'services_section_title_highlight', 'value': 'Offer', 'label': 'Services Section Title Highlight', 'page': 'operations', 'type': 'heading', 'description': 'Services carousel title highlighted word' },
             'services_section_subtitle': { 'key': 'services_section_subtitle', 'value': 'Comprehensive support systems protecting and empowering every voice in Uganda.', 'label': 'Services Section Subtitle', 'page': 'operations', 'type': 'text', 'description': 'Services carousel subtitle' },
 
             # Service Items (titles and descriptions)
@@ -352,6 +308,8 @@ class Command(BaseCommand):
             'service_referral_text': { 'key': 'service_referral_text', 'value': 'Referral to essential services including healthcare, legal aid, and social support.', 'label': 'Service Referral Text', 'page': 'operations', 'type': 'text', 'description': 'Referral service description' },
             'service_community_title': { 'key': 'service_community_title', 'value': 'Community Sensitization', 'label': 'Service Community Title', 'page': 'operations', 'type': 'heading', 'description': 'Community service title' },
             'service_community_text': { 'key': 'service_community_text', 'value': 'Community sensitization activities to raise awareness about child protection and GBV prevention.', 'label': 'Service Community Text', 'page': 'operations', 'type': 'text', 'description': 'Community service description' },
+            'service_chatbot_title': { 'key': 'service_chatbot_title', 'value': 'MHPSS Chatbot', 'label': 'Service Chatbot Title', 'page': 'operations', 'type': 'heading', 'description': 'Chatbot service title' },
+            'service_chatbot_text': { 'key': 'service_chatbot_text', 'value': 'Mental Health and Psychosocial Support chatbot for immediate automated assistance.', 'label': 'Service Chatbot Text', 'page': 'operations', 'type': 'text', 'description': 'Chatbot service description' },
 
             # Resources Page Content
             'resources_title': { 'key': 'resources_title', 'value': 'Resources & Statistics', 'label': 'Resources Title', 'page': 'resources', 'type': 'heading' },
@@ -440,16 +398,14 @@ class Command(BaseCommand):
             'reports_insights_footer_text': { 'key': 'reports_insights_footer_text', 'value': '© 2024 Sauti Uganda 116 helpline. All rights reserved.', 'label': 'Reports & Insights Footer Text', 'page': 'reports_insights', 'type': 'text' },
 
             # Videos Page Content
-            'videos_title': { 'key': 'videos_title', 'value': 'Videos', 'label': 'Videos Title', 'page': 'videos', 'type': 'heading' },
-            'videos_resources_link': { 'key': 'videos_resources_link', 'value': 'Resources →', 'label': 'Videos Resources Link', 'page': 'videos', 'type': 'button' },
+            'videos_page_title': { 'key': 'videos_page_title', 'value': 'Video Gallery', 'label': 'Videos Page Title', 'page': 'videos', 'type': 'heading', 'description': 'Hero section main title' },
+            'videos_page_title_highlight': { 'key': 'videos_page_title_highlight', 'value': 'Audio-Visuals', 'label': 'Videos Page Title Highlight', 'page': 'videos', 'type': 'heading', 'description': 'Hero section highlighted word' },
+            'videos_page_description': { 'key': 'videos_page_description', 'value': 'Explore our archive of official media content, awareness videos, and community stories.', 'label': 'Videos Page Description', 'page': 'videos', 'type': 'text', 'description': 'Hero section subtitle text' },
+            'videos_search_heading': { 'key': 'videos_search_heading', 'value': 'Search Official Media', 'label': 'Videos Search Heading', 'page': 'videos', 'type': 'heading', 'description': 'Heading above the search bar' },
             'videos_search_placeholder': { 'key': 'videos_search_placeholder', 'value': 'Search videos...', 'label': 'Videos Search Placeholder', 'page': 'videos', 'type': 'text' },
             'videos_search_button': { 'key': 'videos_search_button', 'value': 'Search', 'label': 'Videos Search Button', 'page': 'videos', 'type': 'button' },
-            'videos_chip_all': { 'key': 'videos_chip_all', 'value': 'All', 'label': 'Videos Chip All', 'page': 'videos', 'type': 'button' },
-            'videos_chip_education': { 'key': 'videos_chip_education', 'value': 'Education', 'label': 'Videos Chip Education', 'page': 'videos', 'type': 'button' },
-            'videos_chip_safety': { 'key': 'videos_chip_safety', 'value': 'Safety', 'label': 'Videos Chip Safety', 'page': 'videos', 'type': 'button' },
-            'videos_chip_support': { 'key': 'videos_chip_support', 'value': 'Support', 'label': 'Videos Chip Support', 'page': 'videos', 'type': 'button' },
-            'videos_chip_recency': { 'key': 'videos_chip_recency', 'value': 'Recency', 'label': 'Videos Chip Recency', 'page': 'videos', 'type': 'button' },
-            'videos_chip_popular': { 'key': 'videos_chip_popular', 'value': 'Popular', 'label': 'Videos Chip Popular', 'page': 'videos', 'type': 'button' },
+            'videos_section_title': { 'key': 'videos_section_title', 'value': 'Videos', 'label': 'Videos Section Title', 'page': 'videos', 'type': 'heading', 'description': 'Heading above the video grid' },
+            'videos_audio_section_title': { 'key': 'videos_audio_section_title', 'value': 'Audio', 'label': 'Videos Audio Section Title', 'page': 'videos', 'type': 'heading', 'description': 'Heading above the audio list' },
 
             # FAQs Page Content
             'faqs_support_title': { 'key': 'faqs_support_title', 'value': '24/7 Support', 'label': 'FAQs Support Title', 'page': 'faqs', 'type': 'heading' },
@@ -461,6 +417,7 @@ class Command(BaseCommand):
             'faqs_immediate_help_subtitle': { 'key': 'faqs_immediate_help_subtitle', 'value': 'Call our toll-free helpline', 'label': 'FAQs Immediate Help Subtitle', 'page': 'faqs', 'type': 'text' },
             'faqs_call_button': { 'key': 'faqs_call_button', 'value': 'Call 116', 'label': 'FAQs Call Button', 'page': 'faqs', 'type': 'button' },
             'faqs_page_title': { 'key': 'faqs_page_title', 'value': 'Frequently Asked', 'label': 'FAQs Page Title', 'page': 'faqs', 'type': 'heading' },
+            'faqs_page_title_highlight': { 'key': 'faqs_page_title_highlight', 'value': 'Questions', 'label': 'FAQs Page Title Highlight', 'page': 'faqs', 'type': 'heading' },
             'faqs_page_subtitle': { 'key': 'faqs_page_subtitle', 'value': 'Questions & Answers', 'label': 'FAQs Page Subtitle', 'page': 'faqs', 'type': 'heading' },
             'faqs_search_placeholder': { 'key': 'faqs_search_placeholder', 'value': 'Search questions', 'label': 'FAQs Search Placeholder', 'page': 'faqs', 'type': 'text' },
             'faqs_all_categories_button': { 'key': 'faqs_all_categories_button', 'value': 'All Categories', 'label': 'FAQs All Categories Button', 'page': 'faqs', 'type': 'button' },
@@ -472,7 +429,7 @@ class Command(BaseCommand):
             'faqs_footer_text': { 'key': 'faqs_footer_text', 'value': '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.', 'label': 'FAQs Footer Text', 'page': 'faqs', 'type': 'text' },
 
             # Header Navigation and CTAs
-            'header_brand_name': { 'key': 'header_brand_name', 'value': 'Sauti 116', 'label': 'Header Brand Name', 'page': 'header', 'type': 'text', 'description': 'Brand name displayed in the header' },
+            'header_brand_name': { 'key': 'header_brand_name', 'value': 'Sauti 116 Helpline', 'label': 'Header Brand Name', 'page': 'header', 'type': 'text', 'description': 'Brand name displayed in the header' },
             'header_nav_home': { 'key': 'header_nav_home', 'value': 'Home', 'label': 'Header Nav Home', 'page': 'header', 'type': 'button', 'description': 'Home navigation link text' },
             'header_nav_about': { 'key': 'header_nav_about', 'value': 'Who We Are', 'label': 'Header Nav About', 'page': 'header', 'type': 'button', 'description': 'About navigation link text' },
             'header_nav_operations': { 'key': 'header_nav_operations', 'value': 'Our Operations', 'label': 'Header Nav Operations', 'page': 'header', 'type': 'button', 'description': 'Operations navigation link text' },
@@ -495,15 +452,15 @@ class Command(BaseCommand):
             'footer_nav_news': { 'key': 'footer_nav_news', 'value': 'News', 'label': 'Footer Nav News', 'page': 'footer', 'type': 'button', 'description': 'News footer link text' },
             'footer_nav_partners': { 'key': 'footer_nav_partners', 'value': 'Partners', 'label': 'Footer Nav Partners', 'page': 'footer', 'type': 'button', 'description': 'Partners footer link text' },
             'footer_nav_contact': { 'key': 'footer_nav_contact', 'value': 'Contact', 'label': 'Footer Nav Contact', 'page': 'footer', 'type': 'button', 'description': 'Contact footer link text' },
-            'footer_social_x_url': { 'key': 'footer_social_x_url', 'value': 'https://x.com/sauti116', 'label': 'Footer X URL', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter social media URL' },
+            'footer_social_x_url': { 'key': 'footer_social_x_url', 'value': 'https://x.com/sauti116?s=21', 'label': 'Footer X URL', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter social media URL' },
             'footer_social_x_label': { 'key': 'footer_social_x_label', 'value': 'X', 'label': 'Footer X Label', 'page': 'footer', 'type': 'text', 'description': 'X/Twitter display name' },
-            'footer_social_facebook_url': { 'key': 'footer_social_facebook_url', 'value': 'https://facebook.com/sauti116', 'label': 'Footer Facebook URL', 'page': 'footer', 'type': 'text', 'description': 'Facebook social media URL' },
+            'footer_social_facebook_url': { 'key': 'footer_social_facebook_url', 'value': 'https://www.facebook.com/share/14W6eurox1o/', 'label': 'Footer Facebook URL', 'page': 'footer', 'type': 'text', 'description': 'Facebook social media URL' },
             'footer_social_facebook_label': { 'key': 'footer_social_facebook_label', 'value': 'Facebook', 'label': 'Footer Facebook Label', 'page': 'footer', 'type': 'text', 'description': 'Facebook display name' },
-            'footer_social_instagram_url': { 'key': 'footer_social_instagram_url', 'value': 'https://instagram.com/sauti116', 'label': 'Footer Instagram URL', 'page': 'footer', 'type': 'text', 'description': 'Instagram social media URL' },
+            'footer_social_instagram_url': { 'key': 'footer_social_instagram_url', 'value': 'https://www.instagram.com/sauti116helpline?igsh=MTdyNjgwOG42ZjB2dA%3D%3D&utm_source=qr', 'label': 'Footer Instagram URL', 'page': 'footer', 'type': 'text', 'description': 'Instagram social media URL' },
             'footer_social_instagram_label': { 'key': 'footer_social_instagram_label', 'value': 'Instagram', 'label': 'Footer Instagram Label', 'page': 'footer', 'type': 'text', 'description': 'Instagram display name' },
-            'footer_social_youtube_url': { 'key': 'footer_social_youtube_url', 'value': 'https://youtube.com/@sauti116', 'label': 'Footer YouTube URL', 'page': 'footer', 'type': 'text', 'description': 'YouTube social media URL' },
+            'footer_social_youtube_url': { 'key': 'footer_social_youtube_url', 'value': 'https://www.youtube.com/@Sauti116HelplineUganda', 'label': 'Footer YouTube URL', 'page': 'footer', 'type': 'text', 'description': 'YouTube social media URL' },
             'footer_social_youtube_label': { 'key': 'footer_social_youtube_label', 'value': 'YouTube', 'label': 'Footer YouTube Label', 'page': 'footer', 'type': 'text', 'description': 'YouTube display name' },
-            'footer_social_tiktok_url': { 'key': 'footer_social_tiktok_url', 'value': 'https://tiktok.com/@sauti116', 'label': 'Footer TikTok URL', 'page': 'footer', 'type': 'text', 'description': 'TikTok social media URL' },
+            'footer_social_tiktok_url': { 'key': 'footer_social_tiktok_url', 'value': 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', 'label': 'Footer TikTok URL', 'page': 'footer', 'type': 'text', 'description': 'TikTok social media URL' },
             'footer_social_tiktok_label': { 'key': 'footer_social_tiktok_label', 'value': 'TikTok', 'label': 'Footer TikTok Label', 'page': 'footer', 'type': 'text', 'description': 'TikTok display name' },
 
             # Contact Page Form Text
@@ -565,12 +522,33 @@ class Command(BaseCommand):
             'resources_chart_region_subtitle': { 'key': 'resources_chart_region_subtitle', 'value': 'Cases reported per region', 'label': 'Resources Chart Region Subtitle', 'page': 'resources', 'type': 'text', 'description': 'Region chart subtitle' },
             'resources_download': { 'key': 'resources_download', 'value': 'Download', 'label': 'Resources Download', 'page': 'resources', 'type': 'button', 'description': 'Download button text' },
             'resources_downloading': { 'key': 'resources_downloading', 'value': 'Downloading...', 'label': 'Resources Downloading', 'page': 'resources', 'type': 'text', 'description': 'Download button loading state' },
+            'resources_page_title': { 'key': 'resources_page_title', 'value': 'Resources', 'label': 'Resources Page Title', 'page': 'resources', 'type': 'heading', 'description': 'Resources hero title prefix' },
+            'resources_page_title_highlight': { 'key': 'resources_page_title_highlight', 'value': 'and Statistics', 'label': 'Resources Page Title Highlight', 'page': 'resources', 'type': 'heading', 'description': 'Resources hero title highlight' },
+            'resources_page_subtitle': { 'key': 'resources_page_subtitle', 'value': 'Access our library of official reports, awareness materials, and real-time helpline statistics.', 'label': 'Resources Page Subtitle', 'page': 'resources', 'type': 'text', 'description': 'Resources hero subtitle' },
+            'statistics_dashboard_title': { 'key': 'statistics_dashboard_title', 'value': 'Live Statistics', 'label': 'Statistics Dashboard Title', 'page': 'resources', 'type': 'heading', 'description': 'Statistics dashboard section title' },
+            'statistics_dashboard_subtitle': { 'key': 'statistics_dashboard_subtitle', 'value': 'Real-time data from the Sauti 116 Helpline', 'label': 'Statistics Dashboard Subtitle', 'page': 'resources', 'type': 'text', 'description': 'Statistics dashboard section subtitle' },
+            'stats_kpi_calls': { 'key': 'stats_kpi_calls', 'value': 'Total Calls', 'label': 'Stats KPI Calls', 'page': 'resources', 'type': 'text', 'description': 'Total calls KPI label' },
+            'stats_kpi_cases': { 'key': 'stats_kpi_cases', 'value': 'Total Cases', 'label': 'Stats KPI Cases', 'page': 'resources', 'type': 'text', 'description': 'Total cases KPI label' },
+            'stats_kpi_gbv': { 'key': 'stats_kpi_gbv', 'value': 'Total GBV Cases', 'label': 'Stats KPI GBV', 'page': 'resources', 'type': 'text', 'description': 'Total GBV cases KPI label' },
+            'stats_kpi_sea': { 'key': 'stats_kpi_sea', 'value': 'Total SEA Cases', 'label': 'Stats KPI SEA', 'page': 'resources', 'type': 'text', 'description': 'Total SEA cases KPI label' },
+            'stats_kpi_migrant': { 'key': 'stats_kpi_migrant', 'value': 'Migrant Workers', 'label': 'Stats KPI Migrant', 'page': 'resources', 'type': 'text', 'description': 'Migrant workers KPI label' },
+            'resources_loading_charts': { 'key': 'resources_loading_charts', 'value': 'Loading...', 'label': 'Resources Loading Charts', 'page': 'resources', 'type': 'text', 'description': 'Chart loading indicator' },
+            'resources_chart_district_title': { 'key': 'resources_chart_district_title', 'value': 'Top Districts', 'label': 'Resources Chart District Title', 'page': 'resources', 'type': 'heading', 'description': 'District chart title' },
+            'resources_chart_district_subtitle': { 'key': 'resources_chart_district_subtitle', 'value': 'Districts with highest case volumes', 'label': 'Resources Chart District Subtitle', 'page': 'resources', 'type': 'text', 'description': 'District chart subtitle' },
+            'resources_downloads_divider': { 'key': 'resources_downloads_divider', 'value': 'Downloads', 'label': 'Resources Downloads Divider', 'page': 'resources', 'type': 'text', 'description': 'Downloads section divider label' },
+            'resources_all_formats': { 'key': 'resources_all_formats', 'value': 'All Formats', 'label': 'Resources All Formats', 'page': 'resources', 'type': 'text', 'description': 'All formats filter option' },
+            'resources_clear_filters': { 'key': 'resources_clear_filters', 'value': 'Clear all filters', 'label': 'Resources Clear Filters', 'page': 'resources', 'type': 'button', 'description': 'Clear filters button text' },
+            'resources_read_more': { 'key': 'resources_read_more', 'value': '+ Read more', 'label': 'Resources Read More', 'page': 'resources', 'type': 'button', 'description': 'Expand description button text' },
+            'resources_show_less': { 'key': 'resources_show_less', 'value': '− Show less', 'label': 'Resources Show Less', 'page': 'resources', 'type': 'button', 'description': 'Collapse description button text' },
+            'resources_downloads_count': { 'key': 'resources_downloads_count', 'value': 'downloads', 'label': 'Resources Downloads Count', 'page': 'resources', 'type': 'text', 'description': 'Download count suffix label' },
 
             # Videos Page - Additional Keys
-            'videos_filter_videos': { 'key': 'videos_filter_videos', 'value': 'VIDEOS', 'label': 'Videos Filter Videos', 'page': 'videos', 'type': 'button', 'description': 'Videos filter tab' },
-            'videos_filter_audio': { 'key': 'videos_filter_audio', 'value': 'AUDIO', 'label': 'Videos Filter Audio', 'page': 'videos', 'type': 'button', 'description': 'Audio filter tab' },
-            'videos_empty_title': { 'key': 'videos_empty_title', 'value': 'No videos found', 'label': 'Videos Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title' },
-            'videos_empty_subtitle': { 'key': 'videos_empty_subtitle', 'value': 'Try adjusting your filters or check back later for new content.', 'label': 'Videos Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle' },
+            'videos_filter_videos': { 'key': 'videos_filter_videos', 'value': 'VIDEOS', 'label': 'Videos Filter Videos', 'page': 'videos', 'type': 'button', 'description': 'Jump-to-Videos-section nav pill' },
+            'videos_filter_audio': { 'key': 'videos_filter_audio', 'value': 'AUDIO', 'label': 'Videos Filter Audio', 'page': 'videos', 'type': 'button', 'description': 'Jump-to-Audio-section nav pill' },
+            'videos_empty_title': { 'key': 'videos_empty_title', 'value': 'No videos found', 'label': 'Videos Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title (Videos section)' },
+            'videos_empty_subtitle': { 'key': 'videos_empty_subtitle', 'value': 'Try adjusting your filters or check back later for new content.', 'label': 'Videos Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle (Videos section)' },
+            'videos_audio_empty_title': { 'key': 'videos_audio_empty_title', 'value': 'No audio content found', 'label': 'Videos Audio Empty Title', 'page': 'videos', 'type': 'heading', 'description': 'Empty state title (Audio section)' },
+            'videos_audio_empty_subtitle': { 'key': 'videos_audio_empty_subtitle', 'value': 'Check back later for new content', 'label': 'Videos Audio Empty Subtitle', 'page': 'videos', 'type': 'text', 'description': 'Empty state subtitle (Audio section)' },
 
             # Blog Page Buttons
             'blog_search_button': { 'key': 'blog_search_button', 'value': 'Search', 'label': 'Blog Search Button', 'page': 'blog', 'type': 'button', 'description': 'Search button text' },
