@@ -6,10 +6,10 @@
       <div class="container-custom hero-content-wrapper">
         <div class="hero-text">
           <h1 class="hero-title">
-            {{ siteContent.getContent('videos_page_title', 'Sauti') }} <span class="text-accent-yellow">{{ siteContent.getContent('videos_page_title_highlight', 'Audio-Visuals') }}</span>
+            {{ siteContent.getContent('videos_page_title', 'Video Gallery') }} <span class="text-accent-yellow">{{ siteContent.getContent('videos_page_title_highlight', 'Audio-Visuals') }}</span>
           </h1>
           <p class="hero-subtitle">
-            {{ siteContent.getContent('videos_page_subtitle', 'Explore our archive of official media content, awareness videos, and community stories.') }}
+            {{ siteContent.getContent('videos_page_description', 'Explore our archive of official media content, awareness videos, and community stories.') }}
           </p>
         </div>
       </div>
@@ -18,6 +18,7 @@
     <!-- Search Bar -->
     <div class="bg-white border-b border-gray-100">
       <div class="container-custom py-4">
+        <h2 class="search-heading">{{ siteContent.getContent('videos_search_heading', 'Search Official Media') }}</h2>
         <div class="search-box">
           <Search class="search-icon-inline" />
           <input
@@ -34,18 +35,15 @@
       </div>
     </div>
 
-    <!-- Sticky Filter Tabs -->
+    <!-- Sticky Section Jump Nav -->
     <div class="sticky top-[70px] z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
       <div class="container-custom">
         <div class="filter-tabs-wrapper">
           <button
             v-for="chip in filterChips"
             :key="chip.value"
-            @click="activeFilter = chip.value"
-            :class="[
-              'filter-chip',
-              activeFilter === chip.value ? 'filter-chip-active' : 'filter-chip-inactive'
-            ]"
+            @click="scrollToSection(chip.value)"
+            class="filter-chip filter-chip-inactive"
           >
             {{ chip.label }}
           </button>
@@ -68,9 +66,14 @@
       </div>
 
       <!-- Content -->
-      <div v-else class="space-y-8">
+      <div v-else class="space-y-12">
         <!-- Videos Section -->
-        <section v-if="activeFilter === 'VIDEOS'" aria-label="Video Gallery">
+        <section ref="videosSectionRef" class="scroll-section" aria-label="Video Gallery">
+          <div class="section-header">
+            <div class="section-badge"></div>
+            <h2 class="section-title">{{ siteContent.getContent('videos_section_title', 'Videos') }}</h2>
+          </div>
+
           <!-- Empty State -->
           <div v-if="videos.filter(v => !isAudio(v)).length === 0" class="empty-state">
             <Video class="empty-icon" />
@@ -121,7 +124,12 @@
         </section>
 
         <!-- Audio Section - Podcast Style -->
-        <section v-if="activeFilter === 'AUDIO'" aria-label="Audio Gallery">
+        <section ref="audioSectionRef" class="scroll-section" aria-label="Audio Gallery">
+          <div class="section-header">
+            <div class="section-badge"></div>
+            <h2 class="section-title">{{ siteContent.getContent('videos_audio_section_title', 'Audio') }}</h2>
+          </div>
+
           <!-- Empty State -->
           <div v-if="videos.filter(v => isAudio(v)).length === 0" class="empty-state">
             <Play class="empty-icon" />
@@ -196,10 +204,11 @@
   const settingsStore = useSettingsStore()
   const siteContent = useSiteContent('videos')
   const query = ref('')
-  const activeFilter = ref('VIDEOS') // Filter: VIDEOS, AUDIO
   const loading = ref(false)
   const isModalOpen = ref(false)
   const selectedVideo = ref(null)
+  const videosSectionRef = ref(null)
+  const audioSectionRef = ref(null)
 
   const videosSearchPlaceholder = computed(() => settingsStore.settings.videos_search_placeholder || 'Search video archive...')
   const videosSearchButton = computed(() => settingsStore.settings.videos_search_button || 'Search')
@@ -215,11 +224,6 @@
   // Helper function to separate media types for the display logic
   const isAudio = (v) => {
     return v.video_type === 'AUDIO' || (v.video_file && (v.video_file.toLowerCase().endsWith('.mp3') || v.video_file.toLowerCase().endsWith('.m4a') || v.video_file.toLowerCase().endsWith('.wav')))
-  }
-
-  // Default to VIDEOS filter
-  if (activeFilter.value === 'ALL') {
-    activeFilter.value = 'VIDEOS'
   }
 
   // Filtered computed property still exists for search functionality
@@ -258,8 +262,12 @@
     }
   }
 
-  const setChip = (chip) => activeChip.value = chip
   const applySearch = () => { }
+
+  const scrollToSection = (section) => {
+    const target = section === 'AUDIO' ? audioSectionRef.value : videosSectionRef.value
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
   const useThumbPlaceholder = (e) => e.target.src = 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=640&auto=format&fit=crop'
 
   const openVideo = (video) => {
@@ -353,6 +361,15 @@
   }
 
   /* ===== INLINE SEARCH ===== */
+  .search-heading {
+    max-width: 600px;
+    margin: 0 auto 0.75rem;
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(var(--color-text));
+  }
+
   .search-box {
     max-width: 600px;
     margin: 0 auto;
@@ -474,6 +491,11 @@
   .filter-chip-inactive:hover {
     border-color: rgb(var(--color-primary));
     background: rgb(var(--color-primary) / 0.05);
+  }
+
+  /* ===== SCROLL SECTIONS ===== */
+  .scroll-section {
+    scroll-margin-top: 150px;
   }
 
   /* ===== SECTION HEADERS ===== */

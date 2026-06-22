@@ -1,60 +1,34 @@
 <template>
-  <article
-    class="group bg-neutral-white p-4 rounded-[2rem] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-primary/10">
+  <article class="group cursor-pointer">
     <router-link :to="`/blogs/${post.slug}`" class="block">
       <!-- Featured Image -->
-      <div class="relative bg-neutral-offwhite rounded-2xl overflow-hidden aspect-video cursor-pointer">
+      <div class="relative bg-neutral-offwhite rounded-xl overflow-hidden aspect-video mb-3 shadow-md">
         <img :src="post.featured_image || helplineAction" :alt="post.title"
-          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy"
+          class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105 group-hover:brightness-110" loading="lazy"
           @error="setPlaceholder" />
 
-        <!-- Brand Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-secondary/20 via-transparent to-transparent"></div>
-
-        <!-- Category Badge -->
-        <div v-if="post.category" class="absolute top-4 left-4">
-          <span
-            class="text-[10px] font-bold uppercase tracking-widest bg-secondary text-neutral-white px-3 py-1.5 rounded-xl shadow-lg">
-            {{ post.category.name }}
-          </span>
-        </div>
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
 
         <!-- Featured Badge -->
-        <div v-if="post.is_featured" class="absolute top-4 right-4">
-          <span
-            class="bg-primary text-neutral-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg">
+        <div v-if="post.is_featured" class="absolute top-3 left-3">
+          <span class="bg-primary text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-lg">
             Featured
           </span>
         </div>
       </div>
 
       <!-- Content -->
-      <div class="mt-6 flex gap-4">
-        <!-- Author Avatar -->
-        <div
-          class="h-10 w-10 rounded-xl bg-hotline flex items-center justify-center text-neutral-white font-bold text-sm flex-shrink-0 shadow-lg shadow-hotline/20 transition-transform group-hover:scale-110">
-          {{ getAuthorInitial() }}
-        </div>
+      <div class="px-1">
+        <!-- Title -->
+        <h3 class="text-sm font-bold text-secondary leading-tight mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+          {{ post.title }}
+        </h3>
 
-        <!-- Post Info -->
-        <div class="min-w-0">
-          <!-- Title -->
-          <h3
-            class="text-base font-bold text-secondary leading-tight mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-            {{ post.title }}
-          </h3>
-
-          <!-- Meta -->
-          <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span class="text-[10px] text-muted font-bold uppercase tracking-widest whitespace-nowrap">
-              {{ post.author?.username || post.author_name || 'Sauti Uganda' }}
-            </span>
-            <span class="w-1 h-1 bg-secondary/20 rounded-full"></span>
-            <span class="text-[10px] text-black/40 font-bold uppercase tracking-widest whitespace-nowrap">
-              {{ formatViews(post.views_count) }} • {{ formatPostTime(post) }}
-            </span>
-          </div>
-        </div>
+        <!-- Meta -->
+        <p class="text-xs text-gray-600 font-medium">
+          {{ formatPostTime(post) }}
+        </p>
       </div>
     </router-link>
   </article>
@@ -139,5 +113,24 @@
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  article {
+    transition: transform 0.2s ease;
+  }
+
+  article:hover {
+    transform: translateY(-4px);
+  }
+
+  @media (max-width: 640px) {
+    h3 {
+      font-size: 0.8125rem;
+      -webkit-line-clamp: 1;
+    }
+
+    article:hover {
+      transform: translateY(-2px);
+    }
   }
 </style>

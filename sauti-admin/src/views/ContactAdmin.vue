@@ -1,91 +1,120 @@
 <template>
-  <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Manage Contact Information</h1>
+  <div class="p-6">
+    <PageHeader
+      title="Contact Channels"
+      description="Manage the contact methods shown on the public Contact page"
+      :action-label="editingContact ? 'New Contact' : null"
+      :action-icon="PlusIcon"
+      @action="cancelEdit"
+    />
 
     <!-- Create/Edit Form -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-      <h2 class="text-2xl font-semibold mb-4">{{ editingContact ? 'Edit Contact Item' : 'Create New Contact Item' }}</h2>
-      <form @submit.prevent="saveContact">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input type="text" id="name" v-model="form.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+    <div class="card mb-8">
+      <div class="card-header">
+        <h2 class="text-lg font-bold text-gray-900">{{ editingContact ? 'Edit Contact Channel' : 'Add Contact Channel' }}</h2>
+      </div>
+      <div class="card-body">
+        <form @submit.prevent="saveContact">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="form-label">Name</label>
+              <input type="text" id="name" v-model="form.name" class="form-input" placeholder="e.g., WhatsApp" required>
+            </div>
+            <div>
+              <label for="value" class="form-label">Value</label>
+              <input type="text" id="value" v-model="form.value" class="form-input" placeholder="e.g., 0800-100-200" required>
+            </div>
           </div>
-          <div>
-            <label for="value" class="block text-sm font-medium text-gray-700">Value</label>
-            <input type="text" id="value" v-model="form.value" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label for="type" class="form-label">Type</label>
+              <select id="type" v-model="form.type" class="form-select" required>
+                <option value="phone">Phone Number</option>
+                <option value="email">Email Address</option>
+                <option value="location">Physical Location</option>
+                <option value="social">Social Media Link</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="icon" class="form-label">Icon Name</label>
+              <input type="text" id="icon" v-model="form.icon" class="form-input" placeholder="e.g., phone, envelope, whatsapp">
+            </div>
           </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div>
-            <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-            <select id="type" v-model="form.type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-              <option value="phone">Phone Number</option>
-              <option value="email">Email Address</option>
-              <option value="location">Physical Location</option>
-              <option value="social">Social Media Link</option>
-              <option value="other">Other</option>
-            </select>
+          <div class="mt-4">
+            <label for="description" class="form-label">Description <span class="font-normal text-gray-400">(shown on the contact page card)</span></label>
+            <textarea id="description" v-model="form.description" rows="2" class="form-input" placeholder="e.g., Free, confidential hotline available 24/7"></textarea>
           </div>
-          <div>
-            <label for="icon" class="block text-sm font-medium text-gray-700">Icon Name (e.g., 'phone', 'envelope')</label>
-            <input type="text" id="icon" v-model="form.icon" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label for="order" class="form-label">Order</label>
+              <input type="number" id="order" v-model="form.order" class="form-input" placeholder="0" required>
+            </div>
+            <div class="flex items-center pt-8">
+              <input type="checkbox" id="is_visible" v-model="form.is_visible" class="h-4 w-4 rounded border-gray-300 text-[#009EDB] focus:ring-[#009EDB]">
+              <label for="is_visible" class="ml-2 block text-sm font-medium text-gray-700">Visible on the public site</label>
+            </div>
           </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div>
-            <label for="order" class="block text-sm font-medium text-gray-700">Order</label>
-            <input type="number" id="order" v-model="form.order" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+          <div class="flex items-center gap-3 mt-6">
+            <button type="submit" class="btn-primary">
+              {{ editingContact ? 'Update Contact' : 'Create Contact' }}
+            </button>
+            <button type="button" @click="cancelEdit" v-if="editingContact" class="btn-outline">
+              Cancel
+            </button>
           </div>
-          <div class="flex items-center mt-5">
-            <input type="checkbox" id="is_visible" v-model="form.is_visible" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-            <label for="is_visible" class="ml-2 block text-sm text-gray-900">Is Visible</label>
-          </div>
-        </div>
-        <div class="mt-6">
-          <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {{ editingContact ? 'Update Contact' : 'Create Contact' }}
-          </button>
-          <button type="button" @click="cancelEdit" v-if="editingContact" class="ml-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Cancel
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
 
     <!-- Contact List -->
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <h2 class="text-2xl font-semibold mb-4">Existing Contact Items</h2>
-      <div v-if="loading" class="text-center py-4">Loading contacts...</div>
-      <div v-else-if="contacts.length === 0" class="text-center py-4">No contact items found.</div>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="text-lg font-bold text-gray-900">Existing Contact Channels</h2>
+      </div>
+      <LoadingState v-if="loading" message="Loading contacts..." />
+      <EmptyState
+        v-else-if="contacts.length === 0"
+        :icon="PhoneIcon"
+        title="No contact channels yet"
+        message="Add your first contact channel using the form above."
+      />
       <div v-else class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <table class="min-w-full">
+          <thead class="table-header">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Icon</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visible</th>
-              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Name</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Value</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Description</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Type</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Icon</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Order</th>
+              <th class="table-cell text-left text-xs font-bold uppercase tracking-wider">Visible</th>
+              <th class="table-cell text-right text-xs font-bold uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="contact in contacts" :key="contact.id">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ contact.name }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.value }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.type }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.icon }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.order }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <span :class="{'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800': contact.is_visible, 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800': !contact.is_visible}">
-                  {{ contact.is_visible ? 'Yes' : 'No' }}
+          <tbody class="bg-white">
+            <tr v-for="contact in contacts" :key="contact.id" class="table-row">
+              <td class="table-cell font-semibold text-gray-900">{{ contact.name }}</td>
+              <td class="table-cell text-gray-500">{{ contact.value }}</td>
+              <td class="table-cell text-gray-500 max-w-xs truncate" :title="contact.description">{{ contact.description || '—' }}</td>
+              <td class="table-cell text-gray-500 capitalize">{{ contact.type }}</td>
+              <td class="table-cell text-gray-500">{{ contact.icon || '—' }}</td>
+              <td class="table-cell text-gray-500">{{ contact.order }}</td>
+              <td class="table-cell">
+                <span class="inline-flex px-2.5 py-0.5 text-xs font-semibold rounded-full" :class="contact.is_visible ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                  {{ contact.is_visible ? 'Visible' : 'Hidden' }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button @click="editContact(contact)" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                <button @click="deleteContact(contact.id)" class="text-red-600 hover:text-red-900">Delete</button>
+              <td class="table-cell text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <button @click="editContact(contact)" class="p-2 text-gray-400 hover:text-[#009EDB] hover:bg-blue-50 rounded-full transition-all" title="Edit">
+                    <PencilIcon class="h-4 w-4" />
+                  </button>
+                  <button @click="deleteContact(contact.id)" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all" title="Delete">
+                    <TrashIcon class="h-4 w-4" />
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -97,8 +126,12 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import { api } from '@/utils/api';
+import { PageHeader, LoadingState, EmptyState } from '@/components/admin';
+import { PlusIcon, PencilIcon, TrashIcon, PhoneIcon } from '@heroicons/vue/24/outline';
 
+const toast = useToast();
 const contacts = ref([]);
 const loading = ref(true);
 const form = ref({
@@ -106,20 +139,21 @@ const form = ref({
   value: '',
   type: 'phone',
   icon: '',
+  description: '',
   order: 0,
   is_visible: true,
 });
 const editingContact = ref(null); // Stores the contact being edited
 
-const API_URL = '/api/content/contacts/'; // API endpoint for contacts
-
 const fetchContacts = async () => {
   loading.value = true;
   try {
-    const response = await axios.get(API_URL);
-    contacts.value = response.data; // Correctly access the results array
+    const response = await api.contacts.list();
+    // Endpoint has pagination disabled, so the payload is a plain array.
+    contacts.value = Array.isArray(response.data) ? response.data : (response.data?.results || []);
   } catch (error) {
     console.error('Error fetching contact items:', error);
+    toast.error('Failed to load contact items');
   } finally {
     loading.value = false;
   }
@@ -128,18 +162,17 @@ const fetchContacts = async () => {
 const saveContact = async () => {
   try {
     if (editingContact.value) {
-      // Update existing contact
-      await axios.put(`${API_URL}${editingContact.value.id}/`, form.value);
-      console.log('Contact updated successfully!');
+      await api.contacts.update(editingContact.value.id, form.value);
+      toast.success('Contact updated successfully');
     } else {
-      // Create new contact
-      await axios.post(API_URL, form.value);
-      console.log('Contact created successfully!');
+      await api.contacts.create(form.value);
+      toast.success('Contact created successfully');
     }
-    resetForm();
+    cancelEdit();
     await fetchContacts(); // Refresh the list
   } catch (error) {
     console.error('Error saving contact item:', error);
+    toast.error('Failed to save contact item');
   }
 };
 
@@ -156,11 +189,12 @@ const cancelEdit = () => {
 const deleteContact = async (id) => {
   if (confirm('Are you sure you want to delete this contact item?')) {
     try {
-      await axios.delete(`${API_URL}${id}/`);
-      console.log('Contact deleted successfully!');
+      await api.contacts.delete(id);
+      toast.success('Contact deleted successfully');
       await fetchContacts(); // Refresh the list
     } catch (error) {
       console.error('Error deleting contact item:', error);
+      toast.error('Failed to delete contact item');
     }
   }
 };
@@ -171,6 +205,7 @@ const resetForm = () => {
     value: '',
     type: 'phone',
     icon: '',
+    description: '',
     order: 0,
     is_visible: true,
   };

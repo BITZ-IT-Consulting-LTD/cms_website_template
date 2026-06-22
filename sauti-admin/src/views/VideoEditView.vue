@@ -82,6 +82,15 @@
                 />
                 <span class="text-sm text-gray-700">Upload Video File</span>
               </label>
+              <label class="flex items-center cursor-pointer">
+                <input
+                  v-model="videoForm.video_type"
+                  type="radio"
+                  value="AUDIO"
+                  class="mr-2 text-[#8B4000] focus:ring-[#8B4000]"
+                />
+                <span class="text-sm text-gray-700">Upload Audio File</span>
+              </label>
             </div>
           </div>
 
@@ -144,6 +153,45 @@
                 class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 {{ videoForm.video_file ? 'Change Video' : 'Upload Video' }}
+              </button>
+              <p class="mt-1 text-xs text-gray-500">Max file size: 500MB</p>
+            </div>
+
+            <!-- Audio File Upload (shown when AUDIO is selected) -->
+            <div v-if="videoForm.video_type === 'AUDIO'">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Audio File</label>
+
+              <div v-if="audioPreview || videoForm.video_file" class="mb-3">
+                <audio
+                  v-if="audioPreview"
+                  :src="audioPreview"
+                  controls
+                  class="w-full"
+                ></audio>
+                <div v-else class="w-full h-24 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <p class="text-sm text-gray-600">Audio file selected</p>
+                </div>
+              </div>
+
+              <div v-else class="w-full h-24 bg-gray-100 rounded-lg flex flex-col items-center justify-center mb-3 border-2 border-dashed border-gray-300">
+                <MusicalNoteIcon class="h-10 w-10 text-gray-400 mb-2" />
+                <p class="text-sm text-gray-500">No audio selected</p>
+                <p class="text-xs text-gray-400 mt-1">MP3, WAV, M4A, etc.</p>
+              </div>
+
+              <input
+                ref="audioInput"
+                type="file"
+                accept="audio/*"
+                @change="handleAudioUpload"
+                class="hidden"
+              />
+
+              <button
+                @click="audioInput.click()"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              >
+                {{ videoForm.video_file ? 'Change Audio' : 'Upload Audio' }}
               </button>
               <p class="mt-1 text-xs text-gray-500">Max file size: 500MB</p>
             </div>
@@ -313,7 +361,8 @@ import {
   ArrowUpIcon,
   VideoCameraIcon,
   PhotoIcon,
-  XMarkIcon
+  XMarkIcon,
+  MusicalNoteIcon
 } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
@@ -323,11 +372,14 @@ const videosStore = useVideosStore()
 
 // Refs
 const videoInput = ref(null)
+const audioInput = ref(null)
 const thumbnailInput = ref(null)
 const loading = ref(false)
 const thumbnailPreview = ref(null)
 const videoPreview = ref(null)
 const videoPreviewObjectUrl = ref(null)
+const audioPreview = ref(null)
+const audioPreviewObjectUrl = ref(null)
 
 const videoForm = ref({
   title: '',
@@ -437,6 +489,35 @@ const handleVideoUpload = (event) => {
   }
 }
 
+const handleAudioUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    // Validate file type
+    if (!file.type.startsWith('audio/')) {
+      toast.error('Please select an audio file')
+      return
+    }
+
+    // Validate file size (max 500MB)
+    if (file.size > 500 * 1024 * 1024) {
+      toast.error('Audio size must be less than 500MB')
+      return
+    }
+
+    if (audioPreviewObjectUrl.value) {
+      URL.revokeObjectURL(audioPreviewObjectUrl.value)
+      audioPreviewObjectUrl.value = null
+    }
+    audioPreviewObjectUrl.value = URL.createObjectURL(file)
+    audioPreview.value = audioPreviewObjectUrl.value
+    videoForm.value.video_file = file
+    videoForm.value.video_type = 'AUDIO'
+    // Clear YouTube URL if audio file is uploaded
+    videoForm.value.youtube_url = ''
+    toast.success('Audio file ready')
+  }
+}
+
 const previewVideo = () => {
   if (!videoKey.value) {
     toast.warning('Please save the video first to preview it')
@@ -447,6 +528,8 @@ const previewVideo = () => {
     window.open(videoForm.value.youtube_url, '_blank')
   } else if (videoPreview.value) {
     window.open(videoPreview.value, '_blank')
+  } else if (audioPreview.value) {
+    window.open(audioPreview.value, '_blank')
   } else {
     toast.info('No video URL available for preview')
   }
@@ -456,6 +539,10 @@ onBeforeUnmount(() => {
   if (videoPreviewObjectUrl.value) {
     URL.revokeObjectURL(videoPreviewObjectUrl.value)
     videoPreviewObjectUrl.value = null
+  }
+  if (audioPreviewObjectUrl.value) {
+    URL.revokeObjectURL(audioPreviewObjectUrl.value)
+    audioPreviewObjectUrl.value = null
   }
 })
 
@@ -474,7 +561,7 @@ const publishVideo = () => {
   saveChanges('PUBLISHED')
 }
 
-const saveChanges = async (status = 'DRAFT') => {
+const saveChanges = async (forceStatus = null) => {
   if (!videoForm.value.title.trim()) {
     toast.error('Please enter a video title')
     return
@@ -489,7 +576,7 @@ const saveChanges = async (status = 'DRAFT') => {
     videoData = {
       title: videoForm.value.title.trim(),
       description: videoForm.value.description?.trim() || '',
-      status: status || videoForm.value.status || 'DRAFT',
+      status: forceStatus || videoForm.value.status || 'DRAFT',
       language: videoForm.value.language || 'en',
       is_featured: videoForm.value.is_featured || false
     }
@@ -505,10 +592,10 @@ const saveChanges = async (status = 'DRAFT') => {
     }
     
     // Handle video source based on video_type
-    if (videoForm.value.video_type === 'UPLOAD') {
-      videoData.video_type = 'UPLOAD'
+    if (videoForm.value.video_type === 'UPLOAD' || videoForm.value.video_type === 'AUDIO') {
+      videoData.video_type = videoForm.value.video_type
       videoData.youtube_url = '' // Clear youtube_url
-      // For uploaded videos, include video_file
+      // For uploaded videos/audio, include video_file
       if (videoForm.value.video_file instanceof File) {
         videoData.video_file = videoForm.value.video_file
       }

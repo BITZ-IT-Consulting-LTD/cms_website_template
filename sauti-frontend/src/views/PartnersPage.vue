@@ -49,7 +49,7 @@
               class="group relative bg-neutral-white rounded-[2.5rem] border-2 border-neutral-offwhite p-6 h-40 flex items-center justify-center transition-all duration-500 hover:shadow-2xl hover:border-primary card-base !p-0">
               <a v-if="partner.website_url" :href="partner.website_url" target="_blank"
                 class="flex items-center justify-center h-full w-full p-6">
-                <img :src="partner.logo" :alt="partner.name"
+                <img :src="partner.logo_url || partner.logo" :alt="partner.name"
                   class="max-h-full max-w-full object-contain mx-auto transition-transform duration-700 group-hover:scale-110" />
                 <div
                   class="absolute inset-x-0 bottom-4 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
@@ -59,7 +59,7 @@
                 </div>
               </a>
               <div v-else class="flex items-center justify-center h-full w-full p-6">
-                <img :src="partner.logo" :alt="partner.name"
+                <img :src="partner.logo_url || partner.logo" :alt="partner.name"
                   class="max-h-full max-w-full object-contain mx-auto opacity-80" />
               </div>
             </div>

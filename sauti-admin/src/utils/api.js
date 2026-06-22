@@ -254,6 +254,14 @@ export const api = {
     delete: (id) => apiClient.delete(`/auth/users/${id}/`),
   },
 
+  contacts: {
+    list: (params) => apiClient.get('/content/contacts/', { params }),
+    get: (id) => apiClient.get(`/content/contacts/${id}/`),
+    create: (data) => apiClient.post('/content/contacts/', data),
+    update: (id, data) => apiClient.put(`/content/contacts/${id}/`, data),
+    delete: (id) => apiClient.delete(`/content/contacts/${id}/`),
+  },
+
   coreValues: {
     list: (params) => apiClient.get('/content/core-values/', { params }),
     get: (id) => apiClient.get(`/content/core-values/${id}/`),

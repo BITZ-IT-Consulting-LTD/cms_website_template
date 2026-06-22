@@ -22,7 +22,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
     """Serializer for listing posts (summary view)"""
-    author_name = serializers.CharField(source='author.get_full_name', read_only=True)
+    author_name = serializers.SerializerMethodField()
     category_name = serializers.CharField(source='category.name', read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     featured_image = serializers.SerializerMethodField()
@@ -35,7 +35,13 @@ class PostListSerializer(serializers.ModelSerializer):
             'language', 'views_count', 'is_featured', 'published_at',
             'scheduled_publish_at', 'created_at', 'updated_at'
         ]
-    
+
+    def get_author_name(self, obj):
+        """Full name if set, else fall back to username (avoids blank 'Unknown' author)"""
+        if not obj.author:
+            return ''
+        return obj.author.get_full_name() or obj.author.username
+
     def get_featured_image(self, obj):
         """Return relative URL for featured image (frontend proxy handles it)"""
         if obj.featured_image:

@@ -1,83 +1,42 @@
 <template>
   <div class="space-y-8">
-    <!-- Enhanced Header -->
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-4xl font-bold mb-2" style="font-family: 'Roboto', sans-serif; color: #222222;">Content Management Dashboard</h1>
-        <p class="text-lg" style="color: #555555;">Manage your website content, blog posts, videos, and resources</p>
-      </div>
-      <div class="flex gap-3">
-        <button
-          @click="$router.push('/posts/create')"
-          class="btn-primary flex items-center shadow-lg hover:shadow-xl"
-        >
-          <PlusIcon class="h-5 w-5 mr-2" />
-          New Blog Post
-        </button>
-        <button
-          @click="$router.push('/videos/create')"
-          class="btn-secondary flex items-center shadow-lg hover:shadow-xl"
-        >
-          <VideoCameraIcon class="h-5 w-5 mr-2" />
-          New Video
-        </button>
-      </div>
-    </div>
+    <!-- Header -->
+    <PageHeader
+      title="Content Management Dashboard"
+      description="Manage your website content, blog posts, videos, and resources"
+    />
 
-    <!-- Enhanced Stats Cards -->
-    <div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), min(280px, 1fr)));">
-      <div class="stats-card group">
-        <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(220, 38, 38, 0.15);">
-            <ClipboardDocumentListIcon class="h-6 w-6" style="color: #DC2626;" />
-          </div>
-          <div class="text-right">
-            <div class="stats-number">{{ stats.totalReports }}</div>
-            <div class="stats-label">Total Reports</div>
-          </div>
-        </div>
-        <div class="text-sm" style="color: #555555;">All submitted cases</div>
-      </div>
-      
-      <div class="stats-card group">
-        <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(245, 158, 11, 0.15);">
-            <ClockIcon class="h-6 w-6" style="color: #F59E0B;" />
-          </div>
-          <div class="text-right">
-            <div class="stats-number">{{ stats.pendingReports }}</div>
-            <div class="stats-label">Pending Review</div>
-          </div>
-        </div>
-        <div class="text-sm" style="color: #555555;">Requires attention</div>
-      </div>
-      
-      <div class="stats-card group">
-        <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(16, 185, 129, 0.15);">
-            <CheckCircleIcon class="h-6 w-6" style="color: #10B981;" />
-          </div>
-          <div class="text-right">
-            <div class="stats-number">{{ stats.resolvedReports }}</div>
-            <div class="stats-label">Resolved</div>
-          </div>
-        </div>
-        <div class="text-sm" style="color: #555555;">Successfully closed</div>
-      </div>
-      
-      <div class="stats-card group">
-        <div class="flex items-center justify-between mb-4">
-          <div class="p-3 rounded-2xl transition-colors duration-300" style="background-color: rgba(13, 148, 136, 0.15);">
-            <FolderOpenIcon class="h-6 w-6" style="color: #0D9488;" />
-          </div>
-          <div class="text-right">
-            <div class="stats-number">{{ stats.totalResources || 0 }}</div>
-            <div class="stats-label">Resources</div>
-          </div>
-        </div>
-        <div class="text-sm" style="color: #555555;">Downloadable content</div>
-      </div>
-    </div>
+    <!-- Stats Cards -->
+    <StatsGrid>
+      <StatCard
+        label="Total Reports"
+        :value="stats.totalReports"
+        subtitle="All submitted cases"
+        :icon="ClipboardDocumentListIcon"
+        color="red"
+      />
+      <StatCard
+        label="Pending Review"
+        :value="stats.pendingReports"
+        subtitle="Requires attention"
+        :icon="ClockIcon"
+        color="amber"
+      />
+      <StatCard
+        label="Resolved"
+        :value="stats.resolvedReports"
+        subtitle="Successfully closed"
+        :icon="CheckCircleIcon"
+        color="green"
+      />
+      <StatCard
+        label="Resources"
+        :value="stats.totalResources"
+        subtitle="Downloadable content"
+        :icon="FolderOpenIcon"
+        color="blue"
+      />
+    </StatsGrid>
 
     <!-- Enhanced Content Management -->
     <div class="card">
@@ -88,7 +47,7 @@
         
       <div class="card-body">
         <!-- Enhanced Quick Actions -->
-        <div class="grid gap-3 mb-6" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), min(200px, 1fr)));">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <router-link
             to="/posts/create"
             class="btn-primary flex items-center justify-center gap-2"
@@ -277,8 +236,8 @@ import { useRouter } from 'vue-router'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useToast } from 'vue-toastification'
 import BlogPreviewModal from '@/components/previews/BlogPreviewModal.vue'
+import { PageHeader, StatsGrid, StatCard } from '@/components/admin'
 import {
-  PlusIcon,
   PencilIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -308,7 +267,8 @@ const filters = ref({
 const stats = computed(() => ({
   totalReports: dashboardStore.stats.reports?.total || 0,
   pendingReports: dashboardStore.stats.reports?.pending || 0,
-  resolvedReports: (dashboardStore.stats.reports?.total || 0) - (dashboardStore.stats.reports?.pending || 0)
+  resolvedReports: (dashboardStore.stats.reports?.total || 0) - (dashboardStore.stats.reports?.pending || 0),
+  totalResources: dashboardStore.stats.content?.resources?.total || 0
 }))
 const contentList = computed(() => dashboardStore.contentList)
 const loading = computed(() => dashboardStore.loading)

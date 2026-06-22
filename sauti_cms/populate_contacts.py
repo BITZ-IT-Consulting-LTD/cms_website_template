@@ -25,10 +25,12 @@ def populate_contacts():
         {'name': 'Email', 'value': 'sautichl@mglsd.go.ug', 'type': 'email', 'icon': 'envelope', 'order': 3, 'description': 'Send us an email for inquiries'},
         {'name': 'Online Reporting', 'value': 'https://sauti.mglsd.go.ug', 'type': 'social', 'icon': 'globe', 'order': 4, 'description': 'Report cases online through our portal'},
         {'name': 'SMS', 'value': 'Hello to 116', 'type': 'other', 'icon': 'message-square', 'order': 5, 'description': 'Send SMS to 116 and follow chatbot prompts'},
-        {'name': 'Facebook', 'value': 'https://www.facebook.com/Sauti116Helpline', 'type': 'social', 'icon': 'facebook', 'order': 6, 'description': 'Follow us on Facebook'},
-        {'name': 'Twitter', 'value': 'https://x.com/sauti116', 'type': 'social', 'icon': 'twitter', 'order': 7, 'description': 'Follow us on X (Twitter)'},
-        {'name': 'TikTok', 'value': 'https://www.tiktok.com/@sauti116helplineuganda', 'type': 'social', 'icon': 'video', 'order': 8, 'description': 'Follow us on TikTok'},
-        {'name': 'Office Location', 'value': 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', 'type': 'location', 'icon': 'location-marker', 'order': 9, 'description': 'Visit our head office'},
+        {'name': 'Facebook', 'value': 'https://www.facebook.com/share/14W6eurox1o/', 'type': 'social', 'icon': 'facebook', 'order': 6, 'description': 'Follow us on Facebook'},
+        {'name': 'Twitter', 'value': 'https://x.com/sauti116?s=21', 'type': 'social', 'icon': 'twitter', 'order': 7, 'description': 'Follow us on X (Twitter)'},
+        {'name': 'TikTok', 'value': 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', 'type': 'social', 'icon': 'video', 'order': 8, 'description': 'Follow us on TikTok'},
+        {'name': 'Instagram', 'value': 'https://www.instagram.com/sauti116helpline?igsh=MTdyNjgwOG42ZjB2dA%3D%3D&utm_source=qr', 'type': 'social', 'icon': 'instagram', 'order': 9, 'description': 'Follow us on Instagram'},
+        {'name': 'YouTube', 'value': 'https://www.youtube.com/@Sauti116HelplineUganda', 'type': 'social', 'icon': 'youtube', 'order': 10, 'description': 'Follow us on YouTube'},
+        {'name': 'Office Location', 'value': 'Ministry of Gender, Labour & Social Development, Kampala, Uganda', 'type': 'location', 'icon': 'location-marker', 'order': 11, 'description': 'Visit our head office'},
     ]
 
     created_count = 0

@@ -158,9 +158,9 @@
                 <div
                   class="absolute inset-0 bg-gradient-to-t from-secondary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 </div>
-                <span v-if="related.category"
+                <span v-if="related.category_name"
                   class="absolute top-6 left-6 pill bg-secondary text-neutral-white text-[10px]">
-                  {{ related.category.name }}
+                  {{ related.category_name }}
                 </span>
               </div>
 

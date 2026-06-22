@@ -41,12 +41,12 @@
 
             <!-- The Circle (Overlay) -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="bg-white rounded-full shadow-2xl flex flex-col items-center justify-center text-center z-10 border-[8px] border-[#F9FAFB]" :style="{ width: 'clamp(12rem, 50vw, 20rem)', height: 'clamp(12rem, 50vw, 20rem)', padding: 'clamp(1rem, 5vw, 2rem)' }">
-                  <span class="inline-block px-3 py-1 bg-gray-100 rounded-full font-black tracking-widest text-[#005f99] mb-4" :style="{ fontSize: 'clamp(0.625rem, 2vw, 0.625rem)' }">{{ siteContent.getContent('about_hero_badge', 'Who we are') }}</span>
-                  <h1 class="font-black text-[#0f172a] leading-tight mb-2" :style="{ fontSize: 'clamp(1.5rem, 5vw, 2.25rem)' }">
+              <div class="bg-white rounded-full shadow-2xl flex flex-col items-center justify-center text-center z-10 border-[8px] border-[#F9FAFB]" :style="{ width: 'clamp(14rem, 56vw, 26rem)', height: 'clamp(14rem, 56vw, 26rem)', padding: 'clamp(1.5rem, 6vw, 3rem)' }">
+                  <span class="inline-block px-3 py-1 bg-gray-100 rounded-full font-black tracking-widest text-[#005f99] mb-4" :style="{ fontSize: 'clamp(0.6875rem, 2.2vw, 0.75rem)' }">{{ siteContent.getContent('about_hero_badge', 'Who we are') }}</span>
+                  <h1 class="font-black text-[#0f172a] leading-tight mb-2" :style="{ fontSize: 'clamp(2.25rem, 7.5vw, 3.5rem)' }">
                     {{ siteContent.getContent('about_hero_title', 'About\nSauti 116') }}
                   </h1>
-                  <p class="font-bold text-gray-400" :style="{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }">{{ siteContent.getContent('about_hero_tagline', 'From Uganda, For Children.') }}</p>
+                  <p class="font-bold text-gray-400" :style="{ fontSize: 'clamp(0.875rem, 2.4vw, 1rem)' }">{{ siteContent.getContent('about_hero_tagline', 'From Uganda, For Children.') }}</p>
               </div>
             </div>
         </div>
@@ -160,7 +160,7 @@
                 </div>
                 <!-- Content -->
                 <h3 class="text-sm md:text-base lg:text-lg font-black text-gray-800 mb-0.5 md:mb-1 break-words">{{ step.title }}</h3>
-                <span class="text-[10px] md:text-xs font-bold tracking-widest text-gray-400 mb-2 md:mb-3 break-words">{{ step.subtitle }}</span>
+                <span v-if="step.subtitle" class="text-[10px] md:text-xs font-bold tracking-widest text-gray-400 mb-2 md:mb-3 break-words">{{ step.subtitle }}</span>
                 <p class="text-xs md:text-sm text-gray-600 leading-relaxed break-words">{{ step.description }}</p>
 
                 <!-- Arrow pointing down (except last item) -->
@@ -262,7 +262,7 @@
                       </div>
                       <div class="leading-tight">
                          <h4 class="m-0 text-xs md:text-sm font-black text-slate-700 break-words" :style="{ color: step.color }">{{ step.title }}</h4>
-                         <p class="m-0 text-[10px] text-gray-400 font-bold mt-0.5 md:mt-1 tracking-wide break-words">{{ step.subtitle }}</p>
+                         <p v-if="step.subtitle" class="m-0 text-[10px] text-gray-400 font-bold mt-0.5 md:mt-1 tracking-wide break-words">{{ step.subtitle }}</p>
                       </div>
                    </div>
                 </div>
@@ -380,7 +380,7 @@
                   <!-- Icon -->
                   <div
                     class="w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-sm"
-                    :class="[getColorClasses(value.color || 'blue').bg, getColorClasses(value.color || 'blue').text]"
+                    :class="[getColorClasses(coreValueColorKey(value)).bg, getColorClasses(coreValueColorKey(value)).text]"
                   >
                     <component :is="getIconComponent(value.icon || 'ShieldCheck')" class="w-5 h-5 md:w-6 md:h-6" />
                   </div>
@@ -573,7 +573,7 @@ import { markRaw } from 'vue'
 const activeStep = ref(null)
 const timelineEvents = ref([])
 
-const resolutionSteps = ref([
+const defaultResolutionSteps = [
   {
     title: 'Caller',
     subtitle: 'Case reported',
@@ -602,7 +602,9 @@ const resolutionSteps = ref([
     color: '#ea580c',
     icon: markRaw(Users)
   }
-])
+]
+
+const resolutionSteps = ref(defaultResolutionSteps)
 
 const centerX = 300
 const centerY = 300
@@ -610,9 +612,9 @@ const radius = 210
 const circleSize = 140
 
 const getCoords = (index) => {
-  // Distribute 4 items starting from top (-90 degrees)
-  // 4 items = 90 degrees each
-  const angle = (index * 90 - 90) * (Math.PI / 180)
+  // Distribute items evenly around the circle, starting from top (-90 degrees)
+  const total = resolutionSteps.value.length || 1
+  const angle = (index * (360 / total) - 90) * (Math.PI / 180)
   return {
     x: centerX + radius * Math.cos(angle),
     y: centerY + radius * Math.sin(angle),
@@ -630,8 +632,9 @@ const getCircleStyle = (i, color) => {
 }
 
 const getArrowPath = (i, radiusOffset = 0) => {
+  const total = resolutionSteps.value.length || 1
   const startAngle = getCoords(i).angle
-  const stepRad = (Math.PI / 180) * 90
+  const stepRad = (Math.PI / 180) * (360 / total)
 
   // Clearance to ensure arrow starts/ends outside the step circles
   // Circle radius is 70px. Track radius 210px.
@@ -772,9 +775,45 @@ const getIconComponent = (iconName) => {
     Check,
     Shield,
     Globe,
-    Zap
+    Zap,
+    Phone,
+    Clock
   }
   return iconMap[iconName] || ShieldCheck
+}
+
+// --- Fetch Protection Approach (Path to Resolution steps) ---
+const fetchProtectionApproaches = async () => {
+  try {
+    const response = await api.get('/content/protection-approach/')
+    const data = Array.isArray(response.data)
+      ? response.data
+      : (response.data.results || [])
+
+    if (data.length > 0) {
+      data.sort((a, b) => (a.order || 0) - (b.order || 0))
+      resolutionSteps.value = data.map(item => ({
+        title: item.title,
+        subtitle: '',
+        description: item.description,
+        color: item.color,
+        icon: markRaw(getIconComponent(item.icon))
+      }))
+    } else {
+      resolutionSteps.value = defaultResolutionSteps
+    }
+  } catch (error) {
+    console.error('Failed to fetch protection approach steps:', error)
+    resolutionSteps.value = defaultResolutionSteps
+  }
+}
+
+// Real API core values store their color as a Tailwind shade token
+// (e.g. "purple-500" on color_from); mock fallback data uses a bare
+// color name (e.g. "purple"). Normalize to the bare name either way.
+const coreValueColorKey = (value) => {
+  const raw = value.color_from || value.color || 'blue'
+  return raw.split('-')[0]
 }
 
 // Helper to get color classes by color name
@@ -793,27 +832,16 @@ const getColorClasses = (color) => {
 // --- Fetching ---
 onMounted(async () => {
   // Fire ALL fetches in parallel instead of sequential waterfall
-  const [contentResult, , , , timelineResult] = await Promise.allSettled([
+  const results = await Promise.allSettled([
     siteContent.fetchContent(),
     settingsStore.fetchGlobalSettings(),
     fetchTeamMembers(),
     fetchCoreValues(),
-    api.get('/content/timeline-events/').then(res => res.data.results || res.data || []),
-    fetchWhoWeAreImages()
+    fetchProtectionApproaches(),
+    fetchWhoWeAreImages(),
+    api.get('/content/timeline-events/').then(res => res.data.results || res.data || [])
   ])
-
-  // Update resolution steps with CMS content (only after content fetch resolves)
-  if (contentResult.status === 'fulfilled') {
-    resolutionSteps.value = resolutionSteps.value.map((step, index) => {
-      const stepNum = index + 1
-      return {
-        ...step,
-        title: siteContent.getContent(`about_resolution_step_${stepNum}_title`, step.title),
-        subtitle: siteContent.getContent(`about_resolution_step_${stepNum}_subtitle`, step.subtitle),
-        description: siteContent.getContent(`about_resolution_step_${stepNum}_description`, step.description)
-      }
-    })
-  }
+  const timelineResult = results[6]
 
   // Handle timeline data with fallback
   if (timelineResult.status === 'fulfilled' && timelineResult.value?.length) {

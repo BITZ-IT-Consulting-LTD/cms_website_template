@@ -242,10 +242,10 @@
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <h2 id="downloads-heading" class="campaign-header text-3xl text-secondary mb-4">
-                {{ siteContent.getContent('resources_section_title', resourcesDownloadsTitle) }}
+                {{ siteContent.getContent('resources_downloads_title', 'Downloadable Resources') }}
               </h2>
               <p class="text-black/60 font-bold text-lg">
-                {{ siteContent.getContent('resources_section_subtitle', 'Public awareness materials and official guidance.') }}
+                {{ siteContent.getContent('resources_downloads_subtitle', 'Public awareness materials and official guidance.') }}
               </p>
             </div>
             <div class="pill bg-primary/10 text-primary flex items-center gap-2">
@@ -253,7 +253,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              {{ filteredResources.length }} {{ resourcesAvailable }}
+              {{ filteredResources.length }} {{ siteContent.getContent('resources_available', 'resources available') }}
             </div>
           </div>
 
@@ -264,7 +264,7 @@
               <div class="flex-1 relative group">
                 <Search
                   class="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-primary group-focus-within:text-secondary transition-colors" />
-                <input v-model="search" type="text" :placeholder="siteContent.getContent('resources_search_placeholder', resourcesSearchPlaceholder)"
+                <input v-model="search" type="text" :placeholder="siteContent.getContent('resources_search_placeholder', 'Search resources by title or description...')"
                   class="w-full pl-16 pr-6 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary outline-none transition-all" />
               </div>
 
@@ -274,7 +274,7 @@
                 <div class="relative flex-1">
                   <select v-model="category"
                     class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                    <option value="">{{ siteContent.getContent('resources_filter_all_categories', resourcesAllCategories) }}</option>
+                    <option value="">{{ siteContent.getContent('resources_all_categories', 'All Categories') }}</option>
                     <option v-for="cat in categories" :key="cat.slug || cat.id" :value="cat.slug || cat.id">
                       {{ cat.name }}
                     </option>
@@ -287,7 +287,7 @@
                 <div class="relative flex-1">
                   <select v-model="format"
                     class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                    <option value="">{{ siteContent.getContent('resources_filter_all_formats', 'All Formats') }}</option>
+                    <option value="">{{ siteContent.getContent('resources_all_formats', 'All Formats') }}</option>
                     <option value="audio">Audio</option>
                     <option value="document">Document</option>
                   </select>
@@ -299,7 +299,7 @@
                 <div class="relative flex-1">
                   <select v-model="language"
                     class="w-full appearance-none pl-6 pr-12 py-4 bg-white shadow-sm border-none focus:ring-0 focus:shadow-md rounded-2xl font-bold text-secondary tracking-widest text-[10px] outline-none transition-all cursor-pointer">
-                    <option value="">{{ siteContent.getContent('resources_filter_all_languages', 'All Languages') }}</option>
+                    <option value="">{{ siteContent.getContent('resources_all_languages', 'All Languages') }}</option>
                     <option value="en">English</option>
                     <option value="lg">Luganda</option>
                     <option value="sw">Swahili</option>
@@ -312,7 +312,7 @@
           </div>
 
           <!-- Resources Loading - Only show full loader on initial load with no data -->
-          <AppLoader v-if="loading && !filteredResources.length" :message="settingsStore.settings.resources_loading" />
+          <AppLoader v-if="loading && !filteredResources.length" :message="siteContent.getContent('resources_loading', 'Loading resources...')" />
 
           <!-- Enhanced Resources Grid (No Images - CMS Driven) -->
           <div v-else-if="filteredResources.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" :class="{ 'opacity-60': loading }">
@@ -380,10 +380,8 @@
               class="w-20 h-20 bg-neutral-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-primary">
               <Search class="w-10 h-10 text-primary" />
             </div>
-            <h3 class="text-2xl font-bold text-secondary mb-2">{{ settingsStore.settings.resources_no_results ||
-              'No Resources Found' }}</h3>
-            <p class="text-black/50 font-bold mb-8">{{ settingsStore.settings.resources_no_results_subtitle ||
-              'Try adjusting your search criteria.' }}</p>
+            <h3 class="text-2xl font-bold text-secondary mb-2">{{ siteContent.getContent('resources_no_results', 'No Resources Found') }}</h3>
+            <p class="text-black/50 font-bold mb-8">{{ siteContent.getContent('resources_no_results_subtitle', 'Try adjusting your search criteria.') }}</p>
             <button @click="search = ''; category = ''; language = ''; format = ''" class="btn btn-outline">{{ siteContent.getContent('resources_clear_filters', 'Clear all filters') }}</button>
           </div>
 
@@ -469,16 +467,6 @@
   const categories = ref([])
   const pagination = ref({ count: 0, next: null, previous: null })
   const expandedDescriptions = ref({})
-
-  const resourcesStatsTitle = computed(() => settingsStore.settings?.resources_stats_title || 'Live Help Performance')
-  const resourcesStatsUpdated = computed(() => settingsStore.settings?.resources_stats_updated || 'Real-time Statistics')
-  const resourcesStatsError = computed(() => settingsStore.settings?.resources_stats_error || 'Resource statistics temporary unavailable')
-  const resourcesCasesByCategory = computed(() => settingsStore.settings?.resources_cases_by_category || 'Cases by Category')
-  const resourcesReportsOverTime = computed(() => settingsStore.settings?.resources_reports_over_time || 'Reports Over Time')
-  const resourcesDownloadsTitle = computed(() => settingsStore.settings?.resources_downloads_title || 'Resources')
-  const resourcesAvailable = computed(() => settingsStore.settings?.resources_available || 'items available')
-  const resourcesSearchPlaceholder = computed(() => settingsStore.settings?.resources_search_placeholder || 'Search keywords...')
-  const resourcesAllCategories = computed(() => settingsStore.settings?.resources_all_categories || 'All Categories')
 
   // Statistics
   const statsLoading = ref(true)
