@@ -32,6 +32,10 @@
             <input type="text" id="icon" v-model="form.icon" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
           </div>
         </div>
+        <div class="mt-4">
+          <label for="description" class="block text-sm font-medium text-gray-700">Description (shown on the contact page card)</label>
+          <textarea id="description" v-model="form.description" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="e.g., Free, confidential hotline available 24/7"></textarea>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
             <label for="order" class="block text-sm font-medium text-gray-700">Order</label>
@@ -64,6 +68,7 @@
             <tr>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Icon</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
@@ -75,6 +80,7 @@
             <tr v-for="contact in contacts" :key="contact.id">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ contact.name }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.value }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" :title="contact.description">{{ contact.description || '—' }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.type }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.icon }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ contact.order }}</td>
@@ -97,8 +103,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import { api } from '@/utils/api';
 
+const toast = useToast();
 const contacts = ref([]);
 const loading = ref(true);
 const form = ref({
@@ -106,20 +114,21 @@ const form = ref({
   value: '',
   type: 'phone',
   icon: '',
+  description: '',
   order: 0,
   is_visible: true,
 });
 const editingContact = ref(null); // Stores the contact being edited
 
-const API_URL = '/api/content/contacts/'; // API endpoint for contacts
-
 const fetchContacts = async () => {
   loading.value = true;
   try {
-    const response = await axios.get(API_URL);
-    contacts.value = response.data; // Correctly access the results array
+    const response = await api.contacts.list();
+    // Endpoint has pagination disabled, so the payload is a plain array.
+    contacts.value = Array.isArray(response.data) ? response.data : (response.data?.results || []);
   } catch (error) {
     console.error('Error fetching contact items:', error);
+    toast.error('Failed to load contact items');
   } finally {
     loading.value = false;
   }
@@ -128,18 +137,17 @@ const fetchContacts = async () => {
 const saveContact = async () => {
   try {
     if (editingContact.value) {
-      // Update existing contact
-      await axios.put(`${API_URL}${editingContact.value.id}/`, form.value);
-      console.log('Contact updated successfully!');
+      await api.contacts.update(editingContact.value.id, form.value);
+      toast.success('Contact updated successfully');
     } else {
-      // Create new contact
-      await axios.post(API_URL, form.value);
-      console.log('Contact created successfully!');
+      await api.contacts.create(form.value);
+      toast.success('Contact created successfully');
     }
-    resetForm();
+    cancelEdit();
     await fetchContacts(); // Refresh the list
   } catch (error) {
     console.error('Error saving contact item:', error);
+    toast.error('Failed to save contact item');
   }
 };
 
@@ -156,11 +164,12 @@ const cancelEdit = () => {
 const deleteContact = async (id) => {
   if (confirm('Are you sure you want to delete this contact item?')) {
     try {
-      await axios.delete(`${API_URL}${id}/`);
-      console.log('Contact deleted successfully!');
+      await api.contacts.delete(id);
+      toast.success('Contact deleted successfully');
       await fetchContacts(); // Refresh the list
     } catch (error) {
       console.error('Error deleting contact item:', error);
+      toast.error('Failed to delete contact item');
     }
   }
 };
@@ -171,6 +180,7 @@ const resetForm = () => {
     value: '',
     type: 'phone',
     icon: '',
+    description: '',
     order: 0,
     is_visible: true,
   };

@@ -159,25 +159,18 @@
   const query = ref('')
   const selectedCategory = ref('')
 
-  // Computed properties for content
-  const faqsSupportTitle = computed(() => settingsStore.settings.faqs_support_title || '24/7 Support')
-  const faqsSupportSubtitle = computed(() => settingsStore.settings.faqs_support_subtitle || 'Always here to help')
-  const faqsQuickResponseTitle = computed(() => settingsStore.settings.faqs_quick_response_title || 'Quick Response')
-  const faqsQuickResponseSubtitle = computed(() => settingsStore.settings.faqs_quick_response_subtitle || 'Get help immediately')
-  const faqsQuickResponseText = computed(() => settingsStore.settings.faqs_quick_response_text || 'Our trained counselors are available 24/7 to provide immediate support and guidance.')
-  const faqsImmediateHelpTitle = computed(() => settingsStore.settings.faqs_immediate_help_title || 'Need Immediate Help?')
-  const faqsImmediateHelpSubtitle = computed(() => settingsStore.settings.faqs_immediate_help_subtitle || 'Call our toll-free helpline')
-  const faqsCallButton = computed(() => settingsStore.settings.faqs_call_button || 'Call 116')
-  const faqsPageTitle = computed(() => settingsStore.settings.faqs_page_title || 'Frequently Asked')
-  const faqsPageSubtitle = computed(() => settingsStore.settings.faqs_page_subtitle || 'Questions & Answers')
-  const faqsSearchPlaceholder = computed(() => settingsStore.settings.faqs_search_placeholder || 'Search questions')
-  const faqsAllCategoriesButton = computed(() => settingsStore.settings.faqs_all_categories_button || 'All Categories')
-  const faqsNoResults = computed(() => settingsStore.settings.faqs_no_results || 'No FAQs found')
-  const faqsNoResultsSubtitle = computed(() => settingsStore.settings.faqs_no_results_subtitle || 'Try adjusting your search or category filter')
-  const faqsPrivacyPolicy = computed(() => settingsStore.settings.faqs_privacy_policy || 'Privacy Policy')
-  const faqsTermsOfService = computed(() => settingsStore.settings.faqs_terms_of_service || 'Terms of Service')
-  const faqsContactUs = computed(() => settingsStore.settings.faqs_contact_us || 'Contact Us')
-  const faqsFooterText = computed(() => settingsStore.settings.faqs_footer_text || '© 2024 Sauti Uganda. All rights reserved. A sanctuary for every child.')
+  // Page content (editable via CMS → ContentManager, page "faqs").
+  // These keys live in SiteContent, so read them through siteContent — not the
+  // global settings store — otherwise admin edits never reach the page.
+  const faqsSupportTitle = computed(() => siteContent.getContent('faqs_support_title', '24/7 Support'))
+  const faqsSupportSubtitle = computed(() => siteContent.getContent('faqs_support_subtitle', 'Always here to help'))
+  const faqsImmediateHelpTitle = computed(() => siteContent.getContent('faqs_immediate_help_title', 'Need Immediate Help?'))
+  const faqsImmediateHelpSubtitle = computed(() => siteContent.getContent('faqs_immediate_help_subtitle', 'Call our toll-free helpline'))
+  const faqsCallButton = computed(() => siteContent.getContent('faqs_call_button', 'Call 116'))
+  const faqsSearchPlaceholder = computed(() => siteContent.getContent('faqs_search_placeholder', 'Search questions'))
+  const faqsAllCategoriesButton = computed(() => siteContent.getContent('faqs_all_categories_button', 'All Categories'))
+  const faqsNoResults = computed(() => siteContent.getContent('faqs_no_results', 'No FAQs found'))
+  const faqsNoResultsSubtitle = computed(() => siteContent.getContent('faqs_no_results_subtitle', 'Try adjusting your search or category filter'))
 
   onMounted(async () => {
     await siteContent.fetchContent()
