@@ -107,7 +107,9 @@ class ReportUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'status', 'assigned_to', 'notes',
             'reported_person_age', 'reported_person_gender', 'is_self_report',
-            'reporting_for', 'affected_persons', 'safe_to_contact'
+            'reporting_for', 'affected_persons', 'safe_to_contact',
+            'category', 'description', 'contact_name', 'contact_phone',
+            'contact_email', 'location'
         ]
 
 

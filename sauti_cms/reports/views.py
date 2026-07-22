@@ -48,8 +48,15 @@ class ReportCreateView(generics.CreateAPIView):
             user_agent=user_agent
         )
         
-        # Send notification email to admins
-        self.send_notification_email(report)
+        # Send notification email to admins off the request path so
+        # submitting a report never blocks on a slow/unavailable SMTP server.
+        # The report is already saved above; email delivery is best-effort.
+        import threading
+        threading.Thread(
+            target=self.send_notification_email,
+            args=(report,),
+            daemon=True,
+        ).start()
     
     def get_client_ip(self, request):
         """Get client IP address"""
@@ -92,7 +99,7 @@ Please log in to the CMS to review this report.
                     message,
                     settings.EMAIL_HOST_USER,
                     list(admin_emails),
-                    fail_silently=False,
+                    fail_silently=True,
                 )
                 logger.info("Notification email sent successfully.")
             else:
@@ -194,6 +201,31 @@ class ReportDetailView(generics.RetrieveUpdateAPIView):
             obj.forwarded_to_openchs_at = timezone.now()
             obj.save(update_fields=['forwarded_to_openchs_at'])
             logger.info(f"Report {obj.reference_number} forwarded to OpenCHS by {self.request.user}")
+
+            # Push the case to OpenCHS off the request path so the admin's
+            # PATCH is never blocked. Forwarding is best-effort and must never
+            # break the status update if it fails.
+            import threading
+            from .openchs import forward_case_to_openchs
+
+            def _push_to_openchs(report_obj):
+                try:
+                    remote_id = forward_case_to_openchs(report_obj)
+                    if remote_id and not report_obj.openchs_case_id:
+                        report_obj.openchs_case_id = remote_id
+                        report_obj.save(update_fields=['openchs_case_id'])
+                except Exception as e:
+                    logger.error(
+                        f"OpenCHS forwarding thread failed for "
+                        f"{report_obj.reference_number}: {e}",
+                        exc_info=True,
+                    )
+
+            threading.Thread(
+                target=_push_to_openchs,
+                args=(obj,),
+                daemon=True,
+            ).start()
 
 
 class ReportFollowUpCreateView(generics.CreateAPIView):

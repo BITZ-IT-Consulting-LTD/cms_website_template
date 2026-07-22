@@ -402,6 +402,8 @@
     const classes = {
       PENDING: 'bg-yellow-100 text-yellow-800',
       IN_PROGRESS: 'bg-purple-100 text-purple-800',
+      ESCALATED: 'bg-red-100 text-red-800',
+      FORWARDED: 'bg-indigo-100 text-indigo-800',
       RESOLVED: 'bg-green-100 text-green-800',
       CLOSED: 'bg-gray-100 text-gray-800',
       // Legacy support
@@ -436,6 +438,8 @@
     const statusMap = {
       'PENDING': 'Pending Review',
       'IN_PROGRESS': 'In Progress',
+      'ESCALATED': 'Escalated',
+      'FORWARDED': 'Forwarded to OpenCHS',
       'RESOLVED': 'Resolved',
       'CLOSED': 'Closed',
       // Legacy support
