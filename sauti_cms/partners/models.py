@@ -28,6 +28,7 @@ class Partner(models.Model):
         GOVERNMENT = 'GOVERNMENT', 'Government Agency'
         UN_AGENCY = 'UN_AGENCY', 'UN Agency'
         NGO = 'NGO', 'NGO/CSO'
+        EMBASSY = 'EMBASSY', 'Embassy / Diplomatic Mission'
         PRIVATE = 'PRIVATE', 'Private Sector'
         OTHER = 'OTHER', 'Other'
     
@@ -50,7 +51,7 @@ class Partner(models.Model):
     
     website_url = models.URLField(blank=True)
     email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=20, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
     
     order = models.PositiveIntegerField(default=0, help_text='Display order')
     is_active = models.BooleanField(default=True)
@@ -101,3 +102,20 @@ class Partner(models.Model):
                 print(f"Error deleting old logo: {e}")
 
         super().save(*args, **kwargs)
+
+
+class PartnerPhone(models.Model):
+    """
+    Additional phone numbers for a partner. The primary number is kept on
+    Partner.phone for backward compatibility; this model allows unlimited
+    extra numbers.
+    """
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, related_name='phones')
+    phone = models.CharField(max_length=50)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.phone

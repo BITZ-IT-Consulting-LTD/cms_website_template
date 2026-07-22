@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember, WhoWeAreImage, OperationsImage
+from .models import SiteContent, CoreValue, Contact, ContactValue, ProtectionApproach, TeamMember, WhoWeAreImage, OperationsImage
 
 class OwnershipAdminMixin:
     def save_model(self, request, obj, form, change):
@@ -27,6 +27,11 @@ class CoreValueAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     ordering = ('order', 'title')
 
 
+class ContactValueInline(admin.TabularInline):
+    model = ContactValue
+    extra = 1
+
+
 @admin.register(Contact)
 class ContactAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'value', 'type', 'order', 'is_visible', 'updated_at')
@@ -35,6 +40,7 @@ class ContactAdmin(OwnershipAdminMixin, admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at', 'created_by', 'last_updated_by')
     list_editable = ('order', 'is_visible')
     ordering = ('order', 'name')
+    inlines = [ContactValueInline]
 
 
 @admin.register(ProtectionApproach)

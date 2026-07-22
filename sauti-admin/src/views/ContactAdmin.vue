@@ -37,13 +37,27 @@
               </select>
             </div>
             <div>
-              <label for="icon" class="form-label">Icon Name</label>
-              <input type="text" id="icon" v-model="form.icon" class="form-input" placeholder="e.g., phone, envelope, whatsapp">
+              <label for="icon" class="form-label">Icon</label>
+              <select id="icon" v-model="form.icon" class="form-select">
+                <option value="">— Select an icon —</option>
+                <option v-for="opt in iconOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+              </select>
+              <p class="mt-1 text-xs text-gray-400">Pick the icon shown next to this channel on the public contact page.</p>
             </div>
           </div>
           <div class="mt-4">
             <label for="description" class="form-label">Description <span class="font-normal text-gray-400">(shown on the contact page card)</span></label>
             <textarea id="description" v-model="form.description" rows="2" class="form-input" placeholder="e.g., Free, confidential hotline available 24/7"></textarea>
+          </div>
+          <div class="mt-4">
+            <label class="form-label">Additional values <span class="font-normal text-gray-400">(e.g. email 2, email 3)</span></label>
+            <div v-for="(value, index) in form.extra_values" :key="index" class="flex items-center space-x-2 mt-1">
+              <input v-model="form.extra_values[index]" type="text" class="form-input flex-1" placeholder="e.g., info2@example.com">
+              <button type="button" @click="removeExtraValue(index)" class="text-red-600 hover:text-red-800 px-2" title="Remove">&times;</button>
+            </div>
+            <button type="button" @click="addExtraValue" class="text-[#009EDB] hover:text-[#0086bd] text-sm mt-2">
+              + Add another
+            </button>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
@@ -96,7 +110,10 @@
           <tbody class="bg-white">
             <tr v-for="contact in contacts" :key="contact.id" class="table-row">
               <td class="table-cell font-semibold text-gray-900">{{ contact.name }}</td>
-              <td class="table-cell text-gray-500">{{ contact.value }}</td>
+              <td class="table-cell text-gray-500">
+                {{ contact.value }}
+                <span v-if="contact.extra_values?.length" class="text-gray-400"> + {{ contact.extra_values.length }} more</span>
+              </td>
               <td class="table-cell text-gray-500 max-w-xs truncate" :title="contact.description">{{ contact.description || '—' }}</td>
               <td class="table-cell text-gray-500 capitalize">{{ contact.type }}</td>
               <td class="table-cell text-gray-500">{{ contact.icon || '—' }}</td>
@@ -134,6 +151,24 @@ import { PlusIcon, PencilIcon, TrashIcon, PhoneIcon } from '@heroicons/vue/24/ou
 const toast = useToast();
 const contacts = ref([]);
 const loading = ref(true);
+
+// Only these icon tokens are recognised by the public contact page's getIcon()
+// mapping (ContactPage.vue). Offering them as a dropdown prevents admins from
+// typing an unsupported value that would silently fall back to the phone icon.
+const iconOptions = [
+  { value: 'phone', label: 'Phone' },
+  { value: 'envelope', label: 'Email' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'message-square', label: 'SMS / Message' },
+  { value: 'send', label: 'Send / SMS' },
+  { value: 'globe', label: 'Website / Portal' },
+  { value: 'map-pin', label: 'Location' },
+  { value: 'facebook', label: 'Facebook' },
+  { value: 'twitter', label: 'X (Twitter)' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'youtube', label: 'YouTube' },
+  { value: 'video', label: 'TikTok / Video' },
+];
 const form = ref({
   name: '',
   value: '',
@@ -142,6 +177,7 @@ const form = ref({
   description: '',
   order: 0,
   is_visible: true,
+  extra_values: [],
 });
 const editingContact = ref(null); // Stores the contact being edited
 
@@ -161,11 +197,15 @@ const fetchContacts = async () => {
 
 const saveContact = async () => {
   try {
+    const payload = {
+      ...form.value,
+      extra_values: (form.value.extra_values || []).map(v => v.trim()).filter(Boolean),
+    };
     if (editingContact.value) {
-      await api.contacts.update(editingContact.value.id, form.value);
+      await api.contacts.update(editingContact.value.id, payload);
       toast.success('Contact updated successfully');
     } else {
-      await api.contacts.create(form.value);
+      await api.contacts.create(payload);
       toast.success('Contact created successfully');
     }
     cancelEdit();
@@ -178,7 +218,15 @@ const saveContact = async () => {
 
 const editContact = (contact) => {
   editingContact.value = contact;
-  form.value = { ...contact }; // Populate form with contact data
+  form.value = { ...contact, extra_values: contact.extra_values?.length ? [...contact.extra_values] : [] }; // Populate form with contact data
+};
+
+const addExtraValue = () => {
+  form.value.extra_values.push('');
+};
+
+const removeExtraValue = (index) => {
+  form.value.extra_values.splice(index, 1);
 };
 
 const cancelEdit = () => {
@@ -208,6 +256,7 @@ const resetForm = () => {
     description: '',
     order: 0,
     is_visible: true,
+    extra_values: [],
   };
 };
 

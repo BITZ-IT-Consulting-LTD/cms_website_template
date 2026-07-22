@@ -1,5 +1,6 @@
+import json
 from rest_framework import serializers
-from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember, WhoWeAreImage, OperationsImage
+from .models import SiteContent, CoreValue, Contact, ContactValue, ProtectionApproach, TeamMember, WhoWeAreImage, OperationsImage
 
 class SiteContentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,10 +17,53 @@ class CoreValueSerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
+    extra_values = serializers.SerializerMethodField()
+
     class Meta:
         model = Contact
         fields = '__all__'
         read_only_fields = ('created_at', 'updated_at')
+
+    def get_extra_values(self, obj):
+        """Return this contact's additional values as a list of strings."""
+        return [v.value for v in obj.extra_values.all() if v.value]
+
+    def _extract_extra_values(self):
+        """
+        `extra_values` is sent by the admin as plain JSON, but tolerate a
+        JSON-encoded string too for safety. Returns None if the field wasn't
+        sent at all, so existing single-`value` writes keep working untouched.
+        """
+        raw = self.initial_data.get('extra_values') if hasattr(self, 'initial_data') else None
+        if raw is None:
+            return None
+        if isinstance(raw, str):
+            try:
+                raw = json.loads(raw)
+            except (ValueError, TypeError):
+                return None
+        if not isinstance(raw, list):
+            return None
+        return [str(value).strip() for value in raw if str(value).strip()]
+
+    def _sync_extra_values(self, contact, values):
+        if values is None:
+            return
+        contact.extra_values.all().delete()
+        for index, value in enumerate(values):
+            ContactValue.objects.create(contact=contact, value=value, order=index)
+
+    def create(self, validated_data):
+        extra_values = self._extract_extra_values()
+        contact = super().create(validated_data)
+        self._sync_extra_values(contact, extra_values)
+        return contact
+
+    def update(self, instance, validated_data):
+        extra_values = self._extract_extra_values()
+        contact = super().update(instance, validated_data)
+        self._sync_extra_values(contact, extra_values)
+        return contact
 
 
 class ProtectionApproachSerializer(serializers.ModelSerializer):
