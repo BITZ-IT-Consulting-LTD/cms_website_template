@@ -19,7 +19,7 @@ const createFormData = (data) => {
     const value = data[key]
 
     // Handle file fields first
-    const fileFields = ['featured_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo', 'favicon']
+    const fileFields = ['featured_image', 'secondary_image', 'thumbnail', 'file', 'image', 'photo', 'video_file', 'logo', 'favicon']
     if (fileFields.includes(key)) {
       if (value instanceof File) {
         formData.append(key, value)
@@ -99,15 +99,46 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('admin_token')
-      localStorage.removeItem('admin_refresh_token')
-      localStorage.removeItem('admin_user')
+  async (error) => {
+    const originalRequest = error.config
+    const status = error.response?.status
+    const authStore = useAuthStore()
+
+    // Never attempt a refresh for the auth endpoints themselves, and only try
+    // once per request (guard against infinite retry loops).
+    const isAuthEndpoint =
+      originalRequest?.url?.includes('/auth/token/refresh/') ||
+      originalRequest?.url?.includes('/auth/login/')
+
+    if (status === 401 && originalRequest && !originalRequest._retry && !isAuthEndpoint && authStore.refreshToken) {
+      originalRequest._retry = true
+      try {
+        // Refresh the access token and replay the original request once.
+        const newAccess = await authStore.refreshAccessToken()
+        originalRequest.headers = originalRequest.headers || {}
+        originalRequest.headers.Authorization = `Bearer ${newAccess}`
+        return apiClient(originalRequest)
+      } catch (refreshError) {
+        // Refresh failed — fully clear auth state (store refs + storage) so the
+        // app doesn't stay "logged in with a dead token" and hang, then redirect.
+        await authStore.logout()
+        if (router.currentRoute.value.path !== '/login') {
+          router.push('/login')
+        }
+        return Promise.reject(refreshError)
+      }
+    }
+
+    if (status === 401) {
+      // No refresh token, retry already spent, or an auth endpoint failed:
+      // clear everything (this also resets the Pinia store refs, unlike the
+      // previous localStorage-only cleanup) and send the user to login.
+      await authStore.logout()
       if (router.currentRoute.value.path !== '/login') {
         router.push('/login')
       }
     }
+
     return Promise.reject(error)
   }
 )

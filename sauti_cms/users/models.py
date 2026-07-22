@@ -35,20 +35,23 @@ class User(AbstractUser):
     
     @property
     def is_admin(self):
-        return self.role == self.Role.ADMIN
-    
+        # Django superusers are always treated as application administrators,
+        # even if their role field was left at the default (VIEWER) — e.g.
+        # accounts created via `manage.py createsuperuser`.
+        return self.is_superuser or self.role == self.Role.ADMIN
+
     @property
     def is_editor(self):
-        return self.role in [self.Role.ADMIN, self.Role.EDITOR]
-    
+        return self.is_superuser or self.role in [self.Role.ADMIN, self.Role.EDITOR]
+
     @property
     def is_author(self):
-        return self.role in [self.Role.ADMIN, self.Role.EDITOR, self.Role.AUTHOR]
-    
+        return self.is_superuser or self.role in [self.Role.ADMIN, self.Role.EDITOR, self.Role.AUTHOR]
+
     def can_publish(self):
         """Check if user can publish content"""
-        return self.role in [self.Role.ADMIN, self.Role.EDITOR]
-    
+        return self.is_superuser or self.role in [self.Role.ADMIN, self.Role.EDITOR]
+
     def can_delete(self):
         """Check if user can delete content"""
-        return self.role == self.Role.ADMIN
+        return self.is_superuser or self.role == self.Role.ADMIN

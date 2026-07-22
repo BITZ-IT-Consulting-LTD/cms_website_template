@@ -75,11 +75,19 @@ export const useAuthStore = defineStore('auth', () => {
     
     try {
       const response = await api.auth.refreshToken(refreshToken.value)
-      const { access } = response.data
-      
+      const { access, refresh } = response.data
+
       token.value = access
       localStorage.setItem('admin_token', access)
-      
+
+      // The backend rotates refresh tokens (ROTATE_REFRESH_TOKENS=True) and
+      // blacklists the old one, so persist the new refresh token when present
+      // — otherwise the next refresh would use a blacklisted token and fail.
+      if (refresh) {
+        refreshToken.value = refresh
+        localStorage.setItem('admin_refresh_token', refresh)
+      }
+
       return access
     } catch (err) {
       // If refresh fails, logout user
