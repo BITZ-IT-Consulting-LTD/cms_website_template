@@ -143,6 +143,17 @@
                     {{ category.name }}
                   </option>
                 </select>
+                <div class="mt-2">
+                  <button v-if="!showNewCategory" type="button" @click="showNewCategory = true"
+                    class="text-sm text-[#009EDB] hover:underline">+ Add new category</button>
+                  <div v-else class="flex gap-2">
+                    <input v-model="newCategoryName" type="text" class="form-input flex-1"
+                      placeholder="New category name" @keyup.enter.prevent="createCategory" />
+                    <button type="button" @click="createCategory" class="btn-primary whitespace-nowrap">Add</button>
+                    <button type="button" @click="showNewCategory = false; newCategoryName = ''"
+                      class="btn-outline">Cancel</button>
+                  </div>
+                </div>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">Language</label>
@@ -355,6 +366,27 @@
     file: null
   })
 
+  // Inline "add new category" control for the create-resource form, so admins
+  // can seed a category on the spot instead of hitting an empty required dropdown.
+  const showNewCategory = ref(false)
+  const newCategoryName = ref('')
+
+  const createCategory = async () => {
+    const name = newCategoryName.value.trim()
+    if (!name) return
+    try {
+      const created = await resourcesStore.createCategory({ name })
+      toast.success('Category created')
+      // Auto-select the newly created category.
+      if (created && created.id) createForm.value.category = created.id
+      newCategoryName.value = ''
+      showNewCategory.value = false
+    } catch (error) {
+      console.error('Failed to create category:', error)
+      toast.error(error.response?.data?.name?.[0] || 'Failed to create category')
+    }
+  }
+
   const filteredResources = computed(() => {
     return resources.value.filter(resource => {
       const matchesSearch = !searchQuery.value ||
@@ -467,14 +499,23 @@
     toast.success('Downloading file...')
   }
 
-  const editResource = (resource) => {
+  const editResource = async (resource) => {
+    // Pull the full record from the DB first — the list serializer returns
+    // category_name (a string), not the category object with an id, so editing
+    // off the list row would drop the selected category.
+    let full = resource
+    try {
+      full = await resourcesStore.fetchResource(resource.slug)
+    } catch (e) {
+      console.error('Failed to load full resource for edit:', e)
+    }
     editForm.value = {
-      id: resource.id,
-      slug: resource.slug,
-      title: resource.title,
-      description: resource.description,
-      category: resource.category?.id || '',
-      language: resource.language,
+      id: full.id,
+      slug: full.slug,
+      title: full.title,
+      description: full.description,
+      category: full.category?.id || full.category || '',
+      language: full.language,
       file: null
     }
     showEditModal.value = true

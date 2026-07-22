@@ -32,29 +32,92 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Report Management</h2>
 
         <form @submit.prevent="saveReport" class="space-y-4">
-          <!-- Status -->
-          <div>
-            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-              Status
-            </label>
-            <select id="status" v-model="form.status"
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              required>
-              <option value="PENDING">Pending Review</option>
-              <option value="IN_PROGRESS">In Progress</option>
-              <option value="RESOLVED">Resolved</option>
-              <option value="CLOSED">Closed</option>
-            </select>
+          <!-- Status & Category -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                Status
+              </label>
+              <select id="status" v-model="form.status"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                required>
+                <option value="PENDING">Pending Review</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="ESCALATED">Escalated</option>
+                <option value="FORWARDED">Forwarded to OpenCHS</option>
+                <option value="RESOLVED">Resolved</option>
+                <option value="CLOSED">Closed</option>
+              </select>
+            </div>
+            <div>
+              <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                Category
+              </label>
+              <select id="category" v-model="form.category"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                required>
+                <option value="CHILD_PROTECTION">Child Protection</option>
+                <option value="GBV">Gender-Based Violence</option>
+                <option value="MIGRANT">Migrant Worker</option>
+                <option value="PSEA">PSEA</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Assigned To -->
+          <!-- Case Description -->
           <div>
-            <label for="assigned_to" class="block text-sm font-medium text-gray-700 mb-2">
-              Assign To
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+              Description
             </label>
-            <input id="assigned_to" v-model="form.assigned_to" type="text" placeholder="Enter staff member ID"
+            <textarea id="description" v-model="form.description" rows="5"
+              placeholder="Incident description"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"></textarea>
+          </div>
+
+          <!-- Location -->
+          <div>
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+              Location
+            </label>
+            <input id="location" v-model="form.location" type="text"
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <p class="mt-1 text-sm text-gray-500">Enter the user ID of the staff member to assign this report</p>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="contact_name" class="block text-sm font-medium text-gray-700 mb-2">
+                Contact Name
+              </label>
+              <input id="contact_name" v-model="form.contact_name" type="text"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            </div>
+            <div>
+              <label for="contact_phone" class="block text-sm font-medium text-gray-700 mb-2">
+                Contact Phone
+              </label>
+              <input id="contact_phone" v-model="form.contact_phone" type="text"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            </div>
+            <div>
+              <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-2">
+                Contact Email
+              </label>
+              <input id="contact_email" v-model="form.contact_email" type="email"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            </div>
+          </div>
+
+          <!-- Safe to Contact -->
+          <div>
+            <label for="safe_to_contact" class="block text-sm font-medium text-gray-700 mb-2">
+              Safe to Contact
+            </label>
+            <select id="safe_to_contact" v-model="form.safe_to_contact"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+              <option :value="true">Yes</option>
+              <option :value="false">No</option>
+            </select>
           </div>
 
           <!-- Demographic Data -->
@@ -123,10 +186,10 @@
       <!-- Read-Only Report Information -->
       <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Report Information (Read-Only)</h2>
-        <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <dl class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <dt class="text-sm font-medium text-gray-600">Category</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ formatCategory(report.category) }}</dd>
+            <dt class="text-sm font-medium text-gray-600">Reference Number</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ report.reference_number }}</dd>
           </div>
           <div>
             <dt class="text-sm font-medium text-gray-600">Submitted</dt>
@@ -136,18 +199,7 @@
             <dt class="text-sm font-medium text-gray-600">Anonymous</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ report.is_anonymous ? 'Yes' : 'No' }}</dd>
           </div>
-          <div v-if="report.location">
-            <dt class="text-sm font-medium text-gray-600">Location</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ report.location }}</dd>
-          </div>
         </dl>
-
-        <div class="mt-4">
-          <dt class="text-sm font-medium text-gray-600">Description</dt>
-          <dd class="mt-2 text-sm text-gray-900 whitespace-pre-wrap bg-white p-4 rounded border border-gray-200">
-            {{ report.description }}
-          </dd>
-        </div>
       </div>
     </div>
 
@@ -189,14 +241,19 @@
 
   const form = reactive({
     status: '',
-    assigned_to: null,
     notes: '',
     is_self_report: null,
     reported_person_age: null,
     reported_person_gender: '',
     reporting_for: '',
     affected_persons: [],
-    safe_to_contact: true
+    safe_to_contact: true,
+    category: '',
+    description: '',
+    contact_name: '',
+    contact_phone: '',
+    contact_email: '',
+    location: ''
   })
 
   async function fetchReport() {
@@ -209,7 +266,6 @@
 
       // Populate form with current values
       form.status = report.value.status
-      form.assigned_to = report.value.assigned_to
       form.notes = report.value.notes || ''
       form.is_self_report = report.value.is_self_report
       form.reported_person_age = report.value.reported_person_age
@@ -219,6 +275,14 @@
       form.reporting_for = report.value.reporting_for
       form.affected_persons = report.value.affected_persons || []
       form.safe_to_contact = report.value.safe_to_contact
+
+      // Full case fields
+      form.category = report.value.category || ''
+      form.description = report.value.description || ''
+      form.contact_name = report.value.contact_name || ''
+      form.contact_phone = report.value.contact_phone || ''
+      form.contact_email = report.value.contact_email || ''
+      form.location = report.value.location || ''
 
       // Map from new structure if legacy fields are empty
       if (form.affected_persons.length > 0) {
@@ -263,13 +327,19 @@
 
       await api.reports.update(route.params.id, {
         status: form.status,
-        assigned_to: form.assigned_to || null,
         notes: form.notes,
         is_self_report: form.is_self_report,
         reported_person_age: form.reported_person_age,
         reported_person_gender: form.reported_person_gender,
         affected_persons: persons,
-        reporting_for: r_for
+        reporting_for: r_for,
+        category: form.category,
+        description: form.description,
+        contact_name: form.contact_name,
+        contact_phone: form.contact_phone,
+        contact_email: form.contact_email,
+        location: form.location,
+        safe_to_contact: form.safe_to_contact
       })
 
       showSuccess.value = true
@@ -285,16 +355,6 @@
     } finally {
       saving.value = false
     }
-  }
-
-  function formatCategory(category) {
-    const map = {
-      'CHILD_PROTECTION': 'Child Protection',
-      'GBV': 'Gender-Based Violence',
-      'MIGRANT': 'Migrant Worker',
-      'PSEA': 'PSEA'
-    }
-    return map[category] || category
   }
 
   function formatDateTime(dateStr) {

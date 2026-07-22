@@ -61,7 +61,7 @@
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
               <div class="w-full h-full bg-blue-50 flex items-center justify-center p-4">
-                 <p class="text-center text-[#005f99] font-black text-sm">{{ siteContent.getContent('about_hero_right_column', 'Every Child Matters') }}</p>
+                 <p class="text-center text-[#005f99] font-black text-sm">{{ siteContent.getContent('about_hero_right_column', 'Every Voice Matters') }}</p>
               </div>
            </div>
         </div>
@@ -178,95 +178,36 @@
              </div>
           </div>
 
-          <!-- Desktop Layout: Circular Infographic -->
-          <div class="hidden md:flex justify-center items-center h-[700px] bg-transparent rounded-[3rem] shadow-none border-none">
-             <div class="relative w-[600px] h-[600px]">
-                
-                <!-- Central Node -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-10 text-gray-500 flex flex-col items-center justify-center p-8 bg-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-gray-100 w-48 h-48 transition-all duration-300">
-                   <transition name="fade" mode="out-in">
-                      <div v-if="activeStep !== null" :key="activeStep" class="text-sm leading-tight px-2">
-                         <strong class="text-lg block mb-2" :style="{ color: resolutionSteps[activeStep].color }">
-                            {{ resolutionSteps[activeStep].title }}
-                         </strong>
-                         <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                            {{ resolutionSteps[activeStep].description }}
-                         </p>
-                      </div>
-                      <div v-else key="default" class="text-sm leading-tight">
-                         <div class="mb-2 text-[#005f99] flex justify-center">
-                            <svg viewBox="0 0 64 64" width="50" fill="currentColor">
-                               <path d="M32 30a8 8 0 1 0-8-8 8 8 0 0 0 8 8zm16 4h-4.2a16 16 0 0 1-23.6 0H16a16 16 0 0 0-16 16v4h64v-4a16 16 0 0 0-16-16z"/>
-                            </svg>
-                         </div>
-                         <strong class="text-lg block text-slate-800 mb-1">{{ siteContent.getContent('about_resolution_central_goal', 'Safe Child') }}</strong>
-                         <span class="text-xs tracking-widest text-[#005f99]">{{ siteContent.getContent('about_resolution_central_text', 'Our Goal') }}</span>
-                      </div>
-                   </transition>
-                </div>
-
-                <!-- Arrows Layer -->
-                <svg class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none" viewBox="0 0 600 600">
-                   <defs>
-                      <!-- Forward arrowhead -->
-                      <marker id="arrowhead-forward" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                         <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e1" />
-                      </marker>
-                      <!-- Reverse arrowhead - same color as forward for consistency -->
-                      <marker id="arrowhead-reverse" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto">
-                         <polygon points="10 0, 0 3.5, 10 7" fill="#cbd5e1" />
-                      </marker>
-                   </defs>
-
-                   <!-- Forward arrows (outer arc) -->
-                   <path
-                      v-for="(step, i) in resolutionSteps"
-                      :key="'arrow-forward-'+i"
-                      :d="getArrowPath(i, 0)"
-                      :stroke="step.color"
-                      stroke-width="3"
-                      fill="none"
-                      marker-end="url(#arrowhead-forward)"
-                      stroke-linecap="round"
-                      stroke-dasharray="8 4"
-                      class="opacity-60"
-                   />
-
-                   <!-- Return arrows (inner arc) - positioned slightly offset -->
-                   <path
-                      v-for="(step, i) in resolutionSteps"
-                      :key="'arrow-return-'+i"
-                      :d="getArrowPath(i, -15)"
-                      :stroke="step.color"
-                      stroke-width="3"
-                      fill="none"
-                      marker-start="url(#arrowhead-reverse)"
-                      stroke-linecap="round"
-                      stroke-dasharray="8 4"
-                      class="opacity-60"
-                   />
-                </svg>
-
-                <!-- Steps -->
-                <div 
-                   v-for="(step, i) in resolutionSteps" 
-                   :key="'step-'+i"
-                   @mouseenter="activeStep = i"
-                   @mouseleave="activeStep = null"
-                   class="absolute -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border-[1.5px] shadow-[0_10px_20px_rgba(0,0,0,0.05)] flex items-center justify-center z-10 hover:scale-110 transition-transform duration-300 w-[140px] h-[140px] cursor-pointer"
-                   :style="getCircleStyle(i, step.color)"
-                >
-                   <div class="text-center p-2">
-                      <div class="mb-1 md:mb-2 flex justify-center" :style="{ color: step.color }">
-                         <component :is="step.icon" class="w-6 h-6 md:w-8 md:h-8" />
-                      </div>
-                      <div class="leading-tight">
-                         <h4 class="m-0 text-xs md:text-sm font-black text-slate-700 break-words" :style="{ color: step.color }">{{ step.title }}</h4>
-                         <p v-if="step.subtitle" class="m-0 text-[10px] text-gray-400 font-bold mt-0.5 md:mt-1 tracking-wide break-words">{{ step.subtitle }}</p>
-                      </div>
+          <!-- Desktop Layout: Horizontal process flow -->
+          <div class="hidden md:flex items-stretch justify-center gap-2 lg:gap-3 max-w-6xl mx-auto">
+             <template v-for="(step, i) in resolutionSteps" :key="'d-step-'+i">
+                <div class="flex-1 min-w-0 bg-white rounded-3xl shadow-lg border border-gray-100 p-5 lg:p-7 flex flex-col items-center text-center hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+                   :style="{ borderTop: '4px solid ' + step.color }">
+                   <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white mb-4 shadow-md" :style="{ backgroundColor: step.color }">
+                      <component :is="step.icon" class="w-7 h-7" />
                    </div>
+                   <span class="text-[10px] font-black tracking-[0.2em] text-gray-400 mb-1">STEP {{ i + 1 }}</span>
+                   <h3 class="text-base lg:text-lg font-black text-gray-800 mb-1 break-words" :style="{ color: step.color }">{{ step.title }}</h3>
+                   <span v-if="step.subtitle" class="text-[10px] font-bold tracking-widest text-gray-400 mb-2 break-words">{{ step.subtitle }}</span>
+                   <p class="text-xs text-gray-600 leading-relaxed break-words">{{ step.description }}</p>
                 </div>
+                <!-- Connector -->
+                <div class="flex items-center text-gray-300 shrink-0" aria-hidden="true">
+                   <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                   </svg>
+                </div>
+             </template>
 
+             <!-- Final Goal Card -->
+             <div class="flex-1 min-w-0 bg-green-50 rounded-3xl border-2 border-green-100 p-5 lg:p-7 flex flex-col items-center justify-center text-center">
+                <div class="w-14 h-14 rounded-2xl bg-[#00ac46] flex items-center justify-center text-white mb-4 shadow-md">
+                   <svg viewBox="0 0 64 64" width="30" fill="currentColor" aria-hidden="true">
+                      <path d="M32 30a8 8 0 1 0-8-8 8 8 0 0 0 8 8zm16 4h-4.2a16 16 0 0 1-23.6 0H16a16 16 0 0 0-16 16v4h64v-4a16 16 0 0 0-16-16z"/>
+                   </svg>
+                </div>
+                <strong class="text-lg font-black text-[#00ac46] mb-1 break-words">{{ siteContent.getContent('about_resolution_central_goal', 'Safe Child') }}</strong>
+                <span class="text-[10px] font-black tracking-widest text-[#005f99]">{{ siteContent.getContent('about_resolution_central_text', 'Our Goal') }}</span>
              </div>
           </div>
        </div>

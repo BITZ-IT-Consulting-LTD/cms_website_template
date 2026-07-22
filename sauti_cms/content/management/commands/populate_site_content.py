@@ -194,7 +194,7 @@ class Command(BaseCommand):
 
             # About Page - Additional Content
             # Hero Section Right Column
-            'about_hero_right_column': { 'key': 'about_hero_right_column', 'value': 'Every Child Matters', 'label': 'About Hero Right Column', 'page': 'about', 'type': 'heading' },
+            'about_hero_right_column': { 'key': 'about_hero_right_column', 'value': 'Every Voice Matters', 'label': 'About Hero Right Column', 'page': 'about', 'type': 'heading' },
 
             # Statistics Cards (Reach Across the Nation)
             'about_stats_title': { 'key': 'about_stats_title', 'value': 'Reach Across the Nation', 'label': 'About Statistics Title', 'page': 'about', 'type': 'heading' },
@@ -462,6 +462,17 @@ class Command(BaseCommand):
             'footer_social_youtube_label': { 'key': 'footer_social_youtube_label', 'value': 'YouTube', 'label': 'Footer YouTube Label', 'page': 'footer', 'type': 'text', 'description': 'YouTube display name' },
             'footer_social_tiktok_url': { 'key': 'footer_social_tiktok_url', 'value': 'https://www.tiktok.com/@sauti116helplineuganda?_r=1&_t=ZS-952NtlMMSIs', 'label': 'Footer TikTok URL', 'page': 'footer', 'type': 'text', 'description': 'TikTok social media URL' },
             'footer_social_tiktok_label': { 'key': 'footer_social_tiktok_label', 'value': 'TikTok', 'label': 'Footer TikTok Label', 'page': 'footer', 'type': 'text', 'description': 'TikTok display name' },
+
+            # Footer contact block (previously unseeded — the footer fell back to
+            # hardcoded values, so admin edits could never reach it). The email
+            # keys contain "_email_" so ContentManager surfaces them under its
+            # footer "Contact Information" section.
+            'footer_hotline_label': { 'key': 'footer_hotline_label', 'value': 'Toll Free', 'label': 'Footer Hotline Label', 'page': 'footer', 'type': 'text', 'description': 'Label above the footer hotline number' },
+            'footer_hotline_number': { 'key': 'footer_hotline_number', 'value': 'Call 116', 'label': 'Footer Hotline Number', 'page': 'footer', 'type': 'text', 'description': 'Footer hotline number text' },
+            'footer_email_label': { 'key': 'footer_email_label', 'value': 'Email Us', 'label': 'Footer Email Label', 'page': 'footer', 'type': 'text', 'description': 'Label above the footer email address' },
+            'footer_email_address': { 'key': 'footer_email_address', 'value': 'info@sauti116.ug', 'label': 'Footer Email Address', 'page': 'footer', 'type': 'text', 'description': 'Contact email shown in the footer (edit here to update it site-wide)' },
+            'footer_copyright': { 'key': 'footer_copyright', 'value': '© 2026 Sauti 116. Ministry of Gender, Labour and Social Development.', 'label': 'Footer Copyright', 'page': 'footer', 'type': 'text', 'description': 'Footer copyright line' },
+            'footer_country_label': { 'key': 'footer_country_label', 'value': 'Uganda', 'label': 'Footer Country Label', 'page': 'footer', 'type': 'text', 'description': 'Country label in the footer bottom bar' },
 
             # Contact Page Form Text
             'contact_page_title': { 'key': 'contact_page_title', 'value': 'Get in', 'label': 'Contact Page Title', 'page': 'contact', 'type': 'heading', 'description': 'Contact page title prefix' },

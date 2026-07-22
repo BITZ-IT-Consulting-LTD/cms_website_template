@@ -93,15 +93,28 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def perform_update(self, serializer):
-        # Only admins can update user roles
-        if 'role' in serializer.validated_data and not self.request.user.is_admin:
-            from rest_framework.exceptions import PermissionDenied
+        from rest_framework.exceptions import PermissionDenied
+        request_user = self.request.user
+        instance = self.get_object()
+        # Protect the super-admin: only another superuser may modify a
+        # superuser account (role, active flag, etc.).
+        if instance.is_superuser and not request_user.is_superuser:
+            raise PermissionDenied("Only a super administrator can modify a super-admin account.")
+        # Only admins can change roles.
+        if 'role' in serializer.validated_data and not request_user.is_admin:
             raise PermissionDenied("Only administrators can change user roles.")
         serializer.save()
-    
+
     def perform_destroy(self, instance):
+        from rest_framework.exceptions import PermissionDenied
+        request_user = self.request.user
         # Only admins can delete users
-        if not self.request.user.is_admin:
-            from rest_framework.exceptions import PermissionDenied
+        if not request_user.is_admin:
             raise PermissionDenied("Only administrators can delete users.")
+        # A super-admin account cannot be deleted by a non-superuser.
+        if instance.is_superuser and not request_user.is_superuser:
+            raise PermissionDenied("Super-admin accounts cannot be deleted.")
+        # Prevent deleting your own account.
+        if instance.pk == request_user.pk:
+            raise PermissionDenied("You cannot delete your own account.")
         instance.delete()

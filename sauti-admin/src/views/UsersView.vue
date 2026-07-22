@@ -139,9 +139,14 @@
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getRoleClass(user.role)" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full">
-                  {{ user.role }}
-                </span>
+                <div class="flex items-center gap-1.5">
+                  <span :class="getRoleClass(user.role)" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full">
+                    {{ user.role }}
+                  </span>
+                  <span v-if="user.is_superuser" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800" title="Super administrator (protected)">
+                    Super Admin
+                  </span>
+                </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.email }}</td>
               <td class="px-6 py-4 whitespace-nowrap">

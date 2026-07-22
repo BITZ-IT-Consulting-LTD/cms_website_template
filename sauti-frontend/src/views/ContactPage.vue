@@ -35,7 +35,8 @@
           <div v-else class="space-y-4 md:space-y-6">
             <template v-for="contact in nonEmergencyContacts" :key="contact.id">
                <a :href="getLink(contact)"
-                  :target="contact.type === 'location' ? '_blank' : '_self'"
+                  :target="isExternalHttpLink(getLink(contact)) ? '_blank' : '_self'"
+                  :rel="isExternalHttpLink(getLink(contact)) ? 'noopener noreferrer' : null"
                   class="block bg-neutral-offwhite rounded-xl lg:rounded-2xl p-5 md:p-6 lg:p-8 transition-colors hover:bg-neutral-offwhite/80 group">
                   <div class="flex items-start gap-3 md:gap-4 lg:gap-6">
                     <div class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-white text-primary flex items-center justify-center shrink-0">
@@ -53,6 +54,16 @@
                     </div>
                   </div>
                </a>
+               <!-- Additional values for this channel (e.g. a second email/phone) -->
+               <div v-if="contact.extra_values?.length" class="pl-14 md:pl-16 lg:pl-20 -mt-2 mb-2 space-y-1">
+                 <a v-for="(extraValue, index) in contact.extra_values" :key="index"
+                    :href="getLinkForValue(contact, extraValue)"
+                    :target="isExternalHttpLink(getLinkForValue(contact, extraValue)) ? '_blank' : '_self'"
+                    :rel="isExternalHttpLink(getLinkForValue(contact, extraValue)) ? 'noopener noreferrer' : null"
+                    class="block text-[10px] md:text-xs lg:text-sm font-semibold text-black/60 hover:text-primary transition-colors">
+                   {{ extraValue }}
+                 </a>
+               </div>
             </template>
             
             <!-- Default Fallback if no contacts -->
@@ -193,16 +204,21 @@
     return Phone
   }
 
-  const getLink = (contact) => {
-    if (contact.type === 'email') return `mailto:${contact.value}`
-    if (contact.type === 'location') return `https://maps.google.com/?q=${encodeURIComponent(contact.value)}`
+  const getLinkForValue = (contact, value) => {
+    if (contact.type === 'email') return `mailto:${value}`
+    if (contact.type === 'location') return `https://maps.google.com/?q=${encodeURIComponent(value)}`
     if (contact.type === 'phone') {
-      if (contact.icon === 'whatsapp') return `https://wa.me/${contact.value.replace(/\s/g, '')}`
-      return `tel:${contact.value}`
+      if (contact.icon === 'whatsapp') return `https://wa.me/${value.replace(/\s/g, '')}`
+      return `tel:${value}`
     }
-    return contact.value
+    return value
   }
-  
+
+  const getLink = (contact) => getLinkForValue(contact, contact.value)
+
+  // Only http(s) links are external — mailto:/tel: links must keep opening in the same tab.
+  const isExternalHttpLink = (link) => typeof link === 'string' && /^https?:\/\//i.test(link)
+
   const getActionLabel = (contact) => {
      if (contact.type === 'email') return 'Email Us'
      if (contact.type === 'location') return 'Get Directions'
@@ -278,54 +294,5 @@
 
 <style scoped>
 /* Hero Banner */
-.hero-banner {
-  position: relative;
-  background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
-  min-height: clamp(200px, 25vh, 300px);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  margin-top: 0;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
-  opacity: 0.5;
-}
-
-.hero-content-wrapper {
-  position: relative;
-  z-index: 2;
-  padding: clamp(1.25rem, 3vh, 2.5rem) 0;
-}
-
-.hero-text {
-  text-align: center;
-  margin-bottom: clamp(0.75rem, 2vw, 1rem);
-}
-
-.hero-title {
-  font-size: clamp(1rem, 2vw, 1.75rem);
-  font-weight: 900;
-  color: white;
-  margin-bottom: 0.375rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.text-accent-yellow {
-  color: rgb(var(--color-accent-yellow));
-}
-
-.hero-subtitle {
-  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 400;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.4;
-  padding: 0 1rem;
-}
+/* Hero banner styles are global now — see .hero-banner et al. in main.css */
 </style>

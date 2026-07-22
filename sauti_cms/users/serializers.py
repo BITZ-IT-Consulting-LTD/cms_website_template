@@ -11,9 +11,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
             'role', 'phone_number', 'organization', 'is_active',
-            'created_at', 'updated_at'
+            'is_superuser', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        # is_superuser is exposed read-only so the admin UI can badge the
+        # protected super-admin account; it can't be granted via the API.
+        read_only_fields = ['id', 'is_superuser', 'created_at', 'updated_at']
 
 
 class UserCreateSerializer(serializers.ModelSerializer):

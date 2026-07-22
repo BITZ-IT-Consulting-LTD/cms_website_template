@@ -59,14 +59,15 @@
         </a>
 
         <a
-          v-if="partner.phone"
-          :href="'tel:' + partner.phone"
+          v-for="(phoneNumber, index) in phoneNumbers"
+          :key="index"
+          :href="'tel:' + phoneNumber"
           class="flex items-center text-black/70 hover:text-secondary transition-colors"
         >
           <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
           </svg>
-          {{ partner.phone }}
+          {{ phoneNumber }}
         </a>
       </div>
     </div>
@@ -74,15 +75,25 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+
 defineOptions({
   name: 'PartnerCard'
 })
 
-defineProps({
+const props = defineProps({
   partner: {
     type: Object,
     required: true
   }
+})
+
+// Prefer the unlimited phone_numbers list; fall back to the single legacy phone field.
+const phoneNumbers = computed(() => {
+  if (Array.isArray(props.partner.phone_numbers) && props.partner.phone_numbers.length) {
+    return props.partner.phone_numbers
+  }
+  return props.partner.phone ? [props.partner.phone] : []
 })
 
 const handleImageError = (event) => {

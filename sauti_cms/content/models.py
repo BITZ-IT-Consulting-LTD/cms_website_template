@@ -183,6 +183,23 @@ class Contact(models.Model):
         verbose_name_plural = 'Contact Items'
 
 
+class ContactValue(models.Model):
+    """
+    Additional values for a Contact item (e.g. a second/third email or
+    phone number for the same channel). Contact.value remains the primary
+    value for backward compatibility.
+    """
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='extra_values')
+    value = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.value
+
+
 class ProtectionApproach(models.Model):
     """Sections detailing the organization's protection approach."""
     title = models.CharField(max_length=200, help_text="Title of the approach section or step")

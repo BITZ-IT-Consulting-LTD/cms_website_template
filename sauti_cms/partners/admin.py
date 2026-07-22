@@ -1,6 +1,11 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Partner
+from .models import Partner, PartnerPhone
+
+
+class PartnerPhoneInline(admin.TabularInline):
+    model = PartnerPhone
+    extra = 1
 
 
 @admin.register(Partner)
@@ -11,7 +16,8 @@ class PartnerAdmin(SimpleHistoryAdmin):
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['order', 'name']
     list_editable = ['order', 'is_featured', 'is_active']
-    
+    inlines = [PartnerPhoneInline]
+
     fieldsets = (
         ('Basic Info', {
             'fields': ('name', 'slug', 'description', 'partner_type', 'logo')

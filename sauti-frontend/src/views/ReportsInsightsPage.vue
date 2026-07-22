@@ -19,41 +19,41 @@
         <section aria-label="Quick Statistics" class="mb-16">
           <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             <!-- Total Calls -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total Calls</p>
-              <div class="text-3xl font-black text-primary">
+              <div class="text-4xl md:text-5xl font-black text-primary">
                  {{ formatNumber(stats.total_calls) }}
               </div>
             </div>
 
             <!-- Total Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total Cases</p>
-              <div class="text-3xl font-black text-secondary">
+              <div class="text-4xl md:text-5xl font-black text-secondary">
                  {{ formatNumber(stats.total_cases) }}
               </div>
             </div>
 
             <!-- Total GBV Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total GBV Cases</p>
-               <div class="text-3xl font-black text-hotline">
+               <div class="text-4xl md:text-5xl font-black text-hotline">
                   {{ formatNumber(stats.total_gbv_cases) }}
                </div>
             </div>
 
             <!-- Total SEA Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total SEA Cases</p>
-               <div class="text-3xl font-black text-emergency">
+               <div class="text-4xl md:text-5xl font-black text-emergency">
                   {{ formatNumber(stats.total_sea_cases) }}
                </div>
             </div>
 
              <!-- Total Migrant Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total Migrant Cases</p>
-               <div class="text-3xl font-black text-secondary-light">
+               <div class="text-4xl md:text-5xl font-black text-secondary-light">
                   {{ formatNumber(stats.total_migrant_workers) }}
                </div>
             </div>
@@ -226,10 +226,12 @@ const filterChartData = (chartData) => {
   }
 }
 
-const filteredCategoryBySex = computed(() => formatChartData(filterChartData(charts.value.categoryBySex)))
-const filteredCategoryByRegion = computed(() => formatChartData(filterChartData(charts.value.categoryByRegion)))
-const filteredCategoryByAgeGroup = computed(() => formatChartData(filterChartData(charts.value.categoryByAgeGroup)))
-const filteredCategoryByDistrict = computed(() => formatChartData(filterChartData(charts.value.categoryByDistrict)))
+// Pass an explicit, human-readable series name per chart so the legend/key is
+// meaningful even when the external API omits per-dataset `label` values.
+const filteredCategoryBySex = computed(() => formatChartData(filterChartData(charts.value.categoryBySex), 'Cases by Client Sex'))
+const filteredCategoryByRegion = computed(() => formatChartData(filterChartData(charts.value.categoryByRegion), 'Cases by Client Region'))
+const filteredCategoryByAgeGroup = computed(() => formatChartData(filterChartData(charts.value.categoryByAgeGroup), 'Cases by Client Age Group'))
+const filteredCategoryByDistrict = computed(() => formatChartData(filterChartData(charts.value.categoryByDistrict), 'Cases by Client District'))
 
 // --- Helper Functions ---
 const formatNumber = (num) => {
@@ -273,15 +275,23 @@ const fetchDashboardData = async () => {
 }
 
 // Format chart data from API response to Chart.js format (adds colors)
-const formatChartData = (apiData) => {
+// NOTE: The definitive per-series names should ideally come from the external
+// `/dashboard/helpline-charts/` API `label` field (owned by a separate repo —
+// likely the flock-stages app). `seriesName` here is only a frontend fallback
+// so the legend/key is never the meaningless generic 'Data'.
+const formatChartData = (apiData, seriesName = 'Series') => {
   if (!apiData || !apiData.labels || !apiData.datasets) {
     return { labels: [], datasets: [] }
   }
 
+  const multiSeries = apiData.datasets.length > 1
+
   return {
     labels: apiData.labels,
     datasets: apiData.datasets.map((ds, index) => ({
-      label: ds.label || 'Data',
+      // Prefer the API-provided label; fall back to the chart's own title
+      // (numbered when a chart has more than one series) instead of 'Data'.
+      label: ds.label || (multiSeries ? `${seriesName} (${index + 1})` : seriesName),
       data: ds.data || [],
       backgroundColor: getBrandColor(index),
       borderRadius: 4
@@ -326,7 +336,7 @@ const BarChart = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } }
+        legend: { position: 'bottom', display: true, labels: { usePointStyle: true, boxWidth: 8 } }
       },
       scales: {
         x: { stacked: true, grid: { display: false } },

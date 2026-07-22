@@ -79,7 +79,7 @@
                 <Phone class="w-4 h-4 md:w-5 md:h-5" />
                 <span>Call 116 Free</span>
               </a>
-              <a href="https://wa.me/256743889999" class="flex items-center justify-center gap-2 md:gap-3 w-full py-3 md:py-4 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 font-bold rounded-xl md:rounded-2xl transition-all text-sm md:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+              <a href="https://wa.me/256743889999" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 md:gap-3 w-full py-3 md:py-4 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 font-bold rounded-xl md:rounded-2xl transition-all text-sm md:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
                 <MessageCircle class="w-4 h-4 md:w-5 md:h-5" />
                 <span>WhatsApp Chat</span>
               </a>

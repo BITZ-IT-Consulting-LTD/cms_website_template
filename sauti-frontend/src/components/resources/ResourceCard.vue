@@ -80,7 +80,7 @@
       </div>
 
       <!-- Download Button -->
-      <a :href="resource.file" :download="resource.title" target="_blank"
+      <a :href="resource.file" :download="resource.title" target="_blank" rel="noopener noreferrer"
         class="btn-primary w-full inline-flex items-center justify-center space-x-2 group/btn" @click="trackDownload"
         :aria-label="`Download ${resource.title}`">
         <svg class="w-5 h-5 group-hover/btn:animate-bounce" fill="currentColor" viewBox="0 0 20 20">

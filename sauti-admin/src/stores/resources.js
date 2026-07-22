@@ -153,7 +153,13 @@ export const useResourcesStore = defineStore('resources', () => {
       return []
     }
   }
-  
+
+  async function createCategory(data) {
+    const response = await api.resources.categories.create(data)
+    await fetchCategories()
+    return response.data
+  }
+
   return {
     // State
     resources,
@@ -162,7 +168,7 @@ export const useResourcesStore = defineStore('resources', () => {
     loading,
     error,
     pagination,
-    
+
     // Actions
     fetchResources,
     fetchResource,
@@ -170,5 +176,6 @@ export const useResourcesStore = defineStore('resources', () => {
     updateResource,
     deleteResource,
     fetchCategories,
+    createCategory,
   }
 })

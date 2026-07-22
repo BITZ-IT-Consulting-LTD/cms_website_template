@@ -65,31 +65,34 @@ class PostDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     featured_image = serializers.SerializerMethodField()
+    secondary_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = [
             'id', 'title', 'slug', 'post_type', 'content', 'excerpt', 'author',
-            'category', 'tags', 'featured_image', 'status', 'language',
+            'category', 'tags', 'featured_image', 'secondary_image', 'status', 'language',
             'views_count', 'is_featured', 'published_at', 'scheduled_publish_at',
             'created_at', 'updated_at'
         ]
-    
-    def get_featured_image(self, obj):
-        """Return relative URL for featured image (frontend proxy handles it)"""
-        if obj.featured_image:
-            # Check if it's already a full URL (external URL stored as string)
-            image_value = str(obj.featured_image)
-            if image_value.startswith('http://') or image_value.startswith('https://'):
-                return image_value
 
-            # It's a file field, get the relative URL
-            try:
-                # Return relative URL - frontend proxy will handle /sauti/media/
-                return obj.featured_image.url
-            except (ValueError, AttributeError):
-                return None
-        return None
+    def _relative_image_url(self, image):
+        """Return a relative URL for an image field (frontend proxy handles it)."""
+        if not image:
+            return None
+        image_value = str(image)
+        if image_value.startswith('http://') or image_value.startswith('https://'):
+            return image_value
+        try:
+            return image.url
+        except (ValueError, AttributeError):
+            return None
+
+    def get_featured_image(self, obj):
+        return self._relative_image_url(obj.featured_image)
+
+    def get_secondary_image(self, obj):
+        return self._relative_image_url(obj.secondary_image)
 
 
 class PostCreateUpdateSerializer(serializers.ModelSerializer):
@@ -104,7 +107,7 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
         model = Post
         fields = [
             'title', 'slug', 'post_type', 'content', 'excerpt', 'category',
-            'tags', 'featured_image', 'status', 'language', 'is_featured',
+            'tags', 'featured_image', 'secondary_image', 'status', 'language', 'is_featured',
             'scheduled_publish_at'
         ]
         extra_kwargs = {'slug': {'required': False}}

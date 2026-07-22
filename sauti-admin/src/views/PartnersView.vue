@@ -75,9 +75,9 @@
             <span class="truncate">{{ partner.email }}</span>
           </div>
 
-          <div v-if="partner.phone" class="flex items-center">
+          <div v-if="partner.phone_numbers?.length || partner.phone" class="flex items-center">
             <PhoneIcon class="h-4 w-4 mr-2" />
-            <span>{{ partner.phone }}</span>
+            <span>{{ (partner.phone_numbers?.length ? partner.phone_numbers : [partner.phone]).join(', ') }}</span>
           </div>
         </div>
       </div>
@@ -117,6 +117,7 @@
                     <option value="GOVERNMENT">Government Agency</option>
                     <option value="UN_AGENCY">UN Agency</option>
                     <option value="NGO">NGO/CSO</option>
+                    <option value="EMBASSY">Embassy / Diplomatic Mission</option>
                     <option value="PRIVATE">Private Sector</option>
                     <option value="OTHER">Other</option>
                   </select>
@@ -130,8 +131,18 @@
                   <input v-model="createForm.email" type="email" class="form-input">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Phone</label>
-                  <input v-model="createForm.phone" type="tel" class="form-input">
+                  <label class="block text-sm font-medium text-gray-700">Phone Number(s)</label>
+                  <div v-for="(number, index) in createForm.phone_numbers" :key="index"
+                    class="flex items-center space-x-2 mt-1">
+                    <input v-model="createForm.phone_numbers[index]" type="tel" class="form-input flex-1"
+                      placeholder="e.g. +256 700 123 456">
+                    <button v-if="createForm.phone_numbers.length > 1" type="button"
+                      @click="removeCreatePhone(index)" class="text-red-600 hover:text-red-800 px-2"
+                      title="Remove">&times;</button>
+                  </div>
+                  <button type="button" @click="addCreatePhone" class="text-primary-600 hover:text-primary-800 text-sm mt-2">
+                    + Add phone
+                  </button>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Logo</label>
@@ -196,6 +207,7 @@
                     <option value="GOVERNMENT">Government Agency</option>
                     <option value="UN_AGENCY">UN Agency</option>
                     <option value="NGO">NGO/CSO</option>
+                    <option value="EMBASSY">Embassy / Diplomatic Mission</option>
                     <option value="PRIVATE">Private Sector</option>
                     <option value="OTHER">Other</option>
                   </select>
@@ -209,8 +221,18 @@
                   <input v-model="editForm.email" type="email" class="form-input">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Phone</label>
-                  <input v-model="editForm.phone" type="tel" class="form-input">
+                  <label class="block text-sm font-medium text-gray-700">Phone Number(s)</label>
+                  <div v-for="(number, index) in editForm.phone_numbers" :key="index"
+                    class="flex items-center space-x-2 mt-1">
+                    <input v-model="editForm.phone_numbers[index]" type="tel" class="form-input flex-1"
+                      placeholder="e.g. +256 700 123 456">
+                    <button v-if="editForm.phone_numbers.length > 1" type="button"
+                      @click="removeEditPhone(index)" class="text-red-600 hover:text-red-800 px-2"
+                      title="Remove">&times;</button>
+                  </div>
+                  <button type="button" @click="addEditPhone" class="text-primary-600 hover:text-primary-800 text-sm mt-2">
+                    + Add phone
+                  </button>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Logo</label>
@@ -296,9 +318,9 @@
                   <span class="font-medium text-gray-700">Email:</span>
                   <span class="ml-1 text-gray-600">{{ viewedPartner.email }}</span>
                 </div>
-                <div v-if="viewedPartner.phone">
+                <div v-if="viewedPartner.phone_numbers?.length || viewedPartner.phone">
                   <span class="font-medium text-gray-700">Phone:</span>
-                  <span class="ml-1 text-gray-600">{{ viewedPartner.phone }}</span>
+                  <span class="ml-1 text-gray-600">{{ (viewedPartner.phone_numbers?.length ? viewedPartner.phone_numbers : [viewedPartner.phone]).join(', ') }}</span>
                 </div>
               </div>
             </div>
@@ -365,11 +387,15 @@
     { value: 'inactive', label: 'Inactive' }
   ]
 
+  // Values must match the backend PartnerType enum codes — the filter compares
+  // against partner.partner_type (the code), so label-text values never matched.
   const typeOptions = [
-    { value: 'NGO', label: 'NGO' },
-    { value: 'Government Agency', label: 'Government Agency' },
-    { value: 'International Organization', label: 'International Organization' },
-    { value: 'Private Sector', label: 'Private Sector' }
+    { value: 'GOVERNMENT', label: 'Government Agency' },
+    { value: 'UN_AGENCY', label: 'UN Agency' },
+    { value: 'NGO', label: 'NGO/CSO' },
+    { value: 'EMBASSY', label: 'Embassy / Diplomatic Mission' },
+    { value: 'PRIVATE', label: 'Private Sector' },
+    { value: 'OTHER', label: 'Other' }
   ]
 
   const showCreateModal = ref(false)
@@ -385,7 +411,7 @@
     partner_type: 'NGO', // Corrected to partner_type
     website_url: '', // Corrected to website_url
     email: '',
-    phone: '',
+    phone_numbers: [''],
     logoFile: null,
     logoPreview: null, // Add logoPreview
     is_active: true,
@@ -451,7 +477,7 @@
         partner_type: partner.partner_type || 'NGO',
         website_url: partner.website_url || '',
         email: partner.email || '',
-        phone: partner.phone || '',
+        phone_numbers: partner.phone_numbers?.length ? partner.phone_numbers : (partner.phone ? [partner.phone] : []),
         is_active: false,
         is_featured: false,
       }
@@ -465,8 +491,26 @@
     }
   }
 
-  const editPartner = (partner) => {
-    editForm.value = { ...partner, logoFile: null, logoPreview: partner.logo_url || partner.logo || null }
+  const editPartner = async (partner) => {
+    // Pull the FULL record from the DB first. The list endpoint uses a light
+    // serializer (no phone_numbers/description/email/is_active/order), so
+    // editing straight off the list row would show blanks and wipe the
+    // partner's phone numbers on save.
+    let full = partner
+    try {
+      full = await partnersStore.fetchPartner(partner.slug)
+    } catch (e) {
+      console.error('Failed to load full partner for edit:', e)
+    }
+    const phoneNumbers = full.phone_numbers?.length
+      ? [...full.phone_numbers]
+      : (full.phone ? [full.phone] : [''])
+    editForm.value = {
+      ...full,
+      phone_numbers: phoneNumbers,
+      logoFile: null,
+      logoPreview: full.logo_url || full.logo || null,
+    }
     showEditModal.value = true
   }
 
@@ -484,9 +528,29 @@
     }
   }
 
+  const addCreatePhone = () => {
+    createForm.value.phone_numbers.push('')
+  }
+
+  const removeCreatePhone = (index) => {
+    if (createForm.value.phone_numbers.length > 1) {
+      createForm.value.phone_numbers.splice(index, 1)
+    }
+  }
+
+  const addEditPhone = () => {
+    editForm.value.phone_numbers.push('')
+  }
+
+  const removeEditPhone = (index) => {
+    if (editForm.value.phone_numbers.length > 1) {
+      editForm.value.phone_numbers.splice(index, 1)
+    }
+  }
+
   const createPartner = async () => {
     try {
-      const excludeKeys = ['logoFile', 'logoPreview']
+      const excludeKeys = ['logoFile', 'logoPreview', 'phone_numbers']
       const formData = new FormData()
       for (const key in createForm.value) {
         if (key === 'logoFile' && createForm.value[key]) {
@@ -495,6 +559,8 @@
           formData.append(key, createForm.value[key])
         }
       }
+      const phoneNumbers = (createForm.value.phone_numbers || []).map(p => p.trim()).filter(Boolean)
+      formData.append('phone_numbers', JSON.stringify(phoneNumbers))
       await partnersStore.createPartner(formData)
       toast.success('Partner created successfully')
       showCreateModal.value = false
@@ -504,7 +570,7 @@
         partner_type: 'NGO',
         website_url: '',
         email: '',
-        phone: '',
+        phone_numbers: [''],
         logoFile: null,
         logoPreview: null,
         is_active: true,
@@ -518,7 +584,7 @@
 
   const updatePartner = async () => {
     try {
-      const excludeKeys = ['logoFile', 'logoPreview', 'logo', 'logo_url', 'created_at', 'updated_at', 'created_by', 'last_updated_by', 'history']
+      const excludeKeys = ['logoFile', 'logoPreview', 'logo', 'logo_url', 'created_at', 'updated_at', 'created_by', 'last_updated_by', 'history', 'phone_numbers']
       const formData = new FormData()
       for (const key in editForm.value) {
         if (key === 'logoFile' && editForm.value[key]) {
@@ -527,6 +593,8 @@
           formData.append(key, editForm.value[key])
         }
       }
+      const phoneNumbers = (editForm.value.phone_numbers || []).map(p => p.trim()).filter(Boolean)
+      formData.append('phone_numbers', JSON.stringify(phoneNumbers))
       await partnersStore.updatePartner(editForm.value.slug || editForm.value.id, formData)
       toast.success('Partner updated successfully')
       showEditModal.value = false

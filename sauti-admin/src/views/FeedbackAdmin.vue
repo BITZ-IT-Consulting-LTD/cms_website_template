@@ -19,43 +19,69 @@
             message="When users submit feedback on the contact page, they will appear here."
             :icon="ChatBubbleLeftRightIcon" />
 
-        <!-- Messages List -->
-        <div v-else class="space-y-4">
-            <div v-for="msg in messages" :key="msg.id"
-                class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all duration-300">
-                <div class="p-6 flex flex-col md:flex-row gap-6">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-bold text-gray-900">{{ msg.name || 'Anonymous User' }}</h3>
-                            <span v-if="msg.email" class="text-sm text-blue-600 font-medium">{{ msg.email }}</span>
-                            <span class="text-xs text-gray-400 font-bold ml-auto">{{ formatDate(msg.submitted_at)
-                            }}</span>
-                        </div>
-                        <p
-                            class="text-gray-700 leading-relaxed bg-gray-50/50 p-4 rounded-2xl border border-gray-100 italic">
-                            "{{ msg.message }}"
-                        </p>
-                    </div>
-                    <div class="flex md:flex-col justify-between items-end shrink-0 gap-4">
-                        <span class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full"
-                            :class="msg.is_processed ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-amber-50 text-amber-700 border border-amber-100'">
-                            <span class="w-2 h-2 rounded-full"
-                                :class="msg.is_processed ? 'bg-green-500' : 'bg-amber-500 animate-pulse'"></span>
-                            {{ msg.is_processed ? 'Reviewed' : 'Pending' }}
-                        </span>
-                        <div class="flex gap-2">
-                            <button v-if="!msg.is_processed" @click="markAsProcessed(msg.id)"
-                                class="px-4 py-2 bg-blue-600 text-white text-xs font-black rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-100">
-                                Mark Reviewed
-                            </button>
-                            <button @click="deleteMessage(msg.id)"
-                                class="p-2 bg-gray-50 hover:bg-red-50 rounded-xl text-gray-400 hover:text-red-600 transition-all border border-transparent hover:border-red-100">
-                                <TrashIcon class="h-5 w-5" />
-                            </button>
+        <!-- Messages List (split into Pending vs Reviewed) -->
+        <div v-else class="space-y-10">
+            <section v-for="group in groups" :key="group.key">
+                <h2 class="text-sm font-black uppercase tracking-wider mb-4 flex items-center gap-2" :class="group.headingClass">
+                    <span class="w-2 h-2 rounded-full" :class="group.dotClass"></span>
+                    {{ group.title }} ({{ group.items.length }})
+                </h2>
+                <p v-if="group.items.length === 0" class="text-sm text-gray-400 italic px-1">{{ group.emptyText }}</p>
+                <div v-else class="space-y-4">
+                    <div v-for="msg in group.items" :key="msg.id"
+                        class="bg-white rounded-3xl shadow-sm border overflow-hidden group hover:shadow-lg transition-all duration-300"
+                        :class="msg.is_archived ? 'border-gray-200 bg-gray-50/40' : (msg.is_processed ? 'border-green-100 bg-green-50/20' : 'border-gray-100')">
+                        <div class="p-6 flex flex-col md:flex-row gap-6">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-lg font-bold text-gray-900">{{ msg.name || 'Anonymous User' }}</h3>
+                                    <span v-if="msg.email" class="text-sm text-blue-600 font-medium">{{ msg.email }}</span>
+                                    <span class="text-xs text-gray-400 font-bold ml-auto">{{ formatDate(msg.submitted_at) }}</span>
+                                </div>
+                                <p class="text-gray-700 leading-relaxed bg-gray-50/50 p-4 rounded-2xl border border-gray-100 italic">
+                                    "{{ msg.message }}"
+                                </p>
+                                <p v-if="msg.is_processed && msg.reviewed_by_name" class="mt-2 text-xs text-green-700 font-semibold">
+                                    Reviewed by {{ msg.reviewed_by_name }}<span v-if="msg.reviewed_at"> · {{ formatDate(msg.reviewed_at) }}</span>
+                                </p>
+                            </div>
+                            <div class="flex md:flex-col justify-between items-end shrink-0 gap-4">
+                                <span v-if="msg.is_archived" class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                                    <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                                    Archived
+                                </span>
+                                <span v-else class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full"
+                                    :class="msg.is_processed ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-amber-50 text-amber-700 border border-amber-100'">
+                                    <span class="w-2 h-2 rounded-full"
+                                        :class="msg.is_processed ? 'bg-green-500' : 'bg-amber-500 animate-pulse'"></span>
+                                    {{ msg.is_processed ? 'Reviewed' : 'Pending' }}
+                                </span>
+                                <div class="flex gap-2">
+                                    <template v-if="!msg.is_archived">
+                                        <button v-if="!msg.is_processed" @click="setProcessed(msg.id, true)"
+                                            class="px-4 py-2 bg-blue-600 text-white text-xs font-black rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-100">
+                                            Mark Reviewed
+                                        </button>
+                                        <button v-else @click="setProcessed(msg.id, false)"
+                                            class="px-4 py-2 bg-gray-100 text-gray-600 text-xs font-black rounded-xl hover:bg-gray-200 transition-all">
+                                            Mark Unreviewed
+                                        </button>
+                                        <button @click="setArchived(msg.id, true)"
+                                            class="p-2 bg-gray-50 hover:bg-gray-200 rounded-xl text-gray-400 hover:text-gray-700 transition-all border border-transparent hover:border-gray-200"
+                                            title="Archive">
+                                            <ArchiveBoxIcon class="h-5 w-5" />
+                                        </button>
+                                    </template>
+                                    <button v-else @click="setArchived(msg.id, false)"
+                                        class="px-4 py-2 bg-gray-100 text-gray-600 text-xs font-black rounded-xl hover:bg-gray-200 transition-all">
+                                        Unarchive
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 </template>
@@ -69,7 +95,7 @@
         ChatBubbleLeftRightIcon,
         ClockIcon,
         CheckCircleIcon,
-        TrashIcon,
+        ArchiveBoxIcon,
         EnvelopeIcon
     } from '@heroicons/vue/24/outline';
 
@@ -78,12 +104,44 @@
     const loading = ref(true);
 
     const stats = computed(() => {
+        const active = messages.value.filter(m => !m.is_archived);
         return {
             total: messages.value.length,
-            pending: messages.value.filter(m => !m.is_processed).length,
-            processed: messages.value.filter(m => m.is_processed).length,
+            pending: active.filter(m => !m.is_processed).length,
+            processed: active.filter(m => m.is_processed).length,
         };
     });
+
+    const pendingMessages = computed(() => messages.value.filter(m => !m.is_processed && !m.is_archived));
+    const reviewedMessages = computed(() => messages.value.filter(m => m.is_processed && !m.is_archived));
+    const archivedMessages = computed(() => messages.value.filter(m => m.is_archived));
+
+    const groups = computed(() => [
+        {
+            key: 'pending',
+            title: 'Pending Review',
+            items: pendingMessages.value,
+            headingClass: 'text-amber-600',
+            dotClass: 'bg-amber-500 animate-pulse',
+            emptyText: 'No feedback is waiting to be reviewed.',
+        },
+        {
+            key: 'reviewed',
+            title: 'Reviewed / Read',
+            items: reviewedMessages.value,
+            headingClass: 'text-green-600',
+            dotClass: 'bg-green-500',
+            emptyText: 'No messages have been reviewed yet.',
+        },
+        {
+            key: 'archived',
+            title: 'Archived',
+            items: archivedMessages.value,
+            headingClass: 'text-gray-500',
+            dotClass: 'bg-gray-400',
+            emptyText: 'No messages have been archived.',
+        },
+    ]);
 
     const fetchMessages = async () => {
         loading.value = true;
@@ -98,10 +156,10 @@
         }
     };
 
-    const markAsProcessed = async (id) => {
+    const setProcessed = async (id, value) => {
         try {
-            await api.feedback.update(id, { is_processed: true });
-            toast.success('Message marked as reviewed');
+            await api.feedback.update(id, { is_processed: value });
+            toast.success(value ? 'Message marked as reviewed' : 'Message moved back to pending');
             await fetchMessages();
         } catch (error) {
             console.error('Error updating message:', error);
@@ -109,16 +167,14 @@
         }
     };
 
-    const deleteMessage = async (id) => {
-        if (confirm('Are you sure you want to delete this feedback?')) {
-            try {
-                await api.feedback.delete(id);
-                toast.success('Message deleted');
-                await fetchMessages();
-            } catch (error) {
-                console.error('Error deleting message:', error);
-                toast.error('Failed to delete message');
-            }
+    const setArchived = async (id, value) => {
+        try {
+            await api.feedback.update(id, { is_archived: value });
+            toast.success(value ? 'Message archived' : 'Message restored');
+            await fetchMessages();
+        } catch (error) {
+            console.error('Error updating message:', error);
+            toast.error('Failed to update message');
         }
     };
 

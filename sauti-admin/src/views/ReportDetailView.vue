@@ -124,29 +124,44 @@
         <p class="text-gray-700 whitespace-pre-wrap">{{ report.description || 'No description provided' }}</p>
       </div>
 
-      <!-- Contact Information -->
-      <div v-if="!report.is_anonymous" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Contact Information</h2>
+      <!-- Contact Information (always shown; unfilled fields are marked so
+           agents can see what the reporter did and did not provide) -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Contact Information</h2>
+          <span v-if="report.is_anonymous"
+            class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">
+            Submitted anonymously
+          </span>
+        </div>
         <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div v-if="report.contact_name">
+          <div>
             <dt class="text-sm font-medium text-gray-600">Name</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ report.contact_name }}</dd>
+            <dd class="mt-1 text-sm" :class="report.contact_name ? 'text-gray-900' : 'text-gray-400 italic'">
+              {{ report.contact_name || 'Not provided' }}
+            </dd>
           </div>
-          <div v-if="report.contact_phone">
+          <div>
             <dt class="text-sm font-medium text-gray-600">Phone</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ report.contact_phone }}</dd>
+            <dd class="mt-1 text-sm" :class="report.contact_phone ? 'text-gray-900' : 'text-gray-400 italic'">
+              {{ report.contact_phone || 'Not provided' }}
+            </dd>
           </div>
-          <div v-if="report.contact_email">
+          <div>
             <dt class="text-sm font-medium text-gray-600">Email</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ report.contact_email }}</dd>
+            <dd class="mt-1 text-sm" :class="report.contact_email ? 'text-gray-900' : 'text-gray-400 italic'">
+              {{ report.contact_email || 'Not provided' }}
+            </dd>
           </div>
-          <div v-if="report.location">
+          <div>
             <dt class="text-sm font-medium text-gray-600">Location</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ report.location }}</dd>
+            <dd class="mt-1 text-sm" :class="report.location ? 'text-gray-900' : 'text-gray-400 italic'">
+              {{ report.location || 'Not provided' }}
+            </dd>
           </div>
-          <div v-if="report.safe_to_contact !== undefined">
+          <div>
             <dt class="text-sm font-medium text-gray-600">Safe to Contact</dt>
-            <dd class="mt-1 text-sm text-gray-900">
+            <dd class="mt-1 text-sm">
               <span :class="report.safe_to_contact ? 'text-green-600' : 'text-red-600'" class="font-bold">
                 {{ report.safe_to_contact ? 'Yes' : 'No' }}
               </span>
@@ -266,6 +281,8 @@
     const map = {
       'PENDING': 'Pending Review',
       'IN_PROGRESS': 'In Progress',
+      'ESCALATED': 'Escalated',
+      'FORWARDED': 'Forwarded to OpenCHS',
       'RESOLVED': 'Resolved',
       'CLOSED': 'Closed'
     }
@@ -286,6 +303,8 @@
     const map = {
       'PENDING': 'bg-yellow-100 text-yellow-800',
       'IN_PROGRESS': 'bg-orange-100 text-orange-800',
+      'ESCALATED': 'bg-red-100 text-red-800',
+      'FORWARDED': 'bg-purple-100 text-purple-800',
       'RESOLVED': 'bg-green-100 text-green-800',
       'CLOSED': 'bg-gray-100 text-gray-800'
     }

@@ -92,7 +92,15 @@ class Post(models.Model):
         blank=True,
         null=True
     )
-    
+
+    # Optional second image so stories/blogs can carry one or two pictures.
+    secondary_image = models.ImageField(
+        upload_to='posts/images/%Y/%m/',
+        blank=True,
+        null=True,
+        help_text='Optional second image shown within the article body'
+    )
+
     status = models.CharField(
         max_length=10,
         choices=Status.choices,

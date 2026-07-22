@@ -66,7 +66,7 @@ class SautiHelplineClient:
             # Step 1: Get initial session cookie from login page
             logger.info("Step 1: Getting initial session cookie...")
             login_page_url = f"{self.BASE_URL}/helpline/"
-            response = self.session.get(login_page_url, timeout=15)
+            response = self.session.get(login_page_url, timeout=5)
             logger.info(f"  Status: {response.status_code}")
             logger.info(f"  Cookies: {list(self.session.cookies.keys())}")
 
@@ -82,7 +82,7 @@ class SautiHelplineClient:
                     'Origin': 'https://sauti.mglsd.go.ug',
                     'Referer': 'https://sauti.mglsd.go.ug/helpline/',
                 },
-                timeout=15
+                timeout=5
             )
 
             logger.info(f"  Status: {response.status_code}")
@@ -137,7 +137,7 @@ class SautiHelplineClient:
             response = self.session.get(
                 test_url,
                 params=params,
-                timeout=10,
+                timeout=5,
                 headers={
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -200,7 +200,7 @@ class SautiHelplineClient:
             response = self.session.get(
                 dash_url,
                 params=params,
-                timeout=15,
+                timeout=5,
                 headers={
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -242,7 +242,7 @@ class SautiHelplineClient:
             response = self.session.get(
                 dash_url,
                 params=params,
-                timeout=15,
+                timeout=5,
                 headers={
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -289,7 +289,7 @@ class SautiHelplineClient:
             response = self.session.get(
                 f"{self.BASE_URL}/api/cases/",
                 params=params,
-                timeout=20,
+                timeout=5,
                 headers={
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -305,7 +305,7 @@ class SautiHelplineClient:
                     response = self.session.get(
                         f"{self.BASE_URL}/api/cases/",
                         params=params,
-                        timeout=20,
+                        timeout=5,
                         headers={
                             'Accept': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
@@ -444,7 +444,7 @@ class SautiHelplineClient:
             total_calls = 0
             calls_url = f"{self.BASE_URL}/api/calls/"
             calls_response = self.session.get(
-                calls_url, timeout=20,
+                calls_url, timeout=5,
                 headers={'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
             )
             if calls_response.status_code == 200:
@@ -576,7 +576,7 @@ class SautiHelplineClient:
             response = self.session.get(
                 f"{self.BASE_URL}/api/cases/",
                 params=params,
-                timeout=30,
+                timeout=5,
                 headers={
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -592,7 +592,7 @@ class SautiHelplineClient:
                     response = self.session.get(
                         f"{self.BASE_URL}/api/cases/",
                         params=params,
-                        timeout=30,
+                        timeout=5,
                         headers={
                             'Accept': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
