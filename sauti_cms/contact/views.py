@@ -28,3 +28,21 @@ class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FeedbackMessage.objects.all()
     serializer_class = FeedbackMessageSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        from django.utils import timezone
+
+        instance = serializer.instance
+        was_processed = instance.is_processed
+        obj = serializer.save()
+
+        # Stamp who reviewed it (and when) as it transitions to processed;
+        # clear the stamp if it's moved back to unreviewed.
+        if obj.is_processed and not was_processed:
+            obj.reviewed_by = self.request.user
+            obj.reviewed_at = timezone.now()
+            obj.save(update_fields=['reviewed_by', 'reviewed_at'])
+        elif not obj.is_processed and was_processed:
+            obj.reviewed_by = None
+            obj.reviewed_at = None
+            obj.save(update_fields=['reviewed_by', 'reviewed_at'])
