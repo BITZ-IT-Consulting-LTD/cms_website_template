@@ -256,8 +256,8 @@
 
 
 
-  const newsTitle = computed(() => siteContent.getContent('home_news_title', settingsStore.settings?.news_title || 'Latest Stories & Updates'))
-  const newsDescription = computed(() => settingsStore.settings?.news_description || 'Stories and news from our team on how we are making Uganda safer.')
+  const newsTitle = computed(() => siteContent.getContent('home_news_title', settingsStore.settings?.news_title || 'Latest News & Updates'))
+  const newsDescription = computed(() => settingsStore.settings?.news_description || 'News and updates from our team on how we are making Uganda safer.')
   const partnersTitle = computed(() => siteContent.getContent('home_partners_title', settingsStore.settings?.partners_title || 'Our Trusted Partners'))
   const partnersDescription = computed(() => siteContent.getContent('home_partners_description', settingsStore.settings?.partners_description || 'Working together with national and international organizations to protect every voice.'))
 
@@ -312,7 +312,7 @@
           id: post.id,
           slug: post.slug,
           title: post.title,
-          category: post.category_name || 'Story',
+          category: 'News',
           thumbnail: post.featured_image,
           excerpt: post.excerpt || post.summary || '',
           date: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
