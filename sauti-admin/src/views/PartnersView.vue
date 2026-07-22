@@ -491,15 +491,25 @@
     }
   }
 
-  const editPartner = (partner) => {
-    const phoneNumbers = partner.phone_numbers?.length
-      ? [...partner.phone_numbers]
-      : (partner.phone ? [partner.phone] : [''])
+  const editPartner = async (partner) => {
+    // Pull the FULL record from the DB first. The list endpoint uses a light
+    // serializer (no phone_numbers/description/email/is_active/order), so
+    // editing straight off the list row would show blanks and wipe the
+    // partner's phone numbers on save.
+    let full = partner
+    try {
+      full = await partnersStore.fetchPartner(partner.slug)
+    } catch (e) {
+      console.error('Failed to load full partner for edit:', e)
+    }
+    const phoneNumbers = full.phone_numbers?.length
+      ? [...full.phone_numbers]
+      : (full.phone ? [full.phone] : [''])
     editForm.value = {
-      ...partner,
+      ...full,
       phone_numbers: phoneNumbers,
       logoFile: null,
-      logoPreview: partner.logo_url || partner.logo || null,
+      logoPreview: full.logo_url || full.logo || null,
     }
     showEditModal.value = true
   }

@@ -499,14 +499,23 @@
     toast.success('Downloading file...')
   }
 
-  const editResource = (resource) => {
+  const editResource = async (resource) => {
+    // Pull the full record from the DB first — the list serializer returns
+    // category_name (a string), not the category object with an id, so editing
+    // off the list row would drop the selected category.
+    let full = resource
+    try {
+      full = await resourcesStore.fetchResource(resource.slug)
+    } catch (e) {
+      console.error('Failed to load full resource for edit:', e)
+    }
     editForm.value = {
-      id: resource.id,
-      slug: resource.slug,
-      title: resource.title,
-      description: resource.description,
-      category: resource.category?.id || '',
-      language: resource.language,
+      id: full.id,
+      slug: full.slug,
+      title: full.title,
+      description: full.description,
+      category: full.category?.id || full.category || '',
+      language: full.language,
       file: null
     }
     showEditModal.value = true
