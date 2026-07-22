@@ -76,7 +76,7 @@
             <!-- Twitter (X) Embed -->
             <div v-else-if="post.platform === 'Twitter (X)'" class="relative w-full bg-primary/5 p-4" style="min-height: 500px;">
               <blockquote class="twitter-tweet" data-theme="light">
-                <a :href="post.post_url"></a>
+                <a :href="post.post_url" target="_blank" rel="noopener noreferrer"></a>
               </blockquote>
             </div>
 
@@ -92,7 +92,7 @@
 
             <!-- Fallback for Unknown Platform -->
             <div v-else class="relative w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-              <a :href="post.post_url" target="_blank" class="text-center p-8">
+              <a :href="post.post_url" target="_blank" rel="noopener noreferrer" class="text-center p-8">
                 <div class="text-black/40 mb-4">
                   <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
