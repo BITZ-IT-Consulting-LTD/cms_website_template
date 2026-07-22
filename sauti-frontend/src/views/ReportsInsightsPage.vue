@@ -19,41 +19,41 @@
         <section aria-label="Quick Statistics" class="mb-16">
           <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             <!-- Total Calls -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total Calls</p>
-              <div class="text-3xl font-black text-primary">
+              <div class="text-4xl md:text-5xl font-black text-primary">
                  {{ formatNumber(stats.total_calls) }}
               </div>
             </div>
 
             <!-- Total Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total Cases</p>
-              <div class="text-3xl font-black text-secondary">
+              <div class="text-4xl md:text-5xl font-black text-secondary">
                  {{ formatNumber(stats.total_cases) }}
               </div>
             </div>
 
             <!-- Total GBV Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total GBV Cases</p>
-               <div class="text-3xl font-black text-hotline">
+               <div class="text-4xl md:text-5xl font-black text-hotline">
                   {{ formatNumber(stats.total_gbv_cases) }}
                </div>
             </div>
 
             <!-- Total SEA Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total SEA Cases</p>
-               <div class="text-3xl font-black text-emergency">
+               <div class="text-4xl md:text-5xl font-black text-emergency">
                   {{ formatNumber(stats.total_sea_cases) }}
                </div>
             </div>
 
              <!-- Total Migrant Cases -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                <p class="text-secondary/60 text-xs font-bold uppercase tracking-widest mb-2">Total Migrant Cases</p>
-               <div class="text-3xl font-black text-secondary-light">
+               <div class="text-4xl md:text-5xl font-black text-secondary-light">
                   {{ formatNumber(stats.total_migrant_workers) }}
                </div>
             </div>

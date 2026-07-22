@@ -320,56 +320,7 @@ function setPage(p) {
 
 <style scoped>
 /* Hero Banner */
-.hero-banner {
-  position: relative;
-  background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
-  min-height: clamp(200px, 25vh, 300px);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  margin-top: 0;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
-  opacity: 0.5;
-}
-
-.hero-content-wrapper {
-  position: relative;
-  z-index: 2;
-  padding: clamp(1.25rem, 3vh, 2.5rem) 0;
-}
-
-.hero-text {
-  text-align: center;
-  margin-bottom: clamp(0.75rem, 2vw, 1rem);
-}
-
-.hero-title {
-  font-size: clamp(1rem, 2vw, 1.75rem);
-  font-weight: 900;
-  color: white;
-  margin-bottom: 0.375rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.text-accent-yellow {
-  color: rgb(var(--color-accent-yellow));
-}
-
-.hero-subtitle {
-  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 600px;
-  margin: 0 auto;
-  font-weight: 400;
-  line-height: 1.4;
-  padding: 0 1rem;
-}
+/* Hero banner styles are global now — see .hero-banner et al. in main.css */
 
 /* Search Box */
 .search-box {

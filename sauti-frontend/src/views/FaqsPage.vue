@@ -16,10 +16,15 @@
     </header>
 
     <div class="container-custom section-padding !pt-12">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <!-- CSS-grid layout (defined in scoped <style> as .faq-layout): a real
+           grid-template-columns track for the fixed-width sidebar and a
+           minmax(0, 1fr) track for the Q&A column. Grid tracks can't collapse
+           to content width the way flex-basis / arbitrary Tailwind values did,
+           so this reliably fills the section with no dead whitespace. -->
+      <div class="faq-layout">
 
         <!-- Left Sidebar (Support Info) -->
-        <div class="lg:col-span-4 order-2 lg:order-1 space-y-6 lg:space-y-8 lg:sticky lg:top-32">
+        <div class="faq-sidebar order-2 lg:order-1 space-y-6 lg:space-y-8 lg:sticky lg:top-32">
           <!-- Hero Card -->
           <div class="rounded-xl lg:rounded-2xl bg-primary p-6 lg:p-8 text-neutral-white relative overflow-hidden">
             <div class="relative z-10 text-center space-y-4 lg:space-y-5">
@@ -45,7 +50,7 @@
         </div>
 
         <!-- Right Content (FAQs) -->
-        <div class="lg:col-span-8 order-1 lg:order-2 space-y-8 lg:space-y-10">
+        <div class="faq-main order-1 lg:order-2 space-y-8 lg:space-y-10">
           <!-- Search Bar -->
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-4 lg:pl-6 flex items-center pointer-events-none">
@@ -77,8 +82,8 @@
             <!-- FAQ List -->
             <div v-if="filteredFaqs.length" class="space-y-4 lg:space-y-5">
               <div v-for="(faq, index) in filteredFaqs" :key="faq.id || index"
-                class="group bg-neutral-white rounded-xl lg:rounded-2xl shadow-md transition-all duration-500 overflow-hidden"
-                :class="{ 'shadow-xl': openFaq === index }">
+                class="group bg-neutral-white rounded-xl lg:rounded-2xl border shadow-sm hover:shadow-md transition-all duration-500 overflow-hidden"
+                :class="openFaq === index ? 'shadow-xl border-primary/20' : 'border-neutral-offwhite'">
                 <button @click="toggleFaq(index)"
                   class="w-full text-left px-4 py-4 lg:px-6 lg:py-5 flex items-start gap-3 lg:gap-4 hover:bg-neutral-offwhite/30 transition-colors focus:outline-none"
                   :aria-expanded="openFaq === index">
@@ -250,55 +255,36 @@
 
 <style scoped>
 /* Hero Banner */
-.hero-banner {
-  position: relative;
-  background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
-  min-height: clamp(200px, 25vh, 300px);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  margin-top: 0;
+/* Hero banner styles are global now — see .hero-banner et al. in main.css */
+
+/* FAQ layout: real CSS grid tracks (not Tailwind arbitrary values / flex-basis).
+   A fixed 20rem sidebar track + a minmax(0, 1fr) content track cannot collapse
+   to content width — the second track always stretches to fill whatever space
+   remains, so the section fills evenly with no dead whitespace at any width. */
+.faq-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  max-width: 72rem;
+  margin-inline: auto;
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
-  opacity: 0.5;
+@media (min-width: 1024px) {
+  .faq-layout {
+    grid-template-columns: 20rem minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
 }
 
-.hero-content-wrapper {
-  position: relative;
-  z-index: 2;
-  padding: clamp(1.25rem, 3vh, 2.5rem) 0;
+.faq-sidebar {
+  width: 100%;
+  min-width: 0;
 }
 
-.hero-text {
-  text-align: center;
-  margin-bottom: clamp(0.75rem, 2vw, 1rem);
-}
-
-.hero-title {
-  font-size: clamp(1rem, 2vw, 1.75rem);
-  font-weight: 900;
-  color: white;
-  margin-bottom: 0.375rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.text-accent-yellow {
-  color: rgb(var(--color-accent-yellow));
-}
-
-.hero-subtitle {
-  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 400;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.4;
-  padding: 0 1rem;
+.faq-main {
+  width: 100%;
+  min-width: 0;
 }
 
 /* Hide scrollbar for category filter */

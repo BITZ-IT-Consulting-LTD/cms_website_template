@@ -333,20 +333,72 @@ img, video, iframe, embed, object {
   }
 
   .page-header-title {
-    /* Enhanced H1 for hero sections */
-    font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
-    /* Mobile: 20px → Desktop: 32px */
-    @apply text-secondary mb-4 font-bold;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    /* Enhanced H1 for hero sections — sized like a website headline, not a
+       system label. Mobile: 30px → Desktop: 52px */
+    font-size: clamp(1.875rem, 1.25rem + 2.5vw, 3.25rem);
+    @apply text-secondary mb-4 font-black;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
   }
 
   .page-header-subtitle {
-    font-size: clamp(0.8125rem, 0.75rem + 0.125vw, 0.875rem);
-    /* Mobile: 13px → Desktop: 14px */
+    /* Mobile: 16px → Desktop: 20px */
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
     @apply text-black max-w-2xl font-normal;
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+
+  /* ===== Shared gradient hero banner =====
+     Single source of truth for the gradient page hero used by Contact, FAQ,
+     Blog/News, Resources, Videos and Operations. Previously copy-pasted into
+     each page's scoped <style>; consolidated here so sizing stays consistent. */
+  .hero-banner {
+    position: relative;
+    background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
+    min-height: clamp(260px, 34vh, 400px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 0;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
+    opacity: 0.5;
+  }
+
+  .hero-content-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: clamp(1.25rem, 3vh, 2.5rem) 0;
+  }
+
+  .hero-text {
+    text-align: center;
+    margin-bottom: clamp(0.75rem, 2vw, 1rem);
+  }
+
+  .hero-title {
+    font-size: clamp(1.875rem, 1.25rem + 2.5vw, 3.25rem);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
     line-height: 1.5;
-    opacity: 0.8;
+    padding: 0 1rem;
   }
 
   .form-group {

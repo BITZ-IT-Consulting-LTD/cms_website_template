@@ -380,34 +380,34 @@
   .hero-message {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.6rem;
   }
 
   .hero-headline {
-    font-size: clamp(1rem, 2.25vw, 2rem);
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
     font-weight: 900;
-    line-height: 1.1;
+    line-height: 1.02;
     color: #1a1a1a;
     text-transform: uppercase;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     margin: 0;
     white-space: normal;
   }
 
   .hero-subheadline {
-    font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
     font-weight: 900;
-    line-height: 1.2;
+    line-height: 1.1;
     color: #ED1C24;
     text-transform: uppercase;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
     margin: 0;
   }
 
   .hero-cta-text {
-    font-size: clamp(0.75rem, 1vw, 0.9375rem);
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
     color: #333;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
   }
 
   .hotline-number {
@@ -547,12 +547,12 @@
 
     .hero-headline {
        color: #1a1a1a;
-       font-size: clamp(1rem, 2.25vw, 1.5rem);
+       font-size: clamp(1.875rem, 4vw, 2.75rem);
        text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,255,255,1);
     }
 
     .hero-subheadline {
-        font-size: clamp(0.875rem, 1.75vw, 1.125rem);
+        font-size: clamp(1.25rem, 2.5vw, 1.75rem);
         text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,1);
     }
 
@@ -594,15 +594,15 @@
     }
 
     .hero-headline {
-       font-size: clamp(0.9375rem, 2.25vw, 1.125rem);
+       font-size: clamp(1.75rem, 7vw, 2.25rem);
        text-shadow: 0 0 20px rgba(255,255,255,0.95);
        text-align: center;
        width: 100%;
-       line-height: 1.15;
+       line-height: 1.1;
     }
 
     .hero-subheadline {
-        font-size: clamp(0.8125rem, 1.5vw, 0.9375rem);
+        font-size: clamp(1.125rem, 5vw, 1.5rem);
     }
 
     .hero-image-container {
