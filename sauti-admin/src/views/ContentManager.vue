@@ -54,7 +54,7 @@
                 :image="getHeroImageByPosition(pos)" :label="heroPositionLabels[pos]?.name"
                 @click="openHeroImageModal(pos)" />
               <div class="aspect-[4/3] bg-blue-50 rounded-lg flex items-center justify-center border border-blue-200">
-                <p class="text-blue-600 text-[10px] font-bold text-center px-1">"Every Child Matters"</p>
+                <p class="text-blue-600 text-[10px] font-bold text-center px-1">"Every Voice Matters"</p>
               </div>
             </div>
           </div>

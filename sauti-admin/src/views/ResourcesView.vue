@@ -143,6 +143,17 @@
                     {{ category.name }}
                   </option>
                 </select>
+                <div class="mt-2">
+                  <button v-if="!showNewCategory" type="button" @click="showNewCategory = true"
+                    class="text-sm text-[#009EDB] hover:underline">+ Add new category</button>
+                  <div v-else class="flex gap-2">
+                    <input v-model="newCategoryName" type="text" class="form-input flex-1"
+                      placeholder="New category name" @keyup.enter.prevent="createCategory" />
+                    <button type="button" @click="createCategory" class="btn-primary whitespace-nowrap">Add</button>
+                    <button type="button" @click="showNewCategory = false; newCategoryName = ''"
+                      class="btn-outline">Cancel</button>
+                  </div>
+                </div>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">Language</label>
@@ -354,6 +365,27 @@
     language: 'en',
     file: null
   })
+
+  // Inline "add new category" control for the create-resource form, so admins
+  // can seed a category on the spot instead of hitting an empty required dropdown.
+  const showNewCategory = ref(false)
+  const newCategoryName = ref('')
+
+  const createCategory = async () => {
+    const name = newCategoryName.value.trim()
+    if (!name) return
+    try {
+      const created = await resourcesStore.createCategory({ name })
+      toast.success('Category created')
+      // Auto-select the newly created category.
+      if (created && created.id) createForm.value.category = created.id
+      newCategoryName.value = ''
+      showNewCategory.value = false
+    } catch (error) {
+      console.error('Failed to create category:', error)
+      toast.error(error.response?.data?.name?.[0] || 'Failed to create category')
+    }
+  }
 
   const filteredResources = computed(() => {
     return resources.value.filter(resource => {

@@ -14,9 +14,22 @@ class FAQCategorySerializer(serializers.ModelSerializer):
         return obj.faqs.filter(is_active=True).count()
 
 
+class FAQCategoryNestedSerializer(serializers.ModelSerializer):
+    """Lightweight category serializer for nesting inside FAQ.
+
+    Deliberately omits `faq_count` — computing it per FAQ row triggered an
+    extra COUNT query for every FAQ in the list (N+1) and was the main cause
+    of slow FAQ page loads. The public FAQ list only needs id/name/slug.
+    """
+
+    class Meta:
+        model = FAQCategory
+        fields = ['id', 'name', 'slug', 'description', 'order']
+
+
 class FAQSerializer(serializers.ModelSerializer):
     """Serializer for FAQ"""
-    category = FAQCategorySerializer(read_only=True)
+    category = FAQCategoryNestedSerializer(read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
 
     class Meta:

@@ -44,7 +44,7 @@
               <!-- Other Channels -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- WhatsApp -->
-                <a href="https://wa.me/256743889999" target="_blank"
+                <a href="https://wa.me/256743889999" target="_blank" rel="noopener noreferrer"
                   class="card p-4 flex items-center space-x-3 focus:ring-2 focus:ring-primary focus:outline-none">
                   <div class="bg-neutral-offwhite p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -59,7 +59,7 @@
                 </a>
 
                 <!-- U-Report -->
-                <a href="https://ureport.in" target="_blank"
+                <a href="https://ureport.in" target="_blank" rel="noopener noreferrer"
                   class="card p-4 flex items-center space-x-3 focus:ring-2 focus:ring-primary focus:outline-none">
                   <div class="bg-neutral-offwhite p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -92,7 +92,7 @@
                 </router-link>
 
                 <!-- Email -->
-                <a href="mailto:info@sauti.mglsd.go.ug"
+                <a :href="`mailto:${helpEmail}`"
                   class="card p-4 flex items-center space-x-3 focus:ring-2 focus:ring-primary focus:outline-none">
                   <div class="bg-neutral-offwhite p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -133,10 +133,20 @@
 </template>
 
 <script setup>
-  import { ref, watch, nextTick } from 'vue'
+  import { ref, watch, nextTick, computed, onMounted } from 'vue'
+  import { useSiteContent } from '@/composables/useSiteContent'
 
   const showModal = ref(false)
   const closeButton = ref(null)
+
+  // Read the contact email from the CMS (footer key) instead of hardcoding it,
+  // so updating it in one place propagates everywhere.
+  const siteContent = useSiteContent('footer')
+  const helpEmail = computed(() => siteContent.getContent('footer_email_address', 'info@sauti116.ug'))
+
+  onMounted(() => {
+    siteContent.fetchContent()
+  })
 
   watch(showModal, async (isOpen) => {
     if (isOpen) {

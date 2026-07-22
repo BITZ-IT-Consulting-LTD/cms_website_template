@@ -80,21 +80,29 @@
     return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) !== 1 ? 's' : ''} ago`
   }
 
+  function formatDate(dateString) {
+    if (!dateString) return ''
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      year: 'numeric', month: 'short', day: 'numeric'
+    })
+  }
+
   function formatPostTime(post) {
-    // Prefer updated_at when a post is edited, so the UI reflects changes.
-    const updatedAt = post?.updated_at
+    // Show the specific posting date (not a relative "X months ago"), which
+    // reporters asked for. Prefer published_at, falling back to created_at.
     const publishedAt = post?.published_at
     const createdAt = post?.created_at
+    const updatedAt = post?.updated_at
 
-    const base = updatedAt || publishedAt || createdAt
+    const base = publishedAt || createdAt
     if (!base) return 'Recently'
 
-    // If we have updated_at and it differs meaningfully, show it as an update.
-    if (updatedAt && updatedAt !== publishedAt) {
-      return `Updated ${formatTimeAgo(updatedAt)}`
+    // If the post was meaningfully edited after publishing, note the edit date.
+    if (updatedAt && publishedAt && updatedAt !== publishedAt) {
+      return `${formatDate(base)} · Updated ${formatDate(updatedAt)}`
     }
 
-    return formatTimeAgo(base)
+    return formatDate(base)
   }
 
   function setPlaceholder(event) {

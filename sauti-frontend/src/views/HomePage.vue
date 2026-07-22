@@ -281,6 +281,7 @@
       partnersStore.fetchPartners({ featured: true }),
       blogStore.fetchPosts({
         status: 'PUBLISHED',
+        post_type: 'NEWS',
         ordering: '-published_at,-created_at',
         limit: 4
       })

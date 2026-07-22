@@ -321,6 +321,53 @@ Each paragraph will be properly formatted when displayed."
           </button>
         </div>
 
+          <!-- Optional Second Image Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center space-x-2 mb-6">
+              <svg class="w-5 h-5 text-[#8B4000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <h3 class="text-lg font-semibold text-gray-900" style="font-family: 'Roboto', sans-serif;">Second Image <span class="text-sm font-normal text-gray-400">(optional)</span></h3>
+            </div>
+
+            <div v-if="form.secondaryImage || secondaryImagePreview" class="relative mb-6">
+              <img
+                :src="secondaryImagePreview || form.secondaryImage"
+                alt="Second image"
+                class="w-full h-64 object-contain rounded-xl shadow-sm bg-gray-50"
+              />
+              <button
+                @click="removeSecondaryImage"
+                class="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 shadow-lg"
+                title="Remove image"
+              >
+                <XMarkIcon class="h-4 w-4" />
+              </button>
+            </div>
+
+            <div v-else class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
+              <PhotoIcon class="h-12 w-12 text-gray-400 mx-auto mb-3" />
+              <p class="text-sm text-gray-500 font-medium">No second image</p>
+              <p class="text-xs text-gray-400 mt-1">Add one or two pictures to the story</p>
+            </div>
+
+            <input
+              ref="secondaryImageInput"
+              type="file"
+              accept="image/*"
+              @change="handleSecondaryImageUpload"
+              class="hidden"
+            />
+
+            <button
+              @click="secondaryImageInput.click()"
+              class="w-full mt-4 px-4 py-3 border-2 border-dashed border-[#8B4000] rounded-xl text-sm font-semibold text-[#8B4000] hover:bg-[#8B4000] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200"
+              style="font-family: 'Roboto', sans-serif;"
+            >
+              {{ form.secondaryImage || secondaryImagePreview ? 'Change Second Image' : 'Upload Second Image' }}
+            </button>
+          </div>
+
           <!-- Enhanced Action Buttons -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="space-y-3">
@@ -386,12 +433,14 @@ const toast = useToast()
 // Refs
 const editor = ref(null)
 const imageInput = ref(null)
+const secondaryImageInput = ref(null)
 
 // Reactive data
 const loading = ref(false)
 const history = ref([])
 const loadingHistory = ref(false)
 const imagePreview = ref(null)
+const secondaryImagePreview = ref(null)
 const tagsInput = ref('')
 
 const form = ref({
@@ -403,6 +452,7 @@ const form = ref({
   categories: [],
   tags: [],
   featuredImage: null,
+  secondaryImage: null,
   status: 'DRAFT',
   postType: 'NEWS',
   scheduledPublishAt: null
@@ -508,6 +558,35 @@ const removeImage = () => {
   form.value.featuredImage = null
   if (imageInput.value) {
     imageInput.value.value = ''
+  }
+}
+
+const handleSecondaryImageUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      secondaryImagePreview.value = e.target.result
+      form.value.secondaryImage = file
+      toast.success('Second image uploaded successfully')
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+const removeSecondaryImage = () => {
+  secondaryImagePreview.value = null
+  form.value.secondaryImage = null
+  if (secondaryImageInput.value) {
+    secondaryImageInput.value.value = ''
   }
 }
 
@@ -617,6 +696,13 @@ const savePost = async () => {
       postData.featured_image = null
     }
     // If it's an existing URL (string), we don't send anything, backend keeps the old image.
+
+    // Same handling for the optional second image
+    if (form.value.secondaryImage instanceof File) {
+      postData.secondary_image = form.value.secondaryImage
+    } else if (isEditing.value && form.value.secondaryImage === null) {
+      postData.secondary_image = null
+    }
     
     // Debug: Log the data being sent
     console.log('Post data being sent:', {
@@ -704,6 +790,7 @@ onMounted(async () => {
         categories: post.category ? [post.category.id] : [],
         tags: post.tags?.map(t => t.id) || [],
         featuredImage: post.featured_image || null,
+        secondaryImage: post.secondary_image || null,
         status: post.status || 'DRAFT',
         postType: post.post_type || 'NEWS',
         scheduledPublishAt: post.scheduled_publish_at ? toLocalDatetimeString(new Date(post.scheduled_publish_at)) : null

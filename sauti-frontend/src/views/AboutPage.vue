@@ -61,7 +61,7 @@
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
               <div class="w-full h-full bg-blue-50 flex items-center justify-center p-4">
-                 <p class="text-center text-[#005f99] font-black text-sm">{{ siteContent.getContent('about_hero_right_column', 'Every Child Matters') }}</p>
+                 <p class="text-center text-[#005f99] font-black text-sm">{{ siteContent.getContent('about_hero_right_column', 'Every Voice Matters') }}</p>
               </div>
            </div>
         </div>
