@@ -23,3 +23,22 @@ class FeedbackMessageSerializer(serializers.ModelSerializer):
         if not value.strip():
             raise serializers.ValidationError("Message cannot be empty.")
         return value
+
+
+class FeedbackCreateSerializer(serializers.ModelSerializer):
+    """Public submission serializer — only accepts the submitter's own fields.
+
+    Deliberately excludes is_processed / is_archived / reviewed_* so an anonymous
+    POST to the AllowAny create endpoint cannot self-mark a message reviewed or
+    archived (which would hide it from the accountability queue).
+    """
+
+    class Meta:
+        model = FeedbackMessage
+        fields = ['id', 'name', 'email', 'message', 'submitted_at']
+        read_only_fields = ['id', 'submitted_at']
+
+    def validate_message(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Message cannot be empty.")
+        return value

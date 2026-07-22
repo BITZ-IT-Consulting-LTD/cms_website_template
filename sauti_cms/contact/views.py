@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 from .models import FeedbackMessage
-from .serializers import FeedbackMessageSerializer
+from .serializers import FeedbackMessageSerializer, FeedbackCreateSerializer
 
 class FeedbackCreateView(generics.CreateAPIView):
     """
@@ -8,7 +8,9 @@ class FeedbackCreateView(generics.CreateAPIView):
     Public endpoint.
     """
     queryset = FeedbackMessage.objects.all()
-    serializer_class = FeedbackMessageSerializer
+    # Use the restricted serializer so anonymous submitters can't set
+    # is_processed/is_archived on their own message.
+    serializer_class = FeedbackCreateSerializer
     permission_classes = [permissions.AllowAny]
 
 class FeedbackListView(generics.ListAPIView):

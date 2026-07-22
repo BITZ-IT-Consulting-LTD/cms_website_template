@@ -75,7 +75,7 @@ class ContactViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         Public site should only see visible contacts. Admin site (authenticated)
         should see all, including hidden ones, so they can be re-activated.
         """
-        queryset = Contact.objects.all().order_by('order')
+        queryset = Contact.objects.all().order_by('order').prefetch_related('extra_values')
         if not self.request.user.is_authenticated:
             return queryset.filter(is_visible=True)
         return queryset

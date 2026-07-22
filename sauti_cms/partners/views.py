@@ -15,9 +15,9 @@ class PartnerListCreateView(generics.ListCreateAPIView):
         # Show all partners for authenticated users (admin panel)
         # Show only active partners for public API
         if self.request.user.is_authenticated:
-            queryset = Partner.objects.all()
+            queryset = Partner.objects.all().prefetch_related('phones')
         else:
-            queryset = Partner.objects.filter(is_active=True)
+            queryset = Partner.objects.filter(is_active=True).prefetch_related('phones')
         
         # Filter by featured
         is_featured = self.request.query_params.get('featured')

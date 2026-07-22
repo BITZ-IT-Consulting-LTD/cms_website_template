@@ -82,8 +82,10 @@
 
   function formatDate(dateString) {
     if (!dateString) return ''
-    return new Date(dateString).toLocaleDateString('en-GB', {
-      year: 'numeric', month: 'short', day: 'numeric'
+    // Show the specific date AND time of posting (stakeholder asked for both).
+    return new Date(dateString).toLocaleString('en-GB', {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
     })
   }
 
