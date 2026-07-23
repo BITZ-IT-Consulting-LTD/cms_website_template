@@ -1,32 +1,45 @@
 <template>
-  <article class="group cursor-pointer">
-    <router-link :to="`/blogs/${post.slug}`" class="block">
+  <article class="post-card group">
+    <router-link :to="`/blogs/${post.slug}`" class="block h-full">
       <!-- Featured Image -->
-      <div class="relative bg-neutral-offwhite rounded-xl overflow-hidden aspect-video mb-3 shadow-md">
-        <img :src="post.featured_image || helplineAction" :alt="post.title"
-          class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105 group-hover:brightness-110" loading="lazy"
-          @error="setPlaceholder" />
+      <div class="relative bg-neutral-offwhite rounded-2xl lg:rounded-3xl overflow-hidden aspect-[16/10] mb-4 shadow-sm ring-1 ring-black/[0.04]">
+        <img
+          :src="post.featured_image || helplineAction"
+          :alt="post.title"
+          class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+          loading="lazy"
+          @error="setPlaceholder"
+        />
 
-        <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
 
-        <!-- Featured Badge -->
-        <div v-if="post.is_featured" class="absolute top-3 left-3">
-          <span class="bg-primary text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-lg">
+        <div v-if="post.is_featured" class="absolute top-3 left-3 sm:top-4 sm:left-4">
+          <span class="bg-primary text-neutral-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
             Featured
+          </span>
+        </div>
+
+        <div
+          v-if="categoryLabel"
+          class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4"
+        >
+          <span class="bg-neutral-white/95 text-secondary px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+            {{ categoryLabel }}
           </span>
         </div>
       </div>
 
       <!-- Content -->
-      <div class="px-1">
-        <!-- Title -->
-        <h3 class="text-sm font-bold text-secondary leading-tight mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+      <div class="px-0.5 sm:px-1 space-y-2">
+        <h3 class="text-base sm:text-lg font-bold text-secondary leading-snug line-clamp-2 group-hover:text-primary transition-colors">
           {{ post.title }}
         </h3>
 
-        <!-- Meta -->
-        <p class="text-xs text-gray-600 font-medium">
+        <p v-if="excerpt" class="text-sm text-black/50 font-semibold leading-relaxed line-clamp-2 hidden sm:block">
+          {{ excerpt }}
+        </p>
+
+        <p class="text-xs text-secondary/45 font-semibold pt-0.5">
           {{ formatPostTime(post) }}
         </p>
       </div>
@@ -35,7 +48,7 @@
 </template>
 
 <script setup>
-  import { defineProps } from 'vue'
+  import { computed } from 'vue'
   import helplineAction from '@/assets/helpline-action.png'
 
   const props = defineProps({
@@ -45,44 +58,20 @@
     },
   })
 
-  function getAuthorInitial() {
-    const author = props.post.author?.username || props.post.author_name || 'Sauti'
-    return author.charAt(0).toUpperCase()
-  }
+  const categoryLabel = computed(() => {
+    const cat = props.post.category
+    if (!cat) return ''
+    if (typeof cat === 'string') return cat
+    return cat.name || cat.title || ''
+  })
 
-  function formatViews(views) {
-    if (!views) return '0 views'
-    if (views >= 1000000) {
-      return `${(views / 1000000).toFixed(1)}M views`
-    } else if (views >= 1000) {
-      return `${(views / 1000).toFixed(1)}K views`
-    }
-    return `${views} views`
-  }
-
-  function formatTimeAgo(dateString) {
-    if (!dateString) return 'Recently'
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffTime = Math.abs(now - date)
-
-    const diffMinutes = Math.floor(diffTime / (1000 * 60))
-    const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffMinutes < 1) return 'Just now'
-    if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`
-    if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
-    if (diffDays === 1) return '1 day ago'
-    if (diffDays < 7) return `${diffDays} days ago`
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) !== 1 ? 's' : ''} ago`
-    if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) !== 1 ? 's' : ''} ago`
-    return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) !== 1 ? 's' : ''} ago`
-  }
+  const excerpt = computed(() => {
+    const raw = props.post.excerpt || props.post.summary || props.post.description || ''
+    return String(raw).replace(/<[^>]+>/g, '').trim()
+  })
 
   function formatDate(dateString) {
     if (!dateString) return ''
-    // Show the specific date AND time of posting (stakeholder asked for both).
     return new Date(dateString).toLocaleString('en-GB', {
       year: 'numeric', month: 'short', day: 'numeric',
       hour: '2-digit', minute: '2-digit'
@@ -90,8 +79,6 @@
   }
 
   function formatPostTime(post) {
-    // Show the specific posting date (not a relative "X months ago"), which
-    // reporters asked for. Prefer published_at, falling back to created_at.
     const publishedAt = post?.published_at
     const createdAt = post?.created_at
     const updatedAt = post?.updated_at
@@ -99,7 +86,6 @@
     const base = publishedAt || createdAt
     if (!base) return 'Recently'
 
-    // If the post was meaningfully edited after publishing, note the edit date.
     if (updatedAt && publishedAt && updatedAt !== publishedAt) {
       return `${formatDate(base)} · Updated ${formatDate(updatedAt)}`
     }
@@ -117,6 +103,14 @@
 </script>
 
 <style scoped>
+  .post-card {
+    transition: transform 0.3s ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-6px);
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -125,22 +119,20 @@
     overflow: hidden;
   }
 
-  article {
-    transition: transform 0.2s ease;
-  }
-
-  article:hover {
-    transform: translateY(-4px);
-  }
-
   @media (max-width: 640px) {
-    h3 {
-      font-size: 0.8125rem;
-      -webkit-line-clamp: 1;
+    .post-card:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-card,
+    .post-card img {
+      transition: none !important;
     }
 
-    article:hover {
-      transform: translateY(-2px);
+    .post-card:hover {
+      transform: none;
     }
   }
 </style>

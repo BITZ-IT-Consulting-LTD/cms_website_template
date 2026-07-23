@@ -6,7 +6,8 @@
       <div class="container-custom hero-content-wrapper">
         <div class="hero-text">
           <h1 class="hero-title">
-            {{ siteContent.getContent('videos_page_title', 'Video Gallery') }} <span class="text-accent-yellow">{{ siteContent.getContent('videos_page_title_highlight', 'Audio-Visuals') }}</span>
+            {{ siteContent.getContent('videos_page_title', 'Video Gallery') }}
+            <span class="text-accent-yellow">{{ siteContent.getContent('videos_page_title_highlight', 'Audio-Visuals') }}</span>
           </h1>
           <p class="hero-subtitle">
             {{ siteContent.getContent('videos_page_description', 'Explore our archive of official media content, awareness videos, and community stories.') }}
@@ -15,170 +16,160 @@
       </div>
     </header>
 
-    <!-- Search Bar -->
-    <div class="bg-white border-b border-gray-100">
-      <div class="container-custom py-4">
-        <h2 class="search-heading">{{ siteContent.getContent('videos_search_heading', 'Search Official Media') }}</h2>
-        <div class="search-box">
-          <Search class="search-icon-inline" />
-          <input
-            v-model="query"
-            @input="applySearch"
-            type="search"
-            :placeholder="siteContent.getContent('videos_search_placeholder', videosSearchPlaceholder)"
-            class="search-input-inline"
-          />
-          <button class="search-btn-inline" @click="applySearch">
-            {{ siteContent.getContent('videos_search_button', videosSearchButton) }}
-          </button>
+    <section class="bg-warm">
+      <div class="container-custom section-padding !pt-10 md:!pt-14">
+        <!-- Search -->
+        <div class="max-w-3xl mx-auto mb-6 md:mb-8">
+          <h2 class="text-center text-sm lg:text-base font-bold text-secondary/70 mb-4 tracking-tight">
+            {{ siteContent.getContent('videos_search_heading', 'Search Official Media') }}
+          </h2>
+          <div class="search-shell relative flex items-center gap-2 bg-neutral-white rounded-2xl lg:rounded-[1.75rem] border border-black/5 shadow-sm focus-within:ring-2 focus-within:ring-primary/25 transition-all">
+            <div class="pl-5 lg:pl-6 flex items-center pointer-events-none">
+              <Search class="h-5 w-5 text-primary/40" />
+            </div>
+            <input
+              v-model="query"
+              @input="applySearch"
+              type="search"
+              :placeholder="siteContent.getContent('videos_search_placeholder', videosSearchPlaceholder)"
+              class="flex-1 min-w-0 py-4 lg:py-5 pr-2 bg-transparent text-secondary font-semibold placeholder:text-black/30 focus:outline-none text-sm lg:text-base border-none"
+            />
+            <button
+              type="button"
+              class="shrink-0 mr-2 lg:mr-3 px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-neutral-white rounded-full font-bold text-xs lg:text-sm uppercase tracking-wider hover:brightness-110 transition-all"
+              @click="applySearch"
+            >
+              {{ siteContent.getContent('videos_search_button', videosSearchButton) }}
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Sticky Section Jump Nav -->
-    <div class="sticky top-[70px] z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
-      <div class="container-custom">
-        <div class="filter-tabs-wrapper">
-          <button
-            v-for="chip in filterChips"
-            :key="chip.value"
-            @click="scrollToSection(chip.value)"
-            class="filter-chip filter-chip-inactive"
-          >
-            {{ chip.label }}
-          </button>
+        <!-- Section jump chips -->
+        <div class="mb-8 md:mb-10 sticky top-[70px] z-30 -mx-4 px-4 py-3 bg-warm/95 backdrop-blur-md sm:static sm:bg-transparent sm:backdrop-blur-none sm:p-0 sm:mx-0">
+          <div class="flex flex-wrap gap-2.5 justify-center sm:justify-start">
+            <button
+              v-for="chip in filterChips"
+              :key="chip.value"
+              type="button"
+              @click="scrollToSection(chip.value)"
+              class="chip chip-idle"
+            >
+              {{ chip.label }}
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="container-custom section-padding !pt-8 sm:!pt-12">
-
-      <!-- Loading Skeleton -->
-      <div v-if="loading" class="space-y-8 sm:space-y-12">
-        <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
-          <div v-for="n in 12" :key="n" class="skeleton-card">
-            <div class="skeleton-thumbnail"></div>
-            <div class="skeleton-content">
-              <div class="skeleton-title"></div>
+        <!-- Loading -->
+        <div v-if="loading" class="space-y-8 sm:space-y-12">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+            <div v-for="n in 8" :key="n" class="skeleton-card">
+              <div class="skeleton-thumbnail"></div>
+              <div class="skeleton-content">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-meta"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Content -->
-      <div v-else class="space-y-12">
-        <!-- Videos Section -->
-        <section ref="videosSectionRef" class="scroll-section" aria-label="Video Gallery">
-          <div class="section-header">
-            <div class="section-badge"></div>
-            <h2 class="section-title">{{ siteContent.getContent('videos_section_title', 'Videos') }}</h2>
-          </div>
+        <!-- Content -->
+        <div v-else class="space-y-14 lg:space-y-16">
+          <!-- Videos -->
+          <section ref="videosSectionRef" class="scroll-section" aria-label="Video Gallery">
+            <div class="section-header">
+              <div class="section-badge" aria-hidden="true"></div>
+              <h2 class="section-title">{{ siteContent.getContent('videos_section_title', 'Videos') }}</h2>
+            </div>
 
-          <!-- Empty State -->
-          <div v-if="videos.filter(v => !isAudio(v)).length === 0" class="empty-state">
-            <Video class="empty-icon" />
-            <h3 class="empty-title">{{ siteContent.getContent('videos_empty_title', 'No videos found') }}</h3>
-            <p class="empty-subtitle">{{ siteContent.getContent('videos_empty_subtitle', 'Check back later for new content') }}</p>
-          </div>
+            <div v-if="videoItems.length === 0" class="empty-state">
+              <Video class="empty-icon" />
+              <h3 class="empty-title">{{ siteContent.getContent('videos_empty_title', 'No videos found') }}</h3>
+              <p class="empty-subtitle">{{ siteContent.getContent('videos_empty_subtitle', 'Check back later for new content') }}</p>
+            </div>
 
-          <!-- Video Grid -->
-          <div v-else class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
-            <article v-for="video in videos.filter(v => !isAudio(v))" :key="video.id"
-              class="video-card group cursor-pointer"
-              @click="openVideo(video)">
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+              <article
+                v-for="video in videoItems"
+                :key="video.id"
+                class="video-card group cursor-pointer"
+                @click="openVideo(video)"
+              >
+                <div class="video-thumbnail-wrapper">
+                  <img
+                    :src="video.thumbnail"
+                    :alt="video.title"
+                    class="video-thumbnail"
+                    loading="lazy"
+                    @error="useThumbPlaceholder($event)"
+                  />
+                  <div class="video-overlay"></div>
+                  <div class="play-button-wrapper">
+                    <div class="play-button">
+                      <Play class="play-icon" />
+                    </div>
+                  </div>
+                  <span v-if="video.duration" class="duration-badge">{{ video.duration }}</span>
+                </div>
 
-              <!-- Video Thumbnail -->
-              <div class="video-thumbnail-wrapper">
-                <img :src="video.thumbnail" :alt="video.title"
-                  class="video-thumbnail"
-                  loading="lazy" @error="useThumbPlaceholder($event)" />
+                <div class="video-info">
+                  <h3 class="video-title">{{ video.title }}</h3>
+                  <p class="video-date">
+                    {{ formatDate(video.updated_at || video.published_at || video.created_at) }}
+                  </p>
+                </div>
+              </article>
+            </div>
+          </section>
 
-                <!-- Gradient Overlay -->
-                <div class="video-overlay"></div>
+          <!-- Audio -->
+          <section ref="audioSectionRef" class="scroll-section" aria-label="Audio Gallery">
+            <div class="section-header">
+              <div class="section-badge" aria-hidden="true"></div>
+              <h2 class="section-title">{{ siteContent.getContent('videos_audio_section_title', 'Audio') }}</h2>
+            </div>
 
-                <!-- Play Button Overlay -->
-                <div class="play-button-wrapper">
-                  <div class="play-button">
-                    <Play class="play-icon" />
+            <div v-if="audioItems.length === 0" class="empty-state">
+              <Play class="empty-icon" />
+              <h3 class="empty-title">{{ siteContent.getContent('videos_audio_empty_title', 'No audio content found') }}</h3>
+              <p class="empty-subtitle">{{ siteContent.getContent('videos_audio_empty_subtitle', 'Check back later for new content') }}</p>
+            </div>
+
+            <div v-else class="audio-list">
+              <article v-for="audio in audioItems" :key="audio.id" class="audio-card">
+                <div class="audio-icon-wrapper">
+                  <div class="waveform-icon" aria-hidden="true">
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
                   </div>
                 </div>
 
-                <!-- Duration Badge -->
-                <span v-if="video.duration" class="duration-badge">
-                  {{ video.duration }}
-                </span>
-              </div>
-
-              <!-- Video Info -->
-              <div class="video-info">
-                <h3 class="video-title">
-                  {{ video.title }}
-                </h3>
-
-                <p class="video-date">
-                  {{ formatDate(video.updated_at || video.published_at || video.created_at) }}
-                </p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <!-- Audio Section - Podcast Style -->
-        <section ref="audioSectionRef" class="scroll-section" aria-label="Audio Gallery">
-          <div class="section-header">
-            <div class="section-badge"></div>
-            <h2 class="section-title">{{ siteContent.getContent('videos_audio_section_title', 'Audio') }}</h2>
-          </div>
-
-          <!-- Empty State -->
-          <div v-if="videos.filter(v => isAudio(v)).length === 0" class="empty-state">
-            <Play class="empty-icon" />
-            <h3 class="empty-title">{{ siteContent.getContent('videos_audio_empty_title', 'No audio content found') }}</h3>
-            <p class="empty-subtitle">{{ siteContent.getContent('videos_audio_empty_subtitle', 'Check back later for new content') }}</p>
-          </div>
-
-          <!-- Audio List - Podcast Style -->
-          <div v-else class="audio-list">
-            <article v-for="audio in videos.filter(v => isAudio(v))" :key="audio.id"
-              class="audio-card">
-
-              <!-- Waveform Icon Placeholder -->
-              <div class="audio-icon-wrapper">
-                <div class="waveform-icon">
-                  <div class="waveform-bar"></div>
-                  <div class="waveform-bar"></div>
-                  <div class="waveform-bar"></div>
-                  <div class="waveform-bar"></div>
-                  <div class="waveform-bar"></div>
+                <div class="audio-info">
+                  <h3 class="audio-title">{{ audio.title }}</h3>
+                  <div class="audio-meta">
+                    <span class="audio-author">{{ audio.author_name }}</span>
+                    <span class="meta-divider">•</span>
+                    <span class="audio-date">
+                      {{ formatDate(audio.updated_at || audio.published_at || audio.created_at) }}
+                    </span>
+                    <span v-if="audio.duration" class="meta-divider">•</span>
+                    <span v-if="audio.duration" class="audio-duration">{{ audio.duration }}</span>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Audio Info -->
-              <div class="audio-info">
-                <h3 class="audio-title">{{ audio.title }}</h3>
-                <div class="audio-meta">
-                  <span class="audio-author">{{ audio.author_name }}</span>
-                  <span class="meta-divider">•</span>
-                  <span class="audio-date">
-                    {{ formatDate(audio.updated_at || audio.published_at || audio.created_at) }}
-                  </span>
-                  <span v-if="audio.duration" class="meta-divider">•</span>
-                  <span v-if="audio.duration" class="audio-duration">{{ audio.duration }}</span>
+                <div class="audio-player-wrapper">
+                  <audio controls class="audio-player">
+                    <source :src="audio.video_file" type="audio/mpeg">
+                  </audio>
                 </div>
-              </div>
-
-              <!-- Inline Audio Player -->
-              <div class="audio-player-wrapper">
-                <audio controls class="audio-player">
-                  <source :src="audio.video_file" type="audio/mpeg">
-                </audio>
-              </div>
-            </article>
-          </div>
-        </section>
-
+              </article>
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
+    </section>
 
     <VideoPlayerModal :isOpen="isModalOpen" :video="selectedVideo" @close="closeModal" />
   </div>
@@ -213,7 +204,6 @@
   const videosSearchPlaceholder = computed(() => settingsStore.settings.videos_search_placeholder || 'Search video archive...')
   const videosSearchButton = computed(() => settingsStore.settings.videos_search_button || 'Search')
 
-  // Filter chips - customizable via CMS
   const filterChips = computed(() => [
     { value: 'VIDEOS', label: siteContent.getContent('videos_filter_videos', 'VIDEOS') },
     { value: 'AUDIO', label: siteContent.getContent('videos_filter_audio', 'AUDIO') }
@@ -221,18 +211,19 @@
 
   const videos = ref([])
 
-  // Helper function to separate media types for the display logic
   const isAudio = (v) => {
     return v.video_type === 'AUDIO' || (v.video_file && (v.video_file.toLowerCase().endsWith('.mp3') || v.video_file.toLowerCase().endsWith('.m4a') || v.video_file.toLowerCase().endsWith('.wav')))
   }
 
-  // Filtered computed property still exists for search functionality
   const filteredVideos = computed(() => {
     const q = query.value.trim().toLowerCase()
     return videos.value.filter(v => {
       return !q || v.title.toLowerCase().includes(q) || (v.author_name && v.author_name.toLowerCase().includes(q))
     })
   })
+
+  const videoItems = computed(() => filteredVideos.value.filter(v => !isAudio(v)))
+  const audioItems = computed(() => filteredVideos.value.filter(v => isAudio(v)))
 
   async function fetchVideos() {
     loading.value = true
@@ -243,7 +234,7 @@
         title: video.title,
         thumbnail: video.thumbnail || video.youtube_thumbnail_url || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
         youtube_url: video.youtube_url,
-        youtube_id: video.youtube_id, // Pass youtube_id directly from API
+        youtube_id: video.youtube_id,
         video_file: video.video_file,
         video_type: video.video_type || 'YOUTUBE',
         views_count: video.views_count,
@@ -268,7 +259,10 @@
     const target = section === 'AUDIO' ? audioSectionRef.value : videosSectionRef.value
     target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-  const useThumbPlaceholder = (e) => e.target.src = 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=640&auto=format&fit=crop'
+
+  const useThumbPlaceholder = (e) => {
+    e.target.src = 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=640&auto=format&fit=crop'
+  }
 
   const openVideo = (video) => {
     selectedVideo.value = video
@@ -308,160 +302,30 @@
 </script>
 
 <style scoped>
-  /* ===== HERO BANNER ===== */
-  /* Hero banner styles are global now — see .hero-banner et al. in main.css */
-
-  /* ===== INLINE SEARCH ===== */
-  .search-heading {
-    max-width: 600px;
-    margin: 0 auto 0.75rem;
-    text-align: center;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: rgb(var(--color-text));
+  .chip {
+    @apply px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 flex-shrink-0 border-2;
   }
 
-  .search-box {
-    max-width: 600px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    background: rgb(var(--color-neutral-offwhite));
-    border-radius: 9999px;
-    padding: 0.5rem 0.75rem;
-    gap: 0.5rem;
+  .chip-idle {
+    @apply bg-neutral-white border-transparent text-secondary/60 hover:border-primary/30 hover:text-primary shadow-sm;
   }
 
-  .search-icon-inline {
-    width: 1.125rem;
-    height: 1.125rem;
-    color: rgb(var(--color-primary));
-    flex-shrink: 0;
-  }
-
-  .search-input-inline {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: rgb(var(--color-secondary));
-    background: transparent;
-    padding: 0.25rem 0.5rem;
-    min-width: 0;
-  }
-
-  .search-input-inline::placeholder {
-    color: rgba(0, 0, 0, 0.4);
-  }
-
-  .search-btn-inline {
-    background: rgb(var(--color-primary));
-    color: white;
-    font-weight: 600;
-    border: none;
-    border-radius: 9999px;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .search-btn-inline:hover {
-    background: rgb(var(--color-primary-dark));
-  }
-
-  @media (max-width: 640px) {
-    .search-btn-inline {
-      padding: 0.5rem 1rem;
-      font-size: 0.8125rem;
-    }
-  }
-
-  /* ===== FILTER TABS ===== */
-  .filter-tabs-wrapper {
-    display: flex;
-    gap: 0.75rem;
-    padding: 1rem 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .filter-tabs-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  .filter-chip {
-    padding: 0.75rem 2rem;
-    border-radius: 2rem;
-    font-weight: 700;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    white-space: nowrap;
-    min-height: 44px;
-    min-width: 80px;
-    touch-action: manipulation;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  @media (max-width: 640px) {
-    .filter-tabs-wrapper {
-      gap: 0.5rem;
-      padding: 0.75rem 0;
-    }
-
-    .filter-chip {
-      padding: 0.625rem 1.25rem;
-      font-size: 0.8125rem;
-      min-width: 70px;
-    }
-  }
-
-  .filter-chip-active {
-    background: rgb(var(--color-primary));
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 135, 207, 0.3);
-  }
-
-  .filter-chip-inactive {
-    background: white;
-    color: rgb(var(--color-secondary));
-    border-color: rgb(var(--color-secondary) / 0.2);
-  }
-
-  .filter-chip-inactive:hover {
-    border-color: rgb(var(--color-primary));
-    background: rgb(var(--color-primary) / 0.05);
-  }
-
-  /* ===== SCROLL SECTIONS ===== */
   .scroll-section {
     scroll-margin-top: 150px;
   }
 
-  /* ===== SECTION HEADERS ===== */
   .section-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.875rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgb(var(--color-neutral-offwhite));
+    border-bottom: 2px solid rgb(var(--color-neutral-white) / 0.8);
   }
 
   .section-badge {
     width: 4px;
-    height: 2rem;
+    height: 1.75rem;
     background: rgb(var(--color-primary));
     border-radius: 1rem;
   }
@@ -474,17 +338,12 @@
     letter-spacing: 0.02em;
   }
 
-  /* ===== VIDEO CARDS - BLOG STYLE ===== */
   .video-card {
-    background: transparent;
-    border-radius: 0;
-    overflow: visible;
-    transition: transform 0.2s ease;
-    cursor: pointer;
+    transition: transform 0.3s ease;
   }
 
   .video-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
   }
 
   .video-thumbnail-wrapper {
@@ -493,39 +352,28 @@
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: rgb(var(--color-neutral-offwhite));
-    border-radius: 0.75rem;
-    margin-bottom: 0.75rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  @media (max-width: 640px) {
-    .video-card:hover {
-      transform: translateY(-2px);
-    }
-
-    .video-thumbnail-wrapper {
-      border-radius: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
+    border-radius: 1.25rem;
+    margin-bottom: 0.875rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   }
 
   .video-thumbnail {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: all 0.3s ease;
+    transition: transform 0.5s ease, filter 0.3s ease;
   }
 
   .video-card:hover .video-thumbnail {
     transform: scale(1.05);
-    filter: brightness(1.1);
+    filter: brightness(1.08);
   }
 
   .video-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
-    opacity: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 55%);
+    opacity: 0.65;
     transition: opacity 0.3s ease;
   }
 
@@ -539,7 +387,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: scale(0.8);
+    transform: scale(0.85);
     opacity: 0;
     transition: all 0.3s ease;
   }
@@ -551,13 +399,13 @@
 
   .play-button {
     background: white;
-    width: 3rem;
-    height: 3rem;
+    width: 3.25rem;
+    height: 3.25rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   }
 
   .play-icon {
@@ -568,28 +416,16 @@
     margin-left: 0.15rem;
   }
 
-  @media (max-width: 640px) {
-    .play-button {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-
-    .play-icon {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-  }
-
   .duration-badge {
     position: absolute;
-    bottom: 0.5rem;
-    right: 0.5rem;
-    background: rgba(0, 0, 0, 0.85);
+    bottom: 0.625rem;
+    right: 0.625rem;
+    background: rgba(0, 0, 0, 0.8);
     color: white;
     font-size: 0.6875rem;
-    font-weight: 600;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
+    font-weight: 700;
+    padding: 0.3rem 0.55rem;
+    border-radius: 0.5rem;
     backdrop-filter: blur(4px);
   }
 
@@ -601,10 +437,10 @@
   }
 
   .video-title {
-    font-size: clamp(0.875rem, 1.25vw, 1rem);
+    font-size: clamp(0.9375rem, 1.25vw, 1.0625rem);
     font-weight: 700;
     color: rgb(var(--color-secondary));
-    line-height: 1.3;
+    line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -618,41 +454,14 @@
 
   .video-date {
     font-size: 0.75rem;
-    color: rgba(0, 0, 0, 0.6);
-    font-weight: 500;
+    color: rgba(0, 0, 0, 0.45);
+    font-weight: 600;
   }
 
-  @media (max-width: 640px) {
-    .video-info {
-      padding: 0 0.125rem;
-      gap: 0.25rem;
-    }
-
-    .video-title {
-      font-size: 0.8125rem;
-      -webkit-line-clamp: 1;
-    }
-
-    .video-date {
-      font-size: 0.6875rem;
-    }
-
-    .duration-badge {
-      font-size: 0.625rem;
-      padding: 0.2rem 0.4rem;
-    }
-  }
-
-  .video-card:hover .video-title {
-    color: rgb(var(--color-primary));
-  }
-
-
-  /* ===== AUDIO CARDS - PODCAST STYLE ===== */
   .audio-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.875rem;
   }
 
   .audio-card {
@@ -660,50 +469,28 @@
     align-items: center;
     gap: 1rem;
     background: white;
-    padding: 1.25rem;
-    border-radius: 1rem;
-    border: 1px solid rgb(var(--color-neutral-offwhite));
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 1.25rem 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     transition: all 0.3s ease;
   }
 
   .audio-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 104, 55, 0.15);
-    border-color: rgb(var(--color-secondary) / 0.3);
-    transform: translateX(4px);
+    box-shadow: 0 10px 28px rgba(0, 104, 55, 0.1);
+    border-color: rgb(var(--color-primary) / 0.2);
+    transform: translateY(-2px);
   }
 
   .audio-icon-wrapper {
     flex-shrink: 0;
     width: 3.5rem;
     height: 3.5rem;
-    background: rgb(var(--color-secondary) / 0.1);
+    background: rgb(var(--color-secondary) / 0.08);
     border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  @media (max-width: 640px) {
-    .audio-list {
-      gap: 0.75rem;
-    }
-
-    .audio-card {
-      padding: 1rem;
-      gap: 0.75rem;
-    }
-
-    .audio-icon-wrapper {
-      width: 3rem;
-      height: 3rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .audio-icon-wrapper {
-      display: none;
-    }
   }
 
   .waveform-icon {
@@ -741,7 +528,7 @@
     font-weight: 700;
     color: rgb(var(--color-secondary));
     line-height: 1.4;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.375rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -761,20 +548,18 @@
   }
 
   .audio-author {
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.65);
     font-weight: 600;
   }
 
   .audio-date,
   .audio-duration {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.45);
     font-weight: 500;
   }
 
-  @media (max-width: 480px) {
-    .audio-duration {
-      display: none;
-    }
+  .meta-divider {
+    color: rgba(0, 0, 0, 0.25);
   }
 
   .audio-player-wrapper {
@@ -786,7 +571,83 @@
   .audio-player {
     width: 100%;
     height: 2.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .skeleton-card {
+    background: transparent;
+  }
+
+  .skeleton-thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 1.25rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .skeleton-content {
+    padding: 0 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skeleton-title {
+    height: 1rem;
+    width: 85%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 0.25rem;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton-meta {
+    height: 0.75rem;
+    width: 45%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 0.25rem;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3.5rem 2rem;
+    text-align: center;
+    background: white;
+    border-radius: 1.75rem;
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+  }
+
+  .empty-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    color: rgb(var(--color-primary) / 0.35);
+    margin-bottom: 1.25rem;
+  }
+
+  .empty-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: rgb(var(--color-secondary));
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-subtitle {
+    font-size: 0.9375rem;
+    color: rgba(0, 0, 0, 0.45);
+    font-weight: 600;
   }
 
   @media (max-width: 768px) {
@@ -794,14 +655,12 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 0.875rem;
+      border-radius: 1.25rem;
+      padding: 1.125rem;
     }
 
     .audio-player-wrapper {
       max-width: 100%;
-    }
-
-    .audio-player {
-      width: 100%;
     }
 
     .audio-title {
@@ -813,80 +672,28 @@
   }
 
   @media (max-width: 480px) {
-    .audio-card {
-      gap: 0.75rem;
+    .audio-icon-wrapper {
+      display: none;
+    }
+
+    .audio-duration {
+      display: none;
     }
   }
 
-  /* ===== SKELETON LOADERS ===== */
-  .skeleton-card {
-    background: transparent;
-    border-radius: 0;
-    overflow: visible;
-  }
-
-  .skeleton-thumbnail {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .skeleton-content {
-    padding: 0 0.25rem;
-  }
-
-  .skeleton-title {
-    height: 1rem;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    border-radius: 0.25rem;
-    animation: shimmer 1.5s infinite;
-  }
-
-  @media (max-width: 640px) {
-    .skeleton-thumbnail {
-      border-radius: 0.5rem;
-      margin-bottom: 0.5rem;
+  @media (prefers-reduced-motion: reduce) {
+    .video-card,
+    .audio-card,
+    .waveform-bar,
+    .play-button-wrapper,
+    .video-thumbnail {
+      transition: none !important;
+      animation: none !important;
     }
-  }
 
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-
-  /* ===== EMPTY STATE ===== */
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 2rem;
-    text-align: center;
-    background: rgb(var(--color-neutral-offwhite));
-    border-radius: 2rem;
-  }
-
-  .empty-icon {
-    width: 4rem;
-    height: 4rem;
-    color: rgb(var(--color-primary) / 0.3);
-    margin-bottom: 1.5rem;
-  }
-
-  .empty-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: rgb(var(--color-secondary));
-    margin-bottom: 0.5rem;
-  }
-
-  .empty-subtitle {
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.5);
+    .video-card:hover,
+    .audio-card:hover {
+      transform: none;
+    }
   }
 </style>

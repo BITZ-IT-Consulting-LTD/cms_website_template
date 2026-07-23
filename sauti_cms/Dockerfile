@@ -12,6 +12,6 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir setuptools && pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 EXPOSE 8000
-RUN chmod +x /app/entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh /app/run_scheduler.sh && chmod +x /app/entrypoint.sh /app/run_scheduler.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

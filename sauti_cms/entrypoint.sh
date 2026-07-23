@@ -3,7 +3,7 @@
 set -ex
 
 echo "Waiting for PostgreSQL..."
-while ! pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER}; do
+while ! pg_isready -h ${DB_HOST:-db} -p ${DB_PORT:-5432} -U ${DB_USER:-postgres}; do
   echo "Postgres unavailable - sleeping"
   sleep 1
 done
