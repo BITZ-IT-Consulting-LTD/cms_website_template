@@ -191,6 +191,16 @@
     name: 'VideosPage'
   })
 
+  // Local inline SVG fallback (no third-party network request) used whenever a video
+  // has no thumbnail, or its thumbnail URL fails to load.
+  const VIDEO_THUMB_PLACEHOLDER = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">' +
+    '<rect width="1200" height="675" fill="#F8FAFC"/>' +
+    '<circle cx="600" cy="337.5" r="80" fill="#0087CF" fill-opacity="0.15"/>' +
+    '<path d="M572 292 L648 337.5 L572 383 Z" fill="#0087CF" fill-opacity="0.6"/>' +
+    '</svg>'
+  )
+
   const videosStore = useVideosStore()
   const settingsStore = useSettingsStore()
   const siteContent = useSiteContent('videos')
@@ -232,7 +242,7 @@
       videos.value = videosStore.videos.map(video => ({
         id: video.id,
         title: video.title,
-        thumbnail: video.thumbnail || video.youtube_thumbnail_url || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&auto=format&fit=crop',
+        thumbnail: video.thumbnail || video.youtube_thumbnail_url || VIDEO_THUMB_PLACEHOLDER,
         youtube_url: video.youtube_url,
         youtube_id: video.youtube_id,
         video_file: video.video_file,
@@ -259,9 +269,11 @@
     const target = section === 'AUDIO' ? audioSectionRef.value : videosSectionRef.value
     target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-
   const useThumbPlaceholder = (e) => {
-    e.target.src = 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=640&auto=format&fit=crop'
+    // Guard against a repeated error loop: only swap to the local placeholder once.
+    if (e.target.dataset.fallbackApplied) return
+    e.target.dataset.fallbackApplied = 'true'
+    e.target.src = VIDEO_THUMB_PLACEHOLDER
   }
 
   const openVideo = (video) => {

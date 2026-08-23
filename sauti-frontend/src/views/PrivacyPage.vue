@@ -147,7 +147,7 @@
                   </div>
                   <div>
                     <p class="campaign-header text-[10px] text-black/50 mb-1">Privacy Admin</p>
-                    <p class="text-black font-bold break-all">privacy@sauti.gov.ug</p>
+                    <p class="text-black font-bold break-all"><a :href="`mailto:${privacyContactEmail}`" class="hover:underline">{{ privacyContactEmail }}</a></p>
                   </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -197,7 +197,7 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+  import { computed, onMounted } from 'vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
     CheckIcon,
@@ -207,10 +207,15 @@
     MapPinIcon,
     ArrowLeftIcon
   } from '@heroicons/vue/24/outline'
+  import { useSiteContent } from '@/composables/useSiteContent'
 
   defineOptions({
     name: 'PrivacyPage'
   })
+
+  const siteContent = useSiteContent('privacy')
+
+  const privacyContactEmail = computed(() => siteContent.getContent('privacy_contact_email', 'privacy@sauti.gov.ug'))
 
   const collectionMethods = [
     'Call our helpline (116)',
@@ -255,5 +260,9 @@
       month: 'long',
       day: 'numeric'
     })
+  })
+
+  onMounted(async () => {
+    await siteContent.fetchContent()
   })
 </script>

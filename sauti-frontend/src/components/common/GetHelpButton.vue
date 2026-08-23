@@ -34,17 +34,17 @@
               <!-- Emergency Hotline -->
               <div class="bg-neutral-white rounded-xl p-6 text-center border border-neutral-offwhite shadow-sm">
                 <h3 class="text-lg font-bold text-secondary mb-2">Emergency Hotline</h3>
-                <a href="tel:116" class="hotline-btn">
-                  116
+                <a :href="`tel:${hotlineNumber}`" class="hotline-btn">
+                  {{ hotlineNumber }}
                 </a>
-                <p class="text-sm font-bold text-secondary">Reporting any form of violence. Call 116. Toll-free ·
+                <p class="text-sm font-bold text-secondary">Reporting any form of violence. Call {{ hotlineNumber }}. Toll-free ·
                   Available 24/7</p>
               </div>
 
               <!-- Other Channels -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- WhatsApp -->
-                <a href="https://wa.me/256743889999" target="_blank" rel="noopener noreferrer"
+                <a :href="whatsappLink" target="_blank" rel="noopener noreferrer"
                   class="card p-4 flex items-center space-x-3 focus:ring-2 focus:ring-primary focus:outline-none">
                   <div class="bg-neutral-offwhite p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -59,7 +59,7 @@
                 </a>
 
                 <!-- U-Report -->
-                <a href="https://ureport.in" target="_blank" rel="noopener noreferrer"
+                <a :href="uReportLink" target="_blank" rel="noopener noreferrer"
                   class="card p-4 flex items-center space-x-3 focus:ring-2 focus:ring-primary focus:outline-none">
                   <div class="bg-neutral-offwhite p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -135,6 +135,7 @@
 <script setup>
   import { ref, watch, nextTick, computed, onMounted } from 'vue'
   import { useSiteContent } from '@/composables/useSiteContent'
+  import { useSettingsStore } from '@/store/settings'
 
   const showModal = ref(false)
   const closeButton = ref(null)
@@ -143,6 +144,16 @@
   // so updating it in one place propagates everywhere.
   const siteContent = useSiteContent('footer')
   const helpEmail = computed(() => siteContent.getContent('footer_email_address', 'info@sauti116.ug'))
+
+  // Read emergency contact details from the global settings store / CMS instead of
+  // hardcoding them, following the same pattern used in AppHeader.vue and HomePage.vue.
+  const settingsStore = useSettingsStore()
+  const hotlineNumber = computed(() => settingsStore.settings.hotline_number || '116')
+  const whatsappLink = computed(() => {
+    const raw = settingsStore.settings.social_whatsapp || '256743889999'
+    return `https://wa.me/${raw.toString().replace(/[^0-9]/g, '')}`
+  })
+  const uReportLink = computed(() => siteContent.getContent('footer_ureport_link', 'https://ureport.in'))
 
   onMounted(() => {
     siteContent.fetchContent()
