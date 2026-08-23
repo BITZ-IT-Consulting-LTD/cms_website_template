@@ -3,13 +3,13 @@
     <!-- Enhanced Sidebar -->
     <div
       class="fixed inset-y-0 left-0 z-50 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200"
-      style="width: min(288px, 80vw);"
+      style="width: min(240px, 80vw);"
       :class="{ '-translate-x-full': !sidebarOpen }">
       <div class="flex flex-col h-full">
         <!-- Enhanced Logo -->
-        <div class="flex items-center justify-between h-20 px-6 bg-transparent">
+        <div class="flex items-center justify-between h-16 px-4 bg-transparent">
           <div class="flex items-center space-x-3">
-            <div class="h-16 w-16 flex items-center justify-center">
+            <div class="h-10 w-10 flex items-center justify-center">
               <img :src="sautiLogo" alt="Sauti Logo" class="h-full w-full object-contain" />
             </div>
             <div>
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Enhanced Quick Actions -->
-        <div class="px-4 py-6 space-y-3">
+        <div class="px-3 py-3 space-y-2">
           <router-link to="/posts/create"
             class="w-full btn-primary justify-center gap-2 text-sm shadow-lg hover:shadow-xl">
             <PlusCircleIcon class="h-5 w-5" />
@@ -48,10 +48,10 @@
               <div class="w-2 h-2 rounded-full mr-2 bg-slate-400"></div>
               Overview & Operations
             </h3>
-            <div class="space-y-2">
+            <div class="space-y-0.5">
               <router-link to="/dashboard" class="sidebar-link group" :class="{ active: $route.path === '/dashboard' }">
                 <Squares2X2Icon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path === '/dashboard' ? 'text-white' : 'text-blue-500 group-hover:text-blue-600'
                 ]" />
                 <span class="flex-1">Dashboard</span>
@@ -60,7 +60,7 @@
               <router-link to="/reports" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/reports') }">
                 <ShieldExclamationIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/reports') ? 'text-white' : 'text-red-500 group-hover:text-red-600'
                 ]" />
                 <span class="flex-1">Reports & Cases</span>
@@ -77,13 +77,13 @@
               </h3>
             </div>
 
-            <div class="space-y-2">
+            <div class="space-y-0.5">
               <!-- THE HUB -->
               <router-link to="/content-hub"
                 class="sidebar-link group bg-blue-50 border-blue-100 hover:bg-blue-100 mb-4"
                 :class="{ active: $route.path === '/content-hub' }">
                 <WrenchScrewdriverIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path === '/content-hub' ? 'text-white' : 'text-blue-700'
                 ]" />
                 <span class="flex-1 font-bold">CONTENT HUB</span>
@@ -95,7 +95,7 @@
 
               <router-link to="/posts" class="sidebar-link group" :class="{ active: $route.path === '/posts' || $route.path.startsWith('/posts/') }">
                 <DocumentTextIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   ($route.path === '/posts' || $route.path.startsWith('/posts/')) ? 'text-white' : 'text-orange-500 group-hover:text-orange-600'
                 ]" />
                 <span class="flex-1">Blog Posts</span>
@@ -103,7 +103,7 @@
 
               <router-link to="/drafts" class="sidebar-link group" :class="{ active: $route.path === '/drafts' }">
                 <PencilSquareIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path === '/drafts' ? 'text-white' : 'text-amber-500 group-hover:text-amber-600'
                 ]" />
                 <span class="flex-1">Drafts</span>
@@ -116,7 +116,7 @@
               <router-link to="/videos" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/videos') }">
                 <VideoCameraIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/videos') ? 'text-white' : 'text-purple-500 group-hover:text-purple-600'
                 ]" />
                 <span class="flex-1">Videos</span>
@@ -125,7 +125,7 @@
               <router-link to="/resources" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/resources') }">
                 <FolderOpenIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/resources') ? 'text-white' : 'text-teal-500 group-hover:text-teal-600'
                 ]" />
                 <span class="flex-1">Resources</span>
@@ -134,7 +134,7 @@
               <router-link to="/uploads" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/uploads') }">
                 <PhotoIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/uploads') ? 'text-white' : 'text-indigo-500 group-hover:text-indigo-600'
                 ]" />
                 <span class="flex-1">Media Library</span>
@@ -147,7 +147,7 @@
               <router-link to="/content" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/content') }">
                 <HomeIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/content') ? 'text-white' : 'text-blue-500'
                 ]" />
                 <span class="flex-1">Page Content</span>
@@ -156,7 +156,7 @@
               <router-link to="/services" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/services') }">
                 <CubeIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/services') ? 'text-white' : 'text-cyan-500'
                 ]" />
                 <span class="flex-1">Help Services</span>
@@ -164,7 +164,7 @@
 
               <router-link to="/faqs" class="sidebar-link group" :class="{ active: $route.path.startsWith('/faqs') }">
                 <QuestionMarkCircleIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/faqs') ? 'text-white' : 'text-green-500'
                 ]" />
                 <span class="flex-1">FAQs</span>
@@ -173,7 +173,7 @@
               <router-link to="/feedback" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/feedback') }">
                 <ChatBubbleLeftRightIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/feedback') ? 'text-white' : 'text-indigo-500'
                 ]" />
                 <span class="flex-1">General Feedback</span>
@@ -184,7 +184,7 @@
               <router-link to="/partners" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/partners') }">
                 <HandThumbUpIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/partners') ? 'text-white' : 'text-yellow-500'
                 ]" />
                 <span class="flex-1">Partners</span>
@@ -197,7 +197,7 @@
               <router-link to="/social-media" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/social-media') }">
                 <ShareIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/social-media') ? 'text-white' : 'text-sky-500'
                 ]" />
                 <span class="flex-1">Profiles & Social</span>
@@ -211,10 +211,10 @@
               <div class="w-2 h-2 rounded-full mr-2 bg-slate-400"></div>
               System & Configuration
             </h3>
-            <div class="space-y-2">
+            <div class="space-y-0.5">
               <router-link to="/users" class="sidebar-link group" :class="{ active: $route.path.startsWith('/users') }">
                 <UsersIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/users') ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'
                 ]" />
                 <span class="flex-1">Admin Users</span>
@@ -223,7 +223,7 @@
               <router-link to="/settings" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/settings') }">
                 <CogIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/settings') ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'
                 ]" />
                 <span class="flex-1">System Settings</span>
@@ -232,7 +232,7 @@
               <router-link to="/legal-footer" class="sidebar-link group"
                 :class="{ active: $route.path.startsWith('/legal-footer') }">
                 <ScaleIcon :class="[
-                  'h-5 w-5 mr-3 transition-colors duration-300',
+                  'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/legal-footer') ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'
                 ]" />
                 <span class="flex-1">Legal & Footer</span>
@@ -242,10 +242,10 @@
         </nav>
 
         <!-- Enhanced User Info & Logout -->
-        <div class="p-6 bg-white">
+        <div class="p-4 bg-white">
           <div class="flex items-center mb-4">
             <div class="flex-shrink-0">
-              <div class="h-12 w-12 rounded-2xl flex items-center justify-center shadow-lg"
+              <div class="h-9 w-9 rounded-xl flex items-center justify-center shadow-sm"
                 style="background-color: #009EDB;">
                 <span class="text-white text-lg font-bold">
                   {{ userInitials }}
@@ -260,7 +260,7 @@
           </div>
 
           <button @click="handleLogout"
-            class="flex items-center w-full px-4 py-3 text-sm rounded-xl transition-all duration-300 font-semibold border"
+            class="flex items-center w-full px-3 py-2 text-sm rounded-lg transition-colors duration-200 font-semibold border"
             :style="{
               color: isHoveringLogout ? '#CC0000' : '#222222',
               borderColor: isHoveringLogout ? '#CC0000' : '#DDDDDD',

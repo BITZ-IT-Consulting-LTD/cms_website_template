@@ -102,7 +102,7 @@
 @layer components {
   /* Enhanced Button Styles */
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 transform hover:scale-105 active:scale-95;
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-full font-semibold transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 transform hover:scale-105 active:scale-95;
     font-family: var(--font-cronos);
   }
   
@@ -167,22 +167,22 @@
   
   /* Enhanced Card Styles */
   .card {
-    @apply bg-white rounded-2xl shadow-lg border transition-all duration-300;
+    @apply bg-white rounded-xl shadow-sm border transition-shadow duration-200;
     border-color: #F0F0F0;
   }
   
   .card-header {
-    @apply px-6 py-4;
+    @apply px-4 py-3;
     background: linear-gradient(135deg, #FFFFFF 0%, #F5F8F9 100%);
     border-bottom: 1px solid #F0F0F0;
   }
   
   .card-body {
-    @apply p-6;
+    @apply p-4;
   }
   
   .card-footer {
-    @apply px-6 py-4;
+    @apply px-4 py-3;
     background-color: #F5F8F9;
     border-top: 1px solid #F0F0F0;
   }
@@ -246,7 +246,7 @@
   
   /* Enhanced Sidebar Styles */
   .sidebar-link {
-    @apply flex items-center px-4 py-3 transition-all duration-300 rounded-xl mx-2 font-medium;
+    @apply flex items-center px-3 py-2 text-sm transition-colors duration-200 rounded-lg mx-2 font-medium;
     font-family: var(--font-cronos);
     color: #222222;
   }
@@ -254,7 +254,6 @@
   .sidebar-link:hover {
     background-color: #E6F7FF;
     color: #009EDB;
-    transform: scale(1.03);
   }
   
   .sidebar-link.active {
@@ -315,18 +314,18 @@
   }
   
   .table-cell {
-    @apply px-6 py-4 text-sm font-medium;
+    @apply px-4 py-2.5 text-sm font-medium;
     color: #222222;
   }
   
   /* Enhanced Stats Cards */
   .stats-card {
-    @apply bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:scale-105;
+    @apply bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow duration-200;
     border: 1px solid #F0F0F0;
   }
   
   .stats-number {
-    @apply text-3xl font-bold mb-2;
+    @apply text-2xl font-bold mb-1;
     color: #009EDB;
     font-family: var(--font-cronos);
   }

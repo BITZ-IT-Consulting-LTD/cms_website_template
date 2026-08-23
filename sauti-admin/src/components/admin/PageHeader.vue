@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8">
+  <div class="mb-5">
     <div class="flex justify-between items-start">
       <div>
         <h1 class="text-2xl font-bold text-gray-900" style="font-family: 'Roboto', sans-serif;">
