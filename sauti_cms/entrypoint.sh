@@ -49,10 +49,15 @@ fi
 echo "Running site content population..."
 python manage.py populate_site_content
 
-echo "Running sitesettings population..."
+# Both commands below are additive by default (get_or_create): they add any
+# new keys/FAQs introduced by a release without touching rows an admin has
+# edited. They only overwrite when passed --force, which must never be done
+# here. Before 2026-08, both used update_or_create unconditionally and reset
+# every seeded site setting and all 22 seeded FAQs on each deploy.
+echo "Running sitesettings population (additive)..."
 python manage.py populate_sitesettings
 
-echo "Running FAQs population..."
+echo "Running FAQs population (additive)..."
 python manage.py populate_faqs
 
 echo "Collecting static files..."

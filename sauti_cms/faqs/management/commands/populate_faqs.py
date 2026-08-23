@@ -2,9 +2,25 @@ from django.core.management.base import BaseCommand
 from faqs.models import FAQ, FAQCategory
 
 class Command(BaseCommand):
-    help = 'Populates the FAQ model with default content.'
+    help = (
+        'Seeds the FAQ model with default content. Existing FAQs are left '
+        'untouched so CMS edits survive redeploys; pass --force to overwrite '
+        'them back to these defaults.'
+    )
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--force',
+            action='store_true',
+            help=(
+                'Overwrite existing FAQs with the seed defaults, discarding '
+                'any edits made through the admin. Destructive - never use '
+                'this from entrypoint.sh on a populated database.'
+            ),
+        )
 
     def handle(self, *args, **options):
+        force = options.get('force', False)
         faqs_data = [
             {
                 "question": "How much does it cost to call the helpline 116?",
@@ -96,19 +112,54 @@ class Command(BaseCommand):
             }
         ]
 
+        created_count = 0
+        preserved_count = 0
+        overwritten_count = 0
+
         for i, faq_data in enumerate(faqs_data):
-            faq_obj, created = FAQ.objects.update_or_create(
+            defaults = {
+                'answer': faq_data['answer'],
+                'language': FAQ.Language.ENGLISH,
+                'order': i + 1,
+                'is_active': True,
+                'views_count': 0,
+                'category': None, # No category specified in input
+            }
+
+            if force:
+                # Destructive: resets answer, order, is_active, category and
+                # views_count on FAQs an admin may have edited.
+                faq_obj, created = FAQ.objects.update_or_create(
+                    question=faq_data['question'],
+                    defaults=defaults,
+                )
+                if created:
+                    created_count += 1
+                    self.stdout.write(self.style.SUCCESS(f"Created FAQ: {faq_data['question']}"))
+                else:
+                    overwritten_count += 1
+                    self.stdout.write(self.style.WARNING(f"Overwrote FAQ: {faq_data['question']}"))
+                continue
+
+            # Default: additive only. New seed entries are created; anything
+            # already in the database keeps whatever the CMS admin set.
+            faq_obj, created = FAQ.objects.get_or_create(
                 question=faq_data['question'],
-                defaults={
-                    'answer': faq_data['answer'],
-                    'language': FAQ.Language.ENGLISH,
-                    'order': i + 1,
-                    'is_active': True,
-                    'views_count': 0,
-                    'category': None, # No category specified in input
-                }
+                defaults=defaults,
             )
             if created:
+                created_count += 1
                 self.stdout.write(self.style.SUCCESS(f"Created FAQ: {faq_data['question']}"))
             else:
-                self.stdout.write(self.style.SUCCESS(f"Updated FAQ: {faq_data['question']}"))
+                preserved_count += 1
+
+        if force:
+            self.stdout.write(self.style.WARNING(
+                f"FAQ seed complete (FORCED) - {created_count} created, "
+                f"{overwritten_count} overwritten."
+            ))
+        else:
+            self.stdout.write(self.style.SUCCESS(
+                f"FAQ seed complete - {created_count} created, "
+                f"{preserved_count} existing left untouched."
+            ))

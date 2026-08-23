@@ -12,9 +12,19 @@ class Command(BaseCommand):
             action="store_true",
             help="Run the command without writing changes to the database.",
         )
+        parser.add_argument(
+            "--force",
+            action="store_true",
+            help=(
+                "Overwrite existing settings with the seed defaults, discarding "
+                "any edits made through the admin. Destructive - never use this "
+                "from entrypoint.sh on a populated database."
+            ),
+        )
 
     def handle(self, *args, **options):
         dry_run = options.get("dry_run", False)
+        force = options.get("force", False)
 
         self.stdout.write(self.style.NOTICE("Starting site settings population..."))
 
@@ -151,22 +161,42 @@ class Command(BaseCommand):
                     )
                     continue
 
-                setting, created = SiteSetting.objects.update_or_create(
-                    page=data["page"],
-                    key=data["key"],
-                    defaults={
-                        "value": data["value"],
-                        "description": data["description"],
-                    },
-                )
+                defaults = {
+                    "value": data["value"],
+                    "description": data["description"],
+                }
 
+                if force:
+                    # Destructive: resets values an admin may have edited.
+                    setting, created = SiteSetting.objects.update_or_create(
+                        page=data["page"], key=data["key"], defaults=defaults,
+                    )
+                    if created:
+                        created_count += 1
+                        self.stdout.write(self.style.SUCCESS(f"Created: {setting.page}.{setting.key}"))
+                    else:
+                        updated_count += 1
+                        self.stdout.write(self.style.WARNING(f"Overwrote: {setting.page}.{setting.key}"))
+                    continue
+
+                # Default: additive only. New keys are created; existing rows
+                # keep whatever the CMS admin set.
+                setting, created = SiteSetting.objects.get_or_create(
+                    page=data["page"], key=data["key"], defaults=defaults,
+                )
                 if created:
                     created_count += 1
                     self.stdout.write(self.style.SUCCESS(f"Created: {setting.page}.{setting.key}"))
                 else:
                     updated_count += 1
-                    self.stdout.write(self.style.NOTICE(f"Updated: {setting.page}.{setting.key}"))
 
-        self.stdout.write(self.style.SUCCESS(
-            f"Site settings complete — {created_count} created, {updated_count} updated."
-        ))
+        if force:
+            self.stdout.write(self.style.WARNING(
+                f"Site settings complete (FORCED) — {created_count} created, "
+                f"{updated_count} overwritten."
+            ))
+        else:
+            self.stdout.write(self.style.SUCCESS(
+                f"Site settings complete — {created_count} created, "
+                f"{updated_count} existing left untouched."
+            ))
