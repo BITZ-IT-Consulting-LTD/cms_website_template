@@ -1,12 +1,12 @@
 <template>
   <div class="min-h-screen bg-white">
-    <!-- Hero Banner -->
     <header class="hero-banner" style="padding-top: clamp(70px, 15vw, 90px);">
       <div class="hero-overlay"></div>
       <div class="container-custom hero-content-wrapper">
         <div class="hero-text">
           <h1 class="hero-title">
-            {{ siteContent.getContent('faqs_page_title', 'Frequently Asked') }} <span class="text-accent-yellow">{{ siteContent.getContent('faqs_page_title_highlight', 'Questions') }}</span>
+            {{ siteContent.getContent('faqs_page_title', 'Frequently Asked') }}
+            <span class="text-accent-yellow">{{ siteContent.getContent('faqs_page_title_highlight', 'Questions') }}</span>
           </h1>
           <p class="hero-subtitle">
             {{ siteContent.getContent('faqs_page_subtitle', 'Find answers to common questions about our services, child protection, and how we can support you.') }}
@@ -15,144 +15,276 @@
       </div>
     </header>
 
-    <div class="container-custom section-padding !pt-12">
-      <!-- CSS-grid layout (defined in scoped <style> as .faq-layout): a real
-           grid-template-columns track for the fixed-width sidebar and a
-           minmax(0, 1fr) track for the Q&A column. Grid tracks can't collapse
-           to content width the way flex-basis / arbitrary Tailwind values did,
-           so this reliably fills the section with no dead whitespace. -->
-      <div class="faq-layout">
+    <section class="bg-warm">
+      <div class="container-custom section-padding !pt-10 md:!pt-14">
+        <div class="faq-layout">
 
-        <!-- Left Sidebar (Support Info) -->
-        <div class="faq-sidebar order-2 lg:order-1 space-y-6 lg:space-y-8 lg:sticky lg:top-32">
-          <!-- Hero Card -->
-          <div class="rounded-xl lg:rounded-2xl bg-primary p-6 lg:p-8 text-neutral-white relative overflow-hidden">
-            <div class="relative z-10 text-center space-y-4 lg:space-y-5">
-              <div
-                class="w-14 h-14 lg:w-16 lg:h-16 mx-auto bg-neutral-white/10 rounded-xl lg:rounded-2xl flex items-center justify-center border border-neutral-white/20">
-                <Clock class="w-7 h-7 lg:w-9 lg:h-9 text-neutral-white" />
-              </div>
-              <div>
-                <h3 class="text-xl lg:text-2xl font-bold mb-1.5 lg:mb-2 tracking-tight">{{ faqsSupportTitle }}</h3>
-                <p class="text-sm lg:text-base text-neutral-white/80 font-semibold leading-relaxed">{{ faqsSupportSubtitle }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Emergency Contact Card -->
-          <div class="rounded-xl lg:rounded-2xl bg-emergency/5 p-6 lg:p-8 space-y-4 lg:space-y-5">
-            <h4 class="text-lg lg:text-xl font-bold text-emergency">{{ faqsImmediateHelpTitle }}</h4>
-            <p class="text-sm lg:text-base text-black font-semibold leading-relaxed">{{ faqsImmediateHelpSubtitle }}</p>
-            <BaseCTA :href="`tel:116`" variant="emergency" class="w-full justify-center !py-3 lg:!py-4 font-bold text-sm lg:text-base" external>
-              {{ faqsCallButton }}
-            </BaseCTA>
-          </div>
-        </div>
-
-        <!-- Right Content (FAQs) -->
-        <div class="faq-main order-1 lg:order-2 space-y-8 lg:space-y-10">
-          <!-- Search Bar -->
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-4 lg:pl-6 flex items-center pointer-events-none">
-              <Search class="h-4 w-4 lg:h-5 lg:w-5 text-primary/50" />
-            </div>
-            <input v-model="query" type="text" :placeholder="faqsSearchPlaceholder"
-              class="w-full pl-12 lg:pl-16 pr-4 lg:pr-6 py-3 lg:py-4 bg-neutral-offwhite rounded-full text-secondary font-semibold placeholder:text-black/30 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all text-sm lg:text-base border-none" />
-          </div>
-
-          <AppLoader v-if="loading" />
-
-          <div v-else>
-            <!-- Category Filter -->
-            <div v-if="categories.length" class="overflow-x-auto pb-4 -mx-2 px-2 hide-scrollbar">
-              <div class="flex flex-nowrap gap-2 lg:gap-3">
-                <button @click="selectedCategory = ''"
-                  :class="selectedCategory === '' ? 'bg-secondary text-neutral-white shadow-lg' : 'bg-neutral-white text-secondary shadow-sm hover:shadow-md'"
-                  class="px-4 lg:px-6 py-2 lg:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 flex-shrink-0">
-                  {{ faqsAllCategoriesButton }}
-                </button>
-                <button v-for="category in categories" :key="category.id" @click="selectedCategory = category.id"
-                  :class="selectedCategory === category.id ? 'bg-secondary text-neutral-white shadow-lg' : 'bg-neutral-white text-secondary shadow-sm hover:shadow-md'"
-                  class="px-4 lg:px-6 py-2 lg:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 flex-shrink-0">
-                  {{ category.name }}
-                </button>
-              </div>
-            </div>
-
-            <!-- FAQ List -->
-            <div v-if="filteredFaqs.length" class="space-y-4 lg:space-y-5">
-              <div v-for="(faq, index) in filteredFaqs" :key="faq.id || index"
-                class="group bg-neutral-white rounded-xl lg:rounded-2xl border shadow-sm hover:shadow-md transition-all duration-500 overflow-hidden"
-                :class="openFaq === index ? 'shadow-xl border-primary/20' : 'border-neutral-offwhite'">
-                <button @click="toggleFaq(index)"
-                  class="w-full text-left px-4 py-4 lg:px-6 lg:py-5 flex items-start gap-3 lg:gap-4 hover:bg-neutral-offwhite/30 transition-colors focus:outline-none"
-                  :aria-expanded="openFaq === index">
-                  <div class="mt-0.5 lg:mt-1 flex-shrink-0">
-                    <div class="w-8 h-8 lg:w-9 lg:h-9 rounded-lg lg:rounded-xl flex items-center justify-center transition-all duration-500"
-                      :class="openFaq === index ? 'bg-secondary text-neutral-white shadow-md' : 'bg-neutral-offwhite text-primary'">
-                      <ChevronDown class="w-4 h-4 lg:w-5 lg:h-5 transition-transform duration-500 transform"
-                        :class="{ 'rotate-180': openFaq === index }" />
-                    </div>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <span
-                      class="font-bold text-secondary text-base lg:text-lg block mb-2 lg:mb-3 leading-snug group-hover:text-primary transition-colors">{{
-                        faq.question
-                      }}</span>
-                    <span v-if="faq.category_name"
-                      class="inline-block px-3 py-1 rounded-lg text-[10px] lg:text-xs uppercase font-bold tracking-wider bg-primary/10 text-primary border border-primary/20">{{
-                        faq.category_name }}</span>
-                  </div>
-                </button>
-
-                <div v-show="openFaq === index"
-                  class="px-4 pb-5 pl-14 lg:px-6 lg:pb-6 lg:pl-16 text-secondary font-medium text-sm lg:text-base leading-relaxed animate-fade-in bg-neutral-white">
-                  <p class="max-w-3xl">{{ faq.answer }}</p>
+          <!-- Sidebar: support + category nav -->
+          <aside class="faq-sidebar order-2 lg:order-1 space-y-5 lg:sticky lg:top-28 lg:self-start">
+            <div class="support-card relative overflow-hidden rounded-2xl bg-secondary p-5 lg:p-6 text-neutral-white">
+              <div class="support-card__glow" aria-hidden="true"></div>
+              <div class="relative z-10 flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-neutral-white/10 border border-neutral-white/15 flex items-center justify-center shrink-0">
+                  <Headphones class="w-5 h-5 text-accent-yellow" />
+                </div>
+                <div class="min-w-0">
+                  <h3 class="text-base lg:text-lg font-bold tracking-tight">{{ faqsSupportTitle }}</h3>
+                  <p class="text-xs lg:text-sm text-neutral-white/70 font-semibold mt-0.5">{{ faqsSupportSubtitle }}</p>
                 </div>
               </div>
             </div>
 
-            <!-- Empty State -->
-            <div v-else class="text-center py-16 lg:py-20 max-w-2xl mx-auto">
-              <div
-                class="w-16 h-16 lg:w-20 lg:h-20 mx-auto bg-neutral-offwhite rounded-2xl flex items-center justify-center mb-6 lg:mb-8 shadow-sm">
-                <Search class="w-8 h-8 lg:w-10 lg:h-10 text-primary/60" />
+            <div class="rounded-2xl bg-neutral-white border border-emergency/10 p-5 space-y-4 shadow-sm">
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-lg bg-emergency/10 text-emergency flex items-center justify-center shrink-0">
+                  <Phone class="w-4 h-4" />
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-sm lg:text-base font-bold text-emergency">{{ faqsImmediateHelpTitle }}</h4>
+                  <p class="text-xs text-black/55 font-semibold mt-0.5">{{ faqsImmediateHelpSubtitle }}</p>
+                </div>
               </div>
-              <h3 class="text-xl lg:text-2xl font-bold text-secondary mb-3 lg:mb-4">{{ faqsNoResults }}</h3>
-              <p class="text-sm lg:text-base text-black/60 font-semibold mb-6 lg:mb-8">{{ faqsNoResultsSubtitle }}</p>
-              <button @click="query = ''; selectedCategory = ''"
-                class="px-8 lg:px-10 py-3 lg:py-3.5 bg-primary text-neutral-white rounded-full font-bold uppercase tracking-wider text-xs lg:text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-all">
-                Clear all filters
-              </button>
+              <BaseCTA :href="`tel:116`" variant="emergency" class="w-full justify-center !py-2.5 font-bold text-sm" external>
+                {{ faqsCallButton }}
+              </BaseCTA>
+            </div>
+
+            <!-- Desktop category nav -->
+            <nav
+              v-if="categories.length"
+              class="hidden lg:block rounded-2xl bg-neutral-white border border-black/[0.05] p-3 shadow-sm"
+              aria-label="Browse by topic"
+            >
+              <p class="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-wider text-secondary/40">
+                Browse by topic
+              </p>
+              <ul class="space-y-0.5">
+                <li>
+                  <button
+                    type="button"
+                    class="cat-link"
+                    :class="{ 'cat-link--active': selectedCategory === '' }"
+                    @click="selectCategory('')"
+                  >
+                    <span>{{ faqsAllCategoriesButton }}</span>
+                    <span class="cat-count">{{ faqs.length }}</span>
+                  </button>
+                </li>
+                <li v-for="category in categories" :key="category.id">
+                  <button
+                    type="button"
+                    class="cat-link"
+                    :class="{ 'cat-link--active': selectedCategory === category.id }"
+                    @click="selectCategory(category.id)"
+                  >
+                    <span class="truncate">{{ category.name }}</span>
+                    <span class="cat-count">{{ categoryCount(category.id) }}</span>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </aside>
+
+          <!-- Main -->
+          <div class="faq-main order-1 lg:order-2 min-w-0">
+            <!-- Sticky toolbar -->
+            <div class="faq-toolbar sticky top-[70px] z-20 -mx-1 px-1 pb-4 pt-1 mb-2 bg-warm/95 backdrop-blur-md space-y-3">
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search class="h-4 w-4 text-primary/40" />
+                </div>
+                <input
+                  v-model="query"
+                  type="search"
+                  :placeholder="faqsSearchPlaceholder"
+                  class="w-full pl-11 pr-10 py-3 bg-neutral-white rounded-xl text-secondary font-semibold placeholder:text-black/30 focus:outline-none focus:ring-2 focus:ring-primary/25 text-sm border border-black/5 shadow-sm"
+                />
+                <button
+                  v-if="query"
+                  type="button"
+                  class="absolute inset-y-0 right-0 pr-4 flex items-center text-black/30 hover:text-secondary"
+                  aria-label="Clear search"
+                  @click="query = ''"
+                >
+                  <X class="w-4 h-4" />
+                </button>
+              </div>
+
+              <!-- Mobile category chips -->
+              <div v-if="categories.length" class="lg:hidden overflow-x-auto hide-scrollbar -mx-1 px-1">
+                <div class="flex gap-2 pb-0.5">
+                  <button
+                    type="button"
+                    :class="selectedCategory === '' ? 'chip-active' : 'chip-idle'"
+                    class="chip"
+                    @click="selectCategory('')"
+                  >
+                    {{ faqsAllCategoriesButton }}
+                  </button>
+                  <button
+                    v-for="category in categories"
+                    :key="category.id"
+                    type="button"
+                    :class="selectedCategory === category.id ? 'chip-active' : 'chip-idle'"
+                    class="chip"
+                    @click="selectCategory(category.id)"
+                  >
+                    {{ category.name }}
+                  </button>
+                </div>
+              </div>
+
+              <div v-if="!loading && filteredFaqs.length" class="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-secondary/50">
+                <span>{{ resultsSummary }}</span>
+                <span v-if="totalPages > 1">Page {{ currentPage }} of {{ totalPages }}</span>
+              </div>
+            </div>
+
+            <AppLoader v-if="loading" />
+
+            <div v-else>
+              <!-- Compact accordion list -->
+              <div v-if="paginatedFaqs.length" class="faq-list rounded-2xl bg-neutral-white border border-black/[0.05] shadow-sm overflow-hidden divide-y divide-neutral-offwhite">
+                <article
+                  v-for="faq in paginatedFaqs"
+                  :key="faq.id"
+                  class="faq-row"
+                  :class="{ 'faq-row--open': openFaqId === faq.id }"
+                >
+                  <button
+                    type="button"
+                    class="faq-row__trigger"
+                    :aria-expanded="openFaqId === faq.id"
+                    :aria-controls="`faq-answer-${faq.id}`"
+                    :id="`faq-question-${faq.id}`"
+                    @click="toggleFaq(faq.id)"
+                  >
+                    <span class="faq-row__question">{{ faq.question }}</span>
+                    <span class="faq-row__meta">
+                      <span v-if="!selectedCategory && faq.category_name" class="faq-row__badge">{{ faq.category_name }}</span>
+                      <span
+                        class="faq-row__chevron"
+                        :class="{ 'faq-row__chevron--open': openFaqId === faq.id }"
+                      >
+                        <ChevronDown class="w-4 h-4" stroke-width="2.5" />
+                      </span>
+                    </span>
+                  </button>
+
+                  <transition name="accordion" @enter="enter" @leave="leave">
+                    <div
+                      v-show="openFaqId === faq.id"
+                      :id="`faq-answer-${faq.id}`"
+                      role="region"
+                      :aria-labelledby="`faq-question-${faq.id}`"
+                      class="faq-row__answer"
+                    >
+                      <p>{{ faq.answer }}</p>
+                    </div>
+                  </transition>
+                </article>
+              </div>
+
+              <!-- Pagination -->
+              <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 mt-6">
+                <button
+                  type="button"
+                  class="page-nav"
+                  :disabled="currentPage <= 1"
+                  aria-label="Previous page"
+                  @click="goToPage(currentPage - 1)"
+                >
+                  <ChevronLeft class="w-4 h-4" />
+                </button>
+
+                <div class="flex items-center gap-1">
+                  <button
+                    v-for="n in pageNumbers"
+                    :key="'pg-' + n"
+                    type="button"
+                    :class="['page-btn', currentPage === n ? 'page-btn--active' : 'page-btn--idle']"
+                    @click="goToPage(n)"
+                  >
+                    {{ n }}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  class="page-nav"
+                  :disabled="currentPage >= totalPages"
+                  aria-label="Next page"
+                  @click="goToPage(currentPage + 1)"
+                >
+                  <ChevronRight class="w-4 h-4" />
+                </button>
+              </div>
+
+              <!-- Empty -->
+              <div v-if="!filteredFaqs.length" class="empty-state text-center py-14 px-6 rounded-2xl bg-neutral-white border border-dashed border-black/10">
+                <div class="w-14 h-14 mx-auto bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+                  <Search class="w-7 h-7 text-primary/70" />
+                </div>
+                <h3 class="text-lg font-bold text-secondary mb-2">{{ faqsNoResults }}</h3>
+                <p class="text-sm text-black/50 font-semibold mb-6 max-w-sm mx-auto">{{ faqsNoResultsSubtitle }}</p>
+                <button
+                  type="button"
+                  class="px-6 py-2.5 bg-secondary text-neutral-white rounded-full font-bold uppercase tracking-wider text-xs hover:brightness-110 transition-all"
+                  @click="clearFilters"
+                >
+                  Clear all filters
+                </button>
+              </div>
             </div>
           </div>
-
-
         </div>
 
+        <div class="help-banner mt-10 lg:mt-14 relative overflow-hidden rounded-2xl lg:rounded-3xl bg-secondary text-neutral-white">
+          <div class="help-banner__orb help-banner__orb--a" aria-hidden="true"></div>
+          <div class="relative z-10 flex flex-col sm:flex-row items-center gap-6 p-6 md:p-10 text-center sm:text-left">
+            <div class="w-12 h-12 rounded-xl bg-neutral-white/10 border border-neutral-white/15 flex items-center justify-center shrink-0">
+              <MessageCircle class="w-6 h-6 text-accent-yellow" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-lg lg:text-xl font-bold">Didn't find your answer?</h3>
+              <p class="text-sm text-neutral-white/65 font-semibold mt-1">Call 116 or send us a message — we're here 24/7.</p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <BaseCTA href="tel:116" variant="primary" external class="!bg-neutral-white !text-secondary hover:!bg-accent-yellow !text-sm !px-5">
+                Call 116
+              </BaseCTA>
+              <BaseCTA to="/contact" variant="outline" class="!border-neutral-white/30 !text-neutral-white hover:!bg-neutral-white/10 !text-sm !px-5">
+                Contact
+              </BaseCTA>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import { useFaqsStore } from '@/store/faqs'
   import { useSettingsStore } from '@/store/settings'
   import { useSiteContent } from '@/composables/useSiteContent'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
-    Clock,
     Search,
     ChevronDown,
-    XCircle
+    ChevronLeft,
+    ChevronRight,
+    Phone,
+    Headphones,
+    MessageCircle,
+    X
   } from 'lucide-vue-next'
 
+  defineOptions({ name: 'FaqsPage' })
 
-  defineOptions({
-    name: 'FaqsPage'
-  })
+  const PAGE_SIZE = 10
 
   const faqsStore = useFaqsStore()
   const settingsStore = useSettingsStore()
@@ -160,13 +292,11 @@
   const faqs = ref([])
   const categories = ref([])
   const loading = ref(true)
-  const openFaq = ref(null)
+  const openFaqId = ref(null)
   const query = ref('')
   const selectedCategory = ref('')
+  const currentPage = ref(1)
 
-  // Page content (editable via CMS → ContentManager, page "faqs").
-  // These keys live in SiteContent, so read them through siteContent — not the
-  // global settings store — otherwise admin edits never reach the page.
   const faqsSupportTitle = computed(() => siteContent.getContent('faqs_support_title', '24/7 Support'))
   const faqsSupportSubtitle = computed(() => siteContent.getContent('faqs_support_subtitle', 'Always here to help'))
   const faqsImmediateHelpTitle = computed(() => siteContent.getContent('faqs_immediate_help_title', 'Need Immediate Help?'))
@@ -184,37 +314,13 @@
       await faqsStore.fetchFaqs({ status: 'PUBLISHED' })
       faqs.value = Array.isArray(faqsStore.faqs) ? faqsStore.faqs : []
 
-      // Try to fetch categories from API first
       try {
         const fetchedCategories = await faqsStore.fetchCategories()
-        if (Array.isArray(fetchedCategories) && fetchedCategories.length > 0) {
-          categories.value = fetchedCategories
-        } else {
-          // Fallback: Extract unique categories from FAQs
-          const categoryMap = new Map()
-          faqs.value.forEach(faq => {
-            if (faq.category_name && !categoryMap.has(faq.category)) {
-              categoryMap.set(faq.category, {
-                id: faq.category,
-                name: faq.category_name
-              })
-            }
-          })
-          categories.value = Array.from(categoryMap.values())
-        }
-      } catch (catError) {
-        console.log('Categories API not available, extracting from FAQs')
-        // Extract unique categories from FAQs
-        const categoryMap = new Map()
-        faqs.value.forEach(faq => {
-          if (faq.category_name && !categoryMap.has(faq.category)) {
-            categoryMap.set(faq.category, {
-              id: faq.category,
-              name: faq.category_name
-            })
-          }
-        })
-        categories.value = Array.from(categoryMap.values())
+        categories.value = Array.isArray(fetchedCategories) && fetchedCategories.length
+          ? fetchedCategories
+          : extractCategoriesFromFaqs()
+      } catch {
+        categories.value = extractCategoriesFromFaqs()
       }
     } catch (error) {
       console.error('Error fetching FAQs:', error)
@@ -224,11 +330,31 @@
     }
   })
 
+  watch([query, selectedCategory], () => {
+    currentPage.value = 1
+    openFaqId.value = null
+  })
+
+  function extractCategoriesFromFaqs() {
+    const categoryMap = new Map()
+    faqs.value.forEach(faq => {
+      if (faq.category_name && !categoryMap.has(faq.category)) {
+        categoryMap.set(faq.category, { id: faq.category, name: faq.category_name })
+      }
+    })
+    return Array.from(categoryMap.values())
+  }
+
+  function categoryCount(categoryId) {
+    return faqs.value.filter(f => {
+      const id = typeof f.category === 'object' ? f.category?.id : f.category
+      return id == categoryId
+    }).length
+  }
+
   const filteredFaqs = computed(() => {
-    // Ensure faqs is an array
     let filtered = Array.isArray(faqs.value) ? faqs.value : []
 
-    // Filter by category
     if (selectedCategory.value) {
       filtered = filtered.filter(f => {
         const categoryId = typeof f.category === 'object' ? f.category?.id : f.category
@@ -236,7 +362,6 @@
       })
     }
 
-    // Filter by search query
     const q = query.value.trim().toLowerCase()
     if (q) {
       filtered = filtered.filter(f =>
@@ -248,68 +373,217 @@
     return filtered
   })
 
-  function toggleFaq(index) {
-    openFaq.value = openFaq.value === index ? null : index
+  const totalPages = computed(() => Math.max(1, Math.ceil(filteredFaqs.value.length / PAGE_SIZE)))
+
+  const paginatedFaqs = computed(() => {
+    const start = (currentPage.value - 1) * PAGE_SIZE
+    return filteredFaqs.value.slice(start, start + PAGE_SIZE)
+  })
+
+  const resultsSummary = computed(() => {
+    const total = filteredFaqs.value.length
+    if (!total) return ''
+    const start = (currentPage.value - 1) * PAGE_SIZE + 1
+    const end = Math.min(currentPage.value * PAGE_SIZE, total)
+    return `Showing ${start}–${end} of ${total} ${total === 1 ? 'question' : 'questions'}`
+  })
+
+  const pageNumbers = computed(() => {
+    const total = totalPages.value
+    if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1)
+    const p = currentPage.value
+    if (p <= 3) return [1, 2, 3, 4, '...', total]
+    if (p >= total - 2) return [1, '...', total - 3, total - 2, total - 1, total]
+    return [1, '...', p - 1, p, p + 1, '...', total]
+  })
+
+  function toggleFaq(id) {
+    openFaqId.value = openFaqId.value === id ? null : id
+  }
+
+  function selectCategory(id) {
+    selectedCategory.value = id
+    openFaqId.value = null
+  }
+
+  function clearFilters() {
+    query.value = ''
+    selectedCategory.value = ''
+    currentPage.value = 1
+    openFaqId.value = null
+  }
+
+  function goToPage(page) {
+    if (page === '...' || page < 1 || page > totalPages.value) return
+    currentPage.value = page
+    openFaqId.value = null
+    document.querySelector('.faq-toolbar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function enter(el) {
+    el.style.height = '0'
+    el.style.overflow = 'hidden'
+    requestAnimationFrame(() => {
+      el.style.height = `${el.scrollHeight}px`
+      el.style.transition = 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+    })
+  }
+
+  function leave(el) {
+    el.style.height = `${el.scrollHeight}px`
+    el.style.overflow = 'hidden'
+    requestAnimationFrame(() => {
+      el.style.height = '0'
+      el.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+    })
   }
 </script>
 
 <style scoped>
-/* Hero Banner */
-/* Hero banner styles are global now — see .hero-banner et al. in main.css */
-
-/* FAQ layout: real CSS grid tracks (not Tailwind arbitrary values / flex-basis).
-   A fixed 20rem sidebar track + a minmax(0, 1fr) content track cannot collapse
-   to content width — the second track always stretches to fill whatever space
-   remains, so the section fills evenly with no dead whitespace at any width. */
 .faq-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem;
+  gap: 1.75rem;
   max-width: 72rem;
   margin-inline: auto;
 }
 
 @media (min-width: 1024px) {
   .faq-layout {
-    grid-template-columns: 20rem minmax(0, 1fr);
-    gap: 3rem;
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    gap: 2.5rem;
     align-items: start;
   }
 }
 
-.faq-sidebar {
-  width: 100%;
-  min-width: 0;
+.support-card__glow {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  right: -3rem;
+  top: -3rem;
+  border-radius: 9999px;
+  background: rgb(var(--color-primary) / 0.3);
+  filter: blur(36px);
+  pointer-events: none;
 }
 
-.faq-main {
-  width: 100%;
-  min-width: 0;
+.cat-link {
+  @apply w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-left text-sm font-semibold text-secondary/70 transition-all;
 }
 
-/* Hide scrollbar for category filter */
+.cat-link:hover {
+  @apply bg-neutral-offwhite text-secondary;
+}
+
+.cat-link--active {
+  @apply bg-primary/10 text-primary font-bold;
+}
+
+.cat-count {
+  @apply shrink-0 min-w-[1.5rem] text-center text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-neutral-offwhite text-secondary/50;
+}
+
+.cat-link--active .cat-count {
+  @apply bg-primary/15 text-primary;
+}
+
+.chip {
+  @apply px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all flex-shrink-0 border-2;
+}
+
+.chip-active {
+  @apply bg-secondary border-secondary text-neutral-white;
+}
+
+.chip-idle {
+  @apply bg-neutral-white border-transparent text-secondary/60;
+}
+
+/* Single bordered list — much denser than individual cards */
+.faq-row__trigger {
+  @apply w-full flex items-start justify-between gap-3 px-4 py-3.5 text-left focus:outline-none focus-visible:bg-primary/5 transition-colors;
+}
+
+.faq-row__question {
+  @apply font-bold text-secondary text-sm leading-snug flex-1 min-w-0;
+}
+
+.faq-row--open .faq-row__question {
+  @apply text-primary;
+}
+
+.faq-row__meta {
+  @apply flex items-center gap-2 shrink-0 pt-0.5;
+}
+
+.faq-row__badge {
+  @apply hidden sm:inline-block px-2 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider bg-primary/10 text-primary;
+}
+
+.faq-row__chevron {
+  @apply w-7 h-7 rounded-full bg-neutral-offwhite text-secondary flex items-center justify-center transition-transform duration-200;
+}
+
+.faq-row__chevron--open {
+  @apply bg-primary text-neutral-white rotate-180;
+}
+
+.faq-row__answer {
+  @apply px-4 pb-4 pt-0;
+}
+
+.faq-row__answer p {
+  @apply text-sm text-secondary/75 font-semibold leading-relaxed border-t border-neutral-offwhite pt-3 whitespace-pre-line;
+}
+
+.page-nav {
+  @apply w-10 h-10 rounded-xl flex items-center justify-center bg-neutral-white text-secondary border border-black/5 shadow-sm hover:text-primary transition-all disabled:opacity-40 disabled:pointer-events-none;
+}
+
+.page-btn {
+  @apply min-w-[2.5rem] h-10 px-2 rounded-xl flex items-center justify-center text-sm font-bold transition-all;
+}
+
+.page-btn--active {
+  @apply bg-primary text-neutral-white shadow-md;
+}
+
+.page-btn--idle {
+  @apply bg-neutral-white text-secondary border border-black/5 hover:shadow-sm;
+}
+
+.help-banner__orb--a {
+  position: absolute;
+  width: 14rem;
+  height: 14rem;
+  right: -4rem;
+  top: -6rem;
+  border-radius: 9999px;
+  background: rgb(var(--color-primary) / 0.35);
+  filter: blur(48px);
+  pointer-events: none;
+}
+
 .hide-scrollbar {
-  -ms-overflow-style: none;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-/* Fade in animation */
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+.accordion-enter-active,
+.accordion-leave-active {
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+@media (prefers-reduced-motion: reduce) {
+  .faq-row__chevron,
+  .cat-link,
+  .chip {
+    transition: none !important;
   }
 }
 </style>

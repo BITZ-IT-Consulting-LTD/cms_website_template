@@ -3,11 +3,11 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-600">{{ label }}</p>
-                <p class="text-3xl font-bold mt-2" :class="valueColor">{{ value }}</p>
+                <p class="text-2xl font-bold mt-1" :class="valueColor">{{ value }}</p>
                 <p v-if="subtitle" class="text-xs text-gray-500 mt-1">{{ subtitle }}</p>
             </div>
-            <div class="p-3 rounded-lg" :class="iconBgColor">
-                <component :is="icon" class="h-8 w-8" :class="iconColor" />
+            <div class="p-2.5 rounded-lg" :class="iconBgColor">
+                <component :is="icon" class="h-5 w-5" :class="iconColor" />
             </div>
         </div>
     </div>

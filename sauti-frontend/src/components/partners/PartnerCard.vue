@@ -96,8 +96,22 @@ const phoneNumbers = computed(() => {
   return props.partner.phone ? [props.partner.phone] : []
 })
 
+// Local inline SVG fallback (no third-party network request) shown when a partner
+// logo URL fails to load. Mirrors the same "no logo" icon used elsewhere in this
+// template so the visual result is consistent either way.
+const PLACEHOLDER_LOGO = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">' +
+  '<rect width="150" height="150" fill="#F8FAFC"/>' +
+  '<g transform="translate(45,45) scale(3)" fill="#006837" fill-opacity="0.3">' +
+  '<path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>' +
+  '</g></svg>'
+)
+
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/150?text=Logo' // Placeholder image
+  // Guard against a repeated error loop: only swap to the local placeholder once.
+  if (event.target.dataset.fallbackApplied) return
+  event.target.dataset.fallbackApplied = 'true'
+  event.target.src = PLACEHOLDER_LOGO
 }
 </script>
 

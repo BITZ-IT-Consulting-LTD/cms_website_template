@@ -19,19 +19,22 @@ class Command(BaseCommand):
         ]
 
         for i, event_data in enumerate(timeline_events_data):
-            event_obj, created = TimelineEvent.objects.get_or_create(
-                year=event_data['year'],
-                title=event_data['title'],
-                defaults={
-                    'description': event_data['description'],
-                    'order': event_data['order'],
-                    'is_visible': True, # Default to visible
-                }
-            )
-            if created:
-                self.stdout.write(self.style.SUCCESS(f"Created TimelineEvent: {event_data['year']} - {event_data['title']}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"TimelineEvent already exists: {event_data['year']} - {event_data['title']}"))
+            try:
+                event_obj, created = TimelineEvent.objects.get_or_create(
+                    order=event_data['order'],
+                    defaults={
+                        'year': event_data['year'],
+                        'title': event_data['title'],
+                        'description': event_data['description'],
+                        'is_visible': True, # Default to visible
+                    }
+                )
+                if created:
+                    self.stdout.write(self.style.SUCCESS(f"Created TimelineEvent: {event_data['year']} - {event_data['title']}"))
+                else:
+                    self.stdout.write(self.style.WARNING(f"TimelineEvent already exists: {event_data['year']} - {event_data['title']}"))
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f"Could not create TimelineEvent {event_data['order']}: {e}"))
 
         # Data for Services
         services_data = [

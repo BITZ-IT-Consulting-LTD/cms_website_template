@@ -165,9 +165,24 @@ const getLanguageName = (code) => {
   return languages[code] || code
 }
 
+// Local inline SVG fallback (no third-party network request) shown when a post's
+// featured image URL fails to load.
+const PLACEHOLDER_FEATURED_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">' +
+  '<rect width="800" height="400" fill="#E9F5FC"/>' +
+  '<g transform="translate(360,160)" fill="none" stroke="#0087CF" stroke-width="4" stroke-opacity="0.5">' +
+  '<rect x="0" y="0" width="80" height="60" rx="6"/>' +
+  '<circle cx="20" cy="20" r="8"/>' +
+  '<path d="M0 55 L25 30 L45 45 L60 25 L80 45" />' +
+  '</g></svg>'
+)
+
 // Image error handling
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/800x400?text=Sauti+Child+Helpline'
+  // Guard against a repeated error loop: only swap to the local placeholder once.
+  if (event.target.dataset.fallbackApplied) return
+  event.target.dataset.fallbackApplied = 'true'
+  event.target.src = PLACEHOLDER_FEATURED_IMAGE
 }
 
 // Share functions

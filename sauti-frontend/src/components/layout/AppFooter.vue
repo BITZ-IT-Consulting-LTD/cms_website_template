@@ -69,8 +69,18 @@
             <li><router-link to="/report" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_report', 'Report a Case') }}</router-link></li>
             <li><router-link to="/faqs" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_faqs', 'FAQs') }}</router-link></li>
             <li><router-link to="/contact" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_contact', 'Contact Us') }}</router-link></li>
-            <li><router-link to="/privacy" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_privacy', 'Privacy Policy') }}</router-link></li>
-            <li><router-link to="/terms" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_terms', 'Terms of Service') }}</router-link></li>
+            <li>
+              <router-link v-if="!isExternalUrl(privacyUrl)" :to="privacyUrl" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_privacy', 'Privacy Policy') }}</router-link>
+              <a v-else :href="privacyUrl" target="_blank" rel="noopener noreferrer" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_privacy', 'Privacy Policy') }}</a>
+            </li>
+            <li>
+              <router-link v-if="!isExternalUrl(termsUrl)" :to="termsUrl" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_terms', 'Terms of Service') }}</router-link>
+              <a v-else :href="termsUrl" target="_blank" rel="noopener noreferrer" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_terms', 'Terms of Service') }}</a>
+            </li>
+            <li>
+              <router-link v-if="!isExternalUrl(accessibilityUrl)" :to="accessibilityUrl" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_accessibility', 'Accessibility') }}</router-link>
+              <a v-else :href="accessibilityUrl" target="_blank" rel="noopener noreferrer" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_accessibility', 'Accessibility') }}</a>
+            </li>
           </ul>
         </div>
 
@@ -101,6 +111,13 @@
         </div>
       </div>
 
+      <!-- Legal & Attribution -->
+      <div v-if="footerText || ministryAttributionText || disclaimerText" class="mt-6 lg:mt-12 pt-4 lg:pt-8 border-t border-neutral-white/10 space-y-2 lg:space-y-3">
+        <p v-if="footerText" class="text-xs lg:text-sm text-neutral-white/60 font-semibold leading-relaxed" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ footerText }}</p>
+        <p v-if="ministryAttributionText" class="text-[10px] lg:text-xs font-bold text-neutral-white/50 uppercase tracking-widest" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ ministryAttributionText }}</p>
+        <p v-if="disclaimerText" class="text-[10px] lg:text-xs text-neutral-white/40 leading-relaxed" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ disclaimerText }}</p>
+      </div>
+
       <!-- Bottom Bar -->
       <div class="mt-6 lg:mt-12 pt-4 lg:pt-8 border-t border-neutral-white/10 flex flex-col md:flex-row items-center justify-between gap-3 lg:gap-6">
         <p class="text-[10px] lg:text-xs font-bold text-neutral-white/40 uppercase tracking-widest text-center md:text-left" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
@@ -116,7 +133,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import {
   Phone,
   Mail,
@@ -126,11 +143,24 @@ import {
   Globe
 } from 'lucide-vue-next'
 import { useSiteContent } from '@/composables/useSiteContent'
+import { useSettingsStore } from '@/store/settings'
 
 const siteContent = useSiteContent('footer')
+const settingsStore = useSettingsStore()
+
+const isExternalUrl = (url) => typeof url === 'string' && /^https?:\/\//i.test(url)
+
+const privacyUrl = computed(() => settingsStore.settings.privacy_policy_url || '/privacy')
+const termsUrl = computed(() => settingsStore.settings.terms_of_service_url || '/terms')
+const accessibilityUrl = computed(() => settingsStore.settings.accessibility_url || '/accessibility')
+
+const footerText = computed(() => settingsStore.settings.footer_text || '')
+const disclaimerText = computed(() => settingsStore.settings.disclaimer_text || '')
+const ministryAttributionText = computed(() => settingsStore.settings.ministry_attribution_text || '')
 
 onMounted(async () => {
   await siteContent.fetchContent()
+  await settingsStore.fetchGlobalSettings()
 })
 </script>
 

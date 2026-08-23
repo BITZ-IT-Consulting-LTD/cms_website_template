@@ -119,8 +119,8 @@
             situation.
           </p>
           <div class="cta-group justify-center md:justify-start">
-            <BaseCTA href="tel:116" variant="primary"
-              class="!bg-neutral-white !text-secondary hover:!bg-primary hover:!text-neutral-white">Call 116</BaseCTA>
+            <BaseCTA :href="`tel:${hotlineNumber}`" variant="primary"
+              class="!bg-neutral-white !text-secondary hover:!bg-primary hover:!text-neutral-white">Call {{ hotlineNumber }}</BaseCTA>
             <BaseCTA href="/contact" variant="outline" class="text-neutral-white border-neutral-white/20">Message Support</BaseCTA>
             <BaseCTA href="/report" variant="outline" class="text-neutral-white border-neutral-white/20">Log Statement</BaseCTA>
           </div>
@@ -133,6 +133,7 @@
 <script setup>
   import { ref, computed } from 'vue'
   import BaseCTA from '../common/BaseCTA.vue'
+  import { useSettingsStore } from '@/store/settings'
   import {
     ChevronDownIcon,
     QuestionMarkCircleIcon,
@@ -147,6 +148,11 @@
     loading: { type: Boolean, default: false },
     error: { type: String, default: null }
   })
+
+  // Read the emergency hotline number from the global settings store / CMS instead of
+  // hardcoding it, following the same pattern used in AppHeader.vue and HomePage.vue.
+  const settingsStore = useSettingsStore()
+  const hotlineNumber = computed(() => settingsStore.settings.hotline_number || '116')
 
   const emit = defineEmits(['retry', 'view'])
 

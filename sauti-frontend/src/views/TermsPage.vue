@@ -168,7 +168,7 @@
                   </div>
                   <div>
                     <p class="campaign-header text-[10px] text-black/50 mb-1">Support Admin</p>
-                    <p class="text-black font-bold break-all">info@sauti.gov.ug</p>
+                    <p class="text-black font-bold break-all"><a :href="`mailto:${termsContactEmail}`" class="hover:underline">{{ termsContactEmail }}</a></p>
                   </div>
                 </div>
               </div>
@@ -199,7 +199,7 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+  import { computed, onMounted } from 'vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
     CheckIcon,
@@ -209,10 +209,15 @@
     ArrowLeftIcon,
     ShieldCheckIcon
   } from '@heroicons/vue/24/outline'
+  import { useSiteContent } from '@/composables/useSiteContent'
 
   defineOptions({
     name: 'TermsPage'
   })
+
+  const siteContent = useSiteContent('terms')
+
+  const termsContactEmail = computed(() => siteContent.getContent('terms_contact_email', 'info@sauti.gov.ug'))
 
   const services = [
     '24/7 confidential helpline (116)',
@@ -257,5 +262,9 @@
       month: 'long',
       day: 'numeric'
     })
+  })
+
+  onMounted(async () => {
+    await siteContent.fetchContent()
   })
 </script>

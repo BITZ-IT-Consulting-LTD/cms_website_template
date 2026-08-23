@@ -154,6 +154,7 @@
   import { useSettingsStore } from '@/store/settings'
   import { useSiteContent } from '@/composables/useSiteContent'
   import { api } from '@/utils/axios'
+  import { toWaMeNumber } from '@/utils/phone'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
@@ -208,7 +209,9 @@
     if (contact.type === 'email') return `mailto:${value}`
     if (contact.type === 'location') return `https://maps.google.com/?q=${encodeURIComponent(value)}`
     if (contact.type === 'phone') {
-      if (contact.icon === 'whatsapp') return `https://wa.me/${value.replace(/\s/g, '')}`
+      // Seeded/CMS values are often Uganda LOCAL format (e.g. '0743889999'),
+      // which wa.me rejects — normalise to international format first.
+      if (contact.icon === 'whatsapp') return `https://wa.me/${toWaMeNumber(value)}`
       return `tel:${value}`
     }
     return value

@@ -75,11 +75,11 @@
               If you or someone else is in immediate physical danger, do not use this form. Get instant help now.
             </p>
             <div class="space-y-2 md:space-y-3">
-              <a href="tel:116" class="flex items-center justify-center gap-2 md:gap-3 w-full py-3 md:py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl md:rounded-2xl shadow-lg shadow-red-200 transition-all active:scale-95 text-sm md:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+              <a :href="phoneHref" class="flex items-center justify-center gap-2 md:gap-3 w-full py-3 md:py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl md:rounded-2xl shadow-lg shadow-red-200 transition-all active:scale-95 text-sm md:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
                 <Phone class="w-4 h-4 md:w-5 md:h-5" />
-                <span>Call 116 Free</span>
+                <span>Call {{ phoneValue }} Free</span>
               </a>
-              <a href="https://wa.me/256743889999" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 md:gap-3 w-full py-3 md:py-4 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 font-bold rounded-xl md:rounded-2xl transition-all text-sm md:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
+              <a :href="whatsappHref" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 md:gap-3 w-full py-3 md:py-4 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 font-bold rounded-xl md:rounded-2xl transition-all text-sm md:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
                 <MessageCircle class="w-4 h-4 md:w-5 md:h-5" />
                 <span>WhatsApp Chat</span>
               </a>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="min-w-0 flex-1">
                   <p class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wide" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">SMS Shortcode</p>
-                  <p class="font-bold text-secondary text-xs md:text-sm break-words" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Text to 8500</p>
+                  <p class="font-bold text-secondary text-xs md:text-sm break-words" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ smsLabel }}</p>
                 </div>
               </div>
               <div class="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100">
@@ -105,7 +105,7 @@
                 </div>
                 <div class="min-w-0 flex-1">
                   <p class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wide" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Mobile App</p>
-                  <p class="font-bold text-secondary text-xs md:text-sm break-words" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">SafePal App</p>
+                  <p class="font-bold text-secondary text-xs md:text-sm break-words" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ appLabel }}</p>
                 </div>
               </div>
               <div class="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100">
@@ -114,7 +114,7 @@
                 </div>
                 <div class="min-w-0 flex-1">
                   <p class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wide" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">Email</p>
-                  <p class="font-bold text-secondary break-all text-xs md:text-sm" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">info@sauti.mglsd.go.ug</p>
+                  <a :href="emailHref" class="font-bold text-secondary break-all text-xs md:text-sm" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ emailValue }}</a>
                 </div>
               </div>
             </div>
@@ -135,6 +135,9 @@
 </template>
 
 <script setup>
+  import { ref, computed, onMounted } from 'vue'
+  import { api } from '@/utils/axios'
+  import { toWaMeNumber } from '@/utils/phone'
   import ReportForm from '@/components/reports/ReportForm.vue'
 
   import {
@@ -153,4 +156,64 @@
   defineOptions({
     name: 'ReportPage'
   })
+
+  // Hardcoded fallbacks — used whenever the CMS is unreachable or a matching
+  // Contact record doesn't exist. Admin > Contact Info (the `/content/contacts/`
+  // endpoint) is the source of truth for everything else below.
+  const FALLBACKS = {
+    phone: '116',
+    whatsapp: '256743889999',
+    sms: 'Text to 8500',
+    app: 'SafePal App',
+    email: 'info@sauti.mglsd.go.ug',
+  }
+
+  const contacts = ref([])
+
+  const findContact = (predicate) => contacts.value.find(predicate)
+
+  // "Call 116 Free" — Contact record: type 'phone', icon 'phone'.
+  const phoneContact = computed(() => findContact(c => c.type === 'phone' && c.icon === 'phone'))
+  const phoneValue = computed(() => phoneContact.value?.value || FALLBACKS.phone)
+  const phoneHref = computed(() => `tel:${phoneValue.value.replace(/\s+/g, '')}`)
+
+  // WhatsApp — Contact record: icon 'whatsapp'.
+  // NOTE: CMS values are frequently entered in Uganda LOCAL format (e.g.
+  // '0743889999'), which is NOT valid for a wa.me link (needs full
+  // international format with no leading '0'/'+'). toWaMeNumber() handles
+  // that normalisation — don't just strip non-digits here.
+  const whatsappContact = computed(() => findContact(c => c.icon === 'whatsapp'))
+  const whatsappValue = computed(() => whatsappContact.value?.value || FALLBACKS.whatsapp)
+  const whatsappHref = computed(() => `https://wa.me/${toWaMeNumber(whatsappValue.value)}`)
+
+  // SMS Shortcode — no CMS Contact record for this exists in the seed data
+  // (icon 'message-square'/'send' records seen in the wild are the "Hello to
+  // 116" chatbot number, not the "8500" shortcode), so this always falls
+  // back to the hardcoded label unless an admin later adds a matching one.
+  const smsContact = computed(() => findContact(c => c.icon === 'message-square' || c.icon === 'send'))
+  const smsLabel = computed(() => smsContact.value?.value || FALLBACKS.sms)
+
+  // Mobile App — the admin Contact Info icon list has no dedicated "app"
+  // icon/type, so there is no reliable CMS record to resolve this from; kept
+  // as a best-effort name match with the hardcoded label as fallback.
+  const appContact = computed(() => findContact(c => /app/i.test(c.name || '')))
+  const appLabel = computed(() => appContact.value?.value || appContact.value?.name || FALLBACKS.app)
+
+  // Email — Contact record: type 'email', icon 'envelope'.
+  const emailContact = computed(() => findContact(c => c.type === 'email' || c.icon === 'envelope'))
+  const emailValue = computed(() => emailContact.value?.value || FALLBACKS.email)
+  const emailHref = computed(() => `mailto:${emailValue.value}`)
+
+  const fetchContacts = async () => {
+    try {
+      const response = await api.get('/content/contacts/')
+      contacts.value = response.data || []
+    } catch (error) {
+      // Leave contacts empty — every computed above falls back to the
+      // hardcoded value so this page never renders blank/broken.
+      contacts.value = []
+    }
+  }
+
+  onMounted(fetchContacts)
 </script>

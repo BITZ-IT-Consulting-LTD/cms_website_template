@@ -126,7 +126,7 @@
                   </div>
                   <div>
                     <p class="campaign-header text-[10px] text-black/50 mb-1">Coordinator Email</p>
-                    <p class="text-black font-bold break-all">accessibility@sauti.gov.ug</p>
+                    <p class="text-black font-bold break-all"><a :href="`mailto:${accessibilityContactEmail}`" class="hover:underline">{{ accessibilityContactEmail }}</a></p>
                   </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -168,7 +168,7 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+  import { computed, onMounted } from 'vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
   import {
     CheckIcon,
@@ -179,10 +179,15 @@
     ArrowLeftIcon,
     ShieldCheckIcon
   } from '@heroicons/vue/24/outline'
+  import { useSiteContent } from '@/composables/useSiteContent'
 
   defineOptions({
     name: 'AccessibilityPage'
   })
+
+  const siteContent = useSiteContent('accessibility')
+
+  const accessibilityContactEmail = computed(() => siteContent.getContent('accessibility_contact_email', 'accessibility@sauti.gov.ug'))
 
   const accessibilityFeatures = [
     'Keyboard navigation support',
@@ -215,5 +220,9 @@
       month: 'long',
       day: 'numeric'
     })
+  })
+
+  onMounted(async () => {
+    await siteContent.fetchContent()
   })
 </script>
