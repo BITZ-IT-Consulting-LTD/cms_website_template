@@ -1,4 +1,7 @@
+from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import generics, permissions, status, serializers
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -8,6 +11,7 @@ from .serializers import (
     ReportCreateSerializer, ReportListSerializer, ReportDetailSerializer,
     ReportUpdateSerializer, ReportFollowUpCreateSerializer
 )
+from .exports import generate_report_pdf, write_reports_csv
 
 
 class AllowAnyPost(permissions.BasePermission):
@@ -226,6 +230,62 @@ class ReportDetailView(generics.RetrieveUpdateAPIView):
                 args=(obj,),
                 daemon=True,
             ).start()
+
+
+class ReportExportPDFView(APIView):
+    """
+    GET /api/reports/<id>/export/pdf/ - Single-report PDF download.
+    Editors/Admins only. Never includes ip_address, user_agent or
+    encrypted_description.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        if not request.user.is_editor:
+            raise PermissionDenied("Only Editors and Admins can export reports.")
+
+        try:
+            report = Report.objects.select_related('assigned_to').get(pk=pk)
+        except Report.DoesNotExist:
+            return Response({'detail': 'Not found.'}, status=404)
+
+        buffer = generate_report_pdf(report)
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = (
+            f'attachment; filename="report-{report.reference_number}.pdf"'
+        )
+        return response
+
+
+class ReportExportCSVView(APIView):
+    """
+    GET /api/reports/export/csv/ - Bulk CSV download of all reports.
+    Editors/Admins only. Never includes ip_address, user_agent or
+    encrypted_description. Optionally scoped with the same ?status= /
+    ?category= query params as the report list endpoint.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        if not request.user.is_editor:
+            raise PermissionDenied("Only Editors and Admins can export reports.")
+
+        queryset = Report.objects.select_related('assigned_to').all()
+
+        status_filter = request.query_params.get('status')
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        category = request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category=category)
+
+        date_str = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
+        filename = f"case-reports-{date_str}.csv"
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return write_reports_csv(response, queryset)
 
 
 class ReportFollowUpCreateView(generics.CreateAPIView):

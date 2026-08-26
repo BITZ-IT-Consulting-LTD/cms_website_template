@@ -2,14 +2,30 @@
     <div class="p-6">
         <!-- Page Header -->
         <PageHeader title="General Feedback"
-            description="View and manage messages submitted via the website contact form." />
+            description="View and manage messages submitted via the website contact form."
+            action-label="Download All (CSV)" :action-icon="ArrowDownTrayIcon" @action="downloadAllCsv" />
 
         <!-- Stats -->
         <StatsGrid>
             <StatCard label="Total Messages" :value="stats.total" :icon="ChatBubbleLeftRightIcon" color="blue" />
             <StatCard label="Pending Review" :value="stats.pending" :icon="ClockIcon" color="amber" />
-            <StatCard label="Resolved" :value="stats.processed" :icon="CheckCircleIcon" color="green" />
+            <StatCard label="Reviewed" :value="stats.processed" :icon="CheckCircleIcon" color="green" />
         </StatsGrid>
+
+        <!-- Status Filter -->
+        <div class="flex flex-wrap gap-2 mb-8">
+            <button v-for="tab in statusTabs" :key="tab.key" @click="statusFilter = tab.key"
+                class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all border"
+                :class="statusFilter === tab.key
+                    ? 'bg-gray-900 text-white border-gray-900 shadow-md'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'">
+                {{ tab.label }}
+                <span class="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px]"
+                    :class="statusFilter === tab.key ? 'bg-white/20' : 'bg-gray-100'">
+                    {{ tab.count }}
+                </span>
+            </button>
+        </div>
 
         <!-- Loading State -->
         <LoadingState v-if="loading" message="Loading messages..." />
@@ -19,10 +35,10 @@
             message="When users submit feedback on the contact page, they will appear here."
             :icon="ChatBubbleLeftRightIcon" />
 
-        <!-- Messages List (split into Pending vs Reviewed) -->
+        <!-- Messages List: grouped when "All" is selected, flat single list otherwise -->
         <div v-else class="space-y-10">
-            <section v-for="group in groups" :key="group.key">
-                <h2 class="text-sm font-black uppercase tracking-wider mb-4 flex items-center gap-2" :class="group.headingClass">
+            <section v-for="group in visibleSections" :key="group.key">
+                <h2 v-if="group.showHeading" class="text-sm font-black uppercase tracking-wider mb-4 flex items-center gap-2" :class="group.headingClass">
                     <span class="w-2 h-2 rounded-full" :class="group.dotClass"></span>
                     {{ group.title }} ({{ group.items.length }})
                 </h2>
@@ -57,6 +73,11 @@
                                     {{ msg.is_processed ? 'Reviewed' : 'Pending' }}
                                 </span>
                                 <div class="flex gap-2">
+                                    <button @click="downloadOne(msg.id)"
+                                        class="p-2 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-500 hover:text-blue-700 transition-all border border-transparent hover:border-blue-200"
+                                        title="Download PDF">
+                                        <ArrowDownTrayIcon class="h-5 w-5" />
+                                    </button>
                                     <template v-if="!msg.is_archived">
                                         <button v-if="!msg.is_processed" @click="setProcessed(msg.id, true)"
                                             class="px-4 py-2 bg-blue-600 text-white text-xs font-black rounded-xl hover:bg-blue-700 transition-all shadow-md shadow-blue-100">
@@ -87,8 +108,9 @@
 </template>
 
 <script setup>
-    import { ref, computed, onMounted } from 'vue';
-    import { api } from '@/utils/api';
+    import { ref, computed, onMounted, watch } from 'vue';
+    import { useRouter, useRoute } from 'vue-router';
+    import { api, downloadBlobResponse } from '@/utils/api';
     import { useToast } from 'vue-toastification';
     import { PageHeader, StatsGrid, StatCard, LoadingState, EmptyState } from '@/components/admin';
     import {
@@ -96,12 +118,24 @@
         ClockIcon,
         CheckCircleIcon,
         ArchiveBoxIcon,
-        EnvelopeIcon
+        EnvelopeIcon,
+        ArrowDownTrayIcon
     } from '@heroicons/vue/24/outline';
 
+    const router = useRouter();
+    const route = useRoute();
     const toast = useToast();
     const messages = ref([]);
     const loading = ref(true);
+
+    const VALID_STATUSES = ['all', 'pending', 'reviewed', 'archived'];
+    const statusFilter = ref(VALID_STATUSES.includes(route.query.status) ? route.query.status : 'all');
+
+    // Keep the selection in the URL so a refresh (or navigating away and back)
+    // doesn't bounce the admin back to "All" while working through the archive.
+    watch(statusFilter, (value) => {
+        router.replace({ query: { ...route.query, status: value === 'all' ? undefined : value } });
+    });
 
     const stats = computed(() => {
         const active = messages.value.filter(m => !m.is_archived);
@@ -116,6 +150,16 @@
     const reviewedMessages = computed(() => messages.value.filter(m => m.is_processed && !m.is_archived));
     const archivedMessages = computed(() => messages.value.filter(m => m.is_archived));
 
+    const statusTabs = computed(() => [
+        { key: 'all', label: 'All', count: messages.value.length },
+        { key: 'pending', label: 'Pending', count: pendingMessages.value.length },
+        { key: 'reviewed', label: 'Reviewed', count: reviewedMessages.value.length },
+        { key: 'archived', label: 'Archived', count: archivedMessages.value.length },
+    ]);
+
+    // The three groups, reused both for the "All" grouped view and (filtered
+    // to a single entry) for a specific status's flat view, so the card
+    // markup is defined exactly once.
     const groups = computed(() => [
         {
             key: 'pending',
@@ -142,6 +186,14 @@
             emptyText: 'No messages have been archived.',
         },
     ]);
+
+    const visibleSections = computed(() => {
+        if (statusFilter.value === 'all') {
+            return groups.value.map(g => ({ ...g, showHeading: true }));
+        }
+        const match = groups.value.find(g => g.key === statusFilter.value);
+        return match ? [{ ...match, showHeading: false, emptyText: 'No messages in this status.' }] : [];
+    });
 
     const fetchMessages = async () => {
         loading.value = true;
@@ -175,6 +227,27 @@
         } catch (error) {
             console.error('Error updating message:', error);
             toast.error('Failed to update message');
+        }
+    };
+
+    const downloadOne = async (id) => {
+        try {
+            const response = await api.feedback.exportPdf(id);
+            downloadBlobResponse(response, `feedback-${id}.pdf`);
+        } catch (error) {
+            console.error('Error downloading feedback PDF:', error);
+            toast.error('Failed to download PDF');
+        }
+    };
+
+    const downloadAllCsv = async () => {
+        try {
+            const response = await api.feedback.exportCsv({ status: statusFilter.value });
+            const today = new Date().toISOString().split('T')[0];
+            downloadBlobResponse(response, `general-feedback-${statusFilter.value}-${today}.csv`);
+        } catch (error) {
+            console.error('Error downloading feedback CSV:', error);
+            toast.error('Failed to download CSV');
         }
     };
 

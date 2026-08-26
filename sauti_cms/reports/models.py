@@ -142,6 +142,28 @@ class Report(models.Model):
         help_text='Is it safe to contact the reporter?'
     )
 
+    # The public intake form collects these three, but they used to be dropped
+    # on submit (alternative_contact and victim_location were never declared on
+    # the create serializer, and incident_type was only smuggled into the
+    # description string as a "[Incident Type: ...]" prefix).
+    alternative_contact = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Reporter-supplied alternative phone/contact for follow-up'
+    )
+
+    victim_location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text='Where the victim/affected person is located (distinct from the incident location)'
+    )
+
+    incident_type = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text='Specific incident type chosen during intake'
+    )
+
     affected_persons = models.JSONField(
         default=list,
         blank=True,

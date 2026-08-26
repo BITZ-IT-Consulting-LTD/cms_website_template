@@ -178,6 +178,17 @@ export const api = {
     }),
     delete: (slug) => apiClient.delete(`/posts/${slug}/`),
     history: (id) => apiClient.get(`/posts/${id}/history/`),
+    // Unlimited gallery images for a post (keyed by numeric post id, not slug).
+    images: {
+      list: (postId) => apiClient.get(`/posts/${postId}/images/`),
+      create: (postId, data) => apiClient.post(`/posts/${postId}/images/`, createFormData(data), {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }),
+      update: (postId, imageId, data) => apiClient.patch(`/posts/${postId}/images/${imageId}/`, createFormData(data), {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }),
+      delete: (postId, imageId) => apiClient.delete(`/posts/${postId}/images/${imageId}/`),
+    },
     categories: {
       list: () => apiClient.get('/posts/categories/'),
       create: (data) => apiClient.post('/posts/categories/', data),
@@ -275,6 +286,8 @@ export const api = {
     update: (id, data) => apiClient.put(`/reports/${id}/`, data),
     addFollowUp: (id, data) => apiClient.post(`/reports/${id}/followup/`, data),
     history: (id) => apiClient.get(`/reports/${id}/history/`),
+    exportPdf: (id) => apiClient.get(`/reports/${id}/export/pdf/`, { responseType: 'blob' }),
+    exportCsv: (params) => apiClient.get('/reports/export/csv/', { params, responseType: 'blob' }),
   },
 
   users: {
@@ -405,6 +418,8 @@ export const api = {
     list: (params) => apiClient.get('/contact/feedback/list/', { params }),
     update: (id, data) => apiClient.patch(`/contact/feedback/${id}/`, data),
     delete: (id) => apiClient.delete(`/contact/feedback/${id}/`),
+    exportPdf: (id) => apiClient.get(`/contact/feedback/${id}/export/pdf/`, { responseType: 'blob' }),
+    exportCsv: (params) => apiClient.get('/contact/feedback/export/csv/', { params, responseType: 'blob' }),
   },
 
   timeline: {
@@ -414,6 +429,24 @@ export const api = {
     update: (id, data) => apiClient.put(`/timeline/${id}/`, data),
     delete: (id) => apiClient.delete(`/timeline/${id}/`),
   },
+}
+
+// Triggers a browser "Save As" for a blob-response (responseType: 'blob')
+// Axios request, e.g. a PDF/CSV export. Prefers the filename the server
+// set via Content-Disposition, falling back to the given name.
+export const downloadBlobResponse = (response, fallbackFilename) => {
+  const disposition = response.headers?.['content-disposition'] || ''
+  const match = disposition.match(/filename="?([^"]+)"?/)
+  const filename = match ? match[1] : fallbackFilename
+
+  const url = window.URL.createObjectURL(new Blob([response.data]))
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute('download', filename)
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  window.URL.revokeObjectURL(url)
 }
 
 export default apiClient
