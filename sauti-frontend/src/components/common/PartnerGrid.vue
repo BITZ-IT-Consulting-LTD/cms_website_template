@@ -16,9 +16,13 @@
 
         <!-- Logo -->
         <div class="logo-container">
-          <img v-if="partner.logo_url || partner.logo"
-            :src="partner.logo_url || partner.logo"
+          <img v-if="partner.logo_thumbnail_url || partner.logo_url || partner.logo"
+            :src="partner.logo_thumbnail_url || partner.logo_url || partner.logo"
             :alt="`${partner.name} logo`"
+            width="120"
+            height="80"
+            loading="lazy"
+            decoding="async"
             class="partner-logo" />
           <div v-else class="logo-placeholder">
             <svg class="w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
@@ -37,9 +41,13 @@
       <!-- Non-linked Partner -->
       <div v-else class="partner-link partner-link--static">
         <div class="logo-container">
-          <img v-if="partner.logo_url || partner.logo"
-            :src="partner.logo_url || partner.logo"
+          <img v-if="partner.logo_thumbnail_url || partner.logo_url || partner.logo"
+            :src="partner.logo_thumbnail_url || partner.logo_url || partner.logo"
             :alt="`${partner.name} logo`"
+            width="120"
+            height="80"
+            loading="lazy"
+            decoding="async"
             class="partner-logo" />
           <div v-else class="logo-placeholder">
             <svg class="w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20">

@@ -5,6 +5,8 @@ import os
 import time
 import uuid
 
+from imaging.derivatives import THUMBNAIL_SIZE, sync_image_derivatives
+
 
 def partner_logo_path(instance, filename):
     """
@@ -48,7 +50,19 @@ class Partner(models.Model):
         null=True,
         help_text='Partner logo'
     )
-    
+
+    # Auto-generated thumbnail derivative of `logo`, generated on save (see
+    # Partner.save() and imaging.derivatives). The partner grid/list should
+    # prefer this over the original; falls back to `logo` when a row
+    # predates this feature or Pillow couldn't decode the source.
+    logo_thumbnail = models.ImageField(
+        upload_to='partners/logos/thumbnails/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text='Auto-generated thumbnail derived from logo'
+    )
+
     website_url = models.URLField(blank=True)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=50, blank=True)
@@ -101,6 +115,10 @@ class Partner(models.Model):
                 # Log or ignore errors related to file deletion (e.g. file not found)
                 print(f"Error deleting old logo: {e}")
 
+        sync_image_derivatives(self, [
+            ('logo', 'logo_thumbnail', THUMBNAIL_SIZE),
+        ], update_fields=kwargs.get('update_fields'))
+
         super().save(*args, **kwargs)
 
 
@@ -119,3 +137,20 @@ class PartnerPhone(models.Model):
 
     def __str__(self):
         return self.phone
+
+
+class PartnerEmail(models.Model):
+    """
+    Additional email addresses for a partner. The primary address is kept on
+    Partner.email for backward compatibility; this model allows unlimited
+    extra addresses. Mirrors PartnerPhone.
+    """
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, related_name='emails')
+    email = models.EmailField()
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.email

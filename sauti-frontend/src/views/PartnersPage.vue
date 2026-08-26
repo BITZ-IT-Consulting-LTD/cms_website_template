@@ -49,7 +49,8 @@
               class="group relative bg-neutral-white rounded-[2.5rem] border-2 border-neutral-offwhite p-6 h-40 flex items-center justify-center transition-all duration-500 hover:shadow-2xl hover:border-primary card-base !p-0">
               <a v-if="partner.website_url" :href="partner.website_url" target="_blank" rel="noopener noreferrer"
                 class="flex items-center justify-center h-full w-full p-6">
-                <img :src="partner.logo_url || partner.logo" :alt="partner.name"
+                <img :src="partner.logo_thumbnail_url || partner.logo_url || partner.logo" :alt="partner.name"
+                  width="200" height="120" loading="lazy" decoding="async"
                   class="max-h-full max-w-full object-contain mx-auto transition-transform duration-700 group-hover:scale-110" />
                 <div
                   class="absolute inset-x-0 bottom-4 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
@@ -59,8 +60,19 @@
                 </div>
               </a>
               <div v-else class="flex items-center justify-center h-full w-full p-6">
-                <img :src="partner.logo_url || partner.logo" :alt="partner.name"
+                <img :src="partner.logo_thumbnail_url || partner.logo_url || partner.logo" :alt="partner.name"
+                  width="200" height="120" loading="lazy" decoding="async"
                   class="max-h-full max-w-full object-contain mx-auto opacity-80" />
+              </div>
+
+              <!-- Contact details reveal: shows every phone/email the partner has, not just the primary -->
+              <div v-if="partnerPhones(partner).length || partnerEmails(partner).length"
+                class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 rounded-[2.5rem] bg-secondary/95 px-4 py-3 text-center opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-neutral-white mb-1">{{ partner.name }}</p>
+                <a v-for="phone in partnerPhones(partner)" :key="`phone-${phone}`" :href="`tel:${phone}`"
+                  class="block text-[10px] text-neutral-white/90 hover:text-primary transition-colors">{{ phone }}</a>
+                <a v-for="email in partnerEmails(partner)" :key="`email-${email}`" :href="`mailto:${email}`"
+                  class="block text-[10px] text-neutral-white/90 hover:text-primary transition-colors truncate max-w-full">{{ email }}</a>
               </div>
             </div>
           </div>
@@ -110,6 +122,13 @@
   const siteContent = useSiteContent('partners')
   const partners = ref([])
   const loading = ref(true)
+
+  // Existing partners with only the single Partner.phone/Partner.email set
+  // (no PartnerPhone/PartnerEmail rows) still render via this fallback.
+  const partnerPhones = (partner) =>
+    partner.phone_numbers?.length ? partner.phone_numbers : (partner.phone ? [partner.phone] : [])
+  const partnerEmails = (partner) =>
+    partner.email_addresses?.length ? partner.email_addresses : (partner.email ? [partner.email] : [])
 
   onMounted(async () => {
     // Fetch site content from CMS
