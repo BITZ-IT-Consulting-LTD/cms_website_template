@@ -39,8 +39,10 @@
                   :rel="isExternalHttpLink(getLink(contact)) ? 'noopener noreferrer' : null"
                   class="block bg-neutral-offwhite rounded-xl lg:rounded-2xl p-5 md:p-6 lg:p-8 transition-colors hover:bg-neutral-offwhite/80 group">
                   <div class="flex items-start gap-3 md:gap-4 lg:gap-6">
-                    <div class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-white text-primary flex items-center justify-center shrink-0">
-                      <component :is="getIcon(contact)" class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                    <div class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-white flex items-center justify-center shrink-0"
+                      :class="isSocialContact(contact) ? '' : 'text-primary'">
+                      <BrandIcon v-if="isSocialContact(contact)" :name="brandName(contact)" class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                      <component v-else :is="getIcon(contact)" class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                     </div>
                     <div>
                       <h3 class="text-base md:text-lg lg:text-xl font-bold text-secondary mb-1 md:mb-2">{{ contact.name }}</h3>
@@ -157,6 +159,7 @@
   import { toWaMeNumber } from '@/utils/phone'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
+  import BrandIcon from '@/components/common/BrandIcon.vue'
   import {
     Phone,
     Mail,
@@ -166,12 +169,7 @@
     CheckCircle,
     ShieldCheck,
     Globe,
-    Video,
-    Send,
-    Facebook,
-    Twitter,
-    Instagram,
-    Youtube
+    Send
   } from 'lucide-vue-next'
 
   defineOptions({
@@ -189,18 +187,29 @@
 
   const nonEmergencyContacts = computed(() => contacts.value.filter(c => c.type !== 'phone' && c.icon !== 'phone'))
 
+  // Social brand channels get their official brand mark + colour (via BrandIcon)
+  // instead of the generic monochrome house icon. Everything not in this map
+  // (Call, Email, SMS, Location, Portal, ...) keeps the house-style icon below.
+  const SOCIAL_BRAND_MAP = {
+    facebook: 'facebook',
+    twitter: 'twitter',
+    instagram: 'instagram',
+    youtube: 'youtube',
+    video: 'tiktok',       // TikTok has historically been seeded with icon='video'
+    tiktok: 'tiktok',
+    whatsapp: 'whatsapp',
+    linkedin: 'linkedin',
+  }
+
+  const isSocialContact = (contact) => !!SOCIAL_BRAND_MAP[contact.icon]
+  const brandName = (contact) => SOCIAL_BRAND_MAP[contact.icon]
+
   const getIcon = (contact) => {
     if (contact.type === 'email' || contact.icon === 'envelope') return Mail
     if (contact.type === 'location' || contact.icon === 'map-pin' || contact.icon === 'location-marker') return MapPin
     if (contact.icon === 'globe') return Globe
-    if (contact.icon === 'facebook') return Facebook
-    if (contact.icon === 'twitter') return Twitter
-    if (contact.icon === 'instagram') return Instagram
-    if (contact.icon === 'youtube') return Youtube
-    if (contact.icon === 'video') return Video
     if (contact.icon === 'message-square') return MessageSquare
     if (contact.icon === 'send' || contact.icon === 'sms') return Send
-    if (contact.icon === 'whatsapp') return MessageSquare
     if (contact.icon === 'phone') return Phone
     return Phone
   }

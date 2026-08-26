@@ -1,10 +1,11 @@
 from rest_framework import generics, permissions, filters
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
-from .models import Post, Category, Tag
+from rest_framework.generics import get_object_or_404
+from .models import Post, Category, Tag, PostImage
 from .serializers import (
     PostListSerializer, PostDetailSerializer, PostCreateUpdateSerializer,
-    CategorySerializer, TagSerializer
+    CategorySerializer, TagSerializer, PostImageSerializer
 )
 
 
@@ -120,6 +121,37 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
         
     def perform_update(self, serializer):
         serializer.save(last_updated_by=self.request.user)
+
+
+class PostImageListCreateView(generics.ListCreateAPIView):
+    """
+    GET  /api/posts/<int:post_id>/images/ - List gallery images for a post (ordered)
+    POST /api/posts/<int:post_id>/images/ - Add a gallery image (Editors/Admins only, multipart)
+    """
+    serializer_class = PostImageSerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+    def get_queryset(self):
+        return PostImage.objects.filter(post_id=self.kwargs['post_id']).order_by('order', 'id')
+
+    def perform_create(self, serializer):
+        post = get_object_or_404(Post, pk=self.kwargs['post_id'])
+        # Append new images to the end of the gallery unless an explicit order was given.
+        next_order = PostImage.objects.filter(post=post).count()
+        order = serializer.validated_data.get('order') or next_order
+        serializer.save(post=post, order=order)
+
+
+class PostImageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET/PATCH/PUT/DELETE /api/posts/<int:post_id>/images/<int:pk>/
+    Used to edit a gallery image's caption/alt text/order, or remove it.
+    """
+    serializer_class = PostImageSerializer
+    permission_classes = [IsEditorOrReadOnly]
+
+    def get_queryset(self):
+        return PostImage.objects.filter(post_id=self.kwargs['post_id'])
 
 
 class CategoryListView(generics.ListCreateAPIView):

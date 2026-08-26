@@ -89,40 +89,36 @@
       <!-- Share Buttons -->
       <div class="mt-8 pt-6 border-t border-primary/15">
         <h3 class="text-sm font-semibold text-black/70 mb-3">Share this post:</h3>
-        <div class="flex space-x-3">
+        <div class="flex flex-wrap gap-3">
           <button
-            @click="shareOnFacebook"
-            class="flex items-center space-x-2 px-4 py-2 bg-[#1877F2] text-white rounded-lg hover:bg-[#1664D9] transition-colors"
-            aria-label="Share on Facebook"
+            v-for="social in socialShareButtons"
+            :key="social.name"
+            @click="social.action"
+            class="flex items-center space-x-2 px-4 py-2 bg-white border border-black/10 text-secondary rounded-lg hover:border-primary hover:shadow-sm transition-colors"
+            :aria-label="`Share on ${social.label}`"
           >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            <span>Facebook</span>
+            <BrandIcon :name="social.name" class="w-5 h-5" />
+            <span>{{ social.label }}</span>
           </button>
 
           <button
-            @click="shareOnTwitter"
-            class="flex items-center space-x-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-neutral-black transition-colors"
-            aria-label="Share on X"
+            @click="copyLink()"
+            class="flex items-center space-x-2 px-4 py-2 bg-white border border-primary text-primary rounded-lg hover:bg-primary/5 transition-colors"
+            aria-label="Copy link"
           >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            <svg v-if="!linkCopied" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5M10.172 13.828a4 4 0 010-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5" />
             </svg>
-            <span>X</span>
-          </button>
-
-          <button
-            @click="shareOnWhatsApp"
-            class="flex items-center space-x-2 px-4 py-2 bg-[#25D366] text-white rounded-lg hover:bg-[#20BA5A] transition-colors"
-            aria-label="Share on WhatsApp"
-          >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            <svg v-else class="w-5 h-5 text-secondary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            <span>WhatsApp</span>
+            <span>{{ linkCopied ? 'Copied!' : 'Copy link' }}</span>
           </button>
         </div>
+
+        <p v-if="shareToast" role="status" class="mt-3 text-sm font-semibold text-secondary bg-secondary/10 rounded-lg py-2 px-3 inline-block">
+          {{ shareToast }}
+        </p>
       </div>
 
       <!-- Back Button -->
@@ -142,6 +138,9 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
+import BrandIcon from '@/components/common/BrandIcon.vue'
+
 const props = defineProps({
   post: {
     type: Object,
@@ -185,34 +184,115 @@ const handleImageError = (event) => {
   event.target.src = PLACEHOLDER_FEATURED_IMAGE
 }
 
-// Share functions
+// --- Share URL -------------------------------------------------------
+// Built from the canonical public base URL (VITE_PUBLIC_BASE_URL) so a link
+// shared from a dev host/IP still resolves to the real public site for the
+// recipient. window.location is only a last-resort fallback (used when the
+// env var isn't set, e.g. local development).
+const shareUrl = computed(() => {
+  const configuredBase = (import.meta.env.VITE_PUBLIC_BASE_URL || '').replace(/\/+$/, '')
+  const base = configuredBase || (window.location.origin + (import.meta.env.BASE_URL || '/').replace(/\/+$/, ''))
+  const slug = props.post?.slug
+  return slug ? `${base}/blogs/${slug}` : `${base}${window.location.pathname}`
+})
+
+const linkCopied = ref(false)
+const shareToast = ref('')
+
+function flashToast(message) {
+  shareToast.value = message
+  setTimeout(() => { shareToast.value = '' }, 2500)
+}
+
 const shareOnFacebook = () => {
-  const url = window.location.href
   window.open(
-    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl.value)}`,
     '_blank',
     'width=600,height=400'
   )
 }
 
 const shareOnTwitter = () => {
-  const url = window.location.href
   const text = props.post.title
   window.open(
-    `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
+    `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl.value)}&text=${encodeURIComponent(text)}`,
     '_blank',
     'width=600,height=400'
   )
 }
 
 const shareOnWhatsApp = () => {
-  const url = window.location.href
-  const text = `${props.post.title} - ${url}`
+  const text = `${props.post.title} - ${shareUrl.value}`
   window.open(
     `https://wa.me/?text=${encodeURIComponent(text)}`,
     '_blank'
   )
 }
+
+const shareOnLinkedIn = () => {
+  window.open(
+    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl.value)}`,
+    '_blank',
+    'width=600,height=500'
+  )
+}
+
+const shareOnTelegram = () => {
+  window.open(
+    `https://t.me/share/url?url=${encodeURIComponent(shareUrl.value)}&text=${encodeURIComponent(props.post.title || '')}`,
+    '_blank'
+  )
+}
+
+const shareByEmail = () => {
+  window.location.href = `mailto:?subject=${encodeURIComponent(props.post.title || 'Sauti 116')}&body=${encodeURIComponent(shareUrl.value)}`
+}
+
+// Instagram and TikTok have no web share-intent URL. Prefer the native share
+// sheet (which surfaces the reader's installed apps, Instagram/TikTok
+// included); fall back to copy-link with an explicit toast so the button
+// never silently does nothing.
+async function shareViaNativeOrCopy(platformLabel) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: props.post.title || 'Sauti 116', url: shareUrl.value })
+      return
+    } catch (err) {
+      if (err?.name === 'AbortError') return
+    }
+  }
+  await copyLink(`Link copied — paste it in ${platformLabel}`)
+}
+
+const shareOnInstagram = () => shareViaNativeOrCopy('Instagram')
+const shareOnTikTok = () => shareViaNativeOrCopy('TikTok')
+
+async function copyLink(message = 'Link copied') {
+  const text = shareUrl.value
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      window.prompt('Copy this link:', text)
+    }
+  } catch (err) {
+    window.prompt('Copy this link:', text)
+  }
+  linkCopied.value = true
+  flashToast(message)
+  setTimeout(() => { linkCopied.value = false }, 2500)
+}
+
+const socialShareButtons = [
+  { name: 'facebook', label: 'Facebook', action: shareOnFacebook },
+  { name: 'x', label: 'X', action: shareOnTwitter },
+  { name: 'whatsapp', label: 'WhatsApp', action: shareOnWhatsApp },
+  { name: 'linkedin', label: 'LinkedIn', action: shareOnLinkedIn },
+  { name: 'telegram', label: 'Telegram', action: shareOnTelegram },
+  { name: 'instagram', label: 'Instagram', action: shareOnInstagram },
+  { name: 'tiktok', label: 'TikTok', action: shareOnTikTok },
+  { name: 'email', label: 'Email', action: shareByEmail },
+]
 </script>
 
 <style scoped>

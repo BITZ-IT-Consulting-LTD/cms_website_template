@@ -31,6 +31,11 @@ urlpatterns = [
     path('api/sitesettings/', include('sitesettings.urls')),
     path('api/contact/', include('contact.urls')),
 
+    # Crawler-facing Open Graph previews (item 10 -- link previews).
+    # Not consumed by the frontend; nginx routes crawler user-agents hitting
+    # /blogs/<slug> here. See sauti_cms/seo/views.py for details.
+    path('api/seo/', include('seo.urls')),
+
     # V1 Additive Resources (Normalized Stats)
     path('api/v1/calls/stats/keypair/', include('reports.urls_v1')),
 

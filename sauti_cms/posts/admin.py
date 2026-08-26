@@ -1,6 +1,6 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, PostImage
 
 
 @admin.register(Category)
@@ -17,6 +17,12 @@ class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+class PostImageInline(admin.TabularInline):
+    model = PostImage
+    extra = 1
+    fields = ['image', 'caption', 'alt_text', 'order']
+
+
 @admin.register(Post)
 class PostAdmin(SimpleHistoryAdmin):
     list_display = ['title', 'author', 'category', 'status', 'language', 'is_featured', 'published_at', 'views_count']
@@ -26,7 +32,8 @@ class PostAdmin(SimpleHistoryAdmin):
     date_hierarchy = 'published_at'
     ordering = ['-published_at', '-created_at']
     filter_horizontal = ['tags']
-    
+    inlines = [PostImageInline]
+
     fieldsets = (
         ('Content', {
             'fields': ('title', 'slug', 'excerpt', 'content', 'featured_image')

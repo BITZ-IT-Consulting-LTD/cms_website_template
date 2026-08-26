@@ -1,6 +1,11 @@
+from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import generics, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import FeedbackMessage
 from .serializers import FeedbackMessageSerializer, FeedbackCreateSerializer
+from .exports import generate_feedback_pdf, write_feedback_csv
 
 class FeedbackCreateView(generics.CreateAPIView):
     """
@@ -48,3 +53,51 @@ class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
             obj.reviewed_by = None
             obj.reviewed_at = None
             obj.save(update_fields=['reviewed_by', 'reviewed_at'])
+
+
+class FeedbackExportPDFView(APIView):
+    """
+    GET /api/contact/feedback/<id>/export/pdf/ - Single-message PDF download.
+    Admin only.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            message = FeedbackMessage.objects.get(pk=pk)
+        except FeedbackMessage.DoesNotExist:
+            return Response({'detail': 'Not found.'}, status=404)
+
+        buffer = generate_feedback_pdf(message)
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = (
+            f'attachment; filename="feedback-{message.id}.pdf"'
+        )
+        return response
+
+
+class FeedbackExportCSVView(APIView):
+    """
+    GET /api/contact/feedback/export/csv/?status=pending|reviewed|archived|all
+    Bulk CSV download, scoped to the active status filter. Admin only.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        status_filter = (request.query_params.get('status') or 'all').lower()
+        queryset = FeedbackMessage.objects.all().order_by('-submitted_at')
+
+        if status_filter == 'pending':
+            queryset = queryset.filter(is_processed=False, is_archived=False)
+        elif status_filter == 'reviewed':
+            queryset = queryset.filter(is_processed=True, is_archived=False)
+        elif status_filter == 'archived':
+            queryset = queryset.filter(is_archived=True)
+        # 'all' (or anything unrecognised) leaves the queryset unfiltered.
+
+        date_str = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
+        filename = f"general-feedback-{status_filter}-{date_str}.csv"
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return write_feedback_csv(response, queryset)

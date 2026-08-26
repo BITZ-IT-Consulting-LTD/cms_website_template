@@ -3,6 +3,8 @@ from django.utils.text import slugify
 from django.conf import settings
 from simple_history.models import HistoricalRecords
 
+from imaging.derivatives import THUMBNAIL_SIZE, MEDIUM_SIZE, sync_image_derivatives
+
 
 class Category(models.Model):
     """Categories for organizing posts"""
@@ -101,6 +103,25 @@ class Post(models.Model):
         help_text='Optional second image shown within the article body'
     )
 
+    # Server-side derivatives of featured_image, generated on save (see
+    # Post.save() and imaging.derivatives). Card/list views should prefer
+    # featured_image_thumbnail over featured_image; both fall back to the
+    # original when a row predates this feature or Pillow couldn't decode it.
+    featured_image_thumbnail = models.ImageField(
+        upload_to='posts/images/thumbnails/%Y/%m/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text='Auto-generated thumbnail derived from featured_image'
+    )
+    featured_image_medium = models.ImageField(
+        upload_to='posts/images/medium/%Y/%m/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text='Auto-generated medium-size derivative of featured_image'
+    )
+
     status = models.CharField(
         max_length=10,
         choices=Status.choices,
@@ -167,9 +188,60 @@ class Post(models.Model):
         if self.status == self.Status.PUBLISHED and not self.published_at:
             from django.utils import timezone
             self.published_at = timezone.now()
-        
+
+        sync_image_derivatives(self, [
+            ('featured_image', 'featured_image_thumbnail', THUMBNAIL_SIZE),
+            ('featured_image', 'featured_image_medium', MEDIUM_SIZE),
+        ], update_fields=kwargs.get('update_fields'))
+
         super().save(*args, **kwargs)
     
     @property
     def is_published(self):
         return self.status == self.Status.PUBLISHED
+
+
+class PostImage(models.Model):
+    """
+    Additional gallery image attached to a story/blog post.
+    A post can have an unlimited number of these, shown in `order`.
+    Separate from `featured_image` (card thumbnail) and `secondary_image`
+    (kept for backward compatibility), which are unaffected by this model.
+    """
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    image = models.ImageField(upload_to='posts/gallery/%Y/%m/')
+    image_thumbnail = models.ImageField(
+        upload_to='posts/gallery/thumbnails/%Y/%m/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text='Auto-generated thumbnail derived from image'
+    )
+    image_medium = models.ImageField(
+        upload_to='posts/gallery/medium/%Y/%m/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text='Auto-generated medium-size derivative of image'
+    )
+    caption = models.CharField(max_length=255, blank=True)
+    alt_text = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"Image {self.pk} for {self.post.title}"
+
+    def save(self, *args, **kwargs):
+        sync_image_derivatives(self, [
+            ('image', 'image_thumbnail', THUMBNAIL_SIZE),
+            ('image', 'image_medium', MEDIUM_SIZE),
+        ], update_fields=kwargs.get('update_fields'))
+        super().save(*args, **kwargs)

@@ -76,11 +76,16 @@ class ProtectionApproachSerializer(serializers.ModelSerializer):
 class TeamMemberSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False, allow_null=True)
     image_url = serializers.SerializerMethodField()
+    image_thumbnail_url = serializers.SerializerMethodField()
 
     class Meta:
         model = TeamMember
         fields = '__all__'
-        read_only_fields = ('created_at', 'updated_at', 'image_url')
+        # `image_thumbnail` is a raw model field pulled in by fields = '__all__';
+        # it is populated server-side on save (see TeamMember.save()) and must
+        # never be writable directly, so it's forced read-only alongside the
+        # computed _url fields.
+        read_only_fields = ('created_at', 'updated_at', 'image_url', 'image_thumbnail', 'image_thumbnail_url')
 
     def get_image_url(self, obj):
         """Return relative URL for image field (frontend proxy handles it)"""
@@ -90,6 +95,19 @@ class TeamMemberSerializer(serializers.ModelSerializer):
             except (ValueError, AttributeError):
                 return None
         return None
+
+    def get_image_thumbnail_url(self, obj):
+        """
+        Small derivative of `image`, generated on save. Falls back to the
+        full-resolution image for rows saved before derivatives existed, or
+        when Pillow couldn't decode the source.
+        """
+        if obj.image_thumbnail:
+            try:
+                return obj.image_thumbnail.url
+            except (ValueError, AttributeError):
+                pass
+        return self.get_image_url(obj)
 
 
 class WhoWeAreImageSerializer(serializers.ModelSerializer):

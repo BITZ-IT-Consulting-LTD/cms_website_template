@@ -368,6 +368,110 @@ Each paragraph will be properly formatted when displayed."
             </button>
           </div>
 
+          <!-- Gallery Images Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-[#8B4000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16l4-4a2 2 0 012.83 0L14 16m-3-3l1.83-1.83a2 2 0 012.83 0L21 16M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zm10-10a1 1 0 11-2 0 1 1 0 012 0z"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-900" style="font-family: 'Roboto', sans-serif;">Gallery <span class="text-sm font-normal text-gray-400">(unlimited)</span></h3>
+              </div>
+              <span v-if="galleryImages.length" class="text-xs text-gray-500">{{ galleryImages.length }} image{{ galleryImages.length === 1 ? '' : 's' }}</span>
+            </div>
+
+            <p v-if="!postId" class="text-sm text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center">
+              Save the post first to add gallery images.
+            </p>
+
+            <template v-else>
+              <div v-if="galleryImages.length" class="space-y-3 mb-4">
+                <div
+                  v-for="(img, idx) in galleryImages"
+                  :key="img.id"
+                  class="flex items-start gap-2 border border-gray-200 rounded-xl p-2 min-w-0"
+                >
+                  <img
+                    :src="img.image_thumbnail || img.image"
+                    :alt="img.alt_text || img.caption || 'Gallery image'"
+                    class="w-11 h-11 object-cover rounded-md flex-shrink-0 bg-gray-50"
+                    loading="lazy"
+                    decoding="async"
+                    width="44"
+                    height="44"
+                  />
+                  <div class="flex-1 min-w-0 space-y-1.5">
+                    <input
+                      v-model="img.caption"
+                      type="text"
+                      placeholder="Caption (optional)"
+                      class="w-full min-w-0 px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B4000]"
+                      @change="updateGalleryImage(img, { caption: img.caption || '' })"
+                    />
+                    <input
+                      v-model="img.alt_text"
+                      type="text"
+                      placeholder="Alt text (optional)"
+                      class="w-full min-w-0 px-2 py-1.5 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B4000]"
+                      @change="updateGalleryImage(img, { alt_text: img.alt_text || '' })"
+                    />
+                  </div>
+                  <div class="flex flex-col items-center gap-0 flex-shrink-0">
+                    <button
+                      type="button"
+                      @click="moveGalleryImage(idx, -1)"
+                      :disabled="idx === 0"
+                      class="p-0.5 text-gray-500 hover:text-[#8B4000] disabled:opacity-30 disabled:cursor-not-allowed"
+                      title="Move up"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      @click="moveGalleryImage(idx, 1)"
+                      :disabled="idx === galleryImages.length - 1"
+                      class="p-0.5 text-gray-500 hover:text-[#8B4000] disabled:opacity-30 disabled:cursor-not-allowed"
+                      title="Move down"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      @click="removeGalleryImage(img)"
+                      class="p-0.5 text-red-500 hover:text-red-700"
+                      title="Remove image"
+                    >
+                      <XMarkIcon class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <p v-else class="text-sm text-gray-500 mb-4">No gallery images yet.</p>
+
+              <input
+                ref="galleryInput"
+                type="file"
+                accept="image/*"
+                multiple
+                @change="handleGalleryUpload"
+                class="hidden"
+              />
+              <button
+                type="button"
+                @click="galleryInput.click()"
+                :disabled="galleryUploading"
+                class="w-full px-4 py-3 border-2 border-dashed border-[#8B4000] rounded-xl text-sm font-semibold text-[#8B4000] hover:bg-[#8B4000] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4000] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                style="font-family: 'Roboto', sans-serif;"
+              >
+                {{ galleryUploading ? 'Uploading...' : 'Add Gallery Image(s)' }}
+              </button>
+            </template>
+          </div>
+
           <!-- Enhanced Action Buttons -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="space-y-3">
@@ -434,6 +538,7 @@ const toast = useToast()
 const editor = ref(null)
 const imageInput = ref(null)
 const secondaryImageInput = ref(null)
+const galleryInput = ref(null)
 
 // Reactive data
 const loading = ref(false)
@@ -442,6 +547,13 @@ const loadingHistory = ref(false)
 const imagePreview = ref(null)
 const secondaryImagePreview = ref(null)
 const tagsInput = ref('')
+
+// Gallery: populated from the post's `images` on load; the numeric post id
+// (not the slug) is what the /posts/<id>/images/ endpoints are keyed on, so
+// the gallery only becomes available once an existing post has been loaded.
+const postId = ref(null)
+const galleryImages = ref([])
+const galleryUploading = ref(false)
 
 const form = ref({
   title: '',
@@ -587,6 +699,101 @@ const removeSecondaryImage = () => {
   form.value.secondaryImage = null
   if (secondaryImageInput.value) {
     secondaryImageInput.value.value = ''
+  }
+}
+
+// --- Gallery (unlimited images) ---
+
+const handleGalleryUpload = async (event) => {
+  const files = Array.from(event.target.files || [])
+  if (!files.length) return
+
+  if (!postId.value) {
+    toast.warning('Save the post first to add gallery images')
+    if (galleryInput.value) galleryInput.value.value = ''
+    return
+  }
+
+  galleryUploading.value = true
+  try {
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        toast.error(`${file.name} is not an image file`)
+        continue
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`${file.name} is larger than 5MB`)
+        continue
+      }
+      const response = await api.posts.images.create(postId.value, {
+        image: file,
+        caption: '',
+        alt_text: '',
+        order: galleryImages.value.length
+      })
+      galleryImages.value.push(response.data)
+    }
+    toast.success('Gallery image(s) added')
+  } catch (err) {
+    console.error('Gallery upload failed:', err)
+    toast.error(err.response?.data?.detail || 'Failed to upload gallery image')
+  } finally {
+    galleryUploading.value = false
+    if (galleryInput.value) galleryInput.value.value = ''
+  }
+}
+
+const updateGalleryImage = async (img, patch) => {
+  if (!postId.value) return
+  try {
+    const response = await api.posts.images.update(postId.value, img.id, patch)
+    Object.assign(img, response.data)
+  } catch (err) {
+    console.error('Failed to update gallery image:', err)
+    toast.error('Failed to save gallery image change')
+  }
+}
+
+const removeGalleryImage = async (img) => {
+  if (!postId.value) return
+  if (!confirm('Remove this gallery image?')) return
+  try {
+    await api.posts.images.delete(postId.value, img.id)
+    galleryImages.value = galleryImages.value.filter(i => i.id !== img.id)
+    toast.success('Image removed')
+  } catch (err) {
+    console.error('Failed to remove gallery image:', err)
+    toast.error('Failed to remove image')
+  }
+}
+
+const moveGalleryImage = async (index, direction) => {
+  const targetIndex = index + direction
+  if (targetIndex < 0 || targetIndex >= galleryImages.value.length) return
+
+  const list = galleryImages.value
+  const a = list[index]
+  const b = list[targetIndex]
+  const aOrder = a.order
+  const bOrder = b.order
+
+  // Reflect the swap immediately, then persist both new orders.
+  list[index] = b
+  list[targetIndex] = a
+
+  try {
+    await Promise.all([
+      api.posts.images.update(postId.value, a.id, { order: bOrder }),
+      api.posts.images.update(postId.value, b.id, { order: aOrder })
+    ])
+    a.order = bOrder
+    b.order = aOrder
+  } catch (err) {
+    console.error('Failed to reorder gallery images:', err)
+    toast.error('Failed to reorder images')
+    // Revert on failure
+    list[index] = a
+    list[targetIndex] = b
   }
 }
 
@@ -795,7 +1002,12 @@ onMounted(async () => {
         postType: post.post_type || 'NEWS',
         scheduledPublishAt: post.scheduled_publish_at ? toLocalDatetimeString(new Date(post.scheduled_publish_at)) : null
       }
-      
+
+      postId.value = post.id || null
+      galleryImages.value = Array.isArray(post.images)
+        ? post.images.slice().sort((a, b) => a.order - b.order)
+        : []
+
       // Fetch history using the post ID
       // if (post.id) {
       //   fetchHistory(post.id)

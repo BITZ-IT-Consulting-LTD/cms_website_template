@@ -6,29 +6,42 @@ class ReporterSerializer(serializers.Serializer):
     name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     phone = serializers.CharField(required=True)
     safe_to_contact = serializers.BooleanField(required=True)
+    # The intake form has always sent this; it used to be silently dropped
+    # because a plain Serializer discards undeclared keys.
+    alternative_contact = serializers.CharField(
+        required=False, allow_null=True, allow_blank=True
+    )
 
 class ReportCreateSerializer(serializers.ModelSerializer):
     """Serializer for submitting reports (public, no auth required)"""
-    
+
     intake_category = serializers.CharField(source='category')
     reporter = ReporterSerializer(write_only=True)
     affected_persons = serializers.ListField(child=serializers.DictField(), required=False)
-    
+
     class Meta:
         model = Report
         fields = [
             'intake_category', 'description', 'reporting_for',
-            'location', 
+            'location',
+            # victim_location and incident_type were previously absent here, so
+            # the values the intake form posted never reached the database.
+            'victim_location', 'incident_type',
             'reporter', 'affected_persons'
         ]
-    
+        extra_kwargs = {
+            'victim_location': {'required': False, 'allow_blank': True},
+            'incident_type': {'required': False, 'allow_blank': True},
+        }
+
     def create(self, validated_data):
         reporter_data = validated_data.pop('reporter', {})
 
         # Map nested reporter data to flat model fields
-        validated_data['contact_name'] = reporter_data.get('name')
-        validated_data['contact_phone'] = reporter_data.get('phone')
+        validated_data['contact_name'] = reporter_data.get('name') or ''
+        validated_data['contact_phone'] = reporter_data.get('phone') or ''
         validated_data['safe_to_contact'] = reporter_data.get('safe_to_contact', True)
+        validated_data['alternative_contact'] = reporter_data.get('alternative_contact') or ''
         # Determine anonymity based on whether name is provided
         validated_data['is_anonymous'] = not bool(reporter_data.get('name'))
 
@@ -89,6 +102,7 @@ class ReportDetailSerializer(serializers.ModelSerializer):
             'reported_person_age', 'reported_person_gender', 'is_self_report',
             'created_at', 'updated_at', 'resolved_at',
             'reporting_for', 'affected_persons', 'safe_to_contact',
+            'alternative_contact', 'victim_location', 'incident_type',
             'escalated_at', 'forwarded_to_openchs_at', 'openchs_case_id'
         ]
     
@@ -109,7 +123,8 @@ class ReportUpdateSerializer(serializers.ModelSerializer):
             'reported_person_age', 'reported_person_gender', 'is_self_report',
             'reporting_for', 'affected_persons', 'safe_to_contact',
             'category', 'description', 'contact_name', 'contact_phone',
-            'contact_email', 'location'
+            'contact_email', 'location',
+            'alternative_contact', 'victim_location', 'incident_type'
         ]
 
 

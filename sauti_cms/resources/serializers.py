@@ -83,11 +83,24 @@ class ResourceDetailSerializer(serializers.ModelSerializer):
 
 class ResourceCreateUpdateSerializer(serializers.ModelSerializer):
     """Serializer for creating/updating resources"""
-    
+
     class Meta:
         model = Resource
         fields = [
-            'title', 'description', 'category', 'file', 'thumbnail', 
+            'title', 'description', 'category', 'file', 'thumbnail',
             'language', 'status', 'is_featured'
         ]
-        extra_kwargs = {'slug': {'required': False}}
+        extra_kwargs = {
+            'slug': {'required': False},
+            # 'file' is required when creating a new resource, but must stay
+            # optional on update — the edit form (e.g. toggling visibility)
+            # only re-sends a file when the editor chooses to replace it, and
+            # PUT is not partial, so without this every metadata-only edit
+            # (status, title, etc.) would 400 with "No file was submitted."
+            'file': {'required': False},
+        }
+
+    def validate(self, attrs):
+        if self.instance is None and not attrs.get('file'):
+            raise serializers.ValidationError({'file': 'This field is required.'})
+        return attrs

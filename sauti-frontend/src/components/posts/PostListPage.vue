@@ -145,7 +145,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import BlogCard from '@/components/blog/BlogCard.vue'
 import AppLoader from '@/components/common/AppLoader.vue'
 import { useBlogStore } from '@/store/blog'
@@ -220,10 +221,23 @@ const categories = ref([])
 const loading = ref(false)
 const totalPages = ref(1)
 
+const route = useRoute()
+
 const filters = reactive({
   category: '',
-  search: '',
+  // Seeded from ?search= so a search started elsewhere (e.g. the article page's
+  // search box) arrives here already applied.
+  search: typeof route.query.search === 'string' ? route.query.search : '',
   page: 1
+})
+
+// Landing here again with a different ?search= should re-run the search.
+watch(() => route.query.search, (term) => {
+  const next = typeof term === 'string' ? term : ''
+  if (next === filters.search) return
+  filters.search = next
+  filters.page = 1
+  fetchFilteredPosts()
 })
 
 let debounceTimer = null

@@ -808,6 +808,20 @@ const handleDataCapture = (key, val) => {
   }
 }
 
+// The backend's `reporting_for` field only accepts SELF / ADULT_OTHER / CHILD /
+// MULTIPLE / UNSPECIFIED. This form's `identity` step only ever produces SELF
+// or the literal string 'OTHERS', which is not a valid choice: every
+// "For Someone Else" submission was rejected with a 400, and the generic
+// catch-all below showed "trouble connecting to the server" -- masking a
+// validation error as a network failure. Map to a real choice, using the
+// victim's age (already collected) to distinguish child vs adult when known.
+const resolveReportingFor = (data) => {
+    if (data.identity === 'SELF') return 'SELF'
+    const age = parseInt(data.victim_age, 10)
+    if (!Number.isNaN(age)) return age < 18 ? 'CHILD' : 'ADULT_OTHER'
+    return 'UNSPECIFIED'
+}
+
 const submitForm = async () => {
     isTyping.value = true
     try {
@@ -818,14 +832,18 @@ const submitForm = async () => {
                 alternative_contact: formData.value.alternative_contact || null,
                 safe_to_contact: true
             },
-            reporting_for: formData.value.identity,
+            reporting_for: resolveReportingFor(formData.value),
             affected_persons: [{
                 name: formData.value.victim_name,
                 age: formData.value.victim_age,
                 gender: formData.value.victim_sex
             }],
             intake_category: formData.value.category,
-            description: `[Incident Type: ${formData.value.incident_type}] \n\n${formData.value.description}`,
+            // incident_type is now a first-class field on the report rather than
+            // a "[Incident Type: ...]" prefix smuggled into the description.
+            // Older reports keep the prefix inside their stored description.
+            incident_type: formData.value.incident_type || '',
+            description: formData.value.description,
             location: formData.value.incident_location || formData.value.victim_location,
             victim_location: formData.value.victim_location
         }
@@ -837,7 +855,19 @@ const submitForm = async () => {
             isFinished.value = true
         }
     } catch (e) {
-        messages.value.push({ sender: 'bot', text: "I'm having trouble connecting to the server. Please call 116 for immediate help." })
+        // A server response means the request reached the backend and was
+        // rejected (e.g. a validation error) -- that is not a connectivity
+        // problem, and telling the reporter "trouble connecting" here hid a
+        // real bug (reporting_for sending an invalid value) behind a
+        // misleading message. Log the real reason and only blame the
+        // connection when there truly was no response.
+        if (e.response) {
+            console.error('Report submission was rejected by the server:', e.response.status, e.response.data)
+            messages.value.push({ sender: 'bot', text: "We couldn't submit your report because of an error on our end. Please call 116 directly so we don't lose your report." })
+        } else {
+            console.error('Report submission failed to reach the server:', e)
+            messages.value.push({ sender: 'bot', text: "I'm having trouble connecting to the server. Please call 116 for immediate help." })
+        }
     } finally {
         isTyping.value = false
     }

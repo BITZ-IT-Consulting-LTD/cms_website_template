@@ -98,8 +98,11 @@
                   <img
                     :src="video.thumbnail"
                     :alt="video.title"
+                    width="400"
+                    height="225"
                     class="video-thumbnail"
                     loading="lazy"
+                    decoding="async"
                     @error="useThumbPlaceholder($event)"
                   />
                   <div class="video-overlay"></div>
@@ -242,7 +245,7 @@
       videos.value = videosStore.videos.map(video => ({
         id: video.id,
         title: video.title,
-        thumbnail: video.thumbnail || video.youtube_thumbnail_url || VIDEO_THUMB_PLACEHOLDER,
+        thumbnail: video.thumbnail_small_url || video.thumbnail || video.youtube_thumbnail_url || VIDEO_THUMB_PLACEHOLDER,
         youtube_url: video.youtube_url,
         youtube_id: video.youtube_id,
         video_file: video.video_file,

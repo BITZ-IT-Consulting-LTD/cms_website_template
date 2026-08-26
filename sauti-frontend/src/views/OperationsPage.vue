@@ -35,6 +35,10 @@
             <img
               :src="getJourneyImage(0)"
               :alt="siteContent.getContent('operations_journey_step1_title', 'Access')"
+              width="400"
+              height="500"
+              loading="lazy"
+              decoding="async"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <!-- Gradient Overlay - Stronger for text visibility -->
@@ -55,6 +59,10 @@
             <img
               :src="getJourneyImage(1)"
               :alt="siteContent.getContent('operations_journey_step2_title', 'Response')"
+              width="400"
+              height="500"
+              loading="lazy"
+              decoding="async"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-secondary-light via-secondary-light/85 to-secondary-light/30"></div>
@@ -73,6 +81,10 @@
             <img
               :src="getJourneyImage(2)"
               :alt="siteContent.getContent('operations_journey_step3_title', 'Management')"
+              width="400"
+              height="500"
+              loading="lazy"
+              decoding="async"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-hotline via-hotline/85 to-hotline/30"></div>
@@ -91,6 +103,10 @@
             <img
               :src="getJourneyImage(3)"
               :alt="siteContent.getContent('operations_journey_step4_title', 'Protection')"
+              width="400"
+              height="500"
+              loading="lazy"
+              decoding="async"
               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/85 to-secondary/30"></div>
@@ -115,6 +131,10 @@
               <img
                 :src="getInfrastructureImage()"
                 alt="Infrastructure"
+                width="800"
+                height="800"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover"
               />
               <div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40"></div>
@@ -216,6 +236,10 @@
             <img
               :src="getServiceImage(idx)"
               :alt="siteContent.getContent(service.cid_title, service.title)"
+              width="800"
+              height="600"
+              :loading="idx === 0 ? 'eager' : 'lazy'"
+              decoding="async"
               class="absolute inset-0 w-full h-full object-cover"
             />
             <!-- Stronger gradient for text visibility -->

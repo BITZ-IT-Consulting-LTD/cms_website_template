@@ -56,6 +56,10 @@ class VideoSerializer(serializers.ModelSerializer):
         data['thumbnail'] = _relative_file_url(instance.thumbnail)
         data['video_file'] = _relative_file_url(instance.video_file)
         data['author_name'] = _author_name(instance.author)
+        # thumbnail_small is a server-generated derivative (see Video.save());
+        # kept out of Meta.fields entirely (never writable) and added here,
+        # falling back to the full thumbnail when no derivative exists yet.
+        data['thumbnail_small_url'] = _relative_file_url(instance.thumbnail_small) or data['thumbnail']
         return data
 
     def create(self, validated_data):
@@ -110,4 +114,5 @@ class VideoListSerializer(serializers.ModelSerializer):
         data['thumbnail'] = _relative_file_url(instance.thumbnail)
         data['video_file'] = _relative_file_url(instance.video_file)
         data['author_name'] = _author_name(instance.author)
+        data['thumbnail_small_url'] = _relative_file_url(instance.thumbnail_small) or data['thumbnail']
         return data

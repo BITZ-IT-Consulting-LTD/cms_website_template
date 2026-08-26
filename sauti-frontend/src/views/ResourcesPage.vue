@@ -316,8 +316,9 @@
 
           <!-- Enhanced Resources Grid (No Images - CMS Driven) -->
           <div v-else-if="filteredResources.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" :class="{ 'opacity-60': loading }">
-            <article v-for="resource in filteredResources" :key="resource.id"
-              class="group bg-white rounded-3xl shadow-lg border border-gray-100 transition-all duration-500 hover:shadow-2xl hover:border-primary/30 transform hover:-translate-y-2 overflow-hidden flex flex-col">
+            <article v-for="resource in filteredResources" :key="resource.id" :id="`resource-${resource.slug}`"
+              class="group bg-white rounded-3xl shadow-lg border border-gray-100 transition-all duration-500 hover:shadow-2xl hover:border-primary/30 transform hover:-translate-y-2 overflow-hidden flex flex-col"
+              :class="{ 'ring-4 ring-primary/40': route.query.resource === resource.slug }">
 
               <!-- Content -->
               <div class="p-8 flex-1 flex flex-col">
@@ -369,6 +370,31 @@
                     {{ resource.download_count }} {{ siteContent.getContent('resources_downloads_count', 'downloads') }}
                   </span>
                 </div>
+
+                <!-- Share Row: same platform set as the article share row, sharing
+                     a stable per-resource URL (?resource=<slug>) rather than a
+                     Download-only affordance. -->
+                <div class="flex items-center flex-wrap gap-1.5 pt-4 mt-4 border-t border-gray-100">
+                  <span class="text-[9px] font-black uppercase tracking-widest text-black/30 mr-1">
+                    {{ siteContent.getContent('resources_share_label', 'Share') }}
+                  </span>
+                  <button v-for="social in socialShareButtons" :key="social.name" type="button"
+                    @click="social.action(resource)"
+                    class="w-7 h-7 rounded-lg bg-neutral-offwhite flex items-center justify-center hover:scale-110 hover:bg-primary/10 transition-all"
+                    :aria-label="`Share ${resource.title} on ${social.label}`">
+                    <BrandIcon :name="social.name" class="w-3.5 h-3.5" />
+                  </button>
+                  <button type="button" @click="copyResourceLink(resource)"
+                    class="w-7 h-7 rounded-lg bg-neutral-offwhite flex items-center justify-center hover:scale-110 hover:bg-primary/10 transition-all"
+                    :aria-label="`Copy link to ${resource.title}`">
+                    <Check v-if="copiedSlug === resource.slug" class="w-3.5 h-3.5 text-primary" />
+                    <Link2 v-else class="w-3.5 h-3.5 text-black/50" />
+                  </button>
+                </div>
+                <p v-if="shareToastSlug === resource.slug" role="status"
+                  class="text-[11px] font-bold text-primary mt-2">
+                  {{ shareToastMessage }}
+                </p>
               </div>
             </article>
           </div>
@@ -399,18 +425,22 @@
 </template>
 
 <script setup>
-  import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+  import { ref, watch, onMounted, onUnmounted, computed, nextTick } from 'vue'
+  import { useRoute } from 'vue-router'
   import { useResourcesStore } from '@/store/resources'
   import { useSettingsStore } from '@/store/settings'
   import { useSiteContent } from '@/composables/useSiteContent'
   import { api } from '@/utils/axios'
   import AppLoader from '@/components/common/AppLoader.vue'
   import BaseCTA from '@/components/common/BaseCTA.vue'
+  import BrandIcon from '@/components/common/BrandIcon.vue'
   import {
     Search,
     ChevronDown,
     FileText,
-    BarChart
+    BarChart,
+    Link2,
+    Check
   } from 'lucide-vue-next'
   import {
     Chart as ChartJS,
@@ -445,6 +475,7 @@
   const resourcesStore = useResourcesStore()
   const settingsStore = useSettingsStore()
   const siteContent = useSiteContent('resources')
+  const route = useRoute()
   const downloadingSlug = ref(null)
 
   const brand_colors = computed(() => ({
@@ -834,6 +865,110 @@
       downloadingSlug.value = null
     }
   }
+
+  // --- Share row -----------------------------------------------------------
+  // Resources have no dedicated detail route, so the "stable per-resource URL"
+  // is this same listing page with a `?resource=<slug>` query param (query
+  // params — unlike hash fragments — are visible to the server/crawlers and
+  // to this page's own onMounted/watch below, which scrolls to + highlights
+  // the named card). Built from the canonical public base URL so a link
+  // shared from a dev host/IP still resolves for the recipient.
+  function getPublicOrigin() {
+    const configuredBase = (import.meta.env.VITE_PUBLIC_BASE_URL || '').replace(/\/+$/, '')
+    return configuredBase || (window.location.origin + (import.meta.env.BASE_URL || '/').replace(/\/+$/, ''))
+  }
+
+  function resourceShareUrl(resource) {
+    return `${getPublicOrigin()}/resources?resource=${encodeURIComponent(resource.slug)}`
+  }
+
+  const copiedSlug = ref(null)
+  const shareToastSlug = ref(null)
+  const shareToastMessage = ref('')
+
+  async function copyResourceLink(resource, message = 'Link copied') {
+    const url = resourceShareUrl(resource)
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url)
+      } else {
+        window.prompt('Copy this link:', url)
+      }
+    } catch (err) {
+      window.prompt('Copy this link:', url)
+    }
+    copiedSlug.value = resource.slug
+    shareToastSlug.value = resource.slug
+    shareToastMessage.value = message
+    setTimeout(() => {
+      copiedSlug.value = null
+      shareToastSlug.value = null
+    }, 2500)
+  }
+
+  function shareResourceOnFacebook(resource) {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(resourceShareUrl(resource))}`, '_blank', 'width=600,height=400')
+  }
+
+  function shareResourceOnTwitter(resource) {
+    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(resourceShareUrl(resource))}&text=${encodeURIComponent(resource.title || '')}`, '_blank', 'width=600,height=400')
+  }
+
+  function shareResourceOnWhatsApp(resource) {
+    window.open(`https://wa.me/?text=${encodeURIComponent((resource.title ? resource.title + ' - ' : '') + resourceShareUrl(resource))}`, '_blank')
+  }
+
+  function shareResourceOnLinkedIn(resource) {
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(resourceShareUrl(resource))}`, '_blank', 'width=600,height=500')
+  }
+
+  function shareResourceOnTelegram(resource) {
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(resourceShareUrl(resource))}&text=${encodeURIComponent(resource.title || '')}`, '_blank')
+  }
+
+  function shareResourceByEmail(resource) {
+    window.location.href = `mailto:?subject=${encodeURIComponent(resource.title || 'Sauti 116 resource')}&body=${encodeURIComponent(resourceShareUrl(resource))}`
+  }
+
+  // Instagram and TikTok have no web share-intent URL. Prefer the native
+  // share sheet (surfaces the visitor's installed apps, Instagram/TikTok
+  // included); fall back to copy-link with an explicit toast so the button
+  // never silently does nothing.
+  async function shareResourceViaNativeOrCopy(resource, platformLabel) {
+    const url = resourceShareUrl(resource)
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: resource.title || 'Sauti 116 resource', url })
+        return
+      } catch (err) {
+        if (err?.name === 'AbortError') return
+      }
+    }
+    await copyResourceLink(resource, `Link copied — paste it in ${platformLabel}`)
+  }
+
+  const shareResourceOnInstagram = (resource) => shareResourceViaNativeOrCopy(resource, 'Instagram')
+  const shareResourceOnTikTok = (resource) => shareResourceViaNativeOrCopy(resource, 'TikTok')
+
+  const socialShareButtons = [
+    { name: 'facebook', label: 'Facebook', action: shareResourceOnFacebook },
+    { name: 'x', label: 'X', action: shareResourceOnTwitter },
+    { name: 'whatsapp', label: 'WhatsApp', action: shareResourceOnWhatsApp },
+    { name: 'linkedin', label: 'LinkedIn', action: shareResourceOnLinkedIn },
+    { name: 'telegram', label: 'Telegram', action: shareResourceOnTelegram },
+    { name: 'instagram', label: 'Instagram', action: shareResourceOnInstagram },
+    { name: 'tiktok', label: 'TikTok', action: shareResourceOnTikTok },
+    { name: 'email', label: 'Email', action: shareResourceByEmail },
+  ]
+
+  // Scroll to + highlight the resource named by ?resource=<slug> (from a
+  // shared card link) once the list has loaded.
+  watch(filteredResources, async (list) => {
+    if (!route.query.resource || !list.length) return
+    await nextTick()
+    const el = document.getElementById(`resource-${route.query.resource}`)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, { once: true })
 
   function nextPage() {
     if (!pagination.value.next) return

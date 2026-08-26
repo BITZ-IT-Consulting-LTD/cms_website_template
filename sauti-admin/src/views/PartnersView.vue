@@ -70,9 +70,9 @@
             </a>
           </div>
 
-          <div v-if="partner.email" class="flex items-center">
+          <div v-if="partner.email_addresses?.length || partner.email" class="flex items-center">
             <EnvelopeIcon class="h-4 w-4 mr-2" />
-            <span class="truncate">{{ partner.email }}</span>
+            <span class="truncate">{{ (partner.email_addresses?.length ? partner.email_addresses : [partner.email]).join(', ') }}</span>
           </div>
 
           <div v-if="partner.phone_numbers?.length || partner.phone" class="flex items-center">
@@ -127,8 +127,18 @@
                   <input v-model="createForm.website_url" type="url" class="form-input">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Email</label>
-                  <input v-model="createForm.email" type="email" class="form-input">
+                  <label class="block text-sm font-medium text-gray-700">Email Address(es)</label>
+                  <div v-for="(address, index) in createForm.email_addresses" :key="index"
+                    class="flex items-center space-x-2 mt-1">
+                    <input v-model="createForm.email_addresses[index]" type="email" class="form-input flex-1"
+                      placeholder="e.g. info@example.org">
+                    <button v-if="createForm.email_addresses.length > 1" type="button"
+                      @click="removeCreateEmail(index)" class="text-red-600 hover:text-red-800 px-2"
+                      title="Remove">&times;</button>
+                  </div>
+                  <button type="button" @click="addCreateEmail" class="text-primary-600 hover:text-primary-800 text-sm mt-2">
+                    + Add email
+                  </button>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Phone Number(s)</label>
@@ -217,8 +227,18 @@
                   <input v-model="editForm.website_url" type="url" class="form-input">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Email</label>
-                  <input v-model="editForm.email" type="email" class="form-input">
+                  <label class="block text-sm font-medium text-gray-700">Email Address(es)</label>
+                  <div v-for="(address, index) in editForm.email_addresses" :key="index"
+                    class="flex items-center space-x-2 mt-1">
+                    <input v-model="editForm.email_addresses[index]" type="email" class="form-input flex-1"
+                      placeholder="e.g. info@example.org">
+                    <button v-if="editForm.email_addresses.length > 1" type="button"
+                      @click="removeEditEmail(index)" class="text-red-600 hover:text-red-800 px-2"
+                      title="Remove">&times;</button>
+                  </div>
+                  <button type="button" @click="addEditEmail" class="text-primary-600 hover:text-primary-800 text-sm mt-2">
+                    + Add email
+                  </button>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Phone Number(s)</label>
@@ -314,9 +334,9 @@
                   <span class="font-medium text-gray-700">Website:</span>
                   <a :href="viewedPartner.website_url" target="_blank" class="ml-1 text-blue-600 hover:text-blue-800">{{ viewedPartner.website_url }}</a>
                 </div>
-                <div v-if="viewedPartner.email">
+                <div v-if="viewedPartner.email_addresses?.length || viewedPartner.email">
                   <span class="font-medium text-gray-700">Email:</span>
-                  <span class="ml-1 text-gray-600">{{ viewedPartner.email }}</span>
+                  <span class="ml-1 text-gray-600">{{ (viewedPartner.email_addresses?.length ? viewedPartner.email_addresses : [viewedPartner.email]).join(', ') }}</span>
                 </div>
                 <div v-if="viewedPartner.phone_numbers?.length || viewedPartner.phone">
                   <span class="font-medium text-gray-700">Phone:</span>
@@ -411,6 +431,7 @@
     partner_type: 'NGO', // Corrected to partner_type
     website_url: '', // Corrected to website_url
     email: '',
+    email_addresses: [''],
     phone_numbers: [''],
     logoFile: null,
     logoPreview: null, // Add logoPreview
@@ -477,6 +498,7 @@
         partner_type: partner.partner_type || 'NGO',
         website_url: partner.website_url || '',
         email: partner.email || '',
+        email_addresses: partner.email_addresses?.length ? partner.email_addresses : (partner.email ? [partner.email] : []),
         phone_numbers: partner.phone_numbers?.length ? partner.phone_numbers : (partner.phone ? [partner.phone] : []),
         is_active: false,
         is_featured: false,
@@ -493,9 +515,9 @@
 
   const editPartner = async (partner) => {
     // Pull the FULL record from the DB first. The list endpoint uses a light
-    // serializer (no phone_numbers/description/email/is_active/order), so
-    // editing straight off the list row would show blanks and wipe the
-    // partner's phone numbers on save.
+    // serializer (no phone_numbers/email_addresses/description/email/is_active/order),
+    // so editing straight off the list row would show blanks and wipe the
+    // partner's phone numbers/emails on save.
     let full = partner
     try {
       full = await partnersStore.fetchPartner(partner.slug)
@@ -505,9 +527,13 @@
     const phoneNumbers = full.phone_numbers?.length
       ? [...full.phone_numbers]
       : (full.phone ? [full.phone] : [''])
+    const emailAddresses = full.email_addresses?.length
+      ? [...full.email_addresses]
+      : (full.email ? [full.email] : [''])
     editForm.value = {
       ...full,
       phone_numbers: phoneNumbers,
+      email_addresses: emailAddresses,
       logoFile: null,
       logoPreview: full.logo_url || full.logo || null,
     }
@@ -525,6 +551,26 @@
     } catch (err) {
       console.error('Delete error:', err)
       toast.error('Failed to delete partner')
+    }
+  }
+
+  const addCreateEmail = () => {
+    createForm.value.email_addresses.push('')
+  }
+
+  const removeCreateEmail = (index) => {
+    if (createForm.value.email_addresses.length > 1) {
+      createForm.value.email_addresses.splice(index, 1)
+    }
+  }
+
+  const addEditEmail = () => {
+    editForm.value.email_addresses.push('')
+  }
+
+  const removeEditEmail = (index) => {
+    if (editForm.value.email_addresses.length > 1) {
+      editForm.value.email_addresses.splice(index, 1)
     }
   }
 
@@ -550,7 +596,7 @@
 
   const createPartner = async () => {
     try {
-      const excludeKeys = ['logoFile', 'logoPreview', 'phone_numbers']
+      const excludeKeys = ['logoFile', 'logoPreview', 'phone_numbers', 'email_addresses']
       const formData = new FormData()
       for (const key in createForm.value) {
         if (key === 'logoFile' && createForm.value[key]) {
@@ -561,6 +607,8 @@
       }
       const phoneNumbers = (createForm.value.phone_numbers || []).map(p => p.trim()).filter(Boolean)
       formData.append('phone_numbers', JSON.stringify(phoneNumbers))
+      const emailAddresses = (createForm.value.email_addresses || []).map(e => e.trim()).filter(Boolean)
+      formData.append('email_addresses', JSON.stringify(emailAddresses))
       await partnersStore.createPartner(formData)
       toast.success('Partner created successfully')
       showCreateModal.value = false
@@ -570,6 +618,7 @@
         partner_type: 'NGO',
         website_url: '',
         email: '',
+        email_addresses: [''],
         phone_numbers: [''],
         logoFile: null,
         logoPreview: null,
@@ -584,7 +633,7 @@
 
   const updatePartner = async () => {
     try {
-      const excludeKeys = ['logoFile', 'logoPreview', 'logo', 'logo_url', 'created_at', 'updated_at', 'created_by', 'last_updated_by', 'history', 'phone_numbers']
+      const excludeKeys = ['logoFile', 'logoPreview', 'logo', 'logo_url', 'created_at', 'updated_at', 'created_by', 'last_updated_by', 'history', 'phone_numbers', 'email_addresses']
       const formData = new FormData()
       for (const key in editForm.value) {
         if (key === 'logoFile' && editForm.value[key]) {
@@ -595,6 +644,8 @@
       }
       const phoneNumbers = (editForm.value.phone_numbers || []).map(p => p.trim()).filter(Boolean)
       formData.append('phone_numbers', JSON.stringify(phoneNumbers))
+      const emailAddresses = (editForm.value.email_addresses || []).map(e => e.trim()).filter(Boolean)
+      formData.append('email_addresses', JSON.stringify(emailAddresses))
       await partnersStore.updatePartner(editForm.value.slug || editForm.value.id, formData)
       toast.success('Partner updated successfully')
       showEditModal.value = false

@@ -4,6 +4,14 @@
     <PageHeader :title="pageTitle" description="Manage and respond to child protection reports"
       action-label="Log New Report" :action-icon="PlusIcon" @action="$router.push('/reports/create')" />
 
+    <div class="flex justify-end -mt-3 mb-4">
+      <button @click="downloadAllCsv" :disabled="exportingCsv"
+        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 flex items-center gap-2 shadow-sm disabled:opacity-50">
+        <ArrowDownTrayIcon class="h-4 w-4" />
+        {{ exportingCsv ? 'Preparing…' : 'Download All (CSV)' }}
+      </button>
+    </div>
+
     <!-- Mini Dashboard -->
     <StatsGrid>
       <StatCard label="Total Active" :value="stats.total" :icon="ShieldExclamationIcon" color="blue" />
@@ -259,7 +267,8 @@
 <script setup>
   import { ref, computed, onMounted, watch } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import { api } from '@/utils/api'
+  import { useToast } from 'vue-toastification'
+  import { api, downloadBlobResponse } from '@/utils/api'
   import { PageHeader, StatsGrid, StatCard } from '@/components/admin'
   import {
     PlusIcon,
@@ -269,11 +278,14 @@
     ClockIcon,
     CheckCircleIcon,
     EyeIcon,
-    PencilIcon
+    PencilIcon,
+    ArrowDownTrayIcon
   } from '@heroicons/vue/24/outline'
 
   const router = useRouter()
   const route = useRoute()
+  const toast = useToast()
+  const exportingCsv = ref(false)
 
   const pageTitle = computed(() => {
     const currentTab = tabs.value.find(t => t.id === activeTab.value)
@@ -468,6 +480,20 @@
 
   const editReport = (id) => {
     router.push(`/reports/${id}/edit`)
+  }
+
+  const downloadAllCsv = async () => {
+    exportingCsv.value = true
+    try {
+      const response = await api.reports.exportCsv()
+      const today = new Date().toISOString().split('T')[0]
+      downloadBlobResponse(response, `case-reports-${today}.csv`)
+    } catch (err) {
+      console.error('Error downloading reports CSV:', err)
+      toast.error('Failed to download CSV')
+    } finally {
+      exportingCsv.value = false
+    }
   }
 
   const previousPage = () => {

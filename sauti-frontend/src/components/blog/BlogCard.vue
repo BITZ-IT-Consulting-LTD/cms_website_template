@@ -4,10 +4,13 @@
       <!-- Featured Image -->
       <div class="relative bg-neutral-offwhite rounded-2xl lg:rounded-3xl overflow-hidden aspect-[16/10] mb-4 shadow-sm ring-1 ring-black/[0.04]">
         <img
-          :src="post.featured_image || helplineAction"
+          :src="post.featured_image_thumbnail || post.featured_image || helplineAction"
           :alt="post.title"
+          width="480"
+          height="300"
           class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
           loading="lazy"
+          decoding="async"
           @error="setPlaceholder"
         />
 

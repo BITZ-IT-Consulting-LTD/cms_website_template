@@ -1,5 +1,8 @@
 from django.db import models
 
+from imaging.derivatives import THUMBNAIL_SIZE, sync_image_derivatives
+
+
 class SiteContent(models.Model):
     CONTENT_TYPES = (
         ('text', 'Text'),
@@ -255,6 +258,13 @@ class TeamMember(models.Model):
         null=True,
         help_text="Profile image of the team member"
     )
+    image_thumbnail = models.ImageField(
+        upload_to='team_members/thumbnails/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text="Auto-generated thumbnail derived from image"
+    )
     order = models.IntegerField(default=0, help_text="Display order (lower numbers first)")
     is_active = models.BooleanField(default=True, help_text="Whether this team member is visible on the site")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -282,6 +292,12 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.role})"
+
+    def save(self, *args, **kwargs):
+        sync_image_derivatives(self, [
+            ('image', 'image_thumbnail', THUMBNAIL_SIZE),
+        ], update_fields=kwargs.get('update_fields'))
+        super().save(*args, **kwargs)
 
 
 class WhoWeAreImage(models.Model):
