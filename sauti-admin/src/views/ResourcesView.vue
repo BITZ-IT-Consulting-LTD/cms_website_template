@@ -36,9 +36,9 @@
             <component :is="getFileIcon(resource.file_type || 'PDF')" class="h-16 w-16 mx-auto mb-2 opacity-90" />
             <p class="text-sm font-medium uppercase">{{ getFileTypeDisplay(resource.file_type) }}</p>
           </div>
-          <span v-if="resource.status === 'draft' || resource.status === 'DRAFT'"
-            class="absolute top-3 right-3 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">
-            Draft
+          <span :class="statusBadgeClass(resource.status)"
+            class="absolute top-3 right-3 px-2 py-1 text-xs font-semibold rounded-full">
+            {{ statusBadgeLabel(resource.status) }}
           </span>
         </div>
 
@@ -77,28 +77,38 @@
           </div>
 
           <!-- Actions -->
-          <div class="flex gap-2">
-            <button @click="viewResource(resource)" class="flex-1 btn-outline text-sm flex items-center justify-center">
-              <EyeIcon class="h-4 w-4 mr-1" />
-              View
-            </button>
-            <button @click="downloadResource(resource)"
-              class="flex-1 btn-outline text-sm flex items-center justify-center" title="Download file">
-              <ArrowDownTrayIcon class="h-4 w-4 mr-1" />
-              Download
-            </button>
-            <button @click="editResource(resource)" class="flex-1 btn-primary text-sm flex items-center justify-center">
-              <PencilIcon class="h-4 w-4 mr-1" />
-              Edit
-            </button>
-            <button @click="duplicateResource(resource)" class="btn-outline text-sm flex items-center justify-center px-3"
-              title="Duplicate resource">
-              <DocumentDuplicateIcon class="h-4 w-4" />
-            </button>
-            <button @click="deleteResource(resource)" class="btn-danger text-sm flex items-center justify-center px-3"
-              title="Delete resource">
-              <TrashIcon class="h-4 w-4" />
-            </button>
+          <div class="flex flex-col gap-2">
+            <!-- Primary actions -->
+            <div class="flex gap-2">
+              <button @click="viewResource(resource)"
+                class="flex-1 min-w-0 btn-outline !px-2 text-xs sm:text-sm flex items-center justify-center" title="View resource">
+                <EyeIcon class="h-4 w-4 mr-1 shrink-0" />
+                <span class="truncate">View</span>
+              </button>
+              <button @click="editResource(resource)"
+                class="flex-1 min-w-0 btn-primary !px-2 text-xs sm:text-sm flex items-center justify-center" title="Edit resource">
+                <PencilIcon class="h-4 w-4 mr-1 shrink-0" />
+                <span class="truncate">Edit</span>
+              </button>
+            </div>
+            <!-- Secondary actions -->
+            <div class="flex gap-2">
+              <button @click="downloadResource(resource)"
+                class="flex-1 min-w-0 btn-outline !px-2 text-xs sm:text-sm flex items-center justify-center" title="Download file">
+                <ArrowDownTrayIcon class="h-4 w-4 mr-1 shrink-0" />
+                <span class="truncate">Download</span>
+              </button>
+              <button @click="duplicateResource(resource)"
+                class="flex-1 min-w-0 btn-outline !px-2 text-xs sm:text-sm flex items-center justify-center" title="Duplicate resource">
+                <DocumentDuplicateIcon class="h-4 w-4 mr-1 shrink-0" />
+                <span class="truncate">Copy</span>
+              </button>
+              <button @click="deleteResource(resource)"
+                class="flex-1 min-w-0 btn-danger !px-2 text-xs sm:text-sm flex items-center justify-center" title="Delete resource">
+                <TrashIcon class="h-4 w-4 mr-1 shrink-0" />
+                <span class="truncate">Delete</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -171,6 +181,16 @@
                 <p class="text-xs text-gray-500 mt-1">Supported: PDF, DOC/DOCX, Images (JPG/PNG), Video (MP4/AVI/MOV),
                   Audio (MP3/M4A/WAV/OGG)</p>
               </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Visibility</label>
+                <select v-model="createForm.status" class="form-select">
+                  <option value="PUBLISHED">Published — visible on website</option>
+                  <option value="DRAFT">Draft — hidden from website</option>
+                  <option value="ARCHIVED">Archived — hidden from website</option>
+                </select>
+                <p class="text-xs text-gray-500 mt-1">Controls whether this resource shows on the public Resources
+                  page.</p>
+              </div>
             </div>
             <div class="mt-6 flex justify-end space-x-3">
               <button type="button" @click="showCreateModal = false" class="btn-outline">
@@ -233,6 +253,16 @@
                 <input type="file" @change="handleEditFileUpload"
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mp3,.m4a,.wav,.ogg" class="form-input">
                 <p class="text-xs text-gray-500 mt-1">Leave empty to keep current file</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Visibility</label>
+                <select v-model="editForm.status" class="form-select">
+                  <option value="PUBLISHED">Published — visible on website</option>
+                  <option value="DRAFT">Draft — hidden from website</option>
+                  <option value="ARCHIVED">Archived — hidden from website</option>
+                </select>
+                <p class="text-xs text-gray-500 mt-1">Controls whether this resource shows on the public Resources
+                  page.</p>
               </div>
             </div>
             <div class="mt-6 flex justify-end space-x-3">
@@ -327,7 +357,8 @@
   // Filter options
   const statusOptions = [
     { value: 'published', label: 'Published' },
-    { value: 'draft', label: 'Draft' }
+    { value: 'draft', label: 'Draft' },
+    { value: 'archived', label: 'Archived' }
   ]
 
   const categoryOptions = computed(() => {
@@ -363,7 +394,8 @@
     description: '',
     category: '',
     language: 'en',
-    file: null
+    file: null,
+    status: 'PUBLISHED'
   })
 
   // Inline "add new category" control for the create-resource form, so admins
@@ -429,6 +461,20 @@
   const getFileTypeDisplay = (type) => {
     if (!type) return 'Document'
     return type.toUpperCase()
+  }
+
+  const statusBadgeLabel = (status) => {
+    const normalized = (status || '').toUpperCase()
+    if (normalized === 'ARCHIVED') return 'Archived'
+    if (normalized === 'PUBLISHED') return 'Published'
+    return 'Draft'
+  }
+
+  const statusBadgeClass = (status) => {
+    const normalized = (status || '').toUpperCase()
+    if (normalized === 'ARCHIVED') return 'bg-gray-200 text-gray-700'
+    if (normalized === 'PUBLISHED') return 'bg-green-100 text-green-800'
+    return 'bg-yellow-100 text-yellow-800'
   }
 
   const getLanguageName = (code) => {
@@ -516,7 +562,8 @@
       description: full.description,
       category: full.category?.id || full.category || '',
       language: full.language,
-      file: null
+      file: null,
+      status: (full.status || 'PUBLISHED').toUpperCase()
     }
     showEditModal.value = true
   }
@@ -584,7 +631,8 @@
       description: '',
       category: '',
       language: 'en',
-      file: null
+      file: null,
+      status: 'PUBLISHED'
     }
   }
 
