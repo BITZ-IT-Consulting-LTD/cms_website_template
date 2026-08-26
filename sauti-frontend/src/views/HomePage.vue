@@ -11,6 +11,10 @@
               src="/assets/sauti-logo-uganda.jpeg"
               :alt="siteContent.getContent('home_logo_sauti_alt', 'Sauti 116 - Speak Up Against Violence, Republic of Uganda')"
               class="logo-combined"
+              width="180"
+              height="60"
+              loading="eager"
+              decoding="async"
             />
           </div>
 
@@ -45,10 +49,15 @@
 
         <!-- Right Image -->
         <div class="hero-image-container">
-          <img 
-            src="@/assets/hero-family.png" 
-            :alt="siteContent.getContent('home_hero_image_alt', 'Ugandan mother protecting her children')" 
+          <img
+            src="@/assets/hero-family.png"
+            :alt="siteContent.getContent('home_hero_image_alt', 'Ugandan mother protecting her children')"
             class="hero-image"
+            width="960"
+            height="1080"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
           />
         </div>
       </div>
@@ -109,6 +118,10 @@
               <img
                 :src="latestVideos[0].thumbnail"
                 :alt="latestVideos[0].title"
+                width="640"
+                height="400"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               />
             </div>
@@ -140,6 +153,10 @@
                 <img
                   :src="post.thumbnail"
                   :alt="post.title"
+                  width="128"
+                  height="128"
+                  loading="lazy"
+                  decoding="async"
                   class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
@@ -165,7 +182,7 @@
            <!-- Featured Mock -->
            <div class="group cursor-pointer">
             <div class="rounded-2xl md:rounded-3xl overflow-hidden aspect-[16/10] shadow-xl mb-3 md:mb-4 bg-gray-200">
-               <img src="@/assets/diverse_helpline_operations.png" class="w-full h-full object-cover opacity-80" />
+               <img src="@/assets/diverse_helpline_operations.png" alt="" width="640" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-80" />
             </div>
             <div class="space-y-2 md:space-y-3">
               <span class="text-primary font-bold text-[10px] md:text-xs tracking-widest uppercase break-words">{{ siteContent.getContent('home_news_mock_featured_category', 'Community') }}</span>
@@ -313,7 +330,7 @@
           slug: post.slug,
           title: post.title,
           category: 'News',
-          thumbnail: post.featured_image,
+          thumbnail: post.featured_image_thumbnail || post.featured_image,
           excerpt: post.excerpt || post.summary || '',
           date: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
         }))

@@ -11,13 +11,13 @@
         <!-- Left Side Column -->
         <div class="hidden md:grid grid-rows-3 gap-4">
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img :src="heroImage1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Community" />
+              <img :src="heroImage1" width="400" height="300" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Community" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img :src="heroImage2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Helpline" />
+              <img :src="heroImage2" width="400" height="300" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Helpline" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img :src="heroImage3" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Family" />
+              <img :src="heroImage3" width="400" height="300" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Family" />
            </div>
         </div>
 
@@ -26,16 +26,16 @@
             <!-- Center Grid (Background for Circle) -->
             <div class="grid grid-cols-2 grid-rows-2 gap-4 w-full h-full">
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img :src="heroImageTeam" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Team" />
+                 <img :src="heroImageTeam" width="400" height="400" loading="eager" decoding="async" fetchpriority="high" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Team" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img :src="heroImage4" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Happy Students" />
+                 <img :src="heroImage4" width="400" height="400" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Happy Students" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img :src="heroImage5" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Action" />
+                 <img :src="heroImage5" width="400" height="400" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Action" />
                </div>
                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-                 <img :src="heroImage6" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Protection" />
+                 <img :src="heroImage6" width="400" height="400" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Protection" />
                </div>
             </div>
 
@@ -54,10 +54,10 @@
         <!-- Right Side Column -->
         <div class="hidden md:grid grid-rows-3 gap-4">
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-              <img :src="heroImage7" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Operations" />
+              <img :src="heroImage7" width="400" height="300" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Operations" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
-               <img :src="heroImage8" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Inclusive" />
+               <img :src="heroImage8" width="400" height="300" loading="eager" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Inclusive" />
            </div>
            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative group">
               <div class="w-full h-full bg-blue-50 flex items-center justify-center p-4">
@@ -237,12 +237,15 @@
           <div v-for="member in teamMembers" :key="member.id" class="group bg-white rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-10 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
             <div class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full overflow-hidden mb-3 md:mb-4 border-4 border-primary/10 group-hover:border-primary transition-colors bg-gray-100 flex items-center justify-center flex-shrink-0">
               <img
-                v-if="member.image_url || member.image"
-                :src="member.image_url || member.image"
+                v-if="member.image_thumbnail_url || member.image_url || member.image"
+                :src="member.image_thumbnail_url || member.image_url || member.image"
                 :alt="member.name"
+                width="128"
+                height="128"
                 class="w-full h-full object-cover"
                 @error="handleImageError($event, member)"
                 loading="lazy"
+                decoding="async"
               />
               <User v-else class="w-12 h-12 md:w-16 md:h-16 text-gray-400" />
             </div>

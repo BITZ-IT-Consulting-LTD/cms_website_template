@@ -3,6 +3,7 @@
     <!-- 1. Hero / Header Section -->
     <header class="relative overflow-hidden pt-24 pb-32 bg-secondary">
       <img src="@/assets/community-protection.png" alt="Sauti 116 Child Protection in Community"
+        width="1600" height="900" loading="eager" decoding="async" fetchpriority="high"
         class="absolute inset-0 w-full h-full object-cover opacity-40" />
       <div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/80"></div>
       <div class="container-custom relative z-10 text-center">

@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
 
+from imaging.derivatives import THUMBNAIL_SIZE, sync_image_derivatives
+
 
 class VideoCategory(models.Model):
     """Categories for organizing videos"""
@@ -82,7 +84,18 @@ class Video(models.Model):
         null=True,
         help_text='Video thumbnail image'
     )
-    
+
+    # Auto-generated small derivative of an *uploaded* thumbnail (YouTube
+    # thumbnails already come pre-sized from img.youtube.com and are
+    # unaffected). Generated on save; falls back to `thumbnail` when empty.
+    thumbnail_small = models.ImageField(
+        upload_to='videos/thumbnails/small/%Y/%m/',
+        blank=True,
+        null=True,
+        editable=False,
+        help_text='Auto-generated small derivative of thumbnail'
+    )
+
     # Metadata
     duration = models.DurationField(blank=True, null=True, help_text='Video duration')
     file_size = models.IntegerField(null=True, blank=True, help_text='File size in bytes')
@@ -168,7 +181,11 @@ class Video(models.Model):
         if self.status == self.Status.PUBLISHED and not self.published_at:
             from django.utils import timezone
             self.published_at = timezone.now()
-        
+
+        sync_image_derivatives(self, [
+            ('thumbnail', 'thumbnail_small', THUMBNAIL_SIZE),
+        ], update_fields=kwargs.get('update_fields'))
+
         super().save(*args, **kwargs)
     
     @property
