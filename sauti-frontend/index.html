@@ -16,12 +16,21 @@
 
     <!--
       Open Graph / Twitter Card meta tags for rich link previews on
-      WhatsApp, Facebook, X, etc. These crawlers do NOT execute JS, so
-      the values below are static site-wide defaults.
-      NOTE: Per-article OG tags (per-post title/description/image) require
-      SSR or prerendering, or a Vue head-manager library (e.g. @unhead/vue
-      with useHead). None is installed, so per-post previews are a
-      follow-up. Until then, every shared link shows this site-wide card.
+      WhatsApp, Facebook, X, etc. These crawlers do NOT execute JS, so the
+      values below are static site-wide defaults and are what a crawler
+      sees for every URL that ISN'T specifically handled below.
+
+      Per-article previews (item 10): rather than SSR/prerendering the whole
+      SPA, article links are served by a small Django view
+      (sauti_cms/seo/views.py, GET /api/seo/post/<slug>/) that renders
+      crawler-facing HTML with that post's own og:title/description/image.
+      nginx routes requests to /blogs/<slug> (dev) or /sauti/blogs/<slug>
+      (prod) to that view ONLY when the request's User-Agent matches a known
+      link-preview crawler (facebookexternalhit, WhatsApp, Twitterbot,
+      LinkedInBot, TelegramBot, ...) — see docker/nginx/dev.conf,
+      docker/nginx/prod.conf and docker/nginx/host/sauticms/cms_logic.inc.
+      Human visitors keep hitting this SPA shell at the same URL. Resource
+      links are not covered by this — see ResourcesPage.vue's share row.
     -->
     <meta property="og:title" content="Sauti 116 helpline - Get Help Now" />
     <meta
@@ -30,7 +39,7 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sauti 116" />
-    <meta property="og:url" content="https://sauti.mglsd.go.ug/" />
+    <meta property="og:url" content="https://sauti.mglsd.go.ug/sauti/" />
     <meta property="og:image" content="https://sauti.mglsd.go.ug/logo.png" />
     <meta property="og:image:alt" content="Sauti 116 helpline logo" />
 
