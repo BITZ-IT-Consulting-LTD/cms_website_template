@@ -176,7 +176,15 @@ class ReportListView(generics.ListAPIView):
     queryset = Report.objects.select_related('assigned_to')
     serializer_class = ReportListSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+    # The admin Reports table fetches once and does its own search/filter/
+    # sort/pagination entirely client-side (ReportsView.vue). The global
+    # PageNumberPagination (PAGE_SIZE=20) was silently truncating that fetch
+    # to the 20 most recent reports, so every filter -- status, category,
+    # reporting-for, age range -- only ever searched within that page and
+    # silently missed anything older, making filters that should have
+    # matches (e.g. "Adult (Other)") appear broken/empty.
+    pagination_class = None
+
     def get_queryset(self):
         if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can view reports.")

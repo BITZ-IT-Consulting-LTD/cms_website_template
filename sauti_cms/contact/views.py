@@ -56,6 +56,12 @@ class FeedbackListView(generics.ListAPIView):
     queryset = FeedbackMessage.objects.all().order_by('-submitted_at')
     serializer_class = FeedbackMessageSerializer
     permission_classes = [HasManageFeedback]
+    # FeedbackAdmin.vue fetches once and does its own status filtering/
+    # tabs/downloads client-side -- same issue as ReportListView: the global
+    # PageNumberPagination (PAGE_SIZE=20) was silently truncating this to
+    # the 20 most recent messages, so anything older was invisible to every
+    # tab/filter.
+    pagination_class = None
 
 class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
