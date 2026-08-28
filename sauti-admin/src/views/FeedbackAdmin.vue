@@ -3,7 +3,30 @@
         <!-- Page Header -->
         <PageHeader title="General Feedback"
             description="View and manage messages submitted via the website contact form."
-            action-label="Download All (CSV)" :action-icon="ArrowDownTrayIcon" @action="downloadAllCsv" />
+            action-label="Download All (CSV)" :action-icon="ArrowDownTrayIcon" @action="showExportPanel = !showExportPanel" />
+
+        <!-- CSV Export: optional date range, defaults to everything when left blank -->
+        <div v-if="showExportPanel" class="-mt-2 mb-6 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex flex-wrap items-end gap-4">
+            <div>
+                <label class="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1">From</label>
+                <input type="date" v-model="exportDateFrom"
+                    class="px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900" />
+            </div>
+            <div>
+                <label class="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1">To</label>
+                <input type="date" v-model="exportDateTo"
+                    class="px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900" />
+            </div>
+            <button @click="downloadAllCsv"
+                class="px-4 py-2 bg-gray-900 text-white text-xs font-black uppercase tracking-wider rounded-xl hover:bg-gray-800 transition-all shadow-md">
+                Download
+            </button>
+            <button @click="showExportPanel = false; exportDateFrom = ''; exportDateTo = ''"
+                class="px-4 py-2 text-xs font-black uppercase tracking-wider rounded-xl text-gray-400 hover:text-gray-700 transition-all">
+                Cancel
+            </button>
+            <p class="w-full text-xs text-gray-400">Leave both blank to download everything in the current status filter.</p>
+        </div>
 
         <!-- Stats -->
         <StatsGrid>
@@ -127,6 +150,9 @@
     const toast = useToast();
     const messages = ref([]);
     const loading = ref(true);
+    const showExportPanel = ref(false);
+    const exportDateFrom = ref('');
+    const exportDateTo = ref('');
 
     const VALID_STATUSES = ['all', 'pending', 'reviewed', 'archived'];
     const statusFilter = ref(VALID_STATUSES.includes(route.query.status) ? route.query.status : 'all');
@@ -242,9 +268,22 @@
 
     const downloadAllCsv = async () => {
         try {
-            const response = await api.feedback.exportCsv({ status: statusFilter.value });
-            const today = new Date().toISOString().split('T')[0];
-            downloadBlobResponse(response, `general-feedback-${statusFilter.value}-${today}.csv`);
+            const params = { status: statusFilter.value };
+            if (exportDateFrom.value) params.date_from = exportDateFrom.value;
+            if (exportDateTo.value) params.date_to = exportDateTo.value;
+
+            const response = await api.feedback.exportCsv(params);
+
+            let fallbackName;
+            if (exportDateFrom.value || exportDateTo.value) {
+                const from = exportDateFrom.value || 'start';
+                const to = exportDateTo.value || 'present';
+                fallbackName = `general-feedback-${statusFilter.value}-${from}_to_${to}.csv`;
+            } else {
+                const today = new Date().toISOString().split('T')[0];
+                fallbackName = `general-feedback-${statusFilter.value}-${today}.csv`;
+            }
+            downloadBlobResponse(response, fallbackName);
         } catch (error) {
             console.error('Error downloading feedback CSV:', error);
             toast.error('Failed to download CSV');
