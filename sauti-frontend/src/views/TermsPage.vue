@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen overflow-x-hidden">
     <!-- 1. Page Header -->
     <header class="page-header">
       <div class="container-custom">
@@ -18,7 +18,7 @@
 
           <!-- Terms in a Flash (Flash Pattern) -->
           <section class="bg-secondary/5 p-8 md:p-10 rounded-[2.5rem] border-2 border-secondary/10">
-            <h2 class="campaign-header text-xl text-secondary mb-6 flex items-center gap-3">
+            <h2 class="campaign-header text-lg md:text-xl text-secondary mb-6 flex items-center gap-3">
               <ShieldCheckIcon class="w-6 h-6 text-secondary" />
               Terms in a Flash
             </h2>
@@ -43,7 +43,7 @@
 
           <!-- Section 1 -->
           <section aria-labelledby="acceptance-heading">
-            <h2 id="acceptance-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="acceptance-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               1. Using Our Sanctuary
             </h2>
@@ -56,7 +56,7 @@
 
           <!-- Section 2 -->
           <section aria-labelledby="description-heading">
-            <h2 id="description-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="description-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-hotline rounded-full"></span>
               2. What We Provide for You
             </h2>
@@ -73,7 +73,7 @@
 
           <!-- Section 3 -->
           <section aria-labelledby="responsibilities-heading">
-            <h2 id="responsibilities-heading" class="campaign-header text-3xl text-secondary mb-8">3. Keeping Each Other
+            <h2 id="responsibilities-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8">3. Keeping Each Other
               Safe</h2>
             <div class="space-y-6">
               <div v-for="resp in responsibilities" :key="resp" class="flex items-start gap-6">
@@ -89,11 +89,11 @@
           <!-- Section 4 -->
           <section aria-labelledby="confidentiality-heading">
             <h2 id="confidentiality-heading"
-              class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+              class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-secondary-light rounded-full"></span>
               4. How We Protect Your Privacy
             </h2>
-            <div class="bg-neutral-offwhite/30 p-10 rounded-[2.5rem] border-2 border-neutral-offwhite">
+            <div class="bg-neutral-offwhite/30 p-6 md:p-10 rounded-[2.5rem] border-2 border-neutral-offwhite">
               <p class="text-black font-bold text-lg leading-relaxed mb-8">
                 We are committed to maintaining the confidentiality of all information shared with us. However, we may
                 be required to share information in the following circumstances:
@@ -110,7 +110,7 @@
 
           <!-- Section 5 -->
           <section aria-labelledby="availability-heading">
-            <h2 id="availability-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="availability-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               5. When You Can Reach Us
             </h2>
@@ -120,7 +120,7 @@
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div v-for="rights in availabilityRights" :key="rights"
-                class="p-8 bg-neutral-white border-2 border-neutral-offwhite rounded-3xl shadow-sm hover:border-primary transition-colors">
+                class="p-6 md:p-8 bg-neutral-white border-2 border-neutral-offwhite rounded-3xl shadow-sm hover:border-primary transition-colors">
                 <p class="text-black font-bold text-sm">{{ rights }}</p>
               </div>
             </div>
@@ -128,9 +128,9 @@
 
           <!-- Section 6 -->
           <section aria-labelledby="emergency-heading">
-            <h2 id="emergency-heading" class="campaign-header text-3xl text-emergency mb-8">6. Emergency Situations</h2>
-            <div class="bg-emergency/5 p-10 rounded-[3rem] border-2 border-emergency/20 space-y-8">
-              <p class="text-black font-bold text-xl">In case of immediate danger, please:</p>
+            <h2 id="emergency-heading" class="campaign-header text-xl md:text-3xl text-emergency mb-8">6. Emergency Situations</h2>
+            <div class="bg-emergency/5 p-6 md:p-10 rounded-[3rem] border-2 border-emergency/20 space-y-8">
+              <p class="text-black font-bold text-lg md:text-xl">In case of immediate danger, please:</p>
               <div class="grid gap-4">
                 <div v-for="step in emergencySteps" :key="step"
                   class="flex items-center gap-6 p-6 bg-neutral-white rounded-2xl border-2 border-emergency/10 shadow-sm">
@@ -146,10 +146,10 @@
 
           <!-- Section 7 -->
           <section aria-labelledby="contact-heading">
-            <h2 id="contact-heading" class="campaign-header text-3xl text-secondary mb-8">7. Contact Information
+            <h2 id="contact-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8">7. Contact Information
             </h2>
             <div
-              class="bg-primary/5 p-10 rounded-[3rem] border-2 border-primary/20 grid grid-cols-1 md:grid-cols-2 gap-10">
+              class="bg-primary/5 p-6 md:p-10 rounded-[3rem] border-2 border-primary/20 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div class="space-y-8">
                 <div class="flex items-center gap-6">
                   <div

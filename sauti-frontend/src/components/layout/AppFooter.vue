@@ -36,6 +36,11 @@
                 <BrandIcon name="youtube" class="w-5 h-5 lg:w-6 lg:h-6" />
                 <span class="social-tooltip" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_social_youtube_label', 'YouTube') }}</span>
              </a>
+             <!-- WhatsApp -->
+             <a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="social-btn group relative rounded-full bg-white flex items-center justify-center transition-all hover:scale-110 w-9 h-9 lg:w-12 lg:h-12">
+                <BrandIcon name="whatsapp" class="w-5 h-5 lg:w-6 lg:h-6" />
+                <span class="social-tooltip" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_social_whatsapp_label', 'WhatsApp') }}</span>
+             </a>
           </div>
         </div>
 
@@ -132,11 +137,17 @@ import {
 import { useSiteContent } from '@/composables/useSiteContent'
 import { useSettingsStore } from '@/store/settings'
 import BrandIcon from '@/components/common/BrandIcon.vue'
+import { toWaMeNumber } from '@/utils/phone'
 
 const siteContent = useSiteContent('footer')
 const settingsStore = useSettingsStore()
 
 const isExternalUrl = (url) => typeof url === 'string' && /^https?:\/\//i.test(url)
+
+// Same normalisation ContactPage uses for its WhatsApp channel: the CMS value
+// may be entered in Uganda local format (e.g. '0743889999'), which wa.me
+// rejects — toWaMeNumber() converts it to the international digits-only form.
+const whatsappUrl = computed(() => `https://wa.me/${toWaMeNumber(siteContent.getContent('footer_social_whatsapp_number', '0743889999'))}`)
 
 const privacyUrl = computed(() => settingsStore.settings.privacy_policy_url || '/privacy')
 const termsUrl = computed(() => settingsStore.settings.terms_of_service_url || '/terms')

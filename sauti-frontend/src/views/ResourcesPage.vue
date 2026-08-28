@@ -41,10 +41,10 @@
           <!-- Enhanced Quick Stats Cards -->
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
             <!-- Total Calls -->
-            <div class="relative overflow-hidden rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-primary to-primary/80">
+            <div class="relative overflow-hidden rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-primary to-primary/80">
               <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div class="relative z-10">
-                <div class="text-3xl md:text-4xl font-black text-white mb-1">
+                <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1">
                    {{ formatNumber(dashboardStats.total_calls) }}
                 </div>
                 <p class="text-white/80 text-xs font-bold tracking-wider uppercase">
@@ -54,10 +54,10 @@
             </div>
 
             <!-- Total Cases -->
-            <div class="relative overflow-hidden rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-secondary to-secondary/80">
+            <div class="relative overflow-hidden rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-secondary to-secondary/80">
               <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div class="relative z-10">
-                <div class="text-3xl md:text-4xl font-black text-white mb-1">
+                <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1">
                    {{ formatNumber(dashboardStats.total_cases) }}
                 </div>
                 <p class="text-white/80 text-xs font-bold tracking-wider uppercase">
@@ -67,10 +67,10 @@
             </div>
 
             <!-- Total GBV Cases -->
-            <div class="relative overflow-hidden rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-hotline to-hotline/80">
+            <div class="relative overflow-hidden rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-hotline to-hotline/80">
               <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div class="relative z-10">
-                <div class="text-3xl md:text-4xl font-black text-white mb-1">
+                <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1">
                    {{ formatNumber(dashboardStats.total_gbv_cases) }}
                 </div>
                 <p class="text-white/80 text-xs font-bold tracking-wider uppercase">
@@ -80,10 +80,10 @@
             </div>
 
             <!-- Total SEA Cases -->
-            <div class="relative overflow-hidden rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-emergency to-emergency/80">
+            <div class="relative overflow-hidden rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-emergency to-emergency/80">
               <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div class="relative z-10">
-                <div class="text-3xl md:text-4xl font-black text-white mb-1">
+                <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1">
                    {{ formatNumber(dashboardStats.total_sea_cases) }}
                 </div>
                 <p class="text-white/80 text-xs font-bold tracking-wider uppercase">
@@ -93,10 +93,10 @@
             </div>
 
             <!-- Total Migrant Workers -->
-            <div class="relative overflow-hidden rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-secondary-light to-secondary-light/80">
+            <div class="relative overflow-hidden rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 group bg-gradient-to-br from-secondary-light to-secondary-light/80">
               <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div class="relative z-10">
-                <div class="text-3xl md:text-4xl font-black text-white mb-1">
+                <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1">
                    {{ formatNumber(dashboardStats.total_migrant_workers) }}
                 </div>
                 <p class="text-white/80 text-xs font-bold tracking-wider uppercase">
@@ -241,7 +241,7 @@
         <section aria-labelledby="downloads-heading">
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <h2 id="downloads-heading" class="campaign-header text-3xl text-secondary mb-4">
+              <h2 id="downloads-heading" class="campaign-header text-2xl lg:text-3xl text-secondary mb-4">
                 {{ siteContent.getContent('resources_downloads_title', 'Downloadable Resources') }}
               </h2>
               <p class="text-black/60 font-bold text-lg">

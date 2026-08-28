@@ -193,7 +193,11 @@ const shareUrl = computed(() => {
   const configuredBase = (import.meta.env.VITE_PUBLIC_BASE_URL || '').replace(/\/+$/, '')
   const base = configuredBase || (window.location.origin + (import.meta.env.BASE_URL || '/').replace(/\/+$/, ''))
   const slug = props.post?.slug
-  return slug ? `${base}/blogs/${slug}` : `${base}${window.location.pathname}`
+  // `base` already includes the deployed base path when VITE_PUBLIC_BASE_URL
+  // is set, so appending window.location.pathname here would duplicate it
+  // (as it did in BlogDetailPage.vue's equivalent bug) -- BASE_URL is the
+  // one piece of the pathname the fallback case above doesn't already cover.
+  return slug ? `${base}/blogs/${slug}` : base
 })
 
 const linkCopied = ref(false)

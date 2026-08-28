@@ -145,7 +145,13 @@
         </main>
 
         <!-- ============ Sidebar ============ -->
-        <aside class="lg:col-span-4 min-w-0 space-y-5 lg:sticky lg:top-24 lg:self-start">
+        <!-- No lg:self-start here: it would shrink this cell to the sidebar's
+             own (short) content height, so position:sticky runs out of room
+             to track scroll partway down a long article, leaving a dead gap
+             beside the rest of the body text. Letting the grid's default
+             align-items:stretch apply keeps the cell as tall as the article
+             column, so the sticky sidebar follows all the way to the bottom. -->
+        <aside class="lg:col-span-4 min-w-0 lg:sticky lg:top-24 space-y-5">
           <!-- Share -->
           <section class="bg-neutral-white rounded-2xl border border-black/5 shadow-sm p-5">
             <h2 class="text-sm font-bold uppercase tracking-wider text-secondary mb-4">Share to</h2>
@@ -188,10 +194,10 @@
             <ul v-else-if="relatedPosts.length" class="list-none p-0 m-0 divide-y divide-black/5">
               <li v-for="related in relatedPosts" :key="related.id">
                 <router-link :to="`/blogs/${related.slug}`" class="group flex gap-3 py-3">
-                  <img :src="related.featured_image_thumbnail || related.featured_image" :alt="related.title" width="80" height="64" loading="lazy"
+                  <img :src="related.featured_image_thumbnail || related.featured_image" :alt="related.title" width="64" height="64" loading="lazy"
                     decoding="async"
-                    class="w-20 h-16 rounded-lg object-cover bg-neutral-offwhite shrink-0" @error="setPlaceholder" />
-                  <div class="min-w-0">
+                    class="w-16 h-16 rounded-lg object-cover bg-neutral-offwhite shrink-0" @error="setPlaceholder" />
+                  <div class="flex-1 min-w-0">
                     <p
                       class="text-sm font-bold leading-snug text-secondary group-hover:text-primary transition-colors line-clamp-2">
                       {{ related.title }}
@@ -407,9 +413,15 @@
 
   const shareUrl = computed(() => {
     const configured = String(import.meta.env.VITE_PUBLIC_BASE_URL || '').trim().replace(/\/+$/, '')
-    if (typeof window === 'undefined') return configured
-    if (!configured) return window.location.href
-    return `${configured}${window.location.pathname}${window.location.search}`
+    if (!configured) {
+      return typeof window === 'undefined' ? '' : window.location.href
+    }
+    // `configured` already includes the deployed base path (e.g. "/sauti"),
+    // and so does window.location.pathname in production -- concatenating
+    // both duplicated it into "/sauti/sauti/blogs/<slug>" for every shared
+    // link. route.fullPath is base-stripped by Vue Router, so it's the
+    // correct thing to append here.
+    return `${configured}${route.fullPath}`
   })
 
   const shareTitle = computed(() => post.value?.title || 'Sauti 116 Helpline')

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen overflow-x-hidden">
     <!-- 1. Page Header -->
     <header class="page-header">
       <div class="container-custom">
@@ -18,7 +18,7 @@
 
           <!-- Quick Summary Block (The Flash Pattern) -->
           <section class="bg-primary/5 p-8 md:p-10 rounded-[2.5rem] border-2 border-primary/10">
-            <h2 class="campaign-header text-xl text-primary mb-6 flex items-center gap-3">
+            <h2 class="campaign-header text-lg md:text-xl text-primary mb-6 flex items-center gap-3">
               <ShieldCheckIcon class="w-6 h-6" />
               Privacy in a Flash
             </h2>
@@ -43,7 +43,7 @@
 
           <!-- Section 1 -->
           <section aria-labelledby="collect-heading">
-            <h2 id="collect-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="collect-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               1. Information We Use to Help You
             </h2>
@@ -65,7 +65,7 @@
 
           <!-- Section 2 -->
           <section aria-labelledby="usage-heading">
-            <h2 id="usage-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="usage-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-hotline rounded-full"></span>
               2. How We Protect Your Story
             </h2>
@@ -82,11 +82,11 @@
 
           <!-- Section 3 -->
           <section aria-labelledby="sharing-heading">
-            <h2 id="sharing-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="sharing-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-secondary-light rounded-full"></span>
               3. When We Share Your Information
             </h2>
-            <div class="bg-neutral-offwhite/30 p-10 rounded-[2.5rem] border-2 border-neutral-offwhite">
+            <div class="bg-neutral-offwhite/30 p-6 md:p-10 rounded-[2.5rem] border-2 border-neutral-offwhite">
               <p class="text-black font-bold text-lg leading-relaxed mb-8">
                 We do not share your personal information except in the following circumstances:
               </p>
@@ -102,7 +102,7 @@
 
           <!-- Section 4 -->
           <section aria-labelledby="security-heading">
-            <h2 id="security-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="security-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               4. Our Security Commitment
             </h2>
@@ -112,7 +112,7 @@
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div v-for="sec in security" :key="sec.title"
-                class="p-8 bg-neutral-white border-2 border-neutral-offwhite rounded-3xl shadow-sm hover:border-primary transition-colors">
+                class="p-6 md:p-8 bg-neutral-white border-2 border-neutral-offwhite rounded-3xl shadow-sm hover:border-primary transition-colors">
                 <h4 class="campaign-header text-primary text-xs mb-3">{{ sec.title }}</h4>
                 <p class="text-black font-bold">{{ sec.desc }}</p>
               </div>
@@ -121,7 +121,7 @@
 
           <!-- Section 5 -->
           <section aria-labelledby="rights-heading">
-            <h2 id="rights-heading" class="campaign-header text-3xl text-secondary mb-10">5. Your Rights</h2>
+            <h2 id="rights-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-10">5. Your Rights</h2>
             <div class="grid gap-4">
               <div v-for="right in rights" :key="right"
                 class="flex items-center justify-between p-6 bg-neutral-offwhite/30 rounded-2xl border-2 border-transparent hover:border-primary transition-all group">
@@ -133,12 +133,12 @@
 
           <!-- Section 6 -->
           <section aria-labelledby="contact-heading">
-            <h2 id="contact-heading" class="campaign-header text-3xl text-secondary mb-8">6. Contact Us</h2>
+            <h2 id="contact-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8">6. Contact Us</h2>
             <p class="text-black/80 font-bold mb-10 text-lg leading-relaxed">
               If you have questions about this Privacy Policy or our data practices, please contact us:
             </p>
             <div
-              class="bg-primary/5 p-10 rounded-[3rem] border-2 border-primary/20 grid grid-cols-1 md:grid-cols-2 gap-10">
+              class="bg-primary/5 p-6 md:p-10 rounded-[3rem] border-2 border-primary/20 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div class="space-y-8">
                 <div class="flex items-center gap-6">
                   <div
@@ -176,7 +176,7 @@
 
           <!-- Section 7 -->
           <section>
-            <h2 class="campaign-header text-2xl text-secondary mb-6">7. Changes to This Policy</h2>
+            <h2 class="campaign-header text-lg md:text-2xl text-secondary mb-6">7. Changes to This Policy</h2>
             <p class="text-black/60 font-bold leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of any changes by posting
               the new Privacy Policy on this page and updating the "Last updated" date.

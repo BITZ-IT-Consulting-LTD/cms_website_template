@@ -149,23 +149,23 @@
               :to="`/blogs/${post.slug}`"
               class="group cursor-pointer flex gap-3 md:gap-4 items-start"
             >
-              <div class="shrink-0 rounded-2xl overflow-hidden shadow-md" style="width: clamp(4rem, 20vw, 8rem); height: clamp(4rem, 20vw, 8rem);">
+              <div class="shrink-0 rounded-2xl overflow-hidden shadow-md" style="width: clamp(3.5rem, 14vw, 5.5rem); height: clamp(3.5rem, 14vw, 5.5rem);">
                 <img
                   :src="post.thumbnail"
                   :alt="post.title"
-                  width="128"
-                  height="128"
+                  width="88"
+                  height="88"
                   loading="lazy"
                   decoding="async"
                   class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
-              <div class="space-y-1 md:space-y-2">
+              <div class="flex-1 min-w-0 space-y-1 md:space-y-2">
                 <span class="text-primary font-bold text-[10px] md:text-xs tracking-widest uppercase break-words">
                   {{ post.category }}
                 </span>
                 <h3
-                  class="text-sm md:text-base lg:text-lg font-bold text-secondary leading-snug group-hover:text-primary transition-colors line-clamp-2 break-words"
+                  class="text-sm md:text-base lg:text-lg font-bold text-secondary leading-snug group-hover:text-primary transition-colors line-clamp-3 break-words"
                 >
                   {{ post.title }}
                 </h3>
@@ -194,24 +194,24 @@
            <!-- Side Mock - Maximum 3 items -->
            <div class="flex flex-col gap-4 md:gap-6">
              <div class="flex gap-3 md:gap-4 items-start group cursor-pointer">
-                <div class="shrink-0 w-24 md:w-32 h-24 md:h-32 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
-                <div class="space-y-1 md:space-y-2">
+                <div class="shrink-0 w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
+                <div class="flex-1 min-w-0 space-y-1 md:space-y-2">
                    <span class="text-primary font-bold text-[10px] md:text-xs tracking-widest uppercase break-words">{{ siteContent.getContent('home_news_mock_side1_category', 'Education') }}</span>
                    <h3 class="text-sm md:text-base lg:text-lg font-bold text-secondary leading-snug break-words">{{ siteContent.getContent('home_news_mock_side1_title', 'School Outreach Programs Launching Soon') }}</h3>
                    <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider break-words">{{ siteContent.getContent('home_news_mock_side1_date', 'Jan 10, 2026') }}</p>
                 </div>
              </div>
              <div class="flex gap-3 md:gap-4 items-start group cursor-pointer">
-                <div class="shrink-0 w-24 md:w-32 h-24 md:h-32 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
-                <div class="space-y-1 md:space-y-2">
+                <div class="shrink-0 w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
+                <div class="flex-1 min-w-0 space-y-1 md:space-y-2">
                    <span class="text-primary font-bold text-[10px] md:text-xs tracking-widest uppercase break-words">{{ siteContent.getContent('home_news_mock_side2_category', 'Health') }}</span>
                    <h3 class="text-sm md:text-base lg:text-lg font-bold text-secondary leading-snug break-words">{{ siteContent.getContent('home_news_mock_side2_title', 'Partnership with Ministry of Health') }}</h3>
                    <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider break-words">{{ siteContent.getContent('home_news_mock_side2_date', 'Jan 08, 2026') }}</p>
                 </div>
              </div>
              <div class="flex gap-3 md:gap-4 items-start group cursor-pointer">
-                <div class="shrink-0 w-24 md:w-32 h-24 md:h-32 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
-                <div class="space-y-1 md:space-y-2">
+                <div class="shrink-0 w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20 rounded-2xl overflow-hidden shadow-md bg-gray-200"></div>
+                <div class="flex-1 min-w-0 space-y-1 md:space-y-2">
                    <span class="text-primary font-bold text-[10px] md:text-xs tracking-widest uppercase break-words">{{ siteContent.getContent('home_news_mock_side3_category', 'Training') }}</span>
                    <h3 class="text-sm md:text-base lg:text-lg font-bold text-secondary leading-snug break-words">{{ siteContent.getContent('home_news_mock_side3_title', 'Counselor Training Certification Complete') }}</h3>
                    <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider break-words">{{ siteContent.getContent('home_news_mock_side3_date', 'Jan 05, 2026') }}</p>

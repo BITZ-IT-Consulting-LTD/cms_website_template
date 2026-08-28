@@ -227,10 +227,13 @@
           @mouseenter="pauseServiceSlideshow"
           @mouseleave="resumeServiceSlideshow"
         >
-          <!-- Slides -->
+          <!-- Slides — all mounted simultaneously (never v-if'd) so the opacity
+               toggle below is a real crossfade, not a re-mount/pop. Images are
+               explicitly preloaded ahead of time (see preloadServiceImage) so the
+               fade never reveals an undecoded/blank image. -->
           <div v-for="(service, idx) in services" :key="idx"
                :class="[
-                 'absolute inset-0 transition-all duration-700 ease-in-out',
+                 'service-slide absolute inset-0',
                  currentServiceIndex === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
                ]">
             <img
@@ -239,6 +242,7 @@
               width="800"
               height="600"
               :loading="idx === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="idx === 0 ? 'high' : 'auto'"
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover"
             />
@@ -280,19 +284,23 @@
           </button>
 
           <!-- Dots Navigation -->
-          <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:gap-3">
+          <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 md:gap-2">
             <button
               v-for="(service, idx) in services"
               :key="'dot-' + idx"
               @click="goToService(idx)"
-              :class="[
-                'w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300',
-                currentServiceIndex === idx
-                  ? 'bg-white scale-125'
-                  : 'bg-white/40 hover:bg-white/70'
-              ]"
+              class="flex items-center justify-center p-2.5 md:p-2 -m-0.5"
               :aria-label="'Go to service ' + (idx + 1)"
-            ></button>
+            >
+              <span
+                :class="[
+                  'block w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300',
+                  currentServiceIndex === idx
+                    ? 'bg-white scale-125'
+                    : 'bg-white/40 hover:bg-white/70'
+                ]"
+              ></span>
+            </button>
           </div>
         </div>
       </section>
@@ -301,7 +309,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import { useSiteContent } from '@/composables/useSiteContent'
 
@@ -434,6 +442,24 @@ const fetchOperationsImages = async () => {
   }
 }
 
+// Preload the upcoming slide's image so it is already decoded by the time the
+// crossfade reveals it — otherwise the fade-in exposes a still-loading image,
+// which reads as a "pop" rather than a smooth dissolve.
+const preloadedServiceImageSrcs = new Set()
+const preloadServiceImage = (index) => {
+  const src = getServiceImage(index)
+  if (!src || preloadedServiceImageSrcs.has(src)) return
+  preloadedServiceImageSrcs.add(src)
+  const img = new Image()
+  img.src = src
+  if (typeof img.decode === 'function') {
+    img.decode().catch(() => {
+      // Ignore decode errors (e.g. slow/broken connection) — the browser will
+      // still have the response cached for when the <img> element needs it.
+    })
+  }
+}
+
 // Services Slideshow Functions
 const startServiceSlideshow = () => {
   serviceSlideshowInterval = setInterval(() => {
@@ -441,6 +467,12 @@ const startServiceSlideshow = () => {
     currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
   }, 5000) // Change slide every 5 seconds
 }
+
+// Always keep the *next* slide's image warmed in the browser cache, one step
+// ahead of whatever is currently showing (covers auto-advance, arrows, dots).
+watch(currentServiceIndex, (idx) => {
+  preloadServiceImage((idx + 1) % services.length)
+})
 
 const pauseServiceSlideshow = () => {
   isSlideshowPaused.value = true
@@ -466,6 +498,10 @@ onMounted(async () => {
   await siteContent.fetchContent()
   await settingsStore.fetchGlobalSettings()
   await fetchOperationsImages()
+
+  // Warm the cache for the first auto-advance target right away, so it's
+  // already decoded well before the 5.5s mark when it first becomes active.
+  preloadServiceImage(1)
 
   // Start services slideshow after a short delay
   setTimeout(() => {
@@ -503,6 +539,16 @@ onBeforeUnmount(() => {
    an off-palette navy, so the section reads as intentional Sauti branding. */
 .services-slideshow {
   background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
+}
+
+/* Services Slideshow — crossfade between slides. All slides stay mounted
+   (see v-for above) and only opacity/z-index toggle, so this is a real
+   dissolve rather than a hard swap. Kept short of the global
+   prefers-reduced-motion override in main.css, which forces near-instant
+   transitions and opacity:1 for everyone with that preference. */
+.service-slide {
+  transition: opacity 500ms ease-in-out;
+  will-change: opacity;
 }
 
 </style>

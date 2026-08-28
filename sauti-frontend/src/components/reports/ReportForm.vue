@@ -63,23 +63,23 @@
     <!-- Input Area -->
     <div class="p-4 bg-white border-t border-gray-100">
       <form @submit.prevent="handleSubmit" class="relative">
-        <textarea 
+        <textarea
           v-if="currentInputType === 'textarea'"
           v-model="userInput"
           :disabled="isTyping || isFinished || waitingForOption"
           placeholder="Please describe what happened..."
-          class="w-full pl-5 pr-14 py-4 bg-gray-50 rounded-[1.5rem] border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm resize-none h-32"
+          :class="['w-full pl-5 py-4 bg-gray-50 rounded-[1.5rem] border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm resize-none h-32', hasMicButton ? 'pr-24' : 'pr-14']"
           style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;"
           ref="inputRef"
         ></textarea>
-        
-        <input 
+
+        <input
           v-else
           v-model="userInput"
           :type="currentInputType"
           :disabled="isTyping || isFinished || waitingForOption"
           :placeholder="inputPlaceholder"
-          class="w-full pl-5 pr-14 py-4 bg-gray-50 rounded-full border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm"
+          :class="['w-full pl-5 py-4 bg-gray-50 rounded-full border border-gray-200 focus:bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none transition-all text-gray-800 text-sm', hasMicButton ? 'pr-24' : 'pr-14']"
           style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;"
           ref="inputRef"
           autofocus
@@ -136,7 +136,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { api } from '@/utils/axios'
 import { RotateCcw, Send, CheckCircle, AlertCircle, Mic, MicOff } from 'lucide-vue-next'
 
@@ -159,6 +159,11 @@ const chatContainer = ref(null)
 const isListening = ref(false)
 const speechSupported = ref(false)
 let recognition = null
+
+// The mic button (when shown) sits to the left of the send button inside the
+// input, so the input needs extra right padding to keep typed text from
+// running underneath it -- see the pr-14/pr-24 class binding below.
+const hasMicButton = computed(() => !isFinished.value && !waitingForOption.value && speechSupported.value)
 
 // Initialize Speech Recognition
 const initSpeechRecognition = () => {

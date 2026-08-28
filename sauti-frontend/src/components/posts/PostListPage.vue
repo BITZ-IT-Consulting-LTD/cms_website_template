@@ -86,7 +86,7 @@
           </div>
 
           <!-- Pagination -->
-          <div class="flex items-center justify-center gap-2 sm:gap-3 pt-2">
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
             <button
               type="button"
               @click="setPage('<')"
@@ -97,7 +97,7 @@
               <ChevronLeft class="w-5 h-5" />
             </button>
 
-            <div class="flex items-center gap-1.5 sm:gap-2">
+            <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
               <button
                 v-for="n in pageNumbers"
                 :key="n + '-pg'"
