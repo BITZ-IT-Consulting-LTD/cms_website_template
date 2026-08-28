@@ -173,7 +173,8 @@ const routes = [
         name: 'users',
         component: UsersView,
         meta: {
-          title: 'Admin Users - Sauti Admin'
+          title: 'Admin Users - Sauti Admin',
+          requiresAdmin: true
         }
       },
       // Redirect old About page detail routes to Page Content
@@ -291,6 +292,10 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } })
   } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    next({ name: 'dashboard' })
+  } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    // Non-admins (Editor/Author/Viewer) don't have API access to user
+    // management, so don't route them to a page that will just 403.
     next({ name: 'dashboard' })
   } else {
     next()

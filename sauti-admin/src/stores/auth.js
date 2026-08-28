@@ -20,7 +20,9 @@ export const useAuthStore = defineStore('auth', () => {
   
   // Getters
   const isAuthenticated = computed(() => !!token.value)
-  const isAdmin = computed(() => user.value?.role === 'ADMIN')
+  // Superusers (e.g. accounts created via `manage.py createsuperuser`) are
+  // always admins too, mirroring the backend User.is_admin property.
+  const isAdmin = computed(() => user.value?.role === 'ADMIN' || !!user.value?.is_superuser)
   const isEditor = computed(() => ['ADMIN', 'EDITOR'].includes(user.value?.role))
   const userFullName = computed(() => {
     if (!user.value) return ''

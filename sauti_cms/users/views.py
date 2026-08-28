@@ -62,36 +62,53 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 class UserListView(generics.ListAPIView):
     """
-    List all users (Admin/Editor)
+    List all users (Admin only)
     GET /api/auth/users/
+
+    This is the admin user-management listing, distinct from the self-service
+    `/api/auth/profile/` endpoint (UserProfileView) that any authenticated user
+    already uses to view/edit their own account.
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def get_queryset(self):
-        # Only admins and editors can view all users
-        if not self.request.user.is_editor:
+        # Only admins can view the full user list.
+        if not self.request.user.is_admin:
             from rest_framework.exceptions import PermissionDenied
-            raise PermissionDenied("Only administrators and editors can view all users.")
-        
+            raise PermissionDenied("Only administrators can view all users.")
+
         # Filter by role if specified
         role = self.request.query_params.get('role')
         if role:
             return User.objects.filter(role=role.upper())
-        
+
         return User.objects.all().order_by('-created_at')
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
-    Get/Update/Delete user details (Admin only for delete)
+    Get/Update/Delete user details (Admin only)
     GET/PUT/DELETE /api/auth/users/<id>/
+
+    This is the admin user-management endpoint for managing *other* users'
+    accounts, distinct from the self-service `/api/auth/profile/` endpoint
+    (UserProfileView) that any authenticated user uses for their own account.
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
+    def get_queryset(self):
+        # Only admins can view, edit, or delete other users' accounts. This
+        # gates GET/PUT/PATCH/DELETE uniformly, since DRF's get_object() is
+        # built on top of get_queryset().
+        if not self.request.user.is_admin:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only administrators can manage user accounts.")
+        return User.objects.all()
+
     def perform_update(self, serializer):
         from rest_framework.exceptions import PermissionDenied
         request_user = self.request.user
