@@ -20,10 +20,12 @@ export const useAuthStore = defineStore('auth', () => {
   
   // Getters
   const isAuthenticated = computed(() => !!token.value)
-  // Superusers (e.g. accounts created via `manage.py createsuperuser`) are
-  // always admins too, mirroring the backend User.is_admin property.
-  const isAdmin = computed(() => user.value?.role === 'ADMIN' || !!user.value?.is_superuser)
-  const isEditor = computed(() => ['ADMIN', 'EDITOR'].includes(user.value?.role))
+  // Role is now a freely-editable record (see Role/Permission models), not a
+  // fixed 'ADMIN'/'EDITOR' string, so gating reflects the actual permissions
+  // the backend computed for this user (is_admin/permissions on UserSerializer)
+  // rather than a role's name.
+  const isAdmin = computed(() => !!user.value?.is_admin)
+  const isEditor = computed(() => isAdmin.value || !!user.value?.permissions?.includes('manage_posts'))
   const userFullName = computed(() => {
     if (!user.value) return ''
     return `${user.value.first_name || ''} ${user.value.last_name || ''}`.trim() || user.value.username

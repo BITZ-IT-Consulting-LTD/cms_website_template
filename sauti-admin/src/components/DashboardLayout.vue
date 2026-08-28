@@ -255,7 +255,7 @@
             <div class="ml-4">
               <p class="text-sm font-bold" style="font-family: 'Poppins', sans-serif; color: #222222;">{{
                 authStore.userFullName }}</p>
-              <p class="text-xs font-medium" style="color: #555555;">{{ authStore.user?.role }}</p>
+              <p class="text-xs font-medium" style="color: #555555;">{{ authStore.user?.role_detail?.name || 'No role' }}</p>
             </div>
           </div>
 

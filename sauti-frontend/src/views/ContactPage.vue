@@ -32,56 +32,56 @@
           <div v-if="loading" class="space-y-6">
             <AppLoader />
           </div>
-          <div v-else class="space-y-4 md:space-y-6">
+          <div v-else class="space-y-3 lg:space-y-4">
             <template v-for="contact in nonEmergencyContacts" :key="contact.id">
                <a :href="getLink(contact)"
                   :target="isExternalHttpLink(getLink(contact)) ? '_blank' : '_self'"
                   :rel="isExternalHttpLink(getLink(contact)) ? 'noopener noreferrer' : null"
-                  class="block bg-neutral-offwhite rounded-xl lg:rounded-2xl p-5 md:p-6 lg:p-8 transition-colors hover:bg-neutral-offwhite/80 group">
-                  <div class="flex items-start gap-3 md:gap-4 lg:gap-6">
-                    <div class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-white flex items-center justify-center shrink-0"
+                  class="block bg-neutral-offwhite rounded-lg lg:rounded-xl p-3.5 md:p-4 lg:p-5 transition-colors hover:bg-neutral-offwhite/80 group">
+                  <div class="flex items-center gap-3 lg:gap-4">
+                    <div class="w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 rounded-lg lg:rounded-xl bg-white flex items-center justify-center shrink-0"
                       :class="isSocialContact(contact) ? '' : 'text-primary'">
-                      <BrandIcon v-if="isSocialContact(contact)" :name="brandName(contact)" class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                      <component v-else :is="getIcon(contact)" class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                      <BrandIcon v-if="isSocialContact(contact)" :name="brandName(contact)" class="w-4 h-4 lg:w-5 lg:h-5" />
+                      <component v-else :is="getIcon(contact)" class="w-4 h-4 lg:w-5 lg:h-5" />
                     </div>
-                    <div>
-                      <h3 class="text-base md:text-lg lg:text-xl font-bold text-secondary mb-1 md:mb-2">{{ contact.name }}</h3>
-                      <p class="text-xs md:text-sm text-black/60 font-semibold leading-relaxed mb-2 md:mb-3 lg:mb-4">
+                    <div class="min-w-0">
+                      <h3 class="text-sm md:text-base lg:text-lg font-bold text-secondary mb-0.5">{{ contact.name }}</h3>
+                      <p class="text-xs md:text-sm text-black/60 font-semibold leading-snug mb-1">
                         {{ contact.description || 'Verified official support channel.' }}
                       </p>
-                      <div class="flex items-center gap-2 text-primary font-bold text-[10px] md:text-xs lg:text-sm uppercase tracking-wider">
+                      <div class="flex items-center gap-2 text-primary font-bold text-[10px] md:text-xs uppercase tracking-wider">
                         <span>{{ getActionLabel(contact) }}</span>
-                        <ArrowRight class="w-3 h-3 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+                        <ArrowRight class="w-3 h-3 md:w-3.5 md:h-3.5" />
                       </div>
                     </div>
                   </div>
                </a>
                <!-- Additional values for this channel (e.g. a second email/phone) -->
-               <div v-if="contact.extra_values?.length" class="pl-14 md:pl-16 lg:pl-20 -mt-2 mb-2 space-y-1">
+               <div v-if="contact.extra_values?.length" class="pl-12 md:pl-14 lg:pl-[3.75rem] -mt-1.5 mb-1.5 space-y-1">
                  <a v-for="(extraValue, index) in contact.extra_values" :key="index"
                     :href="getLinkForValue(contact, extraValue)"
                     :target="isExternalHttpLink(getLinkForValue(contact, extraValue)) ? '_blank' : '_self'"
                     :rel="isExternalHttpLink(getLinkForValue(contact, extraValue)) ? 'noopener noreferrer' : null"
-                    class="block text-[10px] md:text-xs lg:text-sm font-semibold text-black/60 hover:text-primary transition-colors">
+                    class="block text-[10px] md:text-xs font-semibold text-black/60 hover:text-primary transition-colors">
                    {{ extraValue }}
                  </a>
                </div>
             </template>
-            
+
             <!-- Default Fallback if no contacts -->
-            <div v-if="nonEmergencyContacts.length === 0" class="bg-neutral-offwhite rounded-xl lg:rounded-2xl p-5 md:p-6 lg:p-8">
-                <div class="flex items-start gap-3 md:gap-4 lg:gap-6">
-                   <div class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-white text-primary flex items-center justify-center shrink-0">
-                      <Mail class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+            <div v-if="nonEmergencyContacts.length === 0" class="bg-neutral-offwhite rounded-lg lg:rounded-xl p-3.5 md:p-4 lg:p-5">
+                <div class="flex items-center gap-3 lg:gap-4">
+                   <div class="w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 rounded-lg lg:rounded-xl bg-white text-primary flex items-center justify-center shrink-0">
+                      <Mail class="w-4 h-4 lg:w-5 lg:h-5" />
                    </div>
-                   <div>
-                      <h3 class="text-base md:text-lg lg:text-xl font-bold text-secondary mb-1 md:mb-2">{{ siteContent.getContent('contact_fallback_email_title', 'Email Us') }}</h3>
-                       <p class="text-xs md:text-sm text-black/60 font-semibold leading-relaxed mb-2 md:mb-3 lg:mb-4">
+                   <div class="min-w-0">
+                      <h3 class="text-sm md:text-base lg:text-lg font-bold text-secondary mb-0.5">{{ siteContent.getContent('contact_fallback_email_title', 'Email Us') }}</h3>
+                       <p class="text-xs md:text-sm text-black/60 font-semibold leading-snug mb-1">
                         {{ siteContent.getContent('contact_fallback_email_description', 'For general inquiries and information.') }}
                       </p>
-                      <a :href="`mailto:${siteContent.getContent('contact_fallback_email_address', 'info@sauti116.ug')}`" class="flex items-center gap-2 text-primary font-bold text-[10px] md:text-xs lg:text-sm uppercase tracking-wider">
+                      <a :href="`mailto:${siteContent.getContent('contact_fallback_email_address', 'info@sauti116.ug')}`" class="flex items-center gap-2 text-primary font-bold text-[10px] md:text-xs uppercase tracking-wider">
                         <span>{{ siteContent.getContent('contact_action_send_email', 'Send Email') }}</span>
-                        <ArrowRight class="w-3 h-3 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+                        <ArrowRight class="w-3 h-3 md:w-3.5 md:h-3.5" />
                       </a>
                    </div>
                 </div>

@@ -30,7 +30,7 @@
 
         <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <!-- Item 1: Access -->
-          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <!-- Background Image -->
             <img
               :src="getJourneyImage(0)"
@@ -39,15 +39,16 @@
               height="500"
               loading="lazy"
               decoding="async"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
             <!-- Gradient Overlay - Stronger for text visibility -->
-            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/85 to-primary/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-primary"></div>
 
             <!-- Content -->
             <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
               <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step1_label', 'Step 1') }}</span>
-              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step1_title', 'Access') }}</h4>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step1_title', 'Access') }}</h4>
               <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
                 {{ siteContent.getContent('operations_journey_step1_description', 'Toll-free 116 available 24/7 from any network across Uganda.') }}
               </p>
@@ -55,7 +56,7 @@
           </div>
 
           <!-- Item 2: Response -->
-          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <img
               :src="getJourneyImage(1)"
               :alt="siteContent.getContent('operations_journey_step2_title', 'Response')"
@@ -63,13 +64,14 @@
               height="500"
               loading="lazy"
               decoding="async"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-secondary-light via-secondary-light/85 to-secondary-light/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-secondary-light"></div>
 
             <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
               <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step2_label', 'Step 2') }}</span>
-              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step2_title', 'Response') }}</h4>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step2_title', 'Response') }}</h4>
               <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
                 {{ siteContent.getContent('operations_journey_step2_description', 'Professional counselors responding in 26 local languages.') }}
               </p>
@@ -77,7 +79,7 @@
           </div>
 
           <!-- Item 3: Management -->
-          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <img
               :src="getJourneyImage(2)"
               :alt="siteContent.getContent('operations_journey_step3_title', 'Management')"
@@ -85,13 +87,14 @@
               height="500"
               loading="lazy"
               decoding="async"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-hotline via-hotline/85 to-hotline/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-hotline"></div>
 
             <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
               <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step3_label', 'Step 3') }}</span>
-              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step3_title', 'Management') }}</h4>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step3_title', 'Management') }}</h4>
               <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
                 {{ siteContent.getContent('operations_journey_step3_description', 'Case follow-up and specialized support coordination.') }}
               </p>
@@ -99,7 +102,7 @@
           </div>
 
           <!-- Item 4: Protection -->
-          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[240px] md:h-[400px]">
+          <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <img
               :src="getJourneyImage(3)"
               :alt="siteContent.getContent('operations_journey_step4_title', 'Protection')"
@@ -107,13 +110,14 @@
               height="500"
               loading="lazy"
               decoding="async"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/85 to-secondary/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-secondary"></div>
 
             <div class="relative z-10 h-full flex flex-col justify-end p-4 md:p-6 text-white">
               <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-1 md:mb-2 text-white/90 break-words">{{ siteContent.getContent('operations_journey_step4_label', 'Step 4') }}</span>
-              <h4 class="text-base md:text-xl lg:text-2xl font-bold mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step4_title', 'Protection') }}</h4>
+              <h4 class="text-base md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-3 break-words drop-shadow-sm">{{ siteContent.getContent('operations_journey_step4_title', 'Protection') }}</h4>
               <p class="text-sm md:text-base lg:text-lg font-semibold text-white leading-relaxed break-words drop-shadow-sm">
                 {{ siteContent.getContent('operations_journey_step4_description', 'Resolution and community reintegration support.') }}
               </p>
@@ -135,7 +139,7 @@
                 height="800"
                 loading="lazy"
                 decoding="async"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover object-top"
               />
               <div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40"></div>
 
@@ -203,17 +207,23 @@
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
           <div v-for="(fact, fi) in computedKeyFacts" :key="fi"
-               class="bg-neutral-offwhite rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+               class="bg-white rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-md border border-gray-100 transition-shadow"
+               :style="{ borderTopWidth: '3px', borderTopColor: KEY_FACT_COLORS[fi % KEY_FACT_COLORS.length] }">
             <h5 class="text-sm md:text-base font-bold text-secondary mb-1 md:mb-2 break-words">{{ fact.title }}</h5>
             <p class="text-xs md:text-sm text-black/60 font-medium leading-relaxed break-words">{{ fact.desc }}</p>
           </div>
         </div>
       </section>
 
-      <!-- 5. Services Slideshow -->
+      <!-- 5. Services We Offer. A carousel hid 6 of 7 services behind clicks --
+           carousels are a well-documented bad pattern for exactly this content
+           shape (a list of distinct items someone needs to scan), and most
+           visitors never click past the first slide. Now a grid: every
+           service visible at once, same photo-tile language as the Journey
+           section above for consistency. -->
       <section class="mb-6 md:mb-12">
         <div class="text-center mb-6 md:mb-10 px-4">
-          <h2 class="text-xl md:text-3xl lg:text-4xl font-bold text-secondary mb-2 md:mb-3 lg:mb-4 break-words">
+          <h2 class="text-lg md:text-2xl lg:text-3xl font-bold text-secondary mb-2 md:mb-3 break-words">
             {{ siteContent.getContent('services_section_title', 'Services We') }} <span class="text-primary">{{ siteContent.getContent('services_section_title_highlight', 'Offer') }}</span>
           </h2>
           <p class="text-sm md:text-base lg:text-lg text-black/60 font-semibold max-w-2xl mx-auto leading-relaxed break-words">
@@ -221,86 +231,35 @@
           </p>
         </div>
 
-        <!-- Large Slideshow Container -->
-        <div
-          class="services-slideshow relative overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl mx-auto max-w-5xl h-[350px] md:h-[450px] lg:h-[550px]"
-          @mouseenter="pauseServiceSlideshow"
-          @mouseleave="resumeServiceSlideshow"
-        >
-          <!-- Slides — all mounted simultaneously (never v-if'd) so the opacity
-               toggle below is a real crossfade, not a re-mount/pop. Images are
-               explicitly preloaded ahead of time (see preloadServiceImage) so the
-               fade never reveals an undecoded/blank image. -->
+        <!-- 7 services: 3 columns leaves a lonely single card on the last row
+             (2/3 of the row empty), and 2-per-row on mobile leaves the same
+             problem. 4 columns on desktop reads as intentional (4 + 3, one
+             quiet gap rather than an orphan card); on mobile the last card
+             spans both columns instead of sitting alone at half width. -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <div v-for="(service, idx) in services" :key="idx"
-               :class="[
-                 'service-slide absolute inset-0',
-                 currentServiceIndex === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
-               ]">
+               :class="idx === services.length - 1 ? 'col-span-2 lg:col-span-1' : ''"
+               class="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[190px] md:h-[230px]">
             <img
               :src="getServiceImage(idx)"
               :alt="siteContent.getContent(service.cid_title, service.title)"
-              width="800"
-              height="600"
-              :loading="idx === 0 ? 'eager' : 'lazy'"
-              :fetchpriority="idx === 0 ? 'high' : 'auto'"
+              width="400"
+              height="300"
+              loading="lazy"
               decoding="async"
-              class="absolute inset-0 w-full h-full object-cover"
+              class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
-            <!-- Stronger gradient for text visibility -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+            <div class="absolute top-0 inset-x-0 h-1.5" :style="{ backgroundColor: KEY_FACT_COLORS[idx % KEY_FACT_COLORS.length] }"></div>
 
-            <!-- Content - Larger text -->
-            <div class="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-14 text-white">
-              <span class="text-xs md:text-sm font-bold tracking-widest uppercase mb-2 md:mb-3 text-white/80">
-                Service {{ idx + 1 }} of {{ services.length }}
-              </span>
-              <h3 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 drop-shadow-lg break-words">
+            <div class="relative z-10 h-full flex flex-col justify-end p-3.5 md:p-5 text-white">
+              <h3 class="text-sm md:text-base font-bold text-white mb-1 drop-shadow-sm break-words">
                 {{ siteContent.getContent(service.cid_title, service.title) }}
               </h3>
-              <p class="text-base md:text-xl lg:text-2xl text-white font-medium leading-relaxed max-w-3xl drop-shadow-md break-words">
+              <p class="hidden md:block text-xs text-white/85 font-medium leading-relaxed drop-shadow-sm break-words line-clamp-2">
                 {{ siteContent.getContent(service.cid_text, service.text) }}
               </p>
             </div>
-          </div>
-
-          <!-- Navigation Arrows -->
-          <button
-            @click="prevService"
-            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all shadow-lg"
-            aria-label="Previous service"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-          <button
-            @click="nextService"
-            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all shadow-lg"
-            aria-label="Next service"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-
-          <!-- Dots Navigation -->
-          <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 md:gap-2">
-            <button
-              v-for="(service, idx) in services"
-              :key="'dot-' + idx"
-              @click="goToService(idx)"
-              class="flex items-center justify-center p-2.5 md:p-2 -m-0.5"
-              :aria-label="'Go to service ' + (idx + 1)"
-            >
-              <span
-                :class="[
-                  'block w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300',
-                  currentServiceIndex === idx
-                    ? 'bg-white scale-125'
-                    : 'bg-white/40 hover:bg-white/70'
-                ]"
-              ></span>
-            </button>
           </div>
         </div>
       </section>
@@ -309,7 +268,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useSettingsStore } from '@/store/settings'
 import { useSiteContent } from '@/composables/useSiteContent'
 
@@ -330,10 +289,14 @@ const services = [
 const settingsStore = useSettingsStore()
 const siteContent = useSiteContent('operations')
 
-// Services Slideshow
-const currentServiceIndex = ref(0)
-let serviceSlideshowInterval = null
-const isSlideshowPaused = ref(false)
+// Same 4-color rhythm as the Journey tiles above, so Key Facts reads as part
+// of the same page rather than a separate, undesigned afterthought.
+const KEY_FACT_COLORS = [
+  'rgb(var(--color-primary))',
+  'rgb(var(--color-secondary-light))',
+  'rgb(var(--color-hotline))',
+  'rgb(var(--color-secondary))',
+]
 
 // Operations page images from API
 const operationsImages = ref([])
@@ -442,77 +405,10 @@ const fetchOperationsImages = async () => {
   }
 }
 
-// Preload the upcoming slide's image so it is already decoded by the time the
-// crossfade reveals it — otherwise the fade-in exposes a still-loading image,
-// which reads as a "pop" rather than a smooth dissolve.
-const preloadedServiceImageSrcs = new Set()
-const preloadServiceImage = (index) => {
-  const src = getServiceImage(index)
-  if (!src || preloadedServiceImageSrcs.has(src)) return
-  preloadedServiceImageSrcs.add(src)
-  const img = new Image()
-  img.src = src
-  if (typeof img.decode === 'function') {
-    img.decode().catch(() => {
-      // Ignore decode errors (e.g. slow/broken connection) — the browser will
-      // still have the response cached for when the <img> element needs it.
-    })
-  }
-}
-
-// Services Slideshow Functions
-const startServiceSlideshow = () => {
-  serviceSlideshowInterval = setInterval(() => {
-    if (isSlideshowPaused.value) return
-    currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
-  }, 5000) // Change slide every 5 seconds
-}
-
-// Always keep the *next* slide's image warmed in the browser cache, one step
-// ahead of whatever is currently showing (covers auto-advance, arrows, dots).
-watch(currentServiceIndex, (idx) => {
-  preloadServiceImage((idx + 1) % services.length)
-})
-
-const pauseServiceSlideshow = () => {
-  isSlideshowPaused.value = true
-}
-
-const resumeServiceSlideshow = () => {
-  isSlideshowPaused.value = false
-}
-
-const nextService = () => {
-  currentServiceIndex.value = (currentServiceIndex.value + 1) % services.length
-}
-
-const prevService = () => {
-  currentServiceIndex.value = (currentServiceIndex.value - 1 + services.length) % services.length
-}
-
-const goToService = (index) => {
-  currentServiceIndex.value = index
-}
-
 onMounted(async () => {
   await siteContent.fetchContent()
   await settingsStore.fetchGlobalSettings()
   await fetchOperationsImages()
-
-  // Warm the cache for the first auto-advance target right away, so it's
-  // already decoded well before the 5.5s mark when it first becomes active.
-  preloadServiceImage(1)
-
-  // Start services slideshow after a short delay
-  setTimeout(() => {
-    startServiceSlideshow()
-  }, 500)
-})
-
-onBeforeUnmount(() => {
-  if (serviceSlideshowInterval) {
-    clearInterval(serviceSlideshowInterval)
-  }
 })
 </script>
 
@@ -535,20 +431,5 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Services Slideshow — brand gradient (deep green → sky blue) instead of
-   an off-palette navy, so the section reads as intentional Sauti branding. */
-.services-slideshow {
-  background: linear-gradient(135deg, rgb(var(--color-secondary)) 0%, rgb(var(--color-primary-dark)) 100%);
-}
-
-/* Services Slideshow — crossfade between slides. All slides stay mounted
-   (see v-for above) and only opacity/z-index toggle, so this is a real
-   dissolve rather than a hard swap. Kept short of the global
-   prefers-reduced-motion override in main.css, which forces near-instant
-   transitions and opacity:1 for everyone with that preference. */
-.service-slide {
-  transition: opacity 500ms ease-in-out;
-  will-change: opacity;
-}
 
 </style>

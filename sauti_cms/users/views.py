@@ -4,9 +4,12 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.exceptions import PermissionDenied
 from .serializers import (
-    UserSerializer, UserCreateSerializer, UserProfileSerializer
+    UserSerializer, UserCreateSerializer, UserProfileSerializer,
+    RoleSerializer, PermissionSerializer
 )
+from .models import Role, Permission
 
 User = get_user_model()
 
@@ -79,10 +82,10 @@ class UserListView(generics.ListAPIView):
             from rest_framework.exceptions import PermissionDenied
             raise PermissionDenied("Only administrators can view all users.")
 
-        # Filter by role if specified
+        # Filter by role if specified (role is now a FK -- filter by slug)
         role = self.request.query_params.get('role')
         if role:
-            return User.objects.filter(role=role.upper())
+            return User.objects.filter(role__slug=role.lower())
 
         return User.objects.all().order_by('-created_at')
 
@@ -134,4 +137,47 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
         # Prevent deleting your own account.
         if instance.pk == request_user.pk:
             raise PermissionDenied("You cannot delete your own account.")
+        instance.delete()
+
+
+class HasManageUsers(permissions.BasePermission):
+    """Gates the Roles & Permissions admin UI -- same capability as the
+    hardcoded is_admin checks above, expressed as a dynamic permission."""
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.has_permission('manage_users')
+
+
+class PermissionListView(generics.ListAPIView):
+    """
+    GET /api/auth/permissions/ - the fixed permission catalog (read-only;
+    only which permissions belong to a Role is editable).
+    """
+    queryset = Permission.objects.all().order_by('category', 'label')
+    serializer_class = PermissionSerializer
+    permission_classes = [HasManageUsers]
+
+
+class RoleListCreateView(generics.ListCreateAPIView):
+    """
+    GET  /api/auth/roles/ - list roles (seeded defaults + custom)
+    POST /api/auth/roles/ - create a custom role
+    """
+    queryset = Role.objects.all().order_by('name')
+    serializer_class = RoleSerializer
+    permission_classes = [HasManageUsers]
+
+
+class RoleDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET/PUT/PATCH/DELETE /api/auth/roles/<id>/
+    """
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    permission_classes = [HasManageUsers]
+
+    def perform_destroy(self, instance):
+        if instance.is_default:
+            raise PermissionDenied("Default roles can't be deleted.")
+        if instance.users.exists():
+            raise PermissionDenied("This role is still assigned to users -- reassign them first.")
         instance.delete()

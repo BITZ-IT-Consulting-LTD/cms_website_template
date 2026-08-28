@@ -367,8 +367,8 @@
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: rgb(var(--color-neutral-offwhite));
-    border-radius: 1.25rem;
-    margin-bottom: 0.875rem;
+    border-radius: 1rem;
+    margin-bottom: 0.75rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   }
 
@@ -414,8 +414,8 @@
 
   .play-button {
     background: white;
-    width: 3.25rem;
-    height: 3.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border-radius: 50%;
     display: flex;
     align-items: center;

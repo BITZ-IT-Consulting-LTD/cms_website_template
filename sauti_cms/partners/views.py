@@ -10,6 +10,7 @@ class PartnerListCreateView(generics.ListCreateAPIView):
     POST /api/partners/ - Create partner (Editors/Admins only)
     """
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_partners'
     
     def get_queryset(self):
         # Show all partners for authenticated users (admin panel)
@@ -56,6 +57,7 @@ class PartnerDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
     serializer_class = PartnerSerializer
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_partners'
     
     def perform_update(self, serializer):
         serializer.save(last_updated_by=self.request.user)

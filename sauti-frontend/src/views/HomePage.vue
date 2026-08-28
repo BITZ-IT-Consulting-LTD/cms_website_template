@@ -112,6 +112,7 @@
           <router-link
             v-if="latestVideos[0]"
             :to="`/blogs/${latestVideos[0].slug}`"
+            @mouseenter="prefetchHomePost(latestVideos[0])" @focus="prefetchHomePost(latestVideos[0])"
             class="group cursor-pointer block"
           >
             <div class="rounded-2xl md:rounded-3xl overflow-hidden shadow-xl mb-3 md:mb-4" style="aspect-ratio: 16/10; max-height: clamp(200px, 40vh, 400px);">
@@ -147,6 +148,7 @@
               v-for="post in latestVideos.slice(1, 4)"
               :key="post.id"
               :to="`/blogs/${post.slug}`"
+              @mouseenter="prefetchHomePost(post)" @focus="prefetchHomePost(post)"
               class="group cursor-pointer flex gap-3 md:gap-4 items-start"
             >
               <div class="shrink-0 rounded-2xl overflow-hidden shadow-md" style="width: clamp(3.5rem, 14vw, 5.5rem); height: clamp(3.5rem, 14vw, 5.5rem);">
@@ -264,6 +266,20 @@
 
   const partnersStore = usePartnersStore()
   const blogStore = useBlogStore()
+
+  // Same hover/intent prefetch as BlogCard.vue: warm the article data + its
+  // full-size image before the reader clicks, so the detail page has no
+  // visible fetch/decode delay.
+  const homePrefetchedImages = new Set()
+  function prefetchHomePost(post) {
+    if (!post?.slug) return
+    blogStore.prefetchPost(post.slug)
+    if (post.thumbnail && !homePrefetchedImages.has(post.thumbnail)) {
+      homePrefetchedImages.add(post.thumbnail)
+      const img = new Image()
+      img.src = post.thumbnail
+    }
+  }
   const settingsStore = useSettingsStore()
   const siteContent = useSiteContent('home')
 

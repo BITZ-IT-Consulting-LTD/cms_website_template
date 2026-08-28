@@ -1,8 +1,9 @@
 <template>
   <article class="post-card group">
-    <router-link :to="`/blogs/${post.slug}`" class="block h-full">
+    <router-link :to="`/blogs/${post.slug}`" class="block h-full"
+      @mouseenter="prefetchArticle" @focus="prefetchArticle">
       <!-- Featured Image -->
-      <div class="relative bg-neutral-offwhite rounded-2xl lg:rounded-3xl overflow-hidden aspect-[16/10] mb-4 shadow-sm ring-1 ring-black/[0.04]">
+      <div class="relative bg-neutral-offwhite rounded-xl lg:rounded-2xl overflow-hidden aspect-[16/9] mb-3 shadow-sm ring-1 ring-black/[0.04]">
         <img
           :src="post.featured_image_thumbnail || post.featured_image || helplineAction"
           :alt="post.title"
@@ -53,6 +54,7 @@
 <script setup>
   import { computed } from 'vue'
   import helplineAction from '@/assets/helpline-action.png'
+  import { useBlogStore } from '@/store/blog'
 
   const props = defineProps({
     post: {
@@ -60,6 +62,28 @@
       required: true,
     },
   })
+
+  const blogStore = useBlogStore()
+
+  // Hover/focus intent prefetch: by the time a reader actually clicks, the
+  // article's data and its full-size lead image are already warm, so the
+  // detail page renders instantly instead of showing its own loading state.
+  // Only fires once per card (prefetchPost/preloadedImage below both guard
+  // against repeat calls), so rapid mouse movement across many cards doesn't
+  // fire a burst of redundant requests.
+  let imagePreloaded = false
+
+  function prefetchArticle() {
+    if (!props.post?.slug) return
+    blogStore.prefetchPost(props.post.slug)
+
+    if (imagePreloaded) return
+    const src = props.post.featured_image_medium || props.post.featured_image
+    if (!src) return
+    imagePreloaded = true
+    const img = new Image()
+    img.src = src
+  }
 
   const categoryLabel = computed(() => {
     const cat = props.post.category

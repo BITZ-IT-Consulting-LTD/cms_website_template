@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     PostListCreateView, PostDetailView,
     CategoryListView, CategoryDetailView, TagListView,
-    PostImageListCreateView, PostImageDetailView
+    PostImageListCreateView, PostImageDetailView,
+    PostPreviewTokenView
 )
 from cms.views import HistoryAPIView
 from .models import Post
@@ -21,6 +22,7 @@ urlpatterns = [
 
     # Posts
     path('', PostListCreateView.as_view(), name='post-list'),
+    path('<slug:slug>/preview-token/', PostPreviewTokenView.as_view(), name='post-preview-token'),
     path('<slug:slug>/', PostDetailView.as_view(), name='post-detail'),
     path('<int:pk>/history/', HistoryAPIView.as_view(model=Post), name='post-history'),
 ]

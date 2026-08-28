@@ -52,7 +52,7 @@ class AllowAnyPost(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method == 'POST':
             return True
-        return request.user.is_authenticated and request.user.is_editor
+        return request.user.is_authenticated and request.user.has_permission('manage_reports')
 
 
 import logging
@@ -178,7 +178,7 @@ class ReportListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
-        if not self.request.user.is_editor:
+        if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can view reports.")
         
         queryset = super().get_queryset()
@@ -210,7 +210,7 @@ class ReportDetailView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
-        if not self.request.user.is_editor:
+        if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can view reports.")
         return super().get_queryset()
     
@@ -273,7 +273,7 @@ class ReportExportPDFView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk):
-        if not request.user.is_editor:
+        if not request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can export reports.")
 
         try:
@@ -303,7 +303,7 @@ class ReportExportCSVView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        if not request.user.is_editor:
+        if not request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can export reports.")
 
         queryset = Report.objects.select_related('assigned_to').all()
@@ -383,7 +383,7 @@ class ReportFollowUpCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def perform_create(self, serializer):
-        if not self.request.user.is_editor:
+        if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can add follow-ups.")
         serializer.save(created_by=self.request.user)
 

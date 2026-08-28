@@ -8,12 +8,12 @@ from .serializers import (
 
 
 class IsEditorOrReadOnly(permissions.BasePermission):
-    """Custom permission: Only editors/admins can create/edit, others read-only"""
-    
+    """Read-only for everyone; writes require the 'manage_videos' permission."""
+
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user.is_authenticated and request.user.is_editor
+        return request.user.is_authenticated and request.user.has_permission('manage_videos')
 
 
 class VideoCategoryListView(generics.ListCreateAPIView):

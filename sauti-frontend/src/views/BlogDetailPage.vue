@@ -62,11 +62,12 @@
             <figure v-if="post.featured_image" class="mb-7">
               <img :src="post.featured_image_medium || post.featured_image" :alt="post.title" width="1200" height="675" loading="eager"
                 fetchpriority="high" decoding="async"
+                style="max-height: clamp(220px, 42vh, 420px);"
                 class="w-full aspect-[16/9] object-cover rounded-xl bg-neutral-offwhite" @error="setPlaceholder" />
             </figure>
 
             <!-- Standfirst -->
-            <p v-if="post.excerpt" class="text-base sm:text-lg leading-relaxed text-black/70 mb-7">
+            <p v-if="post.excerpt" class="max-w-none text-base sm:text-lg leading-relaxed text-black/70 mb-7">
               {{ post.excerpt }}
             </p>
 
@@ -194,9 +195,9 @@
             <ul v-else-if="relatedPosts.length" class="list-none p-0 m-0 divide-y divide-black/5">
               <li v-for="related in relatedPosts" :key="related.id">
                 <router-link :to="`/blogs/${related.slug}`" class="group flex gap-3 py-3">
-                  <img :src="related.featured_image_thumbnail || related.featured_image" :alt="related.title" width="64" height="64" loading="lazy"
+                  <img :src="related.featured_image_thumbnail || related.featured_image" :alt="related.title" width="80" height="80" loading="lazy"
                     decoding="async"
-                    class="w-16 h-16 rounded-lg object-cover bg-neutral-offwhite shrink-0" @error="setPlaceholder" />
+                    class="w-20 h-20 rounded-lg object-cover bg-neutral-offwhite shrink-0" @error="setPlaceholder" />
                   <div class="flex-1 min-w-0">
                     <p
                       class="text-sm font-bold leading-snug text-secondary group-hover:text-primary transition-colors line-clamp-2">
@@ -582,6 +583,10 @@
 
   :deep(.prose-sauti p) {
     margin-bottom: 1.25rem;
+    /* main.css sets a global `p { max-width: 75ch }` for short-form text
+       elsewhere on the site -- it was clamping the article body to about
+       half the width of its own column instead of filling it. */
+    max-width: none;
   }
 
   :deep(.prose-sauti h2) {

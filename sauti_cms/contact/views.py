@@ -10,6 +10,19 @@ from .serializers import FeedbackMessageSerializer, FeedbackCreateSerializer
 from .exports import generate_feedback_pdf, write_feedback_csv
 
 
+class HasManageFeedback(permissions.BasePermission):
+    """
+    Viewing/managing submitted feedback previously required nothing more
+    than IsAuthenticated -- any logged-in account, including a bare Viewer,
+    could read and moderate feedback. Now requires the 'manage_feedback'
+    permission (see users/models.py's Role/Permission system), seeded onto
+    Editor/Admin by default. The public submission endpoint
+    (FeedbackCreateView) is unaffected -- it stays AllowAny.
+    """
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.has_permission('manage_feedback')
+
+
 def _parse_export_date(value):
     """Parse an optional 'YYYY-MM-DD' query param into a date, or None.
 
@@ -42,7 +55,7 @@ class FeedbackListView(generics.ListAPIView):
     """
     queryset = FeedbackMessage.objects.all().order_by('-submitted_at')
     serializer_class = FeedbackMessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
 class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -51,7 +64,7 @@ class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = FeedbackMessage.objects.all()
     serializer_class = FeedbackMessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
     def perform_update(self, serializer):
         from django.utils import timezone
@@ -77,7 +90,7 @@ class FeedbackExportPDFView(APIView):
     GET /api/contact/feedback/<id>/export/pdf/ - Single-message PDF download.
     Admin only.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
     def get(self, request, pk):
         try:
@@ -101,7 +114,7 @@ class FeedbackExportCSVView(APIView):
     submitted_at date range. Both date params are optional and inclusive;
     omitting one leaves that end of the range open. Admin only.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
     def get(self, request):
         status_filter = (request.query_params.get('status') or 'all').lower()

@@ -16,6 +16,7 @@ class ResourceCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ResourceCategory.objects.all()
     serializer_class = ResourceCategorySerializer
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_resources'
 
 
 class ResourceListCreateView(generics.ListCreateAPIView):
@@ -25,6 +26,7 @@ class ResourceListCreateView(generics.ListCreateAPIView):
     """
     queryset = Resource.objects.select_related('category')
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_resources'
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'description']
     ordering_fields = ['published_at', 'download_count']
@@ -34,7 +36,7 @@ class ResourceListCreateView(generics.ListCreateAPIView):
         queryset = super().get_queryset()
         
         # Filter by status (public sees only published)
-        if not self.request.user.is_authenticated or not self.request.user.is_editor:
+        if not self.request.user.is_authenticated or not self.request.user.has_permission('manage_resources'):
             queryset = queryset.filter(status=Resource.Status.PUBLISHED)
         else:
             # Editors can filter by status
@@ -80,6 +82,7 @@ class ResourceDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Resource.objects.select_related('category')
     lookup_field = 'slug'
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_resources'
     
     def get_serializer_class(self):
         if self.request.method in ['PUT', 'PATCH']:
@@ -107,3 +110,4 @@ class ResourceCategoryListView(generics.ListCreateAPIView):
     queryset = ResourceCategory.objects.all()
     serializer_class = ResourceCategorySerializer
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_resources'

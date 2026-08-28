@@ -16,6 +16,7 @@ class FAQCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FAQCategory.objects.all()
     serializer_class = FAQCategorySerializer
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_faqs'
 
 
 class FAQListCreateView(generics.ListCreateAPIView):
@@ -24,6 +25,7 @@ class FAQListCreateView(generics.ListCreateAPIView):
     POST /api/faqs/ - Create FAQ (Editors/Admins only)
     """
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_faqs'
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['question', 'answer']
     ordering_fields = ['order', 'created_at']
@@ -33,7 +35,7 @@ class FAQListCreateView(generics.ListCreateAPIView):
         queryset = FAQ.objects.select_related('category')
         
         # Only show active and published FAQs to public
-        if not self.request.user.is_authenticated or not self.request.user.is_editor:
+        if not self.request.user.is_authenticated or not self.request.user.has_permission('manage_faqs'):
             queryset = queryset.filter(is_active=True, status=FAQ.Status.PUBLISHED)
         else:
             # Editors can filter by status
@@ -82,6 +84,7 @@ class FAQDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = FAQ.objects.select_related('category')
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_faqs'
     
     def get_serializer_class(self):
         if self.request.method in ['PUT', 'PATCH']:
@@ -109,3 +112,4 @@ class FAQCategoryListView(generics.ListCreateAPIView):
     queryset = FAQCategory.objects.all()
     serializer_class = FAQCategorySerializer
     permission_classes = [IsEditorOrReadOnly]
+    required_permission = 'manage_faqs'
