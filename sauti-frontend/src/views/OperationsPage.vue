@@ -33,6 +33,7 @@
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <!-- Background Image -->
             <img
+              v-if="getJourneyImage(0)"
               :src="getJourneyImage(0)"
               :alt="siteContent.getContent('operations_journey_step1_title', 'Access')"
               width="400"
@@ -41,6 +42,7 @@
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
+            <div v-else class="absolute inset-0 bg-gray-100 animate-pulse"></div>
             <!-- Gradient Overlay - Stronger for text visibility -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
             <div class="absolute top-0 inset-x-0 h-1.5 bg-primary"></div>
@@ -58,6 +60,7 @@
           <!-- Item 2: Response -->
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <img
+              v-if="getJourneyImage(1)"
               :src="getJourneyImage(1)"
               :alt="siteContent.getContent('operations_journey_step2_title', 'Response')"
               width="400"
@@ -66,6 +69,7 @@
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
+            <div v-else class="absolute inset-0 bg-gray-100 animate-pulse"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
             <div class="absolute top-0 inset-x-0 h-1.5 bg-secondary-light"></div>
 
@@ -81,6 +85,7 @@
           <!-- Item 3: Management -->
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <img
+              v-if="getJourneyImage(2)"
               :src="getJourneyImage(2)"
               :alt="siteContent.getContent('operations_journey_step3_title', 'Management')"
               width="400"
@@ -89,6 +94,7 @@
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
+            <div v-else class="absolute inset-0 bg-gray-100 animate-pulse"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
             <div class="absolute top-0 inset-x-0 h-1.5 bg-hotline"></div>
 
@@ -104,6 +110,7 @@
           <!-- Item 4: Protection -->
           <div class="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[200px] md:h-[300px]">
             <img
+              v-if="getJourneyImage(3)"
               :src="getJourneyImage(3)"
               :alt="siteContent.getContent('operations_journey_step4_title', 'Protection')"
               width="400"
@@ -112,6 +119,7 @@
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
+            <div v-else class="absolute inset-0 bg-gray-100 animate-pulse"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
             <div class="absolute top-0 inset-x-0 h-1.5 bg-secondary"></div>
 
@@ -133,6 +141,7 @@
             <!-- Left: Image Side -->
             <div class="relative min-h-[250px] md:min-h-[280px] lg:min-h-[320px]">
               <img
+                v-if="getInfrastructureImage()"
                 :src="getInfrastructureImage()"
                 alt="Infrastructure"
                 width="800"
@@ -141,6 +150,7 @@
                 decoding="async"
                 class="w-full h-full object-cover object-top"
               />
+              <div v-else class="w-full h-full bg-gray-100 animate-pulse"></div>
               <div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40"></div>
 
               <!-- Floating Stats Card -->
@@ -241,6 +251,7 @@
                :class="idx === services.length - 1 ? 'col-span-2 lg:col-span-1' : ''"
                class="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group h-[190px] md:h-[230px]">
             <img
+              v-if="getServiceImage(idx)"
               :src="getServiceImage(idx)"
               :alt="siteContent.getContent(service.cid_title, service.title)"
               width="400"
@@ -249,6 +260,7 @@
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
             />
+            <div v-else class="absolute inset-0 bg-gray-100 animate-pulse"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
             <div class="absolute top-0 inset-x-0 h-1.5" :style="{ backgroundColor: KEY_FACT_COLORS[idx % KEY_FACT_COLORS.length] }"></div>
 
@@ -341,56 +353,29 @@ const computedKeyFacts = computed(() => [
   }
 ])
 
-// Default fallback images for Journey section
-const defaultJourneyImages = [
-  'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=400&h=500&fit=crop', // Step 1: Access
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop', // Step 2: Response
-  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=500&fit=crop', // Step 3: Management
-  'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&h=500&fit=crop'  // Step 4: Protection
-]
+// No stock-photo/local defaults: an image slot with nothing uploaded yet
+// shows a plain skeleton (see the v-else next to each <img>) instead of an
+// unrelated stock photo. Real images are unique-filenamed per upload (Django
+// storage never overwrites), so once loaded they're safe to cache
+// aggressively -- see docker/nginx's /sauti/media/ location.
 
-// Default fallback images for Services section
-const defaultServiceImages = [
-  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop', // Service 1: Telephone Counseling
-  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop', // Service 2: Walk-In Support
-  'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=600&fit=crop', // Service 3: Media Response
-  'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop', // Service 4: Information & Guidance
-  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop', // Service 5: Essential Service Referrals
-  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=300&fit=crop', // Service 6: Community Sensitization
-  'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&h=300&fit=crop'  // Service 7: MHPSS Chatbot
-]
-
-// Default infrastructure image
-const defaultInfraImage = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=800&fit=crop'
-
-// Helper function to get Journey images (from API or fallback)
+// Helper function to get Journey images (from API only)
 const getJourneyImage = (index) => {
-  // Look for uploaded journey images first
   const journeyImage = operationsImages.value.find(img => img.position === `journey_step_${index + 1}`)
-  if (journeyImage?.image_url) {
-    return journeyImage.image_url
-  }
-  return defaultJourneyImages[index] || defaultJourneyImages[0]
+  return journeyImage?.image_url || null
 }
 
-// Helper function to get Service images (from API or fallback)
+// Helper function to get Service images (from API only)
 const getServiceImage = (index) => {
-  // Look for uploaded service images first
   const serviceKeys = ['counseling', 'walkin', 'media', 'guidance', 'referral', 'community', 'chatbot']
   const serviceImage = operationsImages.value.find(img => img.position === `service_${serviceKeys[index]}`)
-  if (serviceImage?.image_url) {
-    return serviceImage.image_url
-  }
-  return defaultServiceImages[index] || defaultServiceImages[0]
+  return serviceImage?.image_url || null
 }
 
-// Helper function to get Infrastructure image (from API or fallback)
+// Helper function to get Infrastructure image (from API only)
 const getInfrastructureImage = () => {
   const infraImage = operationsImages.value.find(img => img.position === 'infrastructure')
-  if (infraImage?.image_url) {
-    return infraImage.image_url
-  }
-  return defaultInfraImage
+  return infraImage?.image_url || null
 }
 
 // Fetch operations images from API
