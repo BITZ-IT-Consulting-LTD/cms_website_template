@@ -65,6 +65,7 @@ services:
     volumes:
       - ../sauti_cms:/app
     environment:
+      - DB_ENGINE=postgres
       - DEBUG=False
       - DB_HOST=db
       - DB_PORT=5432
