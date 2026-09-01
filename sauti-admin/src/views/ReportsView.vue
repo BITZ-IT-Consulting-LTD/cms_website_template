@@ -4,12 +4,36 @@
     <PageHeader :title="pageTitle" description="Manage and respond to child protection reports"
       action-label="Log New Report" :action-icon="PlusIcon" @action="$router.push('/reports/create')" />
 
-    <div class="flex justify-end -mt-3 mb-4">
-      <button @click="downloadAllCsv" :disabled="exportingCsv"
+    <div class="flex flex-col items-end gap-2 -mt-3 mb-4">
+      <button @click="showExportPanel = !showExportPanel" :disabled="exportingCsv"
         class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 flex items-center gap-2 shadow-sm disabled:opacity-50">
         <ArrowDownTrayIcon class="h-4 w-4" />
         {{ exportingCsv ? 'Preparing…' : 'Download All (CSV)' }}
       </button>
+
+      <!-- CSV Export: optional date range, defaults to everything when left blank -->
+      <div v-if="showExportPanel"
+        class="bg-white border border-gray-200 rounded-md shadow-sm p-4 flex flex-wrap items-end gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">From</label>
+          <input type="date" v-model="exportDateFrom"
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">To</label>
+          <input type="date" v-model="exportDateTo"
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+        </div>
+        <button @click="downloadAllCsv" :disabled="exportingCsv"
+          class="px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md hover:bg-gray-900 disabled:opacity-50">
+          {{ exportingCsv ? 'Preparing…' : 'Download' }}
+        </button>
+        <button @click="showExportPanel = false; exportDateFrom = ''; exportDateTo = ''"
+          class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+          Cancel
+        </button>
+        <p class="w-full text-xs text-gray-400">Leave both blank to download everything.</p>
+      </div>
     </div>
 
     <!-- Mini Dashboard -->
@@ -59,15 +83,6 @@
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <select v-model="filterPriority"
-            class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white">
-            <option value="">All Priorities</option>
-            <option value="critical">Critical</option>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-
           <select v-model="filterType"
             class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white">
             <option value="">All Types</option>
@@ -75,6 +90,16 @@
             <option value="GBV">Gender-Based Violence</option>
             <option value="MIGRANT">Migrant Worker</option>
             <option value="PSEA">PSEA</option>
+          </select>
+
+          <select v-model="filterReportingFor"
+            class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white">
+            <option value="">Reporting For: Any</option>
+            <option value="SELF">Self</option>
+            <option value="ADULT_OTHER">Adult (Other)</option>
+            <option value="CHILD">Child</option>
+            <option value="MULTIPLE">Multiple People</option>
+            <option value="UNSPECIFIED">Unspecified</option>
           </select>
 
           <select v-if="activeTab === 'all'" v-model="filterStatus"
@@ -85,6 +110,15 @@
             <option value="RESOLVED">Resolved</option>
             <option value="CLOSED">Closed</option>
           </select>
+
+          <div class="flex items-center gap-2">
+            <label class="text-sm text-gray-600">Age</label>
+            <input v-model="filterAgeMin" type="number" min="0" placeholder="Min"
+              class="w-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white" />
+            <span class="text-gray-400">–</span>
+            <input v-model="filterAgeMax" type="number" min="0" placeholder="Max"
+              class="w-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white" />
+          </div>
 
           <div class="flex items-center gap-2 ml-auto">
             <label class="text-sm text-gray-600">Per page</label>
@@ -105,26 +139,67 @@
         <table class="min-w-full">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Case ID
+              <th @click="toggleSort('reference_number')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Case ID
+                  <ChevronUpIcon v-if="sortField === 'reference_number' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'reference_number' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
+              </th>
+              <th @click="toggleSort('category')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Type
+                  <ChevronUpIcon v-if="sortField === 'category' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'category' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
+              </th>
+              <th @click="toggleSort('status')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Status
+                  <ChevronUpIcon v-if="sortField === 'status' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'status' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
+              </th>
+              <th @click="toggleSort('location')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Location
+                  <ChevronUpIcon v-if="sortField === 'location' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'location' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Type
+                Reporting For
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Priority
+                Incident Type
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+              <th @click="toggleSort('reported_person_age')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Age
+                  <ChevronUpIcon v-if="sortField === 'reported_person_age' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'reported_person_age' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Location
+              <th @click="toggleSort('created_at')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Reported
+                  <ChevronUpIcon v-if="sortField === 'created_at' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'created_at' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Reported
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Assigned To
+              <th @click="toggleSort('assigned_to_name')"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none hover:text-gray-700">
+                <span class="inline-flex items-center gap-1">
+                  Assigned To
+                  <ChevronUpIcon v-if="sortField === 'assigned_to_name' && sortDirection === 'asc'" class="h-3.5 w-3.5" />
+                  <ChevronDownIcon v-else-if="sortField === 'assigned_to_name' && sortDirection === 'desc'" class="h-3.5 w-3.5" />
+                </span>
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
@@ -139,11 +214,8 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900">{{ formatType(report.category) }}</div>
-                <div v-if="report.incident_type" class="text-xs text-gray-500">{{ formatType(report.incident_type) }}
-                </div>
                 <div class="text-xs text-gray-400 mt-0.5">
-                  <span v-if="report.reporting_for" class="font-medium">{{ report.reporting_for }}</span>
-                  <span v-else>
+                  <span v-if="!report.reporting_for || report.reporting_for === 'UNSPECIFIED'">
                     {{ report.reported_person_age ? report.reported_person_age + 'y' : '?' }} •
                     {{ report.reported_person_gender || '?' }}
                   </span>
@@ -154,24 +226,30 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
-                  :class="priorityClass(report.priority)">
-                  {{ report.priority }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
                   :class="statusClass(report.status)">
                   {{ formatStatus(report.status) }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                 {{ report.location }}
+                <div v-if="report.victim_location && report.victim_location !== report.location" class="text-xs text-gray-400">
+                  Victim: {{ report.victim_location }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                {{ formatReportingFor(report.reporting_for) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                {{ report.incident_type ? formatType(report.incident_type) : '—' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                {{ report.reported_person_age ?? '—' }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                 {{ formatDate(report.created_at) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                {{ report.assigned_to || 'Unassigned' }}
+                {{ report.assigned_to_name || 'Unassigned' }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button @click.stop="viewReport(report.id)" class="text-primary-600 hover:text-primary-900 mr-3">
@@ -192,13 +270,19 @@
                 <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
               </td>
               <td class="px-6 py-4">
-                <div class="h-5 w-16 bg-gray-200 rounded-full animate-pulse"></div>
-              </td>
-              <td class="px-6 py-4">
                 <div class="h-5 w-24 bg-gray-200 rounded-full animate-pulse"></div>
               </td>
               <td class="px-6 py-4">
                 <div class="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="h-4 w-10 bg-gray-200 rounded animate-pulse"></div>
               </td>
               <td class="px-6 py-4">
                 <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
@@ -279,13 +363,18 @@
     CheckCircleIcon,
     EyeIcon,
     PencilIcon,
-    ArrowDownTrayIcon
+    ArrowDownTrayIcon,
+    ChevronUpIcon,
+    ChevronDownIcon
   } from '@heroicons/vue/24/outline'
 
   const router = useRouter()
   const route = useRoute()
   const toast = useToast()
   const exportingCsv = ref(false)
+  const showExportPanel = ref(false)
+  const exportDateFrom = ref('')
+  const exportDateTo = ref('')
 
   const pageTitle = computed(() => {
     const currentTab = tabs.value.find(t => t.id === activeTab.value)
@@ -310,16 +399,24 @@
   ])
 
   const searchQuery = ref('')
-  const filterPriority = ref('')
   const filterType = ref('')
   const filterStatus = ref('')
+  const filterReportingFor = ref('')
+  const filterAgeMin = ref('')
+  const filterAgeMax = ref('')
   const currentPage = ref(1)
   const perPage = ref(10)
   const loading = ref(false)
   const error = ref(null)
 
+  // Column sorting for the reports table. Defaults to the same order the
+  // API already returns (newest created_at first), so the table doesn't
+  // visibly re-order on first load.
+  const sortField = ref('created_at')
+  const sortDirection = ref('desc')
+
   // Watch search and filters to reset pagination
-  watch([searchQuery, filterPriority, filterType, filterStatus, activeTab], () => {
+  watch([searchQuery, filterType, filterStatus, filterReportingFor, filterAgeMin, filterAgeMax, activeTab], () => {
     currentPage.value = 1
   })
 
@@ -372,7 +469,6 @@
         if (report.status === 'RESOLVED' || report.status === 'CLOSED') return false
       } else if (activeTab.value === 'urgent') {
         if (report.status === 'RESOLVED' || report.status === 'CLOSED') return false
-        if (report.priority !== 'critical' && report.priority !== 'CRITICAL') return false
       } else if (activeTab.value === 'archive') {
         if (report.status !== 'RESOLVED' && report.status !== 'CLOSED') return false
       }
@@ -382,32 +478,80 @@
         report.reference_number?.toLowerCase().includes(searchLower) ||
         report.id.toLowerCase().includes(searchLower) ||
         report.location.toLowerCase().includes(searchLower) ||
-        report.assigned_to?.toLowerCase().includes(searchLower) ||
+        report.assigned_to_name?.toLowerCase().includes(searchLower) ||
         formatType(report.category).toLowerCase().includes(searchLower) ||
         (report.incident_type && formatType(report.incident_type).toLowerCase().includes(searchLower))
 
-      const matchesPriority = !filterPriority.value || report.priority === filterPriority.value
       const matchesType = !filterType.value || report.category === filterType.value
       const matchesStatus = !filterStatus.value || report.status === filterStatus.value
+      const matchesReportingFor = !filterReportingFor.value || report.reporting_for === filterReportingFor.value
 
-      return matchesSearch && matchesPriority && matchesType && matchesStatus
+      const age = report.reported_person_age
+      const matchesAgeMin = filterAgeMin.value === '' ||
+        (age !== null && age !== undefined && age >= Number(filterAgeMin.value))
+      const matchesAgeMax = filterAgeMax.value === '' ||
+        (age !== null && age !== undefined && age <= Number(filterAgeMax.value))
+
+      return matchesSearch && matchesType && matchesStatus && matchesReportingFor && matchesAgeMin && matchesAgeMax
     })
   })
 
-  const totalPages = computed(() => Math.max(1, Math.ceil(filteredReports.value.length / perPage.value)))
+  // Client-side sort: the table is fetched and filtered client-side already
+  // (api.reports.list() has no server-side params in this view), so sorting
+  // the already-filtered page in the browser is the simplest fit rather than
+  // threading a sort param through the API.
+  const sortedReports = computed(() => {
+    const list = [...filteredReports.value]
+    const field = sortField.value
+    const direction = sortDirection.value === 'asc' ? 1 : -1
+
+    list.sort((a, b) => {
+      let av = a[field]
+      let bv = b[field]
+
+      if (field === 'created_at') {
+        av = av ? new Date(av).getTime() : 0
+        bv = bv ? new Date(bv).getTime() : 0
+      } else if (field === 'reported_person_age') {
+        av = av ?? -Infinity
+        bv = bv ?? -Infinity
+      } else {
+        av = (av ?? '').toString().toLowerCase()
+        bv = (bv ?? '').toString().toLowerCase()
+      }
+
+      if (av < bv) return -1 * direction
+      if (av > bv) return 1 * direction
+      return 0
+    })
+
+    return list
+  })
+
+  const totalPages = computed(() => Math.max(1, Math.ceil(sortedReports.value.length / perPage.value)))
 
   const startIndex = computed(() => (currentPage.value - 1) * perPage.value)
-  const endIndex = computed(() => Math.min(currentPage.value * perPage.value, filteredReports.value.length))
-  const pagedReports = computed(() => filteredReports.value.slice(startIndex.value, endIndex.value))
+  const endIndex = computed(() => Math.min(currentPage.value * perPage.value, sortedReports.value.length))
+  const pagedReports = computed(() => sortedReports.value.slice(startIndex.value, endIndex.value))
 
-  const priorityClass = (priority) => {
-    const classes = {
-      critical: 'bg-red-100 text-red-800',
-      high: 'bg-orange-100 text-orange-800',
-      medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-green-100 text-green-800'
+  function toggleSort(field) {
+    if (sortField.value === field) {
+      sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+    } else {
+      sortField.value = field
+      sortDirection.value = 'asc'
     }
-    return classes[priority] || 'bg-gray-100 text-gray-800'
+  }
+
+  const formatReportingFor = (value) => {
+    const labels = {
+      SELF: 'Self',
+      ADULT_OTHER: 'Adult (Other)',
+      CHILD: 'Child',
+      MULTIPLE: 'Multiple People',
+      UNSPECIFIED: 'Unspecified'
+    }
+    return labels[value] || value || '—'
   }
 
   const statusClass = (status) => {
@@ -485,9 +629,29 @@
   const downloadAllCsv = async () => {
     exportingCsv.value = true
     try {
-      const response = await api.reports.exportCsv()
-      const today = new Date().toISOString().split('T')[0]
-      downloadBlobResponse(response, `case-reports-${today}.csv`)
+      // Mirror the table's active filters into the export so "download what
+      // I'm currently looking at" holds true, plus the optional date range.
+      const params = {}
+      if (filterStatus.value) params.status = filterStatus.value
+      if (filterType.value) params.category = filterType.value
+      if (filterReportingFor.value) params.reporting_for = filterReportingFor.value
+      if (filterAgeMin.value !== '') params.age_min = filterAgeMin.value
+      if (filterAgeMax.value !== '') params.age_max = filterAgeMax.value
+      if (exportDateFrom.value) params.date_from = exportDateFrom.value
+      if (exportDateTo.value) params.date_to = exportDateTo.value
+
+      const response = await api.reports.exportCsv(params)
+
+      let fallbackName
+      if (exportDateFrom.value || exportDateTo.value) {
+        const from = exportDateFrom.value || 'start'
+        const to = exportDateTo.value || 'present'
+        fallbackName = `case-reports-${from}_to_${to}.csv`
+      } else {
+        const today = new Date().toISOString().split('T')[0]
+        fallbackName = `case-reports-${today}.csv`
+      }
+      downloadBlobResponse(response, fallbackName)
     } catch (err) {
       console.error('Error downloading reports CSV:', err)
       toast.error('Failed to download CSV')

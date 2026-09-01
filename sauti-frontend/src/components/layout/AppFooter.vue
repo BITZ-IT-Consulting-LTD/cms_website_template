@@ -5,7 +5,13 @@
         <!-- Brand Column -->
         <div class="md:col-span-2 lg:col-span-4 space-y-3 lg:space-y-6">
           <div>
-            <h2 class="font-black uppercase tracking-tight mb-2" :style="{ fontSize: 'clamp(1.25rem, 5vw, 1.875rem)', fontFamily: 'var(--font-cronos), cronos-pro, Cronos Pro, Georgia, serif' }">{{ siteContent.getContent('footer_brand_name', 'Sauti 116') }}</h2>
+            <!-- Explicit text-white is required here, not just inherited from
+                 <footer>: a global `h2 { color: text-secondary }` base style
+                 targets this tag directly, and that brand green (#006837) is
+                 nearly identical to this footer's own background (#006633) --
+                 without an explicit color the heading was effectively
+                 invisible on every page. -->
+            <h2 class="font-black uppercase tracking-tight text-white mb-2" :style="{ fontSize: 'clamp(1.25rem, 5vw, 1.875rem)', fontFamily: 'var(--font-cronos), cronos-pro, Cronos Pro, Georgia, serif' }">{{ siteContent.getContent('footer_brand_name', 'Sauti 116') }}</h2>
             <p class="text-neutral-white/70 font-bold leading-relaxed max-w-sm text-sm lg:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
               {{ siteContent.getContent('footer_brand_description', 'Uganda\'s verified National Child Helpline. Providing 24/7 confidential support, guidance, and emergency intervention for all citizens.') }}
             </p>
@@ -13,7 +19,7 @@
           <div class="flex gap-2 lg:gap-4">
              <!-- X (Twitter) -->
              <a :href="siteContent.getContent('footer_social_x_url', 'https://x.com/sauti116?s=21')" target="_blank" rel="noopener noreferrer" class="social-btn group relative rounded-full bg-white flex items-center justify-center transition-all hover:scale-110 w-9 h-9 lg:w-12 lg:h-12">
-                <BrandIcon name="x" class="w-4 h-4 lg:w-5 lg:h-5" />
+                <BrandIcon name="x" class="w-5 h-5 lg:w-6 lg:h-6" />
                 <span class="social-tooltip" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_social_x_label', 'X') }}</span>
              </a>
              <!-- Instagram -->
@@ -36,6 +42,11 @@
                 <BrandIcon name="youtube" class="w-5 h-5 lg:w-6 lg:h-6" />
                 <span class="social-tooltip" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_social_youtube_label', 'YouTube') }}</span>
              </a>
+             <!-- WhatsApp -->
+             <a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="social-btn group relative rounded-full bg-white flex items-center justify-center transition-all hover:scale-110 w-9 h-9 lg:w-12 lg:h-12">
+                <BrandIcon name="whatsapp" class="w-5 h-5 lg:w-6 lg:h-6" />
+                <span class="social-tooltip" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_social_whatsapp_label', 'WhatsApp') }}</span>
+             </a>
           </div>
         </div>
 
@@ -53,7 +64,7 @@
         </div>
 
         <!-- Support -->
-        <div class="lg:col-span-2 space-y-2 lg:space-y-5">
+        <div class="lg:col-span-2 lg:col-start-8 space-y-2 lg:space-y-5">
           <h3 class="text-[10px] lg:text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_support_heading', 'Support') }}</h3>
           <ul class="space-y-1.5 lg:space-y-3 font-bold text-sm lg:text-base" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">
             <li><router-link to="/report" class="hover:text-secondary-light transition-colors">{{ siteContent.getContent('footer_nav_report', 'Report a Case') }}</router-link></li>
@@ -75,7 +86,7 @@
         </div>
 
         <!-- Contact Column -->
-        <div class="md:col-span-2 lg:col-span-3 space-y-2 lg:space-y-5">
+        <div class="md:col-span-2 lg:col-span-3 lg:col-start-10 space-y-2 lg:space-y-5">
            <h3 class="text-[10px] lg:text-xs font-black uppercase tracking-widest text-neutral-white/50" style="font-family: var(--font-cronos), 'cronos-pro', 'Cronos Pro', Georgia, serif;">{{ siteContent.getContent('footer_contact_heading', 'Contact') }}</h3>
            <div class="space-y-3 lg:space-y-5">
               <a href="tel:116" class="flex items-center gap-3 lg:gap-4 group">
@@ -132,11 +143,17 @@ import {
 import { useSiteContent } from '@/composables/useSiteContent'
 import { useSettingsStore } from '@/store/settings'
 import BrandIcon from '@/components/common/BrandIcon.vue'
+import { toWaMeNumber } from '@/utils/phone'
 
 const siteContent = useSiteContent('footer')
 const settingsStore = useSettingsStore()
 
 const isExternalUrl = (url) => typeof url === 'string' && /^https?:\/\//i.test(url)
+
+// Same normalisation ContactPage uses for its WhatsApp channel: the CMS value
+// may be entered in Uganda local format (e.g. '0743889999'), which wa.me
+// rejects — toWaMeNumber() converts it to the international digits-only form.
+const whatsappUrl = computed(() => `https://wa.me/${toWaMeNumber(siteContent.getContent('footer_social_whatsapp_number', '0743889999'))}`)
 
 const privacyUrl = computed(() => settingsStore.settings.privacy_policy_url || '/privacy')
 const termsUrl = computed(() => settingsStore.settings.terms_of_service_url || '/terms')

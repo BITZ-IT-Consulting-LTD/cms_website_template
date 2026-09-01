@@ -6,7 +6,10 @@
         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
         @click.self="close"
       >
-        <div class="relative w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden" style="height: 90vh;">
+        <!-- max-w-6xl (1152px) keeps the iframe comfortably above the 1024px
+             breakpoint where the previewed page's own two-column layout
+             switches on, without the modal taking over the whole screen. -->
+        <div class="relative w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden" style="height: 75vh;">
           <!-- Header -->
           <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
             <div class="flex items-center space-x-3">
@@ -74,6 +77,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { api } from '@/utils/api'
 
 const props = defineProps({
   isOpen: {
@@ -94,16 +98,38 @@ const emit = defineEmits(['close'])
 
 const loading = ref(true)
 
-// Frontend URL - adjust port if needed
-const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000'
+// Public site base URL (see .env.development / .env.production). Falls back
+// to the actual dev Vite port (5173), not the old localhost:3000 default --
+// nothing in this project has ever run on port 3000.
+const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173'
+
+// Draft posts 404 on the public site for anonymous requests (this iframe
+// carries no auth), which defeats the actual point of "preview" -- checking
+// a post before it's published. previewToken() issues a short-lived signed
+// token scoped to this one slug (see PostPreviewTokenView), which the
+// public PostDetailView accepts in place of authentication.
+const previewToken = ref('')
 
 const previewUrl = computed(() => {
   if (!props.slug && !props.postId) return ''
-  
-  // Use slug if available, otherwise use ID
   const identifier = props.slug || props.postId
-  return `${frontendUrl}/blogs/${identifier}?preview=true`
+  const base = `${frontendUrl}/blogs/${identifier}?preview=true`
+  return previewToken.value ? `${base}&preview_token=${encodeURIComponent(previewToken.value)}` : base
 })
+
+watch([() => props.isOpen, () => props.slug], async ([isOpen, slug]) => {
+  previewToken.value = ''
+  if (!isOpen || !slug) return
+  try {
+    const response = await api.posts.previewToken(slug)
+    previewToken.value = response.data.token
+  } catch (error) {
+    // A published post doesn't need a token to preview (the public endpoint
+    // already allows it), so a failure here just means an unpublished post
+    // stays unpreviewable -- not a broken preview for published content.
+    console.warn('Could not get a preview token (fine for already-published posts):', error)
+  }
+}, { immediate: true })
 
 const close = () => {
   loading.value = true

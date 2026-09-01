@@ -4,6 +4,7 @@ import { api } from '@/utils/axios'
 
 const POSTS_TTL = 2 * 60 * 1000 // 2 minutes
 const METADATA_TTL = 10 * 60 * 1000 // 10 minutes for categories/tags
+const PREFETCH_TTL = 60 * 1000 // 1 minute -- a hover-prefetched post is only worth reusing if the click follows shortly after
 
 function isCacheFresh(timestamp, ttl) {
   if (!timestamp) return false
@@ -38,6 +39,15 @@ export const useBlogStore = defineStore('blog', () => {
   let fetchingPostsPromise = null
   let fetchingCategoriesPromise = null
   let fetchingTagsPromise = null
+
+  // Hover/intent prefetch cache: slug -> { data, timestamp }. Deliberately a
+  // plain Map, not a ref -- this is a short-lived side cache a click reads
+  // synchronously from, not something a template needs to react to. Kept
+  // separate from `currentPost` and never touches `loading`/`error`, so
+  // prefetching on hover can never flash an unrelated loading state
+  // elsewhere in the app that happens to watch this store's `loading`.
+  const prefetchedPosts = new Map()
+  const prefetchingPromises = new Map()
 
   // Helper to normalize post data (fix broken URLs etc)
   function normalizePost(post) {
@@ -118,6 +128,34 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   async function fetchPost(slug) {
+    // A hover-prefetch already in flight or freshly resolved for this exact
+    // slug means the click that triggered this call can skip the network
+    // round-trip entirely -- this is what actually makes prefetching pay off,
+    // not just the earlier hover request on its own.
+    const prefetching = prefetchingPromises.get(slug)
+    if (prefetching) {
+      loading.value = true
+      try {
+        const result = await prefetching
+        // A prefetch failure resolves to null (see prefetchPost's .catch) --
+        // fall through to a real fetch below rather than treating that as a
+        // genuine "not found", so a flaky background prefetch never breaks
+        // the actual navigation.
+        if (result) {
+          currentPost.value = result
+          return currentPost.value
+        }
+      } finally {
+        loading.value = false
+      }
+    }
+
+    const cached = prefetchedPosts.get(slug)
+    if (cached && isCacheFresh(cached.timestamp, PREFETCH_TTL)) {
+      currentPost.value = cached.data
+      return currentPost.value
+    }
+
     loading.value = true
     error.value = null
 
@@ -131,6 +169,33 @@ export const useBlogStore = defineStore('blog', () => {
     } finally {
       loading.value = false
     }
+  }
+
+  // Fire-and-forget prefetch for a post a reader is likely about to open
+  // (hover/focus intent on a card link). Deliberately does not touch
+  // `loading`/`error`/`currentPost` -- those are for the actual navigation,
+  // and mutating them here would flash loading state for a request the user
+  // may never follow through on. De-dupes repeated hovers on the same card
+  // and silently swallows failures (a failed prefetch just means the real
+  // navigation fetch runs normally, same as if no prefetch had happened).
+  function prefetchPost(slug) {
+    if (!slug) return
+    if (prefetchingPromises.has(slug)) return
+    const cached = prefetchedPosts.get(slug)
+    if (cached && isCacheFresh(cached.timestamp, PREFETCH_TTL)) return
+
+    const promise = api.posts.get(slug)
+      .then((response) => {
+        const data = normalizePost(response.data)
+        prefetchedPosts.set(slug, { data, timestamp: Date.now() })
+        return data
+      })
+      .catch(() => null)
+      .finally(() => {
+        prefetchingPromises.delete(slug)
+      })
+
+    prefetchingPromises.set(slug, promise)
   }
 
   async function fetchCategories(forceRefresh = false) {
@@ -274,6 +339,7 @@ export const useBlogStore = defineStore('blog', () => {
     pagination,
     fetchPosts,
     fetchPost,
+    prefetchPost,
     fetchCategories,
     fetchTags,
     createPost,

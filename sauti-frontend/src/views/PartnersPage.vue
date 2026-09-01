@@ -40,7 +40,7 @@
       <div class="container-custom section-rhythm">
         <!-- 2. Content Area -->
         <section aria-label="Partner Directory">
-          <h2 class="campaign-header text-3xl text-secondary mb-12">{{ siteContent.getContent('partners_directory_title', 'Who We Work With') }}</h2>
+          <h2 class="campaign-header text-2xl sm:text-3xl text-secondary mb-8 sm:mb-12">{{ siteContent.getContent('partners_directory_title', 'Who We Work With') }}</h2>
           <AppLoader v-if="loading" :message="siteContent.getContent('partners_loading', 'Loading partner organizations...')" />
 
           <div v-else-if="partners.length"
@@ -90,12 +90,12 @@
         <!-- 3. Partnership CTA -->
         <section class="mt-20">
           <div
-            class="bg-primary/5 p-12 md:p-16 rounded-[4rem] border-2 border-primary/20 text-center max-w-4xl mx-auto">
-            <h3 class="campaign-header text-3xl text-secondary mb-6">{{ siteContent.getContent('partners_cta_title', 'How We Work Together') }}</h3>
-            <p class="text-xl font-bold text-muted mb-10 leading-relaxed">
+            class="bg-primary/5 p-6 sm:p-8 md:p-16 rounded-[2rem] md:rounded-[4rem] border-2 border-primary/20 text-center max-w-4xl mx-auto">
+            <h3 class="campaign-header text-xl sm:text-2xl md:text-3xl text-secondary mb-3 md:mb-6">{{ siteContent.getContent('partners_cta_title', 'How We Work Together') }}</h3>
+            <p class="text-base sm:text-lg md:text-xl font-bold text-muted mb-6 md:mb-10 leading-relaxed">
               {{ siteContent.getContent('partners_cta_text', 'Interested in joining our mission to protect the children of Uganda? We are always looking for organizations that share our commitment.') }}
             </p>
-            <div class="cta-group justify-center">
+            <div class="cta-group justify-center flex flex-col sm:flex-row flex-wrap items-center gap-3 sm:gap-4">
               <BaseCTA href="/contact" variant="primary">{{ siteContent.getContent('partners_cta_interest_button', 'Express Interest') }}</BaseCTA>
               <BaseCTA href="/about" variant="outline">{{ siteContent.getContent('partners_cta_learn_button', 'Learn About Our Impact') }}</BaseCTA>
             </div>

@@ -81,12 +81,12 @@
         <AppLoader v-if="loading" :message="loadingMessage" />
 
         <div v-else-if="posts.length" class="space-y-12 lg:space-y-14">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-6">
             <BlogCard v-for="post in posts" :key="post.id" :post="post" />
           </div>
 
           <!-- Pagination -->
-          <div class="flex items-center justify-center gap-2 sm:gap-3 pt-2">
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
             <button
               type="button"
               @click="setPage('<')"
@@ -97,7 +97,7 @@
               <ChevronLeft class="w-5 h-5" />
             </button>
 
-            <div class="flex items-center gap-1.5 sm:gap-2">
+            <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
               <button
                 v-for="n in pageNumbers"
                 :key="n + '-pg'"

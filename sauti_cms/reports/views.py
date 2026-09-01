@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import generics, permissions, status, serializers
@@ -14,13 +16,43 @@ from .serializers import (
 from .exports import generate_report_pdf, write_reports_csv
 
 
+def _parse_export_date(value):
+    """Parse an optional 'YYYY-MM-DD' query param into a date, or None.
+
+    Returns None both when `value` is falsy (param omitted) and when it
+    fails to parse; callers distinguish those cases by checking `value`
+    itself.
+    """
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, '%Y-%m-%d').date()
+    except ValueError:
+        return None
+
+
+def _parse_export_int(value):
+    """Parse an optional integer query param, or None.
+
+    Returns None both when `value` is falsy (param omitted) and when it
+    fails to parse; callers distinguish those cases by checking `value`
+    itself.
+    """
+    if not value:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
+
+
 class AllowAnyPost(permissions.BasePermission):
     """Allow anonymous POST, but require auth for other methods"""
     
     def has_permission(self, request, view):
         if request.method == 'POST':
             return True
-        return request.user.is_authenticated and request.user.is_editor
+        return request.user.is_authenticated and request.user.has_permission('manage_reports')
 
 
 import logging
@@ -144,9 +176,17 @@ class ReportListView(generics.ListAPIView):
     queryset = Report.objects.select_related('assigned_to')
     serializer_class = ReportListSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+    # The admin Reports table fetches once and does its own search/filter/
+    # sort/pagination entirely client-side (ReportsView.vue). The global
+    # PageNumberPagination (PAGE_SIZE=20) was silently truncating that fetch
+    # to the 20 most recent reports, so every filter -- status, category,
+    # reporting-for, age range -- only ever searched within that page and
+    # silently missed anything older, making filters that should have
+    # matches (e.g. "Adult (Other)") appear broken/empty.
+    pagination_class = None
+
     def get_queryset(self):
-        if not self.request.user.is_editor:
+        if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can view reports.")
         
         queryset = super().get_queryset()
@@ -178,7 +218,7 @@ class ReportDetailView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
-        if not self.request.user.is_editor:
+        if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can view reports.")
         return super().get_queryset()
     
@@ -241,7 +281,7 @@ class ReportExportPDFView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk):
-        if not request.user.is_editor:
+        if not request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can export reports.")
 
         try:
@@ -259,15 +299,19 @@ class ReportExportPDFView(APIView):
 
 class ReportExportCSVView(APIView):
     """
-    GET /api/reports/export/csv/ - Bulk CSV download of all reports.
-    Editors/Admins only. Never includes ip_address, user_agent or
-    encrypted_description. Optionally scoped with the same ?status= /
-    ?category= query params as the report list endpoint.
+    GET /api/reports/export/csv/?status=...&category=...&reporting_for=...
+        &date_from=YYYY-MM-DD&date_to=YYYY-MM-DD&age_min=...&age_max=...
+    Bulk CSV download of all reports. Editors/Admins only. Never includes
+    ip_address, user_agent or encrypted_description. Optionally scoped with
+    the same ?status=/?category=/?reporting_for= query params as the report
+    list/admin table filters, plus an optional created_at date range and an
+    optional reported_person_age range (all bounds inclusive; omitting
+    either end of a range leaves that end open).
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        if not request.user.is_editor:
+        if not request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can export reports.")
 
         queryset = Report.objects.select_related('assigned_to').all()
@@ -280,8 +324,58 @@ class ReportExportCSVView(APIView):
         if category:
             queryset = queryset.filter(category=category)
 
-        date_str = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
-        filename = f"case-reports-{date_str}.csv"
+        reporting_for = request.query_params.get('reporting_for')
+        if reporting_for:
+            queryset = queryset.filter(reporting_for=reporting_for)
+
+        date_from_str = request.query_params.get('date_from')
+        date_to_str = request.query_params.get('date_to')
+        date_from = _parse_export_date(date_from_str)
+        date_to = _parse_export_date(date_to_str)
+
+        if date_from_str and date_from is None:
+            return Response(
+                {'detail': 'Invalid date_from, expected YYYY-MM-DD.'}, status=400
+            )
+        if date_to_str and date_to is None:
+            return Response(
+                {'detail': 'Invalid date_to, expected YYYY-MM-DD.'}, status=400
+            )
+
+        # Compare on the calendar date of created_at (not a naive string
+        # comparison against the datetime) so date_to's whole day is
+        # included rather than being cut off at midnight.
+        if date_from:
+            queryset = queryset.filter(created_at__date__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(created_at__date__lte=date_to)
+
+        age_min_str = request.query_params.get('age_min')
+        age_max_str = request.query_params.get('age_max')
+        age_min = _parse_export_int(age_min_str)
+        age_max = _parse_export_int(age_max_str)
+
+        if age_min_str and age_min is None:
+            return Response(
+                {'detail': 'Invalid age_min, expected an integer.'}, status=400
+            )
+        if age_max_str and age_max is None:
+            return Response(
+                {'detail': 'Invalid age_max, expected an integer.'}, status=400
+            )
+
+        if age_min is not None:
+            queryset = queryset.filter(reported_person_age__gte=age_min)
+        if age_max is not None:
+            queryset = queryset.filter(reported_person_age__lte=age_max)
+
+        if date_from or date_to:
+            range_from = date_from_str or 'start'
+            range_to = date_to_str or 'present'
+            filename = f"case-reports-{range_from}_to_{range_to}.csv"
+        else:
+            date_str = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
+            filename = f"case-reports-{date_str}.csv"
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
@@ -297,7 +391,7 @@ class ReportFollowUpCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def perform_create(self, serializer):
-        if not self.request.user.is_editor:
+        if not self.request.user.has_permission('manage_reports'):
             raise PermissionDenied("Only Editors and Admins can add follow-ups.")
         serializer.save(created_by=self.request.user)
 

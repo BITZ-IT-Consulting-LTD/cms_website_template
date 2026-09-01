@@ -2,6 +2,20 @@ from rest_framework import viewsets, permissions
 from .models import SiteContent, CoreValue, Contact, ProtectionApproach, TeamMember, WhoWeAreImage, OperationsImage
 from .serializers import SiteContentSerializer, CoreValueSerializer, ContactSerializer, ProtectionApproachSerializer, TeamMemberSerializer, WhoWeAreImageSerializer, OperationsImageSerializer
 
+
+class HasManageSiteContent(permissions.BasePermission):
+    """
+    Write access to the content app (site copy, core values, contacts,
+    protection approach, team members, hero/operations images) previously
+    required nothing more than IsAuthenticated -- any logged-in account,
+    including a bare Viewer, could rewrite page copy. Now requires the
+    'manage_site_content' permission (see users/models.py's Role/Permission
+    system), seeded onto Editor/Admin by default.
+    """
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.has_permission('manage_site_content')
+
+
 class OwnershipViewSetMixin:
     def perform_create(self, serializer):
         serializer.save(
@@ -25,7 +39,7 @@ class SiteContentViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
 
@@ -41,7 +55,7 @@ class CoreValueViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -67,7 +81,7 @@ class ContactViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -93,7 +107,7 @@ class ProtectionApproachViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -119,7 +133,7 @@ class TeamMemberViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -146,7 +160,7 @@ class WhoWeAreImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -173,7 +187,7 @@ class OperationsImageViewSet(OwnershipViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'options']:
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [HasManageSiteContent]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):

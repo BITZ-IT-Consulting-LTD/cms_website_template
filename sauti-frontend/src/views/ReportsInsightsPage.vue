@@ -62,14 +62,14 @@
 
         <!-- 3. Filter Bar -->
         <section class="mb-8">
-          <div class="flex items-center gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
             <label for="caseTypeFilter" class="text-sm font-semibold text-secondary/70 uppercase tracking-wider">
               Filter by Case Type
             </label>
             <select
               id="caseTypeFilter"
               v-model="caseTypeFilter"
-              class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-secondary shadow-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              class="w-full sm:w-auto rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-secondary shadow-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
             >
               <option value="All">All Case Types</option>
               <option value="Abuse">Abuse</option>

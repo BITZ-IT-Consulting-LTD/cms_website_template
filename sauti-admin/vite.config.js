@@ -26,7 +26,10 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true, // Listen on all network interfaces
       port: 5174, // Vite's default port
-      allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'host.docker.internal'],
+      // 'admin' added: nginx's proxy_pass defaults to Host: $proxy_host (the
+      // upstream's own name) when nothing overrides it, so requests routed
+      // through nginx arrive with Host: admin, not localhost.
+      allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'admin', 'host.docker.internal'],
       // hmr block removed for local development
       proxy: {
         '/api': {

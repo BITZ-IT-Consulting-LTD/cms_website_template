@@ -6,7 +6,12 @@
     <!-- A. Hero Section (Grid Moodboard Layout) -->
     <section class="relative bg-[#F9FAFB] flex flex-col items-center justify-center overflow-hidden" style="min-height: auto; padding-top: clamp(5rem, 12vh, 9rem); padding-bottom: clamp(2rem, 6vh, 6rem); padding-left: clamp(1rem, 4vw, 2rem); padding-right: clamp(1rem, 4vw, 2rem);">
       <!-- Grid Container -->
-      <div class="grid grid-cols-1 md:grid-cols-[1fr_4fr_1fr] gap-4 w-full max-w-7xl" style="aspect-ratio: auto; min-height: clamp(400px, 60vh, 800px);">
+      <!-- min-height moved out of the inline style (which would always beat a
+           responsive class on the same property) and into responsive
+           classes instead: the side photo columns are hidden below md:, so
+           the mobile-only value is shrunk to fit just the center 2x2 grid +
+           badge, rather than the taller value sized for all three columns. -->
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_4fr_1fr] gap-4 w-full max-w-7xl min-h-[clamp(300px,52vh,420px)] md:min-h-[clamp(400px,60vh,800px)]" style="aspect-ratio: auto;">
         
         <!-- Left Side Column -->
         <div class="hidden md:grid grid-rows-3 gap-4">
@@ -88,55 +93,52 @@
        </div>
     </section>
 
-    <!-- Reach Across The Nation Statistics Section -->
-    <section class="mb-8 md:mb-16 !pt-6 md:!pt-8 pb-12 md:pb-16 bg-gradient-to-br from-[#006633] to-[#004d26] relative overflow-hidden">
-       <!-- Decorative background elements -->
-       <div class="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-       <div class="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+    <!-- Reach Across The Nation Statistics Section. Contained as a rounded
+         card within the page (matching how every other section here reads
+         as "a card in the page flow") rather than a full-bleed color block --
+         that hard-edged rectangle was the actual source of the jarring
+         white -> green -> white transition. -->
+    <section class="mb-8 md:mb-16">
+       <div class="container-custom">
+          <div class="rounded-[2rem] md:rounded-[2.5rem] !pt-8 md:!pt-10 pb-8 md:pb-10 px-4 md:px-8 bg-gradient-to-br from-[#00693e] to-[#004d2e] relative overflow-hidden">
+             <!-- Decorative background elements -->
+             <div class="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+             <div class="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
 
-       <!-- Subtle pattern overlay -->
-       <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg width=&quot;60&quot; height=&quot;60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><circle cx=&quot;30&quot; cy=&quot;30&quot; r=&quot;2&quot; fill=&quot;white&quot;/></svg>'); background-size: 60px 60px;"></div>
+             <div class="relative z-10">
+                <!-- Section Header -->
+                <div class="text-center mb-6 md:mb-8">
+                   <div class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-white/10 backdrop-blur-sm rounded-full mb-3 md:mb-4 border border-white/20">
+                      <Globe class="w-3 h-3 md:w-4 md:h-4 text-white" />
+                      <span class="text-white/90 font-bold text-[10px] md:text-xs tracking-widest uppercase">National Impact</span>
+                   </div>
+                   <h2 class="text-lg md:text-2xl lg:text-3xl font-black text-white mb-2 md:mb-3 break-words">
+                      {{ siteContent.getContent('about_stats_title', 'Reach Across The Nation') }}
+                   </h2>
+                   <p class="text-white/80 text-xs md:text-sm lg:text-base font-medium max-w-2xl mx-auto break-words">
+                      {{ siteContent.getContent('about_stats_subtitle', 'How we are helping people across Uganda every day.') }}
+                   </p>
+                </div>
 
-       <div class="container-custom relative z-10">
-          <!-- Section Header -->
-          <div class="text-center mb-8 md:mb-12">
-             <div class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-white/10 backdrop-blur-sm rounded-full mb-3 md:mb-4 border border-white/20">
-                <Globe class="w-3 h-3 md:w-4 md:h-4 text-white" />
-                <span class="text-white/90 font-bold text-[10px] md:text-xs tracking-widest uppercase">National Impact</span>
-             </div>
-             <h2 class="text-lg md:text-2xl lg:text-3xl font-black text-white mb-2 md:mb-3 break-words">
-                {{ siteContent.getContent('about_stats_title', 'Reach Across The Nation') }}
-             </h2>
-             <p class="text-white/80 text-xs md:text-sm lg:text-base font-medium max-w-2xl mx-auto break-words">
-                {{ siteContent.getContent('about_stats_subtitle', 'How we are helping people across Uganda every day.') }}
-             </p>
-          </div>
-
-         <!-- Statistics Grid -->
-         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
-            <div
-              v-for="(stat, index) in impactStats"
-              :key="`${stat.value}-${stat.label}-${index}`"
-              class="stat-card group bg-white/10 backdrop-blur-sm rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-8 text-center hover:bg-white/15 transition-all duration-300 border border-white/20 hover:border-white/40 hover:scale-[1.02] hover:shadow-xl hover:shadow-white/10"
-            >
-               <!-- Icon -->
-               <div class="flex justify-center mb-3 md:mb-4">
-                  <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-white/20">
-                     <component :is="getStatIcon(index)" class="w-5 h-5 md:w-6 md:h-6 text-white" />
+               <!-- Statistics Grid: compact tiles -- the number is the point,
+                    everything else stays out of its way. -->
+               <div class="grid grid-cols-2 lg:grid-cols-6 gap-2.5 md:gap-3 max-w-5xl mx-auto">
+                  <div
+                    v-for="(stat, index) in impactStats"
+                    :key="`${stat.value}-${stat.label}-${index}`"
+                    class="stat-card group bg-white/[0.07] rounded-xl p-3 md:p-4 text-center hover:bg-white/[0.12] transition-colors duration-300 border border-white/10"
+                  >
+                     <component :is="getStatIcon(stat, index)" class="w-4 h-4 text-white/50 mx-auto mb-1.5" />
+                     <div class="stat-number text-lg md:text-xl font-black text-white leading-none tracking-tight break-words">
+                        {{ stat.value }}
+                     </div>
+                     <div class="text-white/65 font-bold leading-snug text-[10px] md:text-[11px] mt-1 break-words">
+                        {{ stat.label }}
+                     </div>
                   </div>
                </div>
-
-               <!-- Value -->
-               <div class="stat-number text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2 md:mb-3 leading-tight break-words tracking-tight">
-                  {{ stat.value }}
-               </div>
-
-               <!-- Label -->
-               <div class="text-white/70 font-bold leading-snug text-xs md:text-sm break-words px-2">
-                  {{ stat.label }}
-               </div>
-            </div>
-         </div>
+             </div>
+          </div>
        </div>
     </section>
 
@@ -171,6 +173,18 @@
                 </div>
              </div>
 
+             <!-- Arrow from the last resolution step into the goal card. The
+                  per-step arrows above only render between consecutive steps
+                  (i < length - 1), so the connector into the goal itself was
+                  missing on mobile -- desktop already has this via its
+                  connector rendering after every card, including the last.
+                  One-way only, pointing toward the goal -- no return arrow. -->
+             <div v-if="resolutionSteps.length" class="flex justify-center text-gray-300 -mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+             </div>
+
              <!-- Final Goal Card Mobile -->
              <div class="mt-2 md:mt-4 flex flex-col items-center text-center bg-green-50 p-5 md:p-8 rounded-2xl md:rounded-3xl border-2 border-green-100">
                  <strong class="text-base md:text-xl lg:text-2xl font-black text-[#00ac46] mb-1 md:mb-2 break-words">{{ siteContent.getContent('about_resolution_central_goal', 'Safe Child') }}</strong>
@@ -191,10 +205,18 @@
                    <span v-if="step.subtitle" class="text-[10px] font-bold tracking-widest text-gray-400 mb-2 break-words">{{ step.subtitle }}</span>
                    <p class="text-xs text-gray-600 leading-relaxed break-words">{{ step.description }}</p>
                 </div>
-                <!-- Connector -->
+                <!-- Connector: a decorative "<>" between steps, but the final
+                     connector into the goal stays a single one-way ">" --
+                     it's the one arrow that actually means "leads to the
+                     goal", so it shouldn't look the same as the purely
+                     decorative in-between markers. -->
                 <div class="flex items-center text-gray-300 shrink-0" aria-hidden="true">
-                   <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                   <svg v-if="i === resolutionSteps.length - 1" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                   </svg>
+                   <svg v-else class="w-8 h-6" fill="none" viewBox="0 0 32 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 5l7 7-7 7" />
                    </svg>
                 </div>
              </template>
@@ -234,7 +256,7 @@
 
         <!-- Team Members Grid -->
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
-          <div v-for="member in teamMembers" :key="member.id" class="group bg-white rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-10 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
+          <div v-for="member in teamMembers" :key="member.id" class="group bg-white rounded-2xl p-5 md:p-6 lg:p-7 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
             <div class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full overflow-hidden mb-3 md:mb-4 border-4 border-primary/10 group-hover:border-primary transition-colors bg-gray-100 flex items-center justify-center flex-shrink-0">
               <img
                 v-if="member.image_thumbnail_url || member.image_url || member.image"
@@ -251,95 +273,97 @@
             </div>
             <h3 class="text-sm md:text-base lg:text-lg font-bold text-secondary mb-0.5 md:mb-1 break-words">{{ member.name }}</h3>
             <p class="text-primary font-bold text-[10px] md:text-xs tracking-widest mb-2 md:mb-3 break-words">{{ member.role }}</p>
-            <p class="text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-4 break-words">{{ member.bio || 'Dedicated to the mission of Sauti 116.' }}</p>
+            <!-- No hardcoded fallback: a generic canned bio here had no admin
+                 field it came from, so it silently repeated on every member
+                 with no bio set and nobody could edit or remove it. A member
+                 with no bio filled in just doesn't show this line at all. -->
+            <p v-if="member.bio" class="text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-4 break-words">{{ member.bio }}</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- G. Core Values Section -->
-    <section class="mb-8 md:mb-16 py-12 md:py-20 bg-gradient-to-br from-gray-50 via-white to-primary/5 relative overflow-hidden">
+    <!-- G. Core Values Section. Rebuilt to match the same "centered header
+         above, full-width grid below" pattern every other section on this
+         page uses -- this was the one section still using a sticky sidebar
+         + narrow 2-column grid, which is why its cards read oversized: they
+         were stretching to fill half of an already-narrow 2/3-width column
+         instead of sizing to their own content. -->
+    <section class="mb-8 md:mb-16 py-10 md:py-16 bg-gradient-to-br from-gray-50 via-white to-primary/5 relative overflow-hidden">
       <!-- Decorative elements -->
       <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
       <div class="container-custom relative z-10">
-        <!-- Two Column Layout: Left (Header + Stats) | Right (Cards) -->
-        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+        <!-- Section Header -->
+        <div class="text-center mb-6 md:mb-10 px-4">
+          <span class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-primary/10 rounded-full text-[10px] md:text-xs font-bold tracking-widest mb-3 md:mb-4 border border-primary/20 text-primary">
+            <Heart class="w-3 h-3" />
+            {{ siteContent.getContent('about_values_badge', 'Our Principles') }}
+          </span>
+          <h2 class="text-lg md:text-2xl lg:text-3xl font-bold text-secondary tracking-tight break-words">
+            {{ siteContent.getContent('about_values_title', 'Our Core Values') }}
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mt-2 md:mt-4 rounded-full"></div>
+          <p class="text-xs md:text-sm lg:text-base text-black/60 font-semibold mt-2 md:mt-4 max-w-2xl mx-auto break-words">
+            {{ siteContent.getContent('about_values_description', 'Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.') }}
+          </p>
 
-          <!-- Left Column: Header + Stats -->
-          <div class="w-full lg:w-1/3 lg:sticky lg:top-8">
-            <!-- Section Header -->
-            <div class="mb-8">
-              <span class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-primary/10 rounded-full text-[10px] md:text-xs font-bold tracking-widest mb-4 border border-primary/20 text-primary">
-                <Heart class="w-3 h-3" />
-                {{ siteContent.getContent('about_values_badge', 'Our Principles') }}
-              </span>
-              <h2 class="text-xl md:text-3xl lg:text-4xl font-black mb-4 leading-tight text-secondary">
-                {{ siteContent.getContent('about_values_title', 'Our Core Values') }}
-              </h2>
-              <p class="text-sm md:text-base text-gray-600 leading-relaxed">
-                {{ siteContent.getContent('about_values_description', 'Our core values guide every interaction, decision, and intervention. They are the foundation of our trust with the community.') }}
-              </p>
+          <!-- Stats: inline pills under the description instead of a whole
+               sidebar column for just two numbers. -->
+          <div class="flex flex-wrap justify-center gap-3 md:gap-4 mt-4 md:mt-6">
+            <div class="flex items-center gap-2.5 bg-white rounded-full pl-2 pr-4 py-2 border border-gray-100 shadow-sm">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center font-black text-white text-[10px] shrink-0">
+                {{ siteContent.getContent('about_values_stat_1_value', '1M+') }}
+              </div>
+              <span class="font-bold text-xs md:text-sm text-secondary">{{ siteContent.getContent('about_values_stat_1_label', 'Lives Impacted') }}</span>
             </div>
-
-            <!-- Stats - Below header on left -->
-            <div class="flex flex-col gap-4 pt-6 border-t border-gray-200/60">
-              <div class="stat-item flex items-center gap-3" style="animation-delay: 400ms">
-                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center font-black text-white text-sm md:text-base shadow-lg shadow-primary/20">
-                  {{ siteContent.getContent('about_values_stat_1_value', '1M+') }}
-                </div>
-                <span class="font-bold text-sm md:text-base text-secondary">{{ siteContent.getContent('about_values_stat_1_label', 'Lives Impacted') }}</span>
+            <div class="flex items-center gap-2.5 bg-white rounded-full pl-2 pr-4 py-2 border border-gray-100 shadow-sm">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center font-black text-white text-[10px] shrink-0">
+                {{ siteContent.getContent('about_values_stat_2_value', '10+') }}
               </div>
-              <div class="stat-item flex items-center gap-3" style="animation-delay: 500ms">
-                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center font-black text-white text-sm md:text-base shadow-lg shadow-secondary/20">
-                  {{ siteContent.getContent('about_values_stat_2_value', '10+') }}
-                </div>
-                <span class="font-bold text-sm md:text-base text-secondary">{{ siteContent.getContent('about_values_stat_2_label', 'Years of Service') }}</span>
-              </div>
+              <span class="font-bold text-xs md:text-sm text-secondary">{{ siteContent.getContent('about_values_stat_2_label', 'Years of Service') }}</span>
             </div>
           </div>
+        </div>
 
-          <!-- Right Column: Cards -->
-          <div class="w-full lg:w-2/3">
-            <!-- Loading State -->
-            <div v-if="coreValuesLoading" class="text-center py-12">
-              <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-              <p class="text-gray-500 mt-4 font-bold">Loading core values...</p>
-            </div>
+        <!-- Loading State -->
+        <div v-if="coreValuesLoading" class="text-center py-12">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p class="text-gray-500 mt-4 font-bold">Loading core values...</p>
+        </div>
 
-            <!-- Core Values Grid - 2x2 on right -->
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+        <!-- Core Values Grid: full page width, sizes to content instead of
+             stretching to fill a narrow column. -->
+        <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 max-w-5xl mx-auto">
+          <div
+            v-for="(value, index) in coreValues"
+            :key="value.id"
+            class="core-value-card group bg-white p-4 md:p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-center"
+            :style="{ animationDelay: `${index * 100}ms` }"
+          >
+            <!-- Subtle gradient overlay on hover -->
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+            <!-- Content -->
+            <div class="relative z-10">
+              <!-- Icon -->
               <div
-                v-for="(value, index) in coreValues"
-                :key="value.id"
-                class="core-value-card group bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
-                :style="{ animationDelay: `${index * 100}ms` }"
+                class="w-10 h-10 md:w-11 md:h-11 rounded-xl flex items-center justify-center mb-2.5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-sm"
+                :class="[getColorClasses(coreValueColorKey(value)).bg, getColorClasses(coreValueColorKey(value)).text]"
               >
-                <!-- Subtle gradient overlay on hover -->
-                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-
-                <!-- Content -->
-                <div class="relative z-10">
-                  <!-- Icon -->
-                  <div
-                    class="w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-sm"
-                    :class="[getColorClasses(coreValueColorKey(value)).bg, getColorClasses(coreValueColorKey(value)).text]"
-                  >
-                    <component :is="getIconComponent(value.icon || 'ShieldCheck')" class="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-
-                  <!-- Title -->
-                  <h3 class="text-base md:text-lg font-bold mb-2 text-secondary group-hover:text-primary transition-colors duration-300">
-                    {{ value.title }}
-                  </h3>
-
-                  <!-- Description -->
-                  <p class="text-sm text-gray-500 leading-relaxed">
-                    {{ value.description }}
-                  </p>
-                </div>
+                <component :is="getIconComponent(value.icon || 'ShieldCheck')" class="w-5 h-5" />
               </div>
+
+              <!-- Title -->
+              <h3 class="text-sm md:text-base font-bold mb-1.5 text-secondary group-hover:text-primary transition-colors duration-300 break-words">
+                {{ value.title }}
+              </h3>
+
+              <!-- Description -->
+              <p class="text-xs md:text-sm text-gray-500 leading-relaxed break-words">
+                {{ value.description }}
+              </p>
             </div>
           </div>
         </div>
@@ -461,7 +485,11 @@ const defaultImpactStats = [
 const impactStats = computed(() => {
   const contentMap = siteContent.allContent.value || {}
   const statsByIndex = {}
-  const regex = /^about_stats_stat_(\d+)_(value|label)$/
+  // `icon` is optional: an admin adding a new stat via ContentManager can set
+  // about_stats_stat_<n>_icon to any name from STAT_ICON_MAP below to pick
+  // its icon; if they don't, it falls back to the positional default so
+  // existing stats look exactly as before this field existed.
+  const regex = /^about_stats_stat_(\d+)_(value|label|icon)$/
 
   Object.entries(contentMap).forEach(([key, item]) => {
     const match = key.match(regex)
@@ -469,7 +497,7 @@ const impactStats = computed(() => {
     const index = parseInt(match[1], 10)
     const field = match[2]
     if (!statsByIndex[index]) {
-      statsByIndex[index] = { index, value: '', label: '' }
+      statsByIndex[index] = { index, value: '', label: '', icon: '' }
     }
     statsByIndex[index][field] = item?.value ?? ''
   })
@@ -490,6 +518,7 @@ const impactStats = computed(() => {
       return {
         value: stat.value || fallback.value,
         label: stat.label || fallback.label,
+        icon: stat.icon || '',
       }
     })
     .filter(stat => stat.value || stat.label)
@@ -497,9 +526,14 @@ const impactStats = computed(() => {
 
 
 // --- Stats Icon Mapping ---
-const getStatIcon = (index) => {
-  const icons = [Calendar, TrendingUp, Target, MapPin, PhoneCall, Users]
-  return icons[index % icons.length]
+// Positional defaults, kept only as the fallback for stats that don't set
+// their own `icon` (existing content predates that field, and it's still
+// optional per-stat). A stat with an explicit icon name always wins.
+const DEFAULT_STAT_ICONS = [Calendar, TrendingUp, Target, MapPin, PhoneCall, Users]
+
+const getStatIcon = (stat, index) => {
+  if (stat?.icon) return getIconComponent(stat.icon)
+  return DEFAULT_STAT_ICONS[index % DEFAULT_STAT_ICONS.length]
 }
 
 // --- Mock Data for Layout ---
@@ -721,7 +755,12 @@ const getIconComponent = (iconName) => {
     Globe,
     Zap,
     Phone,
-    Clock
+    Clock,
+    Calendar,
+    TrendingUp,
+    Target,
+    MapPin,
+    PhoneCall,
   }
   return iconMap[iconName] || ShieldCheck
 }

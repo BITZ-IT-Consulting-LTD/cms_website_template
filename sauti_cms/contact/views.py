@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import generics, permissions
@@ -6,6 +8,34 @@ from rest_framework.response import Response
 from .models import FeedbackMessage
 from .serializers import FeedbackMessageSerializer, FeedbackCreateSerializer
 from .exports import generate_feedback_pdf, write_feedback_csv
+
+
+class HasManageFeedback(permissions.BasePermission):
+    """
+    Viewing/managing submitted feedback previously required nothing more
+    than IsAuthenticated -- any logged-in account, including a bare Viewer,
+    could read and moderate feedback. Now requires the 'manage_feedback'
+    permission (see users/models.py's Role/Permission system), seeded onto
+    Editor/Admin by default. The public submission endpoint
+    (FeedbackCreateView) is unaffected -- it stays AllowAny.
+    """
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.has_permission('manage_feedback')
+
+
+def _parse_export_date(value):
+    """Parse an optional 'YYYY-MM-DD' query param into a date, or None.
+
+    Returns None both when `value` is falsy (param omitted) and when it
+    fails to parse; callers distinguish those cases by checking `value`
+    itself.
+    """
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, '%Y-%m-%d').date()
+    except ValueError:
+        return None
 
 class FeedbackCreateView(generics.CreateAPIView):
     """
@@ -25,7 +55,13 @@ class FeedbackListView(generics.ListAPIView):
     """
     queryset = FeedbackMessage.objects.all().order_by('-submitted_at')
     serializer_class = FeedbackMessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
+    # FeedbackAdmin.vue fetches once and does its own status filtering/
+    # tabs/downloads client-side -- same issue as ReportListView: the global
+    # PageNumberPagination (PAGE_SIZE=20) was silently truncating this to
+    # the 20 most recent messages, so anything older was invisible to every
+    # tab/filter.
+    pagination_class = None
 
 class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -34,7 +70,7 @@ class FeedbackDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = FeedbackMessage.objects.all()
     serializer_class = FeedbackMessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
     def perform_update(self, serializer):
         from django.utils import timezone
@@ -60,7 +96,7 @@ class FeedbackExportPDFView(APIView):
     GET /api/contact/feedback/<id>/export/pdf/ - Single-message PDF download.
     Admin only.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
     def get(self, request, pk):
         try:
@@ -79,9 +115,12 @@ class FeedbackExportPDFView(APIView):
 class FeedbackExportCSVView(APIView):
     """
     GET /api/contact/feedback/export/csv/?status=pending|reviewed|archived|all
-    Bulk CSV download, scoped to the active status filter. Admin only.
+        &date_from=YYYY-MM-DD&date_to=YYYY-MM-DD
+    Bulk CSV download, scoped to the active status filter and an optional
+    submitted_at date range. Both date params are optional and inclusive;
+    omitting one leaves that end of the range open. Admin only.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [HasManageFeedback]
 
     def get(self, request):
         status_filter = (request.query_params.get('status') or 'all').lower()
@@ -95,8 +134,35 @@ class FeedbackExportCSVView(APIView):
             queryset = queryset.filter(is_archived=True)
         # 'all' (or anything unrecognised) leaves the queryset unfiltered.
 
-        date_str = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
-        filename = f"general-feedback-{status_filter}-{date_str}.csv"
+        date_from_str = request.query_params.get('date_from')
+        date_to_str = request.query_params.get('date_to')
+        date_from = _parse_export_date(date_from_str)
+        date_to = _parse_export_date(date_to_str)
+
+        if date_from_str and date_from is None:
+            return Response(
+                {'detail': 'Invalid date_from, expected YYYY-MM-DD.'}, status=400
+            )
+        if date_to_str and date_to is None:
+            return Response(
+                {'detail': 'Invalid date_to, expected YYYY-MM-DD.'}, status=400
+            )
+
+        # Compare on the calendar date of submitted_at (not a naive string
+        # comparison against the datetime) so date_to's whole day is
+        # included rather than being cut off at midnight.
+        if date_from:
+            queryset = queryset.filter(submitted_at__date__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(submitted_at__date__lte=date_to)
+
+        if date_from or date_to:
+            range_from = date_from_str or 'start'
+            range_to = date_to_str or 'present'
+            filename = f"general-feedback-{status_filter}-{range_from}_to_{range_to}.csv"
+        else:
+            date_str = timezone.localtime(timezone.now()).strftime('%Y-%m-%d')
+            filename = f"general-feedback-{status_filter}-{date_str}.csv"
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = f'attachment; filename="{filename}"'

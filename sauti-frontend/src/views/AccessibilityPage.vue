@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen overflow-x-hidden">
     <!-- 1. Page Header -->
     <header class="page-header">
       <div class="container-custom">
@@ -18,7 +18,7 @@
 
           <!-- Accessibility in a Flash (Flash Pattern) -->
           <section class="bg-secondary/5 p-8 md:p-10 rounded-[2.5rem] border-2 border-secondary/10">
-            <h2 class="campaign-header text-xl text-secondary mb-6 flex items-center gap-3">
+            <h2 class="campaign-header text-lg md:text-xl text-secondary mb-6 flex items-center gap-3">
               <ShieldCheckIcon class="w-6 h-6 text-secondary" />
               Accessibility in a Flash
             </h2>
@@ -43,11 +43,11 @@
 
           <!-- Section 1 -->
           <section aria-labelledby="commitment-heading">
-            <h2 id="commitment-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="commitment-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               1. How We Build for Everyone
             </h2>
-            <p class="text-black/70 font-bold text-xl leading-relaxed">
+            <p class="text-black/70 font-bold text-lg md:text-xl leading-relaxed">
               Sauti 116 helpline is committed to ensuring digital accessibility for all users, including those
               with disabilities. We strive to provide an accessible and inclusive experience for everyone who
               needs our services, adhering to the highest standards of universal design.
@@ -56,7 +56,7 @@
 
           <!-- Section 2 -->
           <section aria-labelledby="features-heading">
-            <h2 id="features-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="features-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-hotline rounded-full"></span>
               2. Tools We Provide for You
             </h2>
@@ -74,11 +74,11 @@
 
           <!-- Section 3 -->
           <section aria-labelledby="helpline-heading">
-            <h2 id="helpline-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="helpline-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-secondary-light rounded-full"></span>
               3. Alternative Communication Paths
             </h2>
-            <div class="bg-neutral-offwhite/30 p-10 rounded-[2.5rem] border-2 border-neutral-offwhite space-y-6">
+            <div class="bg-neutral-offwhite/30 p-6 md:p-10 rounded-[2.5rem] border-2 border-neutral-offwhite space-y-6">
               <div v-for="method in helplineMethods" :key="method" class="flex items-start gap-6">
                 <div
                   class="w-10 h-10 rounded-xl bg-secondary-light/10 flex-shrink-0 flex items-center justify-center text-secondary-light mt-1">
@@ -91,18 +91,18 @@
 
           <!-- Section 4 -->
           <section aria-labelledby="standards-heading">
-            <h2 id="standards-heading" class="campaign-header text-3xl text-secondary mb-8 flex items-center gap-4">
+            <h2 id="standards-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-8 flex items-center gap-4">
               <span class="w-1.5 h-8 bg-primary rounded-full"></span>
               Standards Compliance
             </h2>
-            <div class="bg-neutral-white border-2 border-primary p-10 rounded-[3rem] shadow-sm">
+            <div class="bg-neutral-white border-2 border-primary p-6 md:p-10 rounded-[3rem] shadow-sm">
               <p class="text-black font-bold text-lg leading-relaxed mb-10">
                 We strictly aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards.
               </p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                 <div v-for="standard in standards" :key="standard.title" class="space-y-3">
                   <h4 class="campaign-header text-primary text-[10px]">{{ standard.title }}</h4>
-                  <p class="text-black font-bold text-xl leading-snug">{{ standard.desc }}</p>
+                  <p class="text-black font-bold text-lg md:text-xl leading-snug">{{ standard.desc }}</p>
                 </div>
               </div>
             </div>
@@ -110,14 +110,14 @@
 
           <!-- Section 5 -->
           <section aria-labelledby="feedback-heading">
-            <h2 id="feedback-heading" class="campaign-header text-3xl text-secondary mb-6">Feedback and Support
+            <h2 id="feedback-heading" class="campaign-header text-xl md:text-3xl text-secondary mb-6">Feedback and Support
             </h2>
             <p class="text-black/70 font-bold text-lg mb-10 leading-relaxed max-w-3xl">
               We welcome feedback on the accessibility of our services. If you encounter any barriers, please contact
               our accessibility coordinator.
             </p>
             <div
-              class="bg-primary/5 p-10 rounded-[3rem] border-2 border-primary/20 grid grid-cols-1 md:grid-cols-2 gap-10">
+              class="bg-primary/5 p-6 md:p-10 rounded-[3rem] border-2 border-primary/20 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div class="space-y-8">
                 <div class="flex items-center gap-6">
                   <div

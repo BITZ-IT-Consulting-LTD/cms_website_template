@@ -8,21 +8,22 @@
         class="timeline-item group"
       >
         <!-- Card -->
-        <div class="timeline-card rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 relative"
-             :style="{ backgroundColor: getEventColor(index) }">
+        <div class="timeline-card bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg border border-gray-100 transition-all duration-300 relative"
+             :style="{ borderTopWidth: '4px', borderTopColor: getEventColor(index) }">
 
           <!-- Year Badge -->
-          <div class="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-white/20 backdrop-blur-sm mb-4 md:mb-5">
-            <Calendar class="w-3 h-3 md:w-4 md:h-4 text-white" />
-            <span class="text-white font-black text-xs md:text-sm">{{ getYear(event) }}</span>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 md:mb-4"
+               :style="{ backgroundColor: getEventColor(index) + '14', color: getEventColor(index) }">
+            <Calendar class="w-3 h-3 md:w-3.5 md:h-3.5" />
+            <span class="font-black text-xs md:text-sm">{{ getYear(event) }}</span>
           </div>
 
           <!-- Content -->
           <div class="text-center">
-            <h3 class="text-base md:text-lg lg:text-xl font-black text-white mb-3 md:mb-4 leading-tight">
+            <h3 class="text-base md:text-lg font-black text-gray-800 mb-2 md:mb-3 leading-tight">
               {{ event.title }}
             </h3>
-            <p class="text-xs md:text-sm text-white/90 leading-relaxed">
+            <p class="text-xs md:text-sm text-gray-500 leading-relaxed">
               {{ event.description }}
             </p>
           </div>
@@ -62,21 +63,22 @@
 
             <!-- Content Card -->
             <div class="pt-24 relative">
-              <div class="rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1"
-                   :style="{ backgroundColor: getEventColor(index) }">
+              <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100 transition-all duration-300 group-hover:-translate-y-1"
+                   :style="{ borderTopWidth: '4px', borderTopColor: getEventColor(index) }">
 
                 <!-- Year Badge -->
-                <div class="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm mb-3">
-                  <span class="text-white font-black text-xs">{{ getYear(event) }}</span>
+                <div class="inline-flex items-center px-3 py-1 rounded-full mb-3"
+                     :style="{ backgroundColor: getEventColor(index) + '14', color: getEventColor(index) }">
+                  <span class="font-black text-xs">{{ getYear(event) }}</span>
                 </div>
 
                 <!-- Title -->
-                <h3 class="text-sm font-black text-white mb-2 leading-tight text-center">
+                <h3 class="text-sm font-black text-gray-800 mb-2 leading-tight text-center">
                   {{ event.title }}
                 </h3>
 
                 <!-- Description -->
-                <p class="text-xs text-white/90 leading-relaxed text-center line-clamp-4">
+                <p class="text-xs text-gray-500 leading-relaxed text-center line-clamp-4">
                   {{ event.description }}
                 </p>
               </div>

@@ -1,38 +1,38 @@
 <template>
-  <div class="min-h-screen bg-neutral-white flex flex-col justify-center items-center section-padding">
+  <div class="min-h-screen bg-neutral-white flex flex-col justify-center items-center section-padding overflow-x-hidden">
     <div class="container-custom max-w-4xl text-center">
       <!-- 404 Illustration placeholder or Icon -->
-      <div class="relative inline-block mb-16">
+      <div class="relative inline-block mb-10 md:mb-16">
         <div class="absolute inset-0 bg-primary/10 rounded-full blur-3xl transform -translate-y-1/2"></div>
-        <h1 class="text-[12rem] md:text-[18rem] font-bold leading-none text-neutral-offwhite relative z-10 select-none">
+        <h1 class="text-[5.5rem] xs:text-[7rem] sm:text-[9rem] md:text-[18rem] font-bold leading-none text-neutral-offwhite relative z-10 select-none">
           404</h1>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
           <div
-            class="w-32 h-32 md:w-48 md:h-48 bg-neutral-white rounded-[3rem] shadow-2xl border-4 border-primary flex items-center justify-center animate-bounce-slow">
-            <MagnifyingGlassIcon class="w-16 h-16 md:w-24 md:h-24 text-primary" />
+            class="w-20 h-20 sm:w-28 sm:h-28 md:w-48 md:h-48 bg-neutral-white rounded-[2rem] md:rounded-[3rem] shadow-2xl border-4 border-primary flex items-center justify-center animate-bounce-slow">
+            <MagnifyingGlassIcon class="w-10 h-10 sm:w-14 sm:h-14 md:w-24 md:h-24 text-primary" />
           </div>
         </div>
       </div>
 
       <!-- Message -->
-      <h2 class="campaign-header text-4xl md:text-6xl text-secondary mb-6">Lost in the Sanctuary?</h2>
-      <p class="text-xl md:text-2xl font-bold text-black/50 max-w-2xl mx-auto leading-relaxed mb-16">
+      <h2 class="campaign-header text-3xl xs:text-4xl md:text-6xl text-secondary mb-4 md:mb-6 break-words">Lost in the Sanctuary?</h2>
+      <p class="text-base md:text-2xl font-bold text-black/50 max-w-2xl mx-auto leading-relaxed mb-10 md:mb-16 break-words">
         The page you are looking for has been moved or does not exist in our current records. Let's get you back to
         safety.
       </p>
 
       <!-- Action -->
-      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-        <BaseCTA href="/" variant="primary" class="!px-12 !py-6 shadow-2xl">
+      <div class="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
+        <BaseCTA href="/" variant="primary" class="!px-8 md:!px-12 !py-4 md:!py-6 shadow-2xl">
           Return to Sanctuary
         </BaseCTA>
-        <BaseCTA href="/contact" variant="outline" class="!px-12 !py-6">
+        <BaseCTA href="/contact" variant="outline" class="!px-8 md:!px-12 !py-4 md:!py-6">
           Report a Problem
         </BaseCTA>
       </div>
 
       <!-- Quick Links -->
-      <div class="mt-24 pt-12 border-t-2 border-neutral-offwhite flex flex-wrap justify-center gap-8">
+      <div class="mt-12 md:mt-24 pt-8 md:pt-12 border-t-2 border-neutral-offwhite flex flex-wrap justify-center gap-4 md:gap-8">
         <router-link v-for="link in [
           { name: 'Helpline', path: '/contact' },
           { name: 'Resources', path: '/resources' },

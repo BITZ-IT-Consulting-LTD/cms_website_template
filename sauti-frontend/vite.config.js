@@ -32,7 +32,10 @@ export default defineConfig(({ mode }) => {
       ? {
         host: true,
         port: 5173,
-        allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'sauti_frontend_dev', 'host.docker.internal'],
+        // 'frontend' added: nginx's proxy_pass defaults to Host: $proxy_host
+        // (the upstream's own name) when nothing overrides it, so requests
+        // routed through nginx arrive with Host: frontend, not localhost.
+        allowedHosts: ['sauti.local', 'localhost', '127.0.0.1', 'sauti_frontend_dev', 'frontend', 'host.docker.internal'],
         proxy: {
           '/api': {
             target: proxyTarget || 'http://127.0.0.1:8000',

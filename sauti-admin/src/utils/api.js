@@ -178,6 +178,7 @@ export const api = {
     }),
     delete: (slug) => apiClient.delete(`/posts/${slug}/`),
     history: (id) => apiClient.get(`/posts/${id}/history/`),
+    previewToken: (slug) => apiClient.get(`/posts/${slug}/preview-token/`),
     // Unlimited gallery images for a post (keyed by numeric post id, not slug).
     images: {
       list: (postId) => apiClient.get(`/posts/${postId}/images/`),
@@ -296,6 +297,18 @@ export const api = {
     create: (data) => apiClient.post('/auth/register/', data),
     update: (id, data) => apiClient.put(`/auth/users/${id}/`, data),
     delete: (id) => apiClient.delete(`/auth/users/${id}/`),
+  },
+
+  roles: {
+    list: () => apiClient.get('/auth/roles/'),
+    get: (id) => apiClient.get(`/auth/roles/${id}/`),
+    create: (data) => apiClient.post('/auth/roles/', data),
+    update: (id, data) => apiClient.patch(`/auth/roles/${id}/`, data),
+    delete: (id) => apiClient.delete(`/auth/roles/${id}/`),
+  },
+
+  permissions: {
+    list: () => apiClient.get('/auth/permissions/'),
   },
 
   contacts: {

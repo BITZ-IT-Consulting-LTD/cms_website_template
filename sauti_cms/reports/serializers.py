@@ -78,7 +78,8 @@ class ReportListSerializer(serializers.ModelSerializer):
             'status', 'status_display', 'is_anonymous', 'location',
             'assigned_to_name', 'created_at', 'updated_at',
             'reporting_for', 'affected_persons', 'safe_to_contact',
-            'openchs_case_id'
+            'openchs_case_id', 'incident_type', 'victim_location',
+            'reported_person_age',
         ]
     
     def get_assigned_to_name(self, obj):

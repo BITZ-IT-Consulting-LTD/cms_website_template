@@ -62,11 +62,12 @@
             <figure v-if="post.featured_image" class="mb-7">
               <img :src="post.featured_image_medium || post.featured_image" :alt="post.title" width="1200" height="675" loading="eager"
                 fetchpriority="high" decoding="async"
+                style="max-height: clamp(220px, 42vh, 420px);"
                 class="w-full aspect-[16/9] object-cover rounded-xl bg-neutral-offwhite" @error="setPlaceholder" />
             </figure>
 
             <!-- Standfirst -->
-            <p v-if="post.excerpt" class="text-base sm:text-lg leading-relaxed text-black/70 mb-7">
+            <p v-if="post.excerpt" class="max-w-none text-base sm:text-lg leading-relaxed text-black/70 mb-7">
               {{ post.excerpt }}
             </p>
 
@@ -145,7 +146,13 @@
         </main>
 
         <!-- ============ Sidebar ============ -->
-        <aside class="lg:col-span-4 min-w-0 space-y-5 lg:sticky lg:top-24 lg:self-start">
+        <!-- No lg:self-start here: it would shrink this cell to the sidebar's
+             own (short) content height, so position:sticky runs out of room
+             to track scroll partway down a long article, leaving a dead gap
+             beside the rest of the body text. Letting the grid's default
+             align-items:stretch apply keeps the cell as tall as the article
+             column, so the sticky sidebar follows all the way to the bottom. -->
+        <aside class="lg:col-span-4 min-w-0 lg:sticky lg:top-24 space-y-5">
           <!-- Share -->
           <section class="bg-neutral-white rounded-2xl border border-black/5 shadow-sm p-5">
             <h2 class="text-sm font-bold uppercase tracking-wider text-secondary mb-4">Share to</h2>
@@ -188,10 +195,10 @@
             <ul v-else-if="relatedPosts.length" class="list-none p-0 m-0 divide-y divide-black/5">
               <li v-for="related in relatedPosts" :key="related.id">
                 <router-link :to="`/blogs/${related.slug}`" class="group flex gap-3 py-3">
-                  <img :src="related.featured_image_thumbnail || related.featured_image" :alt="related.title" width="80" height="64" loading="lazy"
+                  <img :src="related.featured_image_thumbnail || related.featured_image" :alt="related.title" width="80" height="80" loading="lazy"
                     decoding="async"
-                    class="w-20 h-16 rounded-lg object-cover bg-neutral-offwhite shrink-0" @error="setPlaceholder" />
-                  <div class="min-w-0">
+                    class="w-20 h-20 rounded-lg object-cover bg-neutral-offwhite shrink-0" @error="setPlaceholder" />
+                  <div class="flex-1 min-w-0">
                     <p
                       class="text-sm font-bold leading-snug text-secondary group-hover:text-primary transition-colors line-clamp-2">
                       {{ related.title }}
@@ -407,9 +414,15 @@
 
   const shareUrl = computed(() => {
     const configured = String(import.meta.env.VITE_PUBLIC_BASE_URL || '').trim().replace(/\/+$/, '')
-    if (typeof window === 'undefined') return configured
-    if (!configured) return window.location.href
-    return `${configured}${window.location.pathname}${window.location.search}`
+    if (!configured) {
+      return typeof window === 'undefined' ? '' : window.location.href
+    }
+    // `configured` already includes the deployed base path (e.g. "/sauti"),
+    // and so does window.location.pathname in production -- concatenating
+    // both duplicated it into "/sauti/sauti/blogs/<slug>" for every shared
+    // link. route.fullPath is base-stripped by Vue Router, so it's the
+    // correct thing to append here.
+    return `${configured}${route.fullPath}`
   })
 
   const shareTitle = computed(() => post.value?.title || 'Sauti 116 Helpline')
@@ -570,6 +583,10 @@
 
   :deep(.prose-sauti p) {
     margin-bottom: 1.25rem;
+    /* main.css sets a global `p { max-width: 75ch }` for short-form text
+       elsewhere on the site -- it was clamping the article body to about
+       half the width of its own column instead of filling it. */
+    max-width: none;
   }
 
   :deep(.prose-sauti h2) {

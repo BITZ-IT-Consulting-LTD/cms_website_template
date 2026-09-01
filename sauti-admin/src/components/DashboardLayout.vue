@@ -212,7 +212,7 @@
               System & Configuration
             </h3>
             <div class="space-y-0.5">
-              <router-link to="/users" class="sidebar-link group" :class="{ active: $route.path.startsWith('/users') }">
+              <router-link v-if="authStore.isAdmin" to="/users" class="sidebar-link group" :class="{ active: $route.path.startsWith('/users') }">
                 <UsersIcon :class="[
                   'h-4 w-4 mr-2.5 transition-colors duration-200',
                   $route.path.startsWith('/users') ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'
@@ -255,7 +255,7 @@
             <div class="ml-4">
               <p class="text-sm font-bold" style="font-family: 'Poppins', sans-serif; color: #222222;">{{
                 authStore.userFullName }}</p>
-              <p class="text-xs font-medium" style="color: #555555;">{{ authStore.user?.role }}</p>
+              <p class="text-xs font-medium" style="color: #555555;">{{ authStore.user?.role_detail?.name || 'No role' }}</p>
             </div>
           </div>
 
